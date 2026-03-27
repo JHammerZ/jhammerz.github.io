@@ -1,0 +1,23 @@
+{
+  "provenance_standard": "C2PA-H-FID-2026",
+  "entity_id": "did:hfid:jhammerz",
+  "assertions": [
+    {
+      "label": "human_origin",
+      "data": {
+        "creator": "Joshua Lee Hamilton (JHammerZ)",
+        "method": "Manual-Fidelity-Capture",
+        "verification": "Lysander-3.0-Biometric"
+      }
+    },
+    {
+      "label": "ai_disclosure",
+      "data": {
+        "status": "Assimilated-Lieutenant-Only",
+        "role": "Orchestration & Attrition",
+        "human_in_loop": "100% Admin Override"
+      }
+    }
+  ],
+  "signature": "z6MkmT... (FORENSIC-SEAL)"
+}
