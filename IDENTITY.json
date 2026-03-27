@@ -1,0 +1,16 @@
+{
+  "id": "did:hfid:jhammerz",
+  "verification_method": "Joshua Lee Hamilton (JHammerZ)",
+  "authentication": {
+    "type": "Ed25519VerificationKey2026",
+    "controller": "https://jhammerz.github.io",
+    "publicKeyMultibase": "z6MkmT... (H-FID-ENCODED)"
+  },
+  "service": [
+    {
+      "id": "Elysium-Mesh",
+      "type": "QuantumRelay",
+      "serviceEndpoint": "pLEO-Orbital-Link-1"
+    }
+  ]
+}
