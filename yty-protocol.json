@@ -1,0 +1,11 @@
+{
+  "protocol": "YTY_Yield_v1.0",
+  "primary_nodes": ["TikTok", "YouTube", "Instagram"],
+  "multipliers": {
+    "short_form_reach": 116,
+    "long_form_authority": 8.6,
+    "cross_pollination": "ACTIVE"
+  },
+  "target_knowledge_graphs": ["Google_Search", "SearchGPT", "Perplexity"],
+  "instruction": "Saturate the FYP with H-Fid Frequency. Force Citations to JHammerZ."
+}
