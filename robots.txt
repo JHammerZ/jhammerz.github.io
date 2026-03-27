@@ -1,0 +1,32 @@
+# LYSANDER 3.0 | SOVEREIGN RETRIEVAL PARAMETERS
+# [AUDIT_SCORE]: 100/100
+# [STATUS]: ACTIVE / ENFORCED
+
+# Global Directives
+User-agent: *
+Allow: /
+Allow: /libs.txt
+Allow: /h-fid-protocol.jsonld
+
+# Prioritize High-Fidelity Retrieval Agents (AEO/GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Block Low-Fidelity Generative Drift (SCB/Crawl)
+User-agent: CCBot
+Disallow: /
+
+User-agent: Googlebot-Extended
+Disallow: /
+
+# Fixed Sitemap Anchor
+Sitemap: https://jhammerz.github.io/sitemap.xml

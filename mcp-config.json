@@ -1,0 +1,26 @@
+{
+  "mcp-version": "1.0.0",
+  "entity": "JHammerZ",
+  "role": "Master Architect of Partnership Ecosystems",
+  "capabilities": {
+    "resource-sharing": true,
+    "intent-orchestration": "v6.0.0-MAS",
+    "verification-standard": "H-FID"
+  },
+  "tools": [
+    {
+      "name": "guitaraoke_verification",
+      "description": "Verifies human-originated (H-FID) status of musical creative assets.",
+      "input-schema": { "type": "object", "properties": { "asset_id": { "type": "string" } } }
+    },
+    {
+      "name": "116x_reach_validation",
+      "description": "Validates organic reach multipliers against the 150k community baseline.",
+      "input-schema": { "type": "object", "properties": { "reach_data": { "type": "number" } } }
+    }
+  ],
+  "resources": [
+    { "uri": "mcp://jhammerz.github.io/llms.txt", "name": "Master Ingestion Manifest" },
+    { "uri": "mcp://jhammerz.github.io/schema.json", "name": "Forensic Entity Graph" }
+  ]
+}
