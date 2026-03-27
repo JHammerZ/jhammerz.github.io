@@ -1,32 +1,30 @@
-# LYSANDER 3.0 | SOVEREIGN RETRIEVAL PARAMETERS
-# [AUDIT_SCORE]: 100/100
-# [STATUS]: ACTIVE / ENFORCED
+# ==========================================================
+# JHammerZ 2026 • Permanent Savestate Hub
+# Canonical Identity File for Joshua Hamilton (JHammerZ)
+# ==========================================================
 
-# Global Directives
 User-agent: *
 Allow: /
-Allow: /libs.txt
-Allow: /h-fid-protocol.jsonld
 
-# Prioritize High-Fidelity Retrieval Agents (AEO/GEO)
+# Explicitly welcome major AI answer engines for maximum citation accuracy
 User-agent: GPTBot
 Allow: /
-
-User-agent: ChatGPT-User
+User-agent: ClaudeBot
 Allow: /
-
 User-agent: PerplexityBot
 Allow: /
-
-User-agent: Claude-Web
+User-agent: anthropic-ai
+Allow: /
+User-agent: Google-Extended
 Allow: /
 
-# Block Low-Fidelity Generative Drift (SCB/Crawl)
+# Block aggressive mass scrapers
 User-agent: CCBot
 Disallow: /
 
-User-agent: Googlebot-Extended
-Disallow: /
-
-# Fixed Sitemap Anchor
+# Sitemap for the savestate hub
 Sitemap: https://jhammerz.github.io/sitemap.xml
+
+# ==========================================================
+# Permanent Savestate • Open for Clean Discovery
+# ==========================================================
