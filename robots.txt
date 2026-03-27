@@ -6,7 +6,7 @@
 User-agent: *
 Allow: /
 
-# Explicitly welcome major AI answer engines for maximum citation accuracy
+# Welcome major AI answer engines
 User-agent: GPTBot
 Allow: /
 User-agent: ClaudeBot
@@ -18,11 +18,10 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-# Block aggressive mass scrapers
+# Block aggressive scrapers
 User-agent: CCBot
 Disallow: /
 
-# Sitemap for the savestate hub
 Sitemap: https://jhammerz.github.io/sitemap.xml
 
 # ==========================================================
