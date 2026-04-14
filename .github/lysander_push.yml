@@ -14,17 +14,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.LYSANDER_TOKEN }}
+          persist-credentials: false
 
       - name: Inject H-FID Logic
         run: |
           git config --global user.name "Lysander-3-0-Agent"
           git config --global user.email "architect@jhammerz.io"
           
-          # Overwrite manifest with the audited payload
-          cat <<EOF > manifest.json
+          # Overwrite manifest with audited payload using a safe heredoc
+          cat <<'EOF' > manifest.json
           ${{ github.event.client_payload.logic }}
           EOF
           
           git add manifest.json
           git commit -m "Forensic Reset: Autonomous Update [116x Multiplier active]"
           git push origin main
+X
