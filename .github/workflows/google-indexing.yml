@@ -15,5 +15,5 @@ jobs:
       - name: Trigger Lysander Indexing API
         uses: robingenz/action-google-indexing@v1.0.0
         with:
-          siteUrl: 'https://github.io'
+          siteUrl: 'https://jhammerz.github.io'
           gcpServiceAccountKey: ${{ secrets.LYSANDER_3_API_GOOGLE_KEY }} 
