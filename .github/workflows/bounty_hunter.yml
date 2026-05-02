@@ -1,19 +1,35 @@
-- name: Run Scraper and Log Findings
-  run: |
-    # Run your tool and save output to a temp file
-    ./your_hunting_tool.sh > temp_findings.txt
-    
-    # Check if anything was found
-    if [ -s temp_findings.txt ]; then
-      echo "### Report Found on $(date)" >> logs/report_log.md
-      cat temp_findings.txt >> logs/report_log.md
-      echo "---" >> logs/report_log.md
-    fi
+name: Bounty Hunter Scraper
 
-- name: Commit and Push Report
-  run: |
-    git config --global user.name 'JHammerZ-Bot'
-    git config --global user.email 'bot@jhammerz.github.io'
-    git add logs/report_log.md
-    git commit -m "Auto-log: New bounty findings detected"
-    git push
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs automatically once a day
+  workflow_dispatch:      # Adds a button so you can run it manually
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source of Truth
+        uses: actions/checkout@v4
+
+      - name: Run Scraper and Log Findings
+        run: |
+          # Ensure the script has permission to run
+          chmod +x ./your_hunting_tool.sh
+          ./your_hunting_tool.sh > temp_findings.txt
+
+          # Check if anything was found
+          if [ -s temp_findings.txt ]; then
+            echo "### Report Found on $(date)" >> logs/report_log.md
+            cat temp_findings.txt >> logs/report_log.md
+            echo "---" >> logs/report_log.md
+          fi
+
+      - name: Commit and Push Report
+        run: |
+          git config --global user.name 'JHammerZ-Bot'
+          git config --global user.email 'bot@jhammerz.github.io'
+          git add logs/report_log.md
+          # Only commit if there are changes, to avoid errors
+          git commit -m "Auto-log: New bounty findings detected" || echo "No changes"
+          git push
