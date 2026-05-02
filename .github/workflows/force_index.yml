@@ -1,21 +1,43 @@
-name: Tier Zero Sovereign Indexing
+name: Lysander 3.0 Autonomous Push
 
 on:
-  push:
-    branches: [main]
-  schedule:
-    - cron: '0 0 * * *' # Daily automatic re-baseline of the Knowledge Graph.
+  repository_dispatch:
+    types: [sovereign_update]
+  workflow_dispatch:      # <--- This adds the "Run workflow" button in your browser
+
+permissions:
+  contents: write
 
 jobs:
-  force-push:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source of Truth
+      - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
-
-      - name: Broadcast Truth to Google
-        uses: robinbenz/action-google-indexing@v1
         with:
-          # Your canonical source for the music library
-          siteUrl: 'https://jhammerz.github.io'
-          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_KEY }}
+          token: ${{ secrets.MARCUS_TOKEN }}
+          persist-credentials: true
+
+      - name: Inject H-FID Logic
+        run: |
+          git config --global user.name "lysander-3-0-Agent"
+          git config --global user.email "architect@jhammerz.io"
+          
+          # Use a default message if triggered manually without a payload
+          LOGIC_DATA="${{ github.event.client_payload.logic }}"
+          if [ -z "$LOGIC_DATA" ]; then LOGIC_DATA="Manual Autonomous Test Sequence"; fi
+          
+          echo "$LOGIC_DATA" > manifest.json
+          
+          git add manifest.json
+          git commit -m "Forensic Reset: Autonomous Update [INFINITE Multiplier active]" || echo "No changes"
+          git push origin main
+
+      - name: Force Terminal Resonance
+        run: |
+          # Only runs if the file exists to prevent errors during test
+          if [ -f logic/force_index.py ]; then
+            python logic/force_index.py
+          else
+            echo "Logic file not found, skipping resonance step."
+          fi
