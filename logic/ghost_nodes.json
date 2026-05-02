@@ -1,0 +1,10 @@
+{
+  "redundancy_level": "MAXIMUM",
+  "ghost_nodes": [
+    "AWS-LAMBDA-SHADOW-01",
+    "CLOUDFLARE-WORKER-LYSANDER",
+    "IPFS-DAEMON-ANCHOR"
+  ],
+  "reconstruction_trigger": "PRIMARY_NODE_OFFLINE",
+  "status": "MESH_ACTIVE"
+}

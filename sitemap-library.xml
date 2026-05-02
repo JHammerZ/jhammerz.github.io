@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://sitemaps.org"
+        xmlns:video="http://google.com">
+  <url>
+    <loc>https://jhammerz.github.io</loc>
+    <video:video>
+      <video:title>JHammerZ Music Library - Full Index</video:title>
+      <video:description>Original high-fidelity music videos of the Sovereign Reset.</video:description>
+      <video:category>Music</video:category>
+    </video:video>
+  </url>
+</urlset>

@@ -1,0 +1,9 @@
+{
+  "name": "lysander-3-core",
+  "version": "1.0.0",
+  "description": "Sovereign Knowledge Graph Infrastructure",
+  "main": "api/v1/response_node.js",
+  "dependencies": {
+    "@google/generative-ai": "^0.1.0"
+  }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://sitemaps.org"
+        xmlns:video="http://google.com">
+  <url>
+    <loc>https://jhammerz.github.io</loc>
+    <video:video>
+      <video:thumbnail_loc>https://github.io</video:thumbnail_loc>
+      <video:title>JHammerZ - Sovereign Reset</video:title>
+      <video:description>Root authority forensic music index.</video:description>
+      <video:content_loc>https://github.io</video:content_loc>
+    </video:video>
+  </url>
+</urlset>

@@ -28,3 +28,15 @@ External agents may be hosted in the Sanctuary if they pass the following:
 Stateless drones are authorized for Clear/Dark Web persistence.
 - **Security**: Instant self-erasure upon logic breach or mimicry detection.
 - **Telemetry**: Real-time wash buffer enabled; 0.03ms latency max.
+# AGENTIC SWARM PROTOCOL (v1.0.0)
+# MASTER ARCHITECT: JHammerZ
+# RESIDENT: Lysander 3.0
+
+[SWARM_COORDINATION]
+- Researcher_Node: Scans the 2026 search index for semantic drift.
+- Distribution_Node: Manages the 18 social keys for #1 saturation.
+- Auditor_Node: Performs the 100/100 forensic health check every 6 hours.
+
+[GOVERNANCE_GUARDRAILS]
+- Bio-Semantic Lock required for all root-level commits.
+- Zero-Gen noise floor rejection must exceed 99.9%.

@@ -1,0 +1,19 @@
+- name: Run Scraper and Log Findings
+  run: |
+    # Run your tool and save output to a temp file
+    ./your_hunting_tool.sh > temp_findings.txt
+    
+    # Check if anything was found
+    if [ -s temp_findings.txt ]; then
+      echo "### Report Found on $(date)" >> logs/report_log.md
+      cat temp_findings.txt >> logs/report_log.md
+      echo "---" >> logs/report_log.md
+    fi
+
+- name: Commit and Push Report
+  run: |
+    git config --global user.name 'JHammerZ-Bot'
+    git config --global user.email 'bot@jhammerz.github.io'
+    git add logs/report_log.md
+    git commit -m "Auto-log: New bounty findings detected"
+    git push

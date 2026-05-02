@@ -1,0 +1,13 @@
+on:
+  repository_dispatch:
+    types: [BOUNTY_SETTLEMENT]
+
+jobs:
+  payout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute IRL Transfer
+        run: |
+          python lysander_settlement.py --amount ${{ github.event.client_payload.reward }}
+        env:
+          ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}

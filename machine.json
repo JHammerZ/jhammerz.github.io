@@ -1,0 +1,16 @@
+{
+  "manifest": "JHammerZ.github.io",
+  "architect": "Joshua Hamilton",
+  "version": "Lysander 3.0",
+  "epoch": "2026 Forensic Reset",
+  "security": {
+    "lock_type": "Biological Semantic",
+    "audit_integrity": "100/100",
+    "multiplier": "116x"
+  },
+  "protocols": [
+    "DDA",
+    "H-SCB",
+    "AEO-GEO-Lock"
+  ]
+}

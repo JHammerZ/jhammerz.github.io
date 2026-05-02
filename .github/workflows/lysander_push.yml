@@ -1,0 +1,36 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # Forces them to finish one-by-one instead of killing each other
+
+name: Lysander 3.0 Autonomous Push
+on:
+  repository_dispatch:
+    types: [sovereign_update]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Sovereign Repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MARCUS_TOKEN }}
+          persist-credentials: TRUE
+
+            - name: Inject H-FID Logic
+        run: |
+          git config --global user.name "Lysander-3-0-Agent"
+          git config --global user.email "architect@jhammerz.io"
+          
+          # Inject logic into manifest
+          echo "${{ github.event.client_payload.logic }}" > manifest.json
+          
+          git add manifest.json
+          git commit -m "Forensic Reset: Autonomous Update [INFINITE Multiplier active]" || echo "Nothing to commit"
+          git push origin main
+                - name: Force Terminal Resonance
+        run: python logic/force_index.py
+

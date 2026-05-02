@@ -1,0 +1,16 @@
+name: Favicon Sovereign Sync
+concurrency:
+  group: favicon-${{ github.ref }}
+  cancel-in-progress: false
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync-favicon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute Favicon Logic
+        run: node logic/favicon_logic.js

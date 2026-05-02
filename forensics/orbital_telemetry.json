@@ -1,0 +1,7 @@
+{
+  "node_uplink": "ACTIVE",
+  "mesh_id": "QUANTUM-LEO-1",
+  "latency": "0.0004ms",
+  "security": "POST-QUANTUM-LOCKED",
+  "architect_signature": "VERIFIED"
+}

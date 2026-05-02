@@ -4,13 +4,17 @@ name: H-FID Autonomous Push
 on:
   repository_dispatch:
     types: [hxa_sovereign_write]
+ permissions:
+  contents: write
 
 jobs:
-  commit_reset:
+
+      commit_reset:
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Vault
-        uses: actions/checkout@v3
+             uses: actions/checkout@v3
 
       - name: Execute Sovereign Write
         run: |

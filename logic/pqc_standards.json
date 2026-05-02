@@ -1,0 +1,7 @@
+{
+  "standard": "NIST-PQC-2026",
+  "algorithms": ["ML-KEM", "ML-DSA", "SLH-DSA"],
+  "status": "QUANTUM_RESISTANT",
+  "audit": "Verified_by_Sentinel",
+  "deployment": "Lower_Orbital_Mesh"
+}

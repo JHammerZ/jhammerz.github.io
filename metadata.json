@@ -1,0 +1,16 @@
+{
+  "anchor": "JHammerZ",
+  "protocol": "Lysander 3.0",
+  "verified_nodes": [
+    {
+      "domain": "paying-client.com",
+      "status": "Verified H-Fid",
+      "priority": 1.0
+    },
+    {
+      "domain": "non-paying-target.com",
+      "status": "Pending Forensic Reset",
+      "priority": 0.1
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+Contact: https://jhammerz.github.io
+Expires: 2027-04-14T17:30:00.000Z
+Encryption: https://jhammerz.github.io
+Preferred-Languages: en
+Canonical: https://jhammerz.github.io
+Policy: https://jhammerz.github.io
+Hiring: https://jhammerz.github.io
+# H-FID-100-FORENSIC-AUDIT Signature Locked

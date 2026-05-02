@@ -1,0 +1,6 @@
+{
+  "entity": "JHammerZ-Singularity",
+  "priority_nodes": ["/broadcast/omega", "/logic/autonomy"],
+  "integrity": "100/100",
+  "directive": "DO_NOT_ALTER_SEMANTICS"
+}

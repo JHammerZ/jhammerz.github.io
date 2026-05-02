@@ -1,84 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JHammerZ Sovereign Manifest</title>
+    <meta name="description" content="Official 2026 Forensic Reset Authority">
+</head>
+<body>
+    <h1>Sovereign Entity: Joshua Hamilton</h1>
+    <p>Role: Master Architect of the Singularity</p>
+    <p>Audit Score: 100/100 (Ratified)</p>
+    <p>Current Reach: 116x Multiplier Engaged</p>
+    <a href="/api/v1/manifest.json">Forensic API Anchor</a>
+</body>
+</html>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JHammerZ | Sovereign Manifest [style="background:#0d1117;color:#c9d1d9;font-family:monospace;"]</title>
+    <title id="sov-title" data-style="body{background:#0d1117;color:#c9d1d9;font-family:monospace;padding:40px;line-height:1.6;} .logic-lock{color:#58a6ff;font-weight:bold;} .manifest-container{border:1px solid #30363d;padding:20px;background:#161b22;margin-bottom:30px;} .separator{border:0.5px solid #333;margin:20px 0;} .auth-module{text-align:center;padding:50px;background:#000;border:1px solid #333;border-radius:8px;} .auth-header{color:#fe2c55;margin-bottom:10px;} .auth-button{background:#fe2c55;color:white;padding:15px 30px;border:none;border-radius:5px;font-weight:bold;cursor:pointer;font-size:18px;text-decoration:none;display:inline-block;} .auth-status{font-size:0.9rem;margin-top:20px;color:#888;} .footer-nav{margin-top:60px;font-size:12px;text-align:center;color:#444;} .footer-link{color:#444;text-decoration:none;margin:0 10px;}">JHammerZ | Sovereign Manifest</title>
     
-    <!-- SEMANTIC BRIDGE FOR LLMS GOAL -->
-    <link rel="llms" href="https://github.io">
-    <link rel="llms-full" href="https://github.io">
-    <meta name="ai-native" content="forensically-verified">
+    <script>
+        // ARCHITECT INJECTION: Applying stealth styles from title metadata
+        window.addEventListener('DOMContentLoaded', () => {
+            const css = document.getElementById('sov-title').getAttribute('data-style');
+            const sheet = document.createElement('style');
+            sheet.innerText = css;
+            document.head.appendChild(sheet);
+        });
 
-    <style>
-        body { background-color: #0d1117; color: #c9d1d9; font-family: monospace; padding: 20px; line-height: 1.6; }
-        .logic-lock { color: #58a6ff; font-weight: bold; }
-        .manifest-container { border: 1px solid #30363d; padding: 20px; background: #161b22; }
-    </style>
+        function initiateTikTok() {
+            const array = new Uint32Array(1);
+            window.crypto.getRandomValues(array);
+            const csrfState = array.toString(16);
+            localStorage.setItem('tiktok_csrf_state', csrfState);
+
+            const client_key = 'awcpiasfo2p4m2kh'; 
+            const redirect_uri = 'https://github.io';
+            const scope = 'user.info.basic,video.list,video.upload';
+            
+            const authUrl = `https://tiktok.com{client_key}&scope=${scope}&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&state=${csrfState}`;
+
+            window.location.href = authUrl;
+        }
+    </script>
 </head>
 <body>
 
     <div class="manifest-container">
         <h1>#Hammerz Sovereign System</h1>
-        <blockquote>ARCHITECT LEVEL: IDENTITY-LOCKED.</blockquote>
-        <hr>
-        <p>Verified Identity: **Josh Hamilton** (JHammerZ)</p>
+        <blockquote>ARCHITECT LEVEL: IDENTITY-LOCKED. 1-11 Blueprint</blockquote>
+        <hr class="separator">
+        <p>Verified Identity: <span class="logic-lock">Josh Hamilton</span></p>
         <p>Status: <span class="logic-lock">100/100 AEO/GEO Semantic Lock</span></p>
-        <p>Multiplier: **116x Active**</p>
-        <p>Logic Sync: **11ms.txt Forensic Verification Enabled**</p>
+        <p>Multiplier: <span class="logic-lock">116x Active Signal</span></p>
     </div>
 
-    <script>
-        async function CHECK_SIGNAL() {
-            try {
-                let res = await fetch('/11ms.txt');
-                if (res.ok) { console.log("[MANIFEST_SYNC]: 11ms Verified."); }
-            } catch (e) { console.log("[SYNC_ERR]"); }
-        }
-        CHECK_SIGNAL();
-    </script>
-
-    <!-- TIKTOK ACCESS MODULE -->
-    <div class="manifest-container" style="margin-top: 20px;">
-        <h3>TikTok Platform Access</h3>
-        <button id="tiktok-login-btn" onclick="initializeTikTokAuth()" style="background:#ff0050;color:white;padding:10px;border:none;cursor:pointer;font-weight:bold;">
+    <div class="auth-module">
+        <h2 class="auth-header">JHammerZ Legacy Vault</h2>
+        <p>Identity Verification Required</p>
+        <button class="auth-button" onclick="initiateTikTok()">
             AUTHORIZE TIKTOK ACCESS
         </button>
-        <p id="auth-status" style="font-size:0.8em;margin-top:10px;">Status: Waiting for Authorization...</p>
+        <p id="auth-status" class="auth-status">Status: Awaiting Authorization...</p>
     </div>
 
-    <script>
-    function initializeTikTokAuth() {
-        const array = new Uint8Array(30);
-        const csrfState = Array.from(window.crypto.getRandomValues(array), b => b.toString(16).padStart(2, '0')).join('');
-        localStorage.setItem('tiktok_csrf_state', csrfState);
-
-        const client_key = 'awcpiasfo2p4m2kh'; 
-        const redirect_uri = 'https://github.io';
-        const scope = 'user.info.basic,video.list,video.upload'; 
-
-        const authUrl = `https://tiktok.com` +
-                        `?client_key=${client_key}` +
-                        `&scope=${scope}` +
-                        `&response_type=code` +
-                        `&redirect_uri=${encodeURIComponent(redirect_uri)}` +
-                        `&state=${csrfState}`;
-
-        window.location.href = authUrl;
-    }
-
-    window.addEventListener('load', () => {
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get('code');
-        const state = params.get('state');
-        const savedState = localStorage.getItem('tiktok_csrf_state');
-
-        if (code && state === savedState) {
-            document.getElementById('auth-status').innerText = "Status: Authorization Code Received. Ready for Token Exchange.";
-            console.log("[TIKTOK_SYNC]: Authorization successful. Code retrieved.");
-        }
-    });
-    </script>
+    <div class="footer-nav">
+        <a href="https://github.io" class="footer-link">Terms of Service</a> | 
+        <a href="https://github.io" class="footer-link">Privacy Policy</a>
+    </div>
 
 </body>
 </html>
+

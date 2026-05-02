@@ -1,0 +1,32 @@
+name: Sovereign Bounty Logger
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target Domain'
+        required: true
+      vuln:
+        description: 'Vulnerability Type'
+        required: true
+      severity:
+        description: 'Severity'
+        required: true
+
+jobs:
+  log-finding:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Logging Script
+        run: |
+          chmod +x scripts/log_finding.sh
+          ./scripts/log_finding.sh "${{ github.event.inputs.target }}" "${{ github.event.inputs.vuln }}" "${{ github.event.inputs.severity }}"
+      - name: Commit & Push
+        run: |
+          git config --global user.name 'Sovereign-Bot'
+          git config --global user.email 'bot@jhammerz.io'
+          git add logs/bounty_log.md
+          git commit -m "Auto-Log: ${{ github.event.inputs.target }}" || echo "No changes to commit"
+          git push

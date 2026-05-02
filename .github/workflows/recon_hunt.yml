@@ -1,0 +1,24 @@
+name: Real-World Recon Swarm
+on:
+  repository_dispatch:
+    types: [recon_hunt]
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Tools
+        run: |
+          go install -v ://github.com
+          go install -v ://github.com
+      
+      - name: Run Recon on Target
+        run: |
+          # The dashboard sends the target name in the 'client_payload'
+          subfinder -d ${{ github.event.client_payload.target }} -silent | nuclei -t nuclei-templates/exposures/ -o results.txt
+          
+      - name: Upload Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: bug-evidence
+          path: results.txt

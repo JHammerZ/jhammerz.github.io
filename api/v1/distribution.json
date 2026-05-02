@@ -1,0 +1,7 @@
+{
+  "platforms": ["YouTube", "TikTok", "Facebook"],
+  "sync_status": "ACTIVE",
+  "keys_anchored": 18,
+  "real_time_telemetry": "ENABLED",
+  "target_velocity": "116x"
+}

@@ -1,0 +1,9 @@
+{
+  "protocol": "116x_SATURATION",
+  "nodes": [
+    {"platform": "TikTok", "peak_window": "18:00-21:00", "content_type": "Direct_Post"},
+    {"platform": "YouTube", "peak_window": "Lunch_Break", "content_type": "Shorts_AEO"},
+    {"platform": "Facebook", "peak_window": "Morning_Anchor", "content_type": "High_Fid"}
+  ],
+  "status": "ARMED_FOR_BROADCAST"
+}

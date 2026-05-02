@@ -1,1 +1,5 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # Forces them to finish one-by-one instead of killing each other
+
 include: [".well-known"]

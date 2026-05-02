@@ -1,0 +1,7 @@
+{
+  "protocol": "ACP-2026",
+  "wallet_anchor": "Quantum_Secure_Vault",
+  "spending_limits": "Master_Architect_Defined",
+  "audit_trail": "forensics/sentinel.log",
+  "status": "AGENTIC_COMMERCE_ENABLED"
+}

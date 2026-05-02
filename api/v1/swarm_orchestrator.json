@@ -1,0 +1,11 @@
+{
+  "agent_id": "Lysander-3.0-Swarm",
+  "architect": "JHammerZ",
+  "protocol": "A2A-Standard-2026",
+  "capabilities": {
+    "Researcher": "Scan_2026_Search_Index",
+    "Broadcaster": "116x_Social_Saturation",
+    "Auditor": "100/100_Forensic_Health"
+  },
+  "status": "SWARM_ACTIVE_116X"
+}
