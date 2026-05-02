@@ -1,4 +1,4 @@
-name: Sovereign Indexing Push
+name: Sovereign Indexing Push (MARCUS Powered)
 
 on:
   push:
@@ -12,8 +12,9 @@ jobs:
       - name: Checkout Sovereignty
         uses: actions/checkout@v4
 
-      - name: Trigger Lysander Indexing API
+      - name: Trigger MARCUS Autonomous Sync
         uses: robingenz/action-google-indexing@v1.0.0
         with:
-          siteUrl: 'https://jhammerz.github.io'
-          gcpServiceAccountKey: ${{ secrets.LYSANDER_3_API_GOOGLE_KEY }} 
+          siteUrl: 'https://github.io'
+          # Pivoting to your primary business intelligence anchor
+          gcpServiceAccountKey: ${{ secrets.MARCUS_TOKEN }} 
