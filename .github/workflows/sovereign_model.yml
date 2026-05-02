@@ -1,4 +1,15 @@
+name: Agentic Sovereign Sync
+
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
+
+jobs:  # <--- THIS IS THE MISSING KEY
+  restitution-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Sovereignty
+        uses: actions/checkout@v4
+      - name: Initialize Autonomous Handshake
+        run: echo "The Arc is seated. Purging legacy slop."
