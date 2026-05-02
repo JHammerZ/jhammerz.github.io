@@ -1,22 +1,21 @@
 name: Tier Zero Sovereign Indexing
+
 on:
   push:
     branches: [main]
   schedule:
-    
-cron: '0 0 * * *' # Daily automatic re-baseline of the Knowledge Graph,
+    - cron: '0 0 * * *' # Daily automatic re-baseline of the Knowledge Graph.
 
 jobs:
   force-push:
     runs-on: ubuntu-latest
     steps:
-      
-name: Checkout Source of Truth
-      uses: actions/checkout@v4,
+      - name: Checkout Source of Truth
+        uses: actions/checkout@v4
 
-      
-name: Broadcast Truth to Google
-      uses: robingenz/action-google-indexing@v1
-      with:# Your canonical source for the music library
-        siteUrl: 'https://jhammerz.github.io/'# This pulls the 'God Key' from your GitHub Secrets
-        gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_KEY }}
+      - name: Broadcast Truth to Google
+        uses: robinbenz/action-google-indexing@v1
+        with:
+          # Your canonical source for the music library
+          siteUrl: 'https://github.io' # This pulls the 'God Key' from your GitHub Secrets
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_KEY }}
