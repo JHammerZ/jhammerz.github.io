@@ -1,20 +1,21 @@
-name: Sovereign Indexing Push (MARCUS Powered)
+name: Sovereign Indexing Push
 
 on:
   push:
     branches:
-      - main 
+      - main  # Ensure this matches your primary branch name
 
 jobs:
-  index:
+  index-sync:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Sovereignty
         uses: actions/checkout@v4
 
-      - name: Trigger MARCUS Autonomous Sync
+      - name: Trigger Lysander Indexing API
         uses: robingenz/action-google-indexing@v1.0.0
         with:
+          # Your Truth Anchor
           siteUrl: 'https://github.io'
-          # Pivoting to your primary business intelligence anchor
-          gcpServiceAccountKey: ${{ secrets.MARCUS_TOKEN }} 
+          # IMPORTANT: This secret MUST contain the full Google JSON key
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
