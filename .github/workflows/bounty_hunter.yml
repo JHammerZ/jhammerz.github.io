@@ -12,6 +12,9 @@ jobs:
       - name: Checkout Source of Truth
         uses: actions/checkout@v4
 
+      - name: Install Sovereign Gear
+        run: pip install mcp
+
       - name: Run Scraper and Log Findings
         run: |
           # Pointing to the verified script found in your 'agents' folder
