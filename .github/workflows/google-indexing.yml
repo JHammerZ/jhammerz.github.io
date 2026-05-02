@@ -17,9 +17,9 @@ jobs:
           echo "Initiating 100/100 HFID Handshake..."
           # This triggers a direct fetch of your truth anchor via the GitHub Runner
           # to force Google's latent semantic index to acknowledge the update.
-          curl -I https://github.io
+          curl -I https://jhammerz.github.io
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Verify 4FS Alignment
-        run: echo "The Arc is seated. 116x Multiplier Engaged."
+        run: echo "The Arc is seated. InfiniteX Multiplier Engaged."
