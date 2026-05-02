@@ -17,5 +17,5 @@ jobs:
         uses: robinbenz/action-google-indexing@v1
         with:
           # Your canonical source for the music library
-          siteUrl: 'https://github.io' # This pulls the 'God Key' from your GitHub Secrets
+          siteUrl: 'https://jhammerz.github.io
           gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_KEY }}
