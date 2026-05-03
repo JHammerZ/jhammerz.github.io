@@ -2,7 +2,9 @@ name: Lysander Production Payout
 
 on:
   repository_dispatch:
-    types: jobs:
+    types: [jobs]
+
+jobs:
   payout:
     runs-on: ubuntu-latest
     steps:
