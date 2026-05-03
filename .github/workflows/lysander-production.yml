@@ -26,8 +26,7 @@ jobs:
           REWARD="${{ github.event.client_payload.reward }}"
           
           if ; then
-            echo "❌ ERROR: No reward amount provided in the dispatch payload!"
-            echo "Make sure to include a 'reward' value when triggering."
+            echo "❌ ERROR: No reward amount provided!"
             exit 1
           fi
           
