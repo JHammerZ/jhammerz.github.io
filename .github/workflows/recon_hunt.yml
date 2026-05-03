@@ -1,6 +1,7 @@
 name: Real-World Recon Swarm
 
 on:
+  workflow_dispatch:
   repository_dispatch:
     types: jobs:
   hunt:
