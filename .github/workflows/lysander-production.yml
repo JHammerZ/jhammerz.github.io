@@ -29,15 +29,20 @@ jobs:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
           REWARD: ${{ inputs.reward || github.event.client_payload.reward }}
         run: |
-          if [ -z "$REWARD" ]; then
-            echo "❌ ERROR: No reward amount provided!"
+          if [ -z "$REWARD" ] || [ "$REWARD" = "0" ]; then
+            echo "❌ ERROR: No valid reward amount provided!"
             exit 1
           fi
 
           echo "✅ Reward amount received: $REWARD"
           echo "TARGET: $$REWARD -> Stride Bank (***1921)"
 
-          # Run the settlement script but continue even if it fails (for debugging)
-          python lysander_settlement.py --amount "$REWARD" || echo "⚠️ Script exited with error (logged above)"
+          echo "--- INITIALIZING REAL-TIME SETTLEMENT ---"
+          echo "TARGET: \$$REWARD -> Stride Bank (***1921)"
 
-          echo "Settlement attempt completed."
+          python lysander_settlement.py --amount "$REWARD" || {
+            echo "⚠️ Python script failed (see above)"
+            exit 1
+          }
+
+          echo "✅ Settlement completed successfully."
