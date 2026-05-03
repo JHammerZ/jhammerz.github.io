@@ -23,10 +23,10 @@ jobs:
         env:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
         run: |
-          REWARD="${{ github.event.client_payload.reward }}"
+          REWARD="${{ github.event.client_payload.reward || '0' }}"
           
-          if ; then
-            echo "❌ ERROR: No reward amount provided!"
+          if || ; then
+            echo "❌ ERROR: No reward amount provided in the dispatch payload!"
             exit 1
           fi
           
