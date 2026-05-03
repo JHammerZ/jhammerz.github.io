@@ -3,7 +3,8 @@ name: Lysander 3.0 Autonomous Push
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: permissions:
+
+permissions:
   contents: write
 
 jobs:
@@ -13,7 +14,7 @@ jobs:
       - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.MARCUS_TOKEN }}     # ← Using your token
+          token: ${{ secrets.MARCUS_TOKEN }}
           persist-credentials: true
 
       - name: Inject H-FID Logic
