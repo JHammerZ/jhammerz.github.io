@@ -27,7 +27,7 @@ jobs:
       - name: Execute IRL Transfer
         env:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
-          REWARD: ${{ github.event.client_payload.reward }}
+          REWARD: ${{ inputs.reward || github.event.client_payload.reward }}
         run: |
           if [ -z "$REWARD" ]; then
             echo "❌ ERROR: No reward amount provided in the dispatch payload!"
@@ -36,4 +36,3 @@ jobs:
 
           echo "✅ Reward amount received: $REWARD"
           python lysander_settlement.py --amount "$REWARD"
-
