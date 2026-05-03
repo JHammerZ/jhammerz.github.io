@@ -17,6 +17,14 @@ jobs:
       - name: Update Nuclei Templates
         run: nuclei -update-templates
 
+      - name: Debug Template Path
+        run: |
+          echo "=== Template Directory Debug ==="
+          ls -la ~/nuclei-templates/ 2>/dev/null || echo "Main templates dir not found"
+          ls -la ~/nuclei-templates/http/ 2>/dev/null || echo "http/ dir not found"
+          ls -la ~/nuclei-templates/http/exposures/ 2>/dev/null || echo "exposures/ dir not found"
+          echo "================================="
+
       - name: Run Recon on Target
         run: |
           TARGET="${{ github.event.client_payload.target }}"
@@ -26,7 +34,7 @@ jobs:
           subfinder -d "$TARGET" -silent -o subdomains.txt
           echo "→ Found $(wc -l < subdomains.txt 2>/dev/null || echo 0) subdomains"
           
-          # Nuclei - using correct path (http/exposures/)
+          # Nuclei
           if [ -s subdomains.txt ]; then
             echo "→ Running Nuclei exposure scan..."
             nuclei \
