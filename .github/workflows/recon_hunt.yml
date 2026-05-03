@@ -2,9 +2,7 @@ name: Real-World Recon Swarm
 
 on:
   repository_dispatch:
-    types: [recon_hunt]
-
-jobs:
+    types: jobs:
   hunt:
     runs-on: ubuntu-latest
     steps:
@@ -17,22 +15,19 @@ jobs:
       - name: Update Nuclei Templates
         run: nuclei -update-templates
 
-      - name: Debug Templates
-        run: |
-          echo "=== DEBUG ==="
-          ls ~/nuclei-templates/http/exposures/ 2>/dev/null && echo "exposures folder FOUND" || echo "exposures folder MISSING"
-          echo "============="
-
       - name: Run Recon on Target
         run: |
           TARGET="${{ github.event.client_payload.target }}"
-          echo "Scanning: $TARGET"
+          echo "🔍 Scanning target: $TARGET"
           
           subfinder -d "$TARGET" -silent -o subdomains.txt
-          echo "Subdomains: $(wc -l < subdomains.txt 2>/dev/null || echo 0)"
           
-          if [ -s subdomains.txt ]; then
-            nuclei -list subdomains.txt -t ~/nuclei-templates/http/exposures/ -silent -o results.txt -severity low,medium,high,critical || true
+          if ; then
+            nuclei -list subdomains.txt \
+              -t ~/nuclei-templates/http/exposures/ \
+              -silent \
+              -o results.txt \
+              -severity low,medium,high,critical || true
           else
             touch results.txt
           fi
