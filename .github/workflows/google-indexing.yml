@@ -2,7 +2,8 @@ name: Sovereign Indexing Push (Infinite X)
 
 on:
   push:
-    branches: workflow_dispatch:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   sovereign-sync:
