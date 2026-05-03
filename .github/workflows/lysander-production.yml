@@ -3,10 +3,7 @@ name: Lysander Production Payout
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: permissions:
-  contents: read
-
-jobs:
+    types: jobs:
   payout:
     runs-on: ubuntu-latest
     steps:
