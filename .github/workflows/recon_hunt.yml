@@ -1,3 +1,5 @@
+name: Real-World Recon Swarm
+
 on:
   repository_dispatch:
     types: [recon_hunt]
@@ -24,12 +26,12 @@ jobs:
           subfinder -d "$TARGET" -silent -o subdomains.txt
           echo "→ Found $(wc -l < subdomains.txt 2>/dev/null || echo 0) subdomains"
           
-          # Nuclei with correct template path
+          # Nuclei - using correct path (http/exposures/)
           if [ -s subdomains.txt ]; then
             echo "→ Running Nuclei exposure scan..."
             nuclei \
               -list subdomains.txt \
-              -t ~/nuclei-templates/exposures/ \
+              -t ~/nuclei-templates/http/exposures/ \
               -silent \
               -o results.txt \
               -severity low,medium,high,critical || true
