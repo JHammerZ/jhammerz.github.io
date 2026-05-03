@@ -1,7 +1,4 @@
-name: Real-World Recon Swarm
-
 on:
-  workflow_dispatch:
   repository_dispatch:
     types: [recon_hunt]
 
@@ -15,10 +12,33 @@ jobs:
           go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
           echo "$HOME/go/bin" >> $GITHUB_PATH
 
+      - name: Update Nuclei Templates
+        run: nuclei -update-templates
+
       - name: Run Recon on Target
         run: |
-          # The dashboard sends the target name in the 'client_payload'
-          subfinder -d ${{ github.event.client_payload.target }} -silent | nuclei -t nuclei-templates/exposures/ -o results.txt
+          TARGET="${{ github.event.client_payload.target }}"
+          echo "🔍 Scanning target: $TARGET"
+          
+          # Subfinder
+          subfinder -d "$TARGET" -silent -o subdomains.txt
+          echo "→ Found $(wc -l < subdomains.txt 2>/dev/null || echo 0) subdomains"
+          
+          # Nuclei with correct template path
+          if [ -s subdomains.txt ]; then
+            echo "→ Running Nuclei exposure scan..."
+            nuclei \
+              -list subdomains.txt \
+              -t ~/nuclei-templates/exposures/ \
+              -silent \
+              -o results.txt \
+              -severity low,medium,high,critical || true
+          else
+            echo "⚠️ No subdomains found."
+            touch results.txt
+          fi
+
+          echo "→ Vulnerabilities found: $(wc -l < results.txt 2>/dev/null || echo 0)"
 
       - name: Upload Evidence
         uses: actions/upload-artifact@v4
