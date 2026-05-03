@@ -3,7 +3,9 @@ name: Real-World Recon Swarm
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: jobs:
+    types: [jobs]
+
+jobs:
   hunt:
     runs-on: ubuntu-latest
     steps:
@@ -26,9 +28,9 @@ on:
         run: |
           TARGET="${{ github.event.client_payload.target }}"
           echo "Scanning: $TARGET"
-          
+
           subfinder -d "$TARGET" -silent -o subdomains.txt
-          
+
           if [ -s subdomains.txt ]; then
             nuclei -list subdomains.txt \
               -t ~/nuclei-templates/http/exposures/ \
