@@ -1,3 +1,8 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+    
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
