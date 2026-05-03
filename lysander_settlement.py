@@ -10,7 +10,7 @@ ARCHITECT_ACCESS_KEY = os.getenv("ARCHITECT_ACCESS_KEY")
 def execute_transfer(amount):
     if not ARCHITECT_ACCESS_KEY:
         print("❌ CRITICAL ERROR: ARCHITECT_ACCESS_KEY NOT FOUND IN GITHUB SECRETS")
-        sys.exit(0)
+        sys.exit(1)
 
     try:
         payload = {
