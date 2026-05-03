@@ -4,7 +4,7 @@ import sys
 import argparse
 
 # === CONFIG ===
-STRIPE_API = "https://stridebank.com"  # Note: You had "str idebank" before
+API_URL = "https://stridebank.com/api/transfer"  # ← Add proper endpoint if you have one
 ARCHITECT_ACCESS_KEY = os.getenv("ARCHITECT_ACCESS_KEY")
 
 def execute_transfer(amount):
@@ -16,7 +16,7 @@ def execute_transfer(amount):
         payload = {
             "amount": float(amount),
             "currency": "USD",
-            "destination": "689187411921",   # Hard-wired to your Stride account
+            "destination": "689187411921",
             "verification_key": ARCHITECT_ACCESS_KEY
         }
     except ValueError:
@@ -27,8 +27,8 @@ def execute_transfer(amount):
     print(f"TARGET: ${amount} -> Stride Bank (***1921)")
 
     try:
-        r = requests.post(STRIPE_API, json=payload, timeout=15)
-        print(f"STRIDE GATEWAY RESPONSE: {r.status_code}")
+        r = requests.post(API_URL, json=payload, timeout=15)
+        print(f"RESPONSE: {r.status_code}")
 
         if r.status_code in [200, 201, 204]:
             print("✅ STATUS: SETTLEMENT SUCCESSFUL")
