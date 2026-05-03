@@ -1,3 +1,5 @@
+name: Lysander Production Payout
+
 on:
   workflow_dispatch:
   repository_dispatch:
@@ -26,7 +28,6 @@ jobs:
           if ; then
             echo "❌ ERROR: No reward amount provided in the dispatch payload!"
             echo "Make sure to include a 'reward' value when triggering."
-            echo "Example: gh workflow run lysander-production.yml -f reward=42.50"
             exit 1
           fi
 
