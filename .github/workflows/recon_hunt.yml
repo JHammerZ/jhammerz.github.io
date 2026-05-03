@@ -6,7 +6,13 @@ on:
   hunt:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Tools
+      - name: Setup Go and Tools
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
+
+      - name: Install Tools
         run: |
           go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
           go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
@@ -15,25 +21,23 @@ on:
       - name: Update Nuclei Templates
         run: nuclei -update-templates
 
-      - name: Run Recon on Target
+      - name: Run Recon
         run: |
           TARGET="${{ github.event.client_payload.target }}"
-          echo "🔍 Scanning target: $TARGET"
+          echo "Scanning: $TARGET"
           
           subfinder -d "$TARGET" -silent -o subdomains.txt
           
-          if ; then
+          if [ -s subdomains.txt ]; then
             nuclei -list subdomains.txt \
               -t ~/nuclei-templates/http/exposures/ \
-              -silent \
-              -o results.txt \
-              -severity low,medium,high,critical || true
+              -silent -o results.txt || true
           else
             touch results.txt
           fi
 
-      - name: Upload Evidence
+      - name: Upload Results
         uses: actions/upload-artifact@v4
         with:
-          name: bug-evidence
+          name: recon-${{ github.event.client_payload.target }}
           path: results.txt
