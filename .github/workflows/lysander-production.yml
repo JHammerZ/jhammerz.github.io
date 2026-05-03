@@ -24,13 +24,17 @@ jobs:
         env:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
         run: |
-          # Safety check to prevent argparse exit code 2
-          if [ -z "${{ github.event.client_payload.reward }}" ]; then
+          # === SAFETY CHECK - Prevent argparse exit code 2 ===
+          REWARD="${{ github.event.client_payload.reward }}"
+
+          if [ -z "$REWARD" ]; then
             echo "❌ ERROR: No reward amount provided in the dispatch payload!"
-            echo "Make sure you send a 'reward' field when triggering this workflow."
+            echo "Make sure you include a 'reward' field when triggering."
+            echo "Example: gh workflow run lysander-production.yml -f reward=42.50"
             exit 1
           fi
 
-          echo "✅ Reward amount received: ${{ github.event.client_payload.reward }}"
+          echo "✅ Reward amount received: $REWARD"
 
-          python lysander_settlement.py --amount "${{ github.event.client_payload.reward }}"
+          # Run the actual payout script
+          python lysander_settlement.py --amount "$REWARD"
