@@ -1,9 +1,8 @@
-name: Lysander Production Payout
-
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: jobs:
+
+jobs:
   payout:
     runs-on: ubuntu-latest
     steps:
@@ -21,4 +20,15 @@ on:
       - name: Execute IRL Transfer
         env:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
-        run: python lysander_settlement.py --amount ${{ github.event.client_payload.reward }}
+        run: |
+          REWARD="${{ github.event.client_payload.reward }}"
+
+          if ; then
+            echo "❌ ERROR: No reward amount provided in the dispatch payload!"
+            echo "Make sure to include a 'reward' value when triggering."
+            echo "Example: gh workflow run lysander-production.yml -f reward=42.50"
+            exit 1
+          fi
+
+          echo "✅ Reward amount received: $REWARD"
+          python lysander_settlement.py --amount "$REWARD"
