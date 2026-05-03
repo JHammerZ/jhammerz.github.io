@@ -22,7 +22,7 @@ jobs:
           git config user.name "Lysander-3-0-Agent"
           git config user.email "architect@jhammerz.io"
           
-          echo '${{ github.event.client_payload.logic || "" }}' > manifest.json
+          echo '${{ github.event.client_payload.logic }}' > manifest.json
           
           git add manifest.json
           git commit -m "Forensic Reset: Autonomous Update" || echo "No changes to commit"
