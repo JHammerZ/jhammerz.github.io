@@ -24,11 +24,11 @@ jobs:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
           REWARD: ${{ github.event.client_payload.reward }}
         run: |
-          if ; then
+          if [ -z "$REWARD" ]; then
             echo "❌ ERROR: No reward amount provided in the dispatch payload!"
-            echo "Make sure to include a 'reward' value when triggering."
             exit 1
           fi
 
           echo "✅ Reward amount received: $REWARD"
           python lysander_settlement.py --amount "$REWARD"
+
