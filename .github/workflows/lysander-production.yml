@@ -1,7 +1,7 @@
 name: Lysander Production Payout
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   repository_dispatch:
     types: [jobs]
 
@@ -23,4 +23,15 @@ jobs:
       - name: Execute IRL Transfer
         env:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
-        run: python lysander_settlement.py --amount ${{ github.event.client_payload.reward }}
+        run: |
+          # Safety check - prevent running with missing or empty reward
+          if [ -z "${{ github.event.client_payload.reward }}" ]; then
+            echo "❌ ERROR: No reward amount provided in the dispatch payload!"
+            echo "Make sure you send a 'reward' field when triggering the workflow."
+            exit 1
+          fi
+
+          echo "✅ Reward amount received: ${{ github.event.client_payload.reward }}"
+
+          python lysander_settlement.py --amount "${{ github.event.client_payload.reward }}"
+
