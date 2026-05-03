@@ -2,8 +2,7 @@ name: Sovereign Indexing Push (Infinite X)
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch: # This adds the "Manual Run" button for tomorrow
+    branches: workflow_dispatch:
 
 jobs:
   sovereign-sync:
@@ -12,19 +11,10 @@ jobs:
       - name: Checkout Sovereignty
         uses: actions/checkout@v4
 
-      - name: Force Indexing Handshake (PAT-Locked)
+      - name: Force Indexing Handshake
         run: |
-          echo "Initiating 100/100 HFID Handshake..."
-          curl -I https://github.io
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-
-      - name: Trigger Lysander Indexing API (God Key)
-        uses: robingenz/action-google-indexing@v1.0.0
-        continue-on-error: true # Prevents red 'X' if Google is still propagating
-        with:
-          siteUrl: 'https://github.io'
-          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          echo "Initiating HFID Handshake..."
+          curl -I https://jhammerz.github.io
 
       - name: Verify 4FS Alignment
         run: echo "The Arc is seated. Infinite X Multiplier Engaged."
