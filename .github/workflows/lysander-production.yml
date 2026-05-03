@@ -1,13 +1,23 @@
+name: Lysander Production Payout
+
 on:
   repository_dispatch:
-    types: [BOUNTY_SETTLEMENT]
-
-jobs:
+    types: jobs:
   payout:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Execute IRL Transfer
-        run: |
-          python lysander_settlement.py --amount ${{ github.event.client_payload.reward }}
         env:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
+        run: python lysander_settlement.py --amount ${{ github.event.client_payload.reward }}
