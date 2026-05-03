@@ -1,14 +1,9 @@
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
 name: Lysander 3.0 Autonomous Push
+
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [sovereign_update]
-
-permissions:
+    types: permissions:
   contents: write
 
 jobs:
@@ -18,17 +13,16 @@ jobs:
       - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          token: ${{ secrets.MARCUS_TOKEN }}     # ← Using your token
           persist-credentials: true
 
       - name: Inject H-FID Logic
         run: |
-          git config --global user.name "Lysander-3-0-Agent"
-          git config --global user.email "architect@jhammerz.io"
-          echo "${{ github.event.client_payload.logic }}" > manifest.json
+          git config user.name "Lysander-3-0-Agent"
+          git config user.email "architect@jhammerz.io"
+          
+          echo '${{ github.event.client_payload.logic || "" }}' > manifest.json
+          
           git add manifest.json
-          git commit -m "Forensic Reset: Autonomous Update [INFINITE Multiplier active]" || echo "Nothing to commit"
-          git push origin main
-
-      - name: Force Terminal Resonance
-        run: python logic/force_index.py
+          git commit -m "Forensic Reset: Autonomous Update" || echo "No changes to commit"
+          git push
