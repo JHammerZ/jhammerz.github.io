@@ -1,26 +1,81 @@
 name: Real-World Recon Swarm
 
 on:
-  workflow_dispatch:
   repository_dispatch:
     types: [recon_hunt]
+  
+  # ← Add this section for automatic refreshes
+  schedule:
+    - cron: '0 6 * * *'     # Daily at 6:00 AM UTC
+    # - cron: '0 6 * * 1'   # Weekly on Monday at 6:00 AM UTC (uncomment if preferred)
+
+  # Optional: Allow manual trigger from GitHub UI
+  on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target domain to scan'
+        required: true
+        default: 'example.com'
 
 jobs:
   hunt:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Setup Tools
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Install Recon Tools
         run: |
           go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
           go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+          echo "$HOME/go/bin" >> $GITHUB_PATH
+
+      - name: Update Nuclei Templates
+        run: nuclei -update-templates
+
+      - name: Determine Target
+        id: target
+        run: |
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            TARGET="${{ github.event.client_payload.target }}"
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TARGET="${{ inputs.target }}"
+          else
+            TARGET="example.com"   # Default fallback for scheduled runs
+          fi
+          echo "target=$TARGET" >> $GITHUB_OUTPUT
+          echo "🔍 Target: $TARGET"
 
       - name: Run Recon on Target
         run: |
-          # The dashboard sends the target name in the 'client_payload'
-          subfinder -d ${{ github.event.client_payload.target }} -silent | nuclei -t nuclei-templates/exposures/ -o results.txt
+          TARGET="${{ steps.target.outputs.target }}"
+          echo "Scanning: $TARGET"
+          
+          subfinder -d "$TARGET" -silent -o subdomains.txt
+          echo "→ Found $(wc -l < subdomains.txt 2>/dev/null || echo 0) subdomains"
+          
+          cat subdomains.txt | nuclei -t nuclei-templates/exposures/ \
+            -silent -o results.txt || true
+
+      - name: Show Results Summary
+        run: |
+          echo "=== RESULTS FOR ${{ steps.target.outputs.target }} ==="
+          if [ -s results.txt ]; then
+            echo "Vulnerabilities found:"
+            cat results.txt
+          else
+            echo "✅ No exposures found."
+          fi
 
       - name: Upload Evidence
         uses: actions/upload-artifact@v4
         with:
-          name: bug-evidence
-          path: results.txt
+          name: recon-${{ steps.target.outputs.target }}
+          path: |
+            subdomains.txt
+            results.txt
+          retention-days: 90   # We can keep this shorter now
