@@ -30,9 +30,14 @@ jobs:
           REWARD: ${{ inputs.reward || github.event.client_payload.reward }}
         run: |
           if [ -z "$REWARD" ]; then
-            echo "❌ ERROR: No reward amount provided in the dispatch payload!"
+            echo "❌ ERROR: No reward amount provided!"
             exit 1
           fi
 
           echo "✅ Reward amount received: $REWARD"
-          python lysander_settlement.py --amount "$REWARD"
+          echo "TARGET: $$REWARD -> Stride Bank (***1921)"
+
+          # Run the settlement script but continue even if it fails (for debugging)
+          python lysander_settlement.py --amount "$REWARD" || echo "⚠️ Script exited with error (logged above)"
+
+          echo "Settlement attempt completed."
