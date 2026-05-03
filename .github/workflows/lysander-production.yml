@@ -2,6 +2,11 @@ name: Lysander Production Payout
 
 on:
   workflow_dispatch:
+    inputs:
+      reward:
+        description: 'Payout amount in USD'
+        required: true
+        type: string
   repository_dispatch:
 
 jobs:
