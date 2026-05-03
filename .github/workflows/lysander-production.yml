@@ -28,18 +28,12 @@ jobs:
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
           REWARD: ${{ inputs.reward || github.event.client_payload.reward }}
         run: |
-          # Debug the actual value coming from GitHub
-          echo "Raw REWARD value from GitHub: '$REWARD'"
-
-          # Fallback + validation
+          echo "🔍 Raw REWARD value: '$REWARD'"
+          
           if [ -z "$REWARD" ] || [ "$REWARD" = "0" ]; then
             echo "❌ ERROR: No valid reward amount provided!"
             exit 1
           fi
 
           echo "✅ Reward amount received: $REWARD"
-          echo "TARGET: \$$REWARD -> Stride Bank (***1921)"
-          echo "--- INITIALIZING REAL-TIME SETTLEMENT ---"
-          echo "TARGET: \$$REWARD -> Stride Bank (***1921)"
-
           python lysander_settlement.py --amount "$REWARD"
