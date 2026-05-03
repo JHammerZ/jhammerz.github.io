@@ -1,6 +1,5 @@
 name: Real-World Recon Swarm
 
-on:
   repository_dispatch:
     types: [recon_hunt]
   
