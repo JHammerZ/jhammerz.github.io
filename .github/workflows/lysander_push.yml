@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.MARCUS_TOKEN }}
+          token: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
           persist-credentials: true
 
       - name: Inject H-FID Logic
