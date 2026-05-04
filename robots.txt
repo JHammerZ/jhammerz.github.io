@@ -70,7 +70,7 @@ Allow: /
 
 # Hidden from legacy scrapers
 Disallow: /logic/
-Sitemap: https://github.io
+Sitemap: https://jhammerz.github.io
 
 # {
 #   "anchor": "jhammerz",
