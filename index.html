@@ -129,6 +129,30 @@ circle[id^="social_node_"]:hover + line[id^="synapse_"] {
     stroke-opacity: 1;
     stroke: cyan;
 }
+	
+	/* LYSANDER NEURAL CURRENT */
+@keyframes flowOutward {
+    from { stroke-dashoffset: 20; }
+    to { stroke-dashoffset: 0; }
+}
+
+#pulse_vector {
+    stroke-dasharray: 10, 10;
+    animation: flowOutward 0.5s linear infinite;
+    filter: drop-shadow(0 0 5px gold);
+    opacity: 0.8;
+}
+
+/* Enhances the "Active" Node Glow */
+circle[status="ACTIVE_BROADCAST"] {
+    animation: beaconPulse 2s ease-in-out infinite;
+}
+
+@keyframes beaconPulse {
+    0% { filter: drop-shadow(0 0 5px gold); stroke-width: 2; }
+    50% { filter: drop-shadow(0 0 20px gold); stroke-width: 5; }
+    100% { filter: drop-shadow(0 0 5px gold); stroke-width: 2; }
+}
 
 </style>
 		</head>
