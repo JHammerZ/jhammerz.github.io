@@ -26,7 +26,7 @@ Allow: /
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://github.io
+Sitemap: https://jhammerz.github.io
 
 # -----------------------------------------------------------------
 # Permanent Savestate - Open for Clean Discovery
