@@ -4,11 +4,35 @@ node_modules/
 .env.secret
 private_vault/
 
-# DO NOT ignore .txt or .md - the bot needs these for the audit reports!
+# --- 124GB INDUSTRIAL TOOL CLEANUP ---
+# Ignore C++ Build Artifacts and heavy binaries
+*.exe
+*.obj
+*.pdb
+*.o
+*.out
+*.dll
+*.lib
+*.so
+build/
+bin/
+obj/
+ipch/
+.vs/
+
+# --- PYTHON & PIP PROTECTION ---
+# Ignore virtual environments and pip logs
+venv/
+env/
+pip-log.txt
+*.egg-info/
+
+# # DO NOT ignore .txt or .md - the bot needs these for the audit reports!
 # Ignore local keys and state files
 JHammerZ_Orchestrator/vault_state.json
 JHammerZ_Orchestrator/auth_key.json
 JHammerZ_Orchestrator/*.txt
+
 # Ignore Python cache
 __pycache__/
 *.py[cod]
