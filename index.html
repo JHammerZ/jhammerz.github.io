@@ -108,6 +108,27 @@ hr {
             margin: 20px auto;
             background: rgba(0,0,0,0.5);
         }
+	
+	/* 13-Node Matrix Interaction */
+circle[id^="social_node_"] {
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.3));
+}
+
+circle[id^="social_node_"]:hover {
+    filter: drop-shadow(0 0 15px cyan);
+    r: 30; /* Expands the node slightly on hover */
+    stroke-width: 3;
+}
+
+line[id^="synapse_"] {
+    transition: stroke-opacity 0.5s ease;
+}
+
+circle[id^="social_node_"]:hover + line[id^="synapse_"] {
+    stroke-opacity: 1;
+    stroke: cyan;
+}
 
 </style>
 		</head>
