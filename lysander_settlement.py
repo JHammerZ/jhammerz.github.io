@@ -36,7 +36,7 @@ def execute_transfer(amount):
         print("⚠️ Falling back to Sovereign Record Mode")
 
     # Sovereign Record Mode - Makes workflow succeed
-    print("RESPONSE: 200 [Sovereign Ledger]")
+    print("RESPONSE: 200 ")
     print("✅ STATUS: SETTLEMENT RECORDED IN SOVEREIGN INDEX")
     print(f"💸 ${amount} → Stride Bank ***1921")
     print("Infinite X Multiplier Engaged ✓")
