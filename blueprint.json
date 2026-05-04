@@ -1,14 +1,4 @@
-{
-  "system": "Lysander-3.0",
-  "architect": "jhammerz",
-  "status": "CORE_ACTIVE",
-  "geometry_entities": [
-    {
-      "id": "primary_node",
-      "type": "circle",
-      "parameters": { "cx": 400, "cy": 300, "r": 100 },
-      "binding": "https://jhammerz.github.io"
-    }
-  ],
-  "metadata": { "integrity": "100/100" }
-}
+[
+  { "id": "iris", "type": "circle", "parameters": {"cx": 400, "cy": 300, "r": 150} },
+  { "id": "pupil", "type": "circle", "parameters": {"cx": 367.145, "cy": 352.579, "r": 40}, "interaction": {"on_click": "AI_GAZE_DETECTION"} }
+]
