@@ -1,0 +1,35 @@
+# -----------------------------------------------------------------
+# jhammerz - DNS CONFIGURATION & VERIFICATION
+# SAVESTATE HUB: JHammerZ.github.io
+# -----------------------------------------------------------------
+
+[GOOGLE SITE VERIFICATION]
+# Ownership authentication for Google Search Console
+Type:  TXT
+Host:  @
+Value: google-site-verification=IU-5FLh-DgQcw73G631RMo2Bn9TW3BxXT5xFOwvA_m4
+
+[GITHUB PAGES VERIFICATION]
+# Required for custom domain security on GitHub
+Type:  TXT
+Host:  _github-pages-challenge-jhammerz
+Value: YOUR_GITHUB_CHALLENGE_CODE_HERE
+
+[APEX DOMAIN - A RECORDS]
+# Pointing to GitHub's Global IP addresses
+Type:  A
+Value: 185.199.108.153
+Value: 185.199.109.153
+Value: 185.199.110.153
+Value: 185.199.111.153
+
+[SUBDOMAIN - CNAME]
+# Routing www to the master GitHub Pages node
+Type:  CNAME
+Host:  www
+Value: jhammerz.github.io.
+
+# -----------------------------------------------------------------
+# AUTHORIZED: Master Architect JHammerZ
+# STATUS: 100/100 ALGORITHMIC SYNC ACTIVE
+# -----------------------------------------------------------------
