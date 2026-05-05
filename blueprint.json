@@ -1,4 +1,4 @@
 [
   { "id": "iris", "type": "circle", "parameters": {"cx": 400, "cy": 300, "r": 150} },
-  { "id": "pupil", "type": "circle", "parameters": {"cx": 359.623, "cy": 307.12, "r": 40}, "interaction": {"on_click": "AI_GAZE_DETECTION"} }
+  { "id": "pupil", "type": "circle", "parameters": {"cx": 365.458, "cy": 313.26, "r": 40}, "interaction": {"on_click": "AI_GAZE_DETECTION"} }
 ]
