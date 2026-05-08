@@ -5,26 +5,26 @@ from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
 
 def broadcast_to_google():
-    # 1. Pull and Decode the Base64 Vault
+    # 1. Pull the Base64 Tunnel string
     b64_key = os.getenv("GOOGLE_INDEXING_API_JSON")
+    
     if not b64_key:
         print("ERROR: Secret is missing!")
         return
 
     try:
-        # Rebuild the JSON from the Base64 Tunnel
+        # 2. Rebuild the original JSON from the tunnel
         key_json = base64.b64decode(b64_key).decode('utf-8')
         info = json.loads(key_json)
         
+        # 3. Setup credentials and authorized channel
         scopes = ["https://googleapis.com"]
         creds = service_account.Credentials.from_service_account_info(info, scopes=scopes)
-        
-        # 2. Open the Authorized Channel
         session = AuthorizedSession(creds)
-        endpoint = "https://googleapis.com"
         
-        # 3. Define the Target
-        target_url = "https://jhammerz.github.io"
+        # 4. Define the Broadcast Target
+        target_url = "https://github.io"
+        endpoint = "https://jhammerz.googleapis.com"
         data = {"url": target_url, "type": "URL_UPDATED"}
 
         print(f"INITIATING_RESONANCE: Broadcasting {target_url}...")
