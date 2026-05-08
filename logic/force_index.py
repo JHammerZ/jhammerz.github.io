@@ -15,7 +15,7 @@ def command_indexers():
     key_json = os.getenv("LYSANDER_3_API_GOOGLE_KEY")
     
     data = {
-        "url": "https://github.io",
+        "url": "https://jhammerz.github.io",
         "type": "URL_UPDATED"
     }
 
