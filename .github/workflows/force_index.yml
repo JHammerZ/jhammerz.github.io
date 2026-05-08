@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '0 0 * * *' # Daily automatic re-baseline of the Knowledge Graph
+    - cron: '0 0 * * *'
   workflow_dispatch: # THE GOD BUTTON: Trigger manual indexing anytime
 
 jobs:
@@ -18,4 +18,5 @@ jobs:
         uses: robingenz/action-google-indexing@main
         with:
           siteUrl: 'https://jhammerz.github.io'
+          # ALIGNED TO YOUR VAULT: Using the specific key from your verified secret
           gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_KEY }}
