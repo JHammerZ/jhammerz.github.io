@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           # Using the Internal Key to bypass the 'MARCUS_TOKEN' error
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.LYSANDER_AUTH_TOKEN }}
           persist-credentials: true
 
       - name: Inject H-FID Logic
