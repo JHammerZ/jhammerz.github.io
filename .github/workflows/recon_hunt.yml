@@ -17,8 +17,8 @@ jobs:
 
       - name: Install Recon Tools
         run: |
-          go install -v ://github.com
-          go install -v ://github.com
+          go install -v :https://github.com
+          go install -v :https://github.com
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
       - name: Update Nuclei Templates
