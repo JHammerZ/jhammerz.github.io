@@ -24,7 +24,7 @@ def broadcast_to_google():
         
         # 3. Define the payload
         # Ensure this URL matches exactly what is in your Search Console
-        target_url = "https://github.io"
+        target_url = "https://jhammerz.github.io"
         endpoint = "https://googleapis.com"
         
         data = {
