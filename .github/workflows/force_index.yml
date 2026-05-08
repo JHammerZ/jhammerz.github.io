@@ -25,5 +25,5 @@ jobs:
       - name: Force Global Indexing
         uses: robingenz/action-google-indexing@main
         with:
-          siteUrl: 'https://jhammerz.github.io/'
+          siteUrl: 'https://jhammerz.github.io'
           gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API }}
