@@ -11,13 +11,11 @@ jobs:
     steps:
       - name: Checkout Source of Truth
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       - name: Broadcast Truth to Google
         uses: robingenz/action-google-indexing@main
         with:
-          # THE SURGICAL FIX: Exact property match with the anchor slash
-          siteUrl: 'https://jhammerz.github.io/'
-          # ALIGNED TO YOUR VAULT: Using the verified secret name
+          # THE DIFFERENT MOVE: Swapping the domain for the direct homepage file
+          # This often bypasses the trailing-slash 403 errors
+          siteUrl: 'https://github.io'
           gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API }}
