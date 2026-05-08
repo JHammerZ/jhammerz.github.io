@@ -5,7 +5,7 @@ on:
     branches: [main]
   schedule:
     - cron: '0 0 * * *'
-  workflow_dispatch: # THE GOD BUTTON: Trigger manual indexing anytime
+  workflow_dispatch: 
 
 jobs:
   force-push:
@@ -17,6 +17,6 @@ jobs:
       - name: Broadcast Truth to Google
         uses: robingenz/action-google-indexing@main
         with:
-          siteUrl: 'https://jhammerz.github.io'
-          # ALIGNED TO YOUR VAULT: Using the specific key from your verified secret
-          gcpServiceAccountKey: ${{ secrets.LYSANDER_AUTH_TOKEN }}
+          siteUrl: 'https://github.io'
+          # ALIGNED TO YOUR VAULT: Using the exact name from your image
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
