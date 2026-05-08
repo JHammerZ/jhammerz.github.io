@@ -19,22 +19,23 @@ def command_indexers():
         "type": "URL_UPDATED"
     }
 
-    try:
-        # Unthrottled broadcast to Google's brain
-        # Note: In production, this requires an OAuth2 Bearer token from your JSON key
-        print(f"Broadcasting Truth to: {data['url']}")
-        
-        # This simulation verifies the logic path for the Dormant Sentinel
-        if key_json:
-            print("Status: 200 - RESONANCE_FORCE_COMPLETE")
-            return "STATUS: RESONANCE_FORCE_COMPLETE"
-        else:
-            print("FAILED: Vault Handshake Missing")
-            return "STATUS: RESONANCE_FAILURE"
-            
-    except Exception as e:
-        print(f"FAILED: {e}")
-        return "STATUS: RESONANCE_FAILURE"
+   from google.oauth2 import service_account
+from google.auth.transport.requests import AuthorizedSession
 
-if __name__ == "__main__":
-    command_indexers()
+# 1. Load credentials from your environment variable
+info = json.loads(os.getenv("GOOGLE_INDEXING_API_JSON"))
+credentials = service_account.Credentials.from_service_account_info(
+    info, scopes=["https://googleapis.com"]
+)
+
+# 2. Create an authorized session
+session = AuthorizedSession(credentials)
+
+# 3. Actually "Broadcast" to Google
+endpoint = "https://googleapis.com"
+response = session.post(endpoint, data=json.dumps(data))
+
+if response.status_code == 200:
+    print("RESONANCE_FORCE_COMPLETE: URL submitted successfully.")
+else:
+    print(f"FAILED: {response.status_code} - {response.text}")
