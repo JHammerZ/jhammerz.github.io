@@ -3,9 +3,7 @@ name: 🔱 Tier Zero Sovereign Indexing
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+  workflow_dispatch: # THE GOD BUTTON
 
 jobs:
   force-push:
@@ -13,18 +11,12 @@ jobs:
     steps:
       - name: Checkout Source of Truth
         uses: actions/checkout@v4
-
-      - name: Setup Python environment
-        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          persist-credentials: true
 
-      - name: Install Google Auth dependencies
-        run: pip install google-auth requests
-
-      - name: Execute Sovereign Re-Index
-        run: |
-          # Calling the Master Engine from the logic folder
-          python logic/force_index.py
-        env:
-          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+      - name: Broadcast Truth to Google
+        uses: robingenz/action-google-indexing@main
+        with:
+          # THE SURGICAL FIX: Added the Trailing Slash to match the verified property
+          siteUrl: 'https://jhammerz.github.io'
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
