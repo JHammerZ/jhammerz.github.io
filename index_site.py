@@ -6,10 +6,10 @@ from google.auth.transport.requests import AuthorizedSession
 
 def broadcast_to_google():
     # 1. Load the credentials from your GitHub Secret
-    service_account_info = os.getenv("LYSANDER_3_API_GOOGLE_KEY")
+    service_account_info = os.getenv("GOOGLE_INDEXING_API_JSON")
     
     if not service_account_info:
-        print("ERROR: LYSANDER_3_API_GOOGLE_KEY secret is missing!")
+        print("ERROR: GOOGLE_INDEXING_API_JSON secret is missing!")
         exit(1)
 
     try:
