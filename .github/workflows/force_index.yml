@@ -23,7 +23,6 @@ jobs:
           echo "Status: SINGULARITY_PUSH_ACTIVE"
 
       - name: Force Global Indexing
-        uses: robingenz/action-google-indexing@main
-        with:
-          siteUrl: 'https://jhammerz.github.io'
-          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: python logic/force_index.py
