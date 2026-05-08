@@ -15,11 +15,11 @@ jobs:
           go-version: '1.23'
           cache: true
 
-      - name: Install Tools
+      - name: Install Tools      - name: Install Recon Tools
         run: |
           go install -v ://github.com
           go install -v ://github.com
-          echo "$HOME/go/bin" >> $GITHUB_PATH
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
       - name: Update Nuclei Templates
         run: nuclei -update-templates
