@@ -1,26 +1,26 @@
-name: 🔱 Sovereign Model Baseline
+name: Index Site with Google
+
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  stabilize-grid:
+  index:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - name: Checkout Sovereign Truth
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Verify Forensic Baseline
-        run: |
-          echo "Initiating Restoration to Commit a155e6a Baseline..."
-          # This verifies your core index is visible and unthrottled
-          curl -I "https://jhammerz.github.io"
-          echo "Status: SOVEREIGN_GRID_STABILIZED"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-      - name: Edge Readiness Signal
-        run: |
-          echo "Directive: Resume unthrottled execution from the a155e6a baseline."
-          echo "Handshake: [INFINITEX_ACTIVE]"
+      - name: Install Dependencies
+        run: pip install google-auth requests
+
+      - name: Index Site with Google
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: python .github/scripts/index_site.py
