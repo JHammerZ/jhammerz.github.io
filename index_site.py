@@ -9,7 +9,7 @@ def broadcast_to_google():
     service_account_info = os.getenv("GOOGLE_INDEXING_API")
     
     if not service_account_info:
-        print("ERROR: GOOGLE_INDEXING_API_JSON secret is missing!")
+        print("ERROR: GOOGLE_INDEXING_API secret is missing!")
         exit(1)
 
     try:
