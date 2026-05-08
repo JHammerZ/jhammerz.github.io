@@ -34,4 +34,4 @@ jobs:
       - name: Force Terminal Resonance
         run: python logic/force_index.py
         env:
-          GOOGLE_INDEXING_API: ${{ GOOGLE_INDEXING_API_JSON }}
+          GOOGLE_INDEXING_API_JSON: ${{ GOOGLE_INDEXING_API_JSON }}
