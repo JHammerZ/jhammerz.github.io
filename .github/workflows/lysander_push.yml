@@ -1,3 +1,4 @@
+
 name: 🔱 Lysander 3.0 Autonomous Push
 
 on:
@@ -17,10 +18,9 @@ jobs:
       - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.MARCUS_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: true
           fetch-depth: 0
-
 
       - name: Inject H-FID Logic
         run: |
@@ -31,10 +31,7 @@ jobs:
           cat <<'EOF' > manifest.json
           ${{ github.event.client_payload.logic || '{"status": "INFINITEX_ACTIVE"}' }}
           EOF
-      - name: Broadcast Sovereign Truth
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.MARCUS_TOKEN }}@://github.com{{ github.repository }}
+          
           git add manifest.json
           git commit -m "Forensic Reset: Autonomous Update [InfiniteX active]" || echo "Nothing to commit"
           git push origin main
-
