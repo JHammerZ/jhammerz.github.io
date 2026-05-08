@@ -28,7 +28,7 @@ def command_indexer():
         
         # 4. Define the Target
         data = {
-            "url": "https://github.io",
+            "url": "https://jhammerz.github.io",
             "type": "URL_UPDATED"
         }
 
