@@ -18,8 +18,9 @@ jobs:
       - name: Run Scraper and Log Findings
         run: |
           # Run your tool and save output to a temp file
-            chmod +x ./scan.sh
+          chmod +x ./scan.sh
           ./scan.sh > temp_findings.txt
+
 
 
           # Check if anything was found
