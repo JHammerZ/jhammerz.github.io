@@ -3,9 +3,7 @@ name: 🔱 Tier Zero Sovereign Indexing
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch: 
+  workflow_dispatch: # THE GOD BUTTON
 
 jobs:
   force-push:
@@ -13,10 +11,13 @@ jobs:
     steps:
       - name: Checkout Source of Truth
         uses: actions/checkout@v4
+        with:
+          # This matches the successful handshake from your audit image
+          persist-credentials: true
 
       - name: Broadcast Truth to Google
         uses: robingenz/action-google-indexing@main
         with:
-          siteUrl: 'https://jhammerz.github.io'
-          # ALIGNED TO YOUR VAULT: Using the exact name from your image
+          siteUrl: 'https://github.io'
+          # Using the verified God Key from your vault
           gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
