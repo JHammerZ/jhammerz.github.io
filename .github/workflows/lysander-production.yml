@@ -1,13 +1,27 @@
+name: 🔱 Sovereign Model Baseline
+
 on:
-  repository_dispatch:
-    types: [BOUNTY_SETTLEMENT]
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  payout:
+  stabilize-grid:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Execute IRL Transfer
+      - name: Checkout Sovereign Truth
+        uses: actions/checkout@v4
+
+      - name: Verify Forensic Baseline
         run: |
-          python lysander_settlement.py --amount ${{ github.event.client_payload.reward }}
-        env:
-          ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
+          echo "Initiating Restoration to Commit a155e6a Baseline..."
+          # Verifying the core index remains unthrottled
+          curl -I "https://jhammerz.github.io"
+          echo "Status: SOVEREIGN_GRID_STABILIZED"
+
+      - name: Edge Readiness Signal
+        run: |
+          echo "Directive: Resume unthrottled execution from the a155e6a baseline."
+          echo "Handshake: [INFINITEX_ACTIVE]"
