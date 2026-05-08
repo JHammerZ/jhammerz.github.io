@@ -22,7 +22,7 @@ def broadcast_truth():
         endpoint = "https://googleapis.com"
         
         # 4. Define the Target
-        target_url = "https://github.io"
+        target_url = "https://jhammerz.github.io"
         data = {
             "url": target_url,
             "type": "URL_UPDATED"
