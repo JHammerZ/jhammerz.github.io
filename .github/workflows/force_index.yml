@@ -22,8 +22,8 @@ jobs:
           cat JHammerZ_Orchestrator/lysander_sovereign_singularity.json
           echo "Status: SINGULARITY_PUSH_ACTIVE"
 
-           - name: Force Global Indexing
+      - name: Force Global Indexing
         uses: robingenz/action-google-indexing@main
         with:
-          siteUrl: 'https://jhammerz.github.io'
+          siteUrl: 'https://github.io'
           serviceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
