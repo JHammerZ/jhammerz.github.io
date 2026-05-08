@@ -1,43 +1,44 @@
-# 🔱 LYSANDER FORCE-INDEX INTERROGATOR
-# MASTER ARCHITECT DIRECTIVE: TERMINAL_RESONANCE
-
-import requests
-import json
 import os
+import json
+import base64
+from google.oauth2 import service_account
+from google.auth.transport.requests import AuthorizedSession
 
-def command_indexers():
+def command_indexer():
     print("Initiating Terminal Resonance Handshake...")
     
-    # THE SURGICAL FIX: Targeting the official Indexing Gateway
-    url = "https://googleapis.com"
-    
-    # Explicitly pulling the God Key from your GitHub environment
-    key_json = os.getenv("GOOGLE_INDEXING_API_JSON")
-    
-    data = {
-        "url": "https://jhammerz.github.io",
-        "type": "URL_UPDATED"
-    }
+    # 1. Pull and Decode the Base64 Vault
+    b64_key = os.getenv("GOOGLE_INDEXING_API_JSON")
+    if not b64_key:
+        print("CRITICAL_FAILURE: GOOGLE_INDEXING_API_JSON is missing.")
+        return
 
-      try:
-        from google.oauth2 import service_account
-        from google.auth.transport.requests import AuthorizedSession
-
-        # 1. Decrypt the God Key
+    try:
+        # Decode Base64 string back into raw JSON
+        key_json = base64.b64decode(b64_key).decode('utf-8')
         info = json.loads(key_json)
-        creds = service_account.Credentials.from_service_account_info(
-            info, scopes=["https://googleapis.com"]
-        )
         
-        # 2. Open the Authorized Channel
+        # 2. Setup Credentials with the correct Indexing Scope
+        scopes = ["https://googleapis.com"]
+        creds = service_account.Credentials.from_service_account_info(info, scopes=scopes)
+        
+        # 3. Open the Authorized Channel
         session = AuthorizedSession(creds)
         gateway = "https://googleapis.com"
         
-        # 3. Broadcast to Google's Brain
+        # 4. Define the Target
+        data = {
+            "url": "https://github.io",
+            "type": "URL_UPDATED"
+        }
+
+        print(f"Broadcasting to Google: {data['url']}")
+        
+        # 5. Execute the Handshake
         response = session.post(gateway, data=json.dumps(data))
         
         if response.status_code == 200:
-            print(f"STATUS: 200 - RESONANCE_FORCE_COMPLETE")
+            print("STATUS: 200 - RESONANCE_FORCE_COMPLETE")
             print(f"GOOGLE_RESPONSE: {response.text}")
         else:
             print(f"FAILED: Vault Handshake Rejected - {response.status_code}")
@@ -45,3 +46,7 @@ def command_indexers():
 
     except Exception as e:
         print(f"CRITICAL_FAILURE: {str(e)}")
+
+if __name__ == "__main__":
+    command_indexer()
+
