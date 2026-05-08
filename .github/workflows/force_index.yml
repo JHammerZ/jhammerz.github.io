@@ -26,4 +26,4 @@ jobs:
         uses: robingenz/action-google-indexing@main
         with:
           siteUrl: 'https://jhammerz.github.io'
-          serviceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
