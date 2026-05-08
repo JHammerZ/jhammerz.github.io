@@ -15,7 +15,7 @@ def command_indexers():
     key_json = os.getenv("GOOGLE_INDEXING_API_JSON")
     
     data = {
-        "url": "https://jhammerz.github.io/",
+        "url": "https://jhammerz.github.io",
         "type": "URL_UPDATED"
     }
 
