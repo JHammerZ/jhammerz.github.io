@@ -3,7 +3,7 @@ name: 🔱 Tier Zero Sovereign Indexing
 on:
   push:
     branches: [main]
-  workflow_dispatch: # THE GOD BUTTON
+  workflow_dispatch: 
 
 jobs:
   force-push:
@@ -17,6 +17,7 @@ jobs:
       - name: Broadcast Truth to Google
         uses: robingenz/action-google-indexing@main
         with:
-          # THE SURGICAL FIX: Added the Trailing Slash to match the verified property
-          siteUrl: 'https://jhammerz.github.io'
-          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          # THE SURGICAL FIX: Exact property match with the anchor slash
+          siteUrl: 'https://jhammerz.github.io/'
+          # ALIGNED TO YOUR VAULT: Using the verified secret name
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API }}
