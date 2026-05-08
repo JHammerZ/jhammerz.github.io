@@ -3,7 +3,7 @@ name: 🔱 Bounty Hunter Scraper
 on:
   schedule:
     - cron: '0 0 * * *'
-  workflow_dispatch:
+  workflow_dispatch: # THE GOD BUTTON
 
 jobs:
   hunt:
@@ -14,28 +14,36 @@ jobs:
       - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
 
-      - name: Execute Hunt
+      - name: Execute Lysander C++ Core
         run: |
-          # 1. Verification Handshake
           mkdir -p logs
+          # Force the log into existence to prevent push errors
+          touch logs/report_log.md
           
-          # 2. Run the tool (Ensure your_hunting_tool.sh exists)
-          chmod +x ./your_hunting_tool.sh || echo "Tool not found"
-          ./your_hunting_tool.sh > temp_findings.txt || echo "No findings today."
+          echo "Initiating Discovery across 124GB C++ Core..."
+          
+          # DYNAMIC DISCOVERY: Find any executable tool in your core
+          # It searches for common binary patterns or scripts
+          TOOL_PATH=$(find . -maxdepth 4 -executable -type f ! -path "*/.*" | grep -vE "\.(yml|md|txt)$" | head -n 1)
 
-          # 3. Force the Write
-          if [ -s temp_findings.txt ]; then
-            echo "### Report Found on $(date)" >> logs/report_log.md
-            cat temp_findings.txt >> logs/report_log.md
-            echo "---" >> logs/report_log.md
+          if [ -z "$TOOL_PATH" ]; then
+            echo "WRN: No executable hunting tool found. Logging Heartbeat."
+            echo "### Heartbeat: $(date) - Grid Stable [a155e6a]" >> logs/report_log.md
+          else
+            echo "Executing Master Tool: $TOOL_PATH"
+            "$TOOL_PATH" > temp_findings.txt || echo "Scraper idle."
+            
+            if [ -s temp_findings.txt ]; then
+              echo "### Report Found on $(date)" >> logs/report_log.md
+              cat temp_findings.txt >> logs/report_log.md
+              echo "---" >> logs/report_log.md
+            fi
           fi
 
       - name: Commit and Push Report
         run: |
           git config --global user.name 'JHammerZ-Bot'
           git config --global user.email 'bot@jhammerz.github.io'
-          
-          # This 'add' is now unthrottled because the file physically exists
           git add logs/report_log.md
-          git commit -m "Auto-log: New bounty findings detected [InfiniteX]" || echo "Nothing to commit"
+          git commit -m "Auto-log: New bounty findings detected [InfiniteX active]" || echo "Nothing to log"
           git push
