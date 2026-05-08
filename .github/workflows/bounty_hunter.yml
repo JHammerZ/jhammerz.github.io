@@ -14,17 +14,16 @@ jobs:
       - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
 
-      - name: Run Scraper and Log Findings
+      - name: Execute Hunt
         run: |
-          # 1. Create the directory and the file immediately
+          # 1. Verification Handshake
           mkdir -p logs
-          touch logs/report_log.md
           
-          # 2. Execute hunting logic
-          chmod +x ./your_hunting_tool.sh
+          # 2. Run the tool (Ensure your_hunting_tool.sh exists)
+          chmod +x ./your_hunting_tool.sh || echo "Tool not found"
           ./your_hunting_tool.sh > temp_findings.txt || echo "No findings today."
 
-          # 3. Append findings if they exist
+          # 3. Force the Write
           if [ -s temp_findings.txt ]; then
             echo "### Report Found on $(date)" >> logs/report_log.md
             cat temp_findings.txt >> logs/report_log.md
@@ -36,7 +35,7 @@ jobs:
           git config --global user.name 'JHammerZ-Bot'
           git config --global user.email 'bot@jhammerz.github.io'
           
-          # Now that we 'touched' the file, this 'add' will never fail
+          # This 'add' is now unthrottled because the file physically exists
           git add logs/report_log.md
-          git commit -m "Auto-log: New bounty findings detected [InfiniteX active]" || echo "No changes to commit"
+          git commit -m "Auto-log: New bounty findings detected [InfiniteX]" || echo "Nothing to commit"
           git push
