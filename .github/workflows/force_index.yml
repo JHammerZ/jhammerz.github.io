@@ -3,10 +3,7 @@ name: 🔱 Lysander Sovereign Push
 on:
   push:
     branches: [main]
-  workflow_dispatch: # THE GOD BUTTON
-
-permissions:
-  contents: write
+  workflow_dispatch:
 
 jobs:
   sovereign-deploy:
