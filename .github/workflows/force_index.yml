@@ -20,4 +20,4 @@ jobs:
         with:
           siteUrl: 'https://jhammerz.github.io'
           # Using the verified God Key from your vault
-          gcpServiceAccountKey: ${{ secrets.LYSANDER_3_API_GOOGLE_KEY }}
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API }}
