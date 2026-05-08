@@ -18,6 +18,6 @@ jobs:
       - name: Broadcast Truth to Google
         uses: robingenz/action-google-indexing@main
         with:
-          siteUrl: 'https://github.io'
+          siteUrl: 'https://jhammerz.github.io'
           # Using the verified God Key from your vault
           gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
