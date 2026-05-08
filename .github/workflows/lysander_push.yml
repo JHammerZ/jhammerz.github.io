@@ -15,8 +15,7 @@ jobs:
       - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
         with:
-          # Using the verified Internal Token to bypass authentication errors
-          token: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          token: ${{ secrets.MARCUS_TOKEN }}
           persist-credentials: true
 
       - name: Inject H-FID Logic
