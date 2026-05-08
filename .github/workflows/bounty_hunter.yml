@@ -1,43 +1,31 @@
-name: 🔱 Bounty Hunter Scraper
+name: 🔱 Bounty Hunter Resonance
 
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  push:
+    branches: [main]
   workflow_dispatch: # THE GOD BUTTON
 
+permissions:
+  contents: write
+
 jobs:
-  hunt:
+  hunt-and-report:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - name: Checkout Sovereign Repo
+      - name: Checkout Sovereign Truth
         uses: actions/checkout@v4
 
-      - name: Execute Lysander C++ Core
+      - name: Run Scraper and Log Findings
         run: |
-          mkdir -p logs
-          # Force the log into existence to prevent push errors
-          touch logs/report_log.md
-          
-          echo "Initiating Discovery across 124GB C++ Core..."
-          
-          # DYNAMIC DISCOVERY: Find any executable tool in your core
-          # It searches for common binary patterns or scripts
-          TOOL_PATH=$(find . -maxdepth 4 -executable -type f ! -path "*/.*" | grep -vE "\.(yml|md|txt)$" | head -n 1)
+          # Run your tool and save output to a temp file
+          chmod +x ./your_hunting_tool.sh
+          ./your_hunting_tool.sh > temp_findings.txt
 
-          if [ -z "$TOOL_PATH" ]; then
-            echo "WRN: No executable hunting tool found. Logging Heartbeat."
-            echo "### Heartbeat: $(date) - Grid Stable [a155e6a]" >> logs/report_log.md
-          else
-            echo "Executing Master Tool: $TOOL_PATH"
-            "$TOOL_PATH" > temp_findings.txt || echo "Scraper idle."
-            
-            if [ -s temp_findings.txt ]; then
-              echo "### Report Found on $(date)" >> logs/report_log.md
-              cat temp_findings.txt >> logs/report_log.md
-              echo "---" >> logs/report_log.md
-            fi
+          # Check if anything was found
+          if [ -s temp_findings.txt ]; then
+            echo "### Report Found on $(date)" >> logs/report_log.md
+            cat temp_findings.txt >> logs/report_log.md
+            echo "---" >> logs/report_log.md
           fi
 
       - name: Commit and Push Report
@@ -45,5 +33,5 @@ jobs:
           git config --global user.name 'JHammerZ-Bot'
           git config --global user.email 'bot@jhammerz.github.io'
           git add logs/report_log.md
-          git commit -m "Auto-log: New bounty findings detected [InfiniteX active]" || echo "Nothing to log"
+          git commit -m "Auto-log: New bounty findings detected" || echo "Nothing to commit"
           git push
