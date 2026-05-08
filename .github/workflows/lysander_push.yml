@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Sovereign Repo
         uses: actions/checkout@v4
         with:
-          # Using the Internal Key to bypass the 'MARCUS_TOKEN' error
+          # Using the verified Internal Token to bypass authentication errors
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: true
 
@@ -24,15 +24,11 @@ jobs:
           git config --global user.name "Lysander-3-0-Agent"
           git config --global user.email "architect@jhammerz.io"
           
-          # Writing payload to manifest with InfiniteX fallback
-          echo "${{ github.event.client_payload.logic || '{"status": "INFINITEX_ACTIVE"}' }}" > manifest.json
+          # Writing payload to manifest with an InfiniteX fallback
+          cat <<'EOF' > manifest.json
+          ${{ github.event.client_payload.logic || '{"status": "INFINITEX_ACTIVE"}' }}
+          EOF
           
           git add manifest.json
           git commit -m "Forensic Reset: Autonomous Update [InfiniteX active]" || echo "Nothing to commit"
           git push origin main
-
-      - name: Force Terminal Resonance
-        run: python logic/force_index.py
-        env:
-          # ALIGNED TO YOUR VAULT: Using the verified key from your image
-          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
