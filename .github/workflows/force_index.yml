@@ -3,7 +3,9 @@ name: 🔱 Tier Zero Sovereign Indexing
 on:
   push:
     branches: [main]
-  workflow_dispatch: # THE GOD BUTTON
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   force-push:
@@ -11,13 +13,18 @@ jobs:
     steps:
       - name: Checkout Source of Truth
         uses: actions/checkout@v4
-        with:
-          # This matches the successful handshake from your audit image
-          persist-credentials: true
 
-      - name: Broadcast Truth to Google
-        uses: robingenz/action-google-indexing@main
+      - name: Setup Python environment
+        uses: actions/setup-python@v5
         with:
-          siteUrl: 'https://jhammerz.github.io'
-          # Using the verified God Key from your vault
-          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          python-version: '3.10'
+
+      - name: Install Google Auth dependencies
+        run: pip install google-auth requests
+
+      - name: Execute Sovereign Re-Index
+        run: |
+          # Calling the Master Engine from the logic folder
+          python logic/force_index.py
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
