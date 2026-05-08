@@ -18,4 +18,4 @@ jobs:
           # THE SOVEREIGN ANCHOR: Matches the verified Search Console property
           siteUrl: 'https://jhammerz.github.io'
           # THE NEW KEY: Ensure your GitHub Secret is named exactly GOOGLE_INDEXING_API
-          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API }}
+          gcpServiceAccountKey: ${{ secrets.LYSANDER_3_API_GOOGLE_KEY }}
