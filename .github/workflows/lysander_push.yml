@@ -35,4 +35,4 @@ jobs:
         run: python logic/force_index.py
         env:
           # ALIGNED TO YOUR VAULT: Using the verified key from your image
-          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API }}
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
