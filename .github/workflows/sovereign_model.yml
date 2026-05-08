@@ -23,4 +23,4 @@ jobs:
       - name: Index Site with Google
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
-        run: python .github/scripts/index_site.py
+        run: python index_site.py
