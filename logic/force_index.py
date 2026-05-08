@@ -12,7 +12,7 @@ def command_indexers():
     url = "https://googleapis.com"
     
     # Explicitly pulling the God Key from your GitHub environment
-    key_json = os.getenv("GOOGLE_INDEXING_API_JSON")
+    key_json = os.getenv("LYSANDER_3_API_GOOGLE_KEY")
     
     data = {
         "url": "https://github.io",
@@ -23,7 +23,7 @@ def command_indexers():
 from google.auth.transport.requests import AuthorizedSession
 
 # 1. Load credentials from your environment variable
-info = json.loads(os.getenv("GOOGLE_INDEXING_API_JSON"))
+info = json.loads(os.getenv("LYSANDER_3_API_GOOGLE_KEY"))
 credentials = service_account.Credentials.from_service_account_info(
     info, scopes=["https://googleapis.com"]
 )
