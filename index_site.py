@@ -1,49 +1,42 @@
 import os
 import json
+import base64
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
 
-def broadcast_truth():
-    # 1. Access the Vault (GitHub Secret)
-    key_json = os.getenv("GOOGLE_INDEXING_API_JSON")
-    
-    if not key_json:
-        print("ERROR: GOOGLE_INDEXING_API_JSON is missing from the environment.")
-        exit(1)
+def broadcast_to_google():
+    # 1. Pull and Decode the Base64 Vault
+    b64_key = os.getenv("GOOGLE_INDEXING_API_JSON")
+    if not b64_key:
+        print("ERROR: Secret is missing!")
+        return
 
     try:
-        # 2. Decrypt the God Key
+        # Rebuild the JSON from the Base64 Tunnel
+        key_json = base64.b64decode(b64_key).decode('utf-8')
         info = json.loads(key_json)
+        
         scopes = ["https://googleapis.com"]
         creds = service_account.Credentials.from_service_account_info(info, scopes=scopes)
         
-        # 3. Open the Authorized Channel
+        # 2. Open the Authorized Channel
         session = AuthorizedSession(creds)
         endpoint = "https://googleapis.com"
         
-        # 4. Define the Target
+        # 3. Define the Target
         target_url = "https://jhammerz.github.io"
-        data = {
-            "url": target_url,
-            "type": "URL_UPDATED"
-        }
+        data = {"url": target_url, "type": "URL_UPDATED"}
 
         print(f"INITIATING_RESONANCE: Broadcasting {target_url}...")
-        
-        # 5. Execute the Handshake
         response = session.post(endpoint, data=json.dumps(data))
         
         if response.status_code == 200:
-            print("RESONANCE_FORCE_COMPLETE: Google has accepted the Truth.")
-            print(f"RESPONSE: {response.text}")
+            print("RESONANCE_FORCE_COMPLETE: 200 OK")
         else:
-            print(f"SIGNAL_FAILURE: Received {response.status_code}")
-            print(f"DETAILS: {response.text}")
-            exit(1)
+            print(f"SIGNAL_FAILURE: {response.status_code} - {response.text}")
 
     except Exception as e:
         print(f"CRITICAL_FAILURE: {str(e)}")
-        exit(1)
 
 if __name__ == "__main__":
-    broadcast_truth()
+    broadcast_to_google()
