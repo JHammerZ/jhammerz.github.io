@@ -18,4 +18,4 @@ jobs:
           # THE DIFFERENT MOVE: Swapping the domain for the direct homepage file
           # This often bypasses the trailing-slash 403 errors
           siteUrl: 'https://jhammerz.github.io'
-          gcpServiceAccountKey: ${{ secrets.LYSANDER_3_API_GOOGLE_KEY }}
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API }}
