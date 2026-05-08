@@ -19,4 +19,4 @@ jobs:
         with:
           siteUrl: 'https://jhammerz.github.io'
           # ALIGNED TO YOUR VAULT: Using the specific key from your verified secret
-          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          gcpServiceAccountKey: ${{ secrets.LYSANDER_AUTH_TOKEN }}
