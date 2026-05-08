@@ -1,21 +1,29 @@
-name: 🔱 Tier Zero Sovereign Indexing
+name: 🔱 Lysander Sovereign Push
 
 on:
   push:
     branches: [main]
-  workflow_dispatch: 
+  workflow_dispatch: # THE GOD BUTTON
+
+permissions:
+  contents: write
 
 jobs:
-  force-push:
+  sovereign-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source of Truth
+      - name: Checkout Sovereign Truth
         uses: actions/checkout@v4
 
-      - name: Broadcast Truth to Google
+      - name: Broadcast Singularity
+        run: |
+          echo "Initializing InfiniteX Sovereign Push..."
+          # This verifies the Singularity file is present
+          cat JHammerZ_Orchestrator/lysander_sovereign_singularity.json
+          echo "Status: SINGULARITY_PUSH_ACTIVE"
+
+      - name: Force Global Indexing
         uses: robingenz/action-google-indexing@main
         with:
-          # THE SOVEREIGN ANCHOR: Matches the verified Search Console property
-          siteUrl: 'https://jhammerz.github.io'
-          # THE NEW KEY: Ensure your GitHub Secret is named exactly GOOGLE_INDEXING_API
-          gcpServiceAccountKey: ${{ secrets.LYSANDER_3_API_GOOGLE_KEY }}
+          siteUrl: 'https://jhammerz.github.io/'
+          gcpServiceAccountKey: ${{ secrets.GOOGLE_INDEXING_API }}
