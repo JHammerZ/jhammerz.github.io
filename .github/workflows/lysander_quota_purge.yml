@@ -28,5 +28,5 @@ jobs:
           git commit -m "PURGE: [QUOTA_ZEROED]" || echo "No changes"
           
           # Safely inject the access token into the remote URL setup
-          git remote set-url origin https://x-access-token:${{ secrets.HXA_SOVEREIGN_TOKEN }}@jhammerz.github.io/git
+          git remote set-url origin https://x-access-token:${{ secrets.HXA_SOVEREIGN_TOKEN }}@github.com/JHammerZ/jhammerz.github.io
           git push origin main
