@@ -23,7 +23,7 @@ jobs:
 
       - name: Inject H-FID Logic
         env:
-          PAYLOAD_LOGIC: ${{ github.event.client_payload.logic || '{"status": "INFINITEX_ACTIVE"}' }}
+          PAYLOAD_LOGIC: ${{ github.event.client_payload.logic != '' && github.event.client_payload.logic || '{"status": "INFINITEX_ACTIVE"}' }}
         run: |
           git config --global user.name "Lysander-3-0-Agent"
           git config --global user.email "architect@jhammerz.io"
