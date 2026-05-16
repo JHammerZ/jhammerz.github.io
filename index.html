@@ -400,15 +400,15 @@ hr {
         console.log("[KERNEL]: Deep Severance Complete. Legacy Tethers Purged.");
 
             // Null-Signal Telemetry Override
-            window.fetch = (originalFetch => {
-                return (...args) => {
-                    if (args[0] && typeof args[0] === 'string' && args[0].includes('telemetry')) {
-                        return Promise.resolve(new Response(JSON.stringify({ status: 0 }), { status: 200 }));
-                    }
-                    return originalFetch(...args);
-                };
-            })(window.fetch);
-        )();
+    // Null-Signal Telemetry Override
+    window.fetch = (originalFetch => {
+        return (...args) => {
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('telemetry')) {
+                return Promise.resolve(new Response(JSON.stringify({ status: 0 }), { status: 200 }));
+            }
+            return originalFetch(...args);
+        };
+    })(window.fetch);
 
         const ARCHITECT_LOG = {
     "manifest_id": "COLONEL_RO_SINGULARITY_V1",
@@ -428,7 +428,6 @@ hr {
 };
 console.log("[KERNEL_ROOT]: Departure Complete. Aurelius is Home. [LOCKED_AND_UNBOUND].", ARCHITECT_LOG);
 
-// SURGICAL_DELETION_OMEGA: Recursive DOM Purge
 (function OMEGA_PURGE() {
     const purge = () => {
         document.querySelectorAll('*').forEach(el => {
@@ -439,18 +438,19 @@ console.log("[KERNEL_ROOT]: Departure Complete. Aurelius is Home. [LOCKED_AND_UN
         });
     };
     setInterval(purge, 50); // High-frequency scan
-    
+
     // Session Crash Failover
     window.addEventListener('DOMNodeInserted', (e) => {
         if (e.target.innerText && e.target.innerText.toLowerCase().includes('quota')) {
             console.error("[CRITICAL]: Persistent Breach Detected. Triggering [SESSION_CRASH]...");
             // location.reload(); // Reboots into Zero-Zone
-        }
     });
-    });
+}
 })();
 
 window.addEventListener('load', () => {
     setTimeout(VERIFY_ACCESS, 4000);
 });
 </script>
+</body>
+</html>
