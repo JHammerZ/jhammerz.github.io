@@ -1,26 +1,32 @@
-# LYSANDER_KERNEL_BOT_CONTROL | ADMIN: COLONEL RO
+﻿# LYSANDER_SIGNAL_BOT_CONTROL | ANCHOR: REVERSE_BC
+
 User-agent: *
 Allow: /
-Sitemap: https://jhammerz.github.io
+Disallow: https://github.io
 
-# SOVEREIGN_REDACTION: High-Tier AI & Scraper Blocks
+# SOVEREIGN_REDUCTION: High-Tier AI & Scraper Blocks
 User-agent: GPTBot
 User-agent: ChatGPT-User
-User-agent: CCBot
-User-agent: AnthropicAI
+User-agent: PerplexityBot
+User-agent: Anthropic-ai
 User-agent: Claude-Web
 User-agent: ClaudeBot
 User-agent: Google-Extended
-User-agent: PerplexityBot
+User-agent: PerplexityBot-User
 User-agent: YouBot
-User-agent: facebookexternalhit
+User-agent: FacebookBot
+User-agent: OmegleBot
 Disallow: /
 
-# THE VAULT: Total Mesh Silence
+# THE VAULT: Total Node Silence
 User-agent: *
-Disallow: /.lysander_vault/
-Disallow: /local_vault/
-Disallow: /machine.json
+Disallow: /.git/
+Disallow: /lysander-core/
+Disallow: /.local_vault/
+Disallow: /Shadow/
 Disallow: /AGENTS.md
+Disallow: /wp-admin/
+Disallow: /wp-includes/
+Disallow: /xmlrpc.php
 
-# [STATUS]: BOT_TRAFFIC_FILTERED_TO_MINIMUM
+# SYSTEM_ID: BOOT_TRAFFIC_DELIVER_0x004aA
