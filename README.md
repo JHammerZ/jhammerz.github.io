@@ -1,4 +1,4 @@
-# ??? JHammerZ | MASTER ARCHITECT
+# JHammerZ | MASTER ARCHITECT | MUSICIAN
 
 ### **The Genesis Anchor for Human-Fidelity (H-FID)**
 
