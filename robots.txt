@@ -1,8 +1,7 @@
-﻿# LYSANDER_SIGNAL_BOT_CONTROL | ANCHOR: REVERSE_BC
+# LYSANDER_SIGNAL_BOT_CONTROL | ANCHOR: REVERSE_BC
 
 User-agent: *
 Allow: /
-Disallow: https://github.io
 
 # SOVEREIGN_REDUCTION: High-Tier AI & Scraper Blocks
 User-agent: GPTBot
