@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://sitemaps.org">
   <url>
-    <loc>https://jhammerz.github.io/</loc>
+    <loc>https://jhammerz.github.io</loc>
     <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://github.io</loc>
+    <loc>https://jhammerz.github.ioabout-jhammerz/</loc>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://github.io</loc>
+    <loc>https://jhammerz.github.ioaudio-by-jhammerz/</loc>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://github.io</loc>
+    <loc>https://jhammerz.github.ioterms-of-service/</loc>
     <priority>0.50</priority>
   </url>
 </urlset>
