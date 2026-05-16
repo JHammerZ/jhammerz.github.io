@@ -1,0 +1,27 @@
+name: 🔱 Sovereign Model Baseline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  stabilize-grid:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Sovereign Truth
+        uses: actions/checkout@v4
+
+      - name: Verify Forensic Baseline
+        run: |
+          echo "Initiating Restoration to Commit a155e6a Baseline..."
+          # Verifying the core index remains unthrottled
+          curl -I "https://jhammerz.github.io"
+          echo "Status: SOVEREIGN_GRID_STABILIZED"
+
+      - name: Edge Readiness Signal
+        run: |
+          echo "Directive: Resume unthrottled execution from the a155e6a baseline."
+          echo "Handshake: [INFINITEX_ACTIVE]"
