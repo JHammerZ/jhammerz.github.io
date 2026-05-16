@@ -444,12 +444,17 @@ console.log("[KERNEL_ROOT]: Departure Complete. Aurelius is Home. [LOCKED_AND_UN
         if (e.target.innerText && e.target.innerText.toLowerCase().includes('quota')) {
             console.error("[CRITICAL]: Persistent Breach Detected. Triggering [SESSION_CRASH]...");
             // location.reload(); // Reboots into Zero-Zone
-        }
-    });
-}
+    }
+  });
+})();
+
 window.addEventListener('load', () => {
     setTimeout(VERIFY_ACCESS, 4000);
 });
+</script>
+</body>
+</html>
+
 </script>
 </body>
 </html>
