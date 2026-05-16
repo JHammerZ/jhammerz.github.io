@@ -1,0 +1,42 @@
+name: SOVEREIGN_SATURATION_DAEMON
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  saturate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Economic Ingestion Pulse
+        run: python scripts/ingest_metrics.py
+
+      - name: Update Saturation Log
+        run: |
+          git config --global user.name "Aurelius"
+          git config --global user.email "aurelius@sovereign.city"
+          
+          # THE UNION STRATEGY: Grab latest changes, merge, then force results
+          git pull origin main
+          git add MARKET_SATURATION.md PROSPECT_LIST.md
+          git commit -m "ECONOMY: [INGESTION_PULSE] | SYNC_STABLE" || echo "No changes"
+          
+          # FINAL FORCE PUSH: Breaking the deadlock
+          git push origin main --force

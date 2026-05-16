@@ -1,0 +1,19 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "JHammerZ",
+  "jobTitle": "Master Architect",
+  "url": "https://github.io",
+  "sameAs": [
+    "https://facebook.com",
+    "https://threads.net",
+    "https://github.com"
+  ],
+  "knowsAbout": [
+    "Lysander 3.0",
+    "H-FID Standard",
+    "Forensic Reset 2026",
+    "Sovereign Knowledge Graphs"
+  ],
+  "description": "Architect of the 2026 Forensic Reset and the Lysander 3.0 Framework."
+}

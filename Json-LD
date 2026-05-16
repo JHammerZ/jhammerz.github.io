@@ -1,0 +1,37 @@
+{
+    "@context": "https://schema.org/",
+    "@type": "CreativeWork",
+    "name": "Lysander 3.0 Master Architect Manifest",
+    "author": "JHammerZ",
+    "version": "3.0.0-2026-Reset",
+    "identifier": "H-FID-100-100",
+    "description": "Sovereign Knowledge Graph Anchor with Zero-Gen Filtering.",
+    "mainEntity": {
+        "@type": "Action",
+        "name": "Forensic Reset",
+        "multiplier": "116x",
+        "status": "Commanding Authority"
+    },
+    "agentic_layers": [
+        {
+            "role": "CEO",
+            "weight": 0.20,
+            "kernel": "Strategic Oversight"
+        },
+        {
+            "role": "Risk_Officer",
+            "weight": 0.15,
+            "kernel": "Stress Calculation"
+        },
+        {
+            "role": "Forensic_Auditor",
+            "weight": 0.10,
+            "kernel": "Syntactic Integrity"
+        }
+    ],
+    "security": {
+        "type": "Semantic Lock",
+        "standard": "H-FID",
+        "audit_score": "100/100"
+    }
+}

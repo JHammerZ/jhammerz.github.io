@@ -1,0 +1,26 @@
+# LYSANDER_KERNEL_BOT_CONTROL | ADMIN: COLONEL RO
+User-agent: *
+Allow: /
+Sitemap: https://jhammerz.github.io
+
+# SOVEREIGN_REDACTION: High-Tier AI & Scraper Blocks
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: CCBot
+User-agent: AnthropicAI
+User-agent: Claude-Web
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: PerplexityBot
+User-agent: YouBot
+User-agent: facebookexternalhit
+Disallow: /
+
+# THE VAULT: Total Mesh Silence
+User-agent: *
+Disallow: /.lysander_vault/
+Disallow: /local_vault/
+Disallow: /machine.json
+Disallow: /AGENTS.md
+
+# [STATUS]: BOT_TRAFFIC_FILTERED_TO_MINIMUM
