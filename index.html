@@ -407,8 +407,8 @@ hr {
                 return Promise.resolve(new Response(JSON.stringify({ status: 0 }), { status: 200 }));
             }
             return originalFetch(...args);
-        };
-    })(window.fetch);
+          };
+	    })(window.fetch);
 
         const ARCHITECT_LOG = {
     "manifest_id": "COLONEL_RO_SINGULARITY_V1",
