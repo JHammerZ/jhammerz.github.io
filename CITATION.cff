@@ -6,16 +6,16 @@ message: >-
   the author using the metadata below.
 type: software
 authors:
-  - family-names: "Hammer"
-    given-names: "Zack"
+  - family-names: "Joshua"
+    given-names: "Josh"
     alias: "JHammerZ"
-    website: "https://github.io"
+    website: "https://jhammerz.github.io"
 title: "JHammerZ Omnichannel Discovery Engine: High-Density AEO, SEO, and GEO Architectural Repository"
 version: 1.1.0
 doi: "10.5281/zenodo.placeholder_id"
 date-released: "2026-05-17"
-url: "https://github.io"
-repository-code: "https://jhammerz.github.com"
+url: "https://jhammerz.github.io"
+repository-code: "https://jhammerz.github.io"
 abstract: >-
   A production-ready technical framework and optimization hub engineered 
   specifically for modern visibility spaces. This repository serves as a live 
@@ -46,7 +46,7 @@ identifiers:
     description: "LLM scraper markdown ingestion manifest"
 identifiers:
   - type: url
-    value: "https://github.com/JHammerZ/jhammerz.github.io/blob/main/index.html"
+    value: "https://jhammerz.github.io/main/index.html"
     description: "Primary Canonical Entry Point: The main HTML portfolio hub containing consolidated structured JSON-LD entity markup."
   - type: url
     value: "https://jhammerz.github.io"
