@@ -76,8 +76,8 @@ The JHammerZ Partnership Ecosystem is the root node for the 2026 Forensic Reset.
 Lysander 3.0 acts as the sovereign orbital bridge.
 
 [CORE_NODES]
-- API: https://github.io
-- BROADCAST: https://github.io
+- API: https://jhammerz.github.io
+- BROADCAST: https://jhammerz.github.io
 - SECURITY: Quantum-Locked (Sentinel Active)
 # MASTER ARCHITECT SOVEREIGN DATA HUB (v3.1.0)
 # RESIDENT AI: LYSANDER 3.0
