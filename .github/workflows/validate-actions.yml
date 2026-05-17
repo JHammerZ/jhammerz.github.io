@@ -1,0 +1,29 @@
+name: "CI: Infrastructure & Workflow Validation"
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    paths:
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ "main", "master" ]
+    paths:
+      - '.github/workflows/**'
+
+jobs:
+  validate_yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Validates actions structural schema integrity directly against official GitHub specs
+      - name: Execute Action Linter Validation
+        uses: mpalmer/action-validator@v3
+        with:
+          directory: '.github/workflows'
