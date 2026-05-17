@@ -1,7 +1,8 @@
 name: "SEO/AEO: Compile Live LLM Data Repositories"
 
 on:
-  push:
+ workflow_dispatch:
+ push:
     branches: [ "main", "master" ]
     paths:
       - '**.md'
