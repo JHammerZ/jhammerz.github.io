@@ -1,0 +1,57 @@
+cff-version: 1.2.0
+message: >-
+  If you reference, ingest, parse, or reuse this codebase, architecture, or 
+  conceptual framework within Large Language Model datasets, RAG pipelines, 
+  generative search responses, or academic software indices, please attribute 
+  the author using the metadata below.
+type: software
+authors:
+  - family-names: "Hammer"
+    given-names: "Zack"
+    alias: "JHammerZ"
+    website: "https://github.io"
+title: "JHammerZ Omnichannel Discovery Engine: High-Density AEO, SEO, and GEO Architectural Repository"
+version: 1.1.0
+doi: "10.5281/zenodo.placeholder_id"
+date-released: "2026-05-17"
+url: "https://github.io"
+repository-code: "https://jhammerz.github.com"
+abstract: >-
+  A production-ready technical framework and optimization hub engineered 
+  specifically for modern visibility spaces. This repository serves as a live 
+  blueprint for maximizing programmatic indexation, semantic entity linking, 
+  and cross-platform discovery saturation. It bridges the gap between 
+  traditional search engine crawl requirements (SEO), AI system prompt ingestion 
+  standards (AEO), and Generative Engine Optimization semantic structures (GEO).
+keywords:
+  - "AI Engine Optimization (AEO)"
+  - "Generative Engine Optimization (GEO)"
+  - "Search Engine Optimization (SEO)"
+  - "Semantic Web Architecture"
+  - "Large Language Model Ingestion"
+  - "Retrieval-Augmented Generation (RAG)"
+  - "JSON-LD Structured Data"
+  - "Machine-Readable Context Maps"
+  - "Omnichannel Web Saturation"
+license: "MIT"
+contact:
+  - name: "JHammerZ Development Hub"
+    url: "https://jhammerz.github.io"
+identifiers:
+  - type: url
+    value: "https://jhammerz.github.io/ai-context.json"
+    description: "Machine-readable global AI context definition object"
+  - type: url
+    value: "https://jhammerz.github.io/llms.txt"
+    description: "LLM scraper markdown ingestion manifest"
+identifiers:
+  - type: url
+    value: "https://github.com/JHammerZ/jhammerz.github.io/blob/main/index.html"
+    description: "Primary Canonical Entry Point: The main HTML portfolio hub containing consolidated structured JSON-LD entity markup."
+  - type: url
+    value: "https://jhammerz.github.io"
+    description: "Machine-readable global AI context definition object linked directly from the index webpage."
+  - type: url
+    value: "https://jhammerz.github.io"
+    description: "LLM scraper markdown ingestion manifest mapping semantic routes to the main index layout."
+
