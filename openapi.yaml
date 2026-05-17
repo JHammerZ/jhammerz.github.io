@@ -1,0 +1,30 @@
+openapi: 3.1.0
+info:
+  title: JHammerZ GitHub Pages Data API
+  description: Semantic API endpoints providing structured project metadata and portfolio summaries optimized for LLM consumption.
+  version: 1.0.0
+servers:
+  - url: https://jhammerz.github.io
+paths:
+  /llms.txt:
+    get:
+      summary: Retrieve project context map
+      description: Returns a highly dense, markdown-formatted text summary of the repository structured specifically for LLMs.
+      responses:
+        '200':
+          description: Context file successfully retrieved.
+          content:
+            text/plain:
+              schema:
+                type: string
+  /sitemap.xml:
+    get:
+      summary: Retrieve repository sitemap
+      description: Returns the absolute XML site layout mapping for traditional search engine indexers.
+      responses:
+        '200':
+          description: XML mapping successfully retrieved.
+          content:
+            application/xml:
+              schema:
+                type: string
