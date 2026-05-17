@@ -24,7 +24,7 @@ jobs:
         with:
           args: --verbose --no-progress './**/*.md' './**/*.html'
         env:
-          GITHUB_TOKEN: ${{ secrets.MARCUS }}
+          GITHUB_TOKEN: ${{ secrets.ARCHITECT_ACCESS_KEY }}
 
       # Run static-sitemap-cli to auto-build your search engine index map
       - name: Generate Sitemap
