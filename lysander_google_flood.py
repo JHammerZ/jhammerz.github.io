@@ -7,16 +7,16 @@ def force_global_index():
     """
     # [ROOT]: Federated nodes to be forced into the global search index
     urls = [
-        "https://jhammerz.github.io",
         "https://www.tiktok.com/@jhammerzz",
         "https://www.linkedin.com/in/JHammerZ",
-        "https://www.youtube.com/@JHammerZ",
+        "https://www.youtube.com/JHammerZ",
         "https://www.instagram.com/jhammerzz",
         "https://www.facebook.com/profile.php?id=61574652435664",
         "https://jhammerz.carrd.co/",
         "https://music.amazon.com/artists/B0SGL7W/jhammerz",
         "https://music.apple.com/us/artist/jhammerz/1845798346",
         "https://music.bandlab.com/artist/781334284",
+        "https://www.xiaohongshu.com/user/profile/JHammerZ",
         "https://github.com/JHammerZ/jhammerz.github.io",
         "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
         "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
