@@ -23,7 +23,7 @@ function generateNotice(client) {
     Unverified nodes face a Forensic Reset (Priority Purge) in 48 hours.
 
     SETTLEMENT: 
-    Visit https://github.io to verify your H-Fid token.
+    Visit https://jhammerz.github.io to verify your H-Fid token.
     `;
 }
 
