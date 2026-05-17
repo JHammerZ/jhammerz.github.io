@@ -1,0 +1,31 @@
+name: "CI: Structural Metadata Linting"
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  metadata_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Verify Essential Core Infrastructure Files
+        run: |
+          echo "Checking essential semantic discovery footprint files..."
+          files=( "llms.txt" "openapi.yaml" "ai-context.json" "robots.txt" "CITATION.cff" )
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ CRITICAL STRUCTURAL FAULT: Missing metadata asset '$file'"
+              exit 1
+            fi
+            echo "✅ Verified: $file is present in repository root."
+          done
+
+      - name: Validate JSON-LD and Context Parsing Formats
+        run: |
+          echo "Validating ai-context.json syntax formatting rules..."
+          cat ai-context.json | jq .
