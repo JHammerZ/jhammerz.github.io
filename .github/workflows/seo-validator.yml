@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
 
       - name: Setup Node.js
         uses: actions/setup-node@main
@@ -29,4 +29,4 @@ jobs:
       # Run static-sitemap-cli to auto-build your search engine index map
       - name: Generate Sitemap
         run: |
-          npx static-sitemap-cli --base https://github.io
+          npx static-sitemap-cli --base https://jhammerz.github.io
