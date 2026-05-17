@@ -18,20 +18,15 @@ jobs:
         with:
           node-version: '20'
 
-      # Install Lychee to check for broken URLs that hurt SEO rankings
+      # Install lychee to check for broken URLs that hurt SEO rankings
       - name: Link Checker
         uses: lycheeverse/lychee-action@v1.9.3
-      - name: Generate Sitemap
-        run: |
-          npx sscli -b https://jhammerz.github.io
-
+        with:
           args: --verbose --no-progress './**/*.md' './**/*.html'
         env:
           GITHUB_TOKEN: ${{ secrets.MARCUS_TOKEN }}
 
-      # Install static-sitemap-cli to auto-build your search engine index map
       # Run static-sitemap-cli to auto-build your search engine index map
       - name: Generate Sitemap
         run: |
           npx static-sitemap-cli --base https://jhammerz.github.io --output sitemap.xml
-
