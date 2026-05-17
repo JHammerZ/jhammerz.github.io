@@ -21,7 +21,10 @@ jobs:
       # Install Lychee to check for broken URLs that hurt SEO rankings
       - name: Link Checker
         uses: lycheeverse/lychee-action@v1.9.3
-        with:
+      - name: Generate Sitemap
+        run: |
+          npx sscli -b https://jhammerz.github.io
+
           args: --verbose --no-progress './**/*.md' './**/*.html'
         env:
           GITHUB_TOKEN: ${{ secrets.MARCUS_TOKEN }}
