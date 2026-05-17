@@ -23,7 +23,7 @@ def broadcast_to_google():
         session = AuthorizedSession(creds)
         
         # 4. Define the Broadcast Target
-        target_url = "https://github.io"
+        target_url = "https://jhammerz.github.io"
         endpoint = "https://jhammerz.googleapis.com"
         data = {"url": target_url, "type": "URL_UPDATED"}
 
