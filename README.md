@@ -25,7 +25,7 @@ Limited to three Enterprise Partners.
 
 **"The Anchor is set. The wolves are now spectators."**
 
-[LinkedIn](Your-Link-Here) | [H-FID Manifesto](Your-Article-Link)
+[LinkedIn]([Your-Link-Here)](https://www.linkedin.com/in/jhammerz/) | [H-FID Manifesto]([Your-Article-Link](https://github.com/JHammerZ/jhammerz.github.io/blob/main/H-FID_SaaS_Manifest.json))
 # [JHammerZ] - SOVEREIGN ENTITY
 **STATUS: 2026 FORENSIC RESET COMPLETE**
 
