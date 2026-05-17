@@ -9,7 +9,7 @@ const enforceNodeBoundaries = require('./middleware');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({ origin: ['github.io'], optionsSuccessStatus: 200 }));
+app.use(cors({ origin: ['jhammerz.github.io'], optionsSuccessStatus: 200 }));
 app.use(rateLimit({ windowMs: 60000, max: 60 }));
 app.use(express.json({ limit: '10kb' }));
 
