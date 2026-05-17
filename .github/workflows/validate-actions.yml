@@ -24,6 +24,6 @@ jobs:
 
       # Validates actions structural schema integrity directly against official GitHub specs
       - name: Execute Action Linter Validation
-        uses: mpalmer/action-validator@main
+        uses: mpalmer/action-validator@master
         with:
           directory: '.github/workflows'
