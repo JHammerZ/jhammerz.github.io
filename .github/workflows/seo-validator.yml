@@ -29,4 +29,4 @@ jobs:
       # Run static-sitemap-cli to auto-build your search engine index map
       - name: Generate Sitemap
         run: |
-          npx static-sitemap-cli --base https://jhammerz.github.io --output sitemap.xml
+          npx static-sitemap-cli --base https://github.io --output sitemap.xml
