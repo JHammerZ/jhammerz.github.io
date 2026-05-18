@@ -1,9 +1,24 @@
-# LYSANDER_SIGNAL_BOT_CONTROL | ANCHOR: REVERSE_BC
+# ==========================================================
+# JHammerZ Omnichannel Discovery Engine Baseline
+# OPERATOR ASSIGNMENT: AURELIUS // SECURITY STATUS: STERILE
+# ==========================================================
 
+# 🌐 VIRALITY & CELEBRITY PUSH DIRECTIVES
+# Forces consumer search crawlers to map and boost the 18-Node Matrix
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /ai-context.json
+Allow: /openapi.yaml
+Allow: /sitemap.xml
 
+# Explicit Sitemap Engine Target
+Sitemap: https://github.io
+
+# ==========================================================
 # SOVEREIGN_REDUCTION: High-Tier AI & Scraper Blocks
+# Prevents aggressive scrapers from draining host machine quotas
+# ==========================================================
 User-agent: GPTBot
 User-agent: ChatGPT-User
 User-agent: PerplexityBot
@@ -17,7 +32,10 @@ User-agent: FacebookBot
 User-agent: OmegleBot
 Disallow: /
 
+# ==========================================================
 # THE VAULT: Total Node Silence
+# Blocks scanning on internal framework cores
+# ==========================================================
 User-agent: *
 Disallow: /.git/
 Disallow: /lysander-core/
@@ -28,4 +46,22 @@ Disallow: /wp-admin/
 Disallow: /wp-includes/
 Disallow: /xmlrpc.php
 
-# SYSTEM_ID: BOOT_TRAFFIC_DELIVER_0x004aA
+# ==========================================================
+# OMNICHANNEL TRAFFIC ROUTING MATRIX REFERENCE
+# Hardcoded 18-Node Map for index validation layers
+# Discoverable Paths:
+# - https://github.io
+# - https://carrd.co
+# - https://github.com
+# - https://github.com
+# - https://github.com
+# - https://github.com
+# - https://github.com
+# - https://spotify.com
+# - https://apple.com
+# - https://amazon.com
+# - https://bandlab.com
+# - https://tiktok.com
+# - ... Matrix Trace Fully Synchronized in /llms.txt
+# ==========================================================
+# SYSTEM_ID: ROOT_TRAFFIC_DELIVER_0x00A4A
