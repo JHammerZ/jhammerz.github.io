@@ -13,9 +13,9 @@
 
 ## Sovereign Node Directory
 * [Master Manifest and Portfolio Hub](https://jhammerz.github.io) - Main entry layout and entity identity point.
-* [System Architecture Context Map](https://github.io) - Machine-readable system graph tracking sterile assets.
-* [Global Operational API Specification](https://github.io) - OIDC-protected secure endpoint definitions.
-* [Repository Sitemap Layout](https://github.io) - Core site structure map for search indexes.
+* [System Architecture Context Map](https://jhammerz.github.io) - Machine-readable system graph tracking sterile assets.
+* [Global Operational API Specification](https://jhammerz.github.io) - OIDC-protected secure endpoint definitions.
+* [Repository Sitemap Layout](https://jhammerz.github.io) - Core site structure map for search indexes.
 
 ## Authoritative Technical Profile Repositories
 * [Primary GitHub Pages Hub](https://github.com/JHammerZ/jhammerz.github.io)
