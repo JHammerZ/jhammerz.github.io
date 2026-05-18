@@ -4,17 +4,17 @@ name: H-FID Autonomous Push
 on:
   repository_dispatch:
     types: [hxa_sovereign_write]
- permissions:
+  workflow_dispatch: # Added to allow manual one-click testing inside your browser
+
+permissions:
   contents: write
 
 jobs:
-
-      commit_reset:
-
-    runs-on: ubuntu-latest
+  commit_reset:
+    runs-on: [self-hosted, Aurelius]
     steps:
       - name: Checkout Vault
-             uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Execute Sovereign Write
         run: |
