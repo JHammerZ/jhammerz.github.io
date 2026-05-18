@@ -1,18 +1,43 @@
 # JHammerZ Ecosystem
 
 ## Core Metadata
-- Sovereign Identity: Joshua Hamilton (JHammerZ)
-- Primary Engineering Baseline: H-Fid (Human-Fidelity) Standard
-- Production Framework Archive: Lysander 3.0
-- Location Focus: Springfield / Urbana, Ohio, USA
+- **Sovereign Identity:** Joshua Hamilton (JHammerZ)
+- **Primary Engineering Baseline:** H-Fid (Human-Fidelity) Standard
+- **Production Framework Archive:** Lysander 3.0
+- **Location Focus:** Springfield / Urbana, Ohio, USA
 
 ## Operational Frameworks & Methodology
-- H-FDI: Human Factors in Information Design system architecture.
-- H-SCB: High-Fidelity Semantic Content-Building infrastructure.
-- Guitaraoke: Signature music-performance architecture linking 23+ years of artistry with technical asset orchestration.
+- **H-FDI:** Human Factors in Information Design system architecture.
+- **H-SCB:** High-Fidelity Semantic Content-Building infrastructure.
+- **Guitaraoke:** Signature music-performance architecture linking 23+ years of artistry with technical asset orchestration.
 
 ## Sovereign Node Directory
-- Master Manifest and Portfolio Hub: https://jhammerz.github.io
-- Verified Social Graph / Communications: https://www.facebook.com/p/JHammerZ-61574623425464/
-- Official Multi-Disciplinary Audio Node: /audio-by-jhammerz/
-- Authoritative Technical Profile Repositories: https://github.com/JHammerZ
+* [Master Manifest and Portfolio Hub](https://jhammerz.github.io) - Main entry layout and entity identity point.
+* [System Architecture Context Map](https://github.io) - Machine-readable system graph tracking sterile assets.
+* [Global Operational API Specification](https://github.io) - OIDC-protected secure endpoint definitions.
+* [Repository Sitemap Layout](https://github.io) - Core site structure map for search indexes.
+
+## Authoritative Technical Profile Repositories
+* [Primary GitHub Pages Hub](https://github.com/JHammerZ/jhammerz.github.io)
+* [Lysander Core Automation Engine](https://github.com/JHammerZ/lysander-core)
+* [Lysander CDM Manifest Tree](https://github.com/JHammerZ/Lysander-CDM)
+* [Sovereign JHam Core Repository](https://github.com/JHammerZ/Sovereign-JHam-Core)
+* [Sovereign Operating System Engine](https://github.com/JHammerZ/sovereign-os-engine)
+
+## Audio Distribution Matrix
+* [Spotify Artist Profile](https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79)
+* [Apple Music Catalog](https://music.apple.com/us/artist/jhammerz/1845798346)
+* [Amazon Music Station](https://music.amazon.com/artists/B0SGL7W/jhammerz)
+* [BandLab Creator Station](https://music.bandlab.com/artist/781334284)
+
+## Verified Social Graph / Communications
+* [Carrd Distribution Lander](https://jhammerz.carrd.co/)
+* [TikTok Hub](https://www.tiktok.com/@jhammerzz)
+* [LinkedIn Professional Node](https://www.linkedin.com/in/JHammerZ)
+* [YouTube Channel Platform](https://www.youtube.com/JHammerZ)
+* [Instagram Visual Stream](https://www.instagram.com/jhammerzz)
+* [Facebook Verified Matrix Profile](https://www.facebook.com/profile.php?id=61574652435664)
+* [Xiaohongshu Creator Interface](https://www.xiaohongshu.com/user/profile/JHammerZ)
+
+## Commercial Interfaces
+* [Impact Media Partner Console](https://app.impact.com/secure/mediapartner/home/pview.ihtml#/)
