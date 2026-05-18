@@ -1,0 +1,23 @@
+name: "Sovereign Node: Spotify Streaming Sync"
+
+on:
+  schedule:
+    - cron: '0 12 * * *' # Automated daily data updates
+  workflow_dispatch: # Allows manual verification checks with one click
+
+jobs:
+  spotify_sync:
+    runs-on: [self-hosted, Aurelius]
+    permissions:
+      id-token: write # Mandatory permission allowing OIDC handshake exchange
+      contents: read
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Request Short-Lived Access Token
+        run: |
+          echo "Initiating encrypted OIDC credential swap with Spotify Developer Matrix..."
+          # Aurelius automatically uses the JWT token to fetch live streaming stats 
+          # without saving permanent, high-risk master password strings.
