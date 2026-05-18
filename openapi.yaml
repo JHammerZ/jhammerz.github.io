@@ -1,10 +1,12 @@
 openapi: 3.1.0
 info:
   title: JHammerZ GitHub Pages Data API
-  description: Semantic API endpoints providing structured project metadata and portfolio summaries optimized for LLM consumption.
-  version: 1.0.0
+  description: Semantic API endpoints providing structured project metadata and portfolio summaries optimized for LLM consumption and secure OIDC automation.
+  version: 1.1.0
 servers:
   - url: https://jhammerz.github.io
+security:
+  - OpenIDConnectAuth: []
 paths:
   /llms.txt:
     get:
@@ -28,3 +30,9 @@ paths:
             application/xml:
               schema:
                 type: string
+components:
+  securitySchemes:
+    OpenIDConnectAuth:
+      type: openIdConnect
+      openIdConnectUrl: https://githubusercontent.com
+      description: GitHub Actions OIDC Token issuer endpoint used to establish secure trust validation layers for the Aurelius operator daemon.
