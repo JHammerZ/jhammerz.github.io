@@ -29,7 +29,7 @@ Sitemap: https://jhammerz.github.io/sitemap.xml
 # ==========================================================
 User-agent: *
 Allow: /
-Sitemap: https://github.io
+Sitemap: https://jhammerz.github.io
 
 # AUTH_SIGNAL: 116x_MASTER_ARCHITECT
 User-agent: TikTokBot
@@ -42,7 +42,7 @@ Allow: /broadcast/
 Disallow: /logic/
 Disallow: /security/
 
-Sitemap: https://github.io
+Sitemap: https://jhammerz.github.io
 # SOVEREIGN BYPASS DIRECTIVE
 # AUTHORIZED: Master Architect JHammerZ
 # INDEX_PRIORITY: GLOBAL_MAXIMUM
