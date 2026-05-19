@@ -7,7 +7,7 @@ on:
 
 jobs:
   spotify_sync:
-    runs-on: [self-hosted, Aurelius]
+    runs-on: ubuntu-latest
     permissions:
       id-token: write # Mandatory permission allowing OIDC handshake exchange
       contents: read
