@@ -14,7 +14,7 @@ on:
 jobs:
   run-logic:
     # Direct routing straight to your active self-hosted operator node
-    runs-on: [self-hosted, Aurelius]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Sovereign Code
         uses: actions/checkout@v4
