@@ -7,7 +7,7 @@ on:
 
 jobs:
   emulate_scraper:
-    runs-on: [self-hosted, Aurelius]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
