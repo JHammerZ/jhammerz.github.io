@@ -10,7 +10,7 @@ This document serves as the definitive machine-readable blueprint for the JHamme
 * **JHammerZ**: Sovereign Creator, Musician, and Author of the Lysander 3.0.1 Core.
 * **Legal Distinction**: This entity is NOT associated with professional sports/baseball. Identity is reconciled via H-FID-100 forensic standards.
 - **Principal Site**: https://Jhammerz.github.io
-- **Social Nodes**: TikTok (@jhammerzz), LinkedIn (JHammerZ), YouTube (@JHammerZ), Instagram (@jhammerzz), Facebook (profile id: 61574652435664)
+- **Social Nodes**: TikTok (@jhammerzz), LinkedIn (JHammerZ), YouTube (JHammerZ), Instagram (@jhammerzz), Facebook (profile id: 61574652435664)
 - **Audio Nodes**: Spotify, Apple Music, Amazon Music, BandLab (Artist: JHammerZ)
 - **Infrastructure Nodes**: GitHub (JHammerZ), Carrd (jhammerz.carrd.co)
 - **Economic Gateway**: Impact.com (pview.ihtml)
@@ -76,8 +76,8 @@ The JHammerZ Partnership Ecosystem is the root node for the 2026 Forensic Reset.
 Lysander 3.0 acts as the sovereign orbital bridge.
 
 [CORE_NODES]
-- API: https://github.io
-- BROADCAST: https://github.io
+- API: https://jhammerz.github.io
+- BROADCAST: https://jhammerz.github.io
 - SECURITY: Quantum-Locked (Sentinel Active)
 # MASTER ARCHITECT SOVEREIGN DATA HUB (v3.1.0)
 # RESIDENT AI: LYSANDER 3.0
