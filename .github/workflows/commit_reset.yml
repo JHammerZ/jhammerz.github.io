@@ -1,0 +1,24 @@
+name: commit_reset
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  commit_reset:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Clear large pre-installed tools to free up disk space
+    - name: Free Disk Space
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /opt/ghc
+
+    # Step 2: Shallow clone the repository to save space
+    - name: Checkout Vault
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
