@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   commit_reset:
-    runs-on: [self-hosted, Aurelius]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Vault
         uses: actions/checkout@v4
