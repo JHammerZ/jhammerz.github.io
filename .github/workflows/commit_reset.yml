@@ -1,24 +1,51 @@
-name: commit_reset
+/**
+ * GLOBAL EDGE INTERCEPTOR: FORENSIC RESET PROTOCOL (2026)
+ * This script runs at the network edge to evaluate global web traffic, 
+ * stripping away payloads flagged as automated or low-quality.
+ */
 
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+// 1. Define global signatures or endpoints to block
+const BLOCKED_PATTERNS = [
+  "ai-slop-generator.com",
+  "synthetic-spam-network.net",
+  "automated-content-farm.org"
+];
 
-jobs:
-  commit_reset:
-    runs-on: ubuntu-latest
+const QUALITY_THRESHOLD = 0.35;
 
-    steps:
-    # Step 1: Clear large pre-installed tools to free up disk space
-    - name: Free Disk Space
-      run: |
-        sudo rm -rf /usr/share/dotnet
-        sudo rm -rf /usr/local/lib/android
-        sudo rm -rf /opt/ghc
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
 
-    # Step 2: Shallow clone the repository to save space
-    - name: Checkout Vault
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 1
+    // SYSTEM CHECK 1: Is the requested global domain on the known blocklist?
+    if (BLOCKED_PATTERNS.some(pattern => url.hostname.includes(pattern))) {
+      return new Response("Access Denied: Domain flagged by 2026 Forensic Reset Protocol.", {
+        status: 403,
+        headers: { "Content-Type": "text/plain", "X-Global-Reset": "Enforced" }
+      });
+    }
+
+    try {
+      // Fetch the live webpage data moving through the internet pipe
+      const originalResponse = await fetch(request);
+      
+      // SYSTEM CHECK 2: Inspect incoming header metadata for automated scores
+      const contentQuality = originalResponse.headers.get("X-Content-Quality-Score");
+      
+      if (contentQuality && parseFloat(contentQuality) < QUALITY_THRESHOLD) {
+        // Intercept and drop the payload mid-transit before it reaches the user's screen
+        return new Response("Content Dropped: Failed global network quality standards.", {
+          status: 406,
+          headers: { "Content-Type": "text/plain" }
+        });
+      }
+
+      // If the data is clean and valid, let it pass through to the world safely
+      return originalResponse;
+
+    } catch (error) {
+      // Fallback network safety route
+      return new Response("Global Edge Routing Error", { status: 500 });
+    }
+  }
+};
