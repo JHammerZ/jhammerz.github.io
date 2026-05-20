@@ -1,51 +1,70 @@
-/**
- * GLOBAL EDGE INTERCEPTOR: FORENSIC RESET PROTOCOL (2026)
- * This script runs at the network edge to evaluate global web traffic, 
- * stripping away payloads flagged as automated or low-quality.
- */
+name: commit_reset
 
-// 1. Define global signatures or endpoints to block
-const BLOCKED_PATTERNS = [
-  "ai-slop-generator.com",
-  "synthetic-spam-network.net",
-  "automated-content-farm.org"
-];
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-const QUALITY_THRESHOLD = 0.35;
+jobs:
+  forensic_reset_2026:
+    runs-on: ubuntu-latest
 
-export default {
-  async fetch(request, env, ctx) {
-    const url = new URL(request.url);
+    steps:
+    # 1. Clear massive pre-installed software to fix the runner space error
+    - name: Free Disk Space
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /opt/ghc
 
-    // SYSTEM CHECK 1: Is the requested global domain on the known blocklist?
-    if (BLOCKED_PATTERNS.some(pattern => url.hostname.includes(pattern))) {
-      return new Response("Access Denied: Domain flagged by 2026 Forensic Reset Protocol.", {
-        status: 403,
-        headers: { "Content-Type": "text/plain", "X-Global-Reset": "Enforced" }
-      });
-    }
+    # 2. Pull down your repository files safely
+    - name: Checkout Vault
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
 
-    try {
-      // Fetch the live webpage data moving through the internet pipe
-      const originalResponse = await fetch(request);
-      
-      // SYSTEM CHECK 2: Inspect incoming header metadata for automated scores
-      const contentQuality = originalResponse.headers.get("X-Content-Quality-Score");
-      
-      if (contentQuality && parseFloat(contentQuality) < QUALITY_THRESHOLD) {
-        // Intercept and drop the payload mid-transit before it reaches the user's screen
-        return new Response("Content Dropped: Failed global network quality standards.", {
-          status: 406,
-          headers: { "Content-Type": "text/plain" }
-        });
-      }
+    # 3. Create the Edge Script file inside your repository programmatically
+    - name: Deploy Global Edge Reset Script File
+      run: |
+        mkdir -p scripts
+        cat << 'EOF' > scripts/edge_interceptor.js
+        /**
+         * GLOBAL EDGE INTERCEPTOR: FORENSIC RESET PROTOCOL (2026)
+         * Deployed via GitHub Actions Automation
+         */
+        const BLOCKED_PATTERNS = [
+          "ai-slop-generator.com",
+          "synthetic-spam-network.net",
+          "automated-content-farm.org"
+        ];
 
-      // If the data is clean and valid, let it pass through to the world safely
-      return originalResponse;
+        const QUALITY_THRESHOLD = 0.35;
 
-    } catch (error) {
-      // Fallback network safety route
-      return new Response("Global Edge Routing Error", { status: 500 });
-    }
-  }
-};
+        export default {
+          async fetch(request) {
+            const url = new URL(request.url);
+
+            if (BLOCKED_PATTERNS.some(pattern => url.hostname.includes(pattern))) {
+              return new Response("Access Denied: Domain flagged by 2026 Forensic Reset Protocol.", {
+                status: 403,
+                headers: { "Content-Type": "text/plain", "X-Global-Reset": "Enforced" }
+              });
+            }
+
+            try {
+              const originalResponse = await fetch(request);
+              const contentQuality = originalResponse.headers.get("X-Content-Quality-Score");
+              
+              if (contentQuality && parseFloat(contentQuality) < QUALITY_THRESHOLD) {
+                return new Response("Content Dropped: Failed global network quality standards.", { status: 406 });
+              }
+
+              return originalResponse;
+            } catch (error) {
+              return new Response("Global Edge Routing Error", { status: 500 });
+            }
+          }
+        };
+        EOF
+        echo "[SUCCESS] Edge script built and nested into repository tree successfully."
+
