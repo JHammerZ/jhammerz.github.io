@@ -43,10 +43,14 @@ jobs:
           # 4. Safely output the content to the designated file path
           echo "$PAYLOAD_CONTENT" > "$PAYLOAD_PATH"
 
-          # 5. Commit and push the changes back to your repository
-          git config --global user.name "JHammerZ-Orchestrator"
-          git config --global user.email "architect@jhammerz.io"
-          git add .
-          git commit -m "[HxA-AUTONOMOUS]: ${{ github.event.client_payload.message || 'Manual Sovereign State Synchronization' }}"
-          git pull --rebase origin main
-          git push origin main
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "[HxA-AUTONOMOUS]: ${{ github.event.client_payload.message || 'Manual Sovereign State Synchronization' }}"
+            git push
+          else
+            echo "No changes detected. Skipping commit."
+          fi
