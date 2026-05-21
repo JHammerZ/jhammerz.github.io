@@ -48,4 +48,5 @@ jobs:
           git config --global user.email "architect@jhammerz.io"
           git add .
           git commit -m "[HxA-AUTONOMOUS]: ${{ github.event.client_payload.message || 'Manual Sovereign State Synchronization' }}"
-          git push
+          git pull --rebase origin main
+          git push origin main
