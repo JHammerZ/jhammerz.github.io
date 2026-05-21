@@ -1,21 +1,24 @@
-name: Execute Network Script
+name: commit_reset
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  run-script:
+  forensic_reset_2026:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v4
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
+      - name: Checkout Vault
+        uses: actions/checkout@v4
         with:
-          node-version: '20'
+          fetch-depth: 1
 
       - name: Run JavaScript file
         run: node edge_interceptor.js
