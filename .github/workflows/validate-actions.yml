@@ -27,4 +27,4 @@ jobs:
       - name: Execute Action Linter Validation
         uses: mpalmer/action-validator@main
         with:
-          directory: '.github/workflows'
+          patterns: '.github/workflows/**'
