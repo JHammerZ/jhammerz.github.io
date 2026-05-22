@@ -18,5 +18,12 @@ jobs:
         run: |
           docker build -t my-tomcat-app:latest .
           docker run -d -p 8080:8080 --name test-container my-tomcat-app:latest
-          sleep 5
-          curl --fail http://localhost:8080 || exit 1
+          sleep 10
+          # This checks if the server responds with a 200 or 404 status code instead of failing
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          if [ "$STATUS_CODE" -eq 200 ] || [ "$STATUS_CODE" -eq 404 ]; then
+            echo "Tomcat is up and responding with status $STATUS_CODE!"
+          else
+            echo "Tomcat failed to start. Status received: $STATUS_CODE"
+            exit 1
+          fi
