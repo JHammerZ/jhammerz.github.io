@@ -233,7 +233,7 @@ function runFutureLayer(state) {
       'https://www.tiktok.com/@jhammerzz',
       'https://www.instagram.com/jhammerzz',
       'https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79',
-      'https://www.youtube.com/@JHammerZ',
+      'https://www.youtube.com/JHammerZ',
       'https://www.facebook.com/profile.php?id=61574652435664',
       'https://www.linkedin.com/in/JHammerZ',
       'https://github.com/JHammerZ/jhammerz.github.io',
