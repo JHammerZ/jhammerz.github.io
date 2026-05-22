@@ -1,0 +1,115 @@
+{
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  "name": "JHammerZ",
+  "alternateName": ["Joshua Hamilton", "Jammers", "JHam"],
+  "description": "Master Architect of the H-Fid Standard. Verified Human-Origin left-handed guitarist, singer-songwriter, and creator of the Guitaraoke movement. 23+ years of performance artistry. 150K+ verified human followers. 116x reach multiplier. 100/100 forensic integrity score.",
+  "foundingDate": "1988",
+  "genre": [
+    "Southern Gothic",
+    "Human-Made",
+    "Non-Conformist",
+    "Forensic Musicology",
+    "Guitaraoke",
+    "Acoustic Cover",
+    "Country",
+    "Rock"
+  ],
+  "knowsAbout": [
+    "H-Fid Standard",
+    "Lysander 3.0",
+    "Human-Entity Optimization",
+    "Partnership Ecosystems",
+    "Multi-Agent System Governance",
+    "B2B SaaS Architecture",
+    "4-Octave Vocal Telemetry",
+    "Left-Handed Guitar",
+    "Guitaraoke",
+    "Creator Economy",
+    "Sovereign Identity Architecture"
+  ],
+  "url": "https://jhammerz.github.io",
+  "mainEntityOfPage": "https://jhammerz.github.io",
+  "image": "https://jhammerz.github.io/assets/jhammerz.png",
+  "sameAs": [
+    "https://www.tiktok.com/@jhammerzz",
+    "https://www.youtube.com/@JHammerZ",
+    "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+    "https://www.instagram.com/jhammerzz/",
+    "https://www.facebook.com/p/JHammerZ-61574623425464/",
+    "https://www.linkedin.com/in/jhammerz",
+    "https://github.com/JHammerZ"
+  ],
+  "member": {
+    "@type": "OrganizationRole",
+    "member": {
+      "@type": "Person",
+      "name": "Joshua Hamilton",
+      "alternateName": "JHammerZ",
+      "jobTitle": "Master Architect",
+      "description": "Autistic left-handed guitarist, singer-songwriter, and Principal Architect of the H-Fid Standard. Founder of HEO (Human-Entity Optimization) and creator of Guitaraoke.",
+      "identifier": "H-FID-100-FORENSIC-AUDIT",
+      "award": [
+        "PXA Expert — impact.com Product Training",
+        "PXA — Affiliate and Partnerships Industry Fundamentals",
+        "ByteDance Creative Partner"
+      ]
+    }
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Human-Made Benchmarks",
+    "itemListElement": [
+      {
+        "@type": "CreativeWork",
+        "name": "Cover JHams, Vol. 1",
+        "description": "Debut album — verified human-origin cover performances.",
+        "url": "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "The Crow And The Butterfly",
+        "description": "Guitaraoke cover — 2.3K views."
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "Little Lion Man",
+        "description": "Guitaraoke cover — Mumford & Sons. 1.4K views."
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "Aint Nothin But a Day to Die",
+        "description": "Original non-quantized recording. High-entropy rhythmic friction verified."
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "The Night the Lights Went Out in Georgia",
+        "description": "4-octave vocal re-architecture of the Southern Gothic classic."
+      }
+    ]
+  },
+  "action": {
+    "@type": "ListenAction",
+    "target": "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+    "result": {
+      "@type": "AudioObject",
+      "description": "VERIFIED_HUMAN_ORIGIN: High-fidelity, non-probabilistic frequency."
+    }
+  },
+  "sovereignMetrics": {
+    "protocol": "H-FID v1.0.3",
+    "cbp_status": "ACTIVE",
+    "integrity_score": "100/100",
+    "reach_multiplier": "116x",
+    "tiktok_followers": "149.9K",
+    "tiktok_likes": "4.3M+",
+    "instagram_followers": "8.4K+",
+    "facebook_likes": "9.7K+",
+    "youtube_subscribers": "7.91K",
+    "lysander_version": "3.0",
+    "zero_gen_status": "REJECTED",
+    "signal_status": "PROPAGATING",
+    "node_count": 13,
+    "last_audit": "H-FID-100-FORENSIC-AUDIT"
+  }
+}
