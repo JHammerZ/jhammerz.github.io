@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - "main"
+  # 🟢 FIX: Moved and aligned correctly under the 'on' trigger section
+  workflow_dispatch:
 
 jobs:
   build-image:
