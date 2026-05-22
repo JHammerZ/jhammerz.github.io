@@ -1,0 +1,137 @@
+{
+  "timestamp": "2026-05-22T10:23:39.656Z",
+  "version": "RECURSIVE_HEALING_v1.0",
+  "architect": "Joshua Hamilton (JHammerZ)",
+  "pilot": "Manus AI",
+  "token": "GPT",
+  "protocol": "H-FID v1.0.3",
+  "authority": "Root Super User Max 10-Tier Zero",
+  "nodes_online": 13,
+  "nodes_total": 14,
+  "cbp_online": 5,
+  "cbp_total": 5,
+  "healing_log": [],
+  "offline_nodes": [
+    {
+      "id": "bandlab",
+      "label": "BandLab",
+      "status": 0,
+      "note": "Platform bot-protection or regional restriction — not a real outage"
+    }
+  ],
+  "verdict": "ROOT_AUTHORITY_ESTABLISHED",
+  "node_states": [
+    {
+      "id": "github_pages",
+      "label": "GitHub Pages",
+      "online": true,
+      "status": 200,
+      "priority": 10,
+      "cbp": true
+    },
+    {
+      "id": "tiktok",
+      "label": "TikTok",
+      "online": true,
+      "status": 200,
+      "priority": 9,
+      "cbp": true
+    },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "online": true,
+      "status": 301,
+      "priority": 7,
+      "cbp": false
+    },
+    {
+      "id": "youtube",
+      "label": "YouTube",
+      "online": true,
+      "status": 301,
+      "priority": 7,
+      "cbp": false
+    },
+    {
+      "id": "instagram",
+      "label": "Instagram",
+      "online": true,
+      "status": 302,
+      "priority": 8,
+      "cbp": true
+    },
+    {
+      "id": "facebook",
+      "label": "Facebook",
+      "online": true,
+      "status": 301,
+      "priority": 6,
+      "cbp": false
+    },
+    {
+      "id": "carrd",
+      "label": "Carrd",
+      "online": true,
+      "status": 200,
+      "priority": 5,
+      "cbp": false
+    },
+    {
+      "id": "amazon_music",
+      "label": "Amazon Music",
+      "online": true,
+      "status": 200,
+      "priority": 6,
+      "cbp": false
+    },
+    {
+      "id": "apple_music",
+      "label": "Apple Music",
+      "online": true,
+      "status": 301,
+      "priority": 6,
+      "cbp": false
+    },
+    {
+      "id": "bandlab",
+      "label": "BandLab",
+      "online": false,
+      "status": 0,
+      "priority": 5,
+      "cbp": false
+    },
+    {
+      "id": "xiaohongshu",
+      "label": "Xiaohongshu",
+      "online": true,
+      "status": 302,
+      "priority": 5,
+      "cbp": false
+    },
+    {
+      "id": "github_repo",
+      "label": "GitHub Repo",
+      "online": true,
+      "status": 200,
+      "priority": 9,
+      "cbp": true
+    },
+    {
+      "id": "impact",
+      "label": "impact.com",
+      "online": true,
+      "status": 302,
+      "priority": 7,
+      "cbp": false
+    },
+    {
+      "id": "spotify",
+      "label": "Spotify",
+      "online": true,
+      "status": 200,
+      "priority": 8,
+      "cbp": true
+    }
+  ]
+}
