@@ -88,13 +88,15 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Sovereign GitHub Action"
+          
+          # Stage files FIRST so the workspace is completely clean for the pull
           if [ -n "$(git status --porcelain forensics/)" ]; then
             git add forensics/
             git commit -m "chore: updated sovereign audit telemetry [skip ci]"
-            # 🟢 FIX: Pull down latest remote changes before attempting to push
-            git pull origin main --rebase
+            
+            # Use the autostash flag to cleanly handle incoming changes
+            git pull origin main --rebase --autostash
             git push origin main
           else
             echo "No anomalies detected. Audit state matches source ledger."
           fi
-
