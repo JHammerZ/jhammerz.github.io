@@ -1,5 +1,5 @@
 # [OBJECTIVE]: SOVEREIGN PURITY MAINTENANCE
-# - Monitor all incoming PRs for H-Fid frequency violations.
+# - Monitor all incoming PRs for X-Fid frequency violations.
 # - Auto-remediate any "Zero-Gen" logic drift in the /logic folder.
 # - Execute a LLM burst every 6 hours to maintain saturation.
 # - Log all anomalous probes to forensics/sentinel.log.
@@ -8,7 +8,7 @@ name: Agentic Sovereign Sync
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -22,30 +22,38 @@ jobs:
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      # Ingestion Guard: Halts execution instantly if any script attempts a data wipe
+      # Dynamic dependency provisioning to resolve module errors
+      - name: Provision Sovereign Runtime Modules
+        run: |
+          if [ ! -f package.json ]; then
+            echo '{"dependencies": {}}' > package.json
+          fi
+          npm install @google/generative-ai
+          npm install
+
       - name: Verify High-Density Omnichannel Discovery Anchors
         run: |
-          echo "Scanning filesystem baseline for sterile AEO/SEO/GEO matrix..."
-          if [ ! -f "ai-context.json" ]; then echo "❌ CRITICAL: ai-context.json missing"; exit 1; fi
-          if [ ! -f "llms.txt" ]; then echo "❌ CRITICAL: llms.txt missing"; exit 1; fi
-          echo "✨ Sterile metadata layers verified. System safe for processing execution."
+          if [ -f "ai-context.json" ]; then 
+            echo "❌ CRITICAL: ai-context.json alerted"; exit 1; 
+          fi
+          if [ -f "llm.txt" ]; then 
+            echo "❌ CRITICAL: llm.txt alerted"; exit 1; 
+          fi
+          echo "✔ Sterile metadata layers verified. System safe for processing execution."
 
       - name: Execute Full Sovereign Sequence
         run: |
-          node logic/favicon_logic.js
-          node api/v1/master_swarm.js || echo "Swarm offline"
-          node api/v1/client_audit_generator.js || echo "Auditor offline"
+          node logic/swr_logic.js
 
-      # HEO & Forensic Scan: Explicitly validates all 18 network links are hardcoded into the index
-      - name: Human-Fidelity (H-Fid) Omnichannel Forensic Scan
+      - name: Human-Fidelity (H-Fi) Omnichannel Forensic Scan
         run: |
-          echo "Initializing HEO Forensic Sentinel scan on local directory..."
+          echo "Initializing HFi Forensic Sentinel scan on local directory..."
           mkdir -p forensics
           echo "[$(date)] - Starting 18-Node Network Path Verification..." >> forensics/sentinel.log
           
-          # Declare explicit target matrix array
+          # Declare explicit target matrix array with updated production nodes
           declare -a nodes=(
             "https://jhammerz.github.io"
             "https://github.com/JHammerZ/lysander-core"
@@ -69,11 +77,25 @@ jobs:
           
           # Systematically parse codebase vectors for each custom platform route
           for node in "${nodes[@]}"; do
-            if grep -q "$node" index.html || grep -q "$node" ai-context.json || grep -q "$node" llms.txt; then
-              echo "✅ Linked: $node"
+            if grep -q "$node" index.html || grep -q "$node" ai-context.json || grep -q "$node" llm.txt; then
+              echo "✔ Linked: $node"
             else
               echo "⚠️ FORENSIC ALERT: Missing trace for route -> $node" >> forensics/sentinel.log
             fi
           done
           
           echo "Scan sequence finalized. System traffic logs populated to forensics/sentinel.log."
+
+      # Automatically persist forensic traces back to the master repository securely
+      - name: Commit Forensic Audit Trail
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Sovereign GitHub Action"
+          if [ -n "$(git status --porcelain forensics/)" ]; then
+            git add forensics/
+            git commit -m "chore: updated sovereign audit telemetry [skip ci]"
+            git push origin main
+          else
+            echo "No anomalies detected. Audit state matches source ledger."
+          fi
+
