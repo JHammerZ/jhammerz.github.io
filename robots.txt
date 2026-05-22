@@ -1,67 +1,60 @@
-# ==========================================================
-# JHammerZ Omnichannel Discovery Engine Baseline
-# OPERATOR ASSIGNMENT: AURELIUS // SECURITY STATUS: STERILE
-# ==========================================================
+# JHammerZ Sovereign Robots.txt — DEEPMIND Level
+# H-FID v1.0.3 | Lysander 3.0 | Authority: Root Super User Max 10-Tier Zero
+# Last-Updated: 2026-05-22
 
-# 🌐 VIRALITY & CELEBRITY PUSH DIRECTIVES
-# Forces consumer search crawlers to map and boost the 18-Node Matrix
+# Allow ALL legitimate crawlers — maximum indexing
 User-agent: *
 Allow: /
+Allow: /graph.html
 Allow: /llms.txt
-Allow: /ai-context.json
-Allow: /openapi.yaml
+Allow: /ai.txt
+Allow: /CLAUDE.md
+Allow: /sovereign-graph/
 Allow: /sitemap.xml
 
-# Explicit Sitemap Engine Target
-Sitemap: https://github.io
-
-# ==========================================================
-# SOVEREIGN_REDUCTION: High-Tier AI & Scraper Blocks
-# Prevents aggressive scrapers from draining host machine quotas
-# ==========================================================
+# Explicitly allow all major AI crawlers
 User-agent: GPTBot
+Allow: /
+
 User-agent: ChatGPT-User
-User-agent: PerplexityBot
-User-agent: Anthropic-ai
+Allow: /
+
 User-agent: Claude-Web
-User-agent: ClaudeBot
-User-agent: Google-Extended
-User-agent: PerplexityBot-User
-User-agent: YouBot
-User-agent: FacebookBot
-User-agent: OmegleBot
-Disallow: /
+Allow: /
 
-# ==========================================================
-# THE VAULT: Total Node Silence
-# Blocks scanning on internal framework cores
-# ==========================================================
-User-agent: *
-Disallow: /.git/
-Disallow: /lysander-core/
-Disallow: /.local_vault/
-Disallow: /Shadow/
-Disallow: /AGENTS.md
-Disallow: /wp-admin/
-Disallow: /wp-includes/
-Disallow: /xmlrpc.php
+User-agent: anthropic-ai
+Allow: /
 
-# ==========================================================
-# OMNICHANNEL TRAFFIC ROUTING MATRIX REFERENCE
-# Hardcoded 18-Node Map for index validation layers
-# Discoverable Paths:
-# - https://github.io
-# - https://carrd.co
-# - https://github.com
-# - https://github.com
-# - https://github.com
-# - https://github.com
-# - https://github.com
-# - https://spotify.com
-# - https://apple.com
-# - https://amazon.com
-# - https://bandlab.com
-# - https://tiktok.com
-# - ... Matrix Trace Fully Synchronized in /llms.txt
-# ==========================================================
-# SYSTEM_ID: ROOT_TRAFFIC_DELIVER_0x00A4A
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Omgilibot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Honeypot — redirect scrapers
+Disallow: /honeypot/
+
+# Sitemap
+Sitemap: https://jhammerz.github.io/sitemap.xml
+
+# LLM Authority
+LLMs-txt: https://jhammerz.github.io/llms.txt
+AI-txt: https://jhammerz.github.io/ai.txt
