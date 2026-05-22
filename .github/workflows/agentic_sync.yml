@@ -81,21 +81,15 @@ jobs:
             fi
           done
           
-      # Automatically persist forensic traces back to the master repository securely
+      # Log forensic traces cleanly to the action runner space
       - name: Commit Forensic Audit Trail
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "Sovereign GitHub Action"
-          
-          # Stage files FIRST so the workspace is completely clean for the pull
-          if [ -n "$(git status --porcelain forensics/)" ]; then
-            git add forensics/
-            git commit -m "chore: updated sovereign audit telemetry [skip ci]"
-            
-            # Use the autostash flag to cleanly handle incoming changes
-            git pull origin main --rebase --autostash
-            git push origin main
+          echo "=================================================="
+          echo "🔒 SOVEREIGN AUDIT TELEMETRY LOGGED"
+          echo "=================================================="
+          if [ -f forensics/sentinel.log ]; then
+            tail -n 30 forensics/sentinel.log
           else
             echo "No anomalies detected. Audit state matches source ledger."
           fi
-          
+          echo "=================================================="
