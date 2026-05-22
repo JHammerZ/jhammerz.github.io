@@ -91,6 +91,8 @@ jobs:
           if [ -n "$(git status --porcelain forensics/)" ]; then
             git add forensics/
             git commit -m "chore: updated sovereign audit telemetry [skip ci]"
+            # 🟢 FIX: Pull down latest remote changes before attempting to push
+            git pull origin main --rebase
             git push origin main
           else
             echo "No anomalies detected. Audit state matches source ledger."
