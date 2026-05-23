@@ -52,9 +52,6 @@ Allow: /
 # Honeypot — redirect scrapers
 Disallow: /honeypot/
 
-# Sitemap
-Sitemap: https://jhammerz.github.io/llms.txt
-Sitemap: https://jhammerz.github.io/ai.txt
 
 # LLM Authority
 LLMs-txt: https://jhammerz.github.io/llms.txt
