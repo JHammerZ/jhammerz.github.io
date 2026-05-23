@@ -21,22 +21,25 @@ jobs:
 
       - name: Checkout Vault
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: Execute Sovereign Write
         run: |
           # 1. Pull the data from payload or set safe manual fallbacks
           PAYLOAD_CONTENT="${{ github.event.client_payload.content }}"
           PAYLOAD_PATH="${{ github.event.client_payload.path }}"
-          
+
           # 2. Fallback protection: If variables are empty (manual run), give them default values
           if [ -z "$PAYLOAD_PATH" ]; then
             PAYLOAD_PATH="scripts/edge_interceptor.js"
           fi
-          
+
           if [ -z "$PAYLOAD_CONTENT" ]; then
             PAYLOAD_CONTENT="// Manual initialization run complete."
           fi
-          
+
           # 3. Create the directory tree safely if it does not exist
           mkdir -p "$(dirname "$PAYLOAD_PATH")"
 
@@ -45,12 +48,17 @@ jobs:
 
       - name: Commit changes
         run: |
+          # Set up git user identity
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          
+          # Authenticate the remote tracking URL using the workflow token
+          git remote set-url origin https://x-access-token:${{ secrets.GTP }}@://github.com{{ github.repository }}.git
+          
           if [ -n "$(git status --porcelain)" ]; then
             git add .
-            git commit -m "[HxA-AUTONOMOUS]: ${{ github.event.client_payload.message || 'Manual Sovereign State Synchronization' }}"
-            git push
+            git commit -m "[HxA-AUTONOMY]: ${{ github.event.client_payload.message || 'Manual Sovereign State Synchronization' }}"
+            git push origin HEAD:${{ github.ref_name }}
           else
             echo "No changes detected. Skipping commit."
           fi
