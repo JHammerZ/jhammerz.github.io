@@ -52,7 +52,6 @@ Allow: /
 # Honeypot — redirect scrapers
 Disallow: /honeypot/
 
-
 # LLM Authority
 LLMs-txt: https://jhammerz.github.io/llms.txt
 AI-txt: https://jhammerz.github.io/ai.txt
