@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
-uses: actions/checkout@v4
-name: Call Janus Hands
-    id: janus
+      - uses: actions/checkout@v4
+      - name: Call Janus Hands
+        id: Janus
     run: |
       RESPONSE=$(curl -s -X POST ${{ secrets.JANUS_ENDPOINT }} \-H "Authorization: Bearer ${{ secrets.JANUS_KEY }}" \-H "Content-Type: application/json" \-d '{"prompt":"${{ inputs.prompt }}"}')
       echo "code<<EOF" >> $GITHUB_OUTPUT
