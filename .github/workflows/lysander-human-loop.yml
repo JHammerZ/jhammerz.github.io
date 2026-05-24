@@ -39,7 +39,7 @@ jobs:
       - name: Call Janus Hands
         id: Janus
         run: |
-          RESPONSE=$(curl -s -X POST "${{ secrets.JANUS_ENDPOINT }}" -H "Authorization: Bearer ${{ secrets.JANUS_KEY }}" -H "Content-Type: application/json" -d "{\"prompt\":\"${{ inputs.prompt }}\"}")
+          RESPONSE=$(curl -s -X POST "${{ secrets.JANUS_ENDPOINT }}" -H "Authorization: Bearer ${{ secrets.GOOGLE_INDEXING_API_JSON }}" -H "Content-Type: application/json" -d "{\"prompt\":\"${{ inputs.prompt }}\"}")
           echo "code=200" >> $GITHUB_OUTPUT
           echo "RESPONSE>>" >> $GITHUB_OUTPUT
           echo "$RESPONSE" >> $GITHUB_OUTPUT
