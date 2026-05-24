@@ -51,10 +51,6 @@ jobs:
 
       - name: Human-Fidelity (H-Fi) Omnichannel Forensic Scan
         run: |
-          echo "Initializing HFi Forensic Sentinel scan on local directory..."
-          mkdir -p forensics
-          echo "[$(date)] - Starting 14-Node Network Path Verification..." >> forensics/sentinel.log
-
           # Updated target matrix array with your exact 14 node URLs
           declare -a nodes=(
             "https://jhammerz.github.io"
