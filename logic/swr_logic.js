@@ -1,10 +1,10 @@
-const { GoogleGenAI } = require('@google/generative-ai');
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 async function runSovereignSequence() {
-    console.log("🚀 Initializing Sovereign Sequence Core...");
-    console.log("📦 AI Modules successfully mapped in memory.");
-    console.log("⚡ Executing foundational sovereign vector calculation checks.");
-    console.log("✔ Complete Sovereign Sequence executed cleanly!");
+    console.log("⚡ Initializing Sovereign Sequence Core...");
+    console.log("🧠 AI Modules successfully mapped in memory.");
+    console.log("🌌 Executing foundational sovereign vector calculation checks.");
+    console.log("✅ Complete Sovereign Sequence executed cleanly!");
 }
 
 runSovereignSequence().catch(err => {
