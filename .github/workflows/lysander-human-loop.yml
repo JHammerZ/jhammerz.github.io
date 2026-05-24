@@ -52,7 +52,7 @@ jobs:
       - name: Lighthouse Guard
         uses: treosh/lighthouse-ci-action@v11
         with:
-          urls: https://github.io
+          urls: https://jhammerz.github.io
 
       - name: Commit & Push
         if: success()
