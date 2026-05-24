@@ -48,17 +48,14 @@ jobs:
 
       - name: Commit changes
         run: |
-          # Set up git user identity
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --global user.name "Janus via Lysander"
+          git config --global user.email "janus@lysander.dev"
           
-          # Authenticate the remote tracking URL using the workflow token
-          git remote set-url origin https://x-access-token:${{ secrets.GTP }}@://github.com{{ github.repository }}.git
+          # Stage all modified files safely
+          git add .
           
-          if [ -n "$(git status --porcelain)" ]; then
-            git add .
-            git commit -m "[HxA-AUTONOMY]: ${{ github.event.client_payload.message || 'Manual Sovereign State Synchronization' }}"
-            git push origin HEAD:${{ github.ref_name }}
-          else
-            echo "No changes detected. Skipping commit."
-          fi
+          # Only commit if there are actual code changes to avoid empty commit crashes
+          git diff-index --quiet HEAD || git commit -m "feat(ag-fs): automated sovereign write sync"
+          
+          # Push directly to main using default upstream authorization token context
+          git push origin main
