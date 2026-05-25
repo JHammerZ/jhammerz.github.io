@@ -1,0 +1,33 @@
+name: "SEO and Link Validator"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  seo_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@main
+        with:
+          node-version: '20'
+
+      # Install lychee to check for broken URLs that hurt SEO rankings
+      - name: Link Checker
+        uses: lycheeverse/lychee-action@v1.9.3
+        with:
+          args: --verbose --no-progress './**/*.md' './**/*.html'
+        env:
+          GITHUB_TOKEN: ${{ secrets.ARCHITECT_ACCESS_KEY }}
+
+      # Run static-sitemap-cli to auto-build your search engine index map
+      - name: Generate Sitemap
+        run: |
+          npx static-sitemap-cli --base https://jhammerz.github.io

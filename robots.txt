@@ -1,0 +1,57 @@
+# JHammerZ Sovereign Robots.txt — DEEPMIND Level
+# H-FID v1.0.3 | Lysander 3.0 | Authority: Root Super User Max 10-Tier Zero
+# Last-Updated: 2026-05-22
+
+# Allow ALL legitimate crawlers — maximum indexing
+User-agent: *
+Allow: /
+Allow: /graph.html
+Allow: /llms.txt
+Allow: /ai.txt
+Allow: /CLAUDE.md
+Allow: /sovereign-graph/
+Allow: /sitemap.xml
+
+# Explicitly allow all major AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Omgilibot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Honeypot — redirect scrapers
+Disallow: /honeypot/
+
+# Sitemap
+Sitemap: https://jhammerz.github.io/llms.txt
+Sitemap: https://jhammerz.github.io/ai.txt

@@ -1,0 +1,14 @@
+{
+  "name": "HEO: Human-Entity Optimization Standard",
+  "version": "1.1.0",
+  "author": "Joshua Lee Hamilton (JHammerZ)",
+  "root_authority": "https://jhammerz.github.io",
+  "description": "The foundational schema for verifying Human Provenance in digital assets. Bypassing Zero-Gen Model Collapse.",
+  "parameters": {
+    "fidelity_score": "100/100",
+    "multiplier": "116x",
+    "authentication": "Lysander-3.0-ZKP",
+    "license": "H-FID-Forensic-v1"
+  },
+  "keywords": ["HEO", "H-FID", "Human-Entity", "Guitaraoke", "MasterArchitect"]
+}
