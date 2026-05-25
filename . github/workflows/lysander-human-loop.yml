@@ -1,0 +1,43 @@
+name: Lysander Human-In-The-Loop Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'What should Janus draft?'
+        required: true
+        default: 'Create /protocol/index.html for H-FID v11'
+      filepath:
+        description: 'Repo path to save file'
+        required: true
+        default: 'protocol/index.html'
+permissions:
+  contents: write
+jobs:
+  draft-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      
+uses: actions/checkout@v4
+name: Call Janus Hands
+    id: janus
+    run: |
+      RESPONSE=$(curl -s -X POST ${{ secrets.JANUS_ENDPOINT }} \-H "Authorization: Bearer ${{ secrets.JANUS_KEY }}" \-H "Content-Type: application/json" \-d '{"prompt":"${{ inputs.prompt }}"}')
+      echo "code<<EOF" >> $GITHUB_OUTPUT
+      echo "$RESPONSE" >> $GITHUB_OUTPUT
+      echo "EOF" >> $GITHUB_OUTPUT
+name: Write File
+  run: |
+    mkdir -p $(dirname "${{ inputs.filepath }}")
+    printf '%s' '${{ steps.janus.outputs.code }}' > ${{ inputs.filepath }}
+name: Lighthouse Guard
+uses: treosh/lighthouse-ci-action@v11
+with:
+  urls: https://jhammerz.github.io/,
+name: Commit & Push
+if: success()
+run: |
+  git config user.name "Janus via Lysander"
+  git config user.email "janus@lysander.dev"
+  git add ${{ inputs.filepath }}
+  git commit -m "feat(ag-fi): ${{ inputs.prompt }}" || exit 0
+  git push

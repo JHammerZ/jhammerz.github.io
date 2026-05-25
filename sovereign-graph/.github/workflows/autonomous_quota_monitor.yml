@@ -1,0 +1,148 @@
+# ============================================================
+# AUTONOMOUS QUOTA MONITOR — Lysander 3.0
+# JHammerZ x Manus AI | H-FID v1.0.3 | Token: GPT
+# ============================================================
+# DIRECTIVE: Auto-trigger quota purge at ≥50% usage on ANY metric:
+#   - GitHub API rate: ≥50% consumed
+#   - Sentinel log: ≥250 lines (50% of 500 max)
+#   - Session age: ≥3 hours
+#   - Directive count: ≥25 executed
+#
+# Runs every 30 minutes to stay ahead of threshold
+# ============================================================
+
+name: ⚡ Autonomous Quota Monitor
+
+on:
+  schedule:
+    # Every 30 minutes — stays well ahead of 50% threshold
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      force_check:
+        description: 'Force immediate threshold check'
+        required: false
+        default: 'true'
+        type: boolean
+
+concurrency:
+  group: autonomous-quota-monitor
+  cancel-in-progress: true
+
+jobs:
+
+  quota-monitor:
+    name: ⚡ Quota Threshold Monitor
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚙️ Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📊 Check All Usage Metrics
+        id: metrics
+        run: |
+          echo "──────────────────────────────────────────"
+          echo "  AUTONOMOUS QUOTA MONITOR"
+          echo "  Pilot: Manus AI | Token: GPT"
+          echo "  Protocol: H-FID v1.0.3"
+          echo "──────────────────────────────────────────"
+
+          # GitHub API rate check
+          RATE_JSON=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/rate_limit")
+          REMAINING=$(echo $RATE_JSON | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['resources']['core']['remaining'])")
+          LIMIT=$(echo $RATE_JSON | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['resources']['core']['limit'])")
+          USED=$((LIMIT - REMAINING))
+          API_PCT=$((USED * 100 / LIMIT))
+          echo "  API Usage: $USED/$LIMIT ($API_PCT%)"
+
+          # Sentinel log line count
+          LOG_LINES=0
+          if [ -f "sovereign-graph/forensics/sentinel.log" ]; then
+            LOG_LINES=$(wc -l < sovereign-graph/forensics/sentinel.log)
+          fi
+          LOG_PCT=$((LOG_LINES * 100 / 500))
+          echo "  Log Lines: $LOG_LINES/500 ($LOG_PCT%)"
+
+          # Session age check
+          SESSION_AGE_HRS=0
+          if [ -f "sovereign-graph/forensics/manus_session.json" ]; then
+            STARTED=$(python3 -c "import json; d=json.load(open('sovereign-graph/forensics/manus_session.json')); print(d.get('started',''))" 2>/dev/null)
+            if [ -n "$STARTED" ]; then
+              SESSION_AGE_SECS=$(( $(date +%s) - $(date -d "$STARTED" +%s 2>/dev/null || echo $(date +%s)) ))
+              SESSION_AGE_HRS=$((SESSION_AGE_SECS / 3600))
+            fi
+          fi
+          echo "  Session Age: ${SESSION_AGE_HRS}h"
+
+          # Determine if purge needed
+          PURGE_NEEDED=false
+          PURGE_REASON=""
+
+          if [ "$API_PCT" -ge 50 ]; then
+            PURGE_NEEDED=true
+            PURGE_REASON="API_USAGE_${API_PCT}%"
+          fi
+          if [ "$LOG_PCT" -ge 50 ]; then
+            PURGE_NEEDED=true
+            PURGE_REASON="${PURGE_REASON} LOG_SATURATION_${LOG_PCT}%"
+          fi
+          if [ "$SESSION_AGE_HRS" -ge 3 ]; then
+            PURGE_NEEDED=true
+            PURGE_REASON="${PURGE_REASON} SESSION_AGE_${SESSION_AGE_HRS}h"
+          fi
+
+          echo "purge_needed=$PURGE_NEEDED" >> $GITHUB_OUTPUT
+          echo "purge_reason=$PURGE_REASON" >> $GITHUB_OUTPUT
+          echo "api_pct=$API_PCT" >> $GITHUB_OUTPUT
+          echo "log_pct=$LOG_PCT" >> $GITHUB_OUTPUT
+
+          if [ "$PURGE_NEEDED" = "true" ]; then
+            echo ""
+            echo "  ⚡ THRESHOLD EXCEEDED: $PURGE_REASON"
+            echo "  🧹 AUTONOMOUS PURGE WILL EXECUTE"
+          else
+            echo ""
+            echo "  ✅ All metrics below 50% — no purge needed"
+          fi
+
+      - name: 🧹 Execute Autonomous Purge (if threshold exceeded)
+        if: steps.metrics.outputs.purge_needed == 'true'
+        run: |
+          echo "──────────────────────────────────────────"
+          echo "  AUTONOMOUS QUOTA PURGE EXECUTING"
+          echo "  Reason: ${{ steps.metrics.outputs.purge_reason }}"
+          echo "──────────────────────────────────────────"
+          node sovereign-graph/scripts/manus_quota_purge.js
+        env:
+          NODE_ENV: production
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📋 Write Autonomous Audit Entry
+        run: |
+          mkdir -p sovereign-graph/forensics
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          PURGE="${{ steps.metrics.outputs.purge_needed }}"
+          REASON="${{ steps.metrics.outputs.purge_reason }}"
+          API="${{ steps.metrics.outputs.api_pct }}"
+          LOG="${{ steps.metrics.outputs.log_pct }}"
+          echo "[${TIMESTAMP}] [AUTO_MONITOR] API=${API}% LOG=${LOG}% PURGE=${PURGE} REASON=${REASON:-BELOW_THRESHOLD} PILOT=Manus_AI TOKEN=GPT" >> sovereign-graph/forensics/sentinel.log
+
+      - name: 💾 Commit Monitoring Results
+        run: |
+          git config user.name  "Manus-AI-Pilot"
+          git config user.email "manus@lysander.jhammerz.github.io"
+          git add sovereign-graph/forensics/
+          git diff --staged --quiet || git commit -m "chore: autonomous quota monitor — API:${{ steps.metrics.outputs.api_pct }}% LOG:${{ steps.metrics.outputs.log_pct }}% [skip ci]"
+          git push || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

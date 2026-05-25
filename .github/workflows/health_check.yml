@@ -1,0 +1,18 @@
+name: LYSANDER_HEALTH_CHECK
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
+permissions:
+  contents: write
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sovereign Scan
+        run: |
+          curl -s https://jhammerz.github.io | grep "SOVEREIGN_OMEGA"
+          echo "STATUS: [ANCHOR_STABLE_AND_AUTHORITATIVE]"
+      - name: Report Heartbeat
+        run: echo "HEALTH_CHECK_COMPLETE"

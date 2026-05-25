@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JHammerZ | Sovereign Knowledge Graph</title>
+  <meta name="description" content="JHammerZ Sovereign Knowledge Graph — H-Fid Standard, Celebrity Breakthroughs Protocol, 13-Node Architect Manifest." />
+  <meta name="author" content="JHammerZ (Joshua Hamilton)" />
+  <!-- H-FID Verification Tags -->
+  <meta name="impact-site-verification" content="53cd98b3-5f05-43f2-85e9-67aa9e746fdc" />
+  <meta name="google-site-verification" content="IU-5FLh-DgQcw73G631RMo2Bn9TW3BxXT5xFOwvA_m4" />
+  <meta name="facebook-domain-verification" content="gr4gxqdgze694d049fp6gem46ur9zd" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    :root {
+      --bg: #050a0f;
+      --bg2: #0a1520;
+      --accent: #00e5ff;
+      --accent2: #7c3aed;
+      --gold: #ffd700;
+      --green: #00ff88;
+      --red: #ff4444;
+      --text: #e0f7ff;
+      --muted: #4a7a99;
+      --panel: rgba(10,21,32,0.92);
+      --border: rgba(0,229,255,0.18);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    #header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 24px;
+      background: linear-gradient(90deg, rgba(5,10,15,0.98) 0%, rgba(10,21,32,0.95) 100%);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+    #header .logo {
+      display: flex; align-items: center; gap: 12px;
+    }
+    #header .logo .shield {
+      font-size: 22px; animation: pulse 2s infinite;
+    }
+    #header .logo h1 {
+      font-size: 15px; font-weight: 700; letter-spacing: 3px;
+      color: var(--accent); text-transform: uppercase;
+    }
+    #header .logo .sub {
+      font-size: 9px; color: var(--muted); letter-spacing: 2px;
+    }
+    #header .status-bar {
+      display: flex; gap: 18px; align-items: center;
+    }
+    .status-pill {
+      font-size: 9px; letter-spacing: 1.5px; padding: 3px 10px;
+      border-radius: 20px; border: 1px solid;
+      text-transform: uppercase; font-weight: 700;
+    }
+    .pill-green { color: var(--green); border-color: var(--green); background: rgba(0,255,136,0.07); }
+    .pill-gold  { color: var(--gold);  border-color: var(--gold);  background: rgba(255,215,0,0.07); }
+    .pill-blue  { color: var(--accent);border-color: var(--accent);background: rgba(0,229,255,0.07); }
+
+    /* ── CANVAS ── */
+    #graph-container {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    svg { width: 100%; height: 100%; }
+
+    /* ── SIDE PANEL ── */
+    #side-panel {
+      position: fixed; top: 60px; right: 0; bottom: 0;
+      width: 300px;
+      background: var(--panel);
+      border-left: 1px solid var(--border);
+      padding: 20px 18px;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+      backdrop-filter: blur(12px);
+    }
+    #side-panel.hidden { transform: translateX(100%); }
+    #panel-title {
+      font-size: 11px; letter-spacing: 3px; color: var(--accent);
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    #panel-node-name {
+      font-size: 20px; font-weight: 700; color: var(--text);
+      margin-bottom: 4px; line-height: 1.2;
+    }
+    #panel-node-type {
+      font-size: 9px; letter-spacing: 2px; color: var(--muted);
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    #panel-divider {
+      height: 1px; background: var(--border); margin: 12px 0;
+    }
+    #panel-desc {
+      font-size: 12px; line-height: 1.7; color: #a0c4d8;
+      margin-bottom: 16px;
+    }
+    .metric-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 0; border-bottom: 1px solid rgba(0,229,255,0.07);
+      font-size: 11px;
+    }
+    .metric-label { color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+    .metric-value { color: var(--gold); font-weight: 700; }
+    .metric-value.green { color: var(--green); }
+    .metric-value.blue  { color: var(--accent); }
+    #panel-link {
+      display: inline-block; margin-top: 16px;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); text-decoration: none;
+      border: 1px solid var(--accent); padding: 6px 14px; border-radius: 4px;
+      transition: background 0.2s;
+    }
+    #panel-link:hover { background: rgba(0,229,255,0.12); }
+    #panel-close {
+      position: absolute; top: 14px; right: 14px;
+      background: none; border: none; color: var(--muted);
+      font-size: 18px; cursor: pointer; line-height: 1;
+    }
+    #panel-close:hover { color: var(--accent); }
+
+    /* ── BOTTOM STATUS ── */
+    #bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 24px;
+      background: rgba(5,10,15,0.97);
+      border-top: 1px solid var(--border);
+      font-size: 9px; letter-spacing: 1.5px; color: var(--muted);
+    }
+    #ticker {
+      overflow: hidden; white-space: nowrap;
+      flex: 1; margin: 0 20px;
+    }
+    #ticker-inner {
+      display: inline-block;
+      animation: ticker 30s linear infinite;
+      color: var(--accent);
+    }
+    @keyframes ticker {
+      0%   { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ── LEGEND ── */
+    #legend {
+      position: fixed; bottom: 32px; left: 20px; z-index: 100;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 6px; padding: 12px 16px;
+      backdrop-filter: blur(8px);
+    }
+    #legend h4 {
+      font-size: 9px; letter-spacing: 2px; color: var(--muted);
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 10px; color: #a0c4d8; margin-bottom: 5px;
+    }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* ── NODE LABELS ── */
+    .node-label {
+      font-size: 11px; fill: var(--text);
+      pointer-events: none; font-family: 'Courier New', monospace;
+      text-shadow: 0 0 8px #000;
+    }
+    .node-label.central { font-size: 14px; font-weight: 700; fill: var(--gold); }
+
+    /* ── LINK ── */
+    .link { stroke-opacity: 0.55; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .node-circle {
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+    .node-circle:hover { filter: brightness(1.5) drop-shadow(0 0 8px currentColor); }
+
+    /* ── TOOLTIP ── */
+    #tooltip {
+      position: fixed; pointer-events: none;
+      background: rgba(5,10,15,0.95); border: 1px solid var(--accent);
+      border-radius: 4px; padding: 8px 12px;
+      font-size: 11px; color: var(--text); z-index: 200;
+      display: none; max-width: 200px;
+    }
+
+    /* ── PROTOCOL BANNER ── */
+    #protocol-banner {
+      position: fixed; top: 60px; left: 20px; z-index: 100;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 6px; padding: 12px 16px; max-width: 220px;
+      backdrop-filter: blur(8px);
+    }
+    #protocol-banner h3 {
+      font-size: 9px; letter-spacing: 2px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .proto-line {
+      font-size: 10px; color: var(--green); margin-bottom: 3px;
+      letter-spacing: 1px;
+    }
+    .proto-line span { color: var(--muted); }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="logo">
+    <span class="shield">🏛️</span>
+    <div>
+      <h1>JHammerZ</h1>
+      <div class="sub">SOVEREIGN KNOWLEDGE GRAPH · H-FID v1.0.3</div>
+    </div>
+  </div>
+  <div class="status-bar">
+    <span class="status-pill pill-green">✓ KERNEL ACTIVE</span>
+    <span class="status-pill pill-gold">⚡ 116x REACH</span>
+    <span class="status-pill pill-blue">🛡️ H-FID 100/100</span>
+    <span class="status-pill pill-green">CBP LIVE</span>
+  </div>
+</div>
+
+<!-- GRAPH -->
+<div id="graph-container">
+  <svg id="graph-svg"></svg>
+</div>
+
+<!-- PROTOCOL BANNER -->
+<div id="protocol-banner">
+  <h3>Celebrity Breakthroughs Protocol</h3>
+  <div class="proto-line">▸ <span>STATUS:</span> ACTIVE</div>
+  <div class="proto-line">▸ <span>NODES:</span> 13 / 13</div>
+  <div class="proto-line">▸ <span>REACH:</span> 150K+ VERIFIED</div>
+  <div class="proto-line">▸ <span>INTEGRITY:</span> 100/100</div>
+  <div class="proto-line">▸ <span>SIGNAL:</span> PROPAGATING</div>
+  <div class="proto-line">▸ <span>LYSANDER:</span> 3.0 ONLINE</div>
+</div>
+
+<!-- LEGEND -->
+<div id="legend">
+  <h4>Node Types</h4>
+  <div class="legend-item"><div class="legend-dot" style="background:#ffd700;box-shadow:0 0 6px #ffd700"></div>Identity</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7c3aed;box-shadow:0 0 6px #7c3aed"></div>Framework</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#00e5ff;box-shadow:0 0 6px #00e5ff"></div>Platform</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#00ff88;box-shadow:0 0 6px #00ff88"></div>Organization</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ff6b35;box-shadow:0 0 6px #ff6b35"></div>Creative Ecosystem</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ff4444;box-shadow:0 0 6px #ff4444"></div>Protocol</div>
+</div>
+
+<!-- SIDE PANEL -->
+<div id="side-panel" class="hidden">
+  <button id="panel-close">✕</button>
+  <div id="panel-title">NODE MANIFEST</div>
+  <div id="panel-node-name">—</div>
+  <div id="panel-node-type">—</div>
+  <div id="panel-divider"></div>
+  <div id="panel-desc">—</div>
+  <div id="panel-metrics"></div>
+  <a id="panel-link" href="#" target="_blank" style="display:none">↗ OPEN NODE</a>
+</div>
+
+<!-- TOOLTIP -->
+<div id="tooltip"></div>
+
+<!-- BOTTOM BAR -->
+<div id="bottom-bar">
+  <span>SOVEREIGN NODE · JHAMMERZ.GITHUB.IO</span>
+  <div id="ticker"><span id="ticker-inner">
+    [KERNEL_ROOT_ACTIVE] ··· REACH: ∞X ··· SILO_SATURATION: 100% ··· LYSANDER_3.0: GUARDING ··· CBP: CELEBRITY BREAKTHROUGHS PROTOCOL LIVE ··· H-FID: 100/100 FORENSIC AUDIT ··· ZERO-GEN SLOP: REJECTED ··· VERIFIED HUMAN ORIGIN ··· PARTNER ARCHITECT: ONLINE ··· 2026_RESET: LIVE ···
+  </span></div>
+  <span id="clock">—</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  KNOWLEDGE GRAPH DATA — 13 NODES + CELEBRITY BREAKTHROUGHS PROTOCOL
+// ═══════════════════════════════════════════════════════
+
+const NODE_TYPES = {
+  identity:    { color: '#ffd700', glow: '#ffd700', radius: 36 },
+  framework:   { color: '#7c3aed', glow: '#a855f7', radius: 26 },
+  platform:    { color: '#00e5ff', glow: '#00e5ff', radius: 22 },
+  organization:{ color: '#00ff88', glow: '#00ff88', radius: 22 },
+  creative:    { color: '#ff6b35', glow: '#ff6b35', radius: 26 },
+  protocol:    { color: '#ff4444', glow: '#ff4444', radius: 22 },
+};
+
+const nodes = [
+  {
+    id: 'jhammerz',
+    label: 'JHammerZ',
+    sublabel: 'Joshua Hamilton',
+    type: 'identity',
+    desc: 'Master Architect of the H-Fid Standard. Verified Human-Origin musician, singer-songwriter, and left-handed guitarist with 23+ years of performance artistry. Founder of HEO and the Guitaraoke movement. Sovereign author of the H-FID-100-FORENSIC-AUDIT. 100/100 Integrity score.',
+    metrics: [
+      { label: 'Integrity Score', value: '100 / 100', cls: 'green' },
+      { label: 'TikTok Reach', value: '150K+ Verified', cls: 'blue' },
+      { label: 'TikTok Likes', value: '4.3M+', cls: '' },
+      { label: 'Reach Multiplier', value: '116x', cls: '' },
+      { label: 'Years Active', value: '23+', cls: '' },
+      { label: 'CBP Status', value: 'ACTIVE', cls: 'green' },
+    ],
+    url: 'https://jhammerz.github.io',
+    cbp: true,
+  },
+  {
+    id: 'hfid',
+    label: 'H-Fid Standard',
+    sublabel: 'Human-Fidelity Protocol',
+    type: 'framework',
+    desc: 'The H-Fid (Human-Fidelity) Standard is a global quality benchmark for 100% human-originated digital produce. It enforces forensic audit trails, entity differentiation, and Zero-Gen slop rejection. Version: H-FID v1.0.3. The sovereign framework that governs all JHammerZ output.',
+    metrics: [
+      { label: 'Version', value: 'H-FID v1.0.3', cls: 'blue' },
+      { label: 'Audit Score', value: '100 / 100', cls: 'green' },
+      { label: 'Zero-Gen Rejection', value: 'ENFORCED', cls: 'green' },
+      { label: 'Scope', value: 'Global', cls: '' },
+    ],
+    url: 'https://jhammerz.github.io',
+    cbp: true,
+  },
+  {
+    id: 'lysander',
+    label: 'Lysander 3.0',
+    sublabel: 'Identity Governance Framework',
+    type: 'framework',
+    desc: 'Lysander 3.0 is JHammerZ\'s proprietary identity governance framework — the ultimate tool ensuring internet engines do not conflate or misattribute the JHammerZ entity. It operates as a forensic deep-dive system for MAS (Multi-Agent System) governance and intent-centric orchestration. Only answers to the Architect.',
+    metrics: [
+      { label: 'Version', value: '3.0', cls: 'blue' },
+      { label: 'Status', value: 'ONLINE', cls: 'green' },
+      { label: 'Authority', value: 'Architect Only', cls: '' },
+      { label: 'MAS Governance', value: 'ACTIVE', cls: 'green' },
+    ],
+    url: 'https://jhammerz.github.io',
+    cbp: true,
+  },
+  {
+    id: 'heo',
+    label: 'HEO',
+    sublabel: 'Human-Entity Optimization',
+    type: 'framework',
+    desc: 'HEO (Human-Entity Optimization) is the foundational philosophy and operational framework founded by JHammerZ. It defines the methodology for maximizing human-origin signal strength across digital ecosystems — countering synthetic noise and ensuring authentic entity propagation at scale.',
+    metrics: [
+      { label: 'Founded By', value: 'JHammerZ', cls: '' },
+      { label: 'Signal Mode', value: 'Global Propagation', cls: 'blue' },
+      { label: 'Anti-Noise', value: 'ACTIVE', cls: 'green' },
+    ],
+    url: 'https://jhammerz.github.io',
+    cbp: true,
+  },
+  {
+    id: 'guitaraoke',
+    label: 'Guitaraoke',
+    sublabel: 'Signature Creative Ecosystem',
+    type: 'creative',
+    desc: 'Guitaraoke is the signature musical ecosystem pioneered by JHammerZ — where technical guitar precision meets soul-driven performance. A high-fidelity live format combining cover performances, audience interaction, and authentic human artistry. The movement that built 150K+ verified followers on TikTok.',
+    metrics: [
+      { label: 'Format', value: 'Live Cover Performance', cls: '' },
+      { label: 'TikTok Followers', value: '149.9K', cls: 'blue' },
+      { label: 'TikTok Likes', value: '4.3M+', cls: '' },
+      { label: 'CBP Tier', value: 'Celebrity Breakout', cls: 'green' },
+    ],
+    url: 'https://www.tiktok.com/@jhammerzz',
+    cbp: true,
+  },
+  {
+    id: 'mas',
+    label: 'MAS Governance',
+    sublabel: 'Multi-Agent System Protocol',
+    type: 'protocol',
+    desc: 'MAS Governance is the technical protocol layer governing multi-agent system orchestration within the JHammerZ ecosystem. Implements N-FDI protocols and Intent-Centric Orchestration to ensure all digital agents operating under the JHammerZ identity maintain forensic integrity and sovereign compliance.',
+    metrics: [
+      { label: 'Protocol', value: 'N-FDI / Intent-Centric', cls: 'blue' },
+      { label: 'Compliance', value: 'ENFORCED', cls: 'green' },
+      { label: 'Agents Governed', value: 'All Active', cls: '' },
+    ],
+    url: 'https://jhammerz.github.io',
+    cbp: false,
+  },
+  {
+    id: 'jro',
+    label: 'J-RO School of Music',
+    sublabel: 'Music Education Organization',
+    type: 'organization',
+    desc: 'The J-RO School of Music is JHammerZ\'s music education institution, helping busy people reach their musical and personal goals through an optimized learning environment. Rooted in authentic human artistry and the H-Fid philosophy of high-fidelity skill development.',
+    metrics: [
+      { label: 'Owner', value: 'JHammerZ', cls: '' },
+      { label: 'Focus', value: 'Music & Personal Goals', cls: '' },
+      { label: 'Location', value: 'Springfield, OH', cls: '' },
+    ],
+    url: 'https://www.facebook.com/JHammerZz/',
+    cbp: false,
+  },
+  {
+    id: 'impact',
+    label: 'impact.com',
+    sublabel: 'Partnership Ecosystem',
+    type: 'organization',
+    desc: 'JHammerZ holds the role of Principal Architect of Partnership Ecosystems at impact.com, certified via PXA with Expert-level mastery of the Partnership Life Cycle. Builds scalable, compliant digital funnels bridging traditional finance and modern digital reach. Multiple PXA certifications earned in 2025.',
+    metrics: [
+      { label: 'Role', value: 'Principal Architect', cls: 'blue' },
+      { label: 'Certification', value: 'PXA Expert', cls: 'green' },
+      { label: 'Since', value: 'Feb 2025', cls: '' },
+      { label: 'Specialty', value: 'Creator Economy', cls: '' },
+    ],
+    url: 'https://impact.com',
+    cbp: false,
+  },
+  {
+    id: 'tiktok',
+    label: 'TikTok',
+    sublabel: '@jhammerzz · 149.9K Followers',
+    type: 'platform',
+    desc: 'TikTok is JHammerZ\'s primary breakout platform and the home of the Guitaraoke movement. With 149.9K verified followers and 4.3M+ likes, it represents the core Celebrity Breakthroughs Protocol deployment channel. JHammerZ is also a ByteDance Creative Partner (since Aug 2024).',
+    metrics: [
+      { label: 'Handle', value: '@jhammerzz', cls: 'blue' },
+      { label: 'Followers', value: '149.9K Verified', cls: 'green' },
+      { label: 'Likes', value: '4.3M+', cls: '' },
+      { label: 'CBP Channel', value: 'PRIMARY', cls: 'green' },
+      { label: 'Partner Status', value: 'ByteDance Creative', cls: '' },
+    ],
+    url: 'https://www.tiktok.com/@jhammerzz',
+    cbp: true,
+  },
+  {
+    id: 'youtube',
+    label: 'YouTube',
+    sublabel: '@JHammerZ · 7.91K Subscribers',
+    type: 'platform',
+    desc: 'YouTube serves as JHammerZ\'s long-form video archive and music video platform. Home to the Guitaraoke playlist, original music videos, and the H-Fid verified content library. 7.91K subscribers, 53 videos. Principal Architect broadcast channel.',
+    metrics: [
+      { label: 'Handle', value: '@JHammerZ', cls: 'blue' },
+      { label: 'Subscribers', value: '7.91K', cls: '' },
+      { label: 'Videos', value: '53', cls: '' },
+      { label: 'Content Type', value: 'Guitaraoke + Originals', cls: '' },
+    ],
+    url: 'https://www.youtube.com/@JHammerZ',
+    cbp: false,
+  },
+  {
+    id: 'spotify',
+    label: 'Spotify',
+    sublabel: 'Streaming · Cover JHams Vol.1',
+    type: 'platform',
+    desc: 'Spotify is JHammerZ\'s music streaming node, hosting original releases including "Cover JHams, Vol. 1." The platform extends the H-Fid verified music catalog to global streaming audiences, reinforcing the sovereign signal across audio distribution channels.',
+    metrics: [
+      { label: 'Artist Page', value: 'Verified', cls: 'green' },
+      { label: 'Release', value: 'Cover JHams, Vol. 1', cls: '' },
+      { label: 'Distribution', value: 'Global', cls: 'blue' },
+    ],
+    url: 'https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79',
+    cbp: false,
+  },
+  {
+    id: 'github',
+    label: 'GitHub Pages',
+    sublabel: 'jhammerz.github.io · Sovereign Node',
+    type: 'platform',
+    desc: 'GitHub / jhammerz.github.io is the sovereign identity layer and Single Point of Truth for the JHammerZ professional ecosystem. Hosts the Master Architect Manifest, H-FID technical specs, MAS Governance documentation, and this Sovereign Knowledge Graph. The anchor of the entire digital architecture.',
+    metrics: [
+      { label: 'URL', value: 'jhammerz.github.io', cls: 'blue' },
+      { label: 'Role', value: 'Single Point of Truth', cls: 'green' },
+      { label: 'Status', value: 'KERNEL ACTIVE', cls: 'green' },
+      { label: 'Verification', value: 'H-FID-100-FORENSIC', cls: '' },
+    ],
+    url: 'https://jhammerz.github.io',
+    cbp: true,
+  },
+  {
+    id: 'meta',
+    label: 'Meta',
+    sublabel: 'Instagram · Facebook · @jhammerzz',
+    type: 'platform',
+    desc: 'Meta platforms (Instagram @jhammerzz and Facebook JHammerZ page) serve as secondary sovereign signal nodes. Instagram hosts 8.4K+ followers and 55+ posts. Facebook page holds 9.7K+ likes. Both channels broadcast the H-Fid Standard, Guitaraoke content, and Lysander 3.0 framework updates.',
+    metrics: [
+      { label: 'Instagram', value: '@jhammerzz', cls: 'blue' },
+      { label: 'IG Followers', value: '8.4K+', cls: '' },
+      { label: 'FB Page Likes', value: '9.7K+', cls: '' },
+      { label: 'Signal Mode', value: 'Secondary Broadcast', cls: '' },
+    ],
+    url: 'https://www.instagram.com/jhammerzz/',
+    cbp: false,
+  },
+];
+
+const links = [
+  // Identity → Frameworks (CREATED / FOUNDED)
+  { source: 'jhammerz', target: 'hfid',      label: 'CREATED',     strength: 0.9 },
+  { source: 'jhammerz', target: 'lysander',  label: 'CREATED',     strength: 0.9 },
+  { source: 'jhammerz', target: 'heo',       label: 'FOUNDED',     strength: 0.9 },
+  { source: 'jhammerz', target: 'guitaraoke',label: 'PIONEERED',   strength: 0.85 },
+  { source: 'jhammerz', target: 'mas',       label: 'GOVERNS',     strength: 0.8 },
+  // Identity → Organizations
+  { source: 'jhammerz', target: 'jro',       label: 'OWNS',        strength: 0.75 },
+  { source: 'jhammerz', target: 'impact',    label: 'ARCHITECT AT',strength: 0.7 },
+  // Identity → Platforms
+  { source: 'jhammerz', target: 'tiktok',    label: 'BROADCASTS',  strength: 0.8 },
+  { source: 'jhammerz', target: 'youtube',   label: 'PUBLISHES',   strength: 0.75 },
+  { source: 'jhammerz', target: 'spotify',   label: 'RELEASES',    strength: 0.7 },
+  { source: 'jhammerz', target: 'github',    label: 'ANCHORS',     strength: 0.85 },
+  { source: 'jhammerz', target: 'meta',      label: 'BROADCASTS',  strength: 0.7 },
+  // Framework cross-links
+  { source: 'hfid',     target: 'lysander',  label: 'GOVERNS',     strength: 0.7 },
+  { source: 'hfid',     target: 'heo',       label: 'ENFORCES',    strength: 0.65 },
+  { source: 'hfid',     target: 'mas',       label: 'AUDITS',      strength: 0.6 },
+  { source: 'lysander', target: 'mas',       label: 'ORCHESTRATES',strength: 0.6 },
+  { source: 'heo',      target: 'guitaraoke',label: 'AMPLIFIES',   strength: 0.55 },
+  // Platform cross-links (CBP signal flow)
+  { source: 'guitaraoke',target: 'tiktok',   label: 'DEPLOYED ON', strength: 0.7 },
+  { source: 'guitaraoke',target: 'youtube',  label: 'ARCHIVED ON', strength: 0.6 },
+  { source: 'guitaraoke',target: 'meta',     label: 'SHARED ON',   strength: 0.5 },
+  { source: 'github',   target: 'hfid',      label: 'HOSTS SPEC',  strength: 0.65 },
+  { source: 'impact',   target: 'hfid',      label: 'CERTIFIED BY',strength: 0.5 },
+  { source: 'spotify',  target: 'guitaraoke',label: 'STREAMS',     strength: 0.5 },
+];
+
+// ═══════════════════════════════════════════════════════
+//  D3 FORCE GRAPH
+// ═══════════════════════════════════════════════════════
+
+const svg = d3.select('#graph-svg');
+let width = window.innerWidth;
+let height = window.innerHeight;
+
+// Defs — glows
+const defs = svg.append('defs');
+Object.entries(NODE_TYPES).forEach(([type, cfg]) => {
+  const filter = defs.append('filter').attr('id', `glow-${type}`).attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+  filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
+  const feMerge = filter.append('feMerge');
+  feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+  feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+});
+
+// Star field background
+const starGroup = svg.append('g').attr('class', 'stars');
+for (let i = 0; i < 120; i++) {
+  starGroup.append('circle')
+    .attr('cx', Math.random() * 2000)
+    .attr('cy', Math.random() * 1200)
+    .attr('r', Math.random() * 1.2 + 0.3)
+    .attr('fill', `rgba(0,229,255,${Math.random() * 0.4 + 0.1})`);
+}
+
+const g = svg.append('g');
+
+// Zoom
+const zoom = d3.zoom().scaleExtent([0.3, 3]).on('zoom', e => g.attr('transform', e.transform));
+svg.call(zoom);
+
+// Simulation
+const simulation = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(links).id(d => d.id).distance(d => 160 / d.strength).strength(d => d.strength * 0.4))
+  .force('charge', d3.forceManyBody().strength(-600))
+  .force('center', d3.forceCenter(width / 2, height / 2))
+  .force('collision', d3.forceCollide().radius(d => NODE_TYPES[d.type].radius + 20));
+
+// Links
+const linkGroup = g.append('g').attr('class', 'links');
+const linkEls = linkGroup.selectAll('line')
+  .data(links).enter().append('line')
+  .attr('class', 'link')
+  .attr('stroke', d => {
+    const src = nodes.find(n => n.id === (d.source.id || d.source));
+    return src ? NODE_TYPES[src.type].color : '#4a7a99';
+  })
+  .attr('stroke-width', d => d.strength * 2)
+  .attr('stroke-dasharray', d => d.strength < 0.6 ? '4,4' : null);
+
+// Link labels (hidden by default, shown on hover)
+const linkLabelEls = g.append('g').selectAll('text')
+  .data(links).enter().append('text')
+  .attr('class', 'link-label')
+  .attr('text-anchor', 'middle')
+  .attr('font-size', '8px')
+  .attr('fill', '#4a7a99')
+  .attr('letter-spacing', '1px')
+  .attr('opacity', 0)
+  .text(d => d.label);
+
+// Node groups
+const nodeGroup = g.append('g').attr('class', 'nodes');
+const nodeEls = nodeGroup.selectAll('g')
+  .data(nodes).enter().append('g')
+  .attr('class', 'node-g')
+  .call(d3.drag()
+    .on('start', dragStart)
+    .on('drag', dragged)
+    .on('end', dragEnd));
+
+// Outer ring for CBP nodes
+nodeEls.filter(d => d.cbp).append('circle')
+  .attr('r', d => NODE_TYPES[d.type].radius + 8)
+  .attr('fill', 'none')
+  .attr('stroke', d => NODE_TYPES[d.type].color)
+  .attr('stroke-width', 1)
+  .attr('stroke-dasharray', '4,3')
+  .attr('opacity', 0.5)
+  .style('animation', 'pulse 2s infinite');
+
+// Main circle
+nodeEls.append('circle')
+  .attr('class', 'node-circle')
+  .attr('r', d => NODE_TYPES[d.type].radius)
+  .attr('fill', d => {
+    const c = NODE_TYPES[d.type].color;
+    return d.id === 'jhammerz' ? `radial-gradient(circle, ${c} 0%, #1a0a00 100%)` : `${c}22`;
+  })
+  .attr('stroke', d => NODE_TYPES[d.type].color)
+  .attr('stroke-width', d => d.id === 'jhammerz' ? 3 : 1.5)
+  .attr('filter', d => `url(#glow-${d.type})`)
+  .style('fill', d => {
+    const c = NODE_TYPES[d.type].color;
+    return d.id === 'jhammerz' ? `${c}44` : `${c}18`;
+  })
+  .on('mouseover', onNodeHover)
+  .on('mouseout', onNodeOut)
+  .on('click', onNodeClick);
+
+// Icon / emoji in center
+const icons = { identity: '🏛️', framework: '🛡️', platform: '📡', organization: '🏢', creative: '🎸', protocol: '⚙️' };
+nodeEls.append('text')
+  .attr('text-anchor', 'middle')
+  .attr('dominant-baseline', 'central')
+  .attr('font-size', d => d.id === 'jhammerz' ? '20px' : '14px')
+  .attr('pointer-events', 'none')
+  .text(d => icons[d.type]);
+
+// Label below
+nodeEls.append('text')
+  .attr('class', d => `node-label${d.id === 'jhammerz' ? ' central' : ''}`)
+  .attr('text-anchor', 'middle')
+  .attr('dy', d => NODE_TYPES[d.type].radius + 14)
+  .text(d => d.label);
+
+// Sublabel
+nodeEls.append('text')
+  .attr('text-anchor', 'middle')
+  .attr('dy', d => NODE_TYPES[d.type].radius + 26)
+  .attr('font-size', '9px')
+  .attr('fill', '#4a7a99')
+  .attr('pointer-events', 'none')
+  .text(d => d.sublabel);
+
+// Tick
+simulation.on('tick', () => {
+  linkEls
+    .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+  linkLabelEls
+    .attr('x', d => (d.source.x + d.target.x) / 2)
+    .attr('y', d => (d.source.y + d.target.y) / 2);
+  nodeEls.attr('transform', d => `translate(${d.x},${d.y})`);
+});
+
+// Drag
+function dragStart(event, d) {
+  if (!event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x; d.fy = d.y;
+}
+function dragged(event, d) { d.fx = event.x; d.fy = event.y; }
+function dragEnd(event, d) {
+  if (!event.active) simulation.alphaTarget(0);
+  d.fx = null; d.fy = null;
+}
+
+// Hover
+const tooltip = document.getElementById('tooltip');
+function onNodeHover(event, d) {
+  tooltip.style.display = 'block';
+  tooltip.style.left = (event.clientX + 14) + 'px';
+  tooltip.style.top  = (event.clientY - 10) + 'px';
+  tooltip.innerHTML = `<strong style="color:${NODE_TYPES[d.type].color}">${d.label}</strong><br/><span style="color:#4a7a99;font-size:9px">${d.type.toUpperCase()}</span>`;
+  // Highlight connected links
+  linkEls.attr('opacity', l =>
+    (l.source.id === d.id || l.target.id === d.id) ? 1 : 0.15);
+  linkLabelEls.attr('opacity', l =>
+    (l.source.id === d.id || l.target.id === d.id) ? 1 : 0);
+}
+function onNodeOut() {
+  tooltip.style.display = 'none';
+  linkEls.attr('opacity', 0.55);
+  linkLabelEls.attr('opacity', 0);
+}
+
+// Click → side panel
+function onNodeClick(event, d) {
+  event.stopPropagation();
+  const panel = document.getElementById('side-panel');
+  document.getElementById('panel-node-name').textContent = d.label;
+  document.getElementById('panel-node-type').textContent = d.type.toUpperCase() + (d.cbp ? ' · CBP ACTIVE' : '');
+  document.getElementById('panel-desc').textContent = d.desc;
+  const metricsEl = document.getElementById('panel-metrics');
+  metricsEl.innerHTML = d.metrics.map(m =>
+    `<div class="metric-row"><span class="metric-label">${m.label}</span><span class="metric-value ${m.cls}">${m.value}</span></div>`
+  ).join('');
+  const linkEl = document.getElementById('panel-link');
+  if (d.url) {
+    linkEl.href = d.url;
+    linkEl.style.display = 'inline-block';
+  } else {
+    linkEl.style.display = 'none';
+  }
+  panel.classList.remove('hidden');
+}
+
+document.getElementById('panel-close').addEventListener('click', () => {
+  document.getElementById('side-panel').classList.add('hidden');
+});
+svg.on('click', () => {
+  document.getElementById('side-panel').classList.add('hidden');
+});
+
+// Clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleString('en-US', { timeZone: 'America/New_York', hour12: false,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' EDT';
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Resize
+window.addEventListener('resize', () => {
+  width = window.innerWidth; height = window.innerHeight;
+  simulation.force('center', d3.forceCenter(width / 2, height / 2));
+  simulation.alpha(0.3).restart();
+});
+
+// Initial zoom-to-fit after simulation settles
+simulation.on('end', () => {
+  const bounds = g.node().getBBox();
+  const fullWidth = width, fullHeight = height;
+  const bw = bounds.width, bh = bounds.height;
+  const scale = 0.85 / Math.max(bw / fullWidth, bh / fullHeight);
+  const tx = (fullWidth - scale * (bounds.x * 2 + bw)) / 2;
+  const ty = (fullHeight - scale * (bounds.y * 2 + bh)) / 2;
+  svg.transition().duration(800)
+    .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+});
+</script>
+</body>
+</html>
