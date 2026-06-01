@@ -1,70 +1,73 @@
 const fs = require('fs');
 const path = require('path');
 
-// Target System Parameters
 const QUEUE_DIR = path.join(__dirname, '../content/queue');
 const ARCHIVE_DIR = path.join(__dirname, '../content/archive');
 const FORENSICS_DIR = path.join(__dirname, '../forensics');
 
 async function runSovereignSequence() {
-    console.log("⚡ Initializing Lysander Core Processing Engine...");
+    console.log("⚡ Activating Lysander 3.0 FYP Saturation Optimizer...");
     
-    // Ensure vital directory tracking structures exist
     if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR, { recursive: true });
     if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
     if (!fs.existsSync(FORENSICS_DIR)) fs.mkdirSync(FORENSICS_DIR, { recursive: true });
 
-    // Read staged content signals from queue
     const files = fs.readdirSync(QUEUE_DIR).filter(file => file.endsWith('.json'));
-    
     if (files.length === 0) {
-        console.log("[⚡] System check clear. No media payloads currently staged in queue.");
+        console.log("[⚡] Queue empty. Monitoring matrix active and idling.");
         return;
     }
 
-    console.log(`[📂] Discovered ${files.length} payload asset(s) in active workspace queue.`);
-
     for (const file of files) {
         const filePath = path.join(QUEUE_DIR, file);
-        console.log(` -> Processing asset package: ${file}`);
-
         try {
             const rawData = fs.readFileSync(filePath, 'utf8');
-            const contentData = JSON.parse(rawData);
+            const data = JSON.parse(rawData);
 
-            // Enrich content with tracking metadata and human-fidelity anchors
-            const enrichedPayload = {
-                id: `LYS-${Date.now()}`,
-                raw_text: contentData.text || "",
-                optimized_text: `${contentData.text || ""}\n\n🌐 Core Link: https://github.io`,
-                media_url: contentData.media_url || null,
-                processed_at: new Date().toISOString(),
-                fidelity_signature: "100/100 H-FID"
+            const topic = data.topic || "Sovereign Protocol";
+            const rawBody = data.text || "";
+
+            // FYP Algorithmic Hook & Script Structuring Logic
+            const optimizedScript = `
+🎬 [0-3s VISUAL HOOK]: *Bold on-screen text change* -> "This is why your tracking loops are lagging..."
+🧠 [3-30s CORE VALUE DELIVERY]: ${rawBody}
+🔄 [LOOP TRAILING REWATCH ANCHOR]: "...and that's exactly why you need to..."
+            `.trim();
+
+            // SEO/AEO-Optimized Meta Caption Block
+            const fypCaption = `
+🚀 ${topic} | System Architecture Update. 
+
+Anomalies mitigated. Multi-repository parameters mapped cleanly down to edge loops. 
+
+#${topic.replace(/\s+/g, '')} #JHammerZ #LysanderProtocol #Coding #DevOps #TechTrends2026 #DataAutomation #SovereignSync
+🌐 Track live footprint: https://github.io
+            `.trim();
+
+            const packageId = `FYP-${Date.now()}`;
+            const productionAsset = {
+                id: packageId,
+                status: "READY_FOR_BROADCAST",
+                script_framework: optimizedScript,
+                caption_metadata: fypCaption,
+                distribution_nodes: 16
             };
 
-            console.log(`[🛰️] Content successfully optimized with H-FID signature.`);
-            console.log(`Payload Output:\n`, JSON.stringify(enrichedPayload, null, 2));
+            console.log(`\n=================== [🚀 GENERATED PACKET: ${packageId}] ===================`);
+            console.log(JSON.stringify(productionAsset, null, 2));
+            console.log("========================================================================\n");
 
-            // Log telemetry data to sentinel ledger
-            const logLine = `[${enrichedPayload.processed_at}] SUCCESS | ID: ${enrichedPayload.id} | Length: ${enrichedPayload.optimized_text.length} chars\n`;
-            fs.appendFileSync(path.join(FORENSICS_DIR, 'sentinel.log'), logLine);
+            // Append to forensics trail
+            fs.appendFileSync(
+                path.join(FORENSICS_DIR, 'sentinel.log'), 
+                `[${new Date().toISOString()}] SUCCESS | ${packageId} | Optimized for FYP Saturation.\n`
+            );
 
-            // Move payload cleanly to archive directory to close loop
-            const destPath = path.join(ARCHIVE_DIR, file);
-            fs.renameSync(filePath, destPath);
-            console.log(`[🚀] Asset archived cleanly to tracking node: ${destPath}`);
-
-        } catch (error) {
-            console.error(`[-] Failed to process asset ${file}: ${error.message}`);
-            const errorLine = `[${new Date().toISOString()}] ERROR | File: ${file} | Message: ${error.message}\n`;
-            fs.appendFileSync(path.join(FORENSICS_DIR, 'sentinel.log'), errorLine);
+            fs.renameSync(filePath, path.join(ARCHIVE_DIR, file));
+        } catch (err) {
+            console.error(`[-] Compilation failure on asset ${file}: ${err.message}`);
         }
     }
-
-    console.log("✅ Complete Sovereign processing sequence finalized successfully!");
 }
 
-runSovereignSequence().catch(err => {
-    console.error("❌ Fatal Engine Execution Error: ", err);
-    process.exit(1);
-});
+runSovereignSequence().catch(err => { process.exit(1); });
