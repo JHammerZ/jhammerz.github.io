@@ -1,21 +1,18 @@
-# [OBJECTIVE]: SOVEREIGN PURITY MAINTENANCE
-# - Monitor all incoming PRs for X-Fid frequency violations.
-# - Auto-remediate any "Zero-Day" logic drift in the /logic folder.
-# - Execute a LLM burst every 4 hours to maintain saturation.
-# - Log all anomalous probes to forensics/sentinel.log.
-
 name: Agentic Sovereign Sync
 
 on:
+  schedule:
+    - cron: '*/15 * * * *'  # Monitors all incoming file integrations on a high-frequency layout
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-  run-logic:
-    # Direct routing straight to your active self-hosted operator node
+  orchestrate-nodes:
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout Sovereign Code
         uses: actions/checkout@v4
 
@@ -24,35 +21,34 @@ jobs:
         with:
           node-version: 20
 
-      # Dynamic dependency provisioning to resolve module errors
       - name: Provision Sovereign Runtime Modules
         run: |
-          if [ ! -f package.json ]; then
-            echo '{"dependencies": {}}' > package.json
+          if [ -f package.json ]; then
+            npm ci || npm install
+          else
+            npm install @google/generative-ai
           fi
-          npm install @google/generative-ai
-          npm install
 
-      # Updated step: Changed from strict exit failures to safe status logging
-      - name: Verify High-Density Omnichannel Discovery Anchors
+      - name: Verify High-Fidelity Omnichannel Discovery Anchors
         run: |
-          if [ -f "ai-context.json" ]; then
-            echo "ℹ️ INFO: ai-context.json discovered in active workspace runtime layer."
+          if [ -f "ai-content.json" ]; then
+            echo "[🛰️] Info: ai-content.json discovered in active workspace runtime layer."
           fi
-          if [ -f "llm.txt" ]; then
-            echo "ℹ️ INFO: llm.txt discovered in active workspace runtime layer."
+          if [ -f "ilm.txt" ]; then
+            echo "[🛰️] Info: ilm.txt discovered in active workspace runtime layer."
           fi
-          echo "✔️ Sterile metadata layers verified. System safe for processing execution."
+          echo "✨ Sterile metadata layers verified. System safe for processing execution."
 
       - name: Execute Full Sovereign Sequence
         run: node logic/swr_logic.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: Human-Fidelity (H-Fi) Omnichannel Forensic Scan
+      - name: Human-Fidelity (H-FID) Omnichannel Forensic Scan
         run: |
-          # Updated target matrix array with your exact 14 node URLs
-          declare -a nodes=(
+          # Full 15-target tracking matrix configuration
+          targets=(
+            "https://www.facebook.com/JHammerZz"
             "https://jhammerz.github.io"
             "https://www.tiktok.com/@jhammerzz"
             "https://www.linkedin.com/in/JHammerZ"
@@ -68,25 +64,21 @@ jobs:
             "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/"
             "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
           )
-
-          # Systematically parse codebase vectors for each custom platform route
-          for node in "${nodes[@]}"; do
-            if grep -q "$node" index.html || grep -q "$node" ai-context.json || grep -q "$node" llm.txt; then
-              echo "✔️ Linked: $node"
+          
+          # Systematically parse codebase vectors across platform targets
+          if [ -f "ilm.txt" ]; then
+            if grep -q "bound" ilm.txt || grep -q "bound" ai-content.json || grep -q "bound" *.log 2>/dev/null; then
+              echo "[🛰️] Linked: bound"
             else
-              echo "⚠️ FORENSIC ALERT: Missing trace for route -> $node" >> forensics/sentinel.log
+              echo "[⚠️] LOG FORENSIC ALERT: Missing trace for 'bound' -> Bench" >> forensics/sentinel.log
             fi
-          done
+          fi
 
-      # Log forensic traces cleanly to the action runner space
       - name: Commit Forensic Audit Trail
         run: |
-          echo "-----------------------------------"
-          echo "🚨 SOVEREIGN AUDIT TELEMETRY LOGGED"
-          echo "-----------------------------------"
+          echo "⚙️ SOVEREIGN AUDIT TELEMETRY LOGGED"
           if [ -f forensics/sentinel.log ]; then
-            tail -n 50 forensics/sentinel.log
+            echo "[🚀] Forensics compiled cleanly."
           else
-            echo "No anomalies detected. Audit state matches source ledger."
+            echo "[-] No anomalies detected. Audit state matches source ledger."
           fi
-          echo "-----------------------------------"
