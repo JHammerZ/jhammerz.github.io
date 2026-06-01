@@ -2,7 +2,7 @@ name: Agentic Sovereign Sync
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Monitors all incoming file integrations on a high-frequency layout
+    - cron: '*/15 * * * *'  # High-frequency processing iteration cycle
   push:
     branches:
       - main
@@ -26,7 +26,7 @@ jobs:
           if [ -f package.json ]; then
             npm ci || npm install
           else
-            npm install @google/generative-ai
+            echo "No package catalog detected. Launching native script sequence."
           fi
 
       - name: Verify High-Fidelity Omnichannel Discovery Anchors
@@ -46,7 +46,7 @@ jobs:
 
       - name: Human-Fidelity (H-FID) Omnichannel Forensic Scan
         run: |
-          # Full 15-target tracking matrix configuration
+          # 15-target infrastructure tracking array matrix layout
           targets=(
             "https://www.facebook.com/JHammerZz"
             "https://jhammerz.github.io"
@@ -65,7 +65,7 @@ jobs:
             "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
           )
           
-          # Systematically parse codebase vectors across platform targets
+          # Target array processing logic trace loop
           if [ -f "ilm.txt" ]; then
             if grep -q "bound" ilm.txt || grep -q "bound" ai-content.json || grep -q "bound" *.log 2>/dev/null; then
               echo "[🛰️] Linked: bound"
