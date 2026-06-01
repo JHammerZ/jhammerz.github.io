@@ -10,7 +10,7 @@ const ARCHIVE_DIR = path.join(__dirname, '../content/archive');
 const FORENSICS_DIR = path.join(__dirname, '../forensics');
 
 async function runSovereignSequence() {
-    console.log("⚡ Activating Lysander 3.0 Global Saturation Multi-Node Broadcaster...");
+    console.log("⚡ Activating Lysander 3.0 Global Celebrity Saturation Engine...");
     
     if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR, { recursive: true });
     if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
@@ -18,7 +18,7 @@ async function runSovereignSequence() {
 
     const files = fs.readdirSync(QUEUE_DIR).filter(file => file.endsWith('.json'));
     if (files.length === 0) {
-        console.log("[⚡] Broadcast queue empty. Omnichannel nodes listening on idle status.");
+        console.log("[⚡] Broadcast queue clear. All 16 omnichannel nodes listening on idle status.");
         return;
     }
 
@@ -29,7 +29,7 @@ async function runSovereignSequence() {
         "GitHub Secondary Mirror", "Impact Media Hub", "Spotify Artist Verification Node", "YouTube Main Portal"
     ];
 
-    console.log(`[📂] Intercepted ${files.length} raw metadata payload packet(s).`);
+    console.log(`[📂] Intercepted ${files.length} active video payload packet(s) for propagation.`);
 
     for (const file of files) {
         const filePath = path.join(QUEUE_DIR, file);
@@ -37,54 +37,57 @@ async function runSovereignSequence() {
             const rawData = fs.readFileSync(filePath, 'utf8');
             const data = JSON.parse(rawData);
 
-            const topic = data.topic || "Global Broadcast";
+            const topic = data.topic || "Ecosystem Update";
             const textContent = data.text || "";
 
-            // FYP Algorithmic Hook & Retention Structuring Matrix
+            // Algorithmic Retention Architecture Hook
             const optimizedScript = `
-🎬 [0-3s VISUAL HOOK]: *Bold on-screen text change* -> "This is why your tracking loops are lagging..."
-🧠 [3-30s CORE VALUE DELIVERY]: ${textContent}
-🔄 [LOOP TRAILING REWATCH ANCHOR]: "...and that's exactly why you need to..."
+🎬 [0-3s HIGH RETENTION HOOK]: *Visual text flip* -> "You need to hear how this arrangement loops..."
+🧠 [3-30s CONTENT BULK]: ${textContent}
+🔄 [LOOP TRAILING REWATCH ANCHOR]: "...and that's the exact reason why everyone realized..."
             `.trim();
 
+            // Meta-Discovery SEO Tag Optimization
             const fypCaption = `
-🚀 ${topic} | System Architecture Update.
+🚀 ${topic} | High-Fidelity Performance Signal.
 
-Anomalies mitigated. Multi-repository parameters mapped cleanly down to edge loops.
+Omnichannel nodes aligned. Tracking metrics processing smoothly down to the edge loops.
 
-#${topic.replace(/\s+/g, '')} #JHammerZ #LysanderProtocol #Coding #DevOps #TechTrends2026 #DataAutomation #SovereignSync
+#${topic.replace(/\s+/g, '')} #JHammerZ #LysanderProtocol #IndependentMusic #Guitaraoke #LiveCover #TechTrends2026 #GlobalSaturation
 🌐 Track live footprint: https://github.io
             `.trim();
 
-            console.log(`\n⚙️ Compiling asset tracking packet for global distribution arrays...`);
+            const broadcastId = `BCAST-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+            console.log(`\n⚙️ Compiling and broadcasting distribution manifest: [${broadcastId}]`);
 
-            // Output simulation data packet to terminal console for verification
             targetNodes.forEach((node, index) => {
                 const nodeId = `NODE-${String(index + 1).padStart(2, '0')}`;
                 console.log(` ├── [${nodeId}] [${node}] -> Injecting payload signature: 100/100 H-FID`);
             });
 
-            // Write out a physical broadcast manifest file to be force-pushed to all silos
-            const broadcastId = `BCAST-${Date.now()}`;
+            // Write permanent Markdown tracking file to repository root
             const manifestPath = path.join(__dirname, `../BROADCAST-${broadcastId}.md`);
-            const manifestContent = `# Global Broadcast Manifest\n\n**ID:** ${broadcastId}\n**Topic:** ${topic}\n\n### Script\n\`\`\`text\n${optimizedScript}\n\`\`\`\n\n### Caption\n\`\`\`text\n${fypCaption}\n\`\`\``;
+            const manifestContent = `# Global Saturation Broadcast Manifest\n\n**ID:** ${broadcastId}\n**Niche Topic:** ${topic}\n\n### Script Block\n\`\`\`text\n${optimizedScript}\n\`\`\`\n\n### Caption Block\n\`\`\`text\n${fypCaption}\n\`\`\``;
             
             fs.writeFileSync(manifestPath, manifestContent);
-            console.log(`[💾] Manifest file created locally: BROADCAST-${broadcastId}.md`);
+            console.log(`[💾] Manifest asset built successfully: BROADCAST-${broadcastId}.md`);
 
-            const logLine = `[${new Date().toISOString()}] BROADCAST_SUCCESS | ID: ${broadcastId} | Mapped Nodes: 16 | Topic: ${topic}\n`;
-            fs.appendFileSync(path.join(FORENSICS_DIR, 'sentinel.log'), logLine);
+            // Log entry into forensic trail
+            fs.appendFileSync(
+                path.join(FORENSICS_DIR, 'sentinel.log'), 
+                `[${new Date().toISOString()}] SUCCESS | ID: ${broadcastId} | Topic: ${topic} | Grid Saturation Propagated.\n`
+            );
+
             fs.renameSync(filePath, path.join(ARCHIVE_DIR, file));
-            
-            console.log(`[🚀] Broadcast complete. Transmission data safely locked in archive ledger.`);
+            console.log(`[🚀] Video asset safely processed and archived.`);
 
         } catch (err) {
-            console.error(`[-] Propagation bottleneck on file ${file}: ${err.message}`);
+            console.error(`[-] Propagation block on file ${file}: ${err.message}`);
         }
     }
 }
 
 runSovereignSequence().catch(err => { 
-    console.error("❌ Fatal Propagation Failure: ", err);
+    console.error("❌ Fatal Propagation Crash: ", err);
     process.exit(1); 
 });
