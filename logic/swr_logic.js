@@ -1,5 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Re-constructing __dirname behavior for modern ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const QUEUE_DIR = path.join(__dirname, '../content/queue');
 const ARCHIVE_DIR = path.join(__dirname, '../content/archive');
@@ -57,7 +62,7 @@ Anomalies mitigated. Multi-repository parameters mapped cleanly down to edge loo
             console.log(JSON.stringify(productionAsset, null, 2));
             console.log("========================================================================\n");
 
-            // Append to forensics trail
+            // Append to forensics trail cleanly
             fs.appendFileSync(
                 path.join(FORENSICS_DIR, 'sentinel.log'), 
                 `[${new Date().toISOString()}] SUCCESS | ${packageId} | Optimized for FYP Saturation.\n`
@@ -70,4 +75,7 @@ Anomalies mitigated. Multi-repository parameters mapped cleanly down to edge loo
     }
 }
 
-runSovereignSequence().catch(err => { process.exit(1); });
+runSovereignSequence().catch(err => { 
+    console.error("❌ Fatal execution crash: ", err);
+    process.exit(1); 
+});
