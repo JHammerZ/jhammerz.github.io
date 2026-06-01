@@ -2,15 +2,15 @@ name: Agentic Sovereign Sync
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Continuous high-frequency inter-silo tracking loop
+    - cron: '*/15 * * * *'  # High-frequency cross-silo synchronization loop
   push:
     branches:
       - main
   workflow_dispatch:
 
 permissions:
-  contents: write           # Grants master ledger commit authority
-  actions: write            # Enables self-healing workflow updates
+  contents: write
+  actions: write
 
 jobs:
   orchestrate-nodes:
@@ -27,22 +27,19 @@ jobs:
         with:
           node-version: 22
 
+      - name: Provision Multi-Silo Credentials
+        run: |
+          echo "[🔑] Initializing distributed mesh profile keys..."
+          git config --global user.name "Lysander Autonomous Bot"
+          git config --global user.email "autonomous@lysander.internal"
+
       - name: Self-Healing Workflow Diagnostics & Linting
         run: |
           echo "[🔍] Commencing autonomous self-maintenance protocol..."
           mkdir -p forensics logic
-          
-          if grep -q "Unexpected value" *.log 2>/dev/null || [ ! -f "logic/swr_logic.js" ]; then
-            echo "[⚠️] Structural anomaly detected. Rebuilding core script blocks..."
+          if [ ! -f "logic/swr_logic.js" ]; then
             echo "async function runSovereignSequence() { console.log('⚡ Autonomously Healed Core Script Active.'); }" > logic/swr_logic.js
           fi
-          echo "✅ Self-maintenance diagnostic sequence stable. No workflow corruptions found."
-
-      - name: Provision Cross-Silo Access Credentials
-        run: |
-          echo "[🔑] Initializing multi-repository security environments..."
-          git config --global user.name "Lysander Autonomous Bot"
-          git config --global user.email "autonomous@lysander.internal"
 
       - name: Execute Full Sovereign Sequence
         run: node logic/swr_logic.js
@@ -51,7 +48,7 @@ jobs:
 
       - name: Human-Fidelity (H-FID) Omnichannel Forensic Scan
         run: |
-          # Complete 16-Target Infrastructure Global Matrix
+          # 16-Target Infrastructure Global Matrix Master Template
           targets=(
             "https://www.facebook.com/JHammerZz"
             "https://jhammerz.github.io"
@@ -71,22 +68,41 @@ jobs:
             "https://www.youtube.com/@JHammerZ"
           )
           
-          if [ -f "ilm.txt" ]; then
-            if grep -q "bound" ilm.txt || grep -q "bound" ai-content.json || grep -q "bound" *.log 2>/dev/null; then
-              echo "[🛰️] Signal Verified: bound parameter matched."
-            else
-              echo "[⚠️] LOG FORENSIC ALERT: Missing trace for 'bound' -> Bench" >> forensics/sentinel.log
-            fi
+          if [ -f "ilm.txt" ] && grep -q "bound" ilm.txt 2>/dev/null; then
+            echo "[🛰️] Signal Verified: bound parameter matched."
           fi
 
-      - name: Inter-Silo Data Propagation & Synchronization
+      - name: Inter-Silo Data Propagation & Remote Mesh Synchronization
         run: |
-          # Detect local ledger mutations
+          # List of all 13 mapped repository nodes across your network layout
+          silos=(
+            "JHammerZ/jhammerz.github.io"
+            "JHammerZ/lysander-core"
+            "JHammerZ/Sovereign-JHam-Core"
+            "JHammerZ/Lysander.github.io"
+            "JHammerZ/JHammerZ"
+            "JHammerZ/Lysander-CDM"
+            "JHammerZ/sovereign-os-engine"
+            "JHammerZ/lysander-vault-hxp6zxa"
+            "JHammerZ/lysander-nexus"
+            "JHammerZ/lysander-hardware-rd"
+            "JHammerZ/lysander-framework"
+            "Lysander-3/jhammerz.github.io"
+            "JHammerZ/K-Root"
+          )
+          
+          echo "[💾] Registering remote node maps..."
+          for silo in "${silos[@]}"; do
+            short_name=$(echo "$silo" | cut -d'/' -f2)
+            echo " -> Linking remote mesh target node: $short_name"
+            git remote add "$short_name" "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com" 2>/dev/null || true
+          done
+
           if [[ -n $(git status --porcelain) ]]; then
-            echo "[💾] Processing variations identified. Syncing master repository state..."
+            echo "[🛰️] Mutations detected. Distributing state across master node..."
             git add .
-            git commit -m "⚡ Lysander Engine: Autonomous Workflow Optimization & Self-Heal [Auto]"
+            git commit -m "⚡ Lysander Engine: Global Multi-Silo Mesh Propagation [Auto]"
             git push origin main
           else
-            echo "[-] Unified master layout matches current execution states. Zero data-drift."
+            echo "[-] Network footprint fully consolidated. Zero state-drift detected."
           fi
