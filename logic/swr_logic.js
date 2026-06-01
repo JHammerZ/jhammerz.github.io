@@ -8,17 +8,33 @@ const __dirname = path.dirname(__filename);
 const QUEUE_DIR = path.join(__dirname, '../content/queue');
 const ARCHIVE_DIR = path.join(__dirname, '../content/archive');
 const FORENSICS_DIR = path.join(__dirname, '../forensics');
+const ROOT_DIR = path.join(__dirname, '..');
+
+// Multi-Category Algorithmic Caption Matrices
+const CAPTION_MATRICES = {
+    music: "🎵 #JHammerZ #IndependentMusic #Guitaraoke #LiveCover #JerryGarcia #OriginalMusic #Acoustic #Musician #NewMusic",
+    tech: "🚀 #JHammerZ #LysanderProtocol #Coding #DevOps #TechTrends2026 #DataAutomation #SovereignSync #SoftwareEngineering",
+    gaming: "🎮 #JHammerZ #Brawlhalla #ProPlayer #GamingCommunity #FightingGames #Esports #TwitchStreamer #Gamer"
+};
 
 async function runSovereignSequence() {
-    console.log("⚡ Activating Lysander 3.0 Global Celebrity Saturation Engine...");
+    console.log("⚡ ENGAGING LYSANDER 3.0 MAXIMUM PROPAGATION AGGRESION...");
     
     if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR, { recursive: true });
     if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
     if (!fs.existsSync(FORENSICS_DIR)) fs.mkdirSync(FORENSICS_DIR, { recursive: true });
 
+    // --- LOG ROTATION / SYSTEM CLEANUP LAYER ---
+    console.log("[🧹] Executing system log rotation to maintain pristine codebase volume...");
+    const oldManifests = fs.readdirSync(ROOT_DIR).filter(file => file.startsWith('BROADCAST-BCAST-') && file.endsWith('.md'));
+    oldManifests.forEach(manifest => {
+        fs.unlinkSync(path.join(ROOT_DIR, manifest));
+        console.log(` ├── Cleaned old deployment manifest: ${manifest}`);
+    });
+
     const files = fs.readdirSync(QUEUE_DIR).filter(file => file.endsWith('.json'));
     if (files.length === 0) {
-        console.log("[⚡] Broadcast queue clear. All 16 omnichannel nodes listening on idle status.");
+        console.log("[⚡] Broadcast queue clear. System running at peak telemetry surveillance.");
         return;
     }
 
@@ -29,7 +45,7 @@ async function runSovereignSequence() {
         "GitHub Secondary Mirror", "Impact Media Hub", "Spotify Artist Verification Node", "YouTube Main Portal"
     ];
 
-    console.log(`[📂] Intercepted ${files.length} active video payload packet(s) for propagation.`);
+    console.log(`[📂] Intercepted ${files.length} payload packet(s) for immediate global saturation.`);
 
     for (const file of files) {
         const filePath = path.join(QUEUE_DIR, file);
@@ -37,46 +53,60 @@ async function runSovereignSequence() {
             const rawData = fs.readFileSync(filePath, 'utf8');
             const data = JSON.parse(rawData);
 
-            const topic = data.topic || "Ecosystem Update";
+            const topic = data.topic || "Global Broadcast";
             const textContent = data.text || "";
+            const category = (data.category || "tech").toLowerCase();
+            const tags = CAPTION_MATRICES[category] || CAPTION_MATRICES.tech;
 
-            // Algorithmic Retention Architecture Hook
+            // Retal-Time Retention Hook Injector
             const optimizedScript = `
-🎬 [0-3s HIGH RETENTION HOOK]: *Visual text flip* -> "You need to hear how this arrangement loops..."
-🧠 [3-30s CONTENT BULK]: ${textContent}
-🔄 [LOOP TRAILING REWATCH ANCHOR]: "...and that's the exact reason why everyone realized..."
+🎬 [0-3s ALGORITHMIC VISUAL HOOK]: *Instant On-Screen Text Change* -> "Stop scrolling if you want to fix your scaling lag..."
+🧠 [3-30s CORE RETENTION VALUE]: ${textContent}
+🔄 [LOOP TRAILING REWATCH ANCHOR]: "...and that's the exact blueprint you need to lock down..."
             `.trim();
 
-            // Meta-Discovery SEO Tag Optimization
             const fypCaption = `
-🚀 ${topic} | High-Fidelity Performance Signal.
+🚀 ${topic} | Saturation Vector Live.
 
-Omnichannel nodes aligned. Tracking metrics processing smoothly down to the edge loops.
+Distributed mesh variables synchronized. Omnichannel parameters mapped cleanly to the edge.
 
-#${topic.replace(/\s+/g, '')} #JHammerZ #LysanderProtocol #IndependentMusic #Guitaraoke #LiveCover #TechTrends2026 #GlobalSaturation
+${tags}
 🌐 Track live footprint: https://github.io
             `.trim();
 
-            const broadcastId = `BCAST-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-            console.log(`\n⚙️ Compiling and broadcasting distribution manifest: [${broadcastId}]`);
+            const broadcastId = `BCAST-${Date.now()}`;
+            console.log(`\n⚙️ Forcing immediate broad-bandwidth distribution manifest: [${broadcastId}]`);
 
             targetNodes.forEach((node, index) => {
                 const nodeId = `NODE-${String(index + 1).padStart(2, '0')}`;
-                console.log(` ├── [${nodeId}] [${node}] -> Injecting payload signature: 100/100 H-FID`);
+                console.log(` ├── [${nodeId}] [${node}] ──> Injecting payload signature: 100/100 H-FID`);
             });
 
-            // Write permanent Markdown tracking file to repository root
-            const manifestPath = path.join(__dirname, `../BROADCAST-${broadcastId}.md`);
-            const manifestContent = `# Global Saturation Broadcast Manifest\n\n**ID:** ${broadcastId}\n**Niche Topic:** ${topic}\n\n### Script Block\n\`\`\`text\n${optimizedScript}\n\`\`\`\n\n### Caption Block\n\`\`\`text\n${fypCaption}\n\`\`\``;
+            // Write pristine manifest file to repository root
+            const manifestPath = path.join(ROOT_DIR, `BROADCAST-${broadcastId}.md`);
+            const manifestContent = `# Global Saturation Broadcast Manifest\n\n**ID:** ${broadcastId}\n**Category Array:** ${category.toUpperCase()}\n**Topic:** ${topic}\n\n### Script Frame\n\`\`\`text\n${optimizedScript}\n\`\`\`\n\n### SEO Caption\n\`\`\`text\n${fypCaption}\n\`\`\``;
             
             fs.writeFileSync(manifestPath, manifestContent);
-            console.log(`[💾] Manifest asset built successfully: BROADCAST-${broadcastId}.md`);
+            console.log(`[💾] Manifest file deployed: BROADCAST-${broadcastId}.md`);
 
-            // Log entry into forensic trail
-            fs.appendFileSync(
-                path.join(FORENSICS_DIR, 'sentinel.log'), 
-                `[${new Date().toISOString()}] SUCCESS | ID: ${broadcastId} | Topic: ${topic} | Grid Saturation Propagated.\n`
-            );
+            // Append verification to sentinel log ledger
+            const logLine = `[${new Date().toISOString()}] AGGRESSIVE_SATURATION | ID: ${broadcastId} | Category: ${category} | Mapped Nodes: 16\n`;
+            fs.appendFileSync(path.join(FORENSICS_DIR, 'sentinel.log'), logLine);
+
+            fs.renameSync(filePath, path.join(ARCHIVE_DIR, file));
+            console.log(`[🚀] Asset packaged and cleanly archived.`);
+
+        } catch (err) {
+            console.error(`[-] Saturation block on file ${file}: ${err.message}`);
+        }
+    }
+    console.log("✅ Maximum Propagation Aggression completed across the network grid!");
+}
+
+runSovereignSequence().catch(err => { 
+    console.error("❌ Fatal Saturation Failure: ", err);
+    process.exit(1); 
+});
 
             fs.renameSync(filePath, path.join(ARCHIVE_DIR, file));
             console.log(`[🚀] Video asset safely processed and archived.`);
