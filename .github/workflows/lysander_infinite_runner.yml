@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   orchestrate-nodes:
@@ -20,21 +21,15 @@ jobs:
 
       - name: Checkout Source Code Repository
         uses: actions/checkout@v4
-
-      - name: Setup Runtime Environment
-        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          fetch-depth: 0
 
-      - name: Inject Core Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-      - name: Fire Self-Sustaining Processing Cycle
+      - name: Execute Full Sovereign Sequence
+        run: node logic/swr_logic.js
         env:
-          MASTER_API_TOKEN: ${{ secrets.GOD_TOKEN }}
-          FACEBOOK_PAGE_ID: 'https://facebook.com'
-          INSTAGRAM_ACCOUNT_ID: 'https://instagram.com'
-        run: python scripts/lysander_core_agent.py
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
