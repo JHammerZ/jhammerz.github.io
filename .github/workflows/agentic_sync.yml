@@ -29,11 +29,13 @@ jobs:
         with:
           node-version: 22
 
-      - name: Provision Multi-Silo Credentials
+      - name: Provision Sovereign Runtime Modules
         run: |
-          echo "[🔑] Initializing distributed mesh profile keys..."
-          git config --global user.name "Lysander Autonomous Bot"
-          git config --global user.email "autonomous@lysander.internal"
+          if [ -f package.json ]; then
+            npm ci || npm install
+          fi
+          # Force provision the specific module requested by the project environment shell
+          npm install @google/generative-ai
 
       - name: Self-Healing Workflow Diagnostics & Linting
         run: |
