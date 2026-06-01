@@ -2,7 +2,7 @@ name: Agentic Sovereign Sync
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Fallback automatic cron sweep layer
+    - cron: '*/5 * * * *'  # Maximum Aggression Layer: Fired automatically every 5 minutes, forever
   push:
     branches:
       - main
