@@ -1,0 +1,42 @@
+name: Lysander 3.0 Infinite Runner Core
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Wakes up automatically at the top of every hour, forever
+  push:
+    branches:
+      - main
+    paths:
+      - 'content/queue/**'  # Wakes up immediately if you manually drop a new asset file
+  workflow_dispatch:        # Allows you to push a button in GitHub to run it on command
+
+permissions:
+  content: write            # Explicit permission allowing the runner to update the repo
+
+jobs:
+  orchestrate-nodes:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout Source Code Repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GPT }}  # Uses standard runtime token to save changes
+
+    - name: Setup Runtime Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Inject Core Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Fire Self-Sustaining Processing Cycle
+      env:
+        MASTER_API_TOKEN: ${{ secrets.GOD_TOKEN }}
+        FACEBOOK_PAGE_ID: 'https://facebook.com/jhammerzz'
+        INSTAGRAM_ACCOUNT_ID: 'https://instagram.com/jhammerzz'
+      run: python scripts/lysander_core_agent.py
