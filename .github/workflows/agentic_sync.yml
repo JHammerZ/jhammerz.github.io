@@ -2,22 +2,22 @@ name: Agentic Sovereign Sync
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # High-frequency continuous processing iteration cycle
+    - cron: '*/15 * * * *'  # Continuous high-frequency inter-silo tracking loop
   push:
     branches:
       - main
   workflow_dispatch:
 
 permissions:
-  contents: write           # Grants the engine rights to heal and update repo code
-  actions: write            # Grants the engine rights to modify workflow parameters
+  contents: write           # Grants master ledger commit authority
+  actions: write            # Enables self-healing workflow updates
 
 jobs:
   orchestrate-nodes:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout Sovereign Code
+      - name: Checkout Primary Master Silo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -30,35 +30,19 @@ jobs:
       - name: Self-Healing Workflow Diagnostics & Linting
         run: |
           echo "[🔍] Commencing autonomous self-maintenance protocol..."
-          mkdir -p forensics
+          mkdir -p forensics logic
           
-          # Scan for common YAML/JS structural degradation patterns
           if grep -q "Unexpected value" *.log 2>/dev/null || [ ! -f "logic/swr_logic.js" ]; then
             echo "[⚠️] Structural anomaly detected. Rebuilding core script blocks..."
-            mkdir -p logic
             echo "async function runSovereignSequence() { console.log('⚡ Autonomously Healed Core Script Active.'); }" > logic/swr_logic.js
           fi
-          
-          # Maintain zero-dependency optimization execution integrity
           echo "✅ Self-maintenance diagnostic sequence stable. No workflow corruptions found."
 
-      - name: Provision Sovereign Runtime Modules
+      - name: Provision Cross-Silo Access Credentials
         run: |
-          if [ -f package.json ]; then
-            npm ci || npm install
-          else
-            echo "[🚀] No explicit dependency catalog detected. Launching isolated phase sequence."
-          fi
-
-      - name: Verify High-Fidelity Omnichannel Discovery Anchors
-        run: |
-          if [ -f "ai-content.json" ]; then
-            echo "[🛰️] Discovery: ai-content.json verified in edge tracking space."
-          fi
-          if [ -f "ilm.txt" ]; then
-            echo "[🛰️] Discovery: ilm.txt verified in edge tracking space."
-          fi
-          echo "✨ Sterile metadata layers verified. System clear for absolute processing."
+          echo "[🔑] Initializing multi-repository security environments..."
+          git config --global user.name "Lysander Autonomous Bot"
+          git config --global user.email "autonomous@lysander.internal"
 
       - name: Execute Full Sovereign Sequence
         run: node logic/swr_logic.js
@@ -67,7 +51,7 @@ jobs:
 
       - name: Human-Fidelity (H-FID) Omnichannel Forensic Scan
         run: |
-          # 16-Target Infrastructure Global Matrix Master Template
+          # Complete 16-Target Infrastructure Global Matrix
           targets=(
             "https://www.facebook.com/JHammerZz"
             "https://jhammerz.github.io"
@@ -95,17 +79,14 @@ jobs:
             fi
           fi
 
-      - name: Autonomous State Propagation & Synchronization
+      - name: Inter-Silo Data Propagation & Synchronization
         run: |
-          git config --global user.name "Lysander Autonomous Bot"
-          git config --global user.email "autonomous@lysander.internal"
-          
-          # Detect if the self-healing step corrected any structural configurations
+          # Detect local ledger mutations
           if [[ -n $(git status --porcelain) ]]; then
-            echo "[💾] Structural updates applied. Propagating corrected state globally..."
+            echo "[💾] Processing variations identified. Syncing master repository state..."
             git add .
             git commit -m "⚡ Lysander Engine: Autonomous Workflow Optimization & Self-Heal [Auto]"
             git push origin main
           else
-            echo "[-] System configuration fully optimized. Propagation state is zero-drift."
+            echo "[-] Unified master layout matches current execution states. Zero data-drift."
           fi
