@@ -2,11 +2,13 @@ name: Agentic Sovereign Sync
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Continuous high-frequency inter-silo grid loop
+    - cron: '*/15 * * * *'  # Fallback automatic cron sweep layer
   push:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch:        # Manual control override button
+  repository_dispatch:      # Wakes up runner immediately on incoming external social webhooks
+    types: [social_post_trigger]
 
 permissions:
   contents: write
@@ -41,6 +43,15 @@ jobs:
             echo "async function runSovereignSequence() { console.log('⚡ Autonomously Healed Core Script Active.'); }" > logic/swr_logic.js
           fi
 
+      - name: Parse External Webhook Payloads
+        run: |
+          # If triggered by a webhook, stage the incoming data into the active processing queue
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "[🛰️] Inbound social webhook captured. Initializing staging protocols..."
+            mkdir -p content/queue
+            echo '${{ toJson(github.event.client_payload) }}' > content/queue/webhook_signal.json
+          fi
+
       - name: Execute Full Sovereign Sequence
         run: node logic/swr_logic.js
         env:
@@ -48,7 +59,7 @@ jobs:
 
       - name: Human-Fidelity (H-FID) Omnichannel Forensic Scan
         run: |
-          # 16-Target Infrastructure Global Matrix
+          # 16-Target Infrastructure Global Matrix Master Array
           targets=(
             "https://www.facebook.com/JHammerZz"
             "https://jhammerz.github.io"
@@ -91,11 +102,9 @@ jobs:
             "JHammerZ/K-Root"
           )
           
-          # Force commit locally if changes exist
           git add .
           git commit -m "⚡ Lysander Engine: Global Multi-Silo Grid Mesh Propagation [Auto]" || echo "No local modifications to commit."
 
-          # Loop through every repository silo and force absolute upstream alignment
           for silo in "${silos[@]}"; do
             short_name=$(echo "$silo" | cut -d'/' -f2)
             echo "[🚀] Forcing propagation to Silo Node: $short_name"
