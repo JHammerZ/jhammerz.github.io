@@ -26,11 +26,15 @@ async function runSovereignSequence() {
 
     // --- LOG ROTATION / SYSTEM CLEANUP LAYER ---
     console.log("[🧹] Executing system log rotation to maintain pristine codebase volume...");
-    const oldManifests = fs.readdirSync(ROOT_DIR).filter(file => file.startsWith('BROADCAST-BCAST-') && file.endsWith('.md'));
-    oldManifests.forEach(manifest => {
-        fs.unlinkSync(path.join(ROOT_DIR, manifest));
-        console.log(` ├── Cleaned old deployment manifest: ${manifest}`);
-    });
+    try {
+        const oldManifests = fs.readdirSync(ROOT_DIR).filter(file => file.startsWith('BROADCAST-BCAST-') && file.endsWith('.md'));
+        oldManifests.forEach(manifest => {
+            fs.unlinkSync(path.join(ROOT_DIR, manifest));
+            console.log(` ├── Cleaned old deployment manifest: ${manifest}`);
+        });
+    } catch (cleanErr) {
+        console.log(`[⚠️] Log cleanup notice: ${cleanErr.message}`);
+    }
 
     const files = fs.readdirSync(QUEUE_DIR).filter(file => file.endsWith('.json'));
     if (files.length === 0) {
@@ -58,7 +62,7 @@ async function runSovereignSequence() {
             const category = (data.category || "tech").toLowerCase();
             const tags = CAPTION_MATRICES[category] || CAPTION_MATRICES.tech;
 
-            // Retal-Time Retention Hook Injector
+            // Real-Time Retention Hook Injector
             const optimizedScript = `
 🎬 [0-3s ALGORITHMIC VISUAL HOOK]: *Instant On-Screen Text Change* -> "Stop scrolling if you want to fix your scaling lag..."
 🧠 [3-30s CORE RETENTION VALUE]: ${textContent}
@@ -105,19 +109,5 @@ ${tags}
 
 runSovereignSequence().catch(err => { 
     console.error("❌ Fatal Saturation Failure: ", err);
-    process.exit(1); 
-});
-
-            fs.renameSync(filePath, path.join(ARCHIVE_DIR, file));
-            console.log(`[🚀] Video asset safely processed and archived.`);
-
-        } catch (err) {
-            console.error(`[-] Propagation block on file ${file}: ${err.message}`);
-        }
-    }
-}
-
-runSovereignSequence().catch(err => { 
-    console.error("❌ Fatal Propagation Crash: ", err);
     process.exit(1); 
 });
