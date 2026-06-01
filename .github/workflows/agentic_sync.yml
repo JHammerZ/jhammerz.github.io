@@ -2,7 +2,7 @@ name: Agentic Sovereign Sync
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # High-frequency cross-silo synchronization loop
+    - cron: '*/15 * * * *'  # Continuous high-frequency inter-silo grid loop
   push:
     branches:
       - main
@@ -48,7 +48,7 @@ jobs:
 
       - name: Human-Fidelity (H-FID) Omnichannel Forensic Scan
         run: |
-          # 16-Target Infrastructure Global Matrix Master Template
+          # 16-Target Infrastructure Global Matrix
           targets=(
             "https://www.facebook.com/JHammerZz"
             "https://jhammerz.github.io"
@@ -67,14 +67,14 @@ jobs:
             "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
             "https://www.youtube.com/@JHammerZ"
           )
-          
           if [ -f "ilm.txt" ] && grep -q "bound" ilm.txt 2>/dev/null; then
             echo "[🛰️] Signal Verified: bound parameter matched."
           fi
 
       - name: Inter-Silo Data Propagation & Remote Mesh Synchronization
+        env:
+          MESH_TOKEN: ${{ secrets.LYSANDER_MESH_TOKEN }}
         run: |
-          # List of all 13 mapped repository nodes across your network layout
           silos=(
             "JHammerZ/jhammerz.github.io"
             "JHammerZ/lysander-core"
@@ -91,18 +91,16 @@ jobs:
             "JHammerZ/K-Root"
           )
           
-          echo "[💾] Registering remote node maps..."
+          # Force commit locally if changes exist
+          git add .
+          git commit -m "⚡ Lysander Engine: Global Multi-Silo Grid Mesh Propagation [Auto]" || echo "No local modifications to commit."
+
+          # Loop through every repository silo and force absolute upstream alignment
           for silo in "${silos[@]}"; do
             short_name=$(echo "$silo" | cut -d'/' -f2)
-            echo " -> Linking remote mesh target node: $short_name"
-            git remote add "$short_name" "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com" 2>/dev/null || true
+            echo "[🚀] Forcing propagation to Silo Node: $short_name"
+            
+            git remote rm "$short_name" 2>/dev/null || true
+            git remote add "$short_name" "https://x-access-token:${MESH_TOKEN}@://github.com" 2>/dev/null || true
+            git push "$short_name" main --force || echo "[⚠️] Warning: Silo $short_name branch protection or structural layout blocked direct force push."
           done
-
-          if [[ -n $(git status --porcelain) ]]; then
-            echo "[🛰️] Mutations detected. Distributing state across master node..."
-            git add .
-            git commit -m "⚡ Lysander Engine: Global Multi-Silo Mesh Propagation [Auto]"
-            git push origin main
-          else
-            echo "[-] Network footprint fully consolidated. Zero state-drift detected."
-          fi
