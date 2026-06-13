@@ -2,8 +2,8 @@ name: Node Syndication Loop
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Automatically executes every 15 minutes
-  workflow_dispatch:        # Allows manual trigger execution anytime
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
 
 jobs:
   run-sync:
@@ -22,7 +22,7 @@ jobs:
 
       - name: Execute Syndication Sync
         env:
-          SOURCE_FEED_URL: ${{ secrets.SOURCE_FEED_URL }}
+          SOURCE_FEED_URL: "index.html"
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python scripts/sync_nodes.py
 
