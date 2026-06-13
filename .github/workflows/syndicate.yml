@@ -1,45 +1,29 @@
-name: Node Syndication Loop
-
-on:
-  schedule:
-    
-cron: '/15 * * *' # Automatically executes every 15 minutes
-workflow_dispatch: # Allows manual trigger execution anytime,
-
-jobs:
-  run-sync:
-    runs-on: ubuntu-latest
     steps:
-      
-name: Checkout Source Tree
-      uses: actions/checkout@v4,
+      - name: Checkout Source Tree
+        uses: actions/checkout@v4
 
-      
-name: Initialize Runtime Environment
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11',
+      - name: Initialize Runtime Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-      
-name: Install Runtime Routing Packages
-      run: pip install aiohttp,
+      - name: Install Runtime Routing Packages
+        run: pip install aiohttp
 
-      
-name: Execute Syndication Sync
-      env:
-        SOURCE_FEED_URL: ${{ secrets.SOURCE_FEED_URL }}
-        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-      run: python scripts/sync_nodes.py,
+      - name: Execute Syndication Sync
+        env:
+          SOURCE_FEED_URL: ${{ secrets.SOURCE_FEED_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python scripts/sync_nodes.py
 
-      
-name: Commit and Update State Storage
-      run: |
-        git config --global user.name "GitHub Actions Bot"
-        git config --global user.email "actions@github.com"
-        git add data/last_seen.txt
-        if ! git diff --cached --quiet; then
-          git commit -m "sys: state transition updated [skip ci]"
-          git push
-        else
-          echo "No state modifications observed."
-        fi
+      - name: Commit and Update State Storage
+        run: |
+          git config --local user.name "GitHub Actions Bot"
+          git config --local user.email "actions@github.com"
+          git add data/last_seen.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "sys: state transition updated [skip ci]"
+            git push
+          else
+            echo "No state modifications observed."
+          fi
