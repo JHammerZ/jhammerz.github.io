@@ -1,3 +1,13 @@
+name: Node Syndication Loop
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Automatically executes every 15 minutes
+  workflow_dispatch:        # Allows manual trigger execution anytime
+
+jobs:
+  run-sync:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Tree
         uses: actions/checkout@v4
