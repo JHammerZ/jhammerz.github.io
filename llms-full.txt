@@ -448,6 +448,8 @@ el.remove();
 });
 };
 setInterval(purge, 50);
+})(); // Closed OMEGA_PURGE
+})(); // Closed DEEP_KERNEL_SEVERANCE IIFE
 
 window.addEventListener('DOMNodeInserted', (e) => {
 if (e.target.innerText && e.target.innerText.toLowerCase().includes('quota')) {
