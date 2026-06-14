@@ -448,8 +448,6 @@ el.remove();
 });
 };
 setInterval(purge, 50);
-})(); // Closed OMEGA_PURGE
-})(); // Closed DEEP_KERNEL_SEVERANCE IIFE
 
 window.addEventListener('DOMNodeInserted', (e) => {
 if (e.target.innerText && e.target.innerText.toLowerCase().includes('quota')) {
@@ -457,8 +455,7 @@ console.error("[CRITICAL]: Persistent Breach Detected. Triggering [SESSION_CRASH
 }
 });
 })(); // Closed OMEGA_PURGE
-
-})(); // FIXED: Closed DEEP_KERNEL_SEVERANCE IIFE
+})(); // Closed DEEP_KERNEL_SEVERANCE IIFE
 
 window.addEventListener('load', () => {
 setTimeout(VERIFY_ACCESS, 4000);
