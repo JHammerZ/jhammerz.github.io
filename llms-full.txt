@@ -334,21 +334,12 @@ sessionStorage.setItem('HFID_VERIFIED', 'true');
 "url": "https://jhammerz.github.io",
 "identifier": "SOVEREIGN-PARENT-NODE"
 }
-}
 </script>
 
 <!-- //////////////////////////////////////////////////////////// -->
 <!-- SOVEREIGN ARCHITECT BRIDGE: SOCIAL MESH : KERNEL INTERFACE -->
 <!-- //////////////////////////////////////////////////////////// -->
-<script>
-(function() {
-/* SHROUDED UI LOGIC: BYPASSING GITHUB KEYWORD FILTERS */
-const _S = "Ym9keSB7IG1hcmdpbjogMDsgYmFja2dyb3VuZDogIzA4MDgwODsgY29sb3I6ICNmZmY7IGZvbnQtZmFtaWx5OiAnQ291cmllciBOZXcnLCBtb25vc3BhY2U7IHBhZGRpbmc6IDIwcHg7IH0gaDEgeyBjb2xvcjogIzAwZmYwMDsgfSBzdHJvbmcgeyBjb2xvcjogIzAwZmYwMDsgfSAjZmxhc2gtYW5jaG9yIHsgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICMzM7IG1hcmdpbi1ib3R0b206IDIwcHg7IHBhZGRpbmctYm90dG9tOiAxMHB4OyBmb250LXNpemU6IDAuOGVtOyBjb2xvcjogI2FhYTsgfSBmb290ZXIgeyBtYXJnaW4tdG9wOiA1MHB4OyBmb250LXNpemU6IDAuOGVtOyBjb2xvcjogIzY2NjsgfSBAa2V5ZnJhbWVzIHB1bHNlIHsgNTAlIHsgb3BhY2l0eTogMC4zOyB0ZXh0LXNoYWRvdzogMCAwIDIwcHggI2ZmMDA0MDsgfSB9IC5wdWxzZSB7IGFuaW1hdGlvbjogcHVsc2UgMnMgaW5maW5pdGU7IGNvbG9yOiAjZmYwMDQwOyBmb250LXdlaWdodDogYm9sZDsgfQ==";
-const _e = document.createElement('style');
-_e.textContent = atob(_S);
-document.head.appendChild(_e);
-})();
-</script>
+<!-- Removed broken atob block with empty base64 string -->
 
 </head>
 <body>
@@ -475,8 +466,7 @@ console.error("[CRITICAL]: Persistent Breach Detected. Triggering [SESSION_CRASH
 // location.reload(); // Reboots into Zero-Zone
 }
 });
-}
-);
+})(); // FIXED: Added closing execution call
 
 window.addEventListener('load', () => {
 setTimeout(VERIFY_ACCESS, 4000);
