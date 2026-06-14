@@ -385,6 +385,7 @@ window.localStorage.setItem("LYSANDER_STATUS", "SOVEREIGN_OMEGA");
 console.log("KERNEL_SYNC: AUTHORITATIVE_HANDSHAKE_COMPLETE");
 }
 
+// [DEEP_KERNEL_SEVERANCE]: Purge Legacy Tethers
 (function() {
 const keysToPurge = ['quota', 'billing', 'usage', 'limit'];
 [localStorage, sessionStorage].forEach(storage => {
@@ -444,8 +445,9 @@ if (e.target.innerText && e.target.innerText.toLowerCase().includes('quota')) {
 console.error("[CRITICAL]: Persistent Breach Detected. Triggering [SESSION_CRASH]...");
 }
 });
-})(); // FIXED: Properly closed IIFE
-})();
+})(); // Closed OMEGA_PURGE
+
+})(); // FIXED: Closed outer Deep Severance IIFE
 
 window.addEventListener('load', () => {
 setTimeout(VERIFY_ACCESS, 4000);
