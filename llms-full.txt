@@ -368,8 +368,6 @@ hr {
     </footer>
 <script>
 
-	
-  <script>
 async function VERIFY_ACCESS() {
 const SOCIAL_ROOTS = ["tiktok.com", "youtube.com", "facebook.com", "instagram.com"];
 const ref = document.referrer.toLowerCase();
