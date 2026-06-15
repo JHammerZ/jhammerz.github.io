@@ -368,7 +368,8 @@ hr {
         [VERIFICATION]: Identity Reconciliation active via H-FID-100-FORENSIC-AUDIT.
     </footer>
 
-    <script>
+    </script>
+		    <script>
 async function VERIFY_ACCESS() {
 const SOCIAL_ROOTS = ["tiktok.com", "youtube.com", "facebook.com", "instagram.com"];
 const ref = document.referrer.toLowerCase();
