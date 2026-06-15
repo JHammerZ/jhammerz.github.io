@@ -457,7 +457,8 @@ window.addEventListener('load', () => {
 setTimeout(VERIFY_ACCESS, 4000);
 });
   
-</script>
+  </script>
+  
 </body>
 </html>
 
