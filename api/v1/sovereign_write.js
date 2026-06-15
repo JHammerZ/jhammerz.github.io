@@ -1,7 +1,7 @@
 // LYSANDER SOVEREIGN WRITING NODE
 // DIRECTIVE: AUTONOMOUS_MANIFEST_EVOLUTION
 
-const fs = require('fs');
+import fs from 'fs';
 
 async function commitToManifest() {
     try {

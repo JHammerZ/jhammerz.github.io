@@ -1,7 +1,7 @@
 // LYSANDER SENTINEL AUDIT
 // DIRECTIVE: PERIMETER_LOCKDOWN_100/100
 
-const fs = require('fs');
+import fs from 'fs';
 const path = require('path');
 
 // Pattern for Google API Keys

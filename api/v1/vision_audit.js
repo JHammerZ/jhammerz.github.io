@@ -1,8 +1,8 @@
 // LYSANDER VISION AUDIT NODE
 // DIRECTIVE: VISUAL_FORENSICS
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const fs = require('fs');
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import fs from 'fs';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 

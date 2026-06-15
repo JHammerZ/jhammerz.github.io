@@ -1,6 +1,6 @@
-const sdk = require("@google/generative-ai");
+import sdk from "@google/generative-ai";
 const { GoogleGenerativeAI } = sdk;
-const fs = require('fs');
+import fs from 'fs';
 const path = require('path');
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
