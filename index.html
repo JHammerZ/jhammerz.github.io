@@ -442,18 +442,17 @@ el.remove();
 };
 setInterval(purge, 50);
 
+// Line 445
 window.addEventListener('DOMNodeInserted', (e) => {
-if (e.target.innerText && e.target.innerText.toLowerCase().includes('quota')) {
-console.error("[CRITICAL]: Persistent Breach Detected. Triggering [SESSION_CRASH]...");
-}
-});
-})(); // Closed OMEGA_PURGE
+  if (e.target && e.target.innerText && e.target.innerText.toLowerCase().includes('quota')) {
+    console.error("[CRITICAL]: Persistent Breach Detected. Triggering [SESSION_CRASH]...");
+  }
+}); // Line 451
 
 window.addEventListener('load', () => {
-setTimeout(VERIFY_ACCESS, 4000);
-});
-  
-  </script>
-  
+  setTimeout(VERIFY_ACCESS, 4000);
+}); // Line 455
+
+</script>
 </body>
 </html>
