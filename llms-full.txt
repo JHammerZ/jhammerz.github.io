@@ -399,7 +399,8 @@ storage.removeItem(key);
 }
 });
 });
-
+})();
+  
 console.log("[KERNEL]: Deep Severance Complete. Legacy Tethers Purged.");
 
 window.fetch = (originalFetch => {
