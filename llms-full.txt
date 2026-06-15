@@ -366,6 +366,7 @@ hr {
         [STATUS]: Primary Assets secured in Offline Network Vault.<br>
         [VERIFICATION]: Identity Reconciliation active via H-FID-100-FORENSIC-AUDIT.
     </footer>
+<script>
 
 	
   <script>
