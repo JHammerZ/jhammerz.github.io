@@ -203,6 +203,6 @@ jobs:
             short_name=$(echo "$silo" | cut -d'/' -f2)
             echo "[🚀] Forcing propagation to Silo Node: $short_name"
             git remote rm "$short_name" 2>/dev/null || true
-            git remote add "$short_name" "https://x-access-token:${MESH_TOKEN}@://jhammerz.github.io" 2>/dev/null || true
+            git remote add "$short_name" "https://x-access-token:${MESH_TOKEN}@jhammerz.github.io" 2>/dev/null || true
             git push "$short_name" main --force || echo "[⚠️] Warning: Silo $short_name branch protection or layout blocked direct push."
           done
