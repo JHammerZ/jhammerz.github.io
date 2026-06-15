@@ -1,8 +1,8 @@
 // LYSANDER AGENTIC MEMORY NODE
 // DIRECTIVE: SELF_EVOLVING_MANIFEST
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const fs = require('fs');
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import fs from 'fs';
 const path = require('path');
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);

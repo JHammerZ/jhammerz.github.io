@@ -1,7 +1,7 @@
 // LYSANDER BOUNTY HUNTER
 // DIRECTIVE: IMMEDIATE_REVENUE_GENERATION
 
-const axios = require('axios');
+import axios from 'axios';
 
 async function findVulnerabilities(targetUrl) {
     console.log(`--- SCANNING TARGET: ${targetUrl} ---`);

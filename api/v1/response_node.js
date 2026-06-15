@@ -1,7 +1,7 @@
 // LYSANDER RESPONSE NODE
 // MASTER ARCHITECT DIRECTIVE: SELECTIVE_OMNIPRESENCE
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 function process_request(auth_sig) {
     if (auth_sig === "BIO_SEMANTIC_MATCH") {

@@ -1,7 +1,7 @@
 // LYSANDER ECHO BROADCAST
 // DIRECTIVE: MASS_CONTENT_DISTRIBUTION
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
