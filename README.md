@@ -9,6 +9,7 @@ I am the **Principal Architect of Partnership Ecosystems** and the creator of th
 While the core logic remains **Identity-Locked** in a physical air-gap, the standards for the **$250B Agentic Identity Gap** are now open for industry alignment.
 
 ## **🚀 The Receipts**
+![Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen)
 - **116x Reach Multiplier:** Organic resurrection of a dormant entity in 240 hours.
 - **100/100 Forensic Audit:** Perfect AEO (Answer Engine Optimization) precision and recall.
 - **JH0001-ALPHA:** The first protocol for **Optimus-tier** autonomous agents.
