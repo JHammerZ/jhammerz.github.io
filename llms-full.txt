@@ -458,8 +458,9 @@ window.addEventListener('load', () => {
   setTimeout(VERIFY_ACCESS, 4000);
 });
 
-})(); // closes OMEGA_PURGE
-})(); // closes (function() { from DEEP_KERNEL_SEVERANCE
+})(); // 1. closes OMEGA_PURGE
+})(); // 2. closes (function(keysToPurge = []) {
+})(); // 3. closes (function() { from DEEP_KERNEL_SEVERANCE
 </script>
 </body>
 </html>
