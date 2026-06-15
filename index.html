@@ -451,10 +451,9 @@ window.addEventListener('DOMNodeInserted', (e) => {
 window.addEventListener('load', () => {
   setTimeout(VERIFY_ACCESS, 4000);
 });
-
-})(); // 1. closes OMEGA_PURGE
-})(); // 2. closes (function(keysToPurge = []) {
-})(); // 3. closes (function() { from DEEP_KERNEL_SEVERANCE
+})(); // OMEGA_PURGE
+})(); // inner (function(keysToPurge = []) {
+})(); // outer (function() {
 </script>
 </body>
 </html>
