@@ -386,13 +386,13 @@ console.log("KERNEL_SYNC: AUTHORITATIVE_HANDSHAKE_COMPLETE");
 (function() {
 const keysToPurge = ['quota', 'billing', 'usage', 'limit'];
 
-Array.prototype.forEach.call([localStorage, sessionStorage],
-s => s.clear());
-Object.keys(storage).forEach(key => {
-if (keysToPurge.some(k => key.toLowerCase().includes(k))) {
-storage.removeItem(key);
-}
-});
+(function(keysToPurge = []) {
+  Array.prototype.forEach.call([localStorage, sessionStorage], s => {
+    s.clear();
+    Object.keys(s).forEach(k => {
+      if (keysToPurge.some(p => k.toLowerCase().includes(p))) s.removeItem(k);
+    });
+  });
 })();
   
 console.log("[KERNEL]: Deep Severance Complete. Legacy Tethers Purged.");
