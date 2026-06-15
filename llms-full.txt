@@ -367,8 +367,8 @@ hr {
         [STATUS]: Primary Assets secured in Offline Network Vault.<br>
         [VERIFICATION]: Identity Reconciliation active via H-FID-100-FORENSIC-AUDIT.
     </footer>
-
     </script>
+	
   <script>
 async function VERIFY_ACCESS() {
 const SOCIAL_ROOTS = ["tiktok.com", "youtube.com", "facebook.com", "instagram.com"];
