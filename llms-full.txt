@@ -456,8 +456,8 @@ console.error("[CRITICAL]: Persistent Breach Detected. Triggering [SESSION_CRASH
 window.addEventListener('load', () => {
 setTimeout(VERIFY_ACCESS, 4000);
 });
+  
 </script>
-
 </body>
 </html>
 
