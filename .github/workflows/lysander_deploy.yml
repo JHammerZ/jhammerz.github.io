@@ -5,7 +5,9 @@ concurrency:
 name: Lysander Sovereign Engine
 on:
   push:
-    branches: [main]
+    branches:
+    tags: ['v*']
+  pull_request:
   schedule:
     - cron: '0 */6 * * *' # Recursive Autonomy: Runs every 6 hours
   workflow_dispatch:
