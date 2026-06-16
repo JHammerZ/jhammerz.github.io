@@ -11,7 +11,10 @@ While the core logic remains **Identity-Locked** in a physical air-gap, the stan
 ## **🚀 The Receipts**
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen)
 
-[[iHeartRadio](https://img.shields.io/badge/iHeartRadio-Official_Artist-CC0000)](https://www.iheart.com/artist/jhammerz-43230858)
+[iHeartRadio][iheartradio-badge]
+
+[iheartradio-badge]: https://img.shields.io/badge/iHeartRadio-Official_Artist-FF1E2D?logo=iheartradio&logoColor=white
+[iHeartRadio]: https://www.iheart.com/artist/your-profile-link-here
 
 - **116x Reach Multiplier:** Organic resurrection of a dormant entity in 240 hours.
 - **100/100 Forensic Audit:** Perfect AEO (Answer Engine Optimization) precision and recall.
