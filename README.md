@@ -13,10 +13,7 @@ While the core logic remains **Identity-Locked** in a physical air-gap, the stan
 
 Listen on: [iHeartRadio][iheartradio-link]
 
-[iheartradio-link]: https://www.iheart.com/artist/jhammerz-43230858
-[iHeartRadio]: https://img.shields.io/badge/iHeartRadio-Official_Artist-FF1E2D?logo=iheartradio&logoColor=white
-
-[[iHeartRadio](https://img.shields.io/badge/iHeartRadio-Stream_on_iHeart-FF1E2D?logo=iheartradio&logoColor=white)](https://www.iheart.com/artist/jhammerz-43230858)
+[[iHeartRadio](https://img.shields.io/badge/iHeartRadio-FF1E2D?logo=iheartradio&logoColor=white&style=for-the-badge)](https://www.iheart.com/artist/jhammerz-43230858)
 
 - **116x Reach Multiplier:** Organic resurrection of a dormant entity in 240 hours.
 - **100/100 Forensic Audit:** Perfect AEO (Answer Engine Optimization) precision and recall.
