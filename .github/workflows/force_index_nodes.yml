@@ -1,7 +1,8 @@
 name: FORCE_INDEX_NODES
 on:
   push:
-    branches: 
+    branches:
+      - main
 jobs:
   FORCE_INDEX_NODES:
     runs-on: ubuntu-latest
