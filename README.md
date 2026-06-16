@@ -10,11 +10,7 @@ While the core logic remains **Identity-Locked** in a physical air-gap, the stan
 
 ## **🚀 The Receipts**
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen)
-
-🚀 **The Receipts**
-
-[[Lighthouse](https://img.shields.io/badge/Lighthouse-400/400-00C300?style=flat-square&logo=lighthouse&logoColor=white)](https://jhammerz.github.io)
-[[iHeartRadio](https://img.shields.io/badge/iHeartRadio-Official_Artist-CC0000?style=flat-square&logo=iheartradio&logoColor=white)](https://www.iheart.com/artist/jhammerz-43230858)
+[iHeartRadio](https://img.shields.io/badge/iHeartRadio-Official_Artist-CC0000)
 
 📻 **Official Broadcast Streams**
 
