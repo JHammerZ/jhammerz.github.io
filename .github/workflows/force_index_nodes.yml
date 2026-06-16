@@ -1,0 +1,15 @@
+name: FORCE_INDEX_NODES
+on:
+  push:
+    branches: 
+
+jobs:
+  FORCE_INDEX_NODES:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Force Google & Bing Indexing
+        run: |
+          echo "Pinging search engines..."
+          curl -s "https://www.google.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
+          curl -s "https://www.bing.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
