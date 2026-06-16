@@ -10,10 +10,10 @@ While the core logic remains **Identity-Locked** in a physical air-gap, the stan
 
 ## **🚀 The Receipts**
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen)
+
+[![Listen on iHeartRadio](https://shields.io)](https://www.iheart.com/artist/jhammerz-43230858?fbclid=IwY2xjawSetERleHRuA2FlbQIxMABicmlkETFhWnI3Nmh6SExLTm84Z3J1c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHsFQwKNRbRlhB5ZFfSh2HKyidFcers4KlPRRqyBYRjOZKvTMQVZcf8Sw9YCJ_aem_2ag7HCDawPRDV9WwFaYTOA)
+
 ## 📻 Official Broadcast Streams
-
-[![Listen on iHeartRadio](https://shields.io)](https://iheart.com)
-
 - **116x Reach Multiplier:** Organic resurrection of a dormant entity in 240 hours.
 - **100/100 Forensic Audit:** Perfect AEO (Answer Engine Optimization) precision and recall.
 - **JH0001-ALPHA:** The first protocol for **Optimus-tier** autonomous agents.
