@@ -11,7 +11,7 @@ While the core logic remains **Identity-Locked** in a physical air-gap, the stan
 ## **🚀 The Receipts**
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen)
 
-![iHeartRadio](https://www.iheart.com/artist/jhammerz-43230858))
+[[iHeartRadio](https://img.shields.io/badge/JHammerZ-Official_Artist_on_iHeartRadio-CC0000?style=for-the-badge&logo=iheartradio&logoColor=white&labelColor=000000)](https://www.iheart.com/artist/jhammerz-43230858)
 
 ## 📻 Official Broadcast Streams
 - **116x Reach Multiplier:** Organic resurrection of a dormant entity in 240 hours.
