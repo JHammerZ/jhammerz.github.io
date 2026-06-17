@@ -109,13 +109,10 @@ Lysander 3.0 / Aurelius Sovereign Command Center is a production-grade, zero-tru
 4. *Advanced Alignment & Resilience Tuner* 
    Dynamic security posture with Bio-Lock: JhammerZ Verified and automated swarm re-balancing.
 
-5. *Facebook Business Suite: Bidirectional CI/CD via H-FID Standard — commits trigger content, engagement metrics trigger agent swarms. Scoped to `pages_manage_posts` with recursive revocation on `NETWORK_SILENCE`
-*Platform Integration Mesh* Live OAuth connections to 7 platforms: TikTok, YouTube, Instagram, Facebook, LinkedIn, GitHub, Carrd. *Facebook Business Suite: Bidirectional CI/CD via H-FID Standard — commits trigger content, engagement metrics trigger agent swarms. Scoped to `pages_manage_posts` with recursive revocation on `NETWORK_SILENCE`.*
+5. *Platform Integration Mesh* Live OAuth connections to 7 platforms: TikTok, YouTube, Instagram, Facebook, LinkedIn, GitHub, Carrd. *Facebook Business Suite: Bidirectional CI/CD via H-FID Standard — commits trigger content, engagement metrics trigger agent swarms. Scoped to `pages_manage_posts` with recursive revocation on `NETWORK_SILENCE`.*
 
 6. *Security & Forensic Core* 
    NETWORK_SILENCE + recursive IP-block on intrusion attempts. KERNEL BYPASS TOTAL SYNC with NODE DELTA LOCKED. All actions hash-chained via EUID64 MASTER SIGN for audit.
-
-
 
 *Status:* SUPERLUMINAL LIVE | *Security Level:* KERNEL_MAX | *Last Verified:* 2026-06-17
 
