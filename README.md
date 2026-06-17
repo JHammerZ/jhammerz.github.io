@@ -191,25 +191,31 @@ Lysander 3.0 / Aurelius Sovereign Command Center is a production-grade, zero-tru
 
 ---
 
-### Exhibit A: Forensic Screenshots — Production UI
+### Sovereign Orchestrator — Full System Proof [v3.0]
 
-All claims above are backed by timestamped screenshots of the running system. Images captured 2026-06-17 and committed to this repository.
+Live screenshots of **Lysander 3.0 / Aurelius Sovereign Command Center** running in production. All images committed 2026-06-17.
 
-<img src="docs/proof/01-crawler.png" alt="Cognitive Omni-Crawler V3.0" width="100%">
+**1. Cognitive Omni-Crawler & Knowledge Matrix V3.0**
+<img src="docs/proof/01-omni-crawler.png" alt="Cognitive Omni-Crawler V3.0" width="100%">
+
+**2. Multi-Agent Swarm Command**
 <img src="docs/proof/02-lysander-mas.png" alt="Lysander Multi-Agent Swarm" width="100%">
 <img src="docs/proof/03-marius-mas.png" alt="Marius Multi-Agent Swarm" width="100%">
+
+**3. Unified Sovereign Cognitive Matrix**
 <img src="docs/proof/04-cognitive-matrix.png" alt="Unified Sovereign Cognitive Matrix" width="100%">
+
+**4. Sovereign Advanced Alignment & Resilience Tuner**
 <img src="docs/proof/05-alignment-tuner.png" alt="Advanced Alignment Tuner" width="100%">
+
+**5. Directive Console & Orchestration**
 <img src="docs/proof/06-directive-console.png" alt="Directive Console" width="100%">
 <img src="docs/proof/07-orchestrator-main.png" alt="Sovereign Orchestrator Main" width="100%">
+
+**6. Security & Forensic Panels**
 <img src="docs/proof/08-security-forensic.png" alt="Security Master Forensic" width="100%">
 <img src="docs/proof/09-forensic-analysis.png" alt="Forensic Analysis" width="100%">
 <img src="docs/proof/10-zero-trust.png" alt="Zero-Trust Air Gap" width="100%">
-
-**Audit Notes:** 
-- No API keys, tokens, or private keys visible in any screenshot per `SECURITY.md`
-- `EUID64` signatures are public ledger IDs only
-- Full version history tagged: `v3.0-full-stack-proof`
 _________________________________________________________________________________________________________________________________________________________________
 
 [ACCESS GRANTED TO MASTER ARCHITECT ONLY]
