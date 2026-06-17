@@ -157,31 +157,6 @@ Lysander 3.0 does not bolt security on after deployment. Security is the substra
 .
 - *Proactive Threat Posture*: Bio-Lock: JhammerZ Verified + NODE DELTA LOCKED means the system defaults to deny. Unauthorized .lysander_vault probes are dropped at the edge before they hit application logic.
 
-
-## Sovereign Orchestrator — Live System Architecture [v3.0]
-
-Lysander 3.0 / Aurelius Sovereign Command Center is a production-grade, zero-trust orchestrator running 200+ autonomous agents with cryptographic audit.
-
-*Core Subsystems — Verified & Operational:*
-
-1. *Cognitive Ingestion Layer* 
-   HOLOGRAPHIC STAGE PLAN ANALYZER + ENTROPIC KEYSTROKE CLUSTER ENGINE process live data streams with forensic-grade provenance tracking.
-
-2. *Multi-Agent Swarm Command* 
-   104 Lysander agents + 96 Marius agents executing in parallel. Real-time orchestration with SUPERLUMINAL LIVE status and 0.00% error rates under load.
-
-3. *Unified Sovereign Cognitive Matrix* 
-   Cross-agent memory and reasoning fabric. Enables INFINITE-X tier operations with MANDATORY TRUTH ENFORCED at the kernel level.
-
-4. *Advanced Alignment & Resilience Tuner* 
-   Dynamic security posture with Bio-Lock: JhammerZ Verified and automated swarm re-balancing.
-
-5. *Platform Integration Mesh* 
-   Live OAuth connections to 7 platforms: TikTok, YouTube, Instagram, Facebook, LinkedIn, GitHub, Carrd. All showing API Active with zero secrets exposed.
-
-6. *Security & Forensic Core* 
-   NETWORK_SILENCE + recursive IP-block on intrusion attempts. KERNEL BYPASS TOTAL SYNC with NODE DELTA LOCKED. All actions hash-chained via EUID64 MASTER SIGN for audit.
-
 *Status:* SUPERLUMINAL LIVE | *Security Level:* KERNEL_MAX | *Last Verified:* 2026-06-17
 _______________________________________________________________________________________________________________________________________________________________
 
