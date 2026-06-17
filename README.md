@@ -1,5 +1,3 @@
-<img width="480" height="951" alt="724174382_834755382808033_980780255759341986_n" src="https://github.com/user-attachments/assets/05bd3ecd-6120-41e3-84aa-e6514341c4b6" />
-<img width="480" height="951" alt="724174382_834755382808033_980780255759341986_n" src="https://github.com/user-attachments/assets/cf2595a2-ea12-4afb-b62e-e5c1ff3a611d" />
 # JHammerZ | MASTER ARCHITECT | MUSICIAN
 [Architecture Verified](https://img.shields.io/badge/Architecture-Live-brightgreen)
 
