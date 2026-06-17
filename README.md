@@ -69,8 +69,10 @@ All claims below are implemented in **Lysander 3.0** and visible in the running 
 - **Audit**: H-Fid Data Provenance with cryptographic hash-chained logs
 
 **Performance Layer**
-- **116x Reach Multiplier**: Real-time Multi-Platform Viewer Velocity across Spotify Live, TikTok Live, YouTube Live
+- **200x Reach Multiplier**: Real-time Multi-Platform Viewer Velocity across Spotify Live, TikTok Live, YouTube Live
 - **Global Overrides**: `Google Indexing API Active`, `Social Injection Active` with stealth bypass
+
+**ACTIVE (200x)** — 104 Lysander + 96 Marius agents | `SUPERLUMINAL LIVE` | [View Forensic Proof](#exhibit-a-live-system-proof-v30)
 
 **Command Layer**
 - **Agentic Control**: Agent 25 Master Proxy + Council of 25 delegation framework
