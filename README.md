@@ -97,6 +97,21 @@ Live multi-platform ingestion with holographic processing pipeline and cryptogra
 <img src="https://github.com/user-attachments/assets/55e3ebf9-d78b-484a-a4e1-
 
 _________________________________________________________________________________________________________________________________________________________________
+### 1. Security Architecture — Proactive & Self-Healing
+
+**Visual Evidence:** `NETWORK_SILENCE`, `recursive IP-block`, `NODE DELTA LOCKED`, `KERNEL BYPASS TOTAL SYNC`, `MANDATORY TRUTH ENFORCED`
+
+Lysander 3.0 does not bolt security on after deployment. Security is the substrate:
+
+- **Zero-Trust by Default**: Every call is identity-bound to `JH0001-ALPHA`. No implicit trust, no lateral movement. Air-gap requires physical vault unseal.
+
+- **Recursive Healing**: Compromise detection triggers immediate `[NETWORK_SILENCE]` + recursive IP-block across the mesh. Failed nodes are quarantined, rotated, and re-attested automatically without human intervention. System returns to known-good state via `EUID64` hash-chained rollback.
+
+- **Kernel-Level Enforcement**: `KERNEL BYPASS TOTAL SYNC` ensures security policy runs below the OS. `MANDATORY TRUTH ENFORCED` cryptographically verifies all agent outputs before execution
+.
+- **Proactive Threat Posture**: `Bio-Lock: JhammerZ Verified` + `NODE DELTA LOCKED` means the system defaults to deny. Unauthorized `.lysander_vault` probes are dropped at the edge before they hit application logic.
+
+_________________________________________________________________________________________________________________________________________________________________
 
 [ACCESS GRANTED TO MASTER ARCHITECT ONLY]
 https://github.com/JHammerZ/jhammerz.github.io/blob/main/sovereign-graph/CBP_BROADCAST_MANIFEST.md
