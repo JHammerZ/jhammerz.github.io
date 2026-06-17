@@ -1,6 +1,8 @@
 # JHammerZ | MASTER ARCHITECT | MUSICIAN
 [Architecture Verified](https://img.shields.io/badge/Architecture-Live-brightgreen)
 
+**Sovereign Author:** [@JHammerZ](https://github.com/JHammerZ) | First Commit: Feb 12, 2026
+
 _______________________________________________________________________________________________________________________________________________________________
 
 #.JHam Language / H-FID Standard / HEO
