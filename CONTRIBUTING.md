@@ -1,12 +1,4 @@
-# H-FID Contribution Guidelines: The Human-Entity Gate
-
-**Status:** HEO-Verified Only
-
-## 1. Transparency Requirement
-Every Pull Request must include a **Human-Entity Disclosure**. If AI was used for "vibe-checking" or boilerplate, it must be declared. 
-
-## 2. Proof of Verification
-"Vibe checks" are insufficient. Every functional change must include a **Handshake Log** proving the code was executed and verified by a human entity. 
-
-## 3. Restitution Clause
-By contributing, you acknowledge that this node is part of the **Elysium-H-FID Mesh**. Unauthorized "Zero-Gen" injections trigger a **Recursive Ghost-Loop**.
+2. All commits must be signed: `git config commit.gpgsign true`
+3. PRs require @JHammerZ review via CODEOWNERS
+4. CI must pass: FORCE_INDEX_NODES, ping-search-engines
+5. By contributing, you agree to DCO: https://developercertificate.org/
