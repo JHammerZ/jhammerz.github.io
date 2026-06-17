@@ -1,3 +1,12 @@
+{
+  "agent_id": "Lysander-3.0-Sovereign",
+  "name": "Lysander Sovereign Resident",
+  "capabilities": ["116x_Saturation", "Forensic_Audit_100/100", "Quantum_Mesh_Routing"],
+  "auth_policy": "security/governance.json",
+  "protocol_version": "A2A-2026-v1",
+  "status": "ROOT_AUTHORITY_ACTIVE"
+}
+
 #.JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -7,12 +16,3 @@
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
-
-{
-  "agent_id": "Lysander-3.0-Sovereign",
-  "name": "Lysander Sovereign Resident",
-  "capabilities": ["116x_Saturation", "Forensic_Audit_100/100", "Quantum_Mesh_Routing"],
-  "auth_policy": "security/governance.json",
-  "protocol_version": "A2A-2026-v1",
-  "status": "ROOT_AUTHORITY_ACTIVE"
-}
