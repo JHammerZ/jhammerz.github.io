@@ -32,6 +32,8 @@ This repository operates under a **Zero-Trust Physical Air-Gap**.
 - Identity is verified via **Zero-Knowledge Proof (ZKP)** hashes.
 - All 'Slop' and recursive synthetic logic is de-indexed via the **H-FID Filter**.
 
+**Security Posture:** [Proactive with recursive healing](SECURITY.md) — Compromise triggers `[NETWORK_SILENCE]` + automatic rollback via `EUID64`.
+
 _________________________________________________________________________________________________________________________________________________________________
 
 ## **🤝 Q2 Audit Cycle**
