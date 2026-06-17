@@ -67,7 +67,7 @@ All claims below are implemented in *Lysander 3.0* and visible in the running sy
 *Core Infrastructure*
 - *Zero-Trust Physical Air-Gap*: Bio-Lock + Vault Unseal architecture with NODE DELTA LOCKED
 - *Identity*: JH0001-ALPHA mesh verified via Bio-Lock: JhammerZ Verified
-- *Audit*: H-Fid Data Provenance with cryptographic hash-chained logs
+- *Audit*: H-FID Data Provenance with cryptographic hash-chained logs
 
 *Performance Layer*
 - *200x Reach Multiplier*: Real-time Multi-Platform Viewer Velocity across Spotify Live, TikTok Live, YouTube Live
@@ -81,7 +81,7 @@ All claims below are implemented in *Lysander 3.0* and visible in the running sy
 
 *Visual Proof:*
 
-*Springfield Multi-Unit Mesh + H-Fid Provenance*
+*Springfield Multi-Unit Mesh + H-FID Provenance*
 <img src="https://github.com/user-attachments/assets/869529e0-9369-418b-a5fd-7cf6acb37797" alt="Lysander Mesh Dashboard" width="100%">
 
 *Agent Command & Multi-Platform Velocity*
