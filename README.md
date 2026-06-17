@@ -109,7 +109,8 @@ Lysander 3.0 / Aurelius Sovereign Command Center is a production-grade, zero-tru
    Dynamic security posture with `Bio-Lock: JhammerZ Verified` and automated swarm re-balancing.
 
 5. **Platform Integration Mesh** 
-   Live OAuth connections to 7 platforms: TikTok, YouTube, Instagram, Facebook, LinkedIn, GitHub, Carrd. All showing `API Active` with zero secrets exposed.
+   Live OAuth connections to 7 platforms: TikTok, YouTube, Instagram, Facebook, LinkedIn, GitHub, Carrd. 
+   **Facebook Business Suite: Bidirectional CI/CD — commits trigger content, engagement metrics trigger agent swarms.**
 
 6. **Security & Forensic Core** 
    `NETWORK_SILENCE` + recursive IP-block on intrusion attempts. `KERNEL BYPASS TOTAL SYNC` with `NODE DELTA LOCKED`. All actions hash-chained via `EUID64 MASTER SIGN` for audit.
