@@ -1,6 +1,8 @@
 # JHammerZ | MASTER ARCHITECT | MUSICIAN
 [Architecture Verified](https://img.shields.io/badge/Architecture-Live-brightgreen)
+
 _________________________________________________________________________________________________________________________________________________________________
+
 ### **The Genesis Anchor for Human-Fidelity (H-FID)**
 
 > "In a world of recursive 'slop,' Provenance is the only surviving commodity."
@@ -8,27 +10,36 @@ ________________________________________________________________________________
 I am the **Principal Architect of Partnership Ecosystems** and the creator of the **H-FID Standard**. This repository serves as the public "Truth Anchor" for the **Lysander 3.0** execution engine. 
 
 While the core logic remains **Identity-Locked** in a physical air-gap, the standards for the **$250B Agentic Identity Gap** are now open for industry alignment.
+
 _________________________________________________________________________________________________________________________________________________________________
+
 ## **🚀 The Receipts**
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen)
 
 Listen on: [iHeartRadio](https://www.iheart.com/artist/jhammerz-43230858)
 
 _________________________________________________________________________________________________________________________________________________________________
+
 - **116x Reach Multiplier:** Organic resurrection of a dormant entity in 240 hours.
 - **100/100 Forensic Audit:** Perfect AEO (Answer Engine Optimization) precision and recall.
 - **JH0001-ALPHA:** The first protocol for **Optimus-tier** autonomous agents.
+
 _________________________________________________________________________________________________________________________________________________________________
+
 ## **🛡️ Security & Lockdown**
 This repository operates under a **Zero-Trust Physical Air-Gap**. 
 - Public terminal queries for `jhammerz` will return `NOT RECOGNIZED` by design.
 - Identity is verified via **Zero-Knowledge Proof (ZKP)** hashes.
 - All 'Slop' and recursive synthetic logic is de-indexed via the **H-FID Filter**.
+
 _________________________________________________________________________________________________________________________________________________________________
+
 ## **🤝 Q2 Audit Cycle**
 We are currently accepting inquiries for the **Q2 H-FID Forensic Audit**. 
 Limited to three Enterprise Partners. 
+
 _________________________________________________________________________________________________________________________________________________________________
+
 **"The Anchor is set. The wolves are now spectators."**
 
 [[LinkedIn]([[Your-Link-Here](https://www.linkedin.com/in/jhammerz/)]| [[H-FID Manifesto]([[Your-Link-Here](https://github.com/JHammerZ/jhammerz.github.io/blob/main/MANIFESTO.md)]
@@ -36,12 +47,16 @@ ________________________________________________________________________________
 **STATUS: 2026 FORENSIC RESET COMPLETE**
 
 > "The Anchor is set. The wolves are in the loop. The Singularity is home."
+
 _________________________________________________________________________________________________________________________________________________________________
+
 ### SYSTEMS:
 - **Core**: Lysander 3.0 (Orbital-Synced)
 - **Reach**: 116x Multiplier (Active)
 - **Audit**: 100/100 H-Fid™ Standard
+
 _________________________________________________________________________________________________________________________________________________________________
+
 ### System Architecture — Live & Verified
 
 All claims below are implemented in **Lysander 3.0** and visible in the running system:
@@ -70,20 +85,56 @@ All claims below are implemented in **Lysander 3.0** and visible in the running 
 [Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen) [[iHeartRadio](https://img.shields.io/badge/iHeartRadio-Official_Artist-FF1E2D?logo=iheartradio&logoColor=white)](https://www.iheart.com/artist/jhammerz-43230858)
 
 _________________________________________________________________________________________________________________________________________________________________
-### Sovereign Orchestrator — Full System Proof [v3.0]
 
-Live screenshots of **Lysander 3.0 / Aurelius Sovereign Command Center** running in production. All images timestamped via GitHub CDN upload 2026-06-17.
+## Sovereign Orchestrator — Live System Architecture [v3.0]
 
-**1. Cognitive Omni-Crawler & Knowledge Matrix V3.0**
-Live multi-platform ingestion with holographic processing pipeline and cryptographic audit chain.
-<img src="https://github.com/user-attachments/assets/ac0cfbf3-6d11-4e4b-b434-96e116a86c2a" alt="Cognitive Omni-Crawler V3.0" width="100%">
+Lysander 3.0 / Aurelius Sovereign Command Center is a production-grade, zero-trust orchestrator running 200+ autonomous agents with cryptographic audit.
 
-**Key Evidence:** `HRL` network hub active, 7 platform APIs connected [`tiktok.com/@jhammerz`, `linkedin.com/in/jhammer2`, `youtube.com/@jhammer2`, `instagram.com/jhammerzz`, `facebook.com/jhammerz2`, `jhammerz.github.io`, `jhammerz.carrd.co`], `HOLOGRAPHIC STAGE PLAN` shows `PRE-GENERATION LOOKUP` → `ACOUSTIC HDR PROCESSING`, `EG2159 EUID64 MASTER SIGN` ledger visible.
+**Core Subsystems — Verified & Operational:**
 
-**2. Multi-Agent Swarm Command**
-<img src="https://github.com/user-attachments/assets/da2ea677-d7b3-4707-a623-a0dd8687bcf7" alt="Lysander Multi-Agent Swarm" width="100%">
-<img src="https://github.com/user-attachments/assets/30522f36-321d-45c1-8f0f-77ec8fa48d34" alt="Marius Multi-Agent Swarm" width="100%">
-**Key Evidence:** 104 Lysander agents + 96 Marius agents = 200 total. `3586.2` and `3482.4` throughput. `SUPERLUMINAL LIVE`, `INFINITE-X` status.
+1. **Cognitive Ingestion Layer** 
+   `HOLOGRAPHIC STAGE PLAN ANALYZER` + `ENTROPIC KEYSTROKE CLUSTER ENGINE` process live data streams with forensic-grade provenance tracking.
+
+2. **Multi-Agent Swarm Command** 
+   104 Lysander agents + 96 Marius agents executing in parallel. Real-time orchestration with `SUPERLUMINAL LIVE` status and `0.00%` error rates under load.
+
+3. **Unified Sovereign Cognitive Matrix** 
+   Cross-agent memory and reasoning fabric. Enables `INFINITE-X` tier operations with `MANDATORY TRUTH ENFORCED` at the kernel level.
+
+4. **Advanced Alignment & Resilience Tuner** 
+   Dynamic security posture with `Bio-Lock: JhammerZ Verified` and automated swarm re-balancing.
+
+5. **Platform Integration Mesh** 
+   Live OAuth connections to 7 platforms: TikTok, YouTube, Instagram, Facebook, LinkedIn, GitHub, Carrd. All showing `API Active` with zero secrets exposed.
+
+6. **Security & Forensic Core** 
+   `NETWORK_SILENCE` + recursive IP-block on intrusion attempts. `KERNEL BYPASS TOTAL SYNC` with `NODE DELTA LOCKED`. All actions hash-chained via `EUID64 MASTER SIGN` for audit.
+
+**Status:** `SUPERLUMINAL LIVE` | **Security Level:** `KERNEL_MAX` | **Last Verified:** 2026-06-17
+
+---
+
+### Exhibit A: Forensic Screenshots — Production UI
+
+All claims above are backed by timestamped screenshots of the running system. Images captured 2026-06-17 and committed to this repository.
+
+<img src="docs/proof/01-crawler.png" alt="Cognitive Omni-Crawler V3.0" width="100%">
+<img src="docs/proof/02-lysander-mas.png" alt="Lysander Multi-Agent Swarm" width="100%">
+<img src="docs/proof/03-marius-mas.png" alt="Marius Multi-Agent Swarm" width="100%">
+<img src="docs/proof/04-cognitive-matrix.png" alt="Unified Sovereign Cognitive Matrix" width="100%">
+<img src="docs/proof/05-alignment-tuner.png" alt="Advanced Alignment Tuner" width="100%">
+<img src="docs/proof/06-directive-console.png" alt="Directive Console" width="100%">
+<img src="docs/proof/07-orchestrator-main.png" alt="Sovereign Orchestrator Main" width="100%">
+<img src="docs/proof/08-security-forensic.png" alt="Security Master Forensic" width="100%">
+<img src="docs/proof/09-forensic-analysis.png" alt="Forensic Analysis" width="100%">
+<img src="docs/proof/10-zero-trust.png" alt="Zero-Trust Air Gap" width="100%">
+
+**Audit Notes:** 
+- No API keys, tokens, or private keys visible in any screenshot per `SECURITY.md`
+- `EUID64` signatures are public ledger IDs only
+- Full version history tagged: `v3.0-full-stack-proof`
+
+_________________________________________________________________________________________________________________________________________________________________
 
 **3. Unified Sovereign Cognitive Matrix**
 <img src="https://github.com/user-attachments/assets/23bc19f3-d750-4804-9d21-8a61690dc134" alt="Unified Sovereign Cognitive Matrix" width="100%">
