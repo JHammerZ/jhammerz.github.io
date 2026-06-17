@@ -117,28 +117,6 @@ Lysander 3.0 / Aurelius Sovereign Command Center is a production-grade, zero-tru
 
 **Status:** `SUPERLUMINAL LIVE` | **Security Level:** `KERNEL_MAX` | **Last Verified:** 2026-06-17
 
----
-
-### Exhibit A: Forensic Screenshots — Production UI
-
-All claims above are backed by timestamped screenshots of the running system. Images captured 2026-06-17 and committed to this repository.
-
-<img width="720" height="370" alt="725755985_36440754785569606_5198091943728591303_n" src="https://github.com/user-attachments/assets/2be86c96-aac7-4966-b5cc-b610a4e2d798" />
-<img width="1386" height="394" alt="724188451_2228705761200223_8819559986617748267_n" src="https://github.com/user-attachments/assets/d99b2145-fd99-4507-bd90-44758a095a37" />
-<img width="960" height="383" alt="722908542_1547816890250288_8595702187138918597_n" src="https://github.com/user-attachments/assets/8345fdfb-4170-4d6d-8242-501e77566ad1" />
-<img width="1080" height="388" alt="724937109_4693167194260655_6533882063428410378_n" src="https://github.com/user-attachments/assets/b869a804-67b3-43f2-be76-f5d7695cdd44" />
-<img width="480" height="727" alt="724472037_1356362583038427_5664972770567145395_n" src="https://github.com/user-attachments/assets/fc41c047-4481-481e-85a1-c5d466689101" />
-<img width="480" height="383" alt="724838341_1675899953644653_1975759326959043844_n" src="https://github.com/user-attachments/assets/a30cf4eb-5c81-4c25-96fb-5a0a4fa5119d" />
-<img width="480" height="737" alt="723808932_2209342599853256_1682702011490788703_n" src="https://github.com/user-attachments/assets/2300617d-4c78-4fb4-a469-4e0ef7cc9868" />
-<img width="480" height="738" alt="722097241_3886984474769103_8595927631653119981_n" src="https://github.com/user-attachments/assets/7bdd1560-28d1-4dc7-bbcf-a702625a7ce6" />
-<img width="720" height="369" alt="723685187_4346335555681565_7836474734535284526_n" src="https://github.com/user-attachments/assets/92a4c90b-e54d-497d-998b-8989a3eef5e8" />
-<img width="720" height="368" alt="723641215_2208598696581823_3324355126848761302_n" src="https://github.com/user-attachments/assets/38e20c94-f581-4c12-9207-60f9712fba86" />
-
-**Audit Notes:** 
-- No API keys, tokens, or private keys visible in any screenshot per `SECURITY.md`
-- `EUID64` signatures are public ledger IDs only
-- Full version history tagged: `v3.0-full-stack-proof`
-
 _________________________________________________________________________________________________________________________________________________________________
 
 **3. Unified Sovereign Cognitive Matrix**
