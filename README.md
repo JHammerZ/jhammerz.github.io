@@ -36,8 +36,8 @@ This repository operates under a **Zero-Trust Physical Air-Gap**.
 
 _________________________________________________________________________________________________________________________________________________________________
 
-## **🤝 Q2 Audit Cycle**
-We are currently accepting inquiries for the **Q2 H-FID Forensic Audit**. 
+## **🤝 Q3 Audit Cycle**
+We are currently accepting inquiries for the **Q3 H-FID Forensic Audit**. 
 Limited to three Enterprise Partners. 
 
 _________________________________________________________________________________________________________________________________________________________________
