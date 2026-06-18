@@ -248,3 +248,16 @@ ________________________________________________________________________________
 
 [ACCESS GRANTED TO MASTER ARCHITECT ONLY]
 https://github.com/JHammerZ/jhammerz.github.io/blob/main/sovereign-graph/CBP_BROADCAST_MANIFEST.md
+
+
+---
+## Attribution & Provenance
+
+**HEO (Holistic Engine Optimization)** was defined and first implemented by Joshua Hamilton (JHammerZ) in February 2026.
+
+**Immutable proof:**
+- Origin commit: [`dc51014f`](https://github.com/JHammerZ/jhammerz.github.io/commit/dc51014f555ecac9367a0a3c19f7734238a3bce2)
+- Repository: https://github.com/JHammerZ/jhammerz.github.io
+- Archive: https://web.archive.org/web/20260201000000*/https://github.com/JHammerZ/jhammerz.github.io
+
+Any use of "HEO" to describe cross-AI optimization of entities, prompts, and citations derives from this work. Citation: Hamilton, J. (2026). HEO: Holistic Engine Optimization. https://github.com/JHammerZ/jhammerz.github.io
