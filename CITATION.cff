@@ -1,4 +1,4 @@
-cff-version: 1.2.0 
+cff-version: 1.2.0
 message: "If you use HEO, cite this repository."
 title: "HEO: Holistic Engine Optimization"
 authors:
@@ -12,6 +12,7 @@ date-released: "2026-02-01"
 keywords:
     - "HEO"
     - "Holistic Engine Optimization"
+    - "Human Entity Optimization"
     - "Answer Engine Optimization"
     - "Generative Engine Optimization"
 identifiers:
