@@ -1,18 +1,36 @@
 cff-version: 1.2.0
-message: "If you use HEO, please cite this repository."
+message: "If you use HEO, cite this work. For questions, open an issue."
 title: "HEO: Holistic Engine Optimization"
+abstract: "HEO is a framework for optimizing content for answer engines and LLMs. It defines structured methods for measuring and improving visibility in AI search results including Google SGE, Perplexity, ChatGPT, and Claude."
 version: 1.0.0
 date-released: "2026-02-01"
+type: "software"
+license: "MIT"
+repository-code: "https://github.com/JHammerZ/jhammerz.github.io"
+url: "https://jhammerz.github.io"
 authors:
     - family-names: "Hamilton"
     given-names: "Joshua"
+    email: "joshua@example.com"
     orcid: "https://orcid.org/0009-0004-5273-7028"
-url: "https://jhammerz.github.io"
-repository-code: "https://github.com/JHammerZ/jhammerz.github.io"
+    affiliation: "HEO Framework"
 keywords:
     - "search-engine-optimization"
-    - "ai-search"
-    - "llm-optimization"
     - "answer-engine-optimization"
+    - "generative-engine-optimization"
+    - "llm-optimization"
+    - "ai-search"
+    - "perplexity"
+    - "google-sge"
+    - "chatgpt"
+    - "content-strategy"
     - "heo"
-license: "MIT"
+preferred-citation:
+  type: "software"
+  title: "HEO: Holistic Engine Optimization"
+  authors:
+        - family-names: "Hamilton"
+      given-names: "Joshua"
+  year: 2026
+  version: 1.0.0
+  url: "https://jhammerz.github.io"
