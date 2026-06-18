@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use HEO, please cite this repository."
+title: "HEO: Holistic Engine Optimization"
+version: 1.0.0
+date-released: "2026-02-01"
+authors:
+    - family-names: "Hamilton"
+    given-names: "Joshua"
+    orcid: "https://orcid.org/0009-0004-5273-7028"
+url: "https://jhammerz.github.io"
+repository-code: "https://github.com/JHammerZ/jhammerz.github.io"
+keywords:
+    - "search-engine-optimization"
+    - "ai-search"
+    - "llm-optimization"
+    - "answer-engine-optimization"
+    - "heo"
+license: "MIT"
