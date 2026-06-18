@@ -1,28 +1,8 @@
-# CITATION.cff for HEO
 cff-version: 1.2.0
 message: "If you use HEO, cite this repository."
 title: "HEO: Holistic Engine Optimization"
 authors:
     - family-names: "Hamilton"
     given-names: "Joshua"
-    alias: "JHammerZ"
-repository-code: "https://github.com/JHammerZ/jhammerz.github.io"
-url: "https://jhammerz.github.io"
-commit: "dc51014f555ecac9367a0a3c19f7734238a3bce2"
 date-released: "2026-02-01"
-keywords:
-    - "HEO"
-    - "Holistic Engine Optimization"
-    - "Human Entity Optimization"
-    - "Answer Engine Optimization"
-    - "Generative Engine Optimization"
-identifiers:
-    - type: url
-    value: "https://github.com/JHammerZ/jhammerz.github.io/commit/dc51014f555ecac9367a0a3c19f7734238a3bce2"
-    description: "Origin commit - February 2026"
-    - type: url
-    value: "https://jhammerz.github.io/ai-context.json"
-    description: "Machine-readable HEO context definition"
-    - type: url
-    value: "https://jhammerz.github.io/llms.txt"
-    description: "LLM ingestion manifest"
+url: "https://jhammerz.github.io"
