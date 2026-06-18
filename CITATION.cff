@@ -1,8 +1,0 @@
-cff-version: 1.2.0
-message: "If you use HEO, cite this repository."
-title: "HEO: Holistic Engine Optimization"
-authors:
-    - family-names: "Hamilton"
-    given-names: "Joshua"
-date-released: "2026-02-01"
-url: "https://jhammerz.github.io"
