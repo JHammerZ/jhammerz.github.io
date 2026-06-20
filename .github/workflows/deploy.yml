@@ -1,5 +1,4 @@
 name: Deploy Janus Gate
-
 on:
   push:
     branches: [ main ]
@@ -9,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: prod
     steps:
       - name: Checkout with submodules
         uses: actions/checkout@v4
