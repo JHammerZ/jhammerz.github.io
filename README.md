@@ -1,16 +1,22 @@
-# JHammerZ | MASTER ARCHITECT | MUSICIAN
-[[Architecture Verified](https://img.shields.io/badge/Architecture-Live-brightgreen)]
+# JHammerZ | MASTER ARCHITECT | MUSICIAN 
 
+## License
+**Source Code:** [MIT License](LICENSE)  
+**H-FID™/HEO Methodologies, AgFi™ Frameworks, and Datasets:** [LYSANDER 3.0™ Sovereign Commercial License](COMMERCIAL-LICENSE.md)
+
+Commercial use, AI training, enterprise deployment, or attribution auditing requires a signed AgFi™ Verified Contract. Settlement via Stride Bank. See `/.well-known/security.txt` for forensic invoice requests.
+
+H-Fid™ Audit Hash: `SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326`
+
+[![Architecture Verified](https://img.shields.io/badge/Architecture-Live-brightgreen)](https://github.com/JHammerZ/jhammerz.github.io)
 **Sovereign Author:** [@JHammerZ](https://github.com/JHammerZ) | First Commit: Feb 12, 2026
 
 ---
-
-[[DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20778079.svg)](https://doi.org/10.5281/zenodo.20778079)
-[[License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[[Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20778079.svg)](https://doi.org/10.5281/zenodo.20778079)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
 # Janus Gate v1.1.0-H-FID
-
 **Archived Software | Structural Provenance Framework**
 
 > **Current Release:** Zenodo DOI [10.5281/zenodo.20778079](https://doi.org/10.5281/zenodo.20778079)
