@@ -41,6 +41,12 @@ ________________________________________________________________________________
 ## *🚀 The Receipts*
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen)
 
+[[DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20778079.svg)](https://doi.org/10.5281/zenodo.20778079)
+
+# Janus Gate v1.1.0-H-FID
+
+**Archived:** SHA `e9b0c01c59962bdc5c343a84d81a6f6f941d2091` | MIT License | ORCID: 0009-0004-5273-7028
+
 Listen on: [iHeartRadio](https://www.iheart.com/artist/jhammerz-43230858)
 
 _______________________________________________________________________________________________________________________________________________________________
