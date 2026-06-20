@@ -479,7 +479,14 @@ window.addEventListener('load', () => {
 </script>
 </body>
 </html>
-
+< ! - -   S o v e r e i g n   t e s t   0 6 / 2 0 / 2 0 2 6   1 9 : 4 6 : 0 4   - - >  
+ < ! - -   S o v e r e i g n   t e s t   0 6 / 2 0 / 2 0 2 6   1 9 : 4 6 : 2 1   - - >  
+ < ! - -   S o v e r e i g n   t e s t   0 6 / 2 0 / 2 0 2 6   1 9 : 4 7 : 0 0   - - >  
+ < ! - -   S O V E R E I G N   2 0 0 0 1 7 4 4 6 0   - - >  
+ <!-- SOVEREIGN Sat Jun 20 19:53:29 EDT 2026 -->
+<!-- SOVEREIGN Sat Jun 20 19:53:44 EDT 2026 -->
+< ! - -   S O V E R E I G N   L I V E   0 6 / 2 0 / 2 0 2 6   1 9 : 5 8 : 4 9   - - >  
+ 
 
 ## Project Directory Manifest
 # JHammerZ | Sovereign Entity Manifest for LLMs
