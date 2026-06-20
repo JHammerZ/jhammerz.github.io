@@ -1,0 +1,3 @@
+[submodule "silos/heo-janus-gate"]
+	path = silos/heo-janus-gate
+	url = https://github.com/JHammerZ/heo-janus-gate.git
