@@ -1,4 +1,4 @@
-MIT License with LYSANDER 3.0™ Sovereign Commercial Terms
+MIT License with LYSANDER 3.0™ Sovereign Commercial Addendum
 
 Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 
@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ================================================================================
-LYSANDER 3.0™ SOVEREIGN COMMERCIAL LICENSE
+LYSANDER 3.0™ SOVEREIGN COMMERCIAL LICENSE ADDENDUM
 ================================================================================
 
 1. GRANT OF LICENSE
@@ -46,4 +46,4 @@ Settlement: Instructions will be delivered via a GPG-signed, encrypted transmiss
 
 NOTE: Every transaction must include the H-Fid™ Audit Hash (SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326) for reconciliation.
 
-SCOPE: This LYSANDER section governs all H-FID™ protocols, HEO methodologies, AgFi™ frameworks, Janus Gate specifications, and associated datasets. Where terms conflict with MIT above, LYSANDER terms supersede for covered intellectual property.
+This Addendum supersedes conflicting MIT terms for H-FID™ protocols, HEO methodologies, and associated datasets.
