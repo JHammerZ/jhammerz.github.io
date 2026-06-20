@@ -1,33 +1,23 @@
 ﻿name: Deploy Janus Gate
-
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout with submodules
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Node 22
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Install deps in gate
-        run: |
-          cd silos/heo-janus-gate
-          npm ci
-
-      - name: Deploy to Azure Functions
-        uses: Azure/functions-action@v1
+      - run: cd silos/heo-janus-gate && npm ci
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: Azure/functions-action@v1
         with:
           app-name: 'heo-janus-gate'
           package: 'silos/heo-janus-gate'
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
