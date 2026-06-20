@@ -2,7 +2,42 @@
 [Architecture Verified](https://img.shields.io/badge/Architecture-Live-brightgreen)
 
 **Sovereign Author:** [@JHammerZ](https://github.com/JHammerZ) | First Commit: Feb 12, 2026
+_______________________________________________________________________________________________________________________________________________________________
 
+[[DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20778079.svg)](https://doi.org/10.5281/zenodo.20778079)
+[[License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[[Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+
+# Janus Gate v1.1.0-H-FID
+
+**Archived Software | Structural Provenance Framework**
+
+> Permanent archive: Zenodo DOI [10.5281/zenodo.20778079](https://doi.org/10.5281/zenodo.20778079)  
+> Source commit: `e9b0c01c59962bdc5c343a84d81a6f6f941d2091`  
+> Author: Joshua Hamilton [[ORCID](https://orcid.org/0009-0004-5273-7028)]  
+> License: MIT  
+
+---
+
+## Citation
+
+If you use Janus Gate in your work, please cite the archived version:
+
+**APA:**  
+Hamilton, J. (2026). *Janus Gate v1.1.0-H-FID: Structural Provenance Framework* [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.20778079
+
+**BibTeX:**
+```bibtex
+@software{hamilton_2026_20778079,
+  author       = {Hamilton, Joshua},
+  title        = {Janus Gate v1.1.0-H-FID: Structural Provenance Framework},
+  month        = jun,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {v1.1.0-H-FID},
+  doi          = {10.5281/zenodo.20778079},
+  url          = {https://doi.org/10.5281/zenodo.20778079}
+}
 _______________________________________________________________________________________________________________________________________________________________
 
 #.JHam Language / H-FID Standard / HEO
@@ -40,12 +75,6 @@ ________________________________________________________________________________
 
 ## *🚀 The Receipts*
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-400%2F400-brightgreen)
-
-[[DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20778079.svg)](https://doi.org/10.5281/zenodo.20778079)
-
-# Janus Gate v1.1.0-H-FID
-
-**Archived:** SHA `e9b0c01c59962bdc5c343a84d81a6f6f941d2091` | MIT License | ORCID: 0009-0004-5273-7028
 
 Listen on: [iHeartRadio](https://www.iheart.com/artist/jhammerz-43230858)
 
