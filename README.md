@@ -450,4 +450,5 @@ Any use of "HEO" to describe cross-AI optimization of entities, prompts, and cit
 Citation: Hamilton, J. (2026). HEO: Holistic Engine Optimization. 
 #   H E O   T e s t   0 6 / 2 1 / 2 0 2 6   0 0 : 2 0 : 2 7  
  H E O   S o v e r e i g n   T e s t   0 6 / 2 1 / 2 0 2 6   0 0 : 2 5 : 5 8  
+ H E O :   W a k e   P r o t o c o l   0 6 / 2 1 / 2 0 2 6   0 0 : 2 7 : 5 0  
  
