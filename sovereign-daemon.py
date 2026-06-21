@@ -1,26 +1,43 @@
-from flask import Flask, request, abort
-import subprocess, hmac, hashlib, os
+import os
+import sys
+import requests
 
-app = Flask(__name__)
-SECRET = os.environ["LYSANDER_KEY"]  # set this: export LYSANDER_KEY="SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326"
-REPO_PATH = "/path/to/jhammerz.github.io"  # CHANGE THIS
+# Get secrets from environment
+ARCHITECT_KEY = os.environ.get('ARCHITECT_ACCESS_KEY')
+FB_PAGE_ID = os.environ.get('FB_PAGE_ID')
+FB_USER_ID = os.environ.get('FB_USER_ID')
+X_BEARER = os.environ.get('X_BEARER_TOKEN')
+CONTENT = os.environ.get('POST_CONTENT')
 
-def verify_sig(body, sig):
-    mac = hmac.new(SECRET.encode(), body, hashlib.sha256).hexdigest()
-    return hmac.compare_digest(mac, sig)
+if not all([ARCHITECT_KEY, FB_PAGE_ID, FB_USER_ID, X_BEARER, CONTENT]):
+    print("ERROR: Missing required environment variables")
+    sys.exit(1)
 
-@app.route('/execute', methods=['POST'])
-def execute():
-    if not verify_sig(request.data, request.headers.get('X-HFID-Signature', '')):
-        abort(403)  # Janus Gate: Validation failed
-    
-    cmd = request.json.get('cmd')
-    if cmd == "git_push":
-        subprocess.run(["git", "add", "-A"], cwd=REPO_PATH)
-        subprocess.run(["git", "commit", "-m", "feat: Sovereign Charter via Daemon"], cwd=REPO_PATH)
-        subprocess.run(["git", "push", "origin", "main"], cwd=REPO_PATH)
-        return {"status": "executed", "hash": "SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326"}
-    abort(400)
+print(f"HEO DAEMON: Broadcasting content: {CONTENT[:50]}...")
 
-if __name__ == "__main__":
-    app.run(port=8787, host="127.0.0.1")  # localhost only. Sovereign = Air-gapped
+# Facebook Post
+try:
+    fb_url = f"https://graph.facebook.com/v19.0/{FB_PAGE_ID}/feed"
+    fb_data = {
+        "message": CONTENT,
+        "access_token": ARCHITECT_KEY
+    }
+    fb_r = requests.post(fb_url, data=fb_data)
+    print(f"Facebook: {fb_r.status_code} - {fb_r.text[:100]}")
+except Exception as e:
+    print(f"Facebook ERROR: {e}")
+
+# X Post
+try:
+    x_url = "https://api.twitter.com/2/tweets"
+    x_headers = {
+        "Authorization": f"Bearer {X_BEARER}",
+        "Content-Type": "application/json"
+    }
+    x_data = {"text": CONTENT}
+    x_r = requests.post(x_url, headers=x_headers, json=x_data)
+    print(f"X: {x_r.status_code} - {x_r.text[:100]}")
+except Exception as e:
+    print(f"X ERROR: {e}")
+
+print("HEO Planetary Broadcast Complete")
