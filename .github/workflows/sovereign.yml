@@ -1,0 +1,21 @@
+name: HEO Sovereign Broadcast
+on: [push]
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install requests
+      - name: Run HEO Daemon
+        env:
+          ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_USER_ID: ${{ secrets.FB_USER_ID }}
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          POST_CONTENT: ${{ github.event.head_commit.message }}
+        run: python sovereign-daemon.py
