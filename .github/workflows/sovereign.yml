@@ -8,11 +8,16 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write  # <- This fixes the 403 error
+
 jobs:
   broadcast:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}  # <- Ensures token gets passed
     - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
@@ -31,4 +36,3 @@ jobs:
         X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         POST_CONTENT: ${{ github.event.head_commit.message }}
       run: python sovereign-daemon.py
-
