@@ -1,7 +1,8 @@
+name: Deploy Janus Gate
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-name: Deploy Janus Gate
 on:
   push:
     branches: [ main ]

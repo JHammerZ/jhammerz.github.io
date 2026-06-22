@@ -1,7 +1,8 @@
+name: HEO Sovereign Broadcast
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-name: HEO Sovereign Broadcast
 
 on:
   push:
