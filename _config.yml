@@ -1,5 +1,26 @@
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false # Forces them to finish one-by-one instead of killing each other
+name: GitHub Pages
 
-include: [".well-known"]
+on:
+  push:
+    branches:
+      - main  # or your GitHub Pages branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./  # or your publish directory
+          publish_branch: main  # or your GitHub Pages branch
+          keep_files: true
+          force_orphan: true
