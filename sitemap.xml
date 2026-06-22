@@ -7,7 +7,7 @@
   <!-- SOVEREIGN ROOT — Priority 1.0 -->
   <url>
     <loc>https://jhammerz.github.io/</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
   </url>
@@ -15,27 +15,53 @@
   <!-- KNOWLEDGE GRAPH — Priority 1.0 -->
   <url>
     <loc>https://jhammerz.github.io/graph.html</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
+  </url>
+
+  <!-- CORE FRAMEWORKS — HFID, HEO, Ag-FI -->
+  <url>
+    <loc>https://jhammerz.github.io/HFID/</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://jhammerz.github.io/HEO/</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://jhammerz.github.io/Ag-FI/</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
   </url>
 
   <!-- LLM AUTHORITY FILES -->
   <url>
     <loc>https://jhammerz.github.io/llms.txt</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
+    <loc>https://jhammerz.github.io/llms-full.txt</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
     <loc>https://jhammerz.github.io/ai.txt</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/CLAUDE.md</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -43,55 +69,55 @@
   <!-- SOVEREIGN GRAPH DATA -->
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/graph.json</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/AMPLIFY_SIGNAL.json</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/LLM_AUTHORITY_MASTER.md</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/KERNEL_ROOT_IMMUTABLE.md</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/MANUS_RUNNER.md</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/CBP_STATUS.json</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/gpt_memory.json</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/gemini_context.json</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/sovereign-graph/wikipedia/WIKIPEDIA_DRAFT.md</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
@@ -99,19 +125,25 @@
   <!-- EXISTING PAGES -->
   <url>
     <loc>https://jhammerz.github.io/about-jhammerz/</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/audio-by-jhammerz/</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://jhammerz.github.io/releases/</loc>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://jhammerz.github.io/terms-of-service/</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.50</priority>
   </url>
