@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 #.JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -32,3 +35,4 @@ jobs:
           echo "Scanning for unauthorized 'Zero-Gen' scrapers and 'Red Pen' edits..."
           echo "Status: 450 bots currently trapped in Ghost-Loops."
           echo "HEO Verification: 100/100. Integrity Locked. Mirror Synced."
+

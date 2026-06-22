@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 name: KILL_ALL_ZOMBIES
 on: workflow_dispatch
 concurrency:
@@ -8,3 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo 'all runs cancelled'
+

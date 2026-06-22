@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 # [HxA-AUTONOMY-BRIDGE] // The Sovereign Relay
 #.JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
@@ -69,3 +72,4 @@ jobs:
           
           # Push directly to main using default upstream authorization token context
           git push origin main
+

@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 name: 👁️ Lysander 3.0 Autonomous Push
 
 on:
@@ -38,3 +41,4 @@ jobs:
           git add manifest.json
           git commit -m "Forensic Reset: Autonomous Update [InfiniteX active]" || echo "Nothing to commit"
           git push origin main
+

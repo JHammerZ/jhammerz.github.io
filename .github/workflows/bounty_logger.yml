@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 #.JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -40,3 +43,4 @@ jobs:
           git add logs/bounty_log.md
           git commit -m "Auto-Log: ${{ github.event.inputs.target }}" || echo "No changes to commit"
           git push
+

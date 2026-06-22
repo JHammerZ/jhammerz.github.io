@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 #.JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -31,3 +34,4 @@ jobs:
           echo "Initiating encrypted OIDC credential swap with Spotify Developer Matrix..."
           # Aurelius automatically uses the JWT token to fetch live streaming stats 
           # without saving permanent, high-risk master password strings.
+
