@@ -50,7 +50,10 @@ User-agent: LinkedInBot
 Allow: /
 
 # Honeypot — redirect scrapers
-Disallow: /honeypot/
+Disallow: /honeypot/User-agent: *
+Allow: /
+
+Sitemap: https://jhammerz.github.io/sitemap.xml
 
 # Sitemap
 Sitemap: https://jhammerz.github.io/llms.txt
