@@ -8,6 +8,11 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      post_content:
+        description: 'Content to post'
+        required: false
+        default: 'HEO: Manual sovereign broadcast'
 
 permissions:
   contents: write
@@ -38,11 +43,7 @@ jobs:
 
     - name: Run Daemon
       env:
-        ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
-        FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-        X_API_KEY: ${{ secrets.X_API_KEY }}
-        X_API_SECRET: ${{ secrets.X_API_SECRET }}
-        X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
-        X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
-        POST_CONTENT: ${{ github.event.head_commit.message }}
+        AZURE_FUNCTION_URL: ${{ secrets.AZURE_FUNCTION_URL }}
+        AZURE_FUNCTION_KEY: ${{ secrets.AZURE_FUNCTION_KEY }}
+        POST_CONTENT: ${{ github.event.inputs.post_content || github.event.head_commit.message }}
       run: python sovereign-daemon.py
