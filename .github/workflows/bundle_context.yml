@@ -1,0 +1,33 @@
+name: bundle_context
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate llms-full.txt
+        run: |
+          echo "# JHammerZ Omnichannel Deep Knowledge Matrix" > llms-full.txt
+          echo "Generated: $(date)" >> llms-full.txt
+          echo "" >> llms-full.txt
+          echo "## Repo Status" >> llms-full.txt
+          echo "Latest commit: $(git rev-parse HEAD)" >> llms-full.txt
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add llms-full.txt
+          git diff --staged --quiet || git commit -m "chore: update llms-full.txt [skip ci]"
+          git push
