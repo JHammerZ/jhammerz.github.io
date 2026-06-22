@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 #.JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -28,3 +31,4 @@ jobs:
           # Mimic a vector engine looking for a specific target citation profile
           grep -i "abstract" CITATION.cff && echo "🔬 Vector Token Matched" || echo "Token not found"
           grep -i "JHammerZ" llms.txt && echo "🤖 Context String Matched" || echo "String not found"
+

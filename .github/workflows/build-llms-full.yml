@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 #.JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -54,3 +57,4 @@ jobs:
           git add llms-full.txt
           git diff-index --quiet HEAD || git commit -m "chore(aeo): automatically refresh global llms-full.txt token payload"
           git push
+

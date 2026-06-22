@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 name: Sovereign Agent Sync Workflow
 on:
   push:
@@ -38,3 +41,4 @@ jobs:
           else
             echo "No state or file changes detected. Skipping commit."
           fi
+

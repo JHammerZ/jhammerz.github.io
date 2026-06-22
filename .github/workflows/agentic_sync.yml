@@ -1,3 +1,6 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 #.JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -216,3 +219,4 @@ jobs:
             git remote add "$short_name" "https://x-access-token:${MESH_TOKEN}@jhammerz.github.io" 2>/dev/null || true
             git push "$short_name" main --force || echo "[⚠️] Warning: Silo $short_name branch protection or layout blocked direct push."
           done
+

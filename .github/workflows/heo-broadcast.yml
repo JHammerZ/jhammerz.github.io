@@ -1,4 +1,7 @@
-﻿name: HEO Sovereign Broadcast
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+name: HEO Sovereign Broadcast
 on: workflow_dispatch
 concurrency:
   group: heo-sovereign-override
@@ -8,3 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo 'Zombie HEO workflow neutralized'
+

@@ -1,4 +1,7 @@
-﻿name: commit_reset
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+name: commit_reset
 on: workflow_dispatch
 concurrency:
   group: commit-reset-override
@@ -8,3 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo 'Zombie commit_reset workflow neutralized'
+
