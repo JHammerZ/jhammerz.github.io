@@ -1,6 +1,3 @@
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 # For most projects, this workflow file will not need changing; you simply need
 # to commit it to your repository.
 #
@@ -23,6 +20,10 @@ concurrency:
 # REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
 
 name: "CodeQL Advanced"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   push:

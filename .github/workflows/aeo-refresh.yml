@@ -1,7 +1,8 @@
+name: AEO Refresh
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-name: AEO Refresh
 on: workflow_dispatch  # Manual only, HEO DISABLED
 jobs:
   disabled:

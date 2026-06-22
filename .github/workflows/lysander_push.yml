@@ -1,7 +1,8 @@
+name: 👁️ Lysander 3.0 Autonomous Push
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-name: 👁️ Lysander 3.0 Autonomous Push
 
 on:
   repository_dispatch:
