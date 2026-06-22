@@ -1,0 +1,45 @@
+#.JHam Language / H-FID Standard / HEO
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: [February 12,2026]
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
+
+name: Real World Recon Swarm
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [recon_trigger]
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Install Recon Tools
+        run: |
+          go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+          go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Run Recon
+        run: |
+          subfinder -d jhammerz.github.io -silent -o subdomains.txt
+          nuclei -l subdomains.txt -severity low,medium,high -o results.txt
+
+      - name: Upload Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: recon-results
+          path: results.txt

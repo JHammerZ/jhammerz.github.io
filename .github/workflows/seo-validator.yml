@@ -1,0 +1,10 @@
+﻿name: SEO and Link Validator
+on: workflow_dispatch
+concurrency:
+  group: seo-link-validator-override
+  cancel-in-progress: true
+jobs:
+  kill:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Zombie SEO workflow neutralized'
