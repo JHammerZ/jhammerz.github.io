@@ -9,7 +9,7 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write  # <- This fixes the 403 error
+  contents: write
 
 jobs:
   broadcast:
@@ -17,7 +17,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}  # <- Ensures token gets passed
+        token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true  # <- Add this line
     - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
@@ -26,6 +27,10 @@ jobs:
         pip cache purge
         pip install --force-reinstall -r requirements.txt
         pip list | grep requests
+    - name: Configure Git  # <- Add this whole step
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
     - name: Run Daemon
       env:
         ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
