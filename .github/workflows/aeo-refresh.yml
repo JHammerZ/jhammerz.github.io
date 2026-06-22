@@ -8,5 +8,5 @@ jobs:
   disabled:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "AEO Enabled by HEO"
+      - run: echo "AEO disabled by HEO"
 
