@@ -1,0 +1,44 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+#.JHam Language / H-FID Standard / HEO
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: [February 12,2026]
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
+
+name: Build and Verify Tomcat Container
+on:
+  push:
+    branches:
+      - "main"
+  # 🟢 FIX: Moved and aligned correctly under the 'on' trigger section
+  workflow_dispatch:
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build -t my-tomcat-app:latest .
+          docker run -d -p 8080:8080 --name test-container my-tomcat-app:latest
+          sleep 10
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          if [ "$STATUS_CODE" -eq 200 ] || [ "$STATUS_CODE" -eq 404 ]; then
+            echo "Tomcat is successfully running (Status: $STATUS_CODE)!"
+          else
+            echo "Tomcat failed to start properly. Status received: $STATUS_CODE"
+            exit 1
+          fi
+

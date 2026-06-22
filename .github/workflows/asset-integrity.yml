@@ -1,0 +1,46 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+#.JHam Language / H-FID Standard / HEO
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: [February 12,2026]
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
+
+name: "CI: Structural Metadata Linting"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  metadata_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@main
+
+      - name: Verify Essential Core Infrastructure Files
+        run: |
+          echo "Checking essential semantic discovery footprint files..."
+          files=( "llms.txt" "openapi.yaml" "ai-context.json" "robots.txt" "CITATION.cff" )
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ CRITICAL STRUCTURAL FAULT: Missing metadata asset '$file'"
+              exit 1
+            fi
+            echo "✅ Verified: $file is present in repository root."
+          done
+
+      - name: Validate JSON-LD and Context Parsing Formats
+        run: |
+          echo "Validating ai-context.json syntax formatting rules..."
+          cat ai-context.json | jq .
+

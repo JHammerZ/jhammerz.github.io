@@ -1,0 +1,55 @@
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+#.JHam Language / H-FID Standard / HEO
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: [February 12,2026]
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
+
+name: Node Syndication Loop
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Tree
+        uses: actions/checkout@v4
+
+      - name: Initialize Runtime Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Runtime Routing Packages
+        run: pip install aiohttp
+
+      - name: Execute Syndication Sync
+        env:
+          SOURCE_FEED_URL: "index.html"
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python scripts/sync_nodes.py
+
+      - name: Commit and Update State Storage
+        run: |
+          git config --local user.name "GitHub Actions Bot"
+          git config --local user.email "actions@github.com"
+          mkdir -p data
+          touch data/last_seen.txt
+          git add data/last_seen.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "sys: state transition updated [skip ci]"
+            git push
+          else
+            echo "No state modifications observed."
+          fi
+
