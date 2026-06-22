@@ -1,53 +1,48 @@
-import os
-import sys
-import requests
-from datetime import datetime
-from requests_oauthlib import OAuth1
+name: HEO Sovereign Broadcast
 
-ARCHITECT_KEY = os.environ.get('ARCHITECT_ACCESS_KEY')
-FB_PAGE_ID = os.environ.get('FB_PAGE_ID')
-CONTENT = os.environ.get('POST_CONTENT', f'HEO: Sovereign broadcast {datetime.utcnow().isoformat()}')
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
-X_API_KEY = os.environ.get('X_API_KEY')
-X_API_SECRET = os.environ.get('X_API_SECRET')
-X_ACCESS_TOKEN = os.environ.get('X_ACCESS_TOKEN')
-X_ACCESS_SECRET = os.environ.get('X_ACCESS_SECRET')
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-# Exit cleanly if secrets not configured - no more red X
-if not ARCHITECT_KEY or not FB_PAGE_ID:
-    print("Skipping: ARCHITECT_ACCESS_KEY or FB_PAGE_ID not set")
-    sys.exit(0)  # Exit 0 = success, not error
+permissions:
+  contents: write
 
-if not CONTENT:
-    print("ERROR: Missing POST_CONTENT")
-    sys.exit(1)
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
 
-print(f"HEO DAEMON: Broadcasting content: {CONTENT[:50]}...")
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
 
-# Facebook Post
-try:
-    # Fixed: removed duplicate https://
-    fb_url = f"https://graph.facebook.com/v25.0/{FB_PAGE_ID}/feed"
-    fb_data = {
-        "message": CONTENT,
-        "access_token": ARCHITECT_KEY
-    }
-    fb_r = requests.post(fb_url, data=fb_data)
-    print(f"Facebook: {fb_r.status_code} - {fb_r.text[:100]}")
-except Exception as e:
-    print(f"Facebook ERROR: {e}")
+    - name: Install deps
+      run: |
+        pip cache purge
+        pip install --force-reinstall -r requirements.txt
+        pip list | grep requests
 
-# X Post - add your X posting logic here
-try:
-    if all([X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET]):
-        auth = OAuth1(X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET)
-        x_url = "https://api.twitter.com/2/tweets"
-        x_data = {"text": CONTENT}
-        x_r = requests.post(x_url, json=x_data, auth=auth)
-        print(f"X: {x_r.status_code} - {x_r.text[:100]}")
-    else:
-        print("X: Skipping - X credentials not set")
-except Exception as e:
-    print(f"X ERROR: {e}")
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-print("HEO DAEMON: Complete")
+    - name: Run Daemon
+      env:
+        ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
+        FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+        X_API_KEY: ${{ secrets.X_API_KEY }}
+        X_API_SECRET: ${{ secrets.X_API_SECRET }}
+        X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+        X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        POST_CONTENT: ${{ github.event.head_commit.message }}
+      run: python sovereign-daemon.py
