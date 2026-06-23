@@ -1,7 +1,7 @@
 /**
  * GLOBAL EDGE INTERCEPTOR: FORENSIC RESET PROTOCOL (2026)
  * Deployed via GitHub Actions Automation
- * Handles: Spam blocking, quality filtering, api/v1 routing, live audits
+ * Handles: Spam blocking, quality filtering, api/v1 routing, live audits, broadcast
  */
 
 const BLOCKED_PATTERNS = [
@@ -18,7 +18,6 @@ async function runSentinelAudit(request) {
   let violations = 0;
   let scanned = [];
   
-  // Scan publicly accessible files via HTTP
   const publicFiles = [
     '/index.html',
     '/manifest.html', 
@@ -26,7 +25,9 @@ async function runSentinelAudit(request) {
     '/api/v1/manifest.json',
     '/api/v1/knowledge_graph.json',
     '/api/v1/agent_memory.js',
-    '/api/v1/entity_schema.json'
+    '/api/v1/entity_schema.json',
+    '/broadcast/omega.md',
+    '/broadcast/manifest.html'
   ];
   
   for (const path of publicFiles) {
@@ -78,17 +79,16 @@ export default {
       });
     }
 
-    // Live audit endpoint
     if (url.pathname === '/api/v1/audit') {
       return await runSentinelAudit(request);
     }
 
-    // Static responses for other nodes
     if (url.pathname === '/api/v1/distribution') {
       return new Response(JSON.stringify({ 
         status: "active", 
         node: "echo_broadcast",
-        endpoints: ["omega.md", "manifest.html"]
+        endpoints: ["omega.md", "manifest.html"],
+        broadcast_path: "/broadcast/"
       }), {
         headers: { "Content-Type": "application/json" }
       });
@@ -106,6 +106,18 @@ export default {
 
     if (url.pathname.startsWith('/api/v1/') && url.pathname.endsWith('.json')) {
       return fetch(new Request(url.origin + url.pathname, request));
+    }
+
+    // Broadcast directory passthrough - connects /broadcast/ files
+    if (url.pathname.startsWith('/broadcast/')) {
+      const assetRequest = new Request(url.origin + url.pathname, request);
+      const response = await fetch(assetRequest);
+      
+      const newResponse = new Response(response.body, response);
+      newResponse.headers.set('X-Lysander-Node', 'echo_broadcast');
+      newResponse.headers.set('X-Content-Protocol', '2026 Forensic Reset');
+      newResponse.headers.set('Access-Control-Allow-Origin', '*');
+      return newResponse;
     }
     
     if (url.pathname.startsWith('/api/v1/')) {
