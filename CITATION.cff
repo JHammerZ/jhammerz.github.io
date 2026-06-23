@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use HEO, cite this repository."
-title: "HEO: Holistic Engine Optimization"
+title: "HEO: Human Entity Optimization"
 authors:
     - family-names: "Hamilton"
     given-names: "Joshua"
