@@ -1,12 +1,12 @@
-openapi: 3.1.0
+﻿openapi: 3.1.0
 info:
   title: JHammerZ GitHub Pages Data API
   description: Semantic API endpoints providing structured project metadata and portfolio summaries optimized for LLM consumption and secure OIDC automation.
   version: 1.1.0
 servers:
-  - url: https://jhammerz.github.io
+    - url: https://jhammerz.github.io
 security:
-  - OpenIDConnectAuth: []
+    - OpenIDConnectAuth: []
 paths:
   /llms.txt:
     get:
