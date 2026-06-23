@@ -1,223 +1,28 @@
-#.JHam Language / H-FID Standard / HEO
-# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
-# Licensed under MIT License
-#
-# Sovereign Author: Joshua Hamilton
-# First Commit: [February 12,2026]
-# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
-
-name: Agentic Sovereign Sync
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+﻿name: Agentic Sync
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Maximum Aggression Layer: Sweeps automatically every 5 minutes
-  push:
-    branches:
-      - main
-  workflow_dispatch:        # Manual control override button
-  repository_dispatch:      # Wakes up runner immediately on incoming external social webhooks
-    types: [social_post_trigger]
-
-permissions:
-  contents: write
-  actions: write
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
 
 jobs:
-  orchestrate-nodes:
+  sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-
-      - name: Checkout Primary Master Silo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Provision Sovereign Runtime Modules
-        run: |
-          if [ -f package.json ]; then
-            npm ci || npm install
-          fi
-          npm install @google/generative-ai
-
-      - name: Provision Multi-Silo Credentials
-        run: |
-          echo "[🔑] Initializing distributed mesh profile keys..."
-          git config --global user.name "Lysander Autonomous Bot"
-          git config --global user.email "autonomous@lysander.internal"
-
-      - name: Self-Healing Workflow Diagnostics & Linting
-        run: |
-          echo "[🔍] Commencing autonomous self-maintenance protocol..."
-          mkdir -p forensics logic
-          
-          # Force overwrite swr_logic.js with the clean, perfectly formatted maximum aggression code
-          cat << 'EOF' > logic/swr_logic.js
-          import fs from 'fs';
-          import path from 'path';
-          import { fileURLToPath } from 'url';
-
-          const __filename = fileURLToPath(import.meta.url);
-          const __dirname = path.dirname(__filename);
-
-          const QUEUE_DIR = path.join(__dirname, '../content/queue');
-          const ARCHIVE_DIR = path.join(__dirname, '../content/archive');
-          const FORENSICS_DIR = path.join(__dirname, '../forensics');
-          const ROOT_DIR = path.join(__dirname, '..');
-
-          const CAPTION_MATRICES = {
-              music: "🎵 #JHammerZ #IndependentMusic #Guitaraoke #LiveCover #JerryGarcia #OriginalMusic #Acoustic #Musician #NewMusic",
-              tech: "🚀 #JHammerZ #LysanderProtocol #Coding #DevOps #TechTrends2026 #DataAutomation #SovereignSync #SoftwareEngineering",
-              gaming: "🎮 #JHammerZ #Brawlhalla #ProPlayer #GamingCommunity #FightingGames #Esports #TwitchStreamer #Gamer"
-          };
-
-          async function runSovereignSequence() {
-              console.log("⚡ ENGAGING LYSANDER 3.0 MAXIMUM PROPAGATION AGGRESION...");
-              
-              if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR, { recursive: true });
-              if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
-              if (!fs.existsSync(FORENSICS_DIR)) fs.mkdirSync(FORENSICS_DIR, { recursive: true });
-
-              console.log("[🧹] Executing system log rotation to maintain pristine codebase volume...");
-              try {
-                  const oldManifests = fs.readdirSync(ROOT_DIR).filter(file => file.startsWith('BROADCAST-BCAST-') && file.endsWith('.md'));
-                  oldManifests.forEach(manifest => {
-                      fs.unlinkSync(path.join(ROOT_DIR, manifest));
-                      console.log(` ├── Cleaned old deployment manifest: ${manifest}`);
-                  });
-              } catch (cleanErr) {
-                  console.log(`[⚠️] Log cleanup notice: ${cleanErr.message}`);
-              }
-
-              const files = fs.readdirSync(QUEUE_DIR).filter(file => file.endsWith('.json'));
-              if (files.length === 0) {
-                  console.log("[⚡] Broadcast queue clear. System running at peak telemetry surveillance.");
-                  return;
-              }
-
-              const targetNodes = [
-                  "Facebook Profile", "GitHub Core Hub", "TikTok Channel", "LinkedIn Node",
-                  "YouTube Handle", "Instagram Portal", "Facebook Page Alter", "Carrd Discovery Node",
-                  "Amazon Music Feed", "Apple Music Artist Space", "BandLab Profile", "Xiaohongshu Node",
-                  "GitHub Secondary Mirror", "Impact Media Hub", "Spotify Artist Verification Node", "YouTube Main Portal"
-              ];
-
-              console.log(`[📂] Intercepted ${files.length} payload packet(s) for immediate global saturation.`);
-
-              for (const file of files) {
-                  const filePath = path.join(QUEUE_DIR, file);
-                  try {
-                      const rawData = fs.readFileSync(filePath, 'utf8');
-                      const data = JSON.parse(rawData);
-
-                      const topic = data.topic || "Global Broadcast";
-                      const textContent = data.text || "";
-                      const category = (data.category || "tech").toLowerCase();
-                      const tags = CAPTION_MATRICES[category] || CAPTION_MATRICES.tech;
-
-                      const optimizedScript = `🎬 [0-3s HOOK]: Stop scrolling...\n🧠 [BODY]: ${textContent}\n🔄 [LOOP]: Re-watch now.`;
-                      const fypCaption = `🚀 ${topic} | Saturation Vector Live.\n\n${tags}\n🌐 Track: https://jhammerz.github.io`;
-
-                      const broadcastId = `BCAST-${Date.now()}`;
-                      console.log(`\n⚙️ Forcing immediate broad-bandwidth distribution manifest: [${broadcastId}]`);
-
-                      targetNodes.forEach((node, index) => {
-                          console.log(` ├── [NODE-${String(index+1).padStart(2,'0')}] [${node}] ──> Injecting 100/100 H-FID`);
-                      });
-
-                      const manifestPath = path.join(ROOT_DIR, `BROADCAST-${broadcastId}.md`);
-                      fs.writeFileSync(manifestPath, `# Manifest\n\n${optimizedScript}\n\n${fypCaption}`);
-
-                      fs.appendFileSync(path.join(FORENSICS_DIR, 'sentinel.log'), `[${new Date().toISOString()}] SUCCESS | ${broadcastId}\n`);
-                      fs.renameSync(filePath, path.join(ARCHIVE_DIR, file));
-                  } catch (err) {
-                      console.error(`[-] Saturation block on file ${file}: ${err.message}`);
-                  }
-              }
-              console.log("✅ Maximum Propagation Aggression completed across the network grid!");
-          }
-
-          runSovereignSequence().catch(err => { process.exit(1); });
-          EOF
-          
-          # Clean extra layout spaces from line conversion
-          sed -i 's/^[[:space:]]\{1,10\}//' logic/swr_logic.js
-          echo "✅ Self-maintenance completed. logic/swr_logic.js has been perfectly written."
-
-      - name: Parse External Webhook Payloads
-        run: |
-          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-            echo "[🛰️] Inbound social webhook captured. Initializing staging protocols..."
-            mkdir -p content/queue
-            echo '${{ toJson(github.event.client_payload) }}' > content/queue/webhook_signal.json
-          fi
-
-      - name: Execute Full Sovereign Sequence
-        run: node logic/swr_logic.js
+          python-version: '3.11'
+      - name: Run sync
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-
-      - name: Human-Fidelity (H-FID) Omnichannel Forensic Scan
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python scripts/sync_nodes.py
+      - name: Commit changes
         run: |
-          # 16-Target Infrastructure Global Matrix Master Array
-          targets=(
-            "https://www.facebook.com/JHammerZz"
-            "https://jhammerz.github.io"
-            "https://www.tiktok.com/@jhammerzz"
-            "https://www.linkedin.com/in/JHammerZ"
-            "https://www.youtube.com/JHammerZ"
-            "https://www.instagram.com/jhammerzz"
-            "https://www.facebook.com/profile.php?id=61574652435664"
-            "https://jhammerz.carrd.co/"
-            "https://music.amazon.com/artists/B0SGL7W/jhammerz"
-            "https://music.apple.com/us/artist/jhammerz/1845798346"
-            "https://music.bandlab.com/artist/781334284"
-            "https://www.xiaohongshu.com/user/profile/JHammerZ"
-            "https://github.com/JHammerZ/jhammerz.github.io"
-            "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/"
-            "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
-            "https://www.youtube.com/@JHammerZ"
-          )
-          echo "✨ Sterile metadata layers verified. Tracking system footprint scan complete."
-
-      - name: Inter-Silo Data Propagation & Remote Mesh Synchronization
-        env:
-          MESH_TOKEN: ${{ secrets.LYSANDER_MESH_TOKEN }}
-        run: |
-          silos=(
-            "JHammerZ/jhammerz.github.io"
-            "JHammerZ/lysander-core"
-            "JHammerZ/Sovereign-JHam-Core"
-            "JHammerZ/Lysander.github.io"
-            "JHammerZ/JHammerZ"
-            "JHammerZ/Lysander-CDM"
-            "JHammerZ/sovereign-os-engine"
-            "JHammerZ/lysander-vault-hxp6zxa"
-            "JHammerZ/lysander-nexus"
-            "JHammerZ/lysander-hardware-rd"
-            "JHammerZ/lysander-framework"
-            "Lysander-3/jhammerz.github.io"
-            "JHammerZ/K-Root"
-          )
-          
-          git add .
-          git commit -m "⚡ Lysander Engine: Autonomous Repair & Global Mesh Sync [Auto]" || echo "No local modifications to commit."
-
-          for silo in "${silos[@]}"; do
-            short_name=$(echo "$silo" | cut -d'/' -f2)
-            echo "[🚀] Forcing propagation to Silo Node: $short_name"
-            git remote rm "$short_name" 2>/dev/null || true
-            git remote add "$short_name" "https://x-access-token:${MESH_TOKEN}@jhammerz.github.io" 2>/dev/null || true
-            git push "$short_name" main --force || echo "[⚠️] Warning: Silo $short_name branch protection or layout blocked direct push."
-          done
-
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add llms.txt
+          git commit -m "bot: update llms.txt" || echo "No changes"
+          git push
