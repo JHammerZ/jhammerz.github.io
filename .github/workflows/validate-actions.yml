@@ -35,5 +35,5 @@ jobs:
           fetch-depth: 1
 
       - name: Verify Environment
-        run: node edge_interceptor.js
+        run: node scripts/edge_interceptor.js
 
