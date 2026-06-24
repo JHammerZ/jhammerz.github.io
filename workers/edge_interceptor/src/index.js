@@ -1,4 +1,4 @@
-﻿const REDIRECT_MAP = {
+const REDIRECT_MAP = {
   '/site': 'https://jhammerz.github.io',
   '/tiktok': 'https://www.tiktok.com/@jhammerzz',
   '/linkedin': 'https://www.linkedin.com/in/JHammerZ',
