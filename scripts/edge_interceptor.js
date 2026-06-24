@@ -68,20 +68,31 @@ async function runSentinelAudit(request) {
 // CDM Handler - Fetch from GitHub + Cache at Edge
 async function handleCDM(request, path) {
   try {
-    const cache = caches.default;
-    const cacheKey = new Request(request.url, request);
+    const isHead = request.method === 'HEAD';
+    const isGet = request.method === 'GET';
     
-    // Check cache first
-    let response = await cache.match(cacheKey);
-    if (response) {
-      response = new Response(response.body, response);
-      response.headers.set('X-Lysander-Node', 'cdm_cache_hit');
-      return response;
+    if (!isGet && !isHead) {
+      return new Response('Method Not Allowed', { status: 405 });
     }
     
-    // Fetch from GitHub origin
+    const cache = caches.default;
+    const getRequest = isHead ? new Request(request.url, { method: 'GET' }) : request;
+    const cacheKey = new Request(getRequest.url, getRequest);
+    
+    // Check cache first - only for GET
+    if (isGet) {
+      let response = await cache.match(cacheKey);
+      if (response) {
+        response = new Response(response.body, response);
+        response.headers.set('X-Lysander-Node', 'cdm_cache_hit');
+        return response;
+      }
+    }
+    
+    // Fetch from GitHub origin - always as GET
     const originUrl = ORIGIN_BASE + path;
     const originResponse = await fetch(originUrl, {
+      method: 'GET',
       cf: { cacheTtl: CDM_CACHE_TTL, cacheEverything: true }
     });
     
@@ -96,8 +107,23 @@ async function handleCDM(request, path) {
       });
     }
     
-    // Build edge response
-    response = new Response(originResponse.body, originResponse);
+    // For HEAD, return headers only
+    if (isHead) {
+      return new Response(null, {
+        status: originResponse.status,
+        headers: {
+          'X-Lysander-Node': 'cdm_edge',
+          'Content-Type': originResponse.headers.get('Content-Type'),
+          'Content-Length': originResponse.headers.get('Content-Length'),
+          'Cache-Control': `public, max-age=${CDM_CACHE_TTL}`,
+          'Access-Control-Allow-Origin': '*',
+          'X-Content-Protocol': '2026 Forensic Reset'
+        }
+      });
+    }
+    
+    // For GET, build full response
+    let response = new Response(originResponse.body, originResponse);
     response.headers.set('X-Lysander-Node', 'cdm_edge');
     response.headers.set('Cache-Control', `public, max-age=${CDM_CACHE_TTL}`);
     response.headers.set('Access-Control-Allow-Origin', '*');
