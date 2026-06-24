@@ -1,0 +1,48 @@
+﻿name: Janus Pulse
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read config
+        id: cfg
+        run: echo "data=$(cat config.json)" >> $GITHUB_OUTPUT
+
+      - name: Post to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -X POST "$DISCORD_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "{\"embeds\":[{\"title\":\"Janus Pulse\",\"description\":\"H-FID:${{ github.sha }}\",\"color\":5814783,\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}]}"
+
+      - name: Post to GitHub
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          CONTENT=$(echo "Pulse $(date -u) SHA:${{ github.sha }}" | base64 -w 0)
+          curl -X PUT \
+            -H "Authorization: Bearer $GH_PAT" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/JHammerZ/jhammerz.github.io/contents/pulse/latest.txt \
+            -d "{\"message\":\"Janus pulse\",\"content\":\"$CONTENT\",\"branch\":\"main\"}"
+
+      - name: Post to LinkedIn
+        env:
+          LINKEDIN_TOKEN: ${{ secrets.LINKEDIN_TOKEN }}
+          LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
+        run: |
+          curl -X POST https://api.linkedin.com/v2/ugcPosts \
+            -H "Authorization: Bearer $LINKEDIN_TOKEN" \
+            -H "X-Restli-Protocol-Version: 2.0.0" \
+            -H "Content-Type: application/json" \
+            -d "{\"author\":\"$LINKEDIN_PERSON_URN\",\"lifecycleState\":\"PUBLISHED\",\"specificContent\":{\"com.linkedin.ugc.ShareContent\":{\"shareCommentary\":{\"text\":\"Janus H-FID:${{ github.sha }}\"},\"shareMediaCategory\":\"NONE\"}},\"visibility\":{\"com.linkedin.ugc.MemberNetworkVisibility\":\"PUBLIC\"}}"
