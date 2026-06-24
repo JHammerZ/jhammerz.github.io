@@ -67,43 +67,55 @@ async function runSentinelAudit(request) {
 
 // CDM Handler - Fetch from GitHub + Cache at Edge
 async function handleCDM(request, path) {
-  const cache = caches.default;
-  const cacheKey = new Request(request.url, request);
-  
-  // Check cache first
-  let response = await cache.match(cacheKey);
-  if (response) {
-    response = new Response(response.body, response);
-    response.headers.set('X-Lysander-Node', 'cdm_cache_hit');
+  try {
+    const cache = caches.default;
+    const cacheKey = new Request(request.url, request);
+    
+    // Check cache first
+    let response = await cache.match(cacheKey);
+    if (response) {
+      response = new Response(response.body, response);
+      response.headers.set('X-Lysander-Node', 'cdm_cache_hit');
+      return response;
+    }
+    
+    // Fetch from GitHub origin
+    const originUrl = ORIGIN_BASE + path;
+    const originResponse = await fetch(originUrl, {
+      cf: { cacheTtl: CDM_CACHE_TTL, cacheEverything: true }
+    });
+    
+    if (!originResponse.ok) {
+      return new Response(`Origin fetch failed: ${originResponse.status}`, {
+        status: originResponse.status,
+        headers: { 
+          "X-Lysander-Node": "cdm_miss",
+          "X-Origin-Status": originResponse.status.toString(),
+          "X-Origin-URL": originUrl
+        }
+      });
+    }
+    
+    // Build edge response
+    response = new Response(originResponse.body, originResponse);
+    response.headers.set('X-Lysander-Node', 'cdm_edge');
+    response.headers.set('Cache-Control', `public, max-age=${CDM_CACHE_TTL}`);
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('X-Content-Protocol', '2026 Forensic Reset');
+    
+    // Store in cache
+    await cache.put(cacheKey, response.clone());
     return response;
-  }
-  
-  // Fetch from GitHub origin
-  const originUrl = ORIGIN_BASE + path;
-  const originResponse = await fetch(originUrl, {
-    cf: { cacheTtl: CDM_CACHE_TTL, cacheEverything: true }
-  });
-  
-  if (!originResponse.ok) {
-    return new Response("Origin fetch failed", {
-      status: 404,
+    
+  } catch (err) {
+    return new Response(`CDM Error: ${err.message}`, {
+      status: 502,
       headers: { 
-        "X-Lysander-Node": "cdm_miss",
-        "X-Origin-Status": originResponse.status.toString()
+        "X-Lysander-Node": "cdm_error",
+        "X-Error-Detail": err.message
       }
     });
   }
-  
-  // Build edge response
-  response = new Response(originResponse.body, originResponse);
-  response.headers.set('X-Lysander-Node', 'cdm_edge');
-  response.headers.set('Cache-Control', `public, max-age=${CDM_CACHE_TTL}`);
-  response.headers.set('Access-Control-Allow-Origin', '*');
-  response.headers.set('X-Content-Protocol', '2026 Forensic Reset');
-  
-  // Store in cache
-  await cache.put(cacheKey, response.clone());
-  return response;
 }
 
 export default {
