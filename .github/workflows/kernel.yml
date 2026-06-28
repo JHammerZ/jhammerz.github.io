@@ -6,14 +6,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - name: Build
+        run: nix --extra-experimental-features "nix-command flakes" build.#default --print-build-logs
+      - name: Hash
         run: |
-          sh <(curl -L https://nixos.org/nix/install) --no-daemon
-          echo "/home/runner/.nix-profile/bin" >> $GITHUB_PATH
-      - name: Enable flakes
-        run: |
-          mkdir -p ~/.config/nix
-          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-      - run: nix build.#default --print-build-logs
-      - run: |
-          nix hash path result
+          nix --extra-experimental-features "nix-command flakes" hash path result
           cat result/fingerprint
