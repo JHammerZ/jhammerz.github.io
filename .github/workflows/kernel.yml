@@ -4,19 +4,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout exact commit
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v27
-
-      - name: Build as root
-        run: sudo nix build.#default --print-build-logs
-
-      - name: Print fingerprint
-        run: |
+      - uses: cachix/install-nix-action@v27
+      - run: nix build.#default --print-build-logs
+      - run: |
           nix hash path result
           cat result/fingerprint
