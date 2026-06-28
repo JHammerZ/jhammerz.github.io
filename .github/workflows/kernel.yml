@@ -9,6 +9,9 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
       - uses: cachix/install-nix-action@v27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
       - run: nix build.#default --print-build-logs
       - run: |
           nix hash path result
