@@ -15,7 +15,6 @@
         mkdir -p $out
         echo "KERNEL_VECTOR1_LOCKED" > $out/fingerprint
         echo "Revision: ${self.rev or "dirty"}" >> $out/fingerprint
-        echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $out/fingerprint
       '';
     };
   };
