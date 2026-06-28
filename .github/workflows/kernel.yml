@@ -1,4 +1,3 @@
-
 name: KERNEL VECTOR1
 on: [push]
 jobs:
@@ -6,14 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-      - uses: cachix/install-nix-action@v27
-        with:
-          nix_path: nixpkgs=channel:nixos-24.05
-          extra_nix_config: |
-            experimental-features = nix-command flakes
+      - name: Install Nix
+        run: |
+          sh <(curl -L https://nixos.org/nix/install) --no-daemon
+          echo "/home/runner/.nix-profile/bin" >> $GITHUB_PATH
+      - name: Enable flakes
+        run: |
+          mkdir -p ~/.config/nix
+          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
       - run: nix build.#default --print-build-logs
       - run: |
           nix hash path result
