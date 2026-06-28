@@ -1,21 +1,22 @@
-name: KERNEL_VECTOR1
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+name: KERNEL VECTOR1
+on: [push]
 jobs:
-  hermetic-root-build:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
+          fetch-depth: 0
+
       - name: Install Nix
         uses: cachix/install-nix-action@v27
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
-      - name: Hermetic build as root
+
+      - name: Build as root
+        run: sudo nix build.#default --print-build-logs
+
+      - name: Print fingerprint
         run: |
-          sudo /nix/var/nix/profiles/default/bin/nix build .#default --print-build-logs
-          echo "H-FID: $(sudo /nix/var/nix/profiles/default/bin/nix hash path result)"
+          nix hash path result
           cat result/fingerprint
