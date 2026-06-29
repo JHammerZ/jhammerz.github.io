@@ -1,4 +1,4 @@
-﻿name: Agentic Sync
+name: Agentic Sync
 on:
   schedule:
     - cron: '0 */6 * * *'
@@ -11,22 +11,29 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for rebase
+      
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      
       - name: Install deps
         run: pip install aiohttp
+      
       - name: Run sync
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SOURCE_FEED_URL: ${{ secrets.SOURCE_FEED_URL }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python scripts/sync_nodes.py
-      - name: Commit changes
+      
+      - name: Commit and push changes
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add data/last_seen.txt
-          git commit -m "bot: update last_seen.txt" || echo "No changes"
+          git diff --staged --quiet || git commit -m "bot: update last_seen.txt"
+          git pull --rebase origin main
           git push
