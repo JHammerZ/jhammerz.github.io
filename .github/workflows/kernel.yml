@@ -8,7 +8,8 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
       - name: Build
-        run: nix --extra-experimental-features "nix-command flakes" build.#default --print-build-logs
+        run: |
+          nix --extra-experimental-features "nix-command flakes" build.#default --print-build-logs
       - name: Hash
         run: |
           nix --extra-experimental-features "nix-command flakes" hash path./result
