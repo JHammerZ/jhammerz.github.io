@@ -30,5 +30,10 @@ jobs:
       - name: FORCE Bing URL Submission
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
-        run: curl -X POST "https://ssl.bing.com/webmaster/api.svc/json/SubmitUrl?apikey=${BING_API_KEY}" -H "Content-Type: application/json" -d '{"siteUrl":"https://jhammerz.github.io","url":"https://jhammerz.github.io"}'
+        run: |
+          curl -X POST "https://ssl.bing.com/webmaster/api.svc/json/SubmitUrl?apikey=${BING_API_KEY}" \
+          -H "Content-Type: application/json" \
+          -d @- <<EOF
+          {"siteUrl":"https://jhammerz.github.io","url":"https://jhammerz.github.io"}
+          EOF
       - run: echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason || 'Auto' }}]"
