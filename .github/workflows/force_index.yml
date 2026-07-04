@@ -16,8 +16,14 @@ concurrency:
 
 on:
   workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Force Index Reason'
+        required: false
+        default: 'Manual Sovereign Trigger'
+        type: string
   push:
-    branches: [ main ]
+    branches: [main]
   schedule:
     - cron: '0 */12 *'
 
@@ -27,19 +33,24 @@ jobs:
     steps:
       - name: Checkout Sovereign Code
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+
       - name: Install Dependencies
         run: pip install google-auth requests
+
       - name: FORCE Google Indexing API
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
         run: python index_site.py
+
       - name: FORCE Bing URL Submission
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
         run: curl -X POST "https://ssl.bing.com/webmaster/api.svc/json/SubmitUrl?apikey=${BING_API_KEY}" -H "Content-Type: application/json" -d "{\"siteUrl\":\"https://jhammerz.github.io\",\"url\":\"https://jhammerz.github.io\"}"
+
       - name: STATUS
-        run: echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED]"
+        run: echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason || 'Auto' }}]"
