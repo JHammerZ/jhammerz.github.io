@@ -36,4 +36,4 @@ jobs:
           -d @- <<EOF
           {"siteUrl":"https://jhammerz.github.io","url":"https://jhammerz.github.io"}
           EOF
-      - run: echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason || 'Auto' }}]"
+      - run: echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason }}]"
