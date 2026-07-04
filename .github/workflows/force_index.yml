@@ -3,6 +3,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 on:
+  schedule:
+    - cron: '0 */6 *' # Recursive Autonomy: Runs every 6 hours
   workflow_dispatch:
     inputs:
       reason:
@@ -12,8 +14,6 @@ on:
         type: string
   push:
     branches: 
-  schedule:
-    - cron: '0 */12 * *'
 jobs:
   force-index:
     runs-on: ubuntu-latest
