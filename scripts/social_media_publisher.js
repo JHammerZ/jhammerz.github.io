@@ -198,16 +198,10 @@ export async function publishToAllNodes(payload = {}) {
 
 // Allow direct execution: node scripts/social_media_publisher.js
 if (import.meta.url === `file://${process.argv[1]}`) {
-  publishToAllNodes({
-    title: process.env.COMMIT_TITLE || 'Manual Sovereign Pulse'
-  }).then(res => {
+  publishToAllNodes({ title: process.env.COMMIT_TITLE || 'Manual Sovereign Pulse' }).then(res => {
     console.log('--- PUBLISH COMPLETE ---');
     console.log(JSON.stringify(res, null, 2));
-
-    // Only fail workflow if FAIL_ON_ERROR=true
-    const shouldFail = process.env.FAIL_ON_ERROR === 'true';
     const hasErrors = res.results.some(r => r.status >= 400);
-
-    process.exit(shouldFail && hasErrors? 1 : 0);
+    process.exit(hasErrors? 1 : 0);
   });
 }
