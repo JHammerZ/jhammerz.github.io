@@ -1,10 +1,13 @@
-name: Agentic Sovereign Sync
+name: AGENTIC_SYNC
+
 on:
-  schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
   workflow_dispatch:
   push:
-    branches: [ main ]  # Also run on every push to main
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'social_manifest.json'
+      - 'index_site.py'
 
 jobs:
   sync:
@@ -12,122 +15,39 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Need full history for rebase
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '24'
+          cache: 'npm'
 
-      - name: Setup Python
+      - name: Setup Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
-      - name: Install Python deps
-        run: pip install aiohttp
-
-      - name: Install Node deps
+      - name: Install dependencies
         run: |
-          if [ ! -f package.json ]; then echo '{"type":"module"}' > package.json; fi
-          npm install
+          npm ci || npm install
+          pip install requests google-auth google-auth-oauthlib google-auth-httplib2
 
-      - name: Run Python Node Sync
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          SOURCE_FEED_URL: ${{ secrets.SOURCE_FEED_URL }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: python scripts/sync_nodes.py
-
-      - name: Execute Full Sovereign Sequence
-        run: node logic/swr_logic.js
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-
-      - name: Human-Fidelity (H-Fi) Omnichannel Forensic Scan
-        run: |
-          declare -a nodes=(
-            "https://jhammerz.github.io"
-            "https://www.tiktok.com/@jhammerzz"
-            "https://www.linkedin.com/in/JHammerZ"
-            "https://www.youtube.com/JHammerZ"
-            "https://www.instagram.com/jhammerzz"
-            "https://www.facebook.com/profile.php?id=586972934504859"
-            "https://jhammerz.carrd.co/"
-            "https://music.amazon.com/artists/B0SGL7W/jhammerz"
-            "https://music.apple.com/us/artist/jhammerz/1845798346"
-            "https://music.bandlab.com/artist/781334284"
-            "https://www.xiaohongshu.com/user/profile/JHammerZ"
-            "https://github.com/JHammerZ/jhammerz.github.io"
-            "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/"
-            "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
-          )
-          mkdir -p forensics
-          for node in "${nodes[@]}"; do
-            if grep -q "$node" index.html || grep -q "$node" ai-context.json || grep -q "$node" llms.txt; then
-              echo "✔️ Linked: $node"
-            else
-              echo "⚠️ FORENSIC ALERT: Missing trace for route -> $node" >> forensics/sentinel.log
-            fi
-          done
-
-      - name: Publish H-FID State to Social Mesh
-        run: node scripts/social_media_publisher.js
+      - name: Run social media publisher
         env:
           FB_API_KEY: ${{ secrets.FB_API_KEY }}
-          ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
-          LYSANDER_HUB_TOKEN: ${{ secrets.LYSANDER_HUB_TOKEN }}
+          THREADS_API_KEY: ${{ secrets.THREADS_API_KEY }}
+          LINKEDIN_API_KEY: ${{ secrets.LINKEDIN_API_KEY }}
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-          TIKTOK: ${{ secrets.TIKTOK }}
+          LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
+          LYSANDER_HUB_TOKEN: ${{ secrets.LYSANDER_HUB_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}
           COMMIT_TITLE: ${{ github.event.head_commit.message }}
+        run: node scripts/social_media_publisher.js
+        continue-on-error: true
 
-      - name: Push to Google Indexing API
+      - name: Run indexing
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
-        run: |
-          printf '%s' "$GOOGLE_INDEXING_API_JSON" > sa.json
-          npm install googleapis
-          node -e "
-            const {google} = require('googleapis');
-            const fs = require('fs');
-            const auth = new google.auth.GoogleAuth({
-              keyFile: 'sa.json', 
-              scopes: ['https://www.googleapis.com/auth/indexing']
-            });
-            const indexing = google.indexing({version: 'v3', auth});
-            indexing.urlNotifications.publish({
-              requestBody: { url: 'https://jhammerz.github.io', type: 'URL_UPDATED' }
-            }).then(res => {
-              console.log('Google Indexing:', res.status, res.data);
-            }).catch(err => {
-              console.error('Indexing API Error:', err.message);
-              process.exit(1);
-            }).finally(() => {
-              try { fs.unlinkSync('sa.json'); } catch(e) {}
-            });
-          "
-
-      - name: Commit Forensic Audit Trail
-        run: |
-          echo "-----------------------------------"
-          echo "🚨 SOVEREIGN AUDIT TELEMETRY LOGGED"
-          echo "-----------------------------------"
-          if [ -f forensics/sentinel.log ]; then tail -n 50 forensics/sentinel.log; fi
-          if [ -f forensics/social_audit.jsonl ]; then tail -n 10 forensics/social_audit.jsonl; fi
-          echo "-----------------------------------"
-
-      - name: Commit and push changes
-        run: |
-          git config user.name "Janus via Lysander"
-          git config user.email "janus@lysander.dev"
-          git add -A
-          if ! git diff --cached --quiet; then
-            git commit -m "bot: sync nodes + H-FID propagation audit"
-            git pull --rebase origin main
-            git push
-          else
-            echo "No changes to commit"
-          fi
+        run: python index_site.py
