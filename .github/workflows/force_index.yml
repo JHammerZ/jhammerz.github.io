@@ -15,19 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-
       - name: Install deps
         run: pip install google-auth requests
-
       - name: FORCE Google Indexing API
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
         run: python index_site.py
-
       - name: FORCE Bing URL Submission
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
