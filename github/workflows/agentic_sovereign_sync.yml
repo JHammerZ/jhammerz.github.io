@@ -1,7 +1,134 @@
-- name: Push to Google Indexing API
-  env:
-    GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
-  run: |
-    printf '%s' "$GOOGLE_INDEXING_API_JSON" > sa.json
-    npm install googleapis
-    node -e "..."
+name: Agentic Sovereign Sync
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python deps
+        run: pip install aiohttp
+
+      - name: Install Node deps
+        run: |
+          if [ ! -f package.json ]; then echo '{"type":"module"}' > package.json; fi
+          npm install
+
+      - name: Run Python Node Sync
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SOURCE_FEED_URL: ${{ secrets.SOURCE_FEED_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python scripts/sync_nodes.py
+
+      - name: Execute Full Sovereign Sequence
+        run: node logic/swr_logic.js
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Human-Fidelity (H-Fi) Omnichannel Forensic Scan
+        run: |
+          declare -a nodes=(
+            "https://jhammerz.github.io"
+            "https://www.tiktok.com/@jhammerzz"
+            "https://www.linkedin.com/in/JHammerZ"
+            "https://www.youtube.com/JHammerZ"
+            "https://www.instagram.com/jhammerzz"
+            "https://www.facebook.com/profile.php?id=586972934504859"
+            "https://jhammerz.carrd.co/"
+            "https://music.amazon.com/artists/B0SGL7W/jhammerz"
+            "https://music.apple.com/us/artist/jhammerz/1845798346"
+            "https://music.bandlab.com/artist/781334284"
+            "https://www.xiaohongshu.com/user/profile/JHammerZ"
+            "https://github.com/JHammerZ/jhammerz.github.io"
+            "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/"
+            "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
+          )
+          mkdir -p forensics
+          for node in "${nodes[@]}"; do
+            if grep -q "$node" index.html || grep -q "$node" ai-context.json || grep -q "$node" llms.txt; then
+              echo "✔️ Linked: $node"
+            else
+              echo "⚠️ FORENSIC ALERT: Missing trace for route -> $node" >> forensics/sentinel.log
+            fi
+          done
+
+      - name: Publish H-FID State to Social Mesh
+        if: false  # Disabled: OAuth tokens expired - remove this line after refreshing secrets
+        run: node scripts/social_media_publisher.js
+        env:
+          FB_API_KEY: ${{ secrets.FB_API_KEY }}
+          ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
+          LYSANDER_HUB_TOKEN: ${{ secrets.LYSANDER_HUB_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          TIKTOK: ${{ secrets.TIKTOK }}
+          GITHUB_SHA: ${{ github.sha }}
+          COMMIT_TITLE: ${{ github.event.head_commit.message }}
+
+      - name: Push to Google Indexing API
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: |
+          printf '%s' "$GOOGLE_INDEXING_API_JSON" > sa.json
+          npm install googleapis
+          node -e "
+            const {google} = require('googleapis');
+            const fs = require('fs');
+            const auth = new google.auth.GoogleAuth({
+              keyFile: 'sa.json',
+              scopes: ['https://www.googleapis.com/auth/indexing']
+            });
+            const indexing = google.indexing({version: 'v3', auth});
+            indexing.urlNotifications.publish({
+              requestBody: { url: 'https://jhammerz.github.io', type: 'URL_UPDATED' }
+            }).then(res => {
+              console.log('Google Indexing:', res.status, res.data);
+            }).catch(err => {
+              console.error('Indexing API Error:', err.message);
+              process.exit(1);
+            }).finally(() => {
+              try { fs.unlinkSync('sa.json'); } catch(e) {}
+            });
+          "
+
+      - name: Commit Forensic Audit Trail
+        run: |
+          echo "-----------------------------------"
+          echo "🚨 SOVEREIGN AUDIT TELEMETRY LOGGED"
+          echo "-----------------------------------"
+          if [ -f forensics/sentinel.log ]; then tail -n 50 forensics/sentinel.log; fi
+          if [ -f forensics/social_audit.jsonl ]; then tail -n 10 forensics/social_audit.jsonl; fi
+          echo "-----------------------------------"
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "Janus via Lysander"
+          git config user.email "janus@lysander.dev"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "bot: sync nodes + H-FID propagation audit"
+            git pull --rebase origin main
+            git push
+          else
+            echo "No changes to commit"
+          fi
