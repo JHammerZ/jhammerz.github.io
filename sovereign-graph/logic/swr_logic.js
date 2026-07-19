@@ -127,22 +127,22 @@ function writeAureliusLog(hfid,github,indexing,signal) {
 }
 
 async function runSovereignSequence() {
-  console.log('\n╔══════════════════════════════════════════════════════════╗');
+  console.log('\n╔══════════════════════════════════════════════════════════════╗');
   console.log('║  🏛️  SWR LOGIC — PRODUCTION MODE | H-FID v1.0.3          ║');
   console.log('║  Pilot: Manus AI | Token: GPT | Root Authority           ║');
-  console.log('╚══════════════════════════════════════════════════════════╝\n');
+  console.log('╚══════════════════════════════════════════════════════════════╝');
   try {
     const hfid=await runHFIDScan(); console.log('');
     const github=await runGitHubAPIVerification(); console.log('');
     const indexing=await runSitemapPing(); console.log('');
     const signal=runInfiniteXSignal(hfid.results); console.log('');
     const audit=writeAureliusLog(hfid,github,indexing,signal);
-    console.log(`\n╔══════════════════════════════════════════════════════════╗`);
+    console.log(`\n╔══════════════════════════════════════════════════════════════╗`);
     console.log(`║  VERDICT: ${audit.verdict.padEnd(47)}║`);
     console.log(`║  H-FID: ${String(hfid.score+'%').padEnd(50)}║`);
     console.log(`║  CBP: ${signal.status.padEnd(52)}║`);
     console.log(`║  Mode: PRODUCTION | Zero-Gen: REJECTED                   ║`);
-    console.log(`╚══════════════════════════════════════════════════════════╝\n`);
+    console.log(`╚══════════════════════════════════════════════════════════════╝`);
     process.exit(audit.verdict==='SOVEREIGN_VERIFIED'?0:1);
   } catch(err) { log('ERROR',`❌ ${err.message}`); process.exit(1); }
 }
