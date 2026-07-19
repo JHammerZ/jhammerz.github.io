@@ -1,10 +1,10 @@
 name: Agentic Sovereign Sync
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: '0 */6 * * *' # Every 6 hours
   workflow_dispatch:
   push:
-    branches: [ main ]  # Also run on every push to main
+    branches: [ main ] # Also run on every push to main
 
 jobs:
   sync:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Need full history for rebase
+          fetch-depth: 0 # Need full history for rebase
 
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
@@ -31,7 +31,7 @@ jobs:
 
       - name: Install Node deps
         run: |
-          if [ ! -f package.json ]; then echo '{"type":"module"}' > package.json; fi
+          if [! -f package.json ]; then echo '{"type":"module"}' > package.json; fi
           npm install
 
       - name: Run Python Node Sync
@@ -76,7 +76,7 @@ jobs:
       - name: Publish H-FID State to Social Mesh
         run: node scripts/social_media_publisher.js
         env:
-          AURELIUS_SOVEREIGN_TOKEN: ${{ secrets.AURELIUS_SOVEREIGN_TOKEN }}
+          FB_API_KEY: ${{ secrets.FB_API_KEY }}
           ARCHITECT_ACCESS_KEY: ${{ secrets.ARCHITECT_ACCESS_KEY }}
           LYSANDER_HUB_TOKEN: ${{ secrets.LYSANDER_HUB_TOKEN }}
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
