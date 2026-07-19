@@ -1,10 +1,10 @@
 name: Agentic Sovereign Sync
 on:
   schedule:
-    - cron: '0 */6 * * *' # Every 6 hours
+    - cron: '0 */6 * * *'  # Every 6 hours
   workflow_dispatch:
   push:
-    branches: [ main ] # Also run on every push to main
+    branches: [ main ]  # Also run on every push to main
 
 jobs:
   sync:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Need full history for rebase
+          fetch-depth: 0  # Need full history for rebase
 
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
@@ -31,7 +31,7 @@ jobs:
 
       - name: Install Node deps
         run: |
-          if [! -f package.json ]; then echo '{"type":"module"}' > package.json; fi
+          if [ ! -f package.json ]; then echo '{"type":"module"}' > package.json; fi
           npm install
 
       - name: Run Python Node Sync
@@ -89,13 +89,20 @@ jobs:
           echo '${{ secrets.GOOGLE_INDEXING_API_JSON }}' > sa.json
           npm install googleapis
           node -e "
-          const {google} = require('googleapis');
-          const auth = new google.auth.GoogleAuth({keyFile: 'sa.json', scopes: ['https://www.googleapis.com/auth/indexing']});
-          const indexing = google.indexing({version: 'v3', auth});
-          indexing.urlNotifications.publish({
-            requestBody: { url: 'https://jhammerz.github.io', type: 'URL_UPDATED' }
-          }).then(res => console.log('Google Indexing:', res.status)).catch(console.error);
-          require('fs').unlinkSync('sa.json');
+            const {google} = require('googleapis');
+            const fs = require('fs');
+            const auth = new google.auth.GoogleAuth({keyFile: 'sa.json', scopes: ['https://www.googleapis.com/auth/indexing']});
+            const indexing = google.indexing({version: 'v3', auth});
+            indexing.urlNotifications.publish({
+              requestBody: { url: 'https://jhammerz.github.io', type: 'URL_UPDATED' }
+            }).then(res => {
+              console.log('Google Indexing:', res.status, res.data);
+            }).catch(err => {
+              console.error('Indexing API Error:', err.message);
+              process.exit(1);
+            }).finally(() => {
+              try { fs.unlinkSync('sa.json'); } catch(e) {}
+            });
           "
 
       - name: Commit Forensic Audit Trail
@@ -111,7 +118,11 @@ jobs:
         run: |
           git config user.name "Janus via Lysander"
           git config user.email "janus@lysander.dev"
-          git add data/last_seen.txt forensics/
-          git diff --staged --quiet || git commit -m "bot: sync nodes + H-FID propagation audit"
-          git pull --rebase origin main
-          git push
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "bot: sync nodes + H-FID propagation audit"
+            git pull --rebase origin main
+            git push
+          else
+            echo "No changes to commit"
+          fi
