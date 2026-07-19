@@ -44,4 +44,5 @@ jobs:
             -d "{\"siteUrl\":\"https://jhammerz.github.io\",\"url\":\"https://jhammerz.github.io\"}"
 
       - name: Log Status
-        run: echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason }}]"
+        run: |
+          echo 'STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason }}]'
