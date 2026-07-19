@@ -85,13 +85,18 @@ jobs:
           COMMIT_TITLE: ${{ github.event.head_commit.message }}
 
       - name: Push to Google Indexing API
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
         run: |
-          echo '${{ secrets.GOOGLE_INDEXING_API_JSON }}' > sa.json
+          printf '%s' "$GOOGLE_INDEXING_API_JSON" > sa.json
           npm install googleapis
           node -e "
             const {google} = require('googleapis');
             const fs = require('fs');
-            const auth = new google.auth.GoogleAuth({keyFile: 'sa.json', scopes: ['https://www.googleapis.com/auth/indexing']});
+            const auth = new google.auth.GoogleAuth({
+              keyFile: 'sa.json', 
+              scopes: ['https://www.googleapis.com/auth/indexing']
+            });
             const indexing = google.indexing({version: 'v3', auth});
             indexing.urlNotifications.publish({
               requestBody: { url: 'https://jhammerz.github.io', type: 'URL_UPDATED' }
