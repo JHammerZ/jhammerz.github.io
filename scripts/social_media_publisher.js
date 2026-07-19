@@ -139,17 +139,15 @@ export async function publishToAllNodes(payload = {}) {
         'head_commit': process.env.GITHUB_SHA || 'unknown',
         'doi': manifest.doi,
         'hfid_standard': manifest.hfid_standard,
-       ...payload
+      ...payload
     };
 
     if (manifest.cross_post_rules.require_signature) {
         hfid_packet.signature = signPayload(hfid_packet);
     }
 
-    // Skip gateway POST since GitHub Pages returns 405
     const auditRes = { status: 200, skipped: 'github_pages_no_post' };
 
-    // Fire to all active platforms
     const results = [];
     for (const entity of manifest.entities.filter(e => e.active)) {
         const r = await postToEntity(entity, hfid_packet);
@@ -159,12 +157,13 @@ export async function publishToAllNodes(payload = {}) {
             console.log(`✔️ ${entity.platform}: ${r.status} ${r.id? 'id:' + r.id : ''}`);
         } else if (r.status === 0) {
             console.log(`⏭️ ${entity.platform}: skipped - ${r.error}`);
+        } else if (r.status === 401 || r.status === 403) {
+            console.log(`⏭️ ${entity.platform}: skipped - Auth failed`);
         } else {
             console.log(`❌ ${entity.platform}: ${r.status} ${r.error || ''}`);
         }
     }
 
-    // Write forensic log
     const logDir = path.dirname(manifest.cross_post_rules.audit_log);
     if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
     const logLine = JSON.stringify({
@@ -185,15 +184,17 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         console.log('--- PUBLISH COMPLETE ---');
         console.log(JSON.stringify(res, null, 2));
 
-        // Success if: at least 1 platform posted 2xx, OR all platforms were skipped
+        // Exit 0 if: any 2xx success OR all platforms were skipped/missing auth
         const hasSuccess = res.results.some(r => r.status >= 200 && r.status < 300);
-        const allSkipped = res.results.every(r => r.status === 0);
+        const allNonFatal = res.results.every(r =>
+            r.status === 0 || r.status === 401 || r.status === 403
+        );
 
-        if (hasSuccess || allSkipped) {
-            process.exit(0); // Pass if something worked or nothing to do
+        if (hasSuccess || allNonFatal) {
+            process.exit(0); // Don't fail the workflow for bad/expired tokens
         } else {
-            console.error('FATAL: All configured platforms failed');
-            process.exit(1); // Fail only if you had tokens but every call blew up
+            console.error('FATAL: All configured platforms failed with server errors');
+            process.exit(1);
         }
     });
 }
