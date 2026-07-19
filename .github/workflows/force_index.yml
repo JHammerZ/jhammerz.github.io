@@ -2,6 +2,7 @@ name: FORCE_INDEX_NODES
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 on:
   workflow_dispatch:
     inputs:
@@ -11,27 +12,35 @@ on:
         default: 'Manual Sovereign Trigger'
         type: string
   push:
-    branches: 
+    branches: [ main ]
+
 jobs:
   force-index:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - run: pip install google-auth requests
+
+      - name: Install deps
+        run: pip install google-auth requests
+
       - name: FORCE Google Indexing API
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
-        run: python index_site.py
+        run: |
+          printf '%s' "$GOOGLE_INDEXING_API_JSON" > sa.json
+          python index_site.py
+          rm -f sa.json
+
       - name: FORCE Bing URL Submission
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
         run: |
           curl -X POST "https://ssl.bing.com/webmaster/api.svc/json/SubmitUrl?apikey=${BING_API_KEY}" \
           -H "Content-Type: application/json" \
-          -d @- <<EOF
-          {"siteUrl":"https://jhammerz.github.io","url":"https://jhammerz.github.io"}
-          EOF
-      - run: 'echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason }}]"'
+          -d '{"siteUrl":"https://jhammerz.github.io","url":"https://jhammerz.github.io"}'
+
+      - run: echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason }}]"
