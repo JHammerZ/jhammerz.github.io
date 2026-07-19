@@ -1,0 +1,47 @@
+{
+  "worm_id": "LYSANDER_3_0_SOCIAL_MANIFEST",
+  "version": "1.0.0",
+  "doi": "10.5281/zenodo.20778079",
+  "hfid_standard": "v1.1.0",
+  "entities": [
+    {
+      "platform": "facebook",
+      "handle": "JHammerZ",
+      "page_id": "{{secrets.FB_PAGE_ID}}",
+      "endpoint": "https://graph.facebook.com/v20.0/{page_id}/feed",
+      "post_template": "LYSANDER_3_0 :: {title} :: {doi}",
+      "active": true
+    },
+    {
+      "platform": "threads",
+      "handle": "@JHammerZ",
+      "endpoint": "https://graph.threads.net/v1.0/me/threads",
+      "post_template": "H-FID Update: {title}\n\nSource: https://jhammerz.github.io\nDOI: {doi}",
+      "active": true
+    },
+    {
+      "platform": "tiktok",
+      "handle": "@jhammerzz",
+      "endpoint": "https://open-api.tiktok.com/share/video/upload/",
+      "post_template": "Lysander Kernel Audit #{version}",
+      "active": false
+    },
+    {
+      "platform": "linkedin",
+      "handle": "JHammerZ",
+      "endpoint": "https://api.linkedin.com/v2/ugcPosts",
+      "active": true
+    },
+    {
+      "platform": "instagram",
+      "handle": "@jhammerzz", 
+      "endpoint": "https://graph.instagram.com/me/media",
+      "active": true
+    }
+  ],
+  "cross_post_rules": {
+    "frequency": "on_push_to_main",
+    "require_signature": true,
+    "fallback_to_draft": true
+  }
+}
