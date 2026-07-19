@@ -7,7 +7,6 @@
   "entities": [
     {
       "platform": "facebook",
-      "handle": "JHammerZ",
       "page_id_env": "FB_PAGE_ID",
       "endpoint": "https://graph.facebook.com/v20.0/{page_id}/feed",
       "token_env": "FB_API_KEY",
@@ -16,32 +15,24 @@
     },
     {
       "platform": "threads",
-      "handle": "@JHammerZ",
-      "endpoint": "https://graph.threads.net/v1.0/me/threads",
+      "user_id_env": "THREADS_USER_ID",
+      "endpoint": "https://graph.threads.net/v1.0/{user_id}/threads",
       "token_env": "FB_API_KEY",
-      "post_template": "H-FID Update: {title}\n\nSource: https://jhammerz.github.io\nDOI: {doi}",
-      "active": true
-    },
-    {
-      "platform": "tiktok",
-      "handle": "@jhammerzz",
-      "endpoint": "https://open-api.tiktok.com/v2/post/publish/video/init/",
-      "token_env": "TIKTOK",
-      "post_template": "Lysander Kernel Audit #{version}",
+      "post_template": "H-FID Update: {title}\n\nSource: {source}\nDOI: {doi}",
       "active": false
     },
     {
       "platform": "linkedin",
-      "handle": "JHammerZ",
+      "person_urn_env": "LINKEDIN_PERSON_URN",
       "endpoint": "https://api.linkedin.com/v2/ugcPosts",
       "token_env": "ARCHITECT_ACCESS_KEY",
       "post_template": "Lysander 3.0 Sovereign Audit: {title}\n\n{source}",
-      "active": true
+      "active": false
     },
     {
       "platform": "instagram",
-      "handle": "@jhammerzz",
-      "endpoint": "https://graph.instagram.com/me/media",
+      "user_id_env": "IG_USER_ID",
+      "endpoint": "https://graph.instagram.com/v20.0/{user_id}/media",
       "token_env": "FB_API_KEY",
       "post_template": "H-FID :: {title}",
       "active": false
