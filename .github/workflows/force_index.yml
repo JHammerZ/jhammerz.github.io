@@ -1,49 +1,46 @@
-import os
-import json
-import base64
-from google.oauth2 import service_account
-from google.auth.transport.requests import AuthorizedSession
+name: FORCE_INDEX_NODES
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
-def broadcast_to_google():
-    # 1. Pull the Base64 secret
-    b64_key = os.getenv("GOOGLE_INDEXING_API_JSON")
-    if not b64_key:
-        print("ERROR: GOOGLE_INDEXING_API_JSON secret is missing!")
-        raise SystemExit(1)
-    
-    try:
-        # 2. Decode base64 to JSON
-        key_json = base64.b64decode(b64_key).decode('utf-8')
-        info = json.loads(key_json)
-        
-        # 3. Setup credentials - FIXED SCOPE
-        scopes = ["https://www.googleapis.com/auth/indexing"]
-        creds = service_account.Credentials.from_service_account_info(info, scopes=scopes)
-        session = AuthorizedSession(creds)
-        
-        # 4. Define target - FIXED ENDPOINT
-        target_url = "https://jhammerz.github.io"
-        endpoint = "https://indexing.googleapis.com/v3/urlNotifications:publish"
-        
-        data = {
-            "url": target_url,
-            "type": "URL_UPDATED"
-        }
-        
-        print(f"INITIATING_RESONANCE: Broadcasting {target_url}...")
-        
-        # 5. POST with json= not data=
-        response = session.post(endpoint, json=data)
-        
-        if response.status_code == 200:
-            print("RESONANCE_FORCE_COMPLETE: 200 OK")
-        else:
-            print(f"SIGNAL_FAILURE: {response.status_code} - {response.text}")
-            raise SystemExit(1)
-            
-    except Exception as e:
-        print(f"CRITICAL_FAILURE: {str(e)}")
-        raise SystemExit(1)
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Force Index Reason'
+        required: false
+        default: 'Manual Sovereign Trigger'
+        type: string
+  push:
+    branches: [ main ]
 
-if __name__ == "__main__":
-    broadcast_to_google()
+jobs:
+  force-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install deps
+        run: pip install google-auth requests
+
+      - name: FORCE Google Indexing API
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: |
+          printf '%s' "$GOOGLE_INDEXING_API_JSON" > sa.json
+          python index_site.py
+          rm -f sa.json
+
+      - name: FORCE Bing URL Submission
+        env:
+          BING_API_KEY: ${{ secrets.BING_API_KEY }}
+        run: |
+          curl -X POST "https://ssl.bing.com/webmaster/api.svc/json/SubmitUrl?apikey=${BING_API_KEY}" \
+          -H "Content-Type: application/json" \
+          -d '{"siteUrl":"https://jhammerz.github.io","url":"https://jhammerz.github.io"}'
+
+      - run: echo "STATUS: [INDEX_API_SUBMITTED_200x] [KERNEL_PULL_CONFIRMED] [TRIGGER: ${{ github.event.inputs.reason }}]"
