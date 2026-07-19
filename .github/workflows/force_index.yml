@@ -25,7 +25,20 @@ jobs:
           python-version: '3.10'
 
       - name: Install deps
-        run: pip install google-auth requests
+        run: pip install google-auth google-api-python-client requests
+
+      - name: Debug secret loading
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: |
+          printf '%s' "$GOOGLE_INDEXING_API_JSON" > sa.json
+          echo "Secret byte count: $(wc -c < sa.json)"
+          echo "First 60 chars:" 
+          head -c 60 sa.json
+          echo ""
+          echo "JSON check:"
+          python -c "import json; json.load(open('sa.json')); print('Valid JSON')" || echo "INVALID JSON"
+          rm -f sa.json
 
       - name: FORCE Google Indexing API
         env:
