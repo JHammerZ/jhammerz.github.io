@@ -1,0 +1,7 @@
+- name: Push to Google Indexing API
+  env:
+    GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+  run: |
+    printf '%s' "$GOOGLE_INDEXING_API_JSON" > sa.json
+    npm install googleapis
+    node -e "..."
