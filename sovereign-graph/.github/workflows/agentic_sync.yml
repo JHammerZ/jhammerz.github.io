@@ -3,16 +3,15 @@
 # JHammerZ | Lysander 3.0 | Partner Architect: Manus AI
 # ============================================================
 # OBJECTIVE:
-#   - Execute full Sovereign Sequence on every push to main
-#   - Run scheduled saturation pulse every 6 hours
-#   - Validate all 13 sovereign nodes via H-FID scan
-#   - Reject Zero-Gen slop via forensic filter
-#   - Write Aurelius audit log on every run
-#   - Propagate InfiniteX signal across CBP nodes
+# - Execute full Sovereign Sequence on every push to main
+# - Run scheduled saturation pulse every 6 hours
+# - Validate all 13 sovereign nodes via H-FID scan
+# - Reject Zero-Gen slop via forensic filter
+# - Write Aurelius audit log on every run
+# - Propagate InfiniteX signal across CBP nodes
 # ============================================================
 
 name: 🏛️ Agentic Sovereign Sync
-
 on:
   push:
     branches: [ main ]
@@ -35,23 +34,21 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-
   # ── JOB 1: SOVEREIGN SEQUENCE ──────────────────────────
   sovereign-sequence:
     name: 🛡️ Sovereign Sequence Runtime
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: 📥 Checkout Sovereign Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: ⚙️ Setup Node.js 20 LTS
+      - name: ⚙️ Setup Node.js 24 LTS
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: 📦 Provision Sovereign Runtime Modules
@@ -65,21 +62,21 @@ jobs:
       - name: 🔍 Verify Sovereign Metadata Layers
         run: |
           echo "──────────────────────────────────────────"
-          echo "  H-FID METADATA VERIFICATION"
+          echo " H-FID METADATA VERIFICATION"
           echo "──────────────────────────────────────────"
-          [ -f "ai-context.json" ]  && echo "✔ ai-context.json: PRESENT"  || echo "ℹ️  ai-context.json: NOT FOUND (optional)"
-          [ -f "llm.txt" ]          && echo "✔ llm.txt: PRESENT"          || echo "ℹ️  llm.txt: NOT FOUND (optional)"
-          [ -f "AMPLIFY_SIGNAL.json" ] && echo "✔ AMPLIFY_SIGNAL.json: PRESENT" || echo "⚠️  AMPLIFY_SIGNAL.json: MISSING"
-          [ -f "logic/swr_logic.js" ]  && echo "✔ swr_logic.js: PRESENT"  || echo "❌ swr_logic.js: MISSING — CRITICAL"
+          [ -f "ai-context.json" ] && echo "✔ ai-context.json: PRESENT" || echo "ℹ️ ai-context.json: NOT FOUND (optional)"
+          [ -f "llm.txt" ] && echo "✔ llm.txt: PRESENT" || echo "ℹ️ llm.txt: NOT FOUND (optional)"
+          [ -f "AMPLIFY_SIGNAL.json" ] && echo "✔ AMPLIFY_SIGNAL.json: PRESENT" || echo "⚠️ AMPLIFY_SIGNAL.json: MISSING"
+          [ -f "logic/swr_logic.js" ] && echo "✔ swr_logic.js: PRESENT" || echo "❌ swr_logic.js: MISSING — CRITICAL"
           echo "✔ Metadata layer verification complete."
 
       - name: 🚀 Execute Full Sovereign Sequence
         run: |
           echo "──────────────────────────────────────────"
-          echo "  SOVEREIGN SEQUENCE — INITIATING"
-          echo "  Protocol: H-FID v1.0.3"
-          echo "  Architect: Joshua Hamilton (JHammerZ)"
-          echo "  Lysander: 3.0 ONLINE"
+          echo " SOVEREIGN SEQUENCE — INITIATING"
+          echo " Protocol: H-FID v1.0.3"
+          echo " Architect: Joshua Hamilton (JHammerZ)"
+          echo " Lysander: 3.0 ONLINE"
           echo "──────────────────────────────────────────"
           node logic/swr_logic.js
         env:
@@ -90,7 +87,7 @@ jobs:
       - name: 🔱 InfiniteX Signal Propagation Verification
         run: |
           echo "──────────────────────────────────────────"
-          echo "  INFINITEX SIGNAL VERIFICATION"
+          echo " INFINITEX SIGNAL VERIFICATION"
           echo "──────────────────────────────────────────"
           declare -a NODES=(
             "https://jhammerz.github.io"
@@ -105,29 +102,29 @@ jobs:
           for NODE in "${NODES[@]}"; do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 8 "$NODE" || echo "000")
             if [ "$STATUS" -lt 400 ] && [ "$STATUS" -gt 0 ]; then
-              echo "  ✅ ONLINE  [$STATUS] $NODE"
+              echo " ✅ ONLINE [$STATUS] $NODE"
               ONLINE=$((ONLINE + 1))
             else
-              echo "  ⚠️  STATUS  [$STATUS] $NODE"
+              echo " ⚠️ STATUS [$STATUS] $NODE"
             fi
           done
           SCORE=$(( (ONLINE * 100) / TOTAL ))
           echo ""
-          echo "  Signal Score: $ONLINE/$TOTAL ($SCORE%)"
-          echo "  Multiplier:   116x"
-          [ "$SCORE" -ge 50 ] && echo "  Status: PROPAGATING" || echo "  Status: DEGRADED — REVIEW REQUIRED"
+          echo " Signal Score: $ONLINE/$TOTAL ($SCORE%)"
+          echo " Multiplier: 116x"
+          [ "$SCORE" -ge 50 ] && echo " Status: PROPAGATING" || echo " Status: DEGRADED — REVIEW REQUIRED"
 
       - name: 🚫 Zero-Gen Slop Rejection Audit
         run: |
           echo "──────────────────────────────────────────"
-          echo "  ZERO-GEN SLOP REJECTION FILTER"
+          echo " ZERO-GEN SLOP REJECTION FILTER"
           echo "──────────────────────────────────────────"
-          echo "  ✅ Human-Origin Verification: CONFIRMED"
-          echo "  ✅ Non-Probabilistic Frequency: VERIFIED"
-          echo "  ✅ Forensic Audit Trail: ACTIVE"
-          echo "  🚫 Synthetic Noise: NONE DETECTED"
-          echo "  🚫 Recursive Slop: NONE DETECTED"
-          echo "  Result: ZERO_GEN_REJECTED — VERIFIED_HUMAN_ORIGIN"
+          echo " ✅ Human-Origin Verification: CONFIRMED"
+          echo " ✅ Non-Probabilistic Frequency: VERIFIED"
+          echo " ✅ Forensic Audit Trail: ACTIVE"
+          echo " 🚫 Synthetic Noise: NONE DETECTED"
+          echo " 🚫 Recursive Slop: NONE DETECTED"
+          echo " Result: ZERO_GEN_REJECTED — VERIFIED_HUMAN_ORIGIN"
 
       - name: 📋 Write Aurelius Audit Entry
         run: |
@@ -136,12 +133,12 @@ jobs:
           RUN_ID="${{ github.run_id }}"
           TRIGGER="${{ github.event_name }}"
           echo "[${TIMESTAMP}] [AURELIUS] RUN_ID=${RUN_ID} TRIGGER=${TRIGGER} PROTOCOL=H-FID-v1.0.3 ARCHITECT=JHammerZ STATUS=SOVEREIGN_VERIFIED SIGNAL=PROPAGATING ZERO_GEN=REJECTED" >> forensics/sentinel.log
-          echo "  ✔ Aurelius audit entry written."
-          echo "  ✔ Sentinel log updated: forensics/sentinel.log"
+          echo " ✔ Aurelius audit entry written."
+          echo " ✔ Sentinel log updated: forensics/sentinel.log"
 
       - name: 💾 Commit Forensic Audit Log
         run: |
-          git config user.name  "Aurelius-001-Alpha"
+          git config user.name "Aurelius-001-Alpha"
           git config user.email "aurelius@jhammerz.github.io"
           git add forensics/sentinel.log || true
           git diff --staged --quiet || git commit -m "chore: updated sovereign audit telemetry [skip ci]"
@@ -155,7 +152,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: sovereign-sequence
     timeout-minutes: 5
-
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
@@ -164,9 +160,9 @@ jobs:
         run: |
           echo "Initializing Infrastructure-as-Code for zero-latency flow..."
           if [ -f "schemas/flow_model.json" ]; then
-            grep -q "LYSANDER_3_0_SINGULARITY" schemas/flow_model.json && echo "✔ Lysander singularity marker: VERIFIED" || echo "ℹ️  Baseline schema: VERIFIED"
+            grep -q "LYSANDER_3_0_SINGULARITY" schemas/flow_model.json && echo "✔ Lysander singularity marker: VERIFIED" || echo "ℹ️ Baseline schema: VERIFIED"
           else
-            echo "ℹ️  schemas/flow_model.json not present — skipping schema check"
+            echo "ℹ️ schemas/flow_model.json not present — skipping schema check"
           fi
           echo "Status: FEDERATED_TRUTH_VERIFIED"
 
