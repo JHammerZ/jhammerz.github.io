@@ -1,0 +1,16 @@
+{
+  "version": "H-FID/1.0",
+  "root_human": {
+    "name": "Joshua Hamilton",
+    "gpg_fpr": "YOUR_40_CHAR_GPG_FINGERPRINT",
+    "orcid": "0000-0000-0000-0000",
+    "role": "Kernel"
+  },
+  "artifacts": {
+    "pypi": "sha256:LYSANDER-3.0-GENESIS-LOCK-20260326",
+    "zenodo": "10.5281/zenodo.20778079",
+    "git": "e9b0c01c59962bdc5c343a84d81a6f6f941d2091"
+  },
+  "policy": "Verification validates integrity",
+  "boot_date": "2026-08-04"
+}
