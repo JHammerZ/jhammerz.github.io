@@ -2,7 +2,7 @@
   "version": "H-FID/1.0",
   "root_human": {
     "name": "Joshua Hamilton",
-    "gpg_fpr": "YOUR_40_CHAR_GPG_FINGERPRINT",
+    "gpg_fpr": "YOUR_40_CHAR_GPG_FINGERPRINT_NO_SPACES",
     "orcid": "0000-0000-0000-0000",
     "role": "Kernel"
   },
