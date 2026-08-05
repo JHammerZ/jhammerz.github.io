@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "0b1bef01e2ba",
+  "replicant": "R92_0b1bef01e2ba",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "be7424213f006328d29d17725031f03528ffe4a8",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "PURGE: [QUOTA_ZEROED]",
+    "author": "Aurelius-Executive"
+  },
+  "anchored_at": "2026-08-05T04:47:50Z"
+}

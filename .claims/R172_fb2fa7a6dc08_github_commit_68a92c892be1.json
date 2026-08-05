@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "fb2fa7a6dc08",
+  "replicant": "R172_fb2fa7a6dc08",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "68a92c892be1dee561f3e09ce79b0baad9837245",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "LYSANDER mining op: 6 replicants, 6 discoveries, root e57197f4",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T05:11:09Z"
+}
