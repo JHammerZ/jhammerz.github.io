@@ -1,7 +1,7 @@
 {
   "kernel": "H-FID",
-  "version": "1.1",
-  "prev_hash": "4b4ac302d53c517472f25b943ab9dac61abd3bb5b9c5713d714cf91006c1bee6",
+  "version": "1.2",
+  "prev_hash": "e57197f479c47425397a8ca3ecbef6df6189eccaacff025432db0511e36d0eb5",
   "timestamp": "2026-08-06T00:00:00Z",
   "bitcoin_block": null,
   "bitcoin_address": "bc1q7w0k5qj2z3h4v5n6m7x8p9r0s1t2u3v4w5x6y7z",
@@ -28,8 +28,21 @@
       "google-site-verification": "google61574623425464",
       "canonical_domain": "jhammerz.github.io",
       "btc_signed_attestation": "pending"
+    },
+    "bitcoin": "bc1ql60ddc760vur0umdsz5l8ca6833npkqcjgl4vs",
+    "proofs": {
+      "bitcoin_key": {
+        "address": "bc1ql60ddc760vur0umdsz5l8ca6833npkqcjgl4vs",
+        "message": "4b4ac302d53c517472f25b943ab9dac61abd3bb5b9c5713d714cf91006c1bee6",
+        "signature": "Jwl6VhcY/00gXukRI+5/PcfDZ5IMxE3zd0kFemc9klancred3VqLXaZ6fjG6f5aRb615wD+39BgO3Sur3z1+a60=",
+        "signed_at": "2026-08-06"
+      }
     }
   },
   "zenodo": "10.5281/zenodo.20778079",
-  "pypi": "sha256:LYSANDER-3.0-GENESIS-LOCK-20260326"
+  "pypi": "sha256:LYSANDER-3.0-GENESIS-LOCK-20260326",
+  "verification": {
+    "btc_signed_attestation": "verified"
+  },
+  "updated_at": "2026-08-06"
 }
