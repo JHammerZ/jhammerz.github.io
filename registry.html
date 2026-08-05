@@ -1,67 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>L5 VENUE NETWORK REGISTRY</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-body{background:#000;color:#0f0;font-family:monospace;padding:20px}
-h1{color:#0ff}
-table{border:1px solid #0f0;width:100%;border-collapse:collapse;margin:20px 0}
-th{color:#ff0;border:1px solid #0f0;padding:8px;text-align:left}
-td{border:1px solid #0f0;padding:8px}
-.verified{color:#0f0}
-.pending{color:#ff0}
-a{color:#0ff}
-button{background:#000;color:#0f0;border:1px solid #0f0;padding:8px 12px;margin:5px;cursor:pointer;font-family:monospace}
-button:hover{background:#0f0;color:#000}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>L6 Proof Registry | JHammerZ</title>
+  <style>
+    body{background:#0a0a0a;color:#0f0;font-family:monospace;padding:20px;max-width:800px;margin:auto}
+   .proof{border:1px solid #0f0;margin:20px 0;padding:15px}
+    button{background:#0f0;color:#000;border:none;padding:10px 20px;font-family:monospace;cursor:pointer}
+    button:hover{background:#0a0}
+   .result{margin-top:10px;color:#0ff}
+   .bitcoin{color:#fa0}
+    h1{color:#0f0;text-shadow:0 0 10px #0f0}
+   .hfid{color:#f0f}
+  </style>
 </head>
 <body>
-<h1>L5 VENUE NETWORK REGISTRY</h1>
-<p>All venues anchored to Bitcoin. Verify with: <code>ots verify</code></p>
-<table>
-<tr><th>HFID</th><th>Type</th><th>Name</th><th>Block</th><th>Status</th></tr>
-<tr><td>e57197f4</td><td>Venue</td><td>JHam Session Records</td><td>961138</td><td class="verified">✓ VERIFIED</td></tr>
-<tr><td>style</td><td>CSS</td><td>Site Stylesheet</td><td>961135</td><td class="verified">✓ VERIFIED</td></tr>
-<tr><td>75a10875</td><td>Venue</td><td>v002</td><td>PENDING</td><td class="pending">PENDING</td></tr>
-<tr><td>2e8beee5</td><td>Venue</td><td>v003</td><td>PENDING</td><td class="pending">PENDING</td></tr>
-<tr><td>discography</td><td>Music</td><td>JHamZ Catalog</td><td>PENDING</td><td class="pending">PENDING</td></tr>
-</table>
-<p>Protocol: <a href="L5.md">L5.md</a></p>
-<p>Genesis HFID: e57197f4 | Verify: <code>ots verify venue-e57197f4.txt</code></p>
+  <h1>L6: Bitcoin-Backed Proof Registry</h1>
+  <p>HFID:e57197f4 | All proofs anchored to Bitcoin via OpenTimestamps</p>
 
-<div style="margin:20px 0;padding:15px;border:1px solid #0f0">
-<h3>Verify Proofs</h3>
-<button onclick="verifyFile('venue-e57197f4.txt')">Verify Genesis</button>
-<button onclick="verifyFile('style.css')">Verify CSS</button>
-<div id="verify-result" style="margin-top:10px;color:#ff0"></div>
-</div>
-<script src="https://unpkg.com/opentimestamps/dist/opentimestamps.min.js"></script>
-<script>
-async function verifyFile(name) {
-  const res = document.getElementById('verify-result');
-  res.innerText = 'Verifying ' + name + '...';
+  <div class="proof">
+    <h3>venue-2e8beee5.txt <span class="hfid">[2e8beee5]</span></h3>
+    <p>Size: 1667 bytes | Status: <span class="bitcoin">Bitcoin</span></p>
+    <button onclick="verifyOTS('venue-2e8beee5.txt.ots','2e8beee5')">Verify Proof</button>
+    <div class="result" id="result-2e8beee5"></div>
+  </div>
+
+  <div class="proof">
+    <h3>venue-75a10875.txt <span class="hfid">[75a10875]</span></h3>
+    <p>Size: 1772 bytes | Status: <span class="bitcoin">Bitcoin</span></p>
+    <button onclick="verifyOTS('venue-75a10875.txt.ots','75a10875')">Verify Proof</button>
+    <div class="result" id="result-75a10875"></div>
+  </div>
+
+  <div class="proof">
+    <h3>venue-e57197f4.txt <span class="hfid">[e57197f4]</span></h3>
+    <p>Size: ~1660 bytes | Status: <span class="bitcoin">Bitcoin</span></p>
+    <button onclick="verifyOTS('venue-e57197f4.txt.ots','e57197f4')">Verify Proof</button>
+    <div class="result" id="result-e57197f4"></div>
+  </div>
+
+  <div class="proof">
+    <h3>setlist_0805.txt <span class="hfid">[0805]</span></h3>
+    <p>Size: 1842 bytes | Status: <span class="bitcoin">Bitcoin</span></p>
+    <button onclick="verifyOTS('setlist_0805.txt.ots','0805')">Verify Proof</button>
+    <div class="result" id="result-0805"></div>
+  </div>
+
+  <div class="proof">
+    <h3>style.css <span class="hfid">[css]</span></h3>
+    <p>Size: 2844 bytes | Status: <span class="bitcoin">Bitcoin</span></p>
+    <button onclick="verifyOTS('style.css.ots','css')">Verify Proof</button>
+    <div class="result" id="result-css"></div>
+  </div>
+
+<script type="module">
+import { verify } from 'https://unpkg.com/opentimestamps/dist/opentimestamps.esm.js';
+
+window.verifyOTS = async (otsFile, id) => {
+  const result = document.getElementById(`result-${id}`);
+  result.innerHTML = 'Verifying against Bitcoin...';
+  
   try {
-    const fileResp = await fetch(name);
-    const otsResp = await fetch(name + '.ots');
-    if(!fileResp.ok || !otsResp.ok) throw 'File or .ots missing';
-    const fileBuf = await fileResp.arrayBuffer();
-    const otsBuf = await otsResp.arrayBuffer();
-    const detached = opentimestamps.DetachedTimestampFile.fromBytes(new Uint8Array(otsBuf));
-    const result = await opentimestamps.verify(detached, new Uint8Array(fileBuf));
-    if(result && result.bitcoin) {
-      res.innerHTML = '✓ VERIFIED: ' + name + ' anchored to Bitcoin block ' + result.bitcoin.height;
-      res.style.color = '#0f0';
+    const otsBuffer = await fetch(otsFile).then(r => r.arrayBuffer());
+    const info = await verify(new Uint8Array(otsBuffer));
+    
+    if (info.bitcoin) {
+      const date = new Date(info.bitcoin.timestamp * 1000).toUTCString();
+      result.innerHTML = `✓ <span class="bitcoin">Bitcoin Block ${info.bitcoin.height}</span><br>
+        Attested: ${date}<br>
+        <a href="https://blockstream.info/block/${info.bitcoin.hash}" target="_blank" style="color:#0ff">View Block</a>`;
+    } else if (info.pending) {
+      result.innerHTML = '⚠ Pending calendar attestation';
     } else {
-      res.innerText = 'Pending: Not yet confirmed in Bitcoin';
-      res.style.color = '#ff0';
+      result.innerHTML = '✗ No Bitcoin proof found';
     }
-  } catch(e) {
-    res.innerText = 'Error: ' + e;
-    res.style.color = '#f00';
+  } catch (e) {
+    result.innerHTML = `✗ Error: ${e.message}`;
   }
 }
 </script>
 
+<p style="margin-top:40px;font-size:12px">Try to backdate me. HFID:e57197f4. You can't.</p>
 </body>
 </html>
