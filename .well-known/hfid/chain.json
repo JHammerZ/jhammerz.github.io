@@ -1,13 +1,1 @@
-[
-  {
-    "claim_type": "cdn_edge_deploy",
-    "timestamp": "2026-08-05T04:05:19-04:00",
-    "details": {
-      "provider": "leo_mesh",
-      "status": "planned",
-      "node_count": "TBD"
-    },
-    "hfid_root": "e57197f4",
-    "prev_hash": ""
-  }
-]
+[]
