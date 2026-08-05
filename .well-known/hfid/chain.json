@@ -1,9 +1,40 @@
 {
   "kernel": "H-FID",
-  "version": "1.0",
-  "timestamp": "2026-08-04T18:30:00Z",
-  "bitcoin_address": "bc1q7w0k5qj2z3h4v5n6m7x8p9r0s1t2u3v4w5x6y7z",
-  "zenodo": "10.5281/zenodo.20778079",
+  "version": "1.1",
+  "prev_hash": "4b4ac302d53c517472f25b943ab9dac61abd3bb5b9c5713d714cf91006c1bee6",
+  "timestamp": "2026-08-06T00:00:00Z",
   "bitcoin_block": null,
+  "bitcoin_address": "bc1q7w0k5qj2z3h4v5n6m7x8p9r0s1t2u3v4w5x6y7z",
+  "identity": {
+    "name": "JHammerZ | Master Architect | Sovereign Manifest",
+    "description": "Joshua Hamilton (JHammerZ) is the verified Master Architect",
+    "sameAs": [
+      "https://jhammerz.github.io",
+      "https://www.tiktok.com/@jhammerzz",
+      "https://www.linkedin.com/in/JHammerZ",
+      "https://www.youtube.com/JHammerZ",
+      "https://www.instagram.com/jhammerzz",
+      "https://www.facebook.com/profile.php?id=61574652435664",
+      "https://jhammerz.carrd.co/",
+      "https://music.amazon.com/artists/B0SGL7W/jhammerz",
+      "https://music.apple.com/us/artist/jhammerz/1845798346",
+      "https://music.bandlab.com/artist/781334284",
+      "https://www.xiaohongshu.com/user/profile/JHammerZ",
+      "https://github.com/JHammerZ/jhammerz.github.io",
+      "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
+      "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
+    ],
+    "verification_methods": {
+      "github.com/JHammerZ": "ecdsa-secp256k1",
+      "dns": "txt_record",
+      "google": "site-verification"
+    },
+    "proofs": {
+      "google-site-verification": "google61574623425464",
+      "github.com/JHammerZ": "signature_pending: sign prev_hash with bc1q7w0k...",
+      "jhammerz.github.io": "self_hosted_canonical"
+    }
+  },
+  "zenodo": "10.5281/zenodo.20778079",
   "pypi": "sha256:LYSANDER-3.0-GENESIS-LOCK-20260326"
 }
