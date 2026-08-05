@@ -8,99 +8,84 @@
     body{background:#000;color:#0f0;font-family:monospace;padding:20px;max-width:900px;margin:auto}
     button{background:#0f0;color:#000;border:none;padding:8px 16px;font-family:monospace;cursor:pointer;margin-top:8px}
     button:disabled{background:#030;color:#060}
-    .result{margin-top:8px;color:#0ff;font-size:12px;word-break:break-all}
-    .bitcoin{color:#fa0}
-    .error{color:#f00}
-    .hfid{color:#f0f}
+   .result{margin-top:8px;color:#0ff;font-size:12px;word-break:break-all}
+   .bitcoin{color:#fa0}
+   .error{color:#f00}
+   .hfid{color:#f0f}
     h1{color:#0f0;text-shadow:0 0 8px #0f0}
     a{color:#0ff}
     table{border-collapse:collapse;width:100%;margin:20px 0}
     td,th{border:1px solid #0f0;padding:8px;text-align:left}
     th{color:#ff0}
   </style>
+  <script src="ots.js"></script>
 </head>
 <body>
   <h1>L6 BITCOIN PROOF REGISTRY</h1>
   <p>HFID:e57197f4 | All proofs auto-upgraded via GitHub Actions</p>
-  <div id="libstatus" class="error">Loading OpenTimestamps...</div>
+  <div id="libstatus" class="bitcoin">✓ OpenTimestamps ready</div>
   
   <table>
     <tr><th>HFID</th><th>Type</th><th>Name</th><th>Size</th><th>Action</th></tr>
     <tr>
       <td class="hfid">e57197f4</td><td>Venue</td><td>JHam Session Records</td><td>1660+</td>
-      <td><button class="verify-btn" data-file="venue-e57197f4.txt.ots" data-id="e57197f4" disabled>Verify</button><div class="result" id="result-e57197f4"></div></td>
+      <td><button class="verify-btn" data-file="venue-e57197f4.txt.ots" data-id="e57197f4">Verify</button><div class="result" id="result-e57197f4"></div></td>
     </tr>
     <tr>
       <td class="hfid">style</td><td>CSS</td><td>Site Stylesheet</td><td>2844</td>
-      <td><button class="verify-btn" data-file="style.css.ots" data-id="style" disabled>Verify</button><div class="result" id="result-style"></div></td>
+      <td><button class="verify-btn" data-file="style.css.ots" data-id="style">Verify</button><div class="result" id="result-style"></div></td>
     </tr>
     <tr>
       <td class="hfid">75a10875</td><td>Venue</td><td>v002</td><td>1772</td>
-      <td><button class="verify-btn" data-file="venue-75a10875.txt.ots" data-id="75a10875" disabled>Verify</button><div class="result" id="result-75a10875"></div></td>
+      <td><button class="verify-btn" data-file="venue-75a10875.txt.ots" data-id="75a10875">Verify</button><div class="result" id="result-75a10875"></div></td>
     </tr>
     <tr>
       <td class="hfid">2e8beee5</td><td>Venue</td><td>v003</td><td>1667</td>
-      <td><button class="verify-btn" data-file="venue-2e8beee5.txt.ots" data-id="2e8beee5" disabled>Verify</button><div class="result" id="result-2e8beee5"></div></td>
+      <td><button class="verify-btn" data-file="venue-2e8beee5.txt.ots" data-id="2e8beee5">Verify</button><div class="result" id="result-2e8beee5"></div></td>
     </tr>
     <tr>
       <td class="hfid">0805</td><td>Music</td><td>Setlist 0805</td><td>1842</td>
-      <td><button class="verify-btn" data-file="setlist_0805.txt.ots" data-id="0805" disabled>Verify</button><div class="result" id="result-0805"></div></td>
+      <td><button class="verify-btn" data-file="setlist_0805.txt.ots" data-id="0805">Verify</button><div class="result" id="result-0805"></div></td>
     </tr>
   </table>
 
 <script>
-// Load OpenTimestamps with fallback
-(function() {
-  const script = document.createElement('script');
-  script.src = 'https://cdn.jsdelivr.net/npm/opentimestamps@1.0.4/dist/opentimestamps.min.js';
-  script.onload = init;
-  script.onerror = () => {
-    document.getElementById('libstatus').innerHTML = '✗ Failed to load OpenTimestamps. Check network/CSP.';
-  };
-  document.head.appendChild(script);
-
-  function init() {
-    document.getElementById('libstatus').innerHTML = '✓ OpenTimestamps loaded';
-    document.getElementById('libstatus').className = 'bitcoin';
+document.querySelectorAll('.verify-btn').forEach(btn => {
+  btn.addEventListener('click', async (e) => {
+    const file = e.target.dataset.file;
+    const id = e.target.dataset.id;
+    const result = document.getElementById(`result-${id}`);
+    e.target.disabled = true;
+    result.innerHTML = 'Fetching...';
+    result.className = 'result';
     
-    // Enable all buttons and attach listeners
-    document.querySelectorAll('.verify-btn').forEach(btn => {
-      btn.disabled = false;
-      btn.addEventListener('click', async (e) => {
-        const file = e.target.dataset.file;
-        const id = e.target.dataset.id;
-        const result = document.getElementById(`result-${id}`);
-        result.innerHTML = 'Fetching...';
-        result.className = 'result';
-        
-        try {
-          const res = await fetch(file);
-          if (!res.ok) throw new Error(`HTTP ${res.status}: ${file} not found`);
-          result.innerHTML = 'Verifying...';
-          
-          const buf = await res.arrayBuffer();
-          const ots = new OpenTimestamps.DetachedTimestampFile(new Uint8Array(buf));
-          const info = await OpenTimestamps.verify(ots);
-          
-          if (info.bitcoin && info.bitcoin.length > 0) {
-            const btc = info.bitcoin[0];
-            const date = new Date(btc.timestamp * 1000).toUTCString();
-            result.innerHTML = `✓ <span class="bitcoin">Block ${btc.height}</span><br>${date}<br><a href="https://mempool.space/block/${btc.blockHash}" target="_blank">View Block</a>`;
-          } else if (info.pending && info.pending.length > 0) {
-            result.innerHTML = '⚠ Pending calendar attestation';
-          } else {
-            result.innerHTML = '✗ No Bitcoin proof found';
-            result.className = 'result error';
-          }
-        } catch (err) {
-          result.innerHTML = `✗ ${err.message}`;
-          result.className = 'result error';
-          console.error(err);
-        }
-      });
-    });
-  }
-})();
+    try {
+      const res = await fetch(file);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      result.innerHTML = 'Verifying...';
+      
+      const buf = await res.arrayBuffer();
+      const ots = new OpenTimestamps.DetachedTimestampFile(new Uint8Array(buf));
+      const info = await OpenTimestamps.verify(ots);
+      
+      if (info.bitcoin && info.bitcoin.length > 0) {
+        const btc = info.bitcoin[0];
+        const date = new Date(btc.timestamp * 1000).toUTCString();
+        result.innerHTML = `✓ <span class="bitcoin">Block ${btc.height}</span><br>${date}<br><a href="https://mempool.space/block/${btc.blockHash}" target="_blank">View Block</a>`;
+      } else if (info.pending && info.pending.length > 0) {
+        result.innerHTML = '⚠ Pending calendar attestation';
+      } else {
+        result.innerHTML = '✗ No Bitcoin proof found';
+        result.className = 'result error';
+      }
+    } catch (err) {
+      result.innerHTML = `✗ ${err.message}`;
+      result.className = 'result error';
+    } finally {
+      e.target.disabled = false;
+    }
+  });
+});
 </script>
 
 <p style="margin-top:30px;font-size:11px">Try to backdate me. HFID:e57197f4. You can't. | Protocol: L6.md</p>
