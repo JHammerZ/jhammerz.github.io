@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "0b1bef01e2ba",
+  "replicant": "R92_0b1bef01e2ba",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "f24e8784a99b8f8dcda52e686699cca6e753754f",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "LYSANDER: autonomous mining via GitHub Actions",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T04:47:49Z"
+}
