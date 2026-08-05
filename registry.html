@@ -18,6 +18,7 @@
     td,th{border:1px solid #0f0;padding:8px;text-align:left}
     th{color:#ff0}
   </style>
+  <script src="https://unpkg.com/opentimestamps/dist/opentimestamps.js"></script>
 </head>
 <body>
   <h1>L6 BITCOIN PROOF REGISTRY</h1>
@@ -47,19 +48,25 @@
     </tr>
   </table>
 
-<script type="module">
-import { verify } from 'https://unpkg.com/opentimestamps/dist/opentimestamps.esm.js';
-window.verifyOTS = async (otsFile, id) => {
+<script>
+async function verifyOTS(otsFile, id) {
   const result = document.getElementById(`result-${id}`);
   result.innerHTML = 'Checking Bitcoin...';
   try {
-    const buf = await fetch(otsFile).then(r => r.arrayBuffer());
-    const info = await verify(new Uint8Array(buf));
-    if (info.bitcoin) {
-      const date = new Date(info.bitcoin.timestamp * 1000).toUTCString();
-      result.innerHTML = `✓ <span class="bitcoin">Block ${info.bitcoin.height}</span><br>${date}<br><a href="https://mempool.space/block/${info.bitcoin.hash}" target="_blank">View</a>`;
+    const response = await fetch(otsFile);
+    if (!response.ok) throw new Error('OTS file not found');
+    const buf = await response.arrayBuffer();
+    const ots = new OpenTimestamps.DetachedTimestampFile(new Uint8Array(buf));
+    const info = await OpenTimestamps.verify(ots);
+    
+    if (info.bitcoin && info.bitcoin.length > 0) {
+      const btc = info.bitcoin[0];
+      const date = new Date(btc.timestamp * 1000).toUTCString();
+      result.innerHTML = `✓ <span class="bitcoin">Block ${btc.height}</span><br>${date}<br><a href="https://mempool.space/block/${btc.blockHash}" target="_blank">View</a>`;
+    } else if (info.pending && info.pending.length > 0) {
+      result.innerHTML = '⚠ Pending calendar attestation';
     } else {
-      result.innerHTML = '⚠ Pending calendar';
+      result.innerHTML = '✗ No Bitcoin proof found';
     }
   } catch (e) {
     result.innerHTML = `✗ ${e.message}`;
