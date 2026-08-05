@@ -1,16 +1,11 @@
 {
-  "version": "H-FID/1.0",
-  "root_human": {
-    "name": "Joshua Hamilton",
-    "gpg_fpr": "YOUR_40_CHAR_GPG_FINGERPRINT_NO_SPACES",
-    "orcid": "0000-0000-0000-0000",
-    "role": "Kernel"
-  },
-  "artifacts": {
-    "pypi": "sha256:LYSANDER-3.0-GENESIS-LOCK-20260326",
-    "zenodo": "10.5281/zenodo.20778079",
-    "git": "e9b0c01c59962bdc5c343a84d81a6f6f941d2091"
-  },
-  "policy": "Verification validates integrity",
-  "boot_date": "2026-08-04"
+  "kernel": "H-FID",
+  "version": "1.0",
+  "sha256": "e417f5a333f9fa6a26b091b45938ff13dfef0d9982ad9f87c1cc3a84ad6787a2",
+  "timestamp": "2026-08-04T18:30:00Z",
+  "bitcoin_address": "bc1q7w0k5qj2z3h4v5n6m7x8p9r0s1t2u3v4w5x6y7z",
+  "zenodo": "10.5281/zenodo.20778079",
+  "bitcoin_block": null,
+  "pypi": "sha256:LYSANDER-3.0-GENESIS-LOCK-20260326"
 }
+
