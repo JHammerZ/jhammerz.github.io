@@ -1306,3 +1306,10 @@ STATUS: [NO_GHOSTS_DETECTED]
    - Fixed jq array indexing in distribute.yml
    - HFID e57197f4 now extracts from chain head
    - L5 Status: Operational + Tested
+## 2026-08-05 - LYSANDER BTC Attestation Complete
+- HFID: e57197f4
+- Bitcoin Block: 961138  
+- Merkle Root: d24c63ccb0b4f55de3e9721180f812f5e4ec13155a85d9e557f91cd186548228
+- Calendars: alice.btc.calendar.opentimestamps.org, bob.btc.calendar.opentimestamps.org
+- CI: Fixed for hfid.claim.v2 schema
+- L5 Status: Operational + Notarized
