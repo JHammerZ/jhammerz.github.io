@@ -21,6 +21,40 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
+          path
+# 1. Fix the workflows - space after rm
+rm.github/workflows/*.yml
+
+# 2. Verify workflows are gone
+ls -la.github/workflows/
+# Should show: total 0 or No such file or directory
+
+# 3. Create the ONE correct workflow
+mkdir -p.github/workflows
+cat >.github/workflows/deploy.yml << 'EOF'
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
           path: '.'
       - uses: actions/deploy-pages@v4
         id: deployment
