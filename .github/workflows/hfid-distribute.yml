@@ -28,17 +28,14 @@ jobs:
           echo "BTC=$BTC" >> $GITHUB_OUTPUT
           echo "ZENODO=$ZENODO" >> $GITHUB_OUTPUT
           
-      - name: Mirror to IPFS
+      - name: Set IPFS placeholder
         id: ipfs
         run: |
-          # Use ipfs.io public API - no auth required
-          HASH=$(curl -s -X POST -F file=@.well-known/hfid/chain.json "https://ipfs.io/api/v0/add?pin=true" | jq -r .Hash)
-          if [ -z "$HASH" ] || [ "$HASH" = "null" ]; then
-            echo "IPFS upload failed, using fallback"
-            HASH="QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn"
-          fi
+          # IPFS disabled - public APIs require auth now
+          # Using static hash for LYSANDER-3.0-GENESIS
+          HASH="QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn"
           echo "IPFS_HASH=$HASH" >> $GITHUB_OUTPUT
-          echo "IPFS Hash: $HASH"
+          echo "Using placeholder IPFS Hash: $HASH"
           
       - name: Update chain.json with IPFS hash
         run: |
@@ -61,5 +58,5 @@ jobs:
           git config user.name "H-FID Bot"
           git config user.email "actions@github.com"
           git add .well-known/hfid/chain.json badges/hfid.md
-          git commit -m "H-FID LYSANDER: IPFS ${{ steps.ipfs.outputs.IPFS_HASH }} | BTC ${{ steps.hfid.outputs.BTC }}" || echo "No changes"
+          git commit -m "H-FID LYSANDER: HFID ${{ steps.hfid.outputs.HFID }} | BTC ${{ steps.hfid.outputs.BTC }}" || echo "No changes"
           git push
