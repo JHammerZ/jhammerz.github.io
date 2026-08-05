@@ -7,7 +7,7 @@
   "bitcoin_address": "bc1q7w0k5qj2z3h4v5n6m7x8p9r0s1t2u3v4w5x6y7z",
   "identity": {
     "name": "JHammerZ | Master Architect | Sovereign Manifest",
-    "description": "Joshua Hamilton (JHammerZ) is the verified Master Architect",
+    "legal_name": "Joshua Hamilton",
     "sameAs": [
       "https://jhammerz.github.io",
       "https://www.tiktok.com/@jhammerzz",
@@ -24,15 +24,10 @@
       "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
       "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
     ],
-    "verification_methods": {
-      "github.com/JHammerZ": "ecdsa-secp256k1",
-      "dns": "txt_record",
-      "google": "site-verification"
-    },
-    "proofs": {
+    "verification": {
       "google-site-verification": "google61574623425464",
-      "github.com/JHammerZ": "signature_pending: sign prev_hash with bc1q7w0k...",
-      "jhammerz.github.io": "self_hosted_canonical"
+      "canonical_domain": "jhammerz.github.io",
+      "btc_signed_attestation": "pending"
     }
   },
   "zenodo": "10.5281/zenodo.20778079",
