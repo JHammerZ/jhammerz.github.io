@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>H-FID Verifier - JHammerZ</title></head>
+<body>
+<h1>H-FID Verification</h1>
+<div id="status">Loading...</div>
+<script>
+fetch('/.well-known/hfid/chain.json').then(r=>r.json()).then(d=>{
+  document.getElementById('status').innerHTML = `
+    <p><b>Version:</b> ${d.version}</p>
+    <p><b>Bitcoin:</b> ${d.identity.bitcoin}</p>
+    <p><b>Signature:</b> Valid - <a href="https://reinproject.org/bitcoin-signature-tool/">Verify</a></p>
+    <p><b>Message:</b> ${d.identity.proofs.bitcoin_key.message}</p>
+    <p><b>14 Socials:</b> ${Object.keys(d.identity.profiles).length} linked</p>
+  `;
+});
+</script>
+</body>
+</html>
