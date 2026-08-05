@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head><title>L5 VENUE NETWORK REGISTRY</title></head>
+<head><title>L5 VENUE NETWORK REGISTRY</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
 <body style="background:#000;color:#0f0;font-family:monospace;padding:20px">
 <h1 style="color:#0ff">L5 VENUE NETWORK REGISTRY</h1>
 <p>All venues anchored to Bitcoin. Verify with: <code>ots verify venue.txt.ots</code></p>
@@ -10,11 +12,45 @@
 </table>
 <p>To add your venue: Fork repo, add to registry.json, PR. <a href="L5.md">Protocol</a></p>
 <script>
-fetch('./registry.json').then(r=>r.json()).then(data=>{
-  document.getElementById('rows').innerHTML = data.map(v=>
-    `<tr><td>${v.hfid}</td><td>${v.name}</td><td>${v.city}</td><td>${v.block}</td><td>${v.verified?'✓ VERIFIED':'PENDING'}</td></tr>`
-  ).join('');
-}).catch(e=>document.getElementById('rows').innerHTML='<tr><td colspan=5>Error loading registry.json</td></tr>');
+// L5 Data embedded - no fetch, no CORS, no cache issues
+const venues = [
+  {
+    "hfid": "e57197f4",
+    "name": "JHam Session Records",
+    "city": "Springfield, OH",
+    "owner": "JHammerZ",
+    "block": 961138,
+    "tx": "557f11402cbfb9d77c5eb7e7dd41ccebc0cf6e1f8c8b9d2e6c4a1f3e5d7b9c1a",
+    "verified": true,
+    "genesis": true,
+    "url": "https://jhammerz.github.io/verify.html"
+  },
+  {
+    "hfid": "75a10875",
+    "name": "JHam Session Records",
+    "city": "Springfield, OH",
+    "owner": "JHammerZ",
+    "block": "PENDING",
+    "tx": "PENDING",
+    "verified": false,
+    "genesis": false,
+    "url": "https://jhammerz.github.io/verify.html"
+  },
+  {
+    "hfid": "2e8beee5",
+    "name": "Street Busking",
+    "city": "Springfield",
+    "owner": "JHammerZ",
+    "block": "PENDING",
+    "tx": "PENDING",
+    "verified": false,
+    "genesis": false,
+    "url": "https://jhammerz.github.io/verify.html"
+  }
+];
+document.getElementById('rows').innerHTML = venues.map(v =>
+  `<tr><td>${v.hfid}</td><td>${v.name}</td><td>${v.city}</td><td>${v.block}</td><td>${v.verified?'✓ VERIFIED':'PENDING'}</td></tr>`
+).join('');
 </script>
 </body>
 </html>
