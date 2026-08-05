@@ -1,11 +1,11 @@
 [
   {
     "claim_type": "cdn_edge_deploy",
-    "timestamp": "2026-08-05T04:03:00-04:00",
+    "timestamp": "2026-08-05T04:05:19-04:00",
     "details": {
-      "provider": "cloudflare",
-      "status": "configured_inactive",
-      "host": "jhammerz.github.io"
+      "provider": "leo_mesh",
+      "status": "planned",
+      "node_count": "TBD"
     },
     "hfid_root": "e57197f4",
     "prev_hash": ""
