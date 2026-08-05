@@ -1,7 +1,6 @@
 {
   "kernel": "H-FID",
   "version": "1.0",
-  "sha256": "50471beb139f512c169f185b0ee66f5079c3359cd4278cfdbf33874783263dc2",
   "timestamp": "2026-08-04T18:30:00Z",
   "bitcoin_address": "bc1q7w0k5qj2z3h4v5n6m7x8p9r0s1t2u3v4w5x6y7z",
   "zenodo": "10.5281/zenodo.20778079",
