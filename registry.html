@@ -1,1 +1,72 @@
-[PASTE THE FULL L6 HTML FROM MY LAST MESSAGE]
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>L6 Proof Registry | JHammerZ</title>
+  <style>
+    body{background:#000;color:#0f0;font-family:monospace;padding:20px;max-width:900px;margin:auto}
+   .proof{border:1px solid #0f0;margin:15px 0;padding:12px}
+    button{background:#0f0;color:#000;border:none;padding:8px 16px;font-family:monospace;cursor:pointer;margin-top:8px}
+    button:hover{background:#0a0}
+   .result{margin-top:8px;color:#0ff;font-size:14px}
+   .bitcoin{color:#fa0}
+   .hfid{color:#f0f}
+    h1{color:#0f0;text-shadow:0 0 8px #0f0}
+    a{color:#0ff}
+    table{border-collapse:collapse;width:100%;margin:20px 0}
+    td,th{border:1px solid #0f0;padding:8px;text-align:left}
+    th{color:#ff0}
+  </style>
+</head>
+<body>
+  <h1>L6 BITCOIN PROOF REGISTRY</h1>
+  <p>HFID:e57197f4 | All proofs auto-upgraded via GitHub Actions</p>
+  
+  <table>
+    <tr><th>HFID</th><th>Type</th><th>Name</th><th>Size</th><th>Action</th></tr>
+    <tr>
+      <td class="hfid">e57197f4</td><td>Venue</td><td>JHam Session Records</td><td>1660+</td>
+      <td><button onclick="verifyOTS('venue-e57197f4.txt.ots','e57197f4')">Verify</button><div class="result" id="result-e57197f4"></div></td>
+    </tr>
+    <tr>
+      <td class="hfid">style</td><td>CSS</td><td>Site Stylesheet</td><td>2844</td>
+      <td><button onclick="verifyOTS('style.css.ots','style')">Verify</button><div class="result" id="result-style"></div></td>
+    </tr>
+    <tr>
+      <td class="hfid">75a10875</td><td>Venue</td><td>v002</td><td>1772</td>
+      <td><button onclick="verifyOTS('venue-75a10875.txt.ots','75a10875')">Verify</button><div class="result" id="result-75a10875"></div></td>
+    </tr>
+    <tr>
+      <td class="hfid">2e8beee5</td><td>Venue</td><td>v003</td><td>1667</td>
+      <td><button onclick="verifyOTS('venue-2e8beee5.txt.ots','2e8beee5')">Verify</button><div class="result" id="result-2e8beee5"></div></td>
+    </tr>
+    <tr>
+      <td class="hfid">0805</td><td>Music</td><td>Setlist 0805</td><td>1842</td>
+      <td><button onclick="verifyOTS('setlist_0805.txt.ots','0805')">Verify</button><div class="result" id="result-0805"></div></td>
+    </tr>
+  </table>
+
+<script type="module">
+import { verify } from 'https://unpkg.com/opentimestamps/dist/opentimestamps.esm.js';
+window.verifyOTS = async (otsFile, id) => {
+  const result = document.getElementById(`result-${id}`);
+  result.innerHTML = 'Checking Bitcoin...';
+  try {
+    const buf = await fetch(otsFile).then(r => r.arrayBuffer());
+    const info = await verify(new Uint8Array(buf));
+    if (info.bitcoin) {
+      const date = new Date(info.bitcoin.timestamp * 1000).toUTCString();
+      result.innerHTML = `✓ <span class="bitcoin">Block ${info.bitcoin.height}</span><br>${date}<br><a href="https://mempool.space/block/${info.bitcoin.hash}" target="_blank">View</a>`;
+    } else {
+      result.innerHTML = '⚠ Pending calendar';
+    }
+  } catch (e) {
+    result.innerHTML = `✗ ${e.message}`;
+  }
+}
+</script>
+
+<p style="margin-top:30px;font-size:11px">Try to backdate me. HFID:e57197f4. You can't. | Protocol: L6.md</p>
+</body>
+</html>
