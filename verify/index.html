@@ -1,17 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head><title>H-FID Verifier - JHammerZ</title></head>
+<head>
+  <title>H-FID LYSANDER-3.0-GENESIS VERIFIER</title>
+  <meta name="google-site-verification" content="google61574623425464" />
+  <style>
+    body{font-family:monospace;background:#0a0a0a;color:#0f0;padding:20px;line-height:1.6}
+    .v{color:#0f0}.p{color:#ff0}.k{color:#0ff}a{color:#0ff}
+    pre{background:#111;padding:10px;border:1px solid #0f0;overflow-x:auto}
+    h1,h2{border-bottom:1px solid #0f0}
+  </style>
+</head>
 <body>
-<h1>H-FID Verification</h1>
-<div id="status">Loading...</div>
+<h1>H-FID LYSANDER-3.0-GENESIS</h1>
+<div id="s">Loading...</div>
 <script>
 fetch('/.well-known/hfid/chain.json').then(r=>r.json()).then(d=>{
-  document.getElementById('status').innerHTML = `
-    <p><b>Version:</b> ${d.version}</p>
-    <p><b>Bitcoin:</b> ${d.identity.bitcoin}</p>
-    <p><b>Signature:</b> Valid - <a href="https://reinproject.org/bitcoin-signature-tool/">Verify</a></p>
-    <p><b>Message:</b> ${d.identity.proofs.bitcoin_key.message}</p>
-    <p><b>14 Socials:</b> ${Object.keys(d.identity.profiles).length} linked</p>
+  const hfid=d.prev_hash?d.prev_hash.substring(0,8):'genesis';
+  const btcVerify=`https://reinproject.org/bitcoin-signature-tool/`;
+  document.getElementById('s').innerHTML=`
+    <h2>Core Identity</h2>
+    <p><span class="k">H-FID:</span> <b>${hfid}</b></p>
+    <p><span class="k">Version:</span> ${d.version}</p>
+    <p><span class="k">Domain:</span> ${d.canonical_domain}</p>
+    <p><span class="k">Updated:</span> ${d.updated_at}</p>
+    <h2>Bitcoin Cryptographic Proof</h2>
+    <p><span class="k">Address:</span> ${d.bitcoin}</p>
+    <p><span class="k">Message:</span> ${d.proofs.bitcoin_key.message}</p>
+    <p><span class="k">Signature:</span> <span class="v">Valid</span> - <a href="${btcVerify}" target="_blank">Verify Now</a></p>
+    <p><span class="k">Signed:</span> ${d.proofs.bitcoin_key.signed_at}</p>
+    <p><span class="k">Attestation:</span> <span class="${d.verification.btc_signed_attestation==='verified'?'v':'p'}">${d.verification.btc_signed_attestation}</span></p>
+    <h2>Academic + Code Genesis Anchors</h2>
+    <p><span class="k">Zenodo DOI:</span> <a href="https://doi.org/${d.zenodo}" target="_blank">${d.zenodo}</a></p>
+    <p><span class="k">PyPI Lock:</span> ${d.pypi}</p>
+    <p><span class="k">IPFS:</span> ${d.ipfs?`<a href="https://ipfs.io/ipfs/${d.ipfs}" target="_blank">${d.ipfs}</a>`:'<span class="p">pending</span>'}</p>
+    <h2>OpenTimestamps</h2>
+    <p>Verify: <pre>ots verify .well-known/hfid/chain.json .well-known/hfid/chain.json.ots</pre></p>
+    <h2>Raw Chain</h2>
+    <pre>${JSON.stringify(d,null,2)}</pre>
   `;
 });
 </script>
