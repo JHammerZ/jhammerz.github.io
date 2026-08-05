@@ -44,5 +44,6 @@
   "verification": {
     "btc_signed_attestation": "verified"
   },
-  "updated_at": "2026-08-06"
+  "updated_at": "2026-08-06",
+  "bitcoin": "bc1ql60ddc760vur0umdsz5l8ca6833npkqcjgl4vs"
 }
