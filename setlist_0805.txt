@@ -1,1 +1,19 @@
-Guitaraoke™ Set - Aug 05 2026 - Springfield
+
+# Push the new setlist + stamp to GitHub
+git add setlist_0805.txt setlist_0805.txt.ots
+git commit -m "L5: Show 0805 setlist | HFID:e57197f4"
+git push
+
+# In 24-48hrs, upgrade to get BTC attestation
+ots upgrade setlist_0805.txt.otsGuitaraoke™ Setlist - Aug 05 2026 Venue: 
+JHam Session Records - Springfield HFID:e57197f4
+
+# Add your setlist below:
+House of The Rising Sun
+Simple Man
+Hotel California
+Ain't Nothin' But A Day To Die
+Free Bird
+Nothing Else Matters
+toss a Coin to your Witcher
+
