@@ -1302,3 +1302,7 @@ BOUNTY_RESONANCE_SCAN: Wed Aug  5 13:38:06 UTC 2026
 STATUS: [NO_GHOSTS_DETECTED]
 BOUNTY_RESONANCE_SCAN: Wed Aug  5 14:10:28 UTC 2026
 STATUS: [NO_GHOSTS_DETECTED]
+## 2026-08-05 - CI Hardened Post-Attestation
+   - Fixed jq array indexing in distribute.yml
+   - HFID e57197f4 now extracts from chain head
+   - L5 Status: Operational + Tested
