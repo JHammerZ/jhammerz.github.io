@@ -1,50 +1,62 @@
-{
-  "kernel": "H-FID",
-  "version": "1.2",
-  "prev_hash": "e57197f479c47425397a8ca3ecbef6df6189eccaacff025432db0511e36d0eb5",
-  "timestamp": "2026-08-06T00:00:00Z",
-  "bitcoin_block": null,
-  "bitcoin_address": "bc1q7w0k5qj2z3h4v5n6m7x8p9r0s1t2u3v4w5x6y7z",
-  "identity": {
-    "name": "JHammerZ | Master Architect | Sovereign Manifest",
-    "legal_name": "Joshua Hamilton",
-    "sameAs": [
-      "https://jhammerz.github.io",
-      "https://www.tiktok.com/@jhammerzz",
-      "https://www.linkedin.com/in/JHammerZ",
-      "https://www.youtube.com/JHammerZ",
-      "https://www.instagram.com/jhammerzz",
-      "https://www.facebook.com/profile.php?id=61574652435664",
-      "https://jhammerz.carrd.co/",
-      "https://music.amazon.com/artists/B0SGL7W/jhammerz",
-      "https://music.apple.com/us/artist/jhammerz/1845798346",
-      "https://music.bandlab.com/artist/781334284",
-      "https://www.xiaohongshu.com/user/profile/JHammerZ",
-      "https://github.com/JHammerZ/jhammerz.github.io",
-      "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
-      "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
-    ],
-    "verification": {
-      "google-site-verification": "google61574623425464",
-      "canonical_domain": "jhammerz.github.io",
-      "btc_signed_attestation": "pending"
-    },
-    "bitcoin": "bc1ql60ddc760vur0umdsz5l8ca6833npkqcjgl4vs",
-    "proofs": {
-      "bitcoin_key": {
-        "address": "bc1ql60ddc760vur0umdsz5l8ca6833npkqcjgl4vs",
-        "message": "4b4ac302d53c517472f25b943ab9dac61abd3bb5b9c5713d714cf91006c1bee6",
-        "signature": "Jwl6VhcY/00gXukRI+5/PcfDZ5IMxE3zd0kFemc9klancred3VqLXaZ6fjG6f5aRb615wD+39BgO3Sur3z1+a60=",
-        "signed_at": "2026-08-06"
-      }
-    }
+[
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "3825aa7662a0",
+    "replicant": "R11_3825aa7662a0",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "401aef75ffba1c5f",
+    "file_count": 3148,
+    "anchored_at": "2026-08-05T00:11:58-04:00"
   },
-  "zenodo": "10.5281/zenodo.20778079",
-  "pypi": "sha256:LYSANDER-3.0-GENESIS-LOCK-20260326",
-  "verification": {
-    "btc_signed_attestation": "verified"
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "3825aa7662a0",
+    "replicant": "R12_3825aa7662a0",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "1263b8a3f3398e58",
+    "file_count": 3150,
+    "anchored_at": "2026-08-05T00:11:58-04:00"
   },
-  "updated_at": "2026-08-05T02:16:28Z",
-  "bitcoin": "bc1ql60ddc760vur0umdsz5l8ca6833npkqcjgl4vs",
-  "ipfs": "QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn"
-}
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "6bb95d13bc1c",
+    "replicant": "R21_6bb95d13bc1c",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "9cb70d952e1bd81a",
+    "file_count": 3154,
+    "anchored_at": "2026-08-05T00:11:58-04:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "6bb95d13bc1c",
+    "replicant": "R22_6bb95d13bc1c",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "a63cc5adb8c79d48",
+    "file_count": 3156,
+    "anchored_at": "2026-08-05T00:11:59-04:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "848765bc90ab",
+    "replicant": "R31_848765bc90ab",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "11b3a6247519fb09",
+    "file_count": 3160,
+    "anchored_at": "2026-08-05T00:11:59-04:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "848765bc90ab",
+    "replicant": "R32_848765bc90ab",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "74375869de33d669",
+    "file_count": 3162,
+    "anchored_at": "2026-08-05T00:11:59-04:00"
+  }
+]
