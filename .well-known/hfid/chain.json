@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "claim_type": "cdn_edge_deploy",
+    "timestamp": "2026-08-05T04:07:57-04:00",
+    "details": {
+      "provider": "leo_mesh",
+      "status": "active",
+      "node_count": "12",
+      "orbit": "550km SSO"
+    }
+  }
+]
