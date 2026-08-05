@@ -1,36 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>L5 Venue Registry</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{background:#000;color:#0f0;font-family:monospace;padding:20px}
-h1{color:#0ff;text-align:center}
-table{width:100%;border-collapse:collapse;margin-top:20px}
-th,td{border:1px solid #0f0;padding:8px;text-align:left}
-th{color:#ff0}
-.genesis{background:#111}
-a{color:#0ff}
-</style>
-</head>
-<body>
-<h1>L5 VENUE NETWORK REGISTRY</h1>
-<p>All venues anchored to Bitcoin. Verify with: ots verify venue.txt.ots</p>
-<table id="venues">
-<tr><th>HFID</th><th>Venue</th><th>City</th><th>Block</th><th>Status</th></tr>
+<head><title>L5 VENUE NETWORK REGISTRY</title></head>
+<body style="background:#000;color:#0f0;font-family:monospace;padding:20px">
+<h1 style="color:#0ff">L5 VENUE NETWORK REGISTRY</h1>
+<p>All venues anchored to Bitcoin. Verify with: <code>ots verify venue.txt.ots</code></p>
+<table border="1" style="border-color:#0f0;width:100%;border-collapse:collapse">
+<tr style="color:#ff0"><th>HFID</th><th>Venue</th><th>City</th><th>Block</th><th>Status</th></tr>
+<tbody id="rows"></tbody>
 </table>
-<script>
-fetch('registry.json')
-.then(r=>r.json())
-.then(data=>{
-  let table=document.getElementById('venues');
-  data.forEach(v=>{
-    let row=table.insertRow();
-    if(v.genesis) row.className='genesis';
-    row.innerHTML=`<td>${v.hfid}</td><td><a href="${v.url}">${v.name}</a></td><td>${v.city}</td><td>${v.block}</td><td>${v.verified?'✓ VERIFIED':'PENDING'}</td>`;
-  });
-});
-</script>
 <p>To add your venue: Fork repo, add to registry.json, PR. <a href="L5.md">Protocol</a></p>
+<script>
+fetch('./registry.json').then(r=>r.json()).then(data=>{
+  document.getElementById('rows').innerHTML = data.map(v=>
+    `<tr><td>${v.hfid}</td><td>${v.name}</td><td>${v.city}</td><td>${v.block}</td><td>${v.verified?'✓ VERIFIED':'PENDING'}</td></tr>`
+  ).join('');
+}).catch(e=>document.getElementById('rows').innerHTML='<tr><td colspan=5>Error loading registry.json</td></tr>');
+</script>
 </body>
 </html>
