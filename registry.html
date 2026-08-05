@@ -23,7 +23,7 @@
 <body>
   <h1>L6 BITCOIN PROOF REGISTRY</h1>
   <p>HFID:e57197f4 | All proofs auto-upgraded via GitHub Actions</p>
-  <div id="libstatus" class="bitcoin">✓ OpenTimestamps ready</div>
+  <div id="libstatus" class="bitcoin">✓ opentimestamps ready</div>
   
   <table>
     <tr><th>HFID</th><th>Type</th><th>Name</th><th>Size</th><th>Action</th></tr>
@@ -65,8 +65,8 @@ document.querySelectorAll('.verify-btn').forEach(btn => {
       result.innerHTML = 'Verifying...';
       
       const buf = await res.arrayBuffer();
-      const ots = new OpenTimestamps.DetachedTimestampFile(new Uint8Array(buf));
-      const info = await OpenTimestamps.verify(ots);
+      const ots = new opentimestamps.DetachedTimestampFile(new Uint8Array(buf));
+      const info = await opentimestamps.verify(ots);
       
       if (info.bitcoin && info.bitcoin.length > 0) {
         const btc = info.bitcoin[0];
