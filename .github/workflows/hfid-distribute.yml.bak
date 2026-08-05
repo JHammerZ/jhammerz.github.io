@@ -1,0 +1,56 @@
+name: H-FID LYSANDER Distribution
+on:
+  push:
+    paths: ['.well-known/hfid/chain.json']
+  workflow_dispatch:
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Extract H-FID Core Metadata
+        id: hfid
+        run: |
+          echo "VERSION=$(jq -r .version .well-known/hfid/chain.json)" >> $GITHUB_OUTPUT
+          echo "HFID=$(jq -r .prev_hash[0:8] .well-known/hfid/chain.json)" >> $GITHUB_OUTPUT
+          echo "BTC_ADDR=$(jq -r .bitcoin .well-known/hfid/chain.json)" >> $GITHUB_OUTPUT
+          echo "ZENODO=$(jq -r .zenodo .well-known/hfid/chain.json)" >> $GITHUB_OUTPUT
+          echo "PYPI_HASH=$(jq -r .pypi .well-known/hfid/chain.json)" >> $GITHUB_OUTPUT
+          echo "PYPI_HASH=$(jq -r .pypi .well-known/hfid/chain.json)" >> $GITHUB_OUTPUT
+          echo "GSV=$(jq -r .\"google-site-verification\" .well-known/hfid/chain.json)" >> $GITHUB_OUTPUT
+
+      - name: Generate H-FID Badge
+        run: |
+          mkdir -p badges
+          echo "[![H-FID: ${{ steps.hfid.outputs.HFID }}](https://img.shields.io/badge/H--FID-${{ steps.hfid.outputs.HFID }}-blue)](https://jhammerz.github.io/verify/)" > badges/hfid.md
+          echo "[![BTC Verified](https://img.shields.io/badge/BTC-Verified-f7931a)](https://reinproject.org/bitcoin-signature-tool/)" >> badges/hfid.md
+
+      - name: Mirror to IPFS
+        run: |
+          HASH=$(curl -s -X POST -F file=@.well-known/hfid/chain.json "https://ipfs.infura.io:5001/api/v0/add" | jq -r .Hash)
+          echo "IPFS_HASH=$HASH" >> $GITHUB_ENV
+          echo "Published to IPFS: https://ipfs.io/ipfs/$HASH"
+
+      - name: Update chain.json with IPFS hash
+        run: |
+          jq --arg ipfs "$IPFS_HASH" '.ipfs = $ipfs | .updated_at = now | .updated_at |= todate' .well-known/hfid/chain.json > tmp.json
+          mv tmp.json .well-known/hfid/chain.json
+
+      - name: Commit IPFS update
+        run: |
+          git config user.name "H-FID Bot"
+          git config user.email "hfid@jhammerz.github.io"
+          git add .well-known/hfid/chain.json badges/hfid.md
+          git commit -m "H-FID: Auto-distribute v${{ steps.hfid.outputs.VERSION }} to IPFS ${{ env.IPFS_HASH }}" || echo "No changes"
+          git push
+
+      - name: Ping Zenodo DOI
+        if: steps.hfid.outputs.ZENODO != 'null'
+        run: |
+          echo "Zenodo DOI: ${{ steps.hfid.outputs.ZENODO }} - Requires ZENODO_TOKEN secret for auto-update"
+          
+      - name: Log Google Site Verification
+        run: |
+          echo "GSV Token: ${{ steps.hfid.outputs.GSV }} active for canonical_domain"
