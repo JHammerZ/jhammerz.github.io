@@ -1,26 +1,26 @@
-name: Daily LYSANDER Mining
+name: LYSANDER Production
 on:
-  schedule:
-    - cron: '0 3 * * *'  # 3am UTC daily
-  workflow_dispatch:     # allows manual trigger
-
+  schedule: [{cron: '0 4 * * *'}]
+  workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   mine:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run LYSANDER
-        run: |
-          chmod +x LYSANDER-MINER.sh
-          ./LYSANDER-MINER.sh
-      - name: Install OTS
-        run: pip install opentimestamps-client
-      - name: Stamp chain
-        run: ots stamp .well-known/hfid/chain.json || true
-      - name: Commit and push
-        run: |
-          git config user.name "LYSANDER Bot"
-          git config user.email "lysander@jhammerz.github.io"
+        with: {fetch-depth: 0}  # need full git history
+      - run: sudo apt-get update && sudo apt-get install -y jq
+      - run: pip install opentimestamps-client
+      - run: chmod +x LYSANDER-MINER.sh && ./LYSANDER-MINER.sh
+        env:
+          HFID_ROOT: e57197f4
+          REPO_OWNER: JHammerZ
+          REPO_NAME: jhammerz.github.io
+          DEPTH: 3
+      - run: |
+          git config user.name "LYSANDER"
+          git config user.email "lysander@users.noreply.github.com"
           git add .
-          git commit -m "Auto-mine: $(date -Iseconds)" || exit 0
+          git commit -m "LYSANDER: Auto-anchor $(date -Iseconds)" || exit 0
           git push
