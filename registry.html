@@ -12,6 +12,8 @@ td{border:1px solid #0f0;padding:8px}
 .verified{color:#0f0}
 .pending{color:#ff0}
 a{color:#0ff}
+button{background:#000;color:#0f0;border:1px solid #0f0;padding:8px 12px;margin:5px;cursor:pointer;font-family:monospace}
+button:hover{background:#0f0;color:#000}
 </style>
 </head>
 <body>
@@ -23,9 +25,43 @@ a{color:#0ff}
 <tr><td>style</td><td>CSS</td><td>Site Stylesheet</td><td>961135</td><td class="verified">✓ VERIFIED</td></tr>
 <tr><td>75a10875</td><td>Venue</td><td>v002</td><td>PENDING</td><td class="pending">PENDING</td></tr>
 <tr><td>2e8beee5</td><td>Venue</td><td>v003</td><td>PENDING</td><td class="pending">PENDING</td></tr>
-<tr><td>discography</td><td>Music</td><td>JHammerZ Catalog</td><td>PENDING</td><td class="pending">PENDING</td></tr>
+<tr><td>discography</td><td>Music</td><td>JHamZ Catalog</td><td>PENDING</td><td class="pending">PENDING</td></tr>
 </table>
 <p>Protocol: <a href="L5.md">L5.md</a></p>
 <p>Genesis HFID: e57197f4 | Verify: <code>ots verify venue-e57197f4.txt</code></p>
+
+<div style="margin:20px 0;padding:15px;border:1px solid #0f0">
+<h3>Verify Proofs</h3>
+<button onclick="verifyFile('venue-e57197f4.txt')">Verify Genesis</button>
+<button onclick="verifyFile('style.css')">Verify CSS</button>
+<div id="verify-result" style="margin-top:10px;color:#ff0"></div>
+</div>
+<script src="https://unpkg.com/opentimestamps/dist/opentimestamps.min.js"></script>
+<script>
+async function verifyFile(name) {
+  const res = document.getElementById('verify-result');
+  res.innerText = 'Verifying ' + name + '...';
+  try {
+    const fileResp = await fetch(name);
+    const otsResp = await fetch(name + '.ots');
+    if(!fileResp.ok || !otsResp.ok) throw 'File or .ots missing';
+    const fileBuf = await fileResp.arrayBuffer();
+    const otsBuf = await otsResp.arrayBuffer();
+    const detached = opentimestamps.DetachedTimestampFile.fromBytes(new Uint8Array(otsBuf));
+    const result = await opentimestamps.verify(detached, new Uint8Array(fileBuf));
+    if(result && result.bitcoin) {
+      res.innerHTML = '✓ VERIFIED: ' + name + ' anchored to Bitcoin block ' + result.bitcoin.height;
+      res.style.color = '#0f0';
+    } else {
+      res.innerText = 'Pending: Not yet confirmed in Bitcoin';
+      res.style.color = '#ff0';
+    }
+  } catch(e) {
+    res.innerText = 'Error: ' + e;
+    res.style.color = '#f00';
+  }
+}
+</script>
+
 </body>
 </html>
