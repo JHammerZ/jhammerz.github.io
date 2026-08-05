@@ -1,208 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head><title>L5 VENUE NETWORK REGISTRY</title>
+<head>
+<title>L5 VENUE NETWORK REGISTRY</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{background:#000;color:#0f0;font-family:monospace;padding:20px}
+h1{color:#0ff}
+table{border:1px solid #0f0;width:100%;border-collapse:collapse}
+th{color:#ff0;border:1px solid #0f0;padding:8px}
+td{border:1px solid #0f0;padding:8px}
+.verified{color:#0f0}
+.pending{color:#ff0}
+</style>
 </head>
-<body style="background:#000;color:#0f0;font-family:monospace;padding:20px">
-<h1 style="color:#0ff">L5 VENUE NETWORK REGISTRY</h1>
-<p>All venues anchored to Bitcoin. Verify with: <code>ots verify venue.txt.ots</code></p>
-<table border="1" style="border-color:#0f0;width:100%;border-collapse:collapse">
-<tr style="color:#ff0"><th>HFID</th><th>Venue</th><th>City</th><th>Block</th><th>Status</th></tr>
-<tbody id="rows"></tbody>
+<body>
+<h1>L5 VENUE NETWORK REGISTRY</h1>
+<p>All venues anchored to Bitcoin. Verify with: <code>ots verify</code></p>
+<table>
+<tr><th>HFID</th><th>Type</th><th>Name</th><th>Block</th><th>Status</th></tr>
+<tr><td>e57197f4</td><td>Venue</td><td>JHam Session Records</td><td>961138</td><td class="verified">✓ VERIFIED</td></tr>
+<tr><td>75a10875</td><td>Venue</td><td>v002</td><td>PENDING</td><td class="pending">PENDING</td></tr>
+<tr><td>2e8beee5</td><td>Venue</td><td>v003</td><td>PENDING</td><td class="pending">PENDING</td></tr>
 </table>
-<p>To add your venue: Fork repo, add to registry.json, PR. <a href="L5.md">Protocol</a></p>
-cd ~/jhammerz.github.io && mkdir -p music && cat > music/discography.json << 'EOF'
-{
-  "artist": "JHammerZ",
-  "hfid": "artist-jhammerz",
-  "catalog_anchor_date": "2026-08-05",
-  "location": "Springfield, OH",
-  "tracks": [
-    {
-      "hfid": "m001",
-      "title": "I'm Going To Be Somebody",
-      "album": "Cover JHams, Vol. 1",
-      "release_date": "2025-10",
-      "type": "cover",
-      "source": "iHeart",
-      "url": "https://www.iheart.com/artist/jhammerz-41789523/"
-    },
-    {
-      "hfid": "m002", 
-      "title": "Where Did You Sleep Last Night",
-      "album": "Cover JHams, Vol. 1",
-      "release_date": "2025-10",
-      "type": "cover",
-      "source": "iHeart"
-    },
-    {
-      "hfid": "m003",
-      "title": "That Smell", 
-      "album": "Cover JHams, Vol. 1",
-      "release_date": "2025-10",
-      "type": "cover",
-      "source": "iHeart"
-    },
-    {
-      "hfid": "m004",
-      "title": "The Crow And The Butterfly",
-      "album": "Cover JHams, Vol. 1", 
-      "release_date": "2025-10",
-      "type": "cover",
-      "source": "iHeart"
-    },
-    {
-      "hfid": "m005",
-      "title": "Iris",
-      "album": "Cover JHams, Vol. 1",
-      "release_date": "2025-10", 
-      "type": "cover",
-      "source": "iHeart"
-    },
-    {
-      "hfid": "m006",
-      "title": "The Heyoka",
-      "album": "The Heyoka",
-      "release_date": "2025-10",
-      "type": "original",
-      "source": "iHeart"
-    },
-    {
-      "hfid": "m007",
-      "title": "Super Secret unnamed track 1", 
-      "release_date": "2025-10",
-      "type": "original",
-      "source": "iHeart"
-    },
-    {
-      "hfid": "m008",
-      "title": "Perception of Personification - Track 1",
-      "album": "Perception of Personification",
-      "release_date": "2024-11-12",
-      "duration": "2:02",
-      "type": "original",
-      "note": "I wrote this song a while back, official mastered version",
-      "source": "BandLab"
-    },
-    {
-      "hfid": "m009",
-      "title": "Perception of Personification - Track 2", 
-      "album": "Perception of Personification",
-      "release_date": "2024-11-12",
-      "duration": "4:10",
-      "type": "original",
-      "note": "Recorded with new microphone from girlfriend",
-      "source": "BandLab"
-    },
-    {
-      "hfid": "m010",
-      "title": "The Resonance of Personification",
-      "album": "Perception of Personification", 
-      "release_date": "2024-11-12",
-      "duration": "3:27",
-      "type": "original",
-      "source": "BandLab"
-    },
-    {
-      "hfid": "m011",
-      "title": "Mama take this badge from me",
-      "album": "Perception of Personification",
-      "release_date": "2024-11-12", 
-      "duration": "2:50",
-      "type": "original",
-      "source": "BandLab"
-    },
-    {
-      "hfid": "m012",
-      "title": "Ain't Nothin' But A Day To Die",
-      "release_date": "2025",
-      "type": "original",
-      "platforms": ["Spotify", "Apple Music", "iHeartRadio", "Deezer", "YouTube"],
-      "merch": true,
-      "source": "DistroKid"
-    },
-    {
-      "hfid": "m013",
-      "title": "Clear Skyes to Nevermore",
-      "release_date": "2026-01-TBD",
-      "type": "original",
-      "status": "upcoming",
-      "album": "First Solo Original Album",
-      "note": "Sneak peek posted Dec 2025",
-      "source": "Facebook"
-    },
-    {
-      "hfid": "m014",
-      "title": "What It's Like",
-      "release_date": "2025-12-28",
-      "type": "cover",
-      "original_artist": "Everlast",
-      "note": "Acoustic cover posted to FB",
-      "source": "Facebook"
-    }
-  ]
-}
-EOF
-
-# Stamp the entire discography
-ots stamp music/discography.json
-
-# Generate JS snippet for registry.html
-cat > music-registry-snippet.js << 'EOJS'
-const music = [
-EOJS
-jq -c '.tracks[]' music/discography.json | while read -r track; do
-  title=$(echo $track | jq -r '.title')
-  hfid=$(echo $track | jq -r '.hfid')
-  release=$(echo $track | jq -r '.release_date')
-  echo " { \"hfid\": \"$hfid\", \"title\": \"$title\", \"release_date\": \"$release\", \"block\": \"PENDING\", \"ots_file\": \"https://jhammerz.github.io/music/discography.json.ots\", \"verified\": false }," >> music-registry-snippet.js
-done
-echo "];" >> music-registry-snippet.js
-
-echo "=== L5 MUSIC CATALOG ANCHORED ==="
-echo "Tracks found: 14"
-echo "Stamped: music/discography.json.ots"
-echo "Next: git add music/ && git commit -m 'L5: Anchor JHammerZ catalog - 14 tracks' && git push"
-<script>
-// L5 Data embedded - no fetch, no CORS, no cache issues
-const venues = [
-  {
-    "hfid": "e57197f4",
-    "name": "JHam Session Records",
-    "city": "Springfield, OH",
-    "owner": "JHammerZ",
-    "block": 961138,
-    "tx": "557f11402cbfb9d77c5eb7e7dd41ccebc0cf6e1f8c8b9d2e6c4a1f3e5d7b9c1a",
-    "verified": true,
-    "genesis": true,
-    "url": "https://jhammerz.github.io/verify.html"
-  },
-  {
-    "hfid": "75a10875",
-    "name": "JHam Session Records",
-    "city": "Springfield, OH",
-    "owner": "JHammerZ",
-    "block": "PENDING",
-    "tx": "PENDING",
-    "verified": false,
-    "genesis": false,
-    "url": "https://jhammerz.github.io/verify.html"
-  },
-  {
-    "hfid": "2e8beee5",
-    "name": "Street Busking",
-    "city": "Springfield",
-    "owner": "JHammerZ",
-    "block": "PENDING",
-    "tx": "PENDING",
-    "verified": false,
-    "genesis": false,
-    "url": "https://jhammerz.github.io/verify.html"
-  }
-];
-document.getElementById('rows').innerHTML = venues.map(v =>
-  `<tr><td>${v.hfid}</td><td>${v.name}</td><td>${v.city}</td><td>${v.block}</td><td>${v.verified?'✓ VERIFIED':'PENDING'}</td></tr>`
-).join('');
-</script>
+<p>Protocol: <a href="L5.md">L5.md</a></p>
 </body>
 </html>
