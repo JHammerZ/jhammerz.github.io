@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L5 Proof Verification - JHam Session Records</title>
-  <style>
-    body { background:#000; color:#0f0; font-family:monospace; padding:20px; line-height:1.6; }
-    a { color:#0ff; } h1 { color:#fff; } .hash { word-break:break-all; }
-  </style>
+<title>L5 Venue Verification</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{background:#000;color:#0f0;font-family:monospace;padding:20px;text-align:center}
+h1{color:#0ff;text-shadow:0 0 10px #0ff}
+.verified{border:2px solid #0f0;padding:20px;margin:20px 0}
+.hfid{font-size:24px;color:#ff0}
+code{background:#111;padding:10px;display:block;margin:10px 0}
+a{color:#0ff}
+</style>
 </head>
 <body>
-  <h1>L5 PROOF VERIFICATION</h1>
-  <p><b>Venue:</b> JHam Session Records - Springfield</p>
-  <p><b>Date:</b> Aug 5 2026</p>
-  <p><b>HFID:</b> e57197f4</p>
-  <hr>
-  <h2>CDN Anchor</h2>
-  <p>File: <a href="style.css.ots">style.css.ots</a></p>
-  <p>Status: Anchored in Bitcoin Block 961138</p>
-  <p class="hash">Merkle: d24c63ccb0b4f55de3e9721180f812f5e4ec13155a85d9e557f91cd186548228</p>
-  <hr>
-  <h2>Setlist Proof</h2>
-  <p>File: <a href="setlist_0805.txt.ots">setlist_0805.txt.ots</a></p>
-  <p>Status: Pending BTC attestation - Check back in 24hrs</p>
-  <hr>
-  <h2>Verify Yourself</h2>
-  <pre>curl -sLO https://jhammerz.github.io/style.css{,.ots} && ots verify style.css.ots</pre>
-  <p><i>The chain is the contract. Scan the QR to get here.</i></p>
+<h1>L5 VENUE VERIFIED</h1>
+<div class="verified">
+  <div>HFID: <span class="hfid">e57197f4</span></div>
+  <div>VENUE: JHam Session Records</div>
+  <div>CITY: Springfield, OH</div>
+  <div>BITCOIN BLOCK: 961138</div>
+  <div>STATUS: ✓ ANCHORED TO BITCOIN</div>
+</div>
+<h2>Verify Yourself</h2>
+<code>ots verify venue.txt.ots</code>
+<a href="venue.txt">venue.txt</a> | 
+<a href="venue.txt.ots">venue.txt.ots</a> | 
+<a href="L5.md">How to join L5</a>
+<p>Genesis Protocol: jhammerz.github.io/L5.md</p>
+<p>Try to backdate me.</p>
 </body>
 </html>
