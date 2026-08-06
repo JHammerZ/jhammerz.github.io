@@ -1,0 +1,10 @@
+{
+  "schema": "hfid.claim.v1",
+  "hfid": "6bb95d13bc1c",
+  "replicant": "R22_6bb95d13bc1c",
+  "root_hfid": "e57197f4",
+  "claim_type": "repository_state",
+  "state_hash": "c81ec197d9e4fa54",
+  "file_count": 3572,
+  "anchored_at": "2026-08-06T06:30:31+00:00"
+}

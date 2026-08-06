@@ -1303,6 +1303,16 @@
     "replicant": "R11_3825aa7662a0",
     "root_hfid": "e57197f4",
     "claim_type": "repository_state",
+    "state_hash": "df613532ac825c26",
+    "file_count": 3569,
+    "anchored_at": "2026-08-06T06:30:31+00:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "3825aa7662a0",
+    "replicant": "R11_3825aa7662a0",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
     "state_hash": "eb87292c87d23c3d",
     "file_count": 3530,
     "anchored_at": "2026-08-05T08:38:50+00:00"
@@ -1960,6 +1970,16 @@
     "state_hash": "1263b8a3f3398e58",
     "file_count": 3150,
     "anchored_at": "2026-08-05T00:11:58-04:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "3825aa7662a0",
+    "replicant": "R12_3825aa7662a0",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "5800a9639c192949",
+    "file_count": 3570,
+    "anchored_at": "2026-08-06T06:30:31+00:00"
   },
   {
     "schema": "hfid.claim.v1",
@@ -7129,6 +7149,16 @@
     "replicant": "R21_6bb95d13bc1c",
     "root_hfid": "e57197f4",
     "claim_type": "repository_state",
+    "state_hash": "77998f62898fa9e5",
+    "file_count": 3571,
+    "anchored_at": "2026-08-06T06:30:31+00:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "6bb95d13bc1c",
+    "replicant": "R21_6bb95d13bc1c",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
     "state_hash": "9cb70d952e1bd81a",
     "file_count": 3154,
     "anchored_at": "2026-08-05T00:11:58-04:00"
@@ -7165,6 +7195,16 @@
   },
   {
     "schema": "hfid.claim.v1",
+    "hfid": "6bb95d13bc1c",
+    "replicant": "R22_6bb95d13bc1c",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "c81ec197d9e4fa54",
+    "file_count": 3572,
+    "anchored_at": "2026-08-06T06:30:31+00:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
     "hfid": "848765bc90ab",
     "replicant": "R31_848765bc90ab",
     "root_hfid": "e57197f4",
@@ -7172,6 +7212,16 @@
     "state_hash": "11b3a6247519fb09",
     "file_count": 3160,
     "anchored_at": "2026-08-05T00:11:59-04:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "848765bc90ab",
+    "replicant": "R31_848765bc90ab",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "914e223e4b1df550",
+    "file_count": 3573,
+    "anchored_at": "2026-08-06T06:30:31+00:00"
   },
   {
     "schema": "hfid.claim.v1",
@@ -7202,6 +7252,16 @@
     "state_hash": "74375869de33d669",
     "file_count": 3162,
     "anchored_at": "2026-08-05T00:11:59-04:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "848765bc90ab",
+    "replicant": "R32_848765bc90ab",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "7ed27602390840eb",
+    "file_count": 3574,
+    "anchored_at": "2026-08-06T06:30:31+00:00"
   },
   {
     "schema": "hfid.claim.v2",
