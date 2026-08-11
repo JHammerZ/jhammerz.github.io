@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: false
 
       - name: Check latest IG post @jhammerzz
         id: ig
@@ -25,13 +27,13 @@ jobs:
       - name: Cache check
         id: cache
         run: |
-          mkdir -p .cache
-          touch .cache/posted_ids.txt
-          if grep -q "${{ steps.ig.outputs.id }}" .cache/posted_ids.txt; then
+          mkdir -p.cache
+          touch.cache/posted_ids.txt
+          if grep -q "${{ steps.ig.outputs.id }}".cache/posted_ids.txt; then
             echo "seen=true" >> $GITHUB_OUTPUT
           else
             echo "seen=false" >> $GITHUB_OUTPUT
-            echo "${{ steps.ig.outputs.id }}" >> .cache/posted_ids.txt
+            echo "${{ steps.ig.outputs.id }}" >>.cache/posted_ids.txt
           fi
 
       - name: Commit cache
@@ -39,7 +41,7 @@ jobs:
         run: |
           git config user.name "HEO-Bot"
           git config user.email "heo@jhammerz.github.io"
-          git add .cache/posted_ids.txt
+          git add.cache/posted_ids.txt
           git commit -m "cache: saw new IG post ${{ steps.ig.outputs.id }}" || echo "No changes"
           git push
         env:
