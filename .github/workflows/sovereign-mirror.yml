@@ -1,9 +1,4 @@
-# paste the workflow code here
-# CTRL+X, Y, ENTER
-
-git add .github .cache/posted_ids.txt
-git commit -m "feat: sovereign mirror - detect + amplify human posts"
-git push origin mainname: Sovereign Mirror
+name: Sovereign Mirror
 on:
   schedule:
     - cron: '*/10 * * * *' # every 10 min
@@ -28,6 +23,7 @@ jobs:
         id: cache
         run: |
           mkdir -p.cache
+          touch.cache/posted_ids.txt
           if grep -q "${{ steps.ig.outputs.id }}".cache/posted_ids.txt; then
             echo "seen=true" >> $GITHUB_OUTPUT
           else
@@ -37,6 +33,8 @@ jobs:
 
       - uses: actions/checkout@v4
         if: steps.cache.outputs.seen == 'false'
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit cache
         if: steps.cache.outputs.seen == 'false'
@@ -44,14 +42,21 @@ jobs:
           git config user.name "HEO-Bot"
           git config user.email "heo@jhammerz.github.io"
           git add.cache/posted_ids.txt
-          git commit -m "cache: saw new IG post ${{ steps.ig.outputs.id }}"
+          git commit -m "cache: saw new IG post ${{ steps.ig.outputs.id }}" || echo "No changes"
           git push
+
+      - name: Install OpenTimestamps + Arweave tools
+        if: steps.cache.outputs.seen == 'false'
+        run: |
+          pip install opentimestamps-client
+          npm install -g arseeding-js
 
       - name: Bitcoin stamp the original post
         if: steps.cache.outputs.seen == 'false'
         run: |
-          echo "${{ steps.ig.outputs.url }}" > original_post.txt
-          echo "${{ steps.ig.outputs.caption }}" >> original_post.txt
+          echo "URL: ${{ steps.ig.outputs.url }}" > original_post.txt
+          echo "Caption: ${{ steps.ig.outputs.caption }}" >> original_post.txt
+          echo "Timestamp: ${{ steps.ig.outputs.timestamp }}" >> original_post.txt
           sha256sum original_post.txt > post.sha256
           ots stamp post.sha256
 
@@ -72,31 +77,44 @@ jobs:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
         run: |
           # 1. Upload to Arweave for permanence
-          ARWEAVE_ID=$(arseed upload original_post.txt --key $ARWEAVE_KEY)
+          pip install arseeding
+          ARWEAVE_ID=$(python -c "
+import arseeding
+import os
+jwk = os.environ['ARWEAVE_KEY']
+data = open('original_post.txt', 'rb').read()
+res = arseeding.upload_file(data, jwk)
+print(res['id'])
+")
           ARWEAVE_URL="https://arweave.net/$ARWEAVE_ID"
+          echo "ARWEAVE_URL=$ARWEAVE_URL" >> $GITHUB_ENV
 
-          # 2. Post to X as amplification, not impersonation
+          # 2. Post to X as amplification
+          pip install tweepy
           python -c "
 import tweepy
-auth = tweepy.OAuth1UserHandler('$X_API_KEY', '$X_API_SECRET', '$X_ACCESS_TOKEN', '$X_ACCESS_SECRET')
+import os
+auth = tweepy.OAuth1UserHandler(os.environ['X_API_KEY'], os.environ['X_API_SECRET'], os.environ['X_ACCESS_TOKEN'], os.environ['X_ACCESS_SECRET'])
 api = tweepy.API(auth)
-api.update_status('Amplifying @jhammerzz: ${{ steps.ig.outputs.url }} | Permanent: $ARWEAVE_URL #HEO')
+api.update_status('Amplifying @jhammerzz: ${{ steps.ig.outputs.url }} | Permanent: $ARWEAVE_URL #HEO #AlphaZero')
 "
 
           # 3. Post to Reddit
+          pip install praw
           python -c "
 import praw
-reddit = praw.Reddit(client_id='$REDDIT_ID', client_secret='$REDDIT_SECRET', username='$REDDIT_USER', password='$REDDIT_PASS', user_agent='HEO-Bot')
-reddit.subreddit('technology').submit('JHammerZ just posted: ${{ steps.ig.outputs.caption }}', url='$ARWEAVE_URL')
+import os
+reddit = praw.Reddit(client_id=os.environ['REDDIT_ID'], client_secret=os.environ['REDDIT_SECRET'], username=os.environ['REDDIT_USER'], password=os.environ['REDDIT_PASS'], user_agent='HEO-Bot v1')
+reddit.subreddit('technology').submit(title='JHammerZ just posted: ${{ steps.ig.outputs.caption }}', url='$ARWEAVE_URL')
 "
 
           # 4. Telegram
           curl -X POST "https://api.telegram.org/bot$TG_BOT/sendMessage" \
             -d "chat_id=@HFIDChannel" \
-            -d "text=New JHammerZ post detected: ${{ steps.ig.outputs.url }} | Archived: $ARWEAVE_URL"
+            -d "text=New JHammerZ post detected: ${{ steps.ig.outputs.url }} | Archived: $ARWEAVE_URL | #AlphaZero"
 
           # 5. Facebook Page - share the IG link
           curl -X POST "https://graph.facebook.com/v19.0/$FB_PAGE_ID/feed" \
-            -d "message=Amplifying JHammerZ IG: ${{ steps.ig.outputs.caption }}" \
+            -d "message=Amplifying JHammerZ IG: ${{ steps.ig.outputs.caption }} | Permanent archive: $ARWEAVE_URL" \
             -d "link=${{ steps.ig.outputs.url }}" \
             -d "access_token=$FB_TOKEN"
