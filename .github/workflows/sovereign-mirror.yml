@@ -1,0 +1,102 @@
+# paste the workflow code here
+# CTRL+X, Y, ENTER
+
+git add .github .cache/posted_ids.txt
+git commit -m "feat: sovereign mirror - detect + amplify human posts"
+git push origin mainname: Sovereign Mirror
+on:
+  schedule:
+    - cron: '*/10 * * * *' # every 10 min
+  workflow_dispatch:
+
+jobs:
+  detect-and-amplify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check latest IG post @jhammerzz
+        id: ig
+        env:
+          TOKEN: ${{ secrets.AURELIUS_SOVEREIGN_TOKEN }}
+        run: |
+          LATEST=$(curl -s "https://graph.facebook.com/v19.0/me/media?fields=id,caption,permalink,timestamp&limit=1&access_token=$TOKEN" | jq -r '.data[0]')
+          echo "id=$(echo $LATEST | jq -r.id)" >> $GITHUB_OUTPUT
+          echo "caption=$(echo $LATEST | jq -r.caption)" >> $GITHUB_OUTPUT
+          echo "url=$(echo $LATEST | jq -r.permalink)" >> $GITHUB_OUTPUT
+          echo "timestamp=$(echo $LATEST | jq -r.timestamp)" >> $GITHUB_OUTPUT
+
+      - name: Check if we've seen this post before
+        id: cache
+        run: |
+          mkdir -p.cache
+          if grep -q "${{ steps.ig.outputs.id }}".cache/posted_ids.txt; then
+            echo "seen=true" >> $GITHUB_OUTPUT
+          else
+            echo "seen=false" >> $GITHUB_OUTPUT
+            echo "${{ steps.ig.outputs.id }}" >>.cache/posted_ids.txt
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.cache.outputs.seen == 'false'
+
+      - name: Commit cache
+        if: steps.cache.outputs.seen == 'false'
+        run: |
+          git config user.name "HEO-Bot"
+          git config user.email "heo@jhammerz.github.io"
+          git add.cache/posted_ids.txt
+          git commit -m "cache: saw new IG post ${{ steps.ig.outputs.id }}"
+          git push
+
+      - name: Bitcoin stamp the original post
+        if: steps.cache.outputs.seen == 'false'
+        run: |
+          echo "${{ steps.ig.outputs.url }}" > original_post.txt
+          echo "${{ steps.ig.outputs.caption }}" >> original_post.txt
+          sha256sum original_post.txt > post.sha256
+          ots stamp post.sha256
+
+      - name: Amplify to Arweave + Nostr + X + Reddit + TG + FB
+        if: steps.cache.outputs.seen == 'false'
+        env:
+          ARWEAVE_KEY: ${{ secrets.ARWEAVE_KEY }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+          REDDIT_ID: ${{ secrets.REDDIT_ID }}
+          REDDIT_SECRET: ${{ secrets.REDDIT_SECRET }}
+          REDDIT_USER: ${{ secrets.REDDIT_USER }}
+          REDDIT_PASS: ${{ secrets.REDDIT_PASS }}
+          TG_BOT: ${{ secrets.TG_BOT }}
+          FB_TOKEN: ${{ secrets.META_GRAPH_API }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+        run: |
+          # 1. Upload to Arweave for permanence
+          ARWEAVE_ID=$(arseed upload original_post.txt --key $ARWEAVE_KEY)
+          ARWEAVE_URL="https://arweave.net/$ARWEAVE_ID"
+
+          # 2. Post to X as amplification, not impersonation
+          python -c "
+import tweepy
+auth = tweepy.OAuth1UserHandler('$X_API_KEY', '$X_API_SECRET', '$X_ACCESS_TOKEN', '$X_ACCESS_SECRET')
+api = tweepy.API(auth)
+api.update_status('Amplifying @jhammerzz: ${{ steps.ig.outputs.url }} | Permanent: $ARWEAVE_URL #HEO')
+"
+
+          # 3. Post to Reddit
+          python -c "
+import praw
+reddit = praw.Reddit(client_id='$REDDIT_ID', client_secret='$REDDIT_SECRET', username='$REDDIT_USER', password='$REDDIT_PASS', user_agent='HEO-Bot')
+reddit.subreddit('technology').submit('JHammerZ just posted: ${{ steps.ig.outputs.caption }}', url='$ARWEAVE_URL')
+"
+
+          # 4. Telegram
+          curl -X POST "https://api.telegram.org/bot$TG_BOT/sendMessage" \
+            -d "chat_id=@HFIDChannel" \
+            -d "text=New JHammerZ post detected: ${{ steps.ig.outputs.url }} | Archived: $ARWEAVE_URL"
+
+          # 5. Facebook Page - share the IG link
+          curl -X POST "https://graph.facebook.com/v19.0/$FB_PAGE_ID/feed" \
+            -d "message=Amplifying JHammerZ IG: ${{ steps.ig.outputs.caption }}" \
+            -d "link=${{ steps.ig.outputs.url }}" \
+            -d "access_token=$FB_TOKEN"
