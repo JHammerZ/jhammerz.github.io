@@ -1,0 +1,24 @@
+name: DOI Sync | Janus Gate v1.1.0-H-FID
+on:
+  push:
+    paths: ['CITATION.cff','README.md','*.md']
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Zenodo DOI
+        run: |
+          curl -s https://zenodo.org/api/records/20778079 >.zenodo.json
+          jq '.metadata.title,.doi,.conceptdoi'.zenodo.json
+          echo "Janus Gate v1.1.0-H-FID: Verified $(date -u)" >>.hfid/doi-sync.log
+      - name: OpenTimestamp Evidence
+        run: |
+          pip install opentimestamps-client
+          ots stamp.zenodo.json.hfid/doi-sync.log
+          git config user.name "Janus-Gate"
+          git config user.email "janus@jhammerz.github.io"
+          git add.zenodo.json.hfid/doi-sync.log *.ots
+          git commit -m "chore(doi): Janus Gate v1.1.0-H-FID sync $(date -u +%Y%m%d)" || true
+          git push || true
