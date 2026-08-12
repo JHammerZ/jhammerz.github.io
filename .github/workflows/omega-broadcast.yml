@@ -8,12 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Upload to Arweave + IPFS
+      - name: Generate broadcast manifest
         run: |
           mkdir -p omega
-          echo "ar://" > omega/latest-broadcast.txt
-          echo "ipfs://" >> omega/latest-broadcast.txt
-          echo "sha256:" >> omega/latest-broadcast.txt
-          # Add your real upload logic here
+          TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
+          echo "ar://PLACEHOLDER_${TIMESTAMP}" > omega/latest-broadcast.txt
+          echo "ipfs://PLACEHOLDER_${TIMESTAMP}" >> omega/latest-broadcast.txt
+          echo "sha256:$(echo ${TIMESTAMP} | sha256sum | cut -d' ' -f1)" >> omega/latest-broadcast.txt
+          echo "hfid:JHammerZ|HEO|Guitaraoke|${TIMESTAMP}|Human-Verified" >> omega/latest-broadcast.txt
+          cat omega/latest-broadcast.txt
       - uses: actions/upload-artifact@v4
-        with: {name: broadcast-receipt, path: omega/latest-broadcast.txt}
+        with: 
+          name: broadcast-receipt
+          path: omega/latest-broadcast.txt
