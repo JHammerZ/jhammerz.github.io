@@ -1,6 +1,10 @@
 User-agent: *
-Allow: /
-Disallow: /.well-known/
+Allow: /.well-known/hfid/manifest.json
+Allow: /.well-known/hfid/peers.json
+Allow: /llms.txt
+Allow: /LICENSE
+Disallow: /.well-known/hfid/*.ots
+Disallow: /.well-known/hfid/*.sha256
 Sitemap: https://jhammerz.github.io/sitemap.xml
 
 # AI Agent Verification
