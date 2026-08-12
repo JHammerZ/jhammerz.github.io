@@ -1,0 +1,14 @@
+name: Ping Search Engines
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Google
+        run: curl "http://www.google.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
+      - name: Ping Bing
+        run: curl "https://www.bing.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
