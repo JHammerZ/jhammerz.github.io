@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "56f173b7e514",
+  "replicant": "R101_56f173b7e514",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "2279df74301ab054a87d784ae0e67c705d308554",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "H-FID: Skip IPFS - use placeholder hash to complete LYSANDER",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T04:47:58Z"
+}

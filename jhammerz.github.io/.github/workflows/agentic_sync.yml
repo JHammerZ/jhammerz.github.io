@@ -1,0 +1,53 @@
+name: AGENTIC_SYNC
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'social_manifest.json'
+      - 'index_site.py'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          npm ci || npm install
+          pip install requests google-auth google-auth-oauthlib google-auth-httplib2
+
+      - name: Run social media publisher
+        env:
+          FB_API_KEY: ${{ secrets.FB_API_KEY }}
+          THREADS_API_KEY: ${{ secrets.THREADS_API_KEY }}
+          LINKEDIN_API_KEY: ${{ secrets.LINKEDIN_API_KEY }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
+          LYSANDER_HUB_TOKEN: ${{ secrets.LYSANDER_HUB_TOKEN }}
+          GITHUB_SHA: ${{ github.sha }}
+          COMMIT_TITLE: ${{ github.event.head_commit.message }}
+        run: node scripts/social_media_publisher.js
+        continue-on-error: true
+
+      - name: Run indexing
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: python index_site.py
