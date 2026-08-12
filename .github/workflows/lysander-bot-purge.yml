@@ -1,46 +1,26 @@
 name: H-FID Verify | Lysander 3.1 Bot Purge
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 3 * * *"
-
 permissions:
   contents: write
-
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run Lysander Bot Purge
-        id: hfid
         run: |
           set -e
           mkdir -p.hfid/results
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          HASH=$(echo "JHammerZ|HEO|Guitaraoke|$TIMESTAMP|Human-Verified" | sha256sum | cut -d
- -f1)
+          TIMESTAMP=$(date -u +%%Y%%m%%d-%%H%%M%%S)
+          HASH=$(echo "JHammerZ|HEO|Guitaraoke|$TIMESTAMP|Human-Verified" | sha256sum | cut -d" " -f1)
           echo "$HASH" >.hfid/results/hfid-$TIMESTAMP.txt
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
-          echo "Created H-FID: $HASH"
-
-      - name: Commit H-FID
-        run: |
-          set -e
           git config user.name "Lysander-Bot"
           git config user.email "lysander@jhammerz.github.io"
           git add.hfid/results/
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "hfid: Human-Verified ${{ steps.hfid.outputs.timestamp }}"
-            git pull --rebase origin main
-            git push origin main
-          fi
+          git commit -m "hfid: Human-Verified $TIMESTAMP" || echo "No changes"
+          git push
