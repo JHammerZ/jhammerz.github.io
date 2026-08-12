@@ -1,54 +1,85 @@
 name: Sovereign Mirror
+
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 jobs:
-  detect-and-amplify:
+  sovereign-mirror:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: false
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps
+        run: |
+          npm install -g jq curl
 
       - name: Check latest IG post @jhammerzz
-        id: ig
+        id: igcheck
         env:
           TOKEN: ${{ secrets.AURELIUS_SOVEREIGN_TOKEN }}
         run: |
-          LATEST=$(curl -s "https://graph.facebook.com/v19.0/me/media?fields=id,caption,permalink,timestamp&limit=1&access_token=${TOKEN}" | jq -r '.data[0]')
-          echo "id=$(echo $LATEST | jq -r '.id')" >> $GITHUB_OUTPUT
-          echo "caption=$(echo $LATEST | jq -r '.caption')" >> $GITHUB_OUTPUT
-          echo "url=$(echo $LATEST | jq -r '.permalink')" >> $GITHUB_OUTPUT
-          echo "timestamp=$(echo $LATEST | jq -r '.timestamp')" >> $GITHUB_OUTPUT
+          mkdir -p mirror/ig
+          echo "Checking IG User ID: 17841470160903204"
 
-      - name: Cache check
-        id: cache
+          LATEST=$(curl -s "https://graph.facebook.com/v19.0/17841470160903204/media?fields=id,caption,permalink,timestamp&limit=1&access_token=${TOKEN}" | jq -r ".data[0]")
+
+          echo "$LATEST" > mirror/ig/latest.json
+          echo "LATEST_ID=$(echo $LATEST | jq -r ".id")" >> $GITHUB_ENV
+          echo "LATEST_URL=$(echo $LATEST | jq -r ".permalink")" >> $GITHUB_ENV
+          echo "LATEST_CAPTION=$(echo $LATEST | jq -r ".caption")" >> $GITHUB_ENV
+          echo "LATEST_TIME=$(echo $LATEST | jq -r ".timestamp")" >> $GITHUB_ENV
+
+          cat mirror/ig/latest.json
+
+      - name: Compare with last mirrored post
+        id: detect
         run: |
-          mkdir -p .cache
-          touch .cache/posted_ids.txt
-          if grep -q "${{ steps.ig.outputs.id }}" .cache/posted_ids.txt; then
-            echo "seen=true" >> $GITHUB_OUTPUT
+          mkdir -p mirror/ig
+          touch mirror/ig/last.json
+
+          LAST_ID=$(cat mirror/ig/last.json | jq -r ".id // empty")
+          echo "Last mirrored ID: $LAST_ID"
+          echo "Latest IG ID: $LATEST_ID"
+
+          if [ "$LATEST_ID"!= "$LAST_ID" ] && [! -z "$LATEST_ID" ]; then
+            echo "NEW_POST=true" >> $GITHUB_ENV
+            echo "New IG post detected: $LATEST_URL"
           else
-            echo "seen=false" >> $GITHUB_OUTPUT
-            echo "${{ steps.ig.outputs.id }}" >> .cache/posted_ids.txt
+            echo "NEW_POST=false" >> $GITHUB_ENV
+            echo "No new posts"
           fi
 
-      - name: Commit cache
-        if: steps.cache.outputs.seen == 'false'
+      - name: Update mirror state
+        if: env.NEW_POST == "true"
         run: |
-          git config user.name "HEO-Bot"
-          git config user.email "heo@jhammerz.github.io"
-          git add .cache/posted_ids.txt
-          git commit -m "cache: saw new IG post ${{ steps.ig.outputs.id }}" || echo "No changes"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          cp mirror/ig/latest.json mirror/ig/last.json
+          echo "Updated mirror/ig/last.json"
 
-      - name: Detect result
-        if: steps.cache.outputs.seen == 'false'
+      - name: Commit and push if new post
+        if: env.NEW_POST == "true"
         run: |
-          echo "New IG post detected: ${{ steps.ig.outputs.url }}"
-          echo "Caption: ${{ steps.ig.outputs.caption }}"
+          git config user.name "AlphaZero Mirror"
+          git config user.email "actions@github.com"
+          git add mirror/ig/last.json
+          git commit -m "mirror: IG post $LATEST_ID | $LATEST_TIME" || echo "No changes to commit"
+          git push origin main
+
+      - name: Summary
+        run: |
+          echo "### Sovereign Mirror Run Complete" >> $GITHUB_STEP_SUMMARY
+          echo "Latest IG: $LATEST_URL" >> $GITHUB_STEP_SUMMARY
+          echo "New post: $NEW_POST" >> $GITHUB_STEP_SUMMARY
+          echo "Timestamp: $LATEST_TIME" >> $GITHUB_STEP_SUMMARY
+
