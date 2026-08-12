@@ -7,7 +7,7 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Google
-        run: curl "http://www.google.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
       - name: Ping Bing
         run: curl "https://www.bing.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
+      - name: Note about Google
+        run: echo "Google deprecated ping. Use Search Console URL Inspection instead."
