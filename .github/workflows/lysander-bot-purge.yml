@@ -3,8 +3,10 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 3 * * *"
+
 permissions:
   contents: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -12,15 +14,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          
       - name: Run Lysander Bot Purge
         run: |
           set -e
-          mkdir -p.hfid/results
-          TIMESTAMP=$(date -u +%%Y%%m%%d-%%H%%M%%S)
-          HASH=$(echo "JHammerZ|HEO|Guitaraoke|$TIMESTAMP|Human-Verified" | sha256sum | cut -d" " -f1)
-          echo "$HASH" >.hfid/results/hfid-$TIMESTAMP.txt
+          mkdir -p .hfid/results
+          TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
+          HASH=$(echo "JHammerZ|HEO|Guitaraoke|$TIMESTAMP|Human-Verified" | sha256sum | awk '{print $1}')
+          echo "$HASH" > .hfid/results/hfid-$TIMESTAMP.txt
           git config user.name "Lysander-Bot"
           git config user.email "lysander@jhammerz.github.io"
-          git add.hfid/results/
-          git commit -m "hfid: Human-Verified $TIMESTAMP" || echo "No changes"
+          git add .hfid/results/
+          git commit -m "hfid: Human-Verified $TIMESTAMP" || echo "No changes to commit"
           git push
