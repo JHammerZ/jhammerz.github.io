@@ -12,18 +12,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: false
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install deps
-        run: |
-          npm install -g jq curl
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Check latest IG post @jhammerzz
         id: igcheck
@@ -33,13 +26,14 @@ jobs:
           mkdir -p mirror/ig
           echo "Checking IG User ID: 17841470160903204"
 
-          LATEST=$(curl -s "https://graph.facebook.com/v19.0/17841470160903204/media?fields=id,caption,permalink,timestamp&limit=1&access_token=${TOKEN}" | jq -r ".data[0]")
+          LATEST=$(curl -s "https://graph.facebook.com/v19.0/17841470160903204/media?fields=id,caption,permalink,timestamp&limit=1&access_token=${TOKEN}")
 
           echo "$LATEST" > mirror/ig/latest.json
-          echo "LATEST_ID=$(echo $LATEST | jq -r ".id")" >> $GITHUB_ENV
-          echo "LATEST_URL=$(echo $LATEST | jq -r ".permalink")" >> $GITHUB_ENV
-          echo "LATEST_CAPTION=$(echo $LATEST | jq -r ".caption")" >> $GITHUB_ENV
-          echo "LATEST_TIME=$(echo $LATEST | jq -r ".timestamp")" >> $GITHUB_ENV
+
+          echo "LATEST_ID=$(echo $LATEST | jq -r '.data[0].id')" >> $GITHUB_ENV
+          echo "LATEST_URL=$(echo $LATEST | jq -r '.data[0].permalink')" >> $GITHUB_ENV
+          echo "LATEST_CAPTION=$(echo $LATEST | jq -r '.data[0].caption')" >> $GITHUB_ENV
+          echo "LATEST_TIME=$(echo $LATEST | jq -r '.data[0].timestamp')" >> $GITHUB_ENV
 
           cat mirror/ig/latest.json
 
@@ -47,9 +41,11 @@ jobs:
         id: detect
         run: |
           mkdir -p mirror/ig
-          touch mirror/ig/last.json
+          if [! -f mirror/ig/last.json ]; then
+            echo "{}" > mirror/ig/last.json
+          fi
 
-          LAST_ID=$(cat mirror/ig/last.json | jq -r ".id // empty")
+          LAST_ID=$(cat mirror/ig/last.json | jq -r '.data[0].id // empty')
           echo "Last mirrored ID: $LAST_ID"
           echo "Latest IG ID: $LATEST_ID"
 
