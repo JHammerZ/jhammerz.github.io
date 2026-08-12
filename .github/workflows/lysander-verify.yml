@@ -4,12 +4,23 @@ on:
   schedule:
     - cron: '0 */6 * * *'
 
+# This gives the workflow push access
+permissions:
+  contents: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout with write access
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Install OpenTimestamps
+        run: pip install opentimestamps-client
+        
       - name: Run Lysander Bot Purge
         run: |
           set -e
@@ -17,8 +28,11 @@ jobs:
           TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
           HASH=$(echo "JHammerZ|HEO|Guitaraoke|$TIMESTAMP|Human-Verified" | sha256sum | cut -d" " -f1)
           echo "$HASH" > .hfid/results/hfid-$TIMESTAMP.txt
+          
+      - name: Commit and Push H-FID
+        run: |
           git config user.name "Lysander-Bot"
           git config user.email "lysander@jhammerz.github.io"
           git add .hfid/results/
-          git commit -m "hfid: Human-Verified $TIMESTAMP" || echo "No changes"
+          git commit -m "hfid: Human-Verified $(date -u +%Y%m%d-%H%M%S)" || echo "No changes to commit"
           git push
