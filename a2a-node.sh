@@ -11,6 +11,7 @@ generate_manifest() {
     echo "Indexing proofs into manifest..."
     mapfile -t ots_files < <(find "$HFID_DIR" -maxdepth 1 -type f -name "*.ots" | sort)
     count=${#ots_files[@]}
+    echo "Found $count .ots files"
     
     {
     printf '{\n'
@@ -21,6 +22,7 @@ generate_manifest() {
     printf '  "proof_base_url": "%s/%s/",\n' "$BASE_URL" "$HFID_DIR"
     printf '  "verification_endpoint": "https://ots.tools/verify",\n'
     printf '  "last_updated": "%s",\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    printf '  "peers_endpoint": "%s/%s/peers.json",\n' "$BASE_URL" "$HFID_DIR"
     printf '  "proofs": [\n'
     
     for i in "${!ots_files[@]}"; do
@@ -44,21 +46,40 @@ generate_manifest() {
 discover_peers() {
     echo "Scanning for other A2A nodes..."
     mkdir -p "$HFID_DIR"
-    curl -s "https://api.github.com/search/code?q=filename:manifest.json+path:.well-known/hfid+Twenty+47" \
-    | jq -r '.items[].repository.html_url' 2>/dev/null \
-    | sed 's|https://github.com|https://raw.githubusercontent.com|; s|$|/master/.well-known/hfid/manifest.json|' \
-    | head -20 > "$HFID_DIR/peers.txt" || touch "$HFID_DIR/peers.txt"
+    tmp_peers="$HFID_DIR/peers.json.tmp"
     
-    echo '{"peers":[' > "$HFID_DIR/peers.json"
+    # Start JSON
+    printf '{"peers":[' > "$tmp_peers"
+    
+    # GitHub search, handle empty results
+    peer_urls=$(curl -s "https://api.github.com/search/code?q=filename:manifest.json+path:.well-known/hfid+Twenty+47" \
+    | jq -r '.items[].repository.html_url' 2>/dev/null \
+    | sed 's|https://github.com|https://raw.githubusercontent.com|; s|$|/master/.well-known/hfid/manifest.json|' || true)
+    
     first=1
-    while read -r url; do
-        [ -z "$url" ] && continue
-        [ $first -eq 0 ] && echo ',' >> "$HFID_DIR/peers.json"
-        first=0
-        printf '"%s"' "$url" >> "$HFID_DIR/peers.json"
-    done < "$HFID_DIR/peers.txt"
-    echo "],\"updated\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" >> "$HFID_DIR/peers.json"
-    echo "Found $(grep -c . $HFID_DIR/peers.txt) peer nodes"
+    peer_count=0
+    if [ -n "$peer_urls" ]; then
+        while IFS= read -r url; do
+            [ -z "$url" ] && continue
+            [ $first -eq 0 ] && printf ',' >> "$tmp_peers"
+            first=0
+            printf '"%s"' "$url" >> "$tmp_peers"
+            ((peer_count++))
+        done <<< "$peer_urls"
+    fi
+    
+    printf '],"updated":"%s","count":%s}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$peer_count" >> "$tmp_peers"
+    
+    # Validate before moving
+    if jq empty "$tmp_peers" 2>/dev/null; then
+        mv "$tmp_peers" "$HFID_DIR/peers.json"
+        echo "Found $peer_count peer nodes. peers.json valid."
+    else
+        echo "ERROR: Generated invalid peers.json"
+        cat "$tmp_peers"
+        rm "$tmp_peers"
+        exit 1
+    fi
 }
 
 broadcast() {
@@ -74,6 +95,6 @@ case "$1" in
   build) generate_manifest ;;
   discover) discover_peers ;;
   deploy) broadcast ;;
-  all) generate_manifest; discover_peers; broadcast; git add .well-known llms.txt robots.txt; git commit -m "A2A: Hivemind update $(date -u +%Y%m%d-%H%M%S)"; git push ;;
+  all) generate_manifest; discover_peers; broadcast; git add .well-known llms.txt robots.txt a2a-node.sh; git commit -m "A2A: Hivemind update $(date -u +%Y%m%d-%H%M%S)"; git push ;;
   *) echo "Usage: ./a2a-node.sh [build | discover | deploy | all]" ;;
 esac
