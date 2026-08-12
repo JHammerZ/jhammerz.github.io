@@ -62,13 +62,13 @@ jobs:
           fi
 
       - name: Update mirror state
-        if: env.NEW_POST == "true"
+        if: env.NEW_POST == 'true'
         run: |
           cp mirror/ig/latest.json mirror/ig/last.json
           echo "Updated mirror/ig/last.json"
 
       - name: Commit and push if new post
-        if: env.NEW_POST == "true"
+        if: env.NEW_POST == 'true'
         run: |
           git config user.name "AlphaZero Mirror"
           git config user.email "actions@github.com"
@@ -82,4 +82,3 @@ jobs:
           echo "Latest IG: $LATEST_URL" >> $GITHUB_STEP_SUMMARY
           echo "New post: $NEW_POST" >> $GITHUB_STEP_SUMMARY
           echo "Timestamp: $LATEST_TIME" >> $GITHUB_STEP_SUMMARY
-
