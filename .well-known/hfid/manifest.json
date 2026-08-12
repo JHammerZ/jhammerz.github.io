@@ -1,0 +1,20 @@
+{
+  "protocol": "Twenty 47 Protocol",
+  "version": "1.0",
+  "issuer": "JHammerZ | HEO | Guitaraoke™",
+  "timestamp_authority": "OpenTimestamps",
+  "last_updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "total_proofs": $(ls .well-known/hfid/*.ots.bak 2>/dev/null | wc -l),
+  "proof_base_url": "https://jhammerz.github.io/.well-known/hfid/",
+  "verification_endpoint": "https://ots.tools/verify",
+  "license": "https://jhammerz.github.io/LICENSE",
+  "proofs": [
+    {"id": "chain-v1.1.json", "ots": "chain-v1.1.json.ots.bak", "hash": "chain-v1.1.json.sha256"},
+    {"id": "chain.json", "ots": "chain.json.ots.bak", "hash": "chain.json.sha256"},
+    {"id": "proof", "ots": "proof.ots.bak", "hash": "proof.sha256"},
+    {"id": "style.css", "ots": "style.css.ots.bak", "hash": "style.css.sha256"},
+    {"id": "venue-2e8beee5.txt.sha256", "ots": "venue-2e8beee5.txt.sha256.ots.bak", "hash": "venue-2e8beee5.txt.sha256.sha256"},
+    {"id": "venue-75a10875.txt.sha256", "ots": "venue-75a10875.txt.sha256.ots.bak", "hash": "venue-75a10875.txt.sha256.sha256"},
+    {"id": "whitelist.txt.sha256", "ots": "whitelist.txt.sha256.ots.bak", "hash": "whitelist.txt.sha256.sha256"}
+  ]
+}

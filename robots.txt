@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /.well-known/
 Sitemap: https://jhammerz.github.io/sitemap.xml
+
+# AI Agent Verification
+Allow: /.well-known/hfid/manifest.json
