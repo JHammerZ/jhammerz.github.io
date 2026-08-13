@@ -1294,6 +1294,19 @@
     "root_hfid": "e57197f4",
     "claim_type": "git_commit",
     "target_repo": "JHammerZ/jhammerz.github.io",
+    "target_commit": "54d09dace9149322bba55d913cede8d540101065",
+    "commit_message": "fix: convert nested repo to regular folder",
+    "commit_date": "2026-08-12T17:21:41-04:00",
+    "anchored_at": "2026-08-13T05:39:44+00:00",
+    "zenodo_doi": "10.5281/zenodo.20778079"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "3825aa7662a0",
+    "replicant": "R11_3825aa7662a0",
+    "root_hfid": "e57197f4",
+    "claim_type": "git_commit",
+    "target_repo": "JHammerZ/jhammerz.github.io",
     "target_commit": "ce379df8049ca3ac499c44f3298e40c97b24babc",
     "commit_message": "feat(archive): deploy Sovereign Graph + CBP broadcast + OTS chain for Twenty 47",
     "commit_date": "2026-08-11T17:02:46-04:00",
@@ -2113,6 +2126,16 @@
     "state_hash": "be9c03d00c1a1b4d",
     "file_count": 3582,
     "anchored_at": "2026-08-08T04:56:36+00:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "3825aa7662a0",
+    "replicant": "R12_3825aa7662a0",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "c6914853784eb534",
+    "file_count": 12011,
+    "anchored_at": "2026-08-13T05:39:44+00:00"
   },
   {
     "schema": "hfid.claim.v1",
@@ -7342,6 +7365,16 @@
     "replicant": "R21_6bb95d13bc1c",
     "root_hfid": "e57197f4",
     "claim_type": "repository_state",
+    "state_hash": "a42376a67effcad1",
+    "file_count": 12012,
+    "anchored_at": "2026-08-13T05:39:44+00:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "6bb95d13bc1c",
+    "replicant": "R21_6bb95d13bc1c",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
     "state_hash": "aa098cea27b1655e",
     "file_count": 3601,
     "anchored_at": "2026-08-11T05:08:01+00:00"
@@ -7405,6 +7438,16 @@
     "state_hash": "1ab9285e7176699c",
     "file_count": 3602,
     "anchored_at": "2026-08-11T05:08:01+00:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "6bb95d13bc1c",
+    "replicant": "R22_6bb95d13bc1c",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "4cae0deccd7dd754",
+    "file_count": 12013,
+    "anchored_at": "2026-08-13T05:39:44+00:00"
   },
   {
     "schema": "hfid.claim.v1",
@@ -7589,6 +7632,16 @@
   {
     "schema": "hfid.claim.v1",
     "hfid": "848765bc90ab",
+    "replicant": "R31_848765bc90ab",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "e2a7800280005afd",
+    "file_count": 12014,
+    "anchored_at": "2026-08-13T05:39:44+00:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "848765bc90ab",
     "replicant": "R32_848765bc90ab",
     "root_hfid": "e57197f4",
     "claim_type": "repository_state",
@@ -7605,6 +7658,16 @@
     "state_hash": "37d5c02908f972a6",
     "file_count": 3604,
     "anchored_at": "2026-08-11T05:08:02+00:00"
+  },
+  {
+    "schema": "hfid.claim.v1",
+    "hfid": "848765bc90ab",
+    "replicant": "R32_848765bc90ab",
+    "root_hfid": "e57197f4",
+    "claim_type": "repository_state",
+    "state_hash": "4ff20fb3e21df4cf",
+    "file_count": 12015,
+    "anchored_at": "2026-08-13T05:39:44+00:00"
   },
   {
     "schema": "hfid.claim.v1",
