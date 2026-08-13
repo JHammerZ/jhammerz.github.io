@@ -1,0 +1,48 @@
+name: Verify OpenTimestamps
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install OpenTimestamps
+      run: |
+        python -m pip install --upgrade pip
+        pip install opentimestamps-client
+        
+    - name: Create results directory
+      run: mkdir -p .hfid/results
+      
+    - name: Run Lysander Bot Purge
+      run: |
+        echo "Running verification..."
+        # Add your actual verification commands here
+        # Example: ots verify proof.ots
+        echo "Verify step complete" > .hfid/results/verify.txt
+        
+    - name: Timestamp Proof
+      run: |
+        echo "Creating timestamp proof..."
+        # Add your OTS commands here if needed
+        # Example: ots stamp file.txt
+        
+    - name: Upload results
+      uses: actions/upload-artifact@v4
+      with:
+        name: verify-results
+        path: .hfid/results/
