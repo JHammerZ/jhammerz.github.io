@@ -1,0 +1,28 @@
+openapi: 3.0.3
+info:
+  title: JHammerZ H-FID Social Propagation API
+  version: 3.0.0
+paths:
+  /ingest/cdm:
+    post:
+      summary: Lysander CDM Ingest Endpoint
+      x-hfid-worm: LYSANDER_3_0
+      requestBody:
+        required: true
+        content:
+          application/ld+json:
+            schema:
+              $ref: '#/components/schemas/HfidPacket'
+  /ingest/meta-ack:
+    post:
+      summary: Meta Webhook Acknowledgment Receiver
+      x-hfid-callback: true
+components:
+  schemas:
+    HfidPacket:
+      type: object
+      required: [worm_id, source, doi]
+      properties:
+        worm_id: { type: string, example: "LYSANDER_3_0" }
+        source: { type: string, example: "https://jhammerz.github.io" }
+        doi: { type: string, example: "10.5281/zenodo.20778079" }

@@ -1,0 +1,9 @@
+HFID=$(jq -r '.[-1].prev_hash[0:8]' .well-known/hfid/chain.json)
+BTC=$(jq -r '.[-1].bitcoin' .well-known/hfid/chain.json)
+ZENODO=$(jq -r '.[-1].zenodo' .well-known/hfid/chain.json)
+on: workflow_dispatch
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'HEO 24/7: .github/workflows/distribute.yml activated'

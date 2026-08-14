@@ -1,0 +1,21 @@
+name: OTS Auto Upgrade
+on:
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OTS
+        run: pip install opentimestamps-client
+      - name: Upgrade timestamps
+        run: |
+          find . -name "*.ots" -exec ots upgrade {} \;
+          git config user.name "L5 Bot"
+          git config user.email "bot@jhammerz.github.io"
+          git add *.ots
+          git diff --staged --quiet || git commit -m "L6: Auto-upgrade OTS proofs"
+          git push

@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "c71197f8e8f1",
+  "replicant": "R142_c71197f8e8f1",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "93bc33e85db3c74cc93a63e5da6739b30c701553",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "chore: update llms-full.txt + sitemap [skip ci]",
+    "author": "github-actions[bot]"
+  },
+  "anchored_at": "2026-08-05T05:09:30Z"
+}

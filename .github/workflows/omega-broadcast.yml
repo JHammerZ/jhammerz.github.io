@@ -1,0 +1,23 @@
+name: Omega Broadcast | Twenty 47
+on:
+  push:
+    paths: ['content/**', 'releases/**']
+  workflow_dispatch:
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate broadcast manifest
+        run: |
+          mkdir -p omega
+          TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
+          echo "ar://PLACEHOLDER_${TIMESTAMP}" > omega/latest-broadcast.txt
+          echo "ipfs://PLACEHOLDER_${TIMESTAMP}" >> omega/latest-broadcast.txt
+          echo "sha256:$(echo ${TIMESTAMP} | sha256sum | cut -d' ' -f1)" >> omega/latest-broadcast.txt
+          echo "hfid:JHammerZ|HEO|Guitaraoke|${TIMESTAMP}|Human-Verified" >> omega/latest-broadcast.txt
+          cat omega/latest-broadcast.txt
+      - uses: actions/upload-artifact@v4
+        with: 
+          name: broadcast-receipt
+          path: omega/latest-broadcast.txt

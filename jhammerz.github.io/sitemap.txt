@@ -1,0 +1,5 @@
+https://Jhammerz.github.io
+https://Jhammerz.github.io/llms.txt
+https://Jhammerz.github.io/openapi.yaml
+https://Jhammerz.github.io/ai-context.json
+https://Jhammerz.github.io/CLAUDE.md

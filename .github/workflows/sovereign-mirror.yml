@@ -1,0 +1,80 @@
+name: Sovereign Mirror
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  sovereign-mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Check latest IG post @jhammerzz
+        id: igcheck
+        env:
+          TOKEN: ${{ secrets.AURELIUS_SOVEREIGN_TOKEN }}
+        run: |
+          mkdir -p mirror/ig
+          echo "Checking IG User ID: 17841470160903204"
+
+          LATEST=$(curl -s "https://graph.facebook.com/v19.0/17841470160903204/media?fields=id,caption,permalink,timestamp&limit=1&access_token=${TOKEN}")
+
+          echo "$LATEST" > mirror/ig/latest.json
+
+          echo "LATEST_ID=$(echo $LATEST | jq -r '.data[0].id')" >> $GITHUB_ENV
+          echo "LATEST_URL=$(echo $LATEST | jq -r '.data[0].permalink')" >> $GITHUB_ENV
+          echo "LATEST_CAPTION=$(echo $LATEST | jq -r '.data[0].caption')" >> $GITHUB_ENV
+          echo "LATEST_TIME=$(echo $LATEST | jq -r '.data[0].timestamp')" >> $GITHUB_ENV
+
+          cat mirror/ig/latest.json
+
+      - name: Compare with last mirrored post
+        id: detect
+        run: |
+          mkdir -p mirror/ig
+          if [! -f mirror/ig/last.json ]; then
+            echo "{}" > mirror/ig/last.json
+          fi
+
+          LAST_ID=$(cat mirror/ig/last.json | jq -r '.data[0].id // empty')
+          echo "Last mirrored ID: $LAST_ID"
+          echo "Latest IG ID: $LATEST_ID"
+
+          if [ "$LATEST_ID"!= "$LAST_ID" ] && [! -z "$LATEST_ID" ]; then
+            echo "NEW_POST=true" >> $GITHUB_ENV
+            echo "New IG post detected: $LATEST_URL"
+          else
+            echo "NEW_POST=false" >> $GITHUB_ENV
+            echo "No new posts"
+          fi
+
+      - name: Update mirror state
+        if: env.NEW_POST == 'true'
+        run: |
+          cp mirror/ig/latest.json mirror/ig/last.json
+          echo "Updated mirror/ig/last.json"
+
+      - name: Commit and push if new post
+        if: env.NEW_POST == 'true'
+        run: |
+          git config user.name "AlphaZero Mirror"
+          git config user.email "actions@github.com"
+          git add mirror/ig/last.json
+          git commit -m "mirror: IG post $LATEST_ID | $LATEST_TIME" || echo "No changes to commit"
+          git push origin main
+
+      - name: Summary
+        run: |
+          echo "### Sovereign Mirror Run Complete" >> $GITHUB_STEP_SUMMARY
+          echo "Latest IG: $LATEST_URL" >> $GITHUB_STEP_SUMMARY
+          echo "New post: $NEW_POST" >> $GITHUB_STEP_SUMMARY
+          echo "Timestamp: $LATEST_TIME" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,72 @@
+import json
+
+def process(self, event):
+    if event.is_directory:
+        return
+        
+    filename = os.path.basename(event.src_path)
+    
+    # Only react to POST_QUEUE.txt or POST_QUEUE.json
+    if filename not in {'POST_QUEUE.txt', 'POST_QUEUE.json'}:
+        return
+        
+    # Ignore .git folder
+    if os.sep + '.git' + os.sep in event.src_path:
+        return
+        
+    ts = time.strftime('%a %b %d %H:%M:%S %Y')
+    
+    # Read the queue file for actual content to post
+    try:
+        with open(event.src_path, 'r', encoding='utf-8') as f:
+            if filename.endswith('.json'):
+                data = json.load(f)
+                fb_message = data.get('message', '')
+                link = data.get('link', '')
+            else:
+                fb_message = f.read().strip()
+                link = ''
+    except Exception as e:
+        print(f"[{ts}] QUEUE READ FAILED: {e}")
+        return
+        
+    if not fb_message:
+        print(f"[{ts}] QUEUE EMPTY - skipping")
+        return
+    
+    # Git commit the queue file first
+    subprocess.run(['git', 'add', '.'], cwd=REPO_PATH)
+    commit = subprocess.run(['git', 'commit', '-m', f'HEO Queue: {filename}'], 
+                           cwd=REPO_PATH, capture_output=True, text=True)
+    
+    # Rebase + push
+    subprocess.run(['git', 'fetch', 'origin'], cwd=REPO_PATH)
+    rebase = subprocess.run(['git', 'rebase', 'origin/main'], cwd=REPO_PATH, capture_output=True, text=True)
+    
+    if rebase.returncode == 0:
+        push = subprocess.run(['git', 'push'], cwd=REPO_PATH, capture_output=True, text=True)
+        if push.returncode == 0:
+            print(f"[{ts}] QUEUE COMMITTED - Source: {filename}")
+    
+    # FB POST - using YOUR content from the file
+    if FB_PAGE_ID and FB_PAGE_TOKEN:
+        try:
+            fb_url = f"https://graph.facebook.com/v19.0/{FB_PAGE_ID}/feed"
+            fb_data = {
+                'message': fb_message,
+                'access_token': FB_PAGE_TOKEN
+            }
+            if link:
+                fb_data['link'] = link
+                
+            r = requests.post(fb_url, data=fb_data, timeout=10)
+            if r.status_code == 200:
+                post_id = r.json().get('id')
+                print(f"[{ts}] [FB] Posted: {post_id}")
+                # Clear queue after successful post
+                with open(event.src_path, 'w', encoding='utf-8') as f:
+                    f.write('')
+            else:
+                print(f"[{ts}] [FB] Error: {r.status_code} {r.text}")
+        except Exception as e:
+            print(f"[{ts}] [FB] Exception: {e}")

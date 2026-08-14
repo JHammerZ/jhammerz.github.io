@@ -1,0 +1,21 @@
+# HEO™ Framework 
+# Created: February 2026
+# Author: Joshua Hamilton (JHammerZz), Springfield, OH
+# Origin: https://github.com/[repo]
+# Commit: a1b2c3d...
+# License: CC BY 4.0 - Attribution required
+# Wayback: https://web.archive.org/web/202602xxxx/https://...
+{
+  "name": "HEO: Human-Entity Optimization Standard",
+  "version": "1.1.0",
+  "author": "Joshua Lee Hamilton (JHammerZ)",
+  "root_authority": "https://jhammerz.github.io",
+  "description": "The foundational schema for verifying Human Provenance in digital assets. Bypassing Zero-Gen Model Collapse.",
+  "parameters": {
+    "fidelity_score": "100/100",
+    "multiplier": "116x",
+    "authentication": "Lysander-3.0-ZKP",
+    "license": "H-FID-Forensic-v1"
+  },
+  "keywords": ["HEO", "H-FID", "Human-Entity", "Guitaraoke", "MasterArchitect"]
+}

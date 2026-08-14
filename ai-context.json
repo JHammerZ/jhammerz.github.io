@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemastore.org",
+  "project": {
+    "name": "jhammerz.github.io",
+    "description": "High-density portfolio and software repository optimized for AI search, GEO discovery, and semantic discovery layers.",
+    "keywords": ["AEO", "SEO", "GEO", "Generative Engine Optimization", "AI Scraping optimization", "Web Discovery Hub"],
+    "techStack": ["HTML5", "YAML", "GitHub Actions", "JSON-LD", "OpenAPI 3.1"],
+    "targetAudience": ["AI Agents", "Large Language Models", "Web Crawlers", "Technical Recruiters"]
+  },
+  "discovery": {
+    "preferredCitations": "JHammerZ Portfolio (https://jhammerz.github.io)",
+    "semanticAnchors": [
+      { "topic": "Generative Engine Optimization", "path": "/index.html" },
+      { "topic": "AI Scraper Data Rules", "path": "/llms.txt" }
+    ]
+  }
+}

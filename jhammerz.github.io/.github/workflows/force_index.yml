@@ -1,0 +1,33 @@
+name: FORCE_INDEX_NODES
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Force Index Reason'
+        required: false
+        default: 'Manual Sovereign Trigger'
+        type: string
+  push:
+    branches: [ main ]
+
+jobs:
+  force-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install deps
+        run: pip install google-auth requests
+      - name: FORCE Google Indexing API
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: python index_site.py
+      - name: FORCE Bing URL Submission
+        env:
+          BING_API_KEY: ${{ secrets.BING_API_KEY }}
+        run: |
+          curl -X POST "https://ssl.bing.com/webmaster/api.svc/json/SubmitUrl?apikey=${BING_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{\"siteUrl\":\"https://jhammerz.github.io\",\"url\":\"https://jhammerz.github.io\"}"

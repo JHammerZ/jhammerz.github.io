@@ -1,0 +1,23 @@
+name: IPFS Sync
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install IPFS
+        run: |
+          curl -sSL https://dist.ipfs.io/go-ipfs/v0.26.0/go-ipfs_v0.26.0_linux-amd64.tar.gz | tar -xz
+          sudo mv go-ipfs/ipfs /usr/local/bin/
+      - name: Add to IPFS
+        run: |
+          ipfs init
+          ipfs add -r . > ipfs_hash.txt
+          echo "IPFS Hash: $(cat ipfs_hash.txt | tail -n 1 | awk '{print $2}')"

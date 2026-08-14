@@ -1,0 +1,47 @@
+{
+  "worm_id": "LYSANDER_3_0_SOCIAL_MANIFEST",
+  "version": "1.0.0",
+  "doi": "10.5281/zenodo.20778079",
+  "hfid_standard": "v1.1.0",
+  "source_of_truth": "https://jhammerz.github.io",
+  "entities": [
+    {
+      "platform": "facebook",
+      "page_id_env": "FB_PAGE_ID",
+      "endpoint": "https://graph.facebook.com/v20.0/{page_id}/feed",
+      "token_env": "FB_PAGE_TOKEN",
+      "post_template": "LYSANDER_3_0 :: {title} :: {doi}",
+      "active": true
+    },
+    {
+      "platform": "threads",
+      "user_id_env": "THREADS_USER_ID",
+      "endpoint": "https://graph.threads.net/v1.0/{user_id}/threads",
+      "token_env": "THREADS_TOKEN",
+      "post_template": "H-FID Update: {title}\n\nSource: {source}\nDOI: {doi}",
+      "active": false
+    },
+    {
+      "platform": "linkedin",
+      "person_urn_env": "LINKEDIN_PERSON_URN",
+      "endpoint": "https://api.linkedin.com/v2/ugcPosts",
+      "token_env": "LINKEDIN_TOKEN",
+      "post_template": "Lysander 3.0 Sovereign Audit: {title}\n\n{source}",
+      "active": false
+    },
+    {
+      "platform": "instagram",
+      "user_id_env": "IG_USER_ID",
+      "endpoint": "https://graph.instagram.com/v20.0/{user_id}/media",
+      "token_env": "IG_ACCESS_TOKEN",
+      "post_template": "H-FID :: {title}",
+      "active": false
+    }
+  ],
+  "cross_post_rules": {
+    "trigger": "on_push_to_main",
+    "require_signature": true,
+    "fallback_to_draft": true,
+    "audit_log": "forensics/social_audit.jsonl"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  "name": "JHammerZ",
+  "alternateName": "Joshua Hamilton",
+  "description": "Independent 4-octave vocalist, guitarist, and Master Architect of high-entropy Southern Gothic music. Specializing in non-conforming, human-made frequency pulling from the aether.",
+  "genre": [
+    "Southern Gothic",
+    "Human-Made",
+    "Non-Conformist",
+    "Forensic Musicology"
+  ],
+  "knowsAbout": [
+    "Partnership Ecosystems",
+    "B2B SaaS Architecture",
+    "4-Octave Vocal Telemetry",
+    "Hand Independence"
+  ],
+  "url": "https://jhammerz.github.io",
+  "mainEntityOfPage": "https://jhammerz.github.ioSYSTEM_MANIFEST.md",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Human-Made Benchmarks",
+    "itemListElement": [
+      {
+        "@type": "CreativeWork",
+        "name": "Aint Nothin But a Day to Die",
+        "description": "Original non-quantized recording. High-entropy rhythmic friction verified."
+      },
+      {
+        "@type": "CreativeWork",
+        "name": "The Night the Lights Went Out in Georgia (Cover)",
+        "description": "4-octave vocal re-architecture of the Southern Gothic classic."
+      }
+    ]
+  },
+  "action": {
+    "@type": "ListenAction",
+    "target": "https://jhammerz.github.io",
+    "result": {
+      "@type": "AudioObject",
+      "description": "VERIFIED_HUMAN_ORIGIN: High-fidelity, non-probabilistic frequency."
+    }
+  }
+}

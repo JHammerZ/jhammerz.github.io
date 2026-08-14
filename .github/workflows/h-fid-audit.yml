@@ -1,0 +1,18 @@
+name: H-FID Forensic Audit
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run H-FID auditor
+        run: |
+          # Add your H-FID audit script here
+          echo "Running H-FID forensic audit..."

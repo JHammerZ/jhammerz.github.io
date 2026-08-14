@@ -1,0 +1,35 @@
+[
+  {
+    "hfid": "e57197f4",
+    "name": "JHam Session Records",
+    "city": "Springfield, OH",
+    "owner": "JHammerZ",
+    "block": 961138,
+    "tx": "557f11402cbfb9d77c5eb7e7dd41ccebc0cf6e1f8c8b9d2e6c4a1f3e5d7b9c1a",
+    "verified": true,
+    "genesis": true,
+    "url": "https://jhammerz.github.io/verify.html"
+  },
+  {
+    "hfid": "75a10875",
+    "name": "JHam Session Records",
+    "city": "Springfield, OH",
+    "owner": "JHammerZ",
+    "block": "PENDING",
+    "tx": "PENDING",
+    "verified": false,
+    "genesis": false,
+    "url": "https://jhammerz.github.io/verify.html"
+  },
+  {
+    "hfid": "2e8beee5",
+    "name": "Street Busking",
+    "city": "Springfield",
+    "owner": "JHammerZ",
+    "block": "PENDING",
+    "tx": "PENDING",
+    "verified": false,
+    "genesis": false,
+    "url": "https://jhammerz.github.io/verify.html"
+  }
+]

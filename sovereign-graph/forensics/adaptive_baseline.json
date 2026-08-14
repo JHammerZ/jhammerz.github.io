@@ -1,0 +1,29 @@
+{
+  "current_score": 70.21,
+  "cycle": 1,
+  "peak_views": 4300000,
+  "peak_followers": 149900,
+  "timestamp": "2026-05-22T11:13:45.840Z",
+  "previous_score": 70,
+  "delta": 0.21,
+  "trend": "EXPANDING",
+  "mission": "TOP_PERFORMANCE_IS_NEW_BASELINE",
+  "content_catalog": {
+    "total_videos": 8,
+    "total_tracks": 6,
+    "critical_items": [
+      "Remember When (Acoustic)",
+      "That Smell",
+      "Iris",
+      "Where Did You Sleep Last Night"
+    ],
+    "high_items": [
+      "The Crow And The Butterfly",
+      "Little Lion Man",
+      "Time Marches On"
+    ]
+  },
+  "pilot": "Manus AI",
+  "token": "GPT",
+  "version": "ADAPTIVE_BASELINE_v1.0"
+}

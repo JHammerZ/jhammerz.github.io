@@ -1,0 +1,12 @@
+name: AEO Refresh
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+on: workflow_dispatch  # Manual only, HEO DISABLED
+jobs:
+  disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "AEO disabled by HEO"
+

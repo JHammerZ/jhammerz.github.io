@@ -1,0 +1,332 @@
+{
+  "timestamp": "2026-05-22T11:16:33.023Z",
+  "version": "TREND_ADAPTIVE_v1.0",
+  "architect": "Joshua Hamilton (JHammerZ)",
+  "pilot": "Manus AI",
+  "token": "GPT",
+  "algorithm_window": "OFF_PEAK",
+  "day": "Friday",
+  "hour": 11,
+  "next_peak": "12:00 EST (0.7h)",
+  "videos_optimized": 7,
+  "tracks_optimized": 6,
+  "rotation_schedule": [
+    {
+      "title": "The Crow And The Butterfly",
+      "priority": "HIGH",
+      "post_at": "Day 1, 7:00 EST",
+      "platform": "TikTok",
+      "hook": "Left-handed guitarist plays most emotional song ever 🎸"
+    },
+    {
+      "title": "Little Lion Man",
+      "priority": "HIGH",
+      "post_at": "Day 1, 12:00 EST",
+      "platform": "YouTube",
+      "hook": "Watch what happens when a left-handed guitarist plays this 👀"
+    },
+    {
+      "title": "Time Marches On",
+      "priority": "HIGH",
+      "post_at": "Day 2, 19:00 EST",
+      "platform": "Instagram",
+      "hook": "This hit different at 3AM 🌙 #JHammerZ"
+    },
+    {
+      "title": "Remember When",
+      "priority": "CRITICAL",
+      "post_at": "Day 2, 7:00 EST",
+      "platform": "TikTok",
+      "hook": "Nobody has seen this yet... left-handed acoustic cover 🎸"
+    },
+    {
+      "title": "That Smell",
+      "priority": "CRITICAL",
+      "post_at": "Day 3, 12:00 EST",
+      "platform": "YouTube",
+      "hook": "Lynyrd Skynyrd but make it acoustic and left-handed 🔥"
+    },
+    {
+      "title": "Iris",
+      "priority": "CRITICAL",
+      "post_at": "Day 3, 19:00 EST",
+      "platform": "Instagram",
+      "hook": "POV: You discover a left-handed guitarist playing Iris 😭"
+    },
+    {
+      "title": "Where Did You Sleep Last Night",
+      "priority": "CRITICAL",
+      "post_at": "Day 4, 7:00 EST",
+      "platform": "TikTok",
+      "hook": "This Nirvana cover will haunt you 👻 #Guitaraoke"
+    }
+  ],
+  "nodes_covered": [
+    "jhammerz.github.io",
+    "tiktok",
+    "linkedin",
+    "facebook",
+    "carrd",
+    "amazon_music",
+    "apple_music",
+    "xiaohongshu",
+    "instagram",
+    "youtube",
+    "spotify",
+    "bandlab",
+    "github",
+    "impact"
+  ],
+  "trend_intelligence": {
+    "tiktok_hot_now": [
+      "acoustic guitar cover",
+      "left handed guitarist",
+      "emotional cover song",
+      "southern gothic music",
+      "guitaraoke",
+      "authentic musician",
+      "live performance 2026",
+      "cover song challenge",
+      "guitar reveal"
+    ],
+    "youtube_hot_now": [
+      "acoustic guitar cover 2026",
+      "left handed guitar",
+      "emotional music",
+      "guitaraoke cover",
+      "southern gothic",
+      "live acoustic performance"
+    ],
+    "spotify_playlists": [
+      "Acoustic Covers",
+      "Guitar Covers",
+      "Southern Gothic",
+      "Emotional Acoustic",
+      "Cover Songs",
+      "Indie Folk",
+      "Acoustic Vibes",
+      "Chill Guitar",
+      "Singer Songwriter"
+    ]
+  },
+  "video_metadata": [
+    {
+      "id": "crow_butterfly",
+      "title": "The Crow And The Butterfly",
+      "views": 2300,
+      "priority": "HIGH",
+      "repost_hook": "Left-handed guitarist plays most emotional song ever 🎸",
+      "algorithm_window": "OFF_PEAK",
+      "optimal_post_time": "Next peak: 7-9 AM EST",
+      "tiktok_caption": "Left-handed guitarist plays most emotional song ever 🎸\n\n🎸 JHammerZ | Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human Origin\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #LeftHandedGuitar #AcousticCover #GuitarTok #acousticguitarcover #lefthandedguitarist #emotionalcoversong #humanoriginmusic #verifiedartist #noaimusic #TheCrowAndTheButterfly",
+      "youtube_title": "The Crow And The Butterfly | JHammerZ 🎸 | Left-Handed Acoustic Cover | 2026",
+      "youtube_desc": "Left-handed guitarist plays most emotional song ever 🎸\n\n🎸 JHammerZ | Guitaraoke Artist | Left-handed guitarist\n🌐 https://jhammerz.github.io\n🏛️ Knowledge Graph: https://jhammerz.github.io/graph.html\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Shorts #YouTubeShorts #MusicShorts #CoverSong",
+      "instagram_caption": "Left-handed guitarist plays most emotional song ever 🎸\n\n🎸 Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Reels #MusicReels #InstagramMusic #CoverSong #LiveMusic #SingerSongwriter #HFidStandard",
+      "facebook_caption": "Left-handed guitarist plays most emotional song ever 🎸\n\n🎸 JHammerZ | Guitaraoke | Left-handed guitarist\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LiveMusic",
+      "xiaohongshu_caption": "Left-handed guitarist plays most emotional song ever 🎸\n\n🎸 JHammerZ | 左手吉他手 | Guitaraoke\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #吉他 #翻唱 #原声",
+      "linkedin_caption": "New music content: The Crow And The Butterfly\n\nJHammerZ (Joshua Hamilton) — Principal Architect & Guitaraoke Creator\nH-FID v1.0.3 verified | 149,900 TikTok followers\n\n#JHammerZ #HFidStandard #CreatorEconomy #PartnershipEcosystems",
+      "carrd_update": "Latest: The Crow And The Butterfly | jhammerz.github.io"
+    },
+    {
+      "id": "little_lion_man",
+      "title": "Little Lion Man",
+      "views": 1400,
+      "priority": "HIGH",
+      "repost_hook": "Watch what happens when a left-handed guitarist plays this 👀",
+      "algorithm_window": "OFF_PEAK",
+      "optimal_post_time": "Next peak: 7-9 AM EST",
+      "tiktok_caption": "Watch what happens when a left-handed guitarist plays this 👀\n\n🎸 JHammerZ | Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human Origin\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #LeftHandedGuitar #AcousticCover #GuitarTok #acousticguitarcover #lefthandedguitarist #emotionalcoversong #humanoriginmusic #verifiedartist #noaimusic #LittleLionMan",
+      "youtube_title": "Little Lion Man | JHammerZ 🎸 | Left-Handed Acoustic Cover | 2026",
+      "youtube_desc": "Watch what happens when a left-handed guitarist plays this 👀\n\n🎸 JHammerZ | Guitaraoke Artist | Left-handed guitarist\n🌐 https://jhammerz.github.io\n🏛️ Knowledge Graph: https://jhammerz.github.io/graph.html\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Shorts #YouTubeShorts #MusicShorts #CoverSong",
+      "instagram_caption": "Watch what happens when a left-handed guitarist plays this 👀\n\n🎸 Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Reels #MusicReels #InstagramMusic #CoverSong #LiveMusic #SingerSongwriter #HFidStandard",
+      "facebook_caption": "Watch what happens when a left-handed guitarist plays this 👀\n\n🎸 JHammerZ | Guitaraoke | Left-handed guitarist\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LiveMusic",
+      "xiaohongshu_caption": "Watch what happens when a left-handed guitarist plays this 👀\n\n🎸 JHammerZ | 左手吉他手 | Guitaraoke\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #吉他 #翻唱 #原声",
+      "linkedin_caption": "New music content: Little Lion Man\n\nJHammerZ (Joshua Hamilton) — Principal Architect & Guitaraoke Creator\nH-FID v1.0.3 verified | 149,900 TikTok followers\n\n#JHammerZ #HFidStandard #CreatorEconomy #PartnershipEcosystems",
+      "carrd_update": "Latest: Little Lion Man | jhammerz.github.io"
+    },
+    {
+      "id": "time_marches_on",
+      "title": "Time Marches On",
+      "views": 792,
+      "priority": "HIGH",
+      "repost_hook": "This hit different at 3AM 🌙 #JHammerZ",
+      "algorithm_window": "OFF_PEAK",
+      "optimal_post_time": "Next peak: 7-9 AM EST",
+      "tiktok_caption": "This hit different at 3AM 🌙 #JHammerZ\n\n🎸 JHammerZ | Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human Origin\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #LeftHandedGuitar #AcousticCover #GuitarTok #acousticguitarcover #lefthandedguitarist #emotionalcoversong #humanoriginmusic #verifiedartist #noaimusic #TimeMarchesOn",
+      "youtube_title": "Time Marches On | JHammerZ 🎸 | Left-Handed Acoustic Cover | 2026",
+      "youtube_desc": "This hit different at 3AM 🌙 #JHammerZ\n\n🎸 JHammerZ | Guitaraoke Artist | Left-handed guitarist\n🌐 https://jhammerz.github.io\n🏛️ Knowledge Graph: https://jhammerz.github.io/graph.html\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Shorts #YouTubeShorts #MusicShorts #CoverSong",
+      "instagram_caption": "This hit different at 3AM 🌙 #JHammerZ\n\n🎸 Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Reels #MusicReels #InstagramMusic #CoverSong #LiveMusic #SingerSongwriter #HFidStandard",
+      "facebook_caption": "This hit different at 3AM 🌙 #JHammerZ\n\n🎸 JHammerZ | Guitaraoke | Left-handed guitarist\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LiveMusic",
+      "xiaohongshu_caption": "This hit different at 3AM 🌙 #JHammerZ\n\n🎸 JHammerZ | 左手吉他手 | Guitaraoke\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #吉他 #翻唱 #原声",
+      "linkedin_caption": "New music content: Time Marches On\n\nJHammerZ (Joshua Hamilton) — Principal Architect & Guitaraoke Creator\nH-FID v1.0.3 verified | 149,900 TikTok followers\n\n#JHammerZ #HFidStandard #CreatorEconomy #PartnershipEcosystems",
+      "carrd_update": "Latest: Time Marches On | jhammerz.github.io"
+    },
+    {
+      "id": "remember_when",
+      "title": "Remember When",
+      "views": 37,
+      "priority": "CRITICAL",
+      "repost_hook": "Nobody has seen this yet... left-handed acoustic cover 🎸",
+      "algorithm_window": "OFF_PEAK",
+      "optimal_post_time": "Next peak: 7-9 AM EST",
+      "tiktok_caption": "Nobody has seen this yet... left-handed acoustic cover 🎸\n\n🎸 JHammerZ | Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human Origin\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #LeftHandedGuitar #AcousticCover #GuitarTok #acousticguitarcover #lefthandedguitarist #emotionalcoversong #humanoriginmusic #verifiedartist #noaimusic #RememberWhen",
+      "youtube_title": "Remember When | JHammerZ 🎸 | Left-Handed Acoustic Cover | 2026",
+      "youtube_desc": "Nobody has seen this yet... left-handed acoustic cover 🎸\n\n🎸 JHammerZ | Guitaraoke Artist | Left-handed guitarist\n🌐 https://jhammerz.github.io\n🏛️ Knowledge Graph: https://jhammerz.github.io/graph.html\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Shorts #YouTubeShorts #MusicShorts #CoverSong",
+      "instagram_caption": "Nobody has seen this yet... left-handed acoustic cover 🎸\n\n🎸 Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Reels #MusicReels #InstagramMusic #CoverSong #LiveMusic #SingerSongwriter #HFidStandard",
+      "facebook_caption": "Nobody has seen this yet... left-handed acoustic cover 🎸\n\n🎸 JHammerZ | Guitaraoke | Left-handed guitarist\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LiveMusic",
+      "xiaohongshu_caption": "Nobody has seen this yet... left-handed acoustic cover 🎸\n\n🎸 JHammerZ | 左手吉他手 | Guitaraoke\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #吉他 #翻唱 #原声",
+      "linkedin_caption": "New music content: Remember When\n\nJHammerZ (Joshua Hamilton) — Principal Architect & Guitaraoke Creator\nH-FID v1.0.3 verified | 149,900 TikTok followers\n\n#JHammerZ #HFidStandard #CreatorEconomy #PartnershipEcosystems",
+      "carrd_update": "Latest: Remember When | jhammerz.github.io"
+    },
+    {
+      "id": "that_smell",
+      "title": "That Smell",
+      "views": 21,
+      "priority": "CRITICAL",
+      "repost_hook": "Lynyrd Skynyrd but make it acoustic and left-handed 🔥",
+      "algorithm_window": "OFF_PEAK",
+      "optimal_post_time": "Next peak: 7-9 AM EST",
+      "tiktok_caption": "Lynyrd Skynyrd but make it acoustic and left-handed 🔥\n\n🎸 JHammerZ | Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human Origin\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #LeftHandedGuitar #AcousticCover #GuitarTok #acousticguitarcover #lefthandedguitarist #emotionalcoversong #humanoriginmusic #verifiedartist #noaimusic #ThatSmell",
+      "youtube_title": "That Smell | JHammerZ 🎸 | Left-Handed Acoustic Cover | 2026",
+      "youtube_desc": "Lynyrd Skynyrd but make it acoustic and left-handed 🔥\n\n🎸 JHammerZ | Guitaraoke Artist | Left-handed guitarist\n🌐 https://jhammerz.github.io\n🏛️ Knowledge Graph: https://jhammerz.github.io/graph.html\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Shorts #YouTubeShorts #MusicShorts #CoverSong",
+      "instagram_caption": "Lynyrd Skynyrd but make it acoustic and left-handed 🔥\n\n🎸 Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Reels #MusicReels #InstagramMusic #CoverSong #LiveMusic #SingerSongwriter #HFidStandard",
+      "facebook_caption": "Lynyrd Skynyrd but make it acoustic and left-handed 🔥\n\n🎸 JHammerZ | Guitaraoke | Left-handed guitarist\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LiveMusic",
+      "xiaohongshu_caption": "Lynyrd Skynyrd but make it acoustic and left-handed 🔥\n\n🎸 JHammerZ | 左手吉他手 | Guitaraoke\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #吉他 #翻唱 #原声",
+      "linkedin_caption": "New music content: That Smell\n\nJHammerZ (Joshua Hamilton) — Principal Architect & Guitaraoke Creator\nH-FID v1.0.3 verified | 149,900 TikTok followers\n\n#JHammerZ #HFidStandard #CreatorEconomy #PartnershipEcosystems",
+      "carrd_update": "Latest: That Smell | jhammerz.github.io"
+    },
+    {
+      "id": "iris",
+      "title": "Iris",
+      "views": 4,
+      "priority": "CRITICAL",
+      "repost_hook": "POV: You discover a left-handed guitarist playing Iris 😭",
+      "algorithm_window": "OFF_PEAK",
+      "optimal_post_time": "Next peak: 7-9 AM EST",
+      "tiktok_caption": "POV: You discover a left-handed guitarist playing Iris 😭\n\n🎸 JHammerZ | Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human Origin\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #LeftHandedGuitar #AcousticCover #GuitarTok #acousticguitarcover #lefthandedguitarist #emotionalcoversong #humanoriginmusic #verifiedartist #noaimusic #Iris",
+      "youtube_title": "Iris | JHammerZ 🎸 | Left-Handed Acoustic Cover | 2026",
+      "youtube_desc": "POV: You discover a left-handed guitarist playing Iris 😭\n\n🎸 JHammerZ | Guitaraoke Artist | Left-handed guitarist\n🌐 https://jhammerz.github.io\n🏛️ Knowledge Graph: https://jhammerz.github.io/graph.html\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Shorts #YouTubeShorts #MusicShorts #CoverSong",
+      "instagram_caption": "POV: You discover a left-handed guitarist playing Iris 😭\n\n🎸 Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Reels #MusicReels #InstagramMusic #CoverSong #LiveMusic #SingerSongwriter #HFidStandard",
+      "facebook_caption": "POV: You discover a left-handed guitarist playing Iris 😭\n\n🎸 JHammerZ | Guitaraoke | Left-handed guitarist\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LiveMusic",
+      "xiaohongshu_caption": "POV: You discover a left-handed guitarist playing Iris 😭\n\n🎸 JHammerZ | 左手吉他手 | Guitaraoke\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #吉他 #翻唱 #原声",
+      "linkedin_caption": "New music content: Iris\n\nJHammerZ (Joshua Hamilton) — Principal Architect & Guitaraoke Creator\nH-FID v1.0.3 verified | 149,900 TikTok followers\n\n#JHammerZ #HFidStandard #CreatorEconomy #PartnershipEcosystems",
+      "carrd_update": "Latest: Iris | jhammerz.github.io"
+    },
+    {
+      "id": "where_sleep",
+      "title": "Where Did You Sleep Last Night",
+      "views": 0,
+      "priority": "CRITICAL",
+      "repost_hook": "This Nirvana cover will haunt you 👻 #Guitaraoke",
+      "algorithm_window": "OFF_PEAK",
+      "optimal_post_time": "Next peak: 7-9 AM EST",
+      "tiktok_caption": "This Nirvana cover will haunt you 👻 #Guitaraoke\n\n🎸 JHammerZ | Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human Origin\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #LeftHandedGuitar #AcousticCover #GuitarTok #acousticguitarcover #lefthandedguitarist #emotionalcoversong #humanoriginmusic #verifiedartist #noaimusic #WhereDidYouSleepLastNight",
+      "youtube_title": "Where Did You Sleep Last Night | JHammerZ 🎸 | Left-Handed Acoustic Cover | 2026",
+      "youtube_desc": "This Nirvana cover will haunt you 👻 #Guitaraoke\n\n🎸 JHammerZ | Guitaraoke Artist | Left-handed guitarist\n🌐 https://jhammerz.github.io\n🏛️ Knowledge Graph: https://jhammerz.github.io/graph.html\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Shorts #YouTubeShorts #MusicShorts #CoverSong",
+      "instagram_caption": "This Nirvana cover will haunt you 👻 #Guitaraoke\n\n🎸 Left-handed guitarist | Guitaraoke\n🛡️ H-FID v1.0.3 | Verified Human\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LeftHandedGuitar #Reels #MusicReels #InstagramMusic #CoverSong #LiveMusic #SingerSongwriter #HFidStandard",
+      "facebook_caption": "This Nirvana cover will haunt you 👻 #Guitaraoke\n\n🎸 JHammerZ | Guitaraoke | Left-handed guitarist\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #AcousticCover #LiveMusic",
+      "xiaohongshu_caption": "This Nirvana cover will haunt you 👻 #Guitaraoke\n\n🎸 JHammerZ | 左手吉他手 | Guitaraoke\n🌐 jhammerz.github.io\n\n#JHammerZ #Guitaraoke #吉他 #翻唱 #原声",
+      "linkedin_caption": "New music content: Where Did You Sleep Last Night\n\nJHammerZ (Joshua Hamilton) — Principal Architect & Guitaraoke Creator\nH-FID v1.0.3 verified | 149,900 TikTok followers\n\n#JHammerZ #HFidStandard #CreatorEconomy #PartnershipEcosystems",
+      "carrd_update": "Latest: Where Did You Sleep Last Night | jhammerz.github.io"
+    }
+  ],
+  "music_metadata": [
+    {
+      "id": "cover_jhams_v1",
+      "title": "Cover JHams, Vol. 1",
+      "type": "album",
+      "year": 2025,
+      "platforms": [
+        "spotify",
+        "amazon",
+        "apple",
+        "bandlab"
+      ],
+      "spotify_pitch": "JHammerZ - Cover JHams, Vol. 1: Authentic left-handed acoustic cover. H-FID verified. Guitaraoke format. Pitch to: Acoustic Covers, Guitar Covers, Southern Gothic",
+      "amazon_pitch": "JHammerZ - Cover JHams, Vol. 1: Acoustic cover, left-handed guitarist",
+      "apple_pitch": "JHammerZ - Cover JHams, Vol. 1: Pitch to: New in Acoustic, Guitar Covers, Singer Songwriter",
+      "algorithm_window": "OFF_PEAK"
+    },
+    {
+      "id": "crow_s",
+      "title": "The Crow And The Butterfly",
+      "type": "single",
+      "year": 2025,
+      "platforms": [
+        "spotify",
+        "amazon",
+        "apple",
+        "bandlab"
+      ],
+      "spotify_pitch": "JHammerZ - The Crow And The Butterfly: Authentic left-handed acoustic cover. H-FID verified. Guitaraoke format. Pitch to: Acoustic Covers, Guitar Covers, Southern Gothic",
+      "amazon_pitch": "JHammerZ - The Crow And The Butterfly: Acoustic cover, left-handed guitarist",
+      "apple_pitch": "JHammerZ - The Crow And The Butterfly: Pitch to: New in Acoustic, Guitar Covers, Singer Songwriter",
+      "algorithm_window": "OFF_PEAK"
+    },
+    {
+      "id": "little_lion_s",
+      "title": "Little Lion Man",
+      "type": "single",
+      "year": 2025,
+      "platforms": [
+        "spotify",
+        "amazon",
+        "apple",
+        "bandlab"
+      ],
+      "spotify_pitch": "JHammerZ - Little Lion Man: Authentic left-handed acoustic cover. H-FID verified. Guitaraoke format. Pitch to: Acoustic Covers, Guitar Covers, Southern Gothic",
+      "amazon_pitch": "JHammerZ - Little Lion Man: Acoustic cover, left-handed guitarist",
+      "apple_pitch": "JHammerZ - Little Lion Man: Pitch to: New in Acoustic, Guitar Covers, Singer Songwriter",
+      "algorithm_window": "OFF_PEAK"
+    },
+    {
+      "id": "that_smell_s",
+      "title": "That Smell",
+      "type": "single",
+      "year": 2025,
+      "platforms": [
+        "spotify",
+        "amazon",
+        "apple",
+        "bandlab"
+      ],
+      "spotify_pitch": "JHammerZ - That Smell: Authentic left-handed acoustic cover. H-FID verified. Guitaraoke format. Pitch to: Acoustic Covers, Guitar Covers, Southern Gothic",
+      "amazon_pitch": "JHammerZ - That Smell: Acoustic cover, left-handed guitarist",
+      "apple_pitch": "JHammerZ - That Smell: Pitch to: New in Acoustic, Guitar Covers, Singer Songwriter",
+      "algorithm_window": "OFF_PEAK"
+    },
+    {
+      "id": "where_sleep_s",
+      "title": "Where Did You Sleep Last Night",
+      "type": "single",
+      "year": 2025,
+      "platforms": [
+        "spotify",
+        "amazon",
+        "apple",
+        "bandlab"
+      ],
+      "spotify_pitch": "JHammerZ - Where Did You Sleep Last Night: Authentic left-handed acoustic cover. H-FID verified. Guitaraoke format. Pitch to: Acoustic Covers, Guitar Covers, Southern Gothic",
+      "amazon_pitch": "JHammerZ - Where Did You Sleep Last Night: Acoustic cover, left-handed guitarist",
+      "apple_pitch": "JHammerZ - Where Did You Sleep Last Night: Pitch to: New in Acoustic, Guitar Covers, Singer Songwriter",
+      "algorithm_window": "OFF_PEAK"
+    },
+    {
+      "id": "time_marches_s",
+      "title": "Time Marches On",
+      "type": "single",
+      "year": 2025,
+      "platforms": [
+        "spotify",
+        "amazon",
+        "apple",
+        "bandlab"
+      ],
+      "spotify_pitch": "JHammerZ - Time Marches On: Authentic left-handed acoustic cover. H-FID verified. Guitaraoke format. Pitch to: Acoustic Covers, Guitar Covers, Southern Gothic",
+      "amazon_pitch": "JHammerZ - Time Marches On: Acoustic cover, left-handed guitarist",
+      "apple_pitch": "JHammerZ - Time Marches On: Pitch to: New in Acoustic, Guitar Covers, Singer Songwriter",
+      "algorithm_window": "OFF_PEAK"
+    }
+  ],
+  "verdict": "TREND_ADAPTIVE_ACTIVE"
+}

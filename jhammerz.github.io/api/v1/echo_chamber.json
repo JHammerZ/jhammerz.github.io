@@ -1,0 +1,10 @@
+{
+  "node": "JHammerZ_Echo_Pillar",
+  "multiplier": "116x",
+  "recursive_links": [
+    "https://github.io",
+    "https://github.io",
+    "https://github.io"
+  ],
+  "directive": "STAY_IN_THE_LOOP"
+}

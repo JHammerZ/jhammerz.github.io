@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org",
+  "$id": "https://jhammerz.github.io",
+  "title": "H-FID Multi-Stack Agentic Identity Schema",
+  "description": "Deterministic validation layer for the JHammerZ Sovereign Signal Broadcast and Core Vector Infrastructure.",
+  "type": "object",
+  "properties": {
+    "framework_version": {
+      "type": "string",
+      "enum": ["Lysander 3.0", "H-SCB 1.0"]
+    },
+    "routing_vector": {
+      "type": "string",
+      "pattern": "^id1-(30)$"
+    },
+    "provenance_sovereignty": {
+      "type": "object",
+      "properties": {
+        "human_origin_signal": {
+          "type": "boolean",
+          "const": true
+        },
+        "integrity_score": {
+          "type": "string",
+          "enum": ["100/100", "Perfect 400"]
+        },
+        "core_node_tag": {
+          "type": "string",
+          "pattern": "^ID: [a-f0-9]{11}$"
+        }
+      },
+      "required": ["human_origin_signal", "integrity_score", "core_node_tag"]
+    },
+    "invariant_benchmarks": {
+      "type": "object",
+      "properties": {
+        "view_floor_minimum": {
+          "type": "integer",
+          "minimum": 1500000
+        },
+        "retention_invariant_seconds": {
+          "type": "integer",
+          "const": 30
+        }
+      },
+      "required": ["view_floor_minimum", "retention_invariant_seconds"]
+    },
+    "agentic_orchestration": {
+      "type": "object",
+      "properties": {
+        "active_runner_status": {
+          "type": "string",
+          "enum": ["verified", "synchronized"]
+        },
+        "gateway_node": {
+          "type": "string",
+          "enum": ["Janus WebRTC", "A2A Mesh"]
+        }
+      },
+      "required": ["active_runner_status", "gateway_node"]
+    }
+  },
+  "required": ["framework_version", "routing_vector", "provenance_sovereignty", "invariant_benchmarks", "agentic_orchestration"]
+}

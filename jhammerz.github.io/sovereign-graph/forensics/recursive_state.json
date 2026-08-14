@@ -1,0 +1,37 @@
+{
+  "cycle": 1,
+  "version": "PERMANENT_NUMBER_ONE_v1.001",
+  "baseline_score": 70.21,
+  "peak_score": 70.21,
+  "total_posts": 0,
+  "total_reach": 5563502,
+  "algorithm_wins": 0,
+  "trend_accuracy": 0,
+  "self_improvements": 1,
+  "weights": {
+    "tiktok": 0.288,
+    "youtube": 0.09,
+    "instagram": 0.1,
+    "spotify": 0.05,
+    "facebook": 0.06,
+    "linkedin": 0.07,
+    "other": 0.343
+  },
+  "strategies": {
+    "hook_style": "emotional_reveal",
+    "post_frequency": "daily",
+    "hashtag_count": 15,
+    "caption_length": "medium"
+  },
+  "last_upgrade": "2026-05-22T11:23:28.459Z",
+  "temporal_anchor": "44091cc5267c8ff6",
+  "next_post": {
+    "day": "Friday",
+    "date": "2026-05-22",
+    "best_time": "7 PM EST",
+    "platform": "TikTok",
+    "content": "Ain't Nothing But A Day To Die",
+    "priority": "SOVEREIGN_MAXIMUM",
+    "hook_style": "emotional_reveal"
+  }
+}

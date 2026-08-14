@@ -1,0 +1,33 @@
+import os
+import json
+import base64
+from google.oauth2 import service_account
+from google.auth.transport.requests import AuthorizedSession
+
+def broadcast_to_google():
+    b64_key = os.getenv("GOOGLE_INDEXING_API_JSON")
+    if not b64_key:
+        print("ERROR: GOOGLE_INDEXING_API_JSON secret is missing!")
+        raise SystemExit(1)
+    try:
+        key_json = base64.b64decode(b64_key).decode('utf-8')
+        info = json.loads(key_json)
+        scopes = ["https://www.googleapis.com/auth/indexing"]
+        creds = service_account.Credentials.from_service_account_info(info, scopes=scopes)
+        session = AuthorizedSession(creds)
+        target_url = "https://jhammerz.github.io"
+        endpoint = "https://indexing.googleapis.com/v3/urlNotifications:publish"
+        data = {"url": target_url, "type": "URL_UPDATED"}
+        print(f"INITIATING_RESONANCE: Broadcasting {target_url}...")
+        response = session.post(endpoint, json=data)
+        if response.status_code == 200:
+            print("RESONANCE_FORCE_COMPLETE: 200 OK")
+        else:
+            print(f"SIGNAL_FAILURE: {response.status_code} - {response.text}")
+            raise SystemExit(1)
+    except Exception as e:
+        print(f"CRITICAL_FAILURE: {str(e)}")
+        raise SystemExit(1)
+
+if __name__ == "__main__":
+    broadcast_to_google()

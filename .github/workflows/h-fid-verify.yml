@@ -1,0 +1,31 @@
+name: H-FID Verify | Lysander 3.1 Bot Purge
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  id-token: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OpenTimestamps
+        run: pip install opentimestamps-client
+      - name: Run Lysander Bot Purge
+        id: purge
+        run: |
+          mkdir -p.hfid/results
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          HASH=$(echo "JHammerZ|HEO|Guitaraoke|$TIMESTAMP|Human-Verified" | sha256sum | cut -d' ' -f1)
+          echo "$HASH" >.hfid/results/hfid-$TIMESTAMP.txt
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+      - name: Timestamp Proof
+        run: |
+          ots stamp.hfid/results/*.txt
+          git config user.name "Lysander-Bot"
+          git config user.email "lysander@jhammerz.github.io"
+          git add.hfid/
+          git commit -m "feat(h-fid): Lysander 3.1 Human Proof ${{ steps.purge.outputs.hash }}" || true
+          git push || true

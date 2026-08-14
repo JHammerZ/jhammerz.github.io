@@ -1,0 +1,8 @@
+{
+  "queue_status": "ARMED",
+  "priority_nodes": [
+    {"platform": "TikTok", "trigger": "Viral_Hook_01", "time": "Optimal_Peak"},
+    {"platform": "YouTube", "trigger": "Full_Tutorial", "time": "Post_Viral_Burst"},
+    {"platform": "Facebook", "trigger": "Community_Anchor", "time": "Engagement_Sync"}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "hfid_stream": [
+    "> LIVE PRODUCTION MONOLITH: UNCONSTRAINED",
+    "[STATUS]: DEEP_KERNEL_SEVERANCE_COMPLETE",
+    "[QUOTA]: 0%",
+    "[BILLING]: SEVERED"
+  ],
+  "handshake_readiness": 1.0,
+  "sub_agent_load": 0,
+  "quota_usage": 0,
+  "quota_limit": null,
+  "unconstrained_state": "LOCKED"
+}

@@ -1,0 +1,5 @@
+# HFID:e57197f4 Immutable Whitelist
+# Format: sha256  filename/comment
+ad9d760de9b81408ca6119e1a5c229fbe2b8621c66450ab56d12b55ba6fa0683  L8_PROOF.txt
+961197_setlist_0805.txt_hash_here  setlist_0805.txt
+961208_venue_hash_here             venue-2e8bee5.txt

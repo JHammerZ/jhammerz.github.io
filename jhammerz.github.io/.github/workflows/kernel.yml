@@ -1,0 +1,17 @@
+name: KERNEL VECTOR1
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - name: Debug inputs
+        run: nix --extra-experimental-features "nix-command flakes" flake metadata
+      - name: Build
+        run: 'nix --extra-experimental-features "nix-command flakes" build .#default --print-build-logs --no-update-lock-file'
+      - name: Hash
+        run: |
+          nix --extra-experimental-features "nix-command flakes" hash path ./result
+          cat ./result/fingerprint

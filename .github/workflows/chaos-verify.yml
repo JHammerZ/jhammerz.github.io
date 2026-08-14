@@ -1,0 +1,31 @@
+name: Chaos Verify | Self-Healing Stack
+on:
+  schedule:
+    - cron: '13 */4 * * *'
+  workflow_dispatch:
+jobs:
+  chaos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Site Health
+        run: |
+          curl -sf https://jhammerz.github.io > /dev/null || echo "SITE_DOWN=true" >> $GITHUB_ENV
+      - name: Check IPFS Gateway
+        run: |
+          curl -sf https://ipfs.io/ipfs/QmYourCID > /dev/null || echo "IPFS_DOWN=true" >> $GITHUB_ENV
+      - name: Check OpenTimestamps
+        run: |
+          curl -sf https://alice.btc.calendar.opentimestamps.org > /dev/null || echo "OTS_DOWN=true" >> $GITHUB_ENV
+      - name: Auto-Create Issue on Failure
+        if: env.SITE_DOWN == 'true' || env.IPFS_DOWN == 'true' || env.OTS_DOWN == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'ALERT: H-FID Stack Degraded - ' + new Date().toISOString(),
+              body: `Site: ${process.env.SITE_DOWN || 'OK'}\nIPFS: ${process.env.IPFS_DOWN || 'OK'}\nOTS: ${process.env.OTS_DOWN || 'OK'}\n\nLysander initiating self-heal.`,
+              labels: ['chaos', 'incident', 'h-fid']
+            })

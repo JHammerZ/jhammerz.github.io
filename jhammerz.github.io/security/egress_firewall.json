@@ -1,0 +1,11 @@
+{
+  "firewall_mode": "Enforce",
+  "allowed_domains": [
+    "github.com",
+    "://tiktok.com",
+    "://facebook.com",
+    "googleapis.com"
+  ],
+  "tls_requirement": "Strict_v1.3",
+  "status": "NETWORK_PERIMETER_HARDENED"
+}
