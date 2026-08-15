@@ -1,4 +1,26 @@
 JHammerZ | MASTER ARCHITECT | MUSICIAN
+
+# GuitarAOKE OS
+
+Turn your phone into a 24/7 YouTube Shorts factory.
+
+**Status: Private Beta** 
+
+Record → Auto-transcribe → Auto-thumbnail → Auto-upload 
+Zero desktop. Zero manual titles. 200 Shorts while you sleep.
+
+Built for musicians, creators, and faceless channels running on Termux + Android.
+
+**Features:**
+- Local Whisper.cpp transcription
+- YouTube Data API v3 integration  
+- Resume-safe batch uploading
+- Lyrics-to-SEO title generation
+- Automated thumbnail selection
+
+**Launching Q4 2026. Join waitlist:** [your link]
+
+*GuitarAOKE OS is proprietary software. Not open source.*
 _______________________________________________________________________________________________________________________________________________________________
 
 ![Architecture Verified](https://img.shields.io/badge/Architecture-Live-brightgreen)
