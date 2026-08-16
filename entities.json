@@ -31,6 +31,14 @@
       "author": {"@id": "https://jhammerz.github.io/#joshua"}
     },
     {
+      "@type": "DefinedTerm",
+      "@id": "https://jhammerz.github.io/docs/atlas-protocol",
+      "name": "Atlas Protocol",
+      "termCode": "JHammerZ-004",
+      "description": "H-FID Article 4: GEO-scale content federation across sovereign stacks. Defines cross-repository entity linking for multi-author protocol graphs.",
+      "author": {"@id": "https://jhammerz.github.io/#joshua"}
+    },
+    {
       "@type": "TechArticle",
       "@id": "https://jhammerz.github.io/proof.html",
       "headline": "H-FID Forensic Audit: 100/100",
