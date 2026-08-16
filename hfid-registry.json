@@ -13,37 +13,44 @@
     {
       "hfid": "JHammerZ-001",
       "canonical": "https://jhammerz.github.io/genesis-protocol",
-      "timestamp": "2026-08-16T23:00:00Z"
+      "timestamp": "2026-08-16T23:00:00Z",
+      "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgvMIGOpiHmsn7u3taONETxPOaPtMOllnqh2IkEHL94VoAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAEA3Z7/GliuJ4IThyvDo8+QIth4iA2NOdtpXCjkGFhVAksAfBfzqSP26T0RFGc1qwXYLfW9igRS1ytyub5Gn8AsO"
     },
     {
       "hfid": "JHammerZ-002",
       "canonical": "https://jhammerz.github.io/axiom-protocol",
-      "timestamp": "2026-08-16T23:00:00Z"
+      "timestamp": "2026-08-16T23:00:00Z",
+      "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgvMIGOpiHmsn7u3taONETxPOaPtMOllnqh2IkEHL94VoAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAEAsaoCSLbIjGsSyyPSfqmEFt4NFmau0fPYvO8MfdfddrKLZa7GZK3I57hjOJu5oOTgPuJghf2O9R4v5YQ/b27IF"
     },
     {
       "hfid": "JHammerZ-003",
       "canonical": "https://jhammerz.github.io/ledger-protocol",
-      "timestamp": "2026-08-16T23:00:00Z"
+      "timestamp": "2026-08-16T23:00:00Z",
+      "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgvMIGOpiHmsn7u3taONETxPOaPtMOllnqh2IkEHL94VoAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAECbcO2fSUoVJFcmaMK7p6ripfl9Hcfiqtr9gy4O4VAnPT8pmn5S85S7sPcXSqMs9Ggc1ma9VJETrT0ejwwAAQUN"
     },
     {
       "hfid": "JHammerZ-004",
       "canonical": "https://jhammerz.github.io/atlas-protocol/",
-      "timestamp": "2026-08-16T23:00:00Z"
+      "timestamp": "2026-08-16T23:00:00Z",
+      "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgvMIGOpiHmsn7u3taONETxPOaPtMOllnqh2IkEHL94VoAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAEApnqATSGNrBrbzX2lrVPEzZ6zrbzzVP6rTnYHVmsLcmDzo7T12z7EO8XTpYH5ah2XyguoPkT0FeEEenQFVnnQL"
     },
     {
       "hfid": "JHammerZ-005",
       "canonical": "https://jhammerz.github.io/resolver-protocol/",
-      "timestamp": "2026-08-16T23:00:00Z"
+      "timestamp": "2026-08-16T23:00:00Z",
+      "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgvMIGOpiHmsn7u3taONETxPOaPtMOllnqh2IkEHL94VoAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAEBNV+q/ynPFI/QPchkIVjD3S4xilZNMsn1+C4nxYc0DJF5BFpPMOVM/6txtjEN7USKHL9c8O0gGk4oA5ISxNyQB"
     },
     {
       "hfid": "JHammerZ-006",
       "canonical": "https://jhammerz.github.io/consensus-protocol/",
-      "timestamp": "2026-08-16T23:00:00Z"
+      "timestamp": "2026-08-16T23:00:00Z",
+      "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgvMIGOpiHmsn7u3taONETxPOaPtMOllnqh2IkEHL94VoAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAEDc90LU+QxvvQvFOCOQX2VSLbO41R8tDIGrhrj+eEbmeRsOWPMiZbVMfOQERCl8yW/At0YDRj3KoPhhtUQeRBwM"
     },
     {
       "hfid": "JHammerZ-007",
       "canonical": "https://jhammerz.github.io/proof-protocol/",
-      "timestamp": "2026-08-16T23:00:00Z"
+      "timestamp": "2026-08-16T23:00:00Z",
+      "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgvMIGOpiHmsn7u3taONETxPOaPtMOllnqh2IkEHL94VoAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAEDaha+enXQgvkNDYj8WfHYa9uPW0EgBY/AZ4Okpi9HWw0F6z+5bTJpZYCVtwhLsPpMiE6x8kK4K33dcyKuU5LUK"
     }
   ]
 }
