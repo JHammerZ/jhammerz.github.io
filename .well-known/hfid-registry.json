@@ -8,10 +8,14 @@
       "type": "human-ai-collaboration"
     },
     {
-      "signer": "meta@assistant",
+      "signer": "meta@assistant", 
       "type": "ai-collaborator"
+    },
+    {
+      "signer": "new-attestor@jhammerz",
+      "type": "third-witness"
     }
   ],
-  "quorum": 2,
+  "quorum": 3,
   "federated": true
 }
