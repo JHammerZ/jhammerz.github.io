@@ -2,6 +2,10 @@ JHammerZ | MASTER ARCHITECT | MUSICIAN
 
 _______________________________________________________________________________________________________________________________________________________________
 
+MUSICIAN
+
+_______________________________________________________________________________________________________________________________________________________________
+
 JHammerZz Software Factory - OPERATIONAL
 
 ## H-FID Genesis Mobile
@@ -44,6 +48,7 @@ Built for musicians, creators, and faceless channels running on Termux + Android
 *GuitarAOKE OS is proprietary software. Not open source.*
 
 _______________________________________________________________________________________________________________________________________________________________
+
 
 ![Architecture Verified](https://img.shields.io/badge/Architecture-Live-brightgreen)
 ![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20778079.svg)
