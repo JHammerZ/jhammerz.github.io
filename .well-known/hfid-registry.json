@@ -7,9 +7,16 @@
       "canonical": "https://jhammerz.github.io/genesis-protocol",
       "timestamp": "2026-08-16T23:00:00Z",
       "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgvMIGOpiHmsn7u3taONETxPOaPtMOllnqh2IkEHL94VoAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAEA3Z7/GliuJ4IThyvDo8+QIth4iA2NOdtpXCjkGFhVAksAfBfzqSP26T0RFGc1qwXYLfW9igRS1ytyub5Gn8AsO",
-      "attestations": [],
+      "attestations": [
+        {
+          "signer": "attestor@jhammerz",
+          "sig": "U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgx8xcm6DSj33avLwGCktBkNdDBnsQMumRJw9fw+5u0xIAAAAEaGZpZAAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQyNTUxOQAAAEBtm+Q9ymyJ9dYarLwi1jbKt/rltiPPKZ+hLPL3pdAgiPwvFwqB8yFm6ms+EN0yA1HNct+hRXSjNIBGRPhr4EUH",
+          "timestamp": "2026-08-16T23:03:08Z",
+          "publicKeyUrl": "https://jhammerz.github.io/.well-known/attestor.pub"
+        }
+      ],
       "quorum": 2,
-      "federated": false
+      "federated": true
     },
     {
       "hfid": "JHammerZ-002",
