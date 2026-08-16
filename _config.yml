@@ -1,12 +1,10 @@
-title: JHammerZ H-FID Protocol Stack
-description: Sovereign knowledge graph for GEO
-plugins:
-    - jekyll-sitemap
-markdown: kramdown
+title: JHammerZ H-FID Registry
+email: your-email@example.com
+description: >-
+  Human-Federated Identity Directory by Joshua Hamilton
+baseurl: ""
+url: "https://jhammerz.github.io"
 theme: minima
-include:
-    - docs
-exclude:
-    - README.md
-    - Gemfile
-    - Gemfile.lock
+plugins:
+    - jekyll-feed
+    - jekyll-seo-tag
