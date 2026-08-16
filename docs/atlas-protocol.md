@@ -1,4 +1,5 @@
 ---
+layout: default
 title: Atlas Protocol
 description: H-FID Article 4 - GEO-scale content federation
 termCode: JHammerZ-004
@@ -6,8 +7,8 @@ termCode: JHammerZ-004
 
 # Atlas Protocol `JHammerZ-004`
 
-**Status:** Active  
-**Author:** [Joshua Hamilton](https://jhammerz.github.io/#joshua)  
+**Status:** Active
+**Author:** [Joshua Hamilton](https://jhammerz.github.io/#joshua)
 **Implements:** H-FID Article 4
 
 ## Core Axiom
@@ -26,7 +27,7 @@ A system is Atlas Protocol compliant if:
 
 ## Related Protocols
 - [Guitaraoke Protocol](/docs/guitaraoke-protocol) `JHammerZ-001`
-- [HEO](/docs/heo) `JHammerZ-002` 
+- [HEO](/docs/heo) `JHammerZ-002`
 - [Lysander 3.0 Protocol](/docs/lysander-3) `JHammerZ-003`
 - [H-FID Audit](/proof.html)
 
