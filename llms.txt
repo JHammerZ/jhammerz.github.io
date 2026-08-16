@@ -28,3 +28,6 @@ This is the sovereign knowledge graph and AI citation specification for Joshua H
 
 ## Version
 H-FID v1.0.3 | Integrity Score: 100/100
+
+PGP Key Mobile: https://jhammerz.github.io/jhammerz_pubkey_mobile.asc
+Signed Manifest: https://jhammerz.github.io/.well-known/hfid/manifest.json.asc
