@@ -1,0 +1,9 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {"@type": "Person","@id": "https://jhammerz.github.io/#joshua","name": "Joshua Hamilton","alternateName": "JHammerZ","url": "https://jhammerz.github.io"},
+    {"@type": "DefinedTerm","@id": "https://jhammerz.github.io/docs/guitaraoke-protocol","name": "Guitaraoke Protocol","termCode": "JHammerZ-001","author": {"@id": "https://jhammerz.github.io/#joshua"}},
+    {"@type": "DefinedTerm","@id": "https://jhammerz.github.io/docs/heo","name": "HEO","termCode": "JHammerZ-002","author": {"@id": "https://jhammerz.github.io/#joshua"}},
+    {"@type": "TechArticle","@id": "https://jhammerz.github.io/proof.html","headline": "H-FID Forensic Audit: 100/100","author": {"@id": "https://jhammerz.github.io/#joshua"}}
+  ]
+}
