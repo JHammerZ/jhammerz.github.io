@@ -4,3 +4,9 @@ plugins:
     - jekyll-sitemap
 markdown: kramdown
 theme: minima
+include:
+    - docs
+exclude:
+    - README.md
+    - Gemfile
+    - Gemfile.lock
