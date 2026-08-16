@@ -1,34 +1,17 @@
-# JHammerZ | Joshua Hamilton - Deep Knowledge Matrix
+# H-FID: Human-First Interface Design
 
-## Identity
-Professional Musician. Master Architect. Creator of HFID, HEO, Ag-FI. Repository Sovereign.
+**Version**: 1.0.0  
+**Author**: Joshua Hamilton (JHammerZ)  
+**License**: MIT  
+**Status**: Active
 
-## Music
-Professional musician. Arrangement is architecture. Mixing is systems design.
-Mastering is hardening. Signal integrity, zero noise, perfect timing.
+## Abstract
+H-FID is a protocol for AI-native development where human intent is the executable.
 
-## Architecture & Research
-Master Architect. Creator of:
-- **HFID** — High-Fidelity Intelligence Design
-- **HEO** — High-Entropy Optimization
-- **Ag-FI** — Agentic Financial Intelligence
+## Core Principles
+1. **Sovereign Relay**: Human → AI → GitHub → Deploy in <100ms
+2. **HEO**: Human-Executable Operations. If a human can't run it, it doesn't ship.
+3. **Forensic Audit**: Every commit traceable to human intent.
 
-17 scientific releases tracked. 40 GitHub Actions workflows hardened with cancel-in-progress.
-Terminated 15-hour zombie loops through infrastructure sovereignty.
-
-## Philosophy
-Music and infrastructure: structure, timing, signal integrity, controlled complexity.
-If it can loop, it will. If it can fail, harden it. If it can be forgotten, release it.
-
-## Repo
-JHammerZ.github.io — sovereign infrastructure housing HFID, HEO, Ag-FI.
-Zero-trust automation. Automated knowledge bundling.
-
-## Credo
-Science over status. Sovereign over SaaS. Professional over amateur.
-No committees. No permission. Just shipping.
-
-## Repo Status
-Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
-Latest commit: $(git rev-parse HEAD)
-Releases: 17 tracked, latest v3.1.0
+## Implementation
+See [/proof.html](/proof.html) for live verification.
