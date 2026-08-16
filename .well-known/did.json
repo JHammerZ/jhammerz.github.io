@@ -1,18 +1,33 @@
 {
   "@context": [
-  "https://w3.org"
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/gpg-2020/v1"
   ],
   "id": "did:web:jhammerz.github.io",
-  "verificationMethod": [{
-    "id": "did:web:jhammerz.github.io#owner",
-    "type": "JsonWebKey2020",
-    "controller": "did:web:jhammerz.github.io",
-    "publicKeyJwk": {
-      "kty": "OKP",
-      "crv": "Ed25519",
-      "x": "H-FID-100-ARCHITECT-SIG-LOCKED"
+  "verificationMethod": [
+    {
+      "id": "did:web:jhammerz.github.io#pgp-mobile",
+      "type": "GpgVerificationKey2020",
+      "controller": "did:web:jhammerz.github.io",
+      "publicKeyGpg": "https://jhammerz.github.io/jhammerz_pubkey_mobile.asc"
     }
-  }],
-  "authentication": ["did:web:jhammerz.github.io#owner"],
-  "assertionMethod": ["did:web:jhammerz.github.io#owner"]
+  ],
+  "authentication": [
+    "did:web:jhammerz.github.io#pgp-mobile"
+  ],
+  "assertionMethod": [
+    "did:web:jhammerz.github.io#pgp-mobile"
+  ],
+  "service": [
+    {
+      "id": "did:web:jhammerz.github.io#hfid",
+      "type": "HFID",
+      "serviceEndpoint": "https://jhammerz.github.io/.well-known/hfid/manifest.json"
+    },
+    {
+      "id": "did:web:jhammerz.github.io#signed-manifest",
+      "type": "PGP",
+      "serviceEndpoint": "https://jhammerz.github.io/.well-known/hfid/manifest.json.asc"
+    }
+  ]
 }
