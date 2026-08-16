@@ -1,10 +1,10 @@
-# [HxA-AUTONOMY-BRIDGE] // The Sovereign Relay
-#.JHam Language / H-FID Standard / HEO
+#-# [H-FID-AUTONOMY-BRIDGE] // The Sovereign Relay
+# JHammerZ Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
-#
+
 # Sovereign Author: Joshua Hamilton
-# First Commit: [February 12,2026]
+# First Commit: [February 12, 2026]
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
@@ -26,20 +26,24 @@ permissions:
   contents: write
 
 jobs:
-  commit_reset:
+  commit-reset:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Free Disk Space
         run: |
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /usr/local/lib/android
           sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache
+          df -h
 
       - name: Checkout Vault
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: true
+          fetch-depth: 0
 
       - name: Execute Sovereign Write
         run: |
@@ -53,7 +57,7 @@ jobs:
           fi
 
           if [ -z "$PAYLOAD_CONTENT" ]; then
-            PAYLOAD_CONTENT="// Manual initialization run complete."
+            PAYLOAD_CONTENT="// Manual initialization run complete. $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
           fi
 
           # 3. Create the directory tree safely if it does not exist
@@ -61,6 +65,8 @@ jobs:
 
           # 4. Safely output the content to the designated file path
           echo "$PAYLOAD_CONTENT" > "$PAYLOAD_PATH"
+          
+          echo "Wrote to $PAYLOAD_PATH"
 
       - name: Commit changes
         run: |
@@ -71,8 +77,12 @@ jobs:
           git add .
           
           # Only commit if there are actual code changes to avoid empty commit crashes
-          git diff-index --quiet HEAD || git commit -m "feat(ag-fs): automated sovereign write sync"
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit. Exiting."
+            exit 0
+          fi
+          
+          git commit -m "feat(ag-fs): automated sovereign write sync"
           
           # Push directly to main using default upstream authorization token context
           git push origin main
-
