@@ -4,13 +4,9 @@
 
 
 ## Core Index Page Layout
-<!DOCTYPE html>
-</style>
-
-
-<!DOCTYPE html>
-</style>
-
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
 <head>
 <style>
 /* SOVEREIGN MASTER ARCHITECT STYLESHEET - 100/100 OPTIMIZED */
