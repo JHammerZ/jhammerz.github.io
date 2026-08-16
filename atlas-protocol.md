@@ -2,7 +2,7 @@
 title: Atlas Protocol
 description: H-FID Article 4 - GEO-scale content federation
 termCode: JHammerZ-004
-permalink: /docs/atlas-protocol/
+permalink: /atlas-protocol/
 ---
 
 # Atlas Protocol `JHammerZ-004`
