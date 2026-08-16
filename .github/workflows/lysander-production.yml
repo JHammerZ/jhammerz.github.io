@@ -15,12 +15,12 @@ concurrency:
   cancel-in-progress: true
 
 on:
+  schedule:
+    - cron: '0 0 * * *'
   push:
     branches: 
     tags: ['v*']
   pull_request:
-  schedule:
-    - cron: '28 22 * * 4'
   workflow_dispatch:
 
 jobs:

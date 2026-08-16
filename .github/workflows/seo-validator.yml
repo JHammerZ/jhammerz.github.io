@@ -1,7 +1,7 @@
 name: SEO and Link Validator
 on: workflow_dispatch
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 0 * * *'
 concurrency:
   group: seo-link-validator-override
   cancel-in-progress: true

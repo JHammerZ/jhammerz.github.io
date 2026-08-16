@@ -16,7 +16,7 @@ concurrency:
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # Executes weekly verification health checks automatically
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:

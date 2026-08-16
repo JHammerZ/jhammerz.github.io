@@ -15,12 +15,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 on:
+  schedule:
+    - cron: '0 0 * * *'
   push:
     branches:
     tags: ['v*']
   pull_request:
-  schedule:
-    - cron: '0 */6 * * *' # Recursive Autonomy: Runs every 6 hours
   workflow_dispatch:
 
 jobs:

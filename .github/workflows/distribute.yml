@@ -3,7 +3,7 @@ BTC=$(jq -r '.[-1].bitcoin' .well-known/hfid/chain.json)
 ZENODO=$(jq -r '.[-1].zenodo' .well-known/hfid/chain.json)
 on: workflow_dispatch
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 0 * * *'
 jobs:
   run:
     runs-on: ubuntu-latest

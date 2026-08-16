@@ -16,7 +16,7 @@ concurrency:
 
 on:
   schedule:
-    - cron: '0 12 * * *' # Automated daily data updates
+    - cron: '0 0 * * *'
   workflow_dispatch: # Allows manual verification checks with one click
 
 jobs:
