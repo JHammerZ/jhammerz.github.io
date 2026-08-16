@@ -1,6 +1,8 @@
 name: DOI Sync | Janus Gate v1.1.0-H-FID
 
 on:
+  schedule:
+    - cron: '0 * * * *'
   workflow_dispatch:
   push:
     paths:

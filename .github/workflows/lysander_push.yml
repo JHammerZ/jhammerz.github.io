@@ -5,6 +5,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
+  schedule:
+    - cron: '0 * * * *'
   repository_dispatch:
     types: [sovereign_update]
   workflow_dispatch:

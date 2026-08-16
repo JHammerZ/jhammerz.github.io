@@ -1,5 +1,7 @@
 name: HEO Sovereign Broadcast
 on: workflow_dispatch
+  schedule:
+    - cron: '0 * * * *'
 concurrency:
   group: heo-sovereign-override
   cancel-in-progress: true

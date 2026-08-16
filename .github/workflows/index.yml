@@ -1,5 +1,7 @@
 name: Ping Search Engines
 on:
+  schedule:
+    - cron: '0 * * * *'
   push:
     branches: [ main ]
   workflow_dispatch:

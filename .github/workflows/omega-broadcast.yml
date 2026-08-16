@@ -1,5 +1,7 @@
 name: Omega Broadcast | Twenty 47
 on:
+  schedule:
+    - cron: '0 * * * *'
   push:
     paths: ['content/**', 'releases/**']
   workflow_dispatch:

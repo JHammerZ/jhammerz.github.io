@@ -1,5 +1,7 @@
 name: A2A Global Broadcast
 on:
+  schedule:
+    - cron: '0 * * * *'
   push:
     branches: [ main ]
   workflow_dispatch:

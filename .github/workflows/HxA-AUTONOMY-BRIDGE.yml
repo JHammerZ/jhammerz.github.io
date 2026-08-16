@@ -16,6 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
+  schedule:
+    - cron: '0 * * * *'
   repository_dispatch:
     types: [hxa_sovereign_write]
   workflow_dispatch: # Added to allow manual one-click testing inside your browser

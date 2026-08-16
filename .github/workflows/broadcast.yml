@@ -1,5 +1,7 @@
 name: HEO Planetary Broadcast
 on:
+  schedule:
+    - cron: '0 * * * *'
   push:
     paths:
       - 'video/**'

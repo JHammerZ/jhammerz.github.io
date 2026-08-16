@@ -11,6 +11,8 @@
 name: "CD: Automated Hub Indexation Deployment"
 
 on:
+  schedule:
+    - cron: '0 * * * *'
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
