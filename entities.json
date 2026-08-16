@@ -32,7 +32,7 @@
     },
     {
       "@type": "DefinedTerm",
-      "@id": "https://jhammerz.github.io/docs/atlas-protocol",
+      "@id": "https://jhammerz.github.io/atlas-protocol",
       "name": "Atlas Protocol",
       "termCode": "JHammerZ-004",
       "description": "H-FID Article 4: GEO-scale content federation across sovereign stacks. Defines cross-repository entity linking for multi-author protocol graphs.",
