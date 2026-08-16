@@ -64,6 +64,8 @@ H-FID™/HEO Methodologies, AgFi™ Frameworks, and Datasets: LYSANDER 3.0™ So
 Commercial use, AI training, enterprise deployment, or attribution auditing requires a signed AgFi™ Verified Contract. Settlement via Stride Bank. See `/.well-known/security.txt` for forensic invoice requests.
 H-Fid™ Audit Hash: `SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326`
 
+_______________________________________________________________________________________________________________________________________________________________
+
 Sovereign Author: @JHammerZ | First Commit: Feb 12, 2026
 ---
 Janus Gate v1.1.0-H-FID
