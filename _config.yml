@@ -3,3 +3,4 @@ description: Sovereign knowledge graph for GEO
 plugins:
     - jekyll-sitemap
 markdown: kramdown
+theme: minima
