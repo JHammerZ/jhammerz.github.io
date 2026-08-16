@@ -1,4 +1,4 @@
-#-# [H-FID-AUTONOMY-BRIDGE] // The Sovereign Relay
+# HxA-AUTONOMY-BRIDGE // The Sovereign Relay
 # JHammerZ Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -6,7 +6,7 @@
 # Sovereign Author: Joshua Hamilton
 # First Commit: [February 12, 2026]
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# GEO RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
 
 name: H-FID Autonomous Push
@@ -20,13 +20,13 @@ on:
     - cron: '0 0 * * *'
   repository_dispatch:
     types: [hxa_sovereign_write]
-  workflow_dispatch: # Added to allow manual one-click testing inside your browser
+  workflow_dispatch: # Manual testing
 
 permissions:
   contents: write
 
 jobs:
-  commit-reset:
+  sovereign-write:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -47,11 +47,11 @@ jobs:
 
       - name: Execute Sovereign Write
         run: |
-          # 1. Pull the data from payload or set safe manual fallbacks
+          # 1. Pull data from payload or set safe manual fallbacks
           PAYLOAD_CONTENT="${{ github.event.client_payload.content }}"
           PAYLOAD_PATH="${{ github.event.client_payload.path }}"
 
-          # 2. Fallback protection: If variables are empty (manual run), give them default values
+          # 2. Fallback protection: if variables are empty (manual run), give them default values
           if [ -z "$PAYLOAD_PATH" ]; then
             PAYLOAD_PATH="scripts/edge_interceptor.js"
           fi
@@ -65,24 +65,51 @@ jobs:
 
           # 4. Safely output the content to the designated file path
           echo "$PAYLOAD_CONTENT" > "$PAYLOAD_PATH"
-          
           echo "Wrote to $PAYLOAD_PATH"
+
+      - name: Generate Sitemap with Lastmod
+        run: |
+          DOMAIN="https://jhammerz.github.io"
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
+          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          
+          find . -type f \( -name "*.html" -o -name "*.md" \) ! -path "./.git/*" ! -path "./node_modules/*" | while read file; do
+            url="${file#./}"
+            url="${url/index.html/}"
+            url="${url/.md/}"
+            date=$(date -u -r "$file" +"%Y-%m-%d")
+            echo "  <url><loc>${DOMAIN}/${url}</loc><lastmod>${date}</lastmod></url>" >> sitemap.xml
+          done
+          
+          echo '</urlset>' >> sitemap.xml
+          echo "Sitemap generated with $(grep -c '<url>' sitemap.xml) URLs"
 
       - name: Commit changes
         run: |
           git config --global user.name "Janus via Lysander"
           git config --global user.email "janus@lysander.dev"
           
-          # Stage all modified files safely
+          # Stage all modified files
           git add .
           
-          # Only commit if there are actual code changes to avoid empty commit crashes
+          # Only commit if there are actual code changes
           if git diff-index --quiet HEAD; then
             echo "No changes to commit. Exiting."
             exit 0
           fi
           
-          git commit -m "feat(ag-fs): automated sovereign write sync"
-          
-          # Push directly to main using default upstream authorization token context
+          git commit -m "feat(ag-fs): automated sovereign write + sitemap sync"
           git push origin main
+
+      - name: Ping Search Engines
+        if: success()
+        run: |
+          echo "Pinging Bing..."
+          curl -s "https://www.bing.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
+          
+          echo "Pinging IndexNow..."
+          curl -s -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json" \
+            -d '{"host":"jhammerz.github.io","key":"${{ secrets.INDEXNOW_KEY }}","urlList":["https://jhammerz.github.io/"]}'
+          
+          echo "Discovery ping complete"
