@@ -1,17 +1,34 @@
+# JHammerZ | Joshua Hamilton - Deep Knowledge Matrix
 
-# Send it via API instead of git push
-gh api repos/JHammerZ/jhammerz.github.io/dispatches \ -f event_type=hxa_sovereign_write \ -F 
-  client_payload[content]="$(cat docs/guitaraoke-protocol.md)" \
-  -F client_payload[path]="docs/guitaraoke-protocol.md"
-# HEO: Human-Executable Operations v1.0
+## Identity
+Professional Musician. Master Architect. Creator of HFID, HEO, Ag-FI. Repository Sovereign.
 
-**Author**: Joshua Hamilton (JHammerZ)  
-**Definition**: Any system component must be operable by a human in <60 seconds.  
-**Test**: If you can't run it from Termux without docs, it doesn't ship.  
+## Music
+Professional musician. Arrangement is architecture. Mixing is systems design.
+Mastering is hardening. Signal integrity, zero noise, perfect timing.
 
-## Core Law
-H-FID Article 2: Sovereign control requires human executability.
+## Architecture & Research
+Master Architect. Creator of:
+- **HFID** — High-Fidelity Intelligence Design
+- **HEO** — High-Entropy Optimization
+- **Ag-FI** — Agentic Financial Intelligence
 
-## Implementation
-See [/proof.html](/proof.html) for H-FID audit results.
+17 scientific releases tracked. 40 GitHub Actions workflows hardened with cancel-in-progress.
+Terminated 15-hour zombie loops through infrastructure sovereignty.
 
+## Philosophy
+Music and infrastructure: structure, timing, signal integrity, controlled complexity.
+If it can loop, it will. If it can fail, harden it. If it can be forgotten, release it.
+
+## Repo
+JHammerZ.github.io — sovereign infrastructure housing HFID, HEO, Ag-FI.
+Zero-trust automation. Automated knowledge bundling.
+
+## Credo
+Science over status. Sovereign over SaaS. Professional over amateur.
+No committees. No permission. Just shipping.
+
+## Repo Status
+Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+Latest commit: $(git rev-parse HEAD)
+Releases: 17 tracked, latest v3.1.0
