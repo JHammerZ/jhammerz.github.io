@@ -31,3 +31,7 @@ H-FID v1.0.3 | Integrity Score: 100/100
 
 PGP Key Mobile: https://jhammerz.github.io/jhammerz_pubkey_mobile.asc
 Signed Manifest: https://jhammerz.github.io/.well-known/hfid/manifest.json.asc
+
+DID: https://jhammerz.github.io/.well-known/did.json
+
+Bitcoin Timestamp: https://jhammerz.github.io/.well-known/hfid/manifest.json.ots
