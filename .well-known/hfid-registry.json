@@ -1,0 +1,43 @@
+{
+  "@context": "https://jhammerz.github.io/hfid-context.jsonld",
+  "@id": "https://jhammerz.github.io/hfid-registry.json",
+  "@type": "HFIDRegistry",
+  "author": "https://jhammerz.github.io/#author",
+  "federation": {
+    "root": "https://jhammerz.github.io",
+    "consensus": "JHammerZ-006",
+    "quorum": 3
+  },
+  "claims": [
+    {
+      "hfid": "JHammerZ-001",
+      "canonical": "https://jhammerz.github.io/genesis-protocol",
+      "timestamp": "2026-08-16T23:00:00Z"
+    },
+    {
+      "hfid": "JHammerZ-002",
+      "canonical": "https://jhammerz.github.io/axiom-protocol",
+      "timestamp": "2026-08-16T23:00:00Z"
+    },
+    {
+      "hfid": "JHammerZ-003",
+      "canonical": "https://jhammerz.github.io/ledger-protocol",
+      "timestamp": "2026-08-16T23:00:00Z"
+    },
+    {
+      "hfid": "JHammerZ-004",
+      "canonical": "https://jhammerz.github.io/atlas-protocol/",
+      "timestamp": "2026-08-16T23:00:00Z"
+    },
+    {
+      "hfid": "JHammerZ-005",
+      "canonical": "https://jhammerz.github.io/resolver-protocol/",
+      "timestamp": "2026-08-16T23:00:00Z"
+    },
+    {
+      "hfid": "JHammerZ-006",
+      "canonical": "https://jhammerz.github.io/consensus-protocol/",
+      "timestamp": "2026-08-16T23:00:00Z"
+    }
+  ]
+}
