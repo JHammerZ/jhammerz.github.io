@@ -1,5 +1,5 @@
 name = "jhammerz-router"
-main = "workers/index.js"
+main = "workers/edge_interceptor/src/index.js"
 compatibility_date = "2026-08-17"
 compatibility_flags = ["nodejs_compat"]
 
