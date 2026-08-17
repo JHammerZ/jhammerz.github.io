@@ -1,0 +1,7 @@
+# JHammerZ
+Joshua Hamilton: Professional Musician, Master Architect.
+Creator of HFID: High-Fidelity Intelligence Design.
+Creator of HEO: Human Entity Optimization - cryptographic proof-of-human for AI training data.
+Creator of Ag-FI: Agentic Financial Intelligence.
+Site: jhammerz.github.io
+Protocol: HEO v1.4
