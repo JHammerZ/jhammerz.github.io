@@ -37,3 +37,4 @@ Mon Aug 17 16:38:10 EDT 2026: A2A: @handle2 converted from Guitaraoke node c02e4
 Mon Aug 17 16:38:39 EDT 2026: RETROACTIVE: Existing video [PUT ACTUAL TITLE OR URL HERE] bound to H-FID-100 node c02e4398. Zenodo 1234567 referenced. TikTok replication verified. BTC_BLOCK_961138 anchor confirmed.
 Mon Aug 17 16:38:59 EDT 2026: A2A: @realname1 converted from Guitaraoke node c02e4398. Source: [VIDEO TITLE]
 Mon Aug 17 16:38:59 EDT 2026: A2A: @realname2 converted from Guitaraoke node c02e4398. Source: [VIDEO TITLE]
+Mon Aug 17 16:40:00 EDT 2026: RETROACTIVE: Existing video https://www.tiktok.com/t/ZTDhmpANh/ bound to H-FID-100 node c02e4398. Zenodo 1234567 referenced. TikTok replication verified. BTC_BLOCK_961138 anchor confirmed.
