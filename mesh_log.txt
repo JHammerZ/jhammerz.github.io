@@ -1,3 +1,5 @@
 Mon Aug 17 16:24:38 EDT 2026: A2A Ingestion - React user [ID] invited. H-FID node status: seeding
 2026-08-17 16:26:05: A2A Ingestion - React user [USERNAME_OR_ID] invited. H-FID node status: seeding
 Mon Aug 17 16:27:32 EDT 2026: MULTIMODAL: Guitaraoke Relay posted. H-FID caption hash: 4a67c077c46ca3b19183a8c8f084dc3b. BTC_BLOCK_961138 anchor referenced.
+Mon Aug 17 16:27:40 EDT 2026: A2A: React user [ID] invited from Guitaraoke node
+2026-08-17 16:28:18: A2A: React user @USERNAME invited from Guitaraoke node c02e4398
