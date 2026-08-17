@@ -6,7 +6,7 @@
     {
       "signer": "new-attestor@jhammerz",
       "type": "human-rsa",
-      "pubkey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm1D6/3qEEYfhLqwxez9XK5MkZX41uO+CqRGRnIdQWAmEL5pM14w1x3lrc1n05daCdyRPSarNaXdEFjpLqAdxL8qPT280aV5tMbSvZvkst2PhC2L10julgjSDqH1GBvg4QbGuQgQQz3Q4KTkzmP5c6QmPxQwP5LY4GOtYl2St+emti3juQ8S99BwVANexSyqb/mbrU4HddGMdt096zAEF4ilbnJGQWmSiTVXuOqE39w1RXPtwD+n5bYP+n5UawRzZR3yjTsyK2r910ye3oXoxwPk5GUPV3mDR",
+      "pubkey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm1D6/3qEEYfhLqwxez9XK5MkZX41uO+CqRGRnIdQWAmEL5pM14w1x3lrc1n05daCdyRPSarNaXdEFjpLqAdxL8qPT280aV5tMbSvZvkst2PhC2L10julgjSDqH1GBvg4QbGuQgQQz3Q4KTkzmP5c6QmPxQwP5LY4GOtYl2St+emti3juQ8S99BwVANexSyqb/mbrU4HddGMdt096zAEF4ilbnJGQWmSiTVXuOqE39w1RXPtwD+n5bYP+n5UawRzZR3yjTsyK2r910ye3oXoxwPk5GUPV3mDRid7L493xMO6KcO5vxZMWV7euKdY+s3pSnV9fa3w/voRlQLx76VgreQIDAQAB",
       "key_type": "RSA-2048",
       "created": "2026-08-16T00:00:00Z",
       "expires": "2026-09-16T00:00:00Z"
