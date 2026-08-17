@@ -10,11 +10,27 @@
       "key_type": "RSA-2048",
       "created": "2026-08-16T00:00:00Z",
       "expires": "2026-09-16T00:00:00Z"
+    },
+    {
+      "signer": "key-2@jhammerz",
+      "type": "human-ed25519",
+      "pubkey": "MCowBQYDK2VwAyEAG9snV7OedWBq9HNzR96ATIjySqOp/kYDDnKbOlEDR5A=",
+      "key_type": "ED25519",
+      "created": "2026-08-17T00:00:00Z",
+      "expires": "2027-08-17T00:00:00Z"
+    },
+    {
+      "signer": "key-3@jhammerz",
+      "type": "human-ed25519",
+      "pubkey": "MCowBQYDK2VwAyEAFrrNbMoS4gBizovYPmMivuI3FSQ6sA09efJdG3fUGFw=",
+      "key_type": "ED25519",
+      "created": "2026-08-17T00:00:00Z",
+      "expires": "2027-08-17T00:00:00Z"
     }
   ],
-  "quorum": 1,
+  "quorum": 3,
   "federated": true,
-  "version": "1.3",
-  "policy": "single-key-rotation-mode",
-  "note": "operating quorum 1 during key rotation"
+  "version": "1.4",
+  "policy": "m-of-n-rotation",
+  "note": "migrating from RSA to Ed25519, quorum 3"
 }
