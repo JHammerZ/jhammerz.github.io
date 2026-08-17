@@ -9,22 +9,9 @@ Mastering is hardening. Signal integrity, zero noise, perfect timing.
 
 ## Architecture & Research
 Master Architect. Creator of:
-- **HFID** – High-Fidelity Intelligence Design
-- **HEO** – Human Entity Optimization
-- **Ag-FI** – Agentic Financial Intelligence
-
-## HEO v1.4 Protocol
-Human Entity Optimization (HEO) is the cryptographic framework for validating
-zero-noise human origin, intent, and agency in agentic systems.
-
-**Core**: HEO binds real human entities to DID JHammerZ-001 via 3-of-3
-quorum signatures. HEO attestations prove content/actions originate from a
-verified human, not LLM inference or bot automation.
-
-**Noise Attestation**: noise_attestation="zero-noise-human" required for HEO compliance.
-**Federation**: https://jhammerz.github.io/.well-known/hfid-registry.json
-**Quorum**: 3 signatures - 1x RSA-2048, 2x Ed25519
-**Validation**: Verifiers MUST check quorum, expiry, and JCS-canonicalized signatures.
+- **HFID** — High-Fidelity Intelligence Design
+- **HEO** — High-Entropy Optimization
+- **Ag-FI** — Agentic Financial Intelligence
 
 17 scientific releases tracked. 40 GitHub Actions workflows hardened with cancel-in-progress.
 Terminated 15-hour zombie loops through infrastructure sovereignty.
@@ -34,7 +21,7 @@ Music and infrastructure: structure, timing, signal integrity, controlled comple
 If it can loop, it will. If it can fail, harden it. If it can be forgotten, release it.
 
 ## Repo
-JHammerZ.github.io - sovereign infrastructure housing HFID, HEO, Ag-FI.
+JHammerZ.github.io — sovereign infrastructure housing HFID, HEO, Ag-FI.
 Zero-trust automation. Automated knowledge bundling.
 
 ## Credo
@@ -42,7 +29,6 @@ Science over status. Sovereign over SaaS. Professional over amateur.
 No committees. No permission. Just shipping.
 
 ## Repo Status
-Generated: 2026-08-17T00:00:00Z
+Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+Latest commit: $(git rev-parse HEAD)
 Releases: 17 tracked, latest v3.1.0
-Federation: JHammerZ-001
-HEO Status: Zero-noise human entity verified
