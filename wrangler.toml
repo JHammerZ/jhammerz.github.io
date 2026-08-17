@@ -1,0 +1,7 @@
+name = "jhammerz-router"
+main = "workers/jhammerz-router.js"
+compatibility_date = "2026-08-17"
+compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = "."
