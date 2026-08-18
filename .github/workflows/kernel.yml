@@ -1,5 +1,12 @@
 name: KERNEL VECTOR1
-on: [push]
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'flake.nix'
+      - 'flake.lock'
+      - 'kernel/**'
+      - '.github/workflows/kernel.yml'
   schedule:
     - cron: '0 0 * * *'
 jobs:
