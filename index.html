@@ -15,12 +15,19 @@
   <meta property="og:url" content="https://jhammerz.github.io/">
   <meta name="google-site-verification" content="xhLtKrDdi7XbFOhU05BR8JIajzSwfFbTQ0-ahF6jpE4" />
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://api.indexnow.org;">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta n<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; connect-src 'self' https://*.trycloudflare.com https://api.indexnow.org;">ame="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="JHammerZ | HEO | Guitaraoke™ - Bitcoin-anchored AI provenance network">
   <link rel="alternate" type="application/json" href="/.well-known/hfid/manifest.json" title="A2A Manifest">
   <link rel="canonical" href="https://jhammerz.github.io/">
   <style></style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"KnowledgeGraph","name":"JHammerZ Sovereign Knowledge Graph","alternateName":"InfiniteX Sovereign Index","version":"H-FID v1.0.3","protocol":"Celebrity Breakthroughs Protocol","author":{"@type":"Person","name":"Joshua Hamilton","alternateName":"JHammerZ","identifier":"H-FID-100-FORENSIC-AUDIT","url":"https://jhammerz.github.io","sameAs":["https://www.tiktok.com/@jhammerzz","https://www.youtube.com/@JHammerZ","https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79","https://www.instagram.com/jhammerzz/"]}}</script>
+
+<script>
+const W4_API = "https://fare-sitemap-intellectual-pete.trycloudflare.com";
+async function w4_save(k,d){return(await fetch(`${W4_API}/compress?key=${encodeURIComponent(k)}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)})).text()}
+async function w4_load(k){const r=await fetch(`${W4_API}/decompress?key=${encodeURIComponent(k)}`);return r.ok?r.json():null}
+async function w4_test(){const d={user:"Joshua",w4:"root_absolute",time:new Date().toISOString(),url:W4_API};console.log('Save:',await w4_save('gh_test',d));console.log('Load:',await w4_load('gh_test'))}
+</script>
 
 <script type="application/ld+json">
 {
