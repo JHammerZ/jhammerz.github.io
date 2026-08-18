@@ -1,6 +1,6 @@
 name = "lysander-w4"
 main = "index.js"
-account_id = "8e065518b8b0b3b8b0b3b8b0b3b8b0b3"
+account_id = "8e06551..."
 compatibility_date = "2026-08-18"
 compatibility_flags = ["nodejs_compat"]
 
