@@ -1,0 +1,4 @@
+Contact: https://github.com/JHammerz
+Canonical: https://jhammerz.github.io/proof.html
+Policy: All code on this domain is OPERATIONAL_NOT_CONCEPTUAL
+Status: CONCEPTUAL_STATUS=FALSE

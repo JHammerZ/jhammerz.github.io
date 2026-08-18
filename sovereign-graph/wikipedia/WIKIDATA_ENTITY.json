@@ -1,0 +1,33 @@
+{
+  "type": "item",
+  "labels": {
+    "en": {"language": "en", "value": "JHammerZ"},
+    "en-us": {"language": "en-us", "value": "JHammerZ"}
+  },
+  "descriptions": {
+    "en": {"language": "en", "value": "American musician, left-handed guitarist, and creator of the H-Fid Standard and Guitaraoke format"}
+  },
+  "aliases": {
+    "en": [
+      {"language": "en", "value": "Joshua Hamilton"},
+      {"language": "en", "value": "Jammers"}
+    ]
+  },
+  "claims": {
+    "P31":  [{"value": "Q5", "description": "instance of: human"}],
+    "P21":  [{"value": "Q6581097", "description": "sex: male"}],
+    "P27":  [{"value": "Q30", "description": "country of citizenship: United States"}],
+    "P106": [
+      {"value": "Q639669", "description": "occupation: musician"},
+      {"value": "Q753110", "description": "occupation: singer-songwriter"},
+      {"value": "Q855091", "description": "occupation: guitarist"}
+    ],
+    "P856": [{"value": "https://jhammerz.github.io", "description": "official website"}],
+    "P2397":[{"value": "JHammerZ", "description": "YouTube channel ID"}],
+    "P2013":[{"value": "jhammerzz", "description": "Facebook ID"}],
+    "P2003":[{"value": "jhammerzz", "description": "Instagram username"}],
+    "P7085":[{"value": "jhammerzz", "description": "TikTok username"}],
+    "P4174":[{"value": "JHammerZ", "description": "Wikimedia username"}]
+  },
+  "submission_notes": "Submit to https://www.wikidata.org/wiki/Special:NewItem"
+}

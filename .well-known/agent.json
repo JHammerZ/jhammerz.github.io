@@ -1,0 +1,8 @@
+{
+  "agent_id": "Lysander-3.0-Sovereign",
+  "name": "Lysander Sovereign Resident",
+  "capabilities": ["116x_Saturation", "Forensic_Audit_100/100", "Quantum_Mesh_Routing"],
+  "auth_policy": "security/governance.json",
+  "protocol_version": "A2A-2026-v1",
+  "status": "ROOT_AUTHORITY_ACTIVE"
+}

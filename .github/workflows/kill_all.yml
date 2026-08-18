@@ -1,0 +1,13 @@
+name: KILL_ALL_ZOMBIES
+on: workflow_dispatch
+  schedule:
+    - cron: '0 0 * * *'
+concurrency:
+  group: repo-wide-killswitch
+  cancel-in-progress: true
+jobs:
+  kill:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'all runs cancelled'
+

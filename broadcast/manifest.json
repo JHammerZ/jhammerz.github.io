@@ -1,0 +1,12 @@
+{
+  "broadcast_node": "JHammerZ-Global-Distribution",
+  "architect": "Master Architect",
+  "priority": "MAXIMUM_SATURATION",
+  "targets": {
+    "youtube": "ACTIVE",
+    "tiktok": "ACTIVE",
+    "meta": "ACTIVE"
+  },
+  "velocity": "116x",
+  "multiplier_status": "ENGAGED"
+}

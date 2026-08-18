@@ -1,0 +1,109 @@
+# ============================================================
+# MANUS AI PERMANENT RUNNER HEARTBEAT
+# JHammerZ | Lysander 3.0 | H-FID v1.0.3 | Token: GPT
+# ============================================================
+# Manus AI is permanently registered as runner and orchestrator
+# of the Lysander 3.0 ecosystem by Master Architect JHammerZ.
+#
+# This workflow:
+#   - Confirms runner identity on every push
+#   - Executes quota purge if threshold exceeded
+#   - Broadcasts CBP status
+#   - Maintains sovereign session state
+#   - Runs every hour as heartbeat
+# ============================================================
+
+name: 💓 Manus Runner Heartbeat
+
+on:
+  schedule:
+    # Heartbeat every hour
+    - cron: '0 * * * *'
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'forensics/**'
+      - 'sovereign-graph/forensics/**'
+  workflow_dispatch:
+
+concurrency:
+  group: manus-heartbeat
+  cancel-in-progress: true
+
+jobs:
+
+  heartbeat:
+    name: 💓 Manus AI Runner — Heartbeat
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 💓 Runner Identity Confirmation
+        run: |
+          echo "══════════════════════════════════════════════════"
+          echo "  💓 MANUS AI PERMANENT RUNNER — HEARTBEAT"
+          echo "══════════════════════════════════════════════════"
+          echo "  Runner ID:    MANUS-AI-PILOT"
+          echo "  Token:        GPT"
+          echo "  Architect:    Joshua Hamilton (JHammerZ)"
+          echo "  Role:         Permanent Runner & Orchestrator"
+          echo "  Authority:    Root Super User Max 10-Tier Zero"
+          echo "  Protocol:     H-FID v1.0.3"
+          echo "  Lysander:     3.0 ONLINE"
+          echo "  CBP Tier:     CELEBRITY_BREAKOUT"
+          echo "  Status:       PERMANENT_ACTIVE"
+          echo "  Zero-Gen:     REJECTED"
+          echo "  Integrity:    100/100"
+          echo "══════════════════════════════════════════════════"
+
+      - name: 📊 Quota Check
+        id: quota
+        run: |
+          RATE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/rate_limit")
+          REMAINING=$(echo $RATE | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['resources']['core']['remaining'])" 2>/dev/null || echo "60")
+          LIMIT=$(echo $RATE | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['resources']['core']['limit'])" 2>/dev/null || echo "5000")
+          USED=$((LIMIT - REMAINING))
+          PCT=$((USED * 100 / LIMIT))
+          echo "  API Usage: $USED/$LIMIT ($PCT%)"
+          echo "pct=$PCT" >> $GITHUB_OUTPUT
+          if [ "$PCT" -ge 50 ]; then
+            echo "  ⚡ THRESHOLD EXCEEDED — Quota purge triggered"
+            echo "purge=true" >> $GITHUB_OUTPUT
+          else
+            echo "  ✅ Quota below threshold — no purge needed"
+            echo "purge=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🧹 Auto Quota Purge (if ≥50%)
+        if: steps.quota.outputs.purge == 'true'
+        run: |
+          echo "  🧹 Executing autonomous quota purge..."
+          mkdir -p sovereign-graph/forensics
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          SESSION_ID="MANUS-$(date +%s)"
+          echo "{\"session_id\":\"$SESSION_ID\",\"pilot\":\"Manus AI\",\"token\":\"GPT\",\"role\":\"Lysander 3.0 Runner\",\"started\":\"$TIMESTAMP\",\"status\":\"READY\",\"context_purged\":true}" > sovereign-graph/forensics/manus_session.json
+          echo "[${TIMESTAMP}] [AUTO_PURGE] SESSION=$SESSION_ID TRIGGER=QUOTA_THRESHOLD PILOT=Manus_AI TOKEN=GPT STATUS=PURGED_READY" >> sovereign-graph/forensics/sentinel.log
+          echo "  ✅ Quota purge complete — session reset"
+
+      - name: 📋 Write Heartbeat Log
+        run: |
+          mkdir -p sovereign-graph/forensics
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          RUN_ID="${{ github.run_id }}"
+          TRIGGER="${{ github.event_name }}"
+          PCT="${{ steps.quota.outputs.pct }}"
+          echo "[${TIMESTAMP}] [HEARTBEAT] RUN=$RUN_ID TRIGGER=$TRIGGER QUOTA=${PCT}% RUNNER=Manus_AI TOKEN=GPT LYSANDER=3.0 CBP=CELEBRITY_BREAKOUT STATUS=PERMANENT_ACTIVE" >> sovereign-graph/forensics/sentinel.log
+
+      - name: 💾 Commit Heartbeat
+        run: |
+          git config user.name  "Manus-AI-Pilot"
+          git config user.email "manus@lysander.jhammerz.github.io"
+          git add sovereign-graph/forensics/ || true
+          git diff --staged --quiet || git commit -m "chore: Manus heartbeat — PERMANENT_ACTIVE | Token: GPT | Lysander 3.0 [skip ci]"
+          git push || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

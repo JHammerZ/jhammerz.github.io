@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "a9944be40dbb",
+  "replicant": "R162_a9944be40dbb",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "dfa5d83ebe844d1b5c8677bea8c5f503bd36ac55",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "H-FID LYSANDER: HFID e57197f4 | BTC bc1ql60ddc760vur0umdsz5l8ca6833npkqcjgl4vs",
+    "author": "H-FID Bot"
+  },
+  "anchored_at": "2026-08-05T05:10:51Z"
+}

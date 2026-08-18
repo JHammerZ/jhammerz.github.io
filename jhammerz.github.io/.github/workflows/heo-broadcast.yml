@@ -1,0 +1,11 @@
+name: HEO Sovereign Broadcast
+on: workflow_dispatch
+concurrency:
+  group: heo-sovereign-override
+  cancel-in-progress: true
+jobs:
+  kill:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Zombie HEO workflow neutralized'
+

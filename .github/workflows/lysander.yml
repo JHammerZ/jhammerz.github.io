@@ -1,0 +1,4 @@
+name: LYSANDER Production
+on:
+  schedule:
+    - cron: '0 0 * * *'

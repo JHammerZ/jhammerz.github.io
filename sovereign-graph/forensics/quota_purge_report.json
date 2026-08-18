@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-05-22T09:14:34.493Z",
+  "session_id": "MANUS-1779441274508",
+  "architect": "Joshua Hamilton (JHammerZ)",
+  "pilot": "Manus AI",
+  "token_name": "GPT",
+  "log_lines_kept": 5,
+  "log_lines_purged": 0,
+  "temp_files_purged": 0,
+  "protected_files": 5,
+  "zero_gen_clean": true,
+  "quota_status": "PURGED",
+  "ready_for_session": true,
+  "next_purge_trigger": "ON_NEXT_SESSION_START or 6h SCHEDULE"
+}

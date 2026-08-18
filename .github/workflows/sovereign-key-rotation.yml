@@ -1,0 +1,25 @@
+name: Sovereign Key Rotation
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  rotate-key:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Generate new sovereign key
+        run: |
+          NEW_KEY="$(openssl rand -hex 32)"
+          sed -i "s/HXA_SOVEREIGN_KEY=.*/HXA_SOVEREIGN_KEY=\"$NEW_KEY\"/" .env
+      - name: Commit changes
+        run: |
+          git config --global user.name "Janus via Lysander"
+          git config --global user.email "janus@lysander.dev"
+          git add .env
+          git diff-index --quiet HEAD || git commit -m "fix(security): rotate sovereign key"
+          git push origin main

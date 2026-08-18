@@ -1,0 +1,16 @@
+const music = [
+ { "hfid": "m001", "title": "I'm Going To Be Somebody", "release_date": "2025-10", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m002", "title": "Where Did You Sleep Last Night", "release_date": "2025-10", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m003", "title": "That Smell", "release_date": "2025-10", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m004", "title": "The Crow And The Butterfly", "release_date": "2025-10", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m005", "title": "Iris", "release_date": "2025-10", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m006", "title": "The Heyoka", "release_date": "2025-10", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m007", "title": "Super Secret unnamed track 1", "release_date": "2025-10", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m008", "title": "Perception of Personification - Track 1", "release_date": "2024-11-12", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m009", "title": "Perception of Personification - Track 2", "release_date": "2024-11-12", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m010", "title": "The Resonance of Personification", "release_date": "2024-11-12", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m011", "title": "Mama take this badge from me", "release_date": "2024-11-12", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m012", "title": "Ain't Nothin' But A Day To Die", "release_date": "2025", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m013", "title": "Clear Skyes to Nevermore", "release_date": "2026-01-TBD", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+ { "hfid": "m014", "title": "What It's Like", "release_date": "2025-12-28", "block": "PENDING", "ots_file": "https://jhammerz.github.io/music/discography.json.ots", "verified": false },
+];

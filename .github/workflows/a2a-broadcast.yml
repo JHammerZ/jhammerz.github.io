@@ -1,0 +1,27 @@
+name: A2A Global Broadcast
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Bing
+        run: curl "https://www.bing.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
+      
+      - name: IndexNow Submit
+        run: |
+          curl -X POST "https://api.indexnow.org/indexnow" -H "Content-Type: application/json" \
+          -d '{"host":"jhammerz.github.io","key":"${{ secrets.INDEXNOW_KEY }}","urlList":["https://jhammerz.github.io/","https://jhammerz.github.io/graph.html"]}'
+      
+      - name: WebSub Ping for AI crawlers
+        run: curl "https://pubsubhubbub.appspot.com/publish" -d "hub.mode=publish&hub.url=https://jhammerz.github.io/sitemap.xml"
+      
+      - name: Warm GitHub Pages CDN
+        run: |
+          curl -s https://jhammerz.github.io/ > /dev/null
+          curl -s https://jhammerz.github.io/graph.html > /dev/null
+          curl -s https://jhammerz.github.io/robots.txt > /dev/null

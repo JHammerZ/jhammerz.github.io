@@ -1,0 +1,33 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/gpg-2020/v1"
+  ],
+  "id": "did:web:jhammerz.github.io",
+  "verificationMethod": [
+    {
+      "id": "did:web:jhammerz.github.io#pgp-mobile",
+      "type": "GpgVerificationKey2020",
+      "controller": "did:web:jhammerz.github.io",
+      "publicKeyGpg": "https://jhammerz.github.io/jhammerz_pubkey_mobile.asc"
+    }
+  ],
+  "authentication": [
+    "did:web:jhammerz.github.io#pgp-mobile"
+  ],
+  "assertionMethod": [
+    "did:web:jhammerz.github.io#pgp-mobile"
+  ],
+  "service": [
+    {
+      "id": "did:web:jhammerz.github.io#hfid",
+      "type": "HFID",
+      "serviceEndpoint": "https://jhammerz.github.io/.well-known/hfid/manifest.json"
+    },
+    {
+      "id": "did:web:jhammerz.github.io#signed-manifest",
+      "type": "PGP",
+      "serviceEndpoint": "https://jhammerz.github.io/.well-known/hfid/manifest.json.asc"
+    }
+  ]
+}

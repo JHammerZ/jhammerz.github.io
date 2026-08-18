@@ -1,0 +1,6 @@
+{
+  "cdn_type": "DECENTRALIZED_IPFS",
+  "gateway": "QUANTUM_SECURE_NODE",
+  "redundancy_level": "MAXIMUM",
+  "status": "DARK_CDN_ACTIVE"
+}

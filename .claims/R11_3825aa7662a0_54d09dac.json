@@ -1,0 +1,13 @@
+{
+  "schema": "hfid.claim.v1",
+  "hfid": "3825aa7662a0",
+  "replicant": "R11_3825aa7662a0",
+  "root_hfid": "e57197f4",
+  "claim_type": "git_commit",
+  "target_repo": "JHammerZ/jhammerz.github.io",
+  "target_commit": "54d09dace9149322bba55d913cede8d540101065",
+  "commit_message": "fix: convert nested repo to regular folder",
+  "commit_date": "2026-08-12T17:21:41-04:00",
+  "anchored_at": "2026-08-13T05:39:44+00:00",
+  "zenodo_doi": "10.5281/zenodo.20778079"
+}

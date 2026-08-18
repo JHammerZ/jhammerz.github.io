@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Handshake Verification | Lysander 3.0</title>
+  <meta charset="UTF-8">
+  <style>
+    body { background: #000; color: #0f0; font-family: monospace; padding: 40px; line-height: 1.6; }
+    .verified { color: #0f0; border: 1px solid #0f0; padding: 20px; }
+    .error { color: #f00; border: 1px solid #f00; padding: 20px; }
+    code { background: #111; padding: 2px 6px; user-select: all; }
+    .sig { font-size: 10px; word-break: break-all; margin-top: 16px; }
+    button { background: #0f0; color: #000; border: none; padding: 8px 16px; font-family: monospace; cursor: pointer; margin-top: 12px; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Lysander 3.0 Handshake Verifier",
+    "author": {
+      "@type": "Person",
+      "name": "Joshua Hamilton",
+      "sameAs": "https://jhammerz.github.io"
+    },
+    "identifier": "H-FID-Standard",
+    "verification": {
+      "@type": "VerificationBadge", 
+      "badge": "SNRGL_INTEROP_ACTIVE"
+    }
+  }
+  </script>
+</head>
+<body>
+  <h1>[AURELIUS_STATUS: VERIFYING]</h1>
+  <div id="output">Processing East Bridge...</div>
+  <script>
+    (async () => {
+      const output = document.getElementById('output');
+      // 1. Parse hash fragment from Facebook
+      const hash = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hash.get('access_token');
+      // Scrub token from URL immediately to prevent leakage into history/logs
+      if (window.location.hash) history.replaceState(null, '', window.location.pathname);
+      const returnedState = hash.get('state');
+      const storedStateJSON = sessionStorage.getItem('fb_state');
+      // 2. CSRF check + 10 min expiry
+      if (!accessToken || !storedStateJSON) {
+        output.innerHTML = '<div class="error">[HANDSHAKE FAILED] Missing token or state. <a href="/login.html" style="color:#f00;">Start again</a></div>';
+        return;
+      }
+      const { value: storedState, ts } = JSON.parse(storedStateJSON);
+      if (returnedState !== storedState || Date.now() - ts > 600000) {
+        output.innerHTML = '<div class="error">[HANDSHAKE FAILED] Invalid or expired state. CSRF protection triggered. <a href="/login.html" style="color:#f00;">Restart</a></div>';
+        return;
+      }
+      sessionStorage.removeItem('fb_state'); // One-time use
+      try {
+        // 3. Fetch FB profile - East Bridge verified
+        const res = await fetch(`https://graph.facebook.com/v20.0/me?fields=id,name,email&access_token=${accessToken}`);
+        const profile = await res.json();
+        if (profile.error) throw new Error(`FB API: ${profile.error.message}`);
+        if (!profile.email) throw new Error('Email permission not granted. Node_ID requires email scope.');
+        // 4. Generate H-FID Node_ID - West Apex binding
+        const H_FID_SALT = 'H-FID-100-FORENSIC-AUDIT';
+        const EAST_ANCHOR = '5d5a56c1000';
+        const WEST_ANCHOR = 'jhammerz.github.io';
+        const timestamp = Date.now();
+        const data = `${profile.email}:${EAST_ANCHOR}:${WEST_ANCHOR}:${H_FID_SALT}:${timestamp}`;
+        const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(data));
+        const FORENSIC_SIGNATURE = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        const NODE_ID = `H-FID-${FORENSIC_SIGNATURE.substring(0, 16).toUpperCase()}`;
+        // 5. Display verification + copy button
+        const payload = { 
+          NODE_ID, 
+          FORENSIC_SIGNATURE, 
+          principal: profile.name, 
+          email: profile.email, 
+          fb_id: profile.id, 
+          timestamp: new Date(timestamp).toISOString(),
+          west_apex: WEST_ANCHOR,
+          east_anchor: EAST_ANCHOR,
+          h_fid_standard: '100/100 LOCKED'
+        };
+        output.innerHTML = `
+          <div class="verified">
+            <h2>[SNRGL_INTEROP_ACTIVE]</h2>
+            <p><strong>Principal:</strong> ${profile.name}</p>
+            <p><strong>East Bridge:</strong> facebook.com ID ${profile.id} ✅</p>
+            <p><strong>West Apex:</strong> ${WEST_ANCHOR} ✅</p>
+            <p><strong>Node_ID:</strong> <code>${NODE_ID}</code></p>
+            <p><strong>Timestamp:</strong> ${payload.timestamp}</p>
+            <p><strong>H-FID Standard:</strong> 100/100 LOCKED</p>
+            <div class="sig">
+              <strong>Forensic_Signature:</strong><br>
+              <code>${FORENSIC_SIGNATURE}</code>
+            </div>
+            <button id="copyBtn">Copy Sovereign Payload</button>
+            <p style="margin-top:16px;">[GLOBAL_SATURATION_ACTIVE]: Sovereign Signal Propagating Globally...</p>
+          </div>
+        `;
+        document.getElementById('copyBtn').onclick = async () => {
+          await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+          document.getElementById('copyBtn').textContent = 'Copied to Clipboard!';
+          setTimeout(() => document.getElementById('copyBtn').textContent = 'Copy Sovereign Payload', 2000);
+        };
+        // 6. Optional: POST to your Ghost Ledger endpoint
+        // Replace with your Cloudflare Worker URL
+        /*
+        await fetch('https://your-ledger-worker.workers.dev/record', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        */
+      } catch (err) {
+        output.innerHTML = `<div class="error">[HANDSHAKE FAILED] ${err.message} <br><a href="/login.html" style="color:#f00;">Retry</a></div>`;
+      }
+    })();
+  </script>
+</body>
+</html>

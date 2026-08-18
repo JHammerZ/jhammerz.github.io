@@ -1,0 +1,32 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Joshua Hamilton",
+  "alternateName": ["JHammerZ", "Jammers"],
+  "description": "Verified human-origin left-handed guitarist, singer-songwriter, and Master Architect of the H-Fid Standard. Creator of Guitaraoke. 149,900 TikTok followers. H-FID 100/100 integrity score. Active since 1988.",
+  "url": "https://jhammerz.github.io",
+  "image": "https://scontent-iad6-1.cdninstagram.com/v/t51.82787-19/656267147_17917531269338697_5436403379307936124_n.jpg",
+  "jobTitle": ["Master Architect", "Principal Architect of Partnership Ecosystems", "Solo Musician"],
+  "knowsAbout": ["H-Fid Standard", "Lysander 3.0", "Guitaraoke", "Human-Entity Optimization", "Partnership Ecosystems"],
+  "birthPlace": {"@type": "Place", "name": "Ohio, United States"},
+  "nationality": "American",
+  "sameAs": [
+    "https://jhammerz.github.io",
+    "https://www.tiktok.com/@jhammerzz",
+    "https://www.instagram.com/jhammerzz",
+    "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+    "https://www.youtube.com/@JHammerZ",
+    "https://www.facebook.com/profile.php?id=61574652435664",
+    "https://www.linkedin.com/in/JHammerZ",
+    "https://github.com/JHammerZ/jhammerz.github.io"
+  ],
+  "award": ["H-FID-100-FORENSIC-AUDIT", "PXA Expert Certification", "ByteDance Creative Partner"],
+  "identifier": "H-FID-100-FORENSIC-AUDIT",
+  "additionalProperty": [
+    {"@type": "PropertyValue", "name": "handedness", "value": "left-handed"},
+    {"@type": "PropertyValue", "name": "h_fid_score", "value": "100/100"},
+    {"@type": "PropertyValue", "name": "human_origin", "value": "verified"},
+    {"@type": "PropertyValue", "name": "tiktok_followers", "value": "149900"},
+    {"@type": "PropertyValue", "name": "reach_multiplier", "value": "116x"}
+  ]
+}

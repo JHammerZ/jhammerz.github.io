@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "fb2fa7a6dc08",
+  "replicant": "R172_fb2fa7a6dc08",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "f15e3f316edcfc70207869e91accd16630a37959",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "H-FID: Restore BTC address to trigger LYSANDER distribution",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T05:11:10Z"
+}

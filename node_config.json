@@ -1,0 +1,8 @@
+{
+    "framework": "Lysander-3.0",
+    "compliance": "H-FID-100-FORENSIC-AUDIT",
+    "genesis_lock": "SHA-256-LYSANDER-3.0-GENESIS-LOCK",
+    "sovereign_endpoint": "https://github.io",
+    "routing_modes": ["sovereign_remote", "legacy_cdm_split"],
+    "isolation_enforcement": "Fail-Closed"
+}

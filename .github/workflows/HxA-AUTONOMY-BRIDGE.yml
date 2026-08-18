@@ -1,0 +1,32 @@
+name: H-FID Autonomous Push
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate sitemap
+        run: |
+          echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > sitemap.xml
+          echo "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">" >> sitemap.xml
+          find docs -name "*.md" -o -name "*.html" | sed "s|\.md||" | sed "s|^\./||" | while read f; do
+            echo "<url><loc>https://jhammerz.github.io/$f</loc><lastmod>$(date -u +%Y-%m-%d)</lastmod></url>" >> sitemap.xml
+          done
+          for f in llms.txt llms-full.txt entities.json proof.html; do
+            [ -f "$f" ] && echo "<url><loc>https://jhammerz.github.io/$f</loc><lastmod>$(date -u +%Y-%m-%d)</lastmod></url>" >> sitemap.xml
+          done
+          echo "</urlset>" >> sitemap.xml
+      - name: Commit sitemap
+        run: |
+          git config user.name "H-FID Bot"
+          git config user.email "bot@jhammerz.github.io"
+          git add sitemap.xml
+          git commit -m "chore: update sitemap" || exit 0
+          git push
+      - name: Ping IndexNow
+        run: |
+          curl -X POST "https://api.indexnow.org/indexnow" -H "Content-Type: application/json" -d "{\"host\":\"jhammerz.github.io\",\"key\":\"$(cat indexnow-key.txt)\",\"urlList\":[\"https://jhammerz.github.io/llms-full.txt\",\"https://jhammerz.github.io/entities.json\",\"https://jhammerz.github.io/proof.html\"]}"

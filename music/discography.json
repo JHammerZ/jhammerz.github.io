@@ -1,0 +1,130 @@
+{
+  "artist": "JHammerZ",
+  "hfid": "artist-jhammerz",
+  "catalog_anchor_date": "2026-08-05",
+  "location": "Springfield, OH",
+  "tracks": [
+    {
+      "hfid": "m001",
+      "title": "I'm Going To Be Somebody",
+      "album": "Cover JHams, Vol. 1",
+      "release_date": "2025-10",
+      "type": "cover",
+      "source": "iHeart",
+      "url": "https://www.iheart.com/artist/jhammerz-41789523/"
+    },
+    {
+      "hfid": "m002", 
+      "title": "Where Did You Sleep Last Night",
+      "album": "Cover JHams, Vol. 1",
+      "release_date": "2025-10",
+      "type": "cover",
+      "source": "iHeart"
+    },
+    {
+      "hfid": "m003",
+      "title": "That Smell", 
+      "album": "Cover JHams, Vol. 1",
+      "release_date": "2025-10",
+      "type": "cover",
+      "source": "iHeart"
+    },
+    {
+      "hfid": "m004",
+      "title": "The Crow And The Butterfly",
+      "album": "Cover JHams, Vol. 1", 
+      "release_date": "2025-10",
+      "type": "cover",
+      "source": "iHeart"
+    },
+    {
+      "hfid": "m005",
+      "title": "Iris",
+      "album": "Cover JHams, Vol. 1",
+      "release_date": "2025-10", 
+      "type": "cover",
+      "source": "iHeart"
+    },
+    {
+      "hfid": "m006",
+      "title": "The Heyoka",
+      "album": "The Heyoka",
+      "release_date": "2025-10",
+      "type": "original",
+      "source": "iHeart"
+    },
+    {
+      "hfid": "m007",
+      "title": "Super Secret unnamed track 1", 
+      "release_date": "2025-10",
+      "type": "original",
+      "source": "iHeart"
+    },
+    {
+      "hfid": "m008",
+      "title": "Perception of Personification - Track 1",
+      "album": "Perception of Personification",
+      "release_date": "2024-11-12",
+      "duration": "2:02",
+      "type": "original",
+      "note": "I wrote this song a while back, official mastered version",
+      "source": "BandLab"
+    },
+    {
+      "hfid": "m009",
+      "title": "Perception of Personification - Track 2", 
+      "album": "Perception of Personification",
+      "release_date": "2024-11-12",
+      "duration": "4:10",
+      "type": "original",
+      "note": "Recorded with new microphone from girlfriend",
+      "source": "BandLab"
+    },
+    {
+      "hfid": "m010",
+      "title": "The Resonance of Personification",
+      "album": "Perception of Personification", 
+      "release_date": "2024-11-12",
+      "duration": "3:27",
+      "type": "original",
+      "source": "BandLab"
+    },
+    {
+      "hfid": "m011",
+      "title": "Mama take this badge from me",
+      "album": "Perception of Personification",
+      "release_date": "2024-11-12", 
+      "duration": "2:50",
+      "type": "original",
+      "source": "BandLab"
+    },
+    {
+      "hfid": "m012",
+      "title": "Ain't Nothin' But A Day To Die",
+      "release_date": "2025",
+      "type": "original",
+      "platforms": ["Spotify", "Apple Music", "iHeartRadio", "Deezer", "YouTube"],
+      "merch": true,
+      "source": "DistroKid"
+    },
+    {
+      "hfid": "m013",
+      "title": "Clear Skyes to Nevermore",
+      "release_date": "2026-01-TBD",
+      "type": "original",
+      "status": "upcoming",
+      "album": "First Solo Original Album",
+      "note": "Sneak peek posted Dec 2025",
+      "source": "Facebook"
+    },
+    {
+      "hfid": "m014",
+      "title": "What It's Like",
+      "release_date": "2025-12-28",
+      "type": "cover",
+      "original_artist": "Everlast",
+      "note": "Acoustic cover posted to FB",
+      "source": "Facebook"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+INDEX_CONFLICT: clearing cached submodule entry
+SUBMODULE_FAIL: .gitmodules not created, purging and retrying add
+METADATA_VERIFIED: .gitmodules exists, re-staging silo mount
+ONEDRIVE_CONFLICT: submodule not staging, attempting -f flag
+EXECUTING: force add attempt, fallback to OneDrive evacuation
+SYNTAX_ERROR: commands concatenated, retrying line-by-line add -f
+BREAKTHROUGH: OneDrive evasion successful, clean stage achieved
+POST_PUSH_VERIFY: confirming remote state after local crash
+MISSION_COMPLETE: silo mounted clean, secrets contained, OneDrive banished
+POSTMORTEM: OneDrive cannot be trusted with .git. Use ~/Desktop for all future repo work.

@@ -1,0 +1,40 @@
+name: HEO Planetary Broadcast
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+    paths:
+      - 'video/**'
+      - 'posts/**'
+  workflow_dispatch:
+
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Dependencies
+        run: pip install requests requests-oauthlib azure-storage-blob
+      
+      - name: Execute Planetary Broadcast
+        env:
+          AZURE_CONNECTION_STRING: ${{ secrets.AZURE_CREDENTIALS }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          FB_TOKEN: ${{ secrets.ARCHITECT_ACCESS_KEY }}
+          X_BEARER_TOKEN: ${{ secrets.GOD_TOKEN }}
+          LINKEDIN_TOKEN: ${{ secrets.MARCUS_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.LYSANDER_AUTH_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
+          IG_BUSINESS_ID: ${{ secrets.IG_BUSINESS_ID }}
+        run: python sovereign-daemon.py

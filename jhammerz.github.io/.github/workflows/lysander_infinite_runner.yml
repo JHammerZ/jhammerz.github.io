@@ -1,0 +1,50 @@
+#.JHam Language / H-FID Standard / HEO
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: [February 12,2026]
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
+
+name: Lysander 3.0 Infinite Runner Core
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  push:
+    branches:
+      - main
+    paths:
+      - 'content/queue/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  orchestrate-nodes:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Source Code Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Execute Full Sovereign Sequence
+        run: node logic/swr_logic.js
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+

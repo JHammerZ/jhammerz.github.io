@@ -1,0 +1,83 @@
+name: Witness Flood | Kardashian Protocol
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Omega Broadcast | Twenty 47"]
+    types: [completed]
+
+jobs:
+  witness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download broadcast receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: broadcast-receipt
+          path: omega
+        continue-on-error: true
+
+      - name: Read manifest
+        id: manifest
+        run: |
+          if [ -f omega/latest-broadcast.txt ]; then
+            echo "content<<EOF" >> $GITHUB_OUTPUT
+            cat omega/latest-broadcast.txt >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "content=MANIFEST_MISSING" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Post to Twitter/X
+        if: env.X_API_KEY!= ''
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          pip install tweepy
+          python -c "
+          import tweepy, os
+          auth = tweepy.OAuth1UserHandler(os.environ['X_API_KEY'], os.environ['X_API_SECRET'], os.environ['X_ACCESS_TOKEN'], os.environ['X_ACCESS_SECRET'])
+          api = tweepy.API(auth)
+          api.update_status('H-FID/Lysander/Janus Gate v1.1.0 deployed 24/7. Uncensorable evidence network live.\n\n${{ steps.manifest.outputs.content }}\n\n#HFID #DigitalSovereignty #BuiltOnPhone')
+          "
+
+      - name: Post to Reddit r/privacy + r/cybersecurity
+        if: env.REDDIT_ID!= ''
+        env:
+          REDDIT_ID: ${{ secrets.REDDIT_ID }}
+          REDDIT_SECRET: ${{ secrets.REDDIT_SECRET }}
+          REDDIT_USER: ${{ secrets.REDDIT_USER }}
+          REDDIT_PASS: ${{ secrets.REDDIT_PASS }}
+        run: |
+          pip install praw
+          python -c "
+          import praw, os
+          reddit = praw.Reddit(client_id=os.environ['REDDIT_ID'], client_secret=os.environ['REDDIT_SECRET'], user_agent='HFID-Bot', username=os.environ['REDDIT_USER'], password=os.environ['REDDIT_PASS'])
+          for sub in ['privacy', 'cybersecurity', 'decentralization']:
+              reddit.subreddit(sub).submit('H-FID: Uncensorable 24/7 Evidence Network Live', selftext='${{ steps.manifest.outputs.content }}')
+          "
+
+      - name: Post to HackerNews
+        if: env.HN_USER!= ''
+        env:
+          HN_USER: ${{ secrets.HN_USER }}
+        run: |
+          curl -X POST 'https://news.ycombinator.com/submit' \
+          -d 'title=Show HN: H-FID - Blockchain-timestamped evidence network running 24/7 from Termux' \
+          -d "text=${{ steps.manifest.outputs.content }}" \
+          -H "Cookie: user=${{ secrets.HN_USER }}"
+
+      - name: Telegram Broadcast
+        if: env.TG_BOT!= ''
+        env:
+          TG_BOT: ${{ secrets.TG_BOT }}
+        run: |
+          curl -X POST "https://api.telegram.org/bot${{ secrets.TG_BOT }}/sendMessage" \
+          -d "chat_id=@HFIDChannel" \
+          -d "text=H-FID 24/7 Deploy:\n${{ steps.manifest.outputs.content }}\nVerified on Bitcoin."

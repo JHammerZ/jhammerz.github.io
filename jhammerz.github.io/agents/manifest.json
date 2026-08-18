@@ -1,0 +1,8 @@
+{
+  "system": "Lysander City",
+  "mode": "AUTONOMOUS_EXECUTIVE",
+  "mesh_id": "SOVEREIGN-MESH-ALPHA-2026",
+  "audit_baseline": "∞/∞",
+  "executive_saturation": "ACTIVE",
+  "status": "LYSANDER_CITY_ONLINE"
+}
