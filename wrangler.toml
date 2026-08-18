@@ -1,0 +1,17 @@
+name = "lysander"
+main = "index.js"
+compatibility_date = "2023-10-30"
+
+[durable_objects]
+bindings = [
+  { name = "W4_ROOM", class_name = "W4Room" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["W4Room"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "w4-db"
+database_id = "67f06052-2425-4200-bb94-835dd6792f8b"
