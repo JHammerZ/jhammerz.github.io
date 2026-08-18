@@ -1,4 +1,19 @@
-name: LYSANDER Production
+name: Deploy Lysander W4
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  push:
+    paths:
+      - 'lysander-w4/**'
+      - '.github/workflows/lysander.yml'
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN2 }}
+          workingDirectory: 'lysander-w4'
+          command: deploy
