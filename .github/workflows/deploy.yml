@@ -1,7 +1,6 @@
 name: Deploy Lysander W4
 on:
   push:
-    paths: ['lysander-w4/**']
     branches: [main]
   workflow_dispatch:
 jobs:

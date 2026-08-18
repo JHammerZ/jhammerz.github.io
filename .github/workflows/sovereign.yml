@@ -5,13 +5,6 @@ concurrency:
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'sovereign/**'
-      - '.well-known/**'
-      - 'hfid/**'
-      - 'sovereign-daemon.py'
-      - 'requirements.txt'
-      - '.github/workflows/sovereign.yml'
   workflow_dispatch:
     inputs:
       post_content:

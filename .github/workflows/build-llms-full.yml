@@ -20,10 +20,6 @@ on:
  workflow_dispatch:
  push:
     branches: [ "main", "master" ]
-    paths:
-      - '**.md'
-      - '**.html'
-
 jobs:
   bundle_context:
     runs-on: ubuntu-latest
