@@ -10,3 +10,22 @@ SOURCE_FEED_URL = "https://your-source-platform.com"
 POLL_INTERVAL = "60"
 SYNTACTIC_INTEGRITY_THRESHOLD = "100"
 ZERO_GEN_AUDIT_ENABLED = "true"
+
+[vars]
+SOURCE_FEED_URL = "https://jhammerzofficial.com"
+SYNTACTIC_INTEGRITY_THRESHOLD = "50"
+
+[observability]
+enabled = false
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+persist = true
+head_sampling_rate = 1

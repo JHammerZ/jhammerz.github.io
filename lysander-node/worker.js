@@ -1,87 +1,106 @@
-eexport default {
+export default {
   async scheduled(event, env, ctx) {
     try {
-      const res = await fetch(env.SOURCE_FEED_URL);
+      const SOURCE_FEED_URL = env.SOURCE_FEED_URL || "https://jhammerzofficial.com";
+      const SYNTACTIC_INTEGRITY_THRESHOLD = parseInt(env.SYNTACTIC_INTEGRITY_THRESHOLD || "50");
+      const CUSTOM_NODE_ENDPOINT = env.CUSTOM_NODE_ENDPOINT || "https://lysander-node.jhammerzofficial.workers.dev/post";
+      const DISCORD_WEBHOOK_URL = env.DISCORD_WEBHOOK_URL || "";
+
+      const res = await fetch(SOURCE_FEED_URL);
       if (!res.ok) throw new Error(`Source fetch failed: ${res.status}`);
       const data = await res.text();
       const integrity = data.length > 0 ? 100 : 0;
-      
-      if (integrity < env.SYNTACTIC_INTEGRITY_THRESHOLD) {
+
+      if (integrity < SYNTACTIC_INTEGRITY_THRESHOLD) {
         console.log(`Integrity check failed: ${integrity}`);
         return;
       }
 
-      // Your original custom endpoint relay
-      if (env.CUSTOM_NODE_ENDPOINT) {
-        await fetch(env.CUSTOM_NODE_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+      if (CUSTOM_NODE_ENDPOINT) {
+        await fetch(CUSTOM_NODE_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ data, integrity, ts: Date.now() })
         });
       }
 
-      // Algorithmic push to all platforms
       const pushResults = await Promise.allSettled([
         pushGitHub(data, env.GITHUB_TOKEN),
         pushLinkedIn(data, env.LINKEDIN_TOKEN),
-        pushFacebook(data, env.FACEBOOK_TOKEN),
-        // TikTok/YouTube/Instagram need OAuth refresh - stubbed for now
+        pushFacebook(data, env.FACEBOOK_TOKEN)
       ]);
 
-      // Discord summary with push results
-      const failed = pushResults.filter(r => r.status === 'rejected').length;
-      const succeeded = pushResults.length - failed;
-      
-      await fetch(env.DISCORD_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          embeds: [{
-            title: "LYSANDER Node Poll",
-            description: `Integrity: ${integrity}\nPushed: ${succeeded}/${pushResults.length}`,
-            color: failed > 0 ? 15158332 : 5814783,
-            timestamp: new Date().toISOString()
-          }]
-        })
-      });
+      const failed = pushResults.filter(r => r.status === "rejected");
+      const succeeded = pushResults.length - failed.length;
 
+      if (DISCORD_WEBHOOK_URL) {
+        await fetch(DISCORD_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            embeds: [{
+              title: "LYSANDER Node Poll",
+              description: `Integrity: ${integrity}\nPushed: ${succeeded}/${pushResults.length}`,
+              color: failed.length > 0 ? 15158332 : 5814783,
+              fields: failed.map(f => ({ name: "Error", value: String(f.reason).substring(0, 1000) })),
+              timestamp: new Date().toISOString()
+            }]
+          })
+        });
+      }
     } catch (err) {
-      console.error('LYSANDER error:', err);
-      if (env.DISCORD_WEBHOOK_URL) {
-        await fetch(env.DISCORD_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+      console.error("LYSANDER error:", err);
+      const DISCORD_WEBHOOK_URL = env.DISCORD_WEBHOOK_URL || "";
+      if (DISCORD_WEBHOOK_URL) {
+        await fetch(DISCORD_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ content: `LYSANDER ERROR: ${err.message}` })
         });
       }
     }
+  },
+  async fetch(request, env, ctx) {
+    return new Response("LYSANDER-NODE ONLINE", { status: 200 });
   }
 }
 
-// GitHub: commits data as a file
 async function pushGitHub(data, token) {
-  if (!token) return;
-  const content = btoa(`Automated update ${new Date().toISOString()}\n\n${data}`);
-  const res = await fetch("https://api.github.com/repos/JHammerZ/jhammerz.github.io/contents/lysander/latest.txt", {
+  if (!token) throw new Error("GITHUB_TOKEN missing");
+  const repo = "jhammerz/jhammerz.github.io";
+  const path = "lysander/latest.txt";
+  const content = btoa(`LYSANDER UPDATE ${new Date().toISOString()}\n\n${data}`);
+  
+  let sha;
+  const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+    headers: { "Authorization": `Bearer ${token}`, "User-Agent": "Lysander-node" }
+  });
+  if (getRes.status === 200) {
+    const json = await getRes.json();
+    sha = json.sha;
+  } else if (getRes.status !== 404) {
+    throw new Error(`GitHub GET ${getRes.status}: ${await getRes.text()}`);
+  }
+  
+  const putRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
     method: "PUT",
     headers: {
       "Authorization": `Bearer ${token}`,
-      "User-Agent": "lysander-node",
+      "User-Agent": "Lysander-node",
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
       message: "LYSANDER automated push",
       content: content,
-      branch: "main"
+      branch: "main",
+      ...(sha && { sha })
     })
   });
-  if (!res.ok) throw new Error(`GitHub: ${res.status} ${await res.text()}`);
+  if (!putRes.ok) throw new Error(`GitHub PUT ${putRes.status}: ${await putRes.text()}`);
 }
 
-// LinkedIn: requires your Person URN
 async function pushLinkedIn(data, token) {
   if (!token) return;
-  // Replace PERSON_URN with yours from https://api.linkedin.com/v2/me
   const res = await fetch("https://api.linkedin.com/v2/ugcPosts", {
     method: "POST",
     headers: {
@@ -90,30 +109,28 @@ async function pushLinkedIn(data, token) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      author: "urn:li:person:PERSON_URN", // <-- CHANGE THIS
+      author: "urn:li:person:PERSON_URN",
       lifecycleState: "PUBLISHED",
       specificContent: {
         "com.linkedin.ugc.ShareContent": {
-          shareCommentary: { text: data.substring(0, 3000) }, // LinkedIn limit
+          shareCommentary: { text: data.substring(0, 3000) },
           shareMediaCategory: "NONE"
         }
       },
       visibility: { "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC" }
     })
   });
-  if (!res.ok) throw new Error(`LinkedIn: ${res.status} ${await res.text()}`);
+  if (!res.ok) throw new Error(`LinkedIn ${res.status}: ${await res.text()}`);
 }
 
-// Facebook: requires Page ID + Page token, not user token
 async function pushFacebook(data, token) {
   if (!token) return;
-  // Replace PAGE_ID with your Facebook Page ID
-  const res = await fetch(`https://graph.facebook.com/v18.0/PAGE_ID/feed`, {
+  const res = await fetch("https://graph.facebook.com/v18.0/PAGE_ID/feed", {
     method: "POST",
     body: new URLSearchParams({
       message: data.substring(0, 5000),
       access_token: token
     })
   });
-  if (!res.ok) throw new Error(`Facebook: ${res.status} ${await res.text()}`);
+  if (!res.ok) throw new Error(`Facebook ${res.status}: ${await res.text()}`);
 }
