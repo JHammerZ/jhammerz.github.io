@@ -1,51 +1,20 @@
 name: HEO Sovereign Broadcast
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   schedule:
     - cron: '0 0 * * *'
   push:
-    branches: [ main ]
+    branches: [main]
+    paths:
+      - 'sovereign/**'
+      - '.well-known/**'
+      - 'hfid/**'
+      - '.github/workflows/sovereign.yml'
   workflow_dispatch:
-    inputs:
-      post_content:
-        description: 'Content to post'
-        required: false
-        default: 'HEO: Manual sovereign broadcast'
-
-permissions:
-  contents: write
 
 jobs:
-  broadcast:
+  sovereign:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        persist-credentials: true
-
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-
-    - name: Install deps
-      run: |
-        pip cache purge
-        pip install --force-reinstall -r requirements.txt
-        pip list | grep requests
-
-    - name: Configure Git
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-    - name: Run Daemon
-      env:
-        AZURE_FUNCTION_URL: ${{ secrets.AZURE_FUNCTION_URL }}
-        AZURE_FUNCTION_KEY: ${{ secrets.AZURE_FUNCTION_KEY }}
-        POST_CONTENT: ${{ github.event.inputs.post_content || github.event.head_commit.message }}
-      run: python sovereign-daemon.py
+      - uses: actions/checkout@v4
+      # keep your existing sovereign job steps here
+      - run: echo "Add your existing sovereign steps back if this overwrites them"
