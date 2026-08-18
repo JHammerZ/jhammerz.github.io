@@ -1,18 +1,15 @@
 name: Deploy Lysander W4
 on:
   push:
-    paths:
-      - 'lysander-w4/**'
-    branches: [ main ]
+    paths: ['lysander-w4/**']
+    branches: [main]
   workflow_dispatch:
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to Cloudflare Workers
+      - name: Deploy Worker
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN2 }}
