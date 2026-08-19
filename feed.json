@@ -1,5 +1,15 @@
 [
   {
+    "id": "c715b6c5-d569-4b5d-9f63-c4c9ad289576",
+    "title": "LYSANDER_V13_DEBUG",
+    "body": "Testing GitHub PUT response",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:34:34.446Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
     "id": "1dcaa2b0-6808-4a56-b89a-5d70d219ab52",
     "title": "LYSANDER_V13_LIVE",
     "body": "Real 560-line kernel restored. H-FID propagation active.",
