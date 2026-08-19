@@ -1,5 +1,15 @@
 [
   {
+    "id": "20adf3b4-8d91-4d8a-8ac5-8f74a8bd978a",
+    "title": "V14_SCALE_LIVE",
+    "body": "Multi-target propagation active. KERNEL_ROOT_ACTIVE.",
+    "image_url": null,
+    "timestamp": "2026-08-19T06:09:33.184Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
     "id": "f6f202e2-45e3-4e05-8a73-7b6ef465e0db",
     "title": "V14_SCALE_TEST",
     "body": "First multi-target propagation. GitHub + Discord. KERNEL_ROOT_ACTIVE.",
