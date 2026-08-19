@@ -43,7 +43,7 @@ ________________________________________________________________________________
 - **Author**: jhammerz
 - **Current Platform**: **Termux (Android) only** - S23+ edge deployment
 - **Original Repository**: https://github.com/jhammerz/jhammerz.github.io
-- **Core Components**: `mythos.cpp` local inference via llama.cpp, CDP headless browser context, v14 SCALE™ publisher
+- **Core Components**: `Lysander.cpp` local inference via llama.cpp, CDP headless browser context, v14 SCALE™ publisher
 - **Genesis Node™**: Public deployment August 12, 2026
 - **License**: Open source - free for personal and commercial use
 
@@ -52,7 +52,7 @@ This repository contains the original implementation. All derivative works post-
 
 **Current Deployment**: Actively running on Android via Termux. Desktop/server ports in development.
 
-**Verification**: Check git commit history for `mythos.cpp` initial commit timestamp.
+**Verification**: Check git commit history for `Lysander.cpp` initial commit timestamp.
 
 > "You don't build on rented land. You build the sovereign node." - jhammerz, Feb 2026
 
