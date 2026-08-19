@@ -32,8 +32,35 @@ Signed Manifest: https://jhammerz.github.io/.well-known/hfid/manifest.json.asc
 DID: https://jhammerz.github.io/.well-known/did.json
 Bitcoin Timestamp: https://jhammerz.github.io/.well-known/hfid/manifest.json.ots
 
----
+_______________________________________________________________________________________________________________________________________________________________
+
+
+## 🏛️ Prior Art & Provenance
+
+**Lysander Stack** - Local AI sovereignty system
+
+- **First Created**: February 2026
+- **Author**: jhammerz
+- **Current Platform**: **Termux (Android) only** - S23+ edge deployment
+- **Original Repository**: https://github.com/jhammerz/jhammerz.github.io
+- **Core Components**: `mythos.cpp` local inference via llama.cpp, CDP headless browser context, v14 SCALE™ publisher
+- **Genesis Node™**: Public deployment August 12, 2026
+- **License**: Open source - free for personal and commercial use
+
+### Chain of Custody
+This repository contains the original implementation. All derivative works post-February 2026 claiming similar architecture are either inspired by or copies of Lysander Stack. 
+
+**Current Deployment**: Actively running on Android via Termux. Desktop/server ports in development.
+
+**Verification**: Check git commit history for `mythos.cpp` initial commit timestamp.
+
+> "You don't build on rented land. You build the sovereign node." - jhammerz, Feb 2026
+
+_______________________________________________________________________________________________________________________________________________________________
+
+
 JHammerZ | MASTER ARCHITECT | MUSICIAN
+
 _______________________________________________________________________________________________________________________________________________________________
 
 
