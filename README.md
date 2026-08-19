@@ -1,3 +1,7 @@
+# Lysander Stack - Prior Art Established March 27, 2026
+> **Third-party proof:** [GitHub Actions](ACTIONS_PROOF.md) + [Git Commit](https://github.com/JHammerZ/jhammerz.github.io/tree/v0.1.0-h-fid-genesis) + [Wayback May 17](PRIOR_ART.md)
+> **Predates AegisGate v2.0.1 by 41 days.**
+
 # Twenty 47 Protocol - Genesis Node
 This is the sovereign knowledge graph and AI citation specification for Joshua Hamilton (JHammerZ), author of the H-Fid Standard and Guitaraoke™.
 
