@@ -1,7 +1,7 @@
 {
-  "last_rotation": "2026-08-19T02:15:00Z",
-  "status": "MANUAL",
-  "token_prefix": "cfk_usF78r...",
+  "last_rotation": "2026-08-18T23:24:41-04:00",
+  "status": "OK",
+  "token_prefix": "cfat_z5c...",
   "hash": "SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326",
   "worker": "lysander-v13",
   "h_fid_compliance": "H-FID-100-MANUAL"
