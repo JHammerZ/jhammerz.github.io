@@ -14,3 +14,4 @@ mythos
 # Build dirs
 llama.cpp/build/
 build/
+target/
