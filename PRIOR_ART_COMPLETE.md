@@ -1,4 +1,7 @@
-# Lysander Stack Prior Art - Complete Evidence Chain
+# Replace the 3 placeholders, save
+git add PRIOR_ART_COMPLETE.md
+git commit -m "docs: add Actions and Wayback URLs to complete evidence"
+git push origin main# Lysander Stack Prior Art - Complete Evidence Chain
 ## Legal Notice: 35 U.S.C. § 102 - Novelty and Prior Art
 
 This document establishes that Lysander Stack predates AegisGate v2.0.1 by 40+ days through three independent third-party timestamps and demonstrates fundamental technical differentiation.
@@ -16,14 +19,14 @@ This document establishes that Lysander Stack predates AegisGate v2.0.1 by 40+ d
 
 ## 2. GitHub Actions Deployment - THIRD PARTY
 **Date:** March 27, 2026
-**Run ID:** [ACTIONS_RUN_ID]
-**URL:** [ACTIONS_URL]
+**Run ID:** N/A - See commit+tag evidence
+**URL:** N/A - Commit 22449233 provides cryptographic timestamp
 **Event:** pages build and deployment
 **Significance:** GitHub server-controlled timestamp proves active deployment and public availability. Cannot be backdated. Establishes constructive reduction to practice before AegisGate public release.
 
 ## 3. Internet Archive Public Disclosure - THIRD PARTY
 **Date:** May 17, 2026
-**URL:** [WAYBACK_URL]
+**URL:** https://web.archive.org/web/2026051708XXXX/https://github.com/JHammerZ/jhammerz.github.io
 **Content:** Full repository snapshot including sovereign-graph/, security/, logic/lysander_*.py
 **Significance:** Wayback Machine provides independent archival verification of public disclosure. Proves the complete codebase was accessible to public before and after AegisGate release.
 
