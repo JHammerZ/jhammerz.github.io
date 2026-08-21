@@ -1,12 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 <channel>
-  <title>JHammerZ Sovereign Feed</title>
-  <link>https://jhammerz.github.io</link>
-  <description>Official 2026 Forensic Reset Signal</description>
-  <item>
-    <title>Anchor Set: Phase 12 Active</title>
-    <guid>116x-omega-signal</guid>
-  </item>
+  <title>ZVD Sovereign Broadcast</title>
+  <link>https://jhammerz.github.io/</link>
+  <description>Anti-decay autonomous distribution feed</description>
+  <lastBuildDate>Fri, 21 Aug 2026 04:38:57 +0000</lastBuildDate>
+  
+    <item>
+      <title>ZVD H-FID Sovereign Broadcast System Online</title>
+      <link>https://jhammerz.github.io/</link>
+      <guid>rot-genesis-20260821-1787287137</guid>
+      <pubDate>Fri, 21 Aug 2026 04:38:57 +0000</pubDate>
+      <description>[ROTATED] Anti-decay protocol v5.0 activated. Permanent autonomous distribution enabled via PM2 + systemd. Library immortality achieved.</description>
+    </item>
+    <item>
+      <title>ZVD H-FID Sovereign Broadcast System Online</title>
+      <link>https://jhammerz.github.io/</link>
+      <guid>genesis-20260821</guid>
+      <pubDate>Fri, 21 Aug 2026 04:36:40 +0000</pubDate>
+      <description>Anti-decay protocol v5.0 activated. Permanent autonomous distribution enabled via PM2 + systemd. Library immortality achieved.</description>
+    </item>
 </channel>
 </rss>
