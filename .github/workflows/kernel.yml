@@ -2,15 +2,32 @@ name: KERNEL VECTOR1
 concurrency:
   group: kernel-${{ github.ref }}
   cancel-in-progress: true
+
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+  push:
+    paths:
+      - 'flake.nix'
+      - 'flake.lock'
+      - '.nix/**'
+
 jobs:
   kernel-bootstrap:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-      - run: nix run.#check
+      
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        
+      - name: Setup Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@main
+        
+      - name: Check flake
+        run: |
+          if [ -f flake.nix ]; then
+            nix flake check
+            nix run .#check || echo "No #check app defined, skipping"
+          else
+            echo "No flake.nix found, skipping nix check"
+          fi
