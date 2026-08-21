@@ -27,4 +27,4 @@ jobs:
           echo "Latest HFID: $HFID | BTC: $BTC | Zenodo: $ZENODO"
           
       - name: Broadcast status
-        run: echo "HEO 24/7: .github/workflows/distribute.yml activated with HFID ${{ steps.hfid.outputs.hfid }}"
+        run: "echo 'HEO 24/7: .github/workflows/distribute.yml activated with HFID ${{ steps.hfid.outputs.hfid }}'"
