@@ -1,4 +1,4 @@
-#.JHam Language / H-FID Standard / HEO
+# JHammerZ / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
 #
@@ -24,18 +24,32 @@ on:
 jobs:
   forensic_reset_2026:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Free Disk Space
         run: |
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /usr/local/lib/android
           sudo rm -rf /opt/ghc
-
+          
       - name: Checkout Vault
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Verify Environment
         run: node scripts/edge_interceptor.js
-
+        
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add.
+          git diff --staged --quiet || git commit -m "Forensic reset update [skip ci]"
+          
+      - name: Pull latest and push
+        run: |
+          git pull --rebase origin main
+          git push origin main
