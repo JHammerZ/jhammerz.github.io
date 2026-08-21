@@ -1,5 +1,4 @@
 name: Deploy
-
 on:
   workflow_dispatch:
   push:
@@ -9,21 +8,24 @@ on:
       - 'worker.js'
       - 'index.html'
       - 'music.html'
-
+concurrency:
+  group: cloudflare-deploy-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+          cache: 'npm'
+
       - name: Install Wrangler
-        run: npm install -g wrangler
-        
+        run: npm install -g wrangler@latest
+
       - name: Publish to Cloudflare Workers
         run: wrangler deploy
         env:
