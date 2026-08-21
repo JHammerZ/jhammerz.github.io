@@ -5,6 +5,10 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
   push:
+    paths:
+      - 'zenodo.json'
+      - '.well-known/hfid/**'
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -18,9 +22,36 @@ jobs:
       - name: OpenTimestamp Evidence
         run: |
           pip install opentimestamps-client
-          ots stamp zenodo.json.hfid/doi-sync.log
+          
+          # Create hfid dir if missing
+          mkdir -p .hfid
+          
+          # Create log file if missing
+          touch .hfid/doi-sync.log
+          echo "Janus Gate sync $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> .hfid/doi-sync.log
+          
+          # Stamp zenodo.json if it exists, otherwise stamp the log
+          if [ -f zenodo.json ]; then
+            echo "Stamping zenodo.json"
+            ots stamp zenodo.json
+          else
+            echo "zenodo.json not found, stamping .hfid/doi-sync.log instead"
+            ots stamp .hfid/doi-sync.log
+          fi
+          
           git config user.name "Janus-Gate"
           git config user.email "janus@jhammerz.github.io"
-          git add zenodo.json.hfid/doi-sync.log *.ots
-          git commit -m "chore(doi): Janus Gate v1.1.0-H-FID sync $(date -u +%Y%m%d)" || true
-          git push || true
+          git add .hfid/*.ots *.ots 2>/dev/null || true
+          git add .hfid/doi-sync.log
+          git commit -m "chore(doi): Janus Gate v1.1.0-H-FID sync $(date -u +%Y%m%d)" || echo "No changes to commit"
+          git push || echo "Nothing to push"
+
+      - name: Upload OTS files as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: opentimestamps-proofs
+          path: |
+            *.ots
+            .hfid/*.ots
+          retention-days: 90
