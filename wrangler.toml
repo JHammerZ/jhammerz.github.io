@@ -11,8 +11,5 @@ dataset = "lysander_metrics"
 ENVIRONMENT = "production"
 
 [[routes]]
-pattern = "jhammerz.github.io/*"
+pattern = "*jhammerz.github.io/*"
 zone_name = "github.io"
-
-[build]
-command = "npm install && npm run build"
