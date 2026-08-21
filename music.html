@@ -12,7 +12,7 @@
       font-family: 'Courier New', monospace;
       margin: 0;
       padding: 0;
-      line-height: 1.5;
+      line-height: 1.6;
       font-size: 14px;
     }
     .scanlines {
@@ -58,52 +58,58 @@
       margin-bottom: 40px;
       opacity: 0.8;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin: 30px 0;
-    }
-    .card {
+    .section {
       border: 1px solid #00FF00;
       padding: 20px;
+      margin: 30px 0;
       background: rgba(0, 255, 0, 0.03);
-      transition: all 0.2s ease;
     }
-    .card:hover {
-      background: rgba(0, 255, 0, 0.08);
-      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-    }
-    .card h2 {
+    .section h2 {
       color: #00FF00;
-      margin: 0 0 15px 0;
-      font-size: 1.1rem;
+      margin: 0 0 20px 0;
+      font-size: 1.3rem;
       font-weight: normal;
       text-transform: uppercase;
       border-bottom: 1px solid #1a1a1a;
-      padding-bottom: 8px;
+      padding-bottom: 10px;
     }
-    .card h2::before {
-      content: "> ";
+    .section h2::before {
+      content: ">> ";
       color: #00FF00;
+    }
+    .link-item {
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px dotted #1a1a1a;
+    }
+    .link-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .link-title {
+      margin-bottom: 4px;
     }
     a {
       color: #FFFFFF;
-      text-decoration: none;
-      display: block;
-      padding: 4px 0;
-      transition: all 0.15s ease;
-    }
-    a::before {
-      content: "■ ";
-      color: #00FF00;
-      font-size: 10px;
-      margin-right: 8px;
+      text-decoration: underline;
+      font-weight: bold;
+      font-size: 15px;
     }
     a:hover {
       color: #000000;
       background: #FFFFFF;
-      padding-left: 8px;
+      text-decoration: none;
+    }
+    .desc {
+      color: #00FF00;
+      opacity: 0.7;
+      font-size: 13px;
+      margin-left: 0px;
+    }
+    .desc::before {
+      content: "// ";
+      color: #00FF00;
     }
     .back-btn {
       display: inline-block;
@@ -116,9 +122,6 @@
     .back-btn:hover {
       background: #00FF00;
       color: #000000;
-    }
-    .back-btn::before {
-      content: "";
     }
     .footer-log {
       color: #555;
@@ -147,31 +150,71 @@
     <p class="subtitle">Left-handed guitar + one-take vocal compositions. High-energy, unfiltered, live performance spirit.<br>
     No AI. No ghost producers. A&O System testing + forensic strategy.</p>
     
-    <div class="grid">
-      <div class="card">
-        <h2>Streaming</h2>
-        <a href="https://open.spotify.com/artist/7uBLHBCmsUFuV6VBKUN3W">Spotify</a>
-        <a href="https://music.apple.com/us/artist/jhammerz/1845705346">Apple Music</a>
-        <a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz?ref=dm_sh_rfUWSNn89AGOKyPPH2Dc4Tyh8">Amazon Music</a>
-        <a href="https://www.bandlab.com/band/band8670133842983447">BandLab</a>
+    <div class="section">
+      <h2>Streaming Platforms</h2>
+      <div class="link-item">
+        <div class="link-title"><a href="https://open.spotify.com/artist/7uBLHBCmsUFuV6VBKUN3W">Spotify</a></div>
+        <div class="desc">Listen to all JHAMMERZ releases. Albums, singles, and playlists.</div>
       </div>
-      
-      <div class="card">
-        <h2>Social</h2>
-        <a href="https://www.tiktok.com/@jhammerz">TikTok</a>
-        <a href="https://www.instagram.com/jhammerz">Instagram</a>
-        <a href="https://www.youtube.com/@JHAMMERZ">YouTube</a>
-        <a href="https://www.facebook.com/jhammerz">Facebook</a>
-        <a href="https://www.linkedin.com/in/jhammerz">LinkedIn</a>
-        <a href="https://www.xiaohongshu.com/user/profile/5feb2bee0000000001000d8b">Xiaohongshu</a>
+      <div class="link-item">
+        <div class="link-title"><a href="https://music.apple.com/us/artist/jhammerz/1845705346">Apple Music</a></div>
+        <div class="desc">Stream on iPhone, Mac, or iTunes. High-quality audio streaming.</div>
       </div>
-      
-      <div class="card">
-        <h2>Profiles</h2>
-        <a href="https://jhammerz.carrd.co">Carrd</a>
-        <a href="https://github.com/JHammerZ">GitHub</a>
-        <a href="https://github.com/JHammerZ/jhammerz.github.io">GitHub.io</a>
-        <a href="https://app.impact.com/secure/mediapartner/home/pmHome.xhtml">Impact</a>
+      <div class="link-item">
+        <div class="link-title"><a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz?ref=dm_sh_rfUWSNn89AGOKyPPH2Dc4Tyh8">Amazon Music</a></div>
+        <div class="desc">Available for Prime members and Amazon Music Unlimited subscribers.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://www.bandlab.com/band/band8670133842983447">BandLab</a></div>
+        <div class="desc">Raw tracks, demos, and collaborative projects. Direct from the studio.</div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Social Media</h2>
+      <div class="link-item">
+        <div class="link-title"><a href="https://www.tiktok.com/@jhammerz">TikTok</a></div>
+        <div class="desc">Short-form videos: riffs, one-take vocals, and behind-the-scenes.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://www.instagram.com/jhammerz">Instagram</a></div>
+        <div class="desc">Photos, reels, and stories. Daily updates from JHAMMERZ.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://www.youtube.com/@JHAMMERZ">YouTube</a></div>
+        <div class="desc">Full music videos, live performances, and long-form content.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://www.facebook.com/jhammerz">Facebook</a></div>
+        <div class="desc">Official page for announcements, events, and community posts.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://www.linkedin.com/in/jhammerz">LinkedIn</a></div>
+        <div class="desc">Professional profile, collaborations, and industry networking.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://www.xiaohongshu.com/user/profile/5feb2bee0000000001000d8b">Xiaohongshu</a></div>
+        <div class="desc">Chinese platform. Music content and lifestyle updates for CN audience.</div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Developer & Business</h2>
+      <div class="link-item">
+        <div class="link-title"><a href="https://jhammerz.carrd.co">Carrd</a></div>
+        <div class="desc">Simple landing page with bio, contact, and quick links.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://github.com/JHammerZ">GitHub</a></div>
+        <div class="desc">Code repositories, H-FID Standard, and open-source projects.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://github.com/JHammerZ/jhammerz.github.io">GitHub.io</a></div>
+        <div class="desc">Source code for this website. Fork or audit the manifest.</div>
+      </div>
+      <div class="link-item">
+        <div class="link-title"><a href="https://app.impact.com/secure/mediapartner/home/pmHome.xhtml">Impact</a></div>
+        <div class="desc">Affiliate and partnership portal for business inquiries.</div>
       </div>
     </div>
     
