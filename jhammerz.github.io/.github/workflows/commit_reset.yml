@@ -2,7 +2,7 @@ name: commit_reset
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+        - cron: '0 0 * * *'
 concurrency:
   group: commit-reset-override
   cancel-in-progress: true
@@ -10,4 +10,4 @@ jobs:
   kill:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Zombie commit_reset workflow neutralized'
+            - run: echo 'Zombie commit_reset workflow neutralized'
