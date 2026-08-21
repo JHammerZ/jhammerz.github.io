@@ -8,3 +8,7 @@ enabled = true
 [[analytics_engine_datasets]]
 binding = "AE"
 dataset = "lysander_metrics"
+
+routes = [
+  { pattern = "jhammerz.github.io/*", zone_name = "jhammerz.github.io" }
+]
