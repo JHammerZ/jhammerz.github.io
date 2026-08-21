@@ -1,11 +1,30 @@
-HFID=$(jq -r '.[-1].prev_hash[0:8]' .well-known/hfid/chain.json)
-BTC=$(jq -r '.[-1].bitcoin' .well-known/hfid/chain.json)
-ZENODO=$(jq -r '.[-1].zenodo' .well-known/hfid/chain.json)
-on: workflow_dispatch
+name: H-FID Distribute
+on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # Daily
+  push:
+    paths:
+      - '.well-known/hfid/chain.json'
+concurrency:
+  group: hfid-distribute
+  cancel-in-progress: true
 jobs:
-  run:
+  distribute:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'HEO 24/7: .github/workflows/distribute.yml activated'
+      - uses: actions/checkout@v4
+      
+      - name: Read H-FID chain
+        id: hfid
+        run: |
+          HFID=$(jq -r '.[-1].prev_hash[0:8]' .well-known/hfid/chain.json)
+          BTC=$(jq -r '.[-1].bitcoin' .well-known/hfid/chain.json)
+          ZENODO=$(jq -r '.[-1].zenodo' .well-known/hfid/chain.json)
+          echo "hfid=$HFID" >> $GITHUB_OUTPUT
+          echo "btc=$BTC" >> $GITHUB_OUTPUT
+          echo "zenodo=$ZENODO" >> $GITHUB_OUTPUT
+          echo "Latest HFID: $HFID | BTC: $BTC | Zenodo: $ZENODO"
+          
+      - name: Broadcast status
+        run: echo "HEO 24/7: .github/workflows/distribute.yml activated with HFID ${{ steps.hfid.outputs.hfid }}"
