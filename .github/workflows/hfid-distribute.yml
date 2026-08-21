@@ -4,9 +4,10 @@ on:
   schedule:
     - cron: '0 0 * * *' # Runs at 00:00
   push:
-    branches: [ main ]
+    paths:
+      - '.well-known/hfid/chain.json'
   workflow_dispatch:
-  
+
 permissions:
   contents: write
 
