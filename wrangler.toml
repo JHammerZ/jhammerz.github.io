@@ -9,7 +9,3 @@ dataset = "lysander_metrics"
 
 [vars]
 ENVIRONMENT = "production"
-
-[[routes]]
-pattern = "*jhammerz.github.io/*"
-zone_name = "github.io"
