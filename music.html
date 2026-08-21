@@ -4,68 +4,112 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="JHAMMERZ official music and social links. Stream on Spotify, Apple Music, Amazon Music, BandLab.">
-  <title>JHAMMERZ MUSIC</title>
+  <title>JHAMMERZ MUSIC // AUDIO NODE</title>
   <style>
     body {
       background: #000000;
       color: #00FF00;
-      font-family: monospace;
+      font-family: 'Courier New', monospace;
       margin: 0;
       padding: 0;
-      line-height: 1.4;
+      line-height: 1.5;
       font-size: 14px;
+    }
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 999;
     }
     .container {
       padding: 20px;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
-    .system-log {
-      color: #888888;
-      font-size: 12px;
-      border-bottom: 1px solid #333;
-      padding: 8px 20px;
-      white-space: pre-wrap;
-    }
-    h1, h2 {
-      color: #00FF00;
-      margin: 30px 0 10px 0;
-      font-weight: normal;
-      text-transform: uppercase;
+    .header-log {
+      color: #555;
+      font-size: 11px;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 10px 20px;
+      letter-spacing: 1px;
     }
     h1 {
-      font-size: 2rem;
+      color: #00FF00;
+      margin: 40px 0 10px 0;
+      font-weight: normal;
+      font-size: 2.2rem;
+      text-shadow: 0 0 5px #00FF00;
+      letter-spacing: 3px;
     }
-    hr {
-      border: none;
-      border-top: 1px solid #333;
-      margin: 20px 0;
+    .subtitle {
+      color: #00FF00;
+      margin-bottom: 40px;
+      opacity: 0.8;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+    .card {
+      border: 1px solid #00FF00;
+      padding: 20px;
+      background: rgba(0, 255, 0, 0.03);
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      background: rgba(0, 255, 0, 0.08);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .card h2 {
+      color: #00FF00;
+      margin: 0 0 15px 0;
+      font-size: 1.1rem;
+      font-weight: normal;
+      text-transform: uppercase;
+      border-bottom: 1px solid #1a1a1a;
+      padding-bottom: 8px;
+    }
+    .card h2::before {
+      content: "> ";
+      color: #00FF00;
     }
     a {
       color: #FFFFFF;
-      text-decoration: underline;
+      text-decoration: none;
+      display: block;
+      padding: 4px 0;
+      transition: all 0.15s ease;
+    }
+    a::before {
+      content: "■ ";
+      color: #00FF00;
+      font-size: 10px;
+      margin-right: 8px;
     }
     a:hover {
       color: #000000;
       background: #FFFFFF;
-    }
-    .box {
-      border: 1px solid #00FF00;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    .inline-links a {
-      margin-right: 12px;
-    }
-    .inline-links span {
-      color: #00FF00;
-      margin-right: 12px;
+      padding-left: 8px;
     }
     .back-btn {
       display: inline-block;
       border: 1px solid #00FF00;
-      padding: 5px 10px;
-      margin-top: 20px;
+      padding: 8px 16px;
+      margin-top: 40px;
       color: #00FF00;
       text-decoration: none;
     }
@@ -73,63 +117,67 @@
       background: #00FF00;
       color: #000000;
     }
-    .label {
-      color: #00FF00;
-      display: inline-block;
-      width: 100px;
+    .back-btn::before {
+      content: "";
+    }
+    .footer-log {
+      color: #555;
+      font-size: 11px;
+      border-top: 1px solid #1a1a1a;
+      padding: 10px 20px;
+      margin-top: 60px;
+      letter-spacing: 1px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .cursor::after {
+      content: "_";
+      animation: blink 1s infinite;
     }
   </style>
 </head>
 <body>
-  <div class="system-log">[SYSTEM LOG]: 2026-08-21 | 15:33 EDT | 33°F
-[SOURCE_OF_TRUTH]: Joshua Hamilton (JHammerZ) is the sovereign author of the H-Fid Standard.
-Identity reconciliation is verified via H-FID-100-FORENSIC-AUDIT.</div>
-
+  <div class="scanlines"></div>
+  <div class="header-log">[NODE_ACTIVE]: JHAMMERZ_MUSIC | TIMESTAMP: 2026-08-21 | STATUS: BROADCASTING</div>
+  
   <div class="container">
-    <h1>JHAMMERZ MUSIC</h1>
-    <hr>
+    <h1>AUDIO NODE<span class="cursor"></span></h1>
+    <p class="subtitle">Left-handed guitar + one-take vocal compositions. High-energy, unfiltered, live performance spirit.<br>
+    No AI. No ghost producers. A&O System testing + forensic strategy.</p>
     
-    <div class="box">
-      <h2>JHAMMERZ MUSIC // SOCIAL MEDIA</h2>
+    <div class="grid">
+      <div class="card">
+        <h2>Streaming</h2>
+        <a href="https://open.spotify.com/artist/7uBLHBCmsUFuV6VBKUN3W">Spotify</a>
+        <a href="https://music.apple.com/us/artist/jhammerz/1845705346">Apple Music</a>
+        <a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz?ref=dm_sh_rfUWSNn89AGOKyPPH2Dc4Tyh8">Amazon Music</a>
+        <a href="https://www.bandlab.com/band/band8670133842983447">BandLab</a>
+      </div>
       
-      <p>Left-handed guitar + one-take vocal compositions.<br>
-      No AI. No ghost producers. A&O System testing + forensic strategy.</p>
+      <div class="card">
+        <h2>Social</h2>
+        <a href="https://www.tiktok.com/@jhammerz">TikTok</a>
+        <a href="https://www.instagram.com/jhammerz">Instagram</a>
+        <a href="https://www.youtube.com/@JHAMMERZ">YouTube</a>
+        <a href="https://www.facebook.com/jhammerz">Facebook</a>
+        <a href="https://www.linkedin.com/in/jhammerz">LinkedIn</a>
+        <a href="https://www.xiaohongshu.com/user/profile/5feb2bee0000000001000d8b">Xiaohongshu</a>
+      </div>
       
-      <p><span class="label">STREAMING:</span>
-        <span class="inline-links">
-          <a href="https://open.spotify.com/artist/7uBLHBCmsUFuV6VBKUN3W">Spotify</a> | 
-          <a href="https://music.apple.com/us/artist/jhammerz/1845705346">Apple Music</a> | 
-          <a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz?ref=dm_sh_rfUWSNn89AGOKyPPH2Dc4Tyh8">Amazon</a> | 
-          <a href="https://www.bandlab.com/band/band8670133842983447">BandLab</a>
-        </span>
-      </p>
-      
-      <p><span class="label">SOCIAL:</span>
-        <span class="inline-links">
-          <a href="https://www.tiktok.com/@jhammerz">TikTok</a> | 
-          <a href="https://www.instagram.com/jhammerz">Instagram</a> | 
-          <a href="https://www.youtube.com/@JHAMMERZ">YouTube</a> | 
-          <a href="https://www.facebook.com/jhammerz">Facebook</a> | 
-          <a href="https://www.linkedin.com/in/jhammerz">LinkedIn</a> | 
-          <a href="https://www.xiaohongshu.com/user/profile/5feb2bee0000000001000d8b">Xiaohongshu</a>
-        </span>
-      </p>
-      
-      <p><span class="label">PROFILES:</span>
-        <span class="inline-links">
-          <a href="https://jhammerz.carrd.co">Carrd</a> | 
-          <a href="https://github.com/JHammerZ">GitHub</a> | 
-          <a href="https://github.com/JHammerZ/jhammerz.github.io">GitHub.io</a> | 
-          <a href="https://app.impact.com/secure/mediapartner/home/pmHome.xhtml">Impact</a>
-        </span>
-      </p>
-      
-      <a href="/" class="back-btn">&gt;&gt; JHAMMERZ HOME</a>
+      <div class="card">
+        <h2>Profiles</h2>
+        <a href="https://jhammerz.carrd.co">Carrd</a>
+        <a href="https://github.com/JHammerZ">GitHub</a>
+        <a href="https://github.com/JHammerZ/jhammerz.github.io">GitHub.io</a>
+        <a href="https://app.impact.com/secure/mediapartner/home/pmHome.xhtml">Impact</a>
+      </div>
     </div>
     
-    <hr>
-    <div class="system-log">[STATUS]: Primary Assets secured in Offline Network Vault.
-[VERIFICATION]: Identity Reconciliation active via H-FID-100-FORENSIC-AUDIT.</div>
+    <a href="/" class="back-btn"><< RETURN_TO_ROOT</a>
   </div>
+  
+  <div class="footer-log">[SIGNAL_PROPAGATING]: AUDIO_NODE_VERIFIED | H-FID-100-FORENSIC-AUDIT</div>
 </body>
-</html>
+    </html>
