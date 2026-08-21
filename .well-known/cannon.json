@@ -1,0 +1,9 @@
+{
+  "system_state": "AUTONOMOUS_BROADCAST",
+  "last_run_ts": 0,
+  "monitor_status": "ARMED",
+  "detected_drop": null,
+  "broadcasts": [],
+  "throttled_nodes": [],
+  "hash_chain_tip": "2820166f310d85dbfced2e24d1c67f8b95a7f07d20d18598d38784a5d2fe62c4"
+}
