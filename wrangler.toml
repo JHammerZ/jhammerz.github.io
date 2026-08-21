@@ -1,18 +1,10 @@
 name = "jhammerz-worker"
 main = "cloudflare-worker-lru.js"
-compatibility_date = "2026-08-21"
-compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2024-01-01"
+
+[observability]
+enabled = true
 
 [[analytics_engine_datasets]]
 binding = "AE"
 dataset = "lysander_metrics"
-
-[vars]
-ENVIRONMENT = "production"
-
-[[routes]]
-pattern = "*jhammerz.github.io/*"
-zone_name = "github.io"
-
-[observability]
-enabled = true
