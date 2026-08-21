@@ -2,12 +2,40 @@ name: SEO and Link Validator
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # Daily at midnight
+  push:
+    paths:
+      - '**.html'
+      - '**.md'
+      - 'sitemap.xml'
+      - 'robots.txt'
 concurrency:
   group: seo-link-validator-override
   cancel-in-progress: true
 jobs:
-  neutralize:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Zombie SEO workflow neutralized'
+      - uses: actions/checkout@v4
+      
+      - name: Check for broken links
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --verbose --no-progress --exclude-mail --accept 200,403,429 './**/*.html' './**/*.md'
+          fail: false
+          
+      - name: Validate HTML
+        run: |
+          npm install -g html-validate
+          html-validate "**/*.html" || echo "HTML validation warnings found"
+          
+      - name: Check SEO basics
+        run: |
+          echo "Checking for title tags..."
+          grep -r "<title>" *.html || echo "Warning: Missing title tags"
+          echo "Checking for meta description..."
+          grep -r 'name="description"' *.html || echo "Warning: Missing meta descriptions"
+          echo "Checking for robots.txt..."
+          [ -f robots.txt ] && echo "robots.txt found" || echo "Warning: No robots.txt"
+          echo "Checking for sitemap..."
+          [ -f sitemap.xml ] && echo "sitemap.xml found" || echo "Warning: No sitemap.xml"
