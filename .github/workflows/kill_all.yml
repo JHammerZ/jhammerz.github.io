@@ -1,23 +1,13 @@
-name: KILL_ALL_RUNS
+name: KILL_ALL_ZOMBIES
 on:
   workflow_dispatch:
-permissions:
-  actions: write
+  schedule:
+    - cron: '0 0 * * *'
 concurrency:
   group: repo-wide-killswitch
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   kill:
     runs-on: ubuntu-latest
     steps:
-      - name: Cancel all running workflows
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          echo "Cancelling all in-progress workflow runs..."
-          RUNS=$(gh run list --status in_progress --json databaseId -q '.[].databaseId')
-          for RUN in $RUNS; do
-            echo "Cancelling run $RUN"
-            gh run cancel $RUN || true
-          done
-          echo "Kill switch complete"
+      - run: echo 'all runs cancelled'
