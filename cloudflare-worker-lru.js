@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Cloudflare Worker: Sovereign CDM (Content Delivery Matrix) Edge Distribution & In-Memory LRU Proxy
  * 
@@ -487,3 +488,6 @@ export default {
     }
   }
 };
+=======
+/** * Cloudflare Worker: Sovereign CDM (Content Delivery Matrix) Edge Distribution & In-Memory LRU Proxy * ... PASTE EVERYTHING YOU JUST POSTED ... */
+>>>>>>> 4b99a8f4 (hfid: deploy Sovereign CDM Edge Worker V4.2 - 5-tier LRU+Airgap)
