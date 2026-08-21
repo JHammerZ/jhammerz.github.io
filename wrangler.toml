@@ -3,6 +3,7 @@ main = "src/worker.js"
 compatibility_date = "2026-08-21"
 compatibility_flags = ["nodejs_compat"]
 
+# Wrangler 3.x requires double brackets for Analytics Engine
 [[analytics_engine_datasets]]
 binding = "AE"
 dataset = "lysander_metrics"
@@ -10,6 +11,10 @@ dataset = "lysander_metrics"
 [vars]
 ENVIRONMENT = "production"
 
+# CDN Edge routes - adjust pattern to your domain
 [[routes]]
-pattern = "jhammerz.github.io/*"
+pattern = "*jhammerz.github.io/*"
 zone_name = "github.io"
+
+[observability]
+enabled = true
