@@ -1,4 +1,4 @@
-#.JHam Language / H-FID Standard / HEO
+# JHam Language / H-FID Standard / HEO
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
 #
@@ -10,22 +10,33 @@
 
 name: "SEO/AEO: Compile Live LLM Data Repositories"
 
+permissions:
+  contents: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
   schedule:
-    - cron: '0 0 * * *'
- workflow_dispatch:
- push:
-    branches: [ "main", "master" ]
+    - cron: '0 0 * * *' # Daily at midnight
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - 'index.html'
+      - 'llms.txt'
+      - 'openapi.yaml'
+      - '**.md'
+
 jobs:
   bundle_context:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # Programmatically merges all documentation assets into a single deep token pool
       - name: Build llms-full.txt Data Matrix
@@ -34,17 +45,17 @@ jobs:
           echo "## System Notice" >> llms-full.txt
           echo "> This file contains the absolute raw text repository of jhammerz.github.io for total RAG ingestion." >> llms-full.txt
           
-          echo -e "\n\n## Core Index Page Layout" >> llms-full.txt
+          printf "\n\n## Core Index Page Layout\n" >> llms-full.txt
           if [ -f "index.html" ]; then
             cat index.html >> llms-full.txt
           fi
-
-          echo -e "\n\n## Project Directory Manifest" >> llms-full.txt
+          
+          printf "\n\n## Project Directory Manifest\n" >> llms-full.txt
           if [ -f "llms.txt" ]; then
             cat llms.txt >> llms-full.txt
           fi
-
-          echo -e "\n\n## Global Technical API Specifications" >> llms-full.txt
+          
+          printf "\n\n## Global Technical API Specifications\n" >> llms-full.txt
           if [ -f "openapi.yaml" ]; then
             cat openapi.yaml >> llms-full.txt
           fi
@@ -56,4 +67,3 @@ jobs:
           git add llms-full.txt
           git diff-index --quiet HEAD || git commit -m "chore(aeo): automatically refresh global llms-full.txt token payload"
           git push
-
