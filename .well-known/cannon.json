@@ -1,52 +1,9 @@
 {
   "system_state": "AUTONOMOUS_BROADCAST",
-  "last_run_ts": 1787287137,
+  "last_run_ts": 0,
   "monitor_status": "ARMED",
   "detected_drop": null,
-  "broadcasts": [
-    {
-      "id": "genesis-20260821",
-      "title": "ZVD H-FID Sovereign Broadcast System Online",
-      "url": "https://jhammerz.github.io/",
-      "summary": "Anti-decay protocol v5.0 activated. Permanent autonomous distribution enabled via PM2 + systemd. Library immortality achieved.",
-      "timestamp": 1787287000,
-      "tags": [
-        "ZVD",
-        "H-FID",
-        "sovereignty",
-        "genesis"
-      ],
-      "hash": "2820166f310d85dbfced2e24d1c67f8b95a7f07d20d18598d38784a5d2fe62c4"
-    },
-    {
-      "id": "rot-genesis-20260821-1787287137",
-      "title": "ZVD H-FID Sovereign Broadcast System Online",
-      "url": "https://jhammerz.github.io/",
-      "summary": "[ROTATED] Anti-decay protocol v5.0 activated. Permanent autonomous distribution enabled via PM2 + systemd. Library immortality achieved.",
-      "timestamp": 1787287137,
-      "tags": [
-        "ZVD",
-        "H-FID",
-        "sovereignty",
-        "genesis"
-      ],
-      "hash": "64667cfb4bf436d15e53479c8247171130ba4c805dba16cfac57b24d46936116"
-    }
-  ],
+  "broadcasts": [],
   "throttled_nodes": [],
-  "hash_chain_tip": "64667cfb4bf436d15e53479c8247171130ba4c805dba16cfac57b24d46936116",
-  "config": {
-    "rotate_interval": 3600,
-    "heartbeat_interval": 30,
-    "max_broadcasts": 50,
-    "auto_commit": true,
-    "generate_rss": true,
-    "repo_path": "/root/jhammerz.github.io"
-  },
-  "meta": {
-    "cannon_version": "5.0",
-    "schema_version": "2.1",
-    "installed_ts": 1787287000,
-    "operator": "JHammerZ"
-  }
+  "hash_chain_tip": "2820166f310d85dbfced2e24d1c67f8b95a7f07d20d18598d38784a5d2fe62c4"
 }
