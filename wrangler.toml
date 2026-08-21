@@ -4,7 +4,3 @@ compatibility_date = "2024-01-01"
 
 [observability]
 enabled = true
-
-routes = [
-  { pattern = "jhammerz.github.io/*", zone_name = "jhammerz.github.io" }
-]
