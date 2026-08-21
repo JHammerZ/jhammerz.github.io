@@ -1,14 +1,24 @@
 name: Deploy Worker
+
 on:
+  workflow_dispatch:
   push:
-    branches: [main]
+    branches: [ main ]
+    paths:
+      - 'wrangler.toml'
+      - 'worker.js'
+      - 'src/**'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy jhammerz-router
     steps:
       - uses: actions/checkout@v4
-      - uses: cloudflare/wrangler-action@v3
+      
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
