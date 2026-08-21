@@ -5,10 +5,6 @@ compatibility_date = "2024-01-01"
 [observability]
 enabled = true
 
-[[analytics_engine_datasets]]
-binding = "AE"
-dataset = "lysander_metrics"
-
 routes = [
   { pattern = "jhammerz.github.io/*", zone_name = "jhammerz.github.io" }
 ]
