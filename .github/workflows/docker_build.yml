@@ -23,8 +23,7 @@ on:
       - 'Dockerfile'
       - 'docker/**'
       - '.github/workflows/docker_build.yml'
-    paths-ignore:
-      - '.hfid/**' # CRITICAL: Don't trigger on attestation commits
+      - '!.hfid/**'
   workflow_dispatch:
 
 permissions:
@@ -59,7 +58,7 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context:.
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
