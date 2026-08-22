@@ -108,7 +108,7 @@ jobs:
           if [ "$PROVIDER" = "gemini" ] || [ "$PROVIDER" = "all" ]; then
             # Check Gemini quota - this hits the API to get current usage
             python -c "
-import google.generativeai as genai
+import google .generativeai as genai
 import os, json
 genai.configure(api_key=os.environ['GEMINI_API_KEY'])
 try:
