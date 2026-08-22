@@ -141,5 +141,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hfid-jsonld-validation
-          path:.hfid/validation/
+          path: .hfid/validation/
           retention-days: 30
