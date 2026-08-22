@@ -60,7 +60,7 @@ jobs:
           cache-dependency-path: 'agent/package-lock.json'
 
       - name: Setup Python
-        uses: actions/setup-actions/setup-python@v5
+        uses: actions/setup-actions/setup-actions/setup-python@v5
         with:
           python-version: '3.11'
 
