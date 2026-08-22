@@ -107,22 +107,21 @@ jobs:
 
           if [ "$PROVIDER" = "gemini" ] || [ "$PROVIDER" = "all" ]; then
             # Check Gemini quota - this hits the API to get current usage
-            python -c "
-import google .generativeai as genai
-import os, json
-genai.configure(api_key=os.environ['GEMINI_API_KEY'])
-try:
-    model = genai.GenerativeModel('gemini-2.5-flash')
-    # Dry run to check if quota exceeded
-    response = model.generate_content('test', request_options={'timeout': 5})
-    print('GEMINI: ACTIVE')
-    with open('.hfid/quota/audit.log', 'a') as f:
-        f.write(' Gemini: ACTIVE\\n')
-except Exception as e:
-    print(f'GEMINI: QUOTA_EXCEEDED - {e}')
-    with open('.hfid/quota/audit.log', 'a') as f:
-        f.write(f' Gemini: QUOTA_EXCEEDED\\n')
-"
+            python << 'PYEOF'
+          import google.generativeai as genai
+          import os
+          genai.configure(api_key=os.environ['GEMINI_API_KEY'])
+          try:
+              model = genai.GenerativeModel('gemini-2.5-flash')
+              response = model.generate_content('test', request_options={'timeout': 5})
+              print('GEMINI: ACTIVE')
+              with open('.hfid/quota/audit.log', 'a') as f:
+                  f.write(' Gemini: ACTIVE\n')
+          except Exception as e:
+              print(f'GEMINI: QUOTA_EXCEEDED - {e}')
+              with open('.hfid/quota/audit.log', 'a') as f:
+                  f.write(f' Gemini: QUOTA_EXCEEDED\n')
+          PYEOF
           fi
 
           echo "audit_complete=true" >> $GITHUB_OUTPUT
@@ -134,8 +133,8 @@ except Exception as e:
           echo "PURGING: Local token usage logs" >>.hfid/quota/audit.log
 
           # Delete all local quota tracking files
-          find .hfid -name "token_usage*.json" -delete || true
-          find .hfid -name "quota_*.json" -delete || true
+          find.hfid -name "token_usage*.json" -delete || true
+          find.hfid -name "quota_*.json" -delete || true
           find. -name "QUOTA_HEAL_MANIFEST.md" -delete || true
 
           # Reset counters
