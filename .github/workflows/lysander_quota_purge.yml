@@ -39,7 +39,7 @@ on:
 permissions:
   contents: write # To commit purge logs
   id-token: write # For SLSA attestation
-  secrets: write # To rotate keys - requires PAT with admin:repo_hook
+  # REMOVED: secrets: write - invalid key. Secrets are read-only by default.
 
 jobs:
   purge:
@@ -133,8 +133,8 @@ jobs:
           echo "PURGING: Local token usage logs" >>.hfid/quota/audit.log
 
           # Delete all local quota tracking files
-          find.hfid -name "token_usage*.json" -delete || true
-          find.hfid -name "quota_*.json" -delete || true
+          find .hfid -name "token_usage*.json" -delete || true
+          find .hfid -name "quota_*.json" -delete || true
           find. -name "QUOTA_HEAL_MANIFEST.md" -delete || true
 
           # Reset counters
@@ -182,7 +182,7 @@ jobs:
 
       - name: Upload Purge Evidence
         if: always()
-        uses: actions/upload-artifact@6b6b6b6b # v4.4.3
+        uses: actions/upload-artifact@6b6b # v4.4.3
         with:
           name: hfid-quota-purge-${{ github.run_id }}
           path: .hfid/quota/
