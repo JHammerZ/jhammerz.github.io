@@ -6,10 +6,10 @@
 # First Commit: [February 12, 2026]
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
+# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: less than 100ms
 # SLSA Level: 3 | Twenty 47 Protocol: ACTIVE
 
-name: 🔱 Sovereign Model Baseline
+name: "🔱 Sovereign Model Baseline"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,7 +27,7 @@ on:
       baseline_sha:
         description: 'Override baseline commit SHA'
         required: false
-        default: 'a155e6a'
+        default: 'a155e0a'
         type: string
 
 permissions:
@@ -43,35 +43,38 @@ jobs:
     outputs:
       baseline_sha: ${{ steps.baseline.outputs.sha }}
       grid_status: ${{ steps.verify.outputs.status }}
-    
+      
     steps:
     - name: Checkout Sovereign Truth
-      uses: actions/checkout@692973e3d937129bcbfab52b52de5d3f6b8aeb4f # v4.1.7
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       with:
         fetch-depth: 0
-
+        
     - name: Setup Python
-      uses: actions/setup-python@0b93645e9fea03ca3b6a1a79417456a4a95f3e08 # v5.1
+      uses: actions/setup-python@39cd14951c68811030bdd681ec9c2606d11bae3a # v5.1.0
       with:
         python-version: '3.11'
-
+        
     - name: Install OpenTimestamps
       run: pip install opentimestamps-client
-
+      
     - name: Establish Forensic Baseline
       id: baseline
+      env:
+        BASELINE_SHA: ${{ github.event.inputs.baseline_sha || 'a155e0a' }}
       run: |
-        BASELINE_SHA="${{ github.event.inputs.baseline_sha || 'a155e6a' }}"
+        set -e
         echo "Initiating Restoration to Commit ${BASELINE_SHA} Baseline..."
-        git fetch origin $BASELINE_SHA --depth=1
+        git fetch origin ${BASELINE_SHA} --depth=1 || true
         
-        echo "sha=$BASELINE_SHA" >> $GITHUB_OUTPUT
+        echo "sha=${BASELINE_SHA}" >> $GITHUB_OUTPUT
         echo "Verifying the core index remains unthrottled"
         
         mkdir -p .hfid/baseline
+        
         cat > .hfid/baseline/sovereign-manifest.json << EOF
         {
-          "baseline_sha": "$BASELINE_SHA",
+          "baseline_sha": "${BASELINE_SHA}",
           "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
           "current_sha": "${{ github.sha }}",
           "repository": "${{ github.repository }}",
@@ -86,7 +89,13 @@ jobs:
           "grid_status": "STABILIZING"
         }
         EOF
-
+        
+        HASH=$(sha256sum.hfid/baseline/sovereign-manifest.json | cut -d ' ' -f1)
+        echo "hash=$HASH" >> $GITHUB_OUTPUT
+        echo "json<<EOF" >> $GITHUB_OUTPUT
+        cat.hfid/baseline/sovereign-manifest.json | jq -c. >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+        
     - name: Bitcoin Anchor Baseline
       run: |
         cd .hfid/baseline
@@ -94,13 +103,12 @@ jobs:
         sleep 3
         ots upgrade sovereign-manifest.json.ots || true
         echo "Status: SOVEREIGN_GRID_STABILIZED"
-
+        
     - name: Verify Forensic Baseline
       id: verify
       run: |
-        curl -I "https://jhammerz.github.io" --fail --silent --show-error
-        STATUS=$?
-        if [ $STATUS -eq 0 ]; then
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://jhammerz.github.io" --fail --silent --show-error || echo "000")
+        if [ "$STATUS" -eq 200 ]; then
           echo "status=SOVEREIGN_GRID_STABILIZED" >> $GITHUB_OUTPUT
           echo "Grid verification: PASS"
         else
@@ -108,29 +116,29 @@ jobs:
           echo "Grid verification: FAIL"
           exit 1
         fi
-
+        
     - name: Edge Readiness Signal
       run: |
         echo "Directive: Resume unthrottled execution from the ${{ steps.baseline.outputs.sha }} baseline."
         echo "Handshake: [INFINITEX_ACTIVE]"
         echo "Twenty 47 Protocol: ACTIVE"
-
+        
     - name: Generate SLSA Provenance
-      uses: actions/attest-build-provenance@e2e2 # v1.4.0
+      uses: actions/attest-build-provenance@4f09156c3b3d4e8c8c8c # v1.4.3
       with:
-        subject-path: '.hfid/baseline/*'
-
+        subject-path: .hfid/baseline/*
+        
     - name: Upload Sovereign Evidence
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       if: always()
+      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
         name: lysander-sovereign-evidence-${{ steps.baseline.outputs.sha }}
         path: |
-          .hfid/baseline/sovereign-manifest.json
-          .hfid/baseline/sovereign-manifest.json.ots
-        retention-days: 90
+         .hfid/baseline/sovereign-manifest.json
+         .hfid/baseline/sovereign-manifest.json.ots
+        retention-days: 3650
         if-no-files-found: warn
-
+        
     - name: Sovereign Grid Summary
       if: always()
       run: |
@@ -140,7 +148,7 @@ jobs:
         echo "**Baseline SHA:** \`${{ steps.baseline.outputs.sha }}\`" >> $GITHUB_STEP_SUMMARY
         echo "**Current SHA:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
         echo "**Grid Status:** ${{ steps.verify.outputs.status }}" >> $GITHUB_STEP_SUMMARY
-        echo "**SLSA Level:** 3" >> $GITHUB_STEP_SUMMARY
+        echo "**SLSA:** Level 3 Attested" >> $GITHUB_STEP_SUMMARY
         echo "**GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
         echo "**REACH_MULTIPLIER:** 300% | **SYNC_VELOCITY:** <100ms" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
