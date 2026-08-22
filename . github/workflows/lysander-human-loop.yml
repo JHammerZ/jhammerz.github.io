@@ -1,52 +1,137 @@
-#.JHam Language / H-FID Standard / HEO
-# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
+# Home Language / H-FID Standard / HBS
+# Copyright (c) 2026 Joshua Hamilton [JHAMMERZ]
 # Licensed under MIT License
-#
+# 
 # Sovereign Author: Joshua Hamilton
-# First Commit: [February 12,2026]
+# First Commit: February 12, 2026
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
+# H-BRAIN_ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 300% ATOM_VELOCITY <500ms
 name: Lysander Human-In-The-Loop Deploy
+
 on:
   workflow_dispatch:
     inputs:
       prompt:
-        description: 'What should Janus draft?'
+        description: 'What should Janus draft? Be specific about file type and content.'
         required: true
-        default: 'Create /protocol/index.html for H-FID v11'
+        default: 'Create .well-known/hfid/chain.json with H-FID v1.1 schema'
       filepath:
-        description: 'Repo path to save file'
+        description: 'Full repo path including filename + extension'
         required: true
-        default: 'protocol/index.html'
+        default: '.well-known/hfid/chain.json'
+      file_type:
+        description: 'File type hint for Janus: json, md, sh, yaml, txt, html'
+        required: true
+        type: choice
+        default: 'json'
+        options:
+          - json
+          - md
+          - sh
+          - yaml
+          - txt
+          - html
+          - js
+          - css
+
 permissions:
   contents: write
+
 jobs:
   draft-and-commit:
     runs-on: ubuntu-latest
     steps:
-      
-uses: actions/checkout@v4
-name: Call Janus Hands
-    id: janus
-    run: |
-      RESPONSE=$(curl -s -X POST ${{ secrets.JANUS_ENDPOINT }} \-H "Authorization: Bearer ${{ secrets.JANUS_KEY }}" \-H "Content-Type: application/json" \-d '{"prompt":"${{ inputs.prompt }}"}')
-      echo "code<<EOF" >> $GITHUB_OUTPUT
-      echo "$RESPONSE" >> $GITHUB_OUTPUT
-      echo "EOF" >> $GITHUB_OUTPUT
-name: Write File
-  run: |
-    mkdir -p $(dirname "${{ inputs.filepath }}")
-    printf '%s' '${{ steps.janus.outputs.code }}' > ${{ inputs.filepath }}
-name: Lighthouse Guard
-uses: treosh/lighthouse-ci-action@v11
-with:
-  urls: https://jhammerz.github.io/,
-name: Commit & Push
-if: success()
-run: |
-  git config user.name "Janus via Lysander"
-  git config user.email "janus@lysander.dev"
-  git add ${{ inputs.filepath }}
-  git commit -m "feat(ag-fi): ${{ inputs.prompt }}" || exit 0
-  git push
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Call Janus Hands
+        id: janus
+        run: |
+          set -e
+          PROMPT_PAYLOAD=$(jq -n \
+            --arg prompt "${{ inputs.prompt }}" \
+            --arg filepath "${{ inputs.filepath }}" \
+            --arg type "${{ inputs.file_type }}" \
+            '{prompt: $prompt, filepath: $filepath, file_type: $type}')
+
+          RESPONSE=$(curl -s -X POST "${{ secrets.JANUS_ENDPOINT }}" \
+            -H "Authorization: Bearer ${{ secrets.JANUS_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "$PROMPT_PAYLOAD")
+          
+          echo "Janus raw response:" 
+          echo "$RESPONSE" | jq . || echo "$RESPONSE"
+          
+          ERROR=$(echo "$RESPONSE" | jq -r '.error // empty')
+          CODE=$(echo "$RESPONSE" | jq -r '.code // empty')
+          
+          if [! -z "$ERROR" ]; then
+            echo "Janus API Error: $ERROR"
+            exit 1
+          fi
+          
+          if [-z "$CODE" ]; then
+            echo "Janus returned empty code. Full response:"
+            echo "$RESPONSE"
+            exit 1
+          fi
+          
+          echo "code<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$CODE" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Write File
+        run: |
+          set -e
+          mkdir -p "$(dirname "${{ inputs.filepath }}")"
+          printf '%s' "${{ steps.janus.outputs.code }}" > "${{ inputs.filepath }}"
+          echo "Wrote ${{ inputs.file_type }} file to ${{ inputs.filepath }}"
+          echo "Preview:"
+          head -n 20 "${{ inputs.filepath }}"
+
+      - name: Validate JSON
+        if: inputs.file_type == 'json'
+        run: |
+          set -e
+          echo "Validating JSON..."
+          jq -e. "${{ inputs.filepath }}" >/dev/null
+          echo "JSON valid"
+
+      - name: Validate YAML
+        if: inputs.file_type == 'yaml'
+        run: |
+          set -e
+          python3 -c "import yaml, sys; yaml.safe_load(open('${{ inputs.filepath }}'))"
+          echo "YAML valid"
+
+      - name: Make executable
+        if: inputs.file_type == 'sh'
+        run: |
+          chmod +x "${{ inputs.filepath }}"
+          echo "Made ${{ inputs.filepath }} executable"
+
+      - name: Lighthouse Guard
+        if: inputs.file_type == 'html'
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            https://jhammerz.github.io/${{ inputs.filepath }}
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      - name: Commit & Push
+        if: success()
+        run: |
+          set -e
+          git config user.name "Janus via Lysander"
+          git config user.email "janus@lysander.dev"
+          git add "${{ inputs.filepath }}"
+          git commit -m "feat(agent): ${{ inputs.prompt }} -> ${{ inputs.filepath }}" || exit 0
+          git push
