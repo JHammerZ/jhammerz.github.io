@@ -56,11 +56,10 @@ jobs:
           tags: |
             type=sha,prefix=,format=short
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
-
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context:. # FIXED: space added
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
