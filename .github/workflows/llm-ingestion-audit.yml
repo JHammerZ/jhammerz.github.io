@@ -192,7 +192,7 @@ jobs:
           CITATION_V: ${{ steps.citation.outputs.citation_violations }}
           HEADERS_V: ${{ steps.headers.outputs.headers_violations }}
         run: |
-          # FIXED: All math in bash. No ${{ }} arithmetic.
+          # FIXED: All math in bash. No {{ }} arithmetic.
           TOTAL=$((LLMS_V + ROBOTS_V + CITATION_V + HEADERS_V))
           echo "total_violations=$TOTAL" >> $GITHUB_OUTPUT
 
