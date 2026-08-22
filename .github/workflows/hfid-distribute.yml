@@ -26,12 +26,21 @@ jobs:
       - name: Extract H-FID data
         id: hfid
         run: |
-          if [! -f.well-known/hfid/chain.json ]; then
-            echo "chain.json missing"; exit 1
+          FILE=.well-known/hfid/chain.json
+          if [! -f "$FILE" ]; then
+            echo "chain.json missing"
+            exit 1
           fi
-          HFID=$(jq -r '.[0].prev_hash[0:8] // "GENESIS"'.well-known/hfid/chain.json)
-          BTC=$(jq -r '.[0].bitcoin // "UNANCHORED"'.well-known/hfid/chain.json)
-          ZENODO=$(jq -r '.[0].zenodo // "UNREGISTERED"'.well-known/hfid/chain.json)
+          
+          if! jq -e. "$FILE" >/dev/null 2>&1; then
+            echo "chain.json is not valid JSON"
+            exit 1
+          fi
+          
+          HFID=$(jq -r '.[0].prev_hash[0:8] // "GENESIS"' "$FILE")
+          BTC=$(jq -r '.[0].bitcoin // "UNANCHORED"' "$FILE")
+          ZENODO=$(jq -r '.[0].zenodo // "UNREGISTERED"' "$FILE")
+          
           echo "HFID=$HFID" >> $GITHUB_OUTPUT
           echo "BTC=$BTC" >> $GITHUB_OUTPUT
           echo "ZENODO=$ZENODO" >> $GITHUB_OUTPUT
@@ -51,7 +60,7 @@ jobs:
       - name: Generate badges
         run: |
           mkdir -p badges
-          cat > badges/hfid.md << BADGE
+          cat > badges/hfid.md << 'BADGE'
           [![H-FID: ${{ steps.hfid.outputs.HFID }}](https://img.shields.io/badge/H--FID-${{ steps.hfid.outputs.HFID }}-blue)](https://jhammerz.github.io/verify/)
           [![BTC Verified](https://img.shields.io/badge/BTC-Verified-f7931a?logo=bitcoin&logoColor=white)](https://mempool.space/tx/${{ steps.hfid.outputs.BTC }})
           [![IPFS Mirror](https://img.shields.io/badge/IPFS-Mirrored-0c5c2c?logo=ipfs&logoColor=white)](https://ipfs.io/ipfs/${{ steps.ipfs.outputs.IPFS_HASH }})
