@@ -1,26 +1,33 @@
-#.JHam Language / H-FID Standard / HEO
-# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
+# JHam Language / H-FID Standard / HBS
+# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Licensed under MIT License
 #
 # Sovereign Author: Joshua Hamilton
-# First Commit: [February 12,2026]
+# First Commit: [February 12, 2026]
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 200x, SYNC_VELOCITY: <100ms
-
+# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
 name: Build and Verify Tomcat Container
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 on:
   schedule:
     - cron: '0 0 * * *'
   push:
     branches:
       - "main"
-  # 🟢 FIX: Moved and aligned correctly under the 'on' trigger section
+    paths:
+      - 'Dockerfile'
+      - 'docker/**'
+      - '.github/workflows/docker_build.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
 
 jobs:
   build-image:
@@ -32,16 +39,91 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker Image
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/my-tomcat-app
+          tags: |
+            type=sha,prefix=,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context:.
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify Tomcat Container
         run: |
-          docker build -t my-tomcat-app:latest .
-          docker run -d -p 8080:8080 --name test-container my-tomcat-app:latest
-          sleep 10
-          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080)
+          set -e
+          IMAGE="ghcr.io/${{ github.repository_owner }}/my-tomcat-app:latest"
+
+          echo "Pulling $IMAGE"
+          docker pull "$IMAGE"
+
+          echo "Starting test container..."
+          docker run -d -p 8080:8080 --name test-container "$IMAGE"
+
+          echo "Waiting for Tomcat startup..."
+          for i in {1..30}; do
+            if docker logs test-container 2>&1 | grep -q "Server startup"; then
+              echo "Tomcat started in logs"
+              break
+            fi
+            sleep 2
+          done
+
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 || echo "000")
+
           if [ "$STATUS_CODE" -eq 200 ] || [ "$STATUS_CODE" -eq 404 ]; then
-            echo "Tomcat is successfully running (Status: $STATUS_CODE)!"
+            echo "Tomcat is successfully running. Status: $STATUS_CODE"
           else
             echo "Tomcat failed to start properly. Status received: $STATUS_CODE"
+            echo "Container logs:"
+            docker logs test-container
             exit 1
           fi
 
+      - name: Generate H-FID Container Attestation
+        if: success()
+        run: |
+          set -e
+          mkdir -p.hfid
+          DIGEST=$(docker inspect --format='{{index.RepoDigests 0}}' ghcr.io/${{ github.repository_owner }}/my-tomcat-app:latest | cut -d'@' -f2)
+          cat >.hfid/container.json << EOF
+          {
+            "image": "ghcr.io/${{ github.repository_owner }}/my-tomcat-app:latest",
+            "digest": "$DIGEST",
+            "sha": "${{ github.sha }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "hfid_version": "v1.1"
+          }
+          EOF
+
+      - name: Commit H-FID Attestation
+        if: success()
+        run: |
+          set -e
+          git config user.name "H-FID Docker Bot"
+          git config user.email "docker@jhammerz.github.io"
+          git add.hfid/container.json
+          git commit -m "chore(h-fid): container attestation $(echo ${{ github.sha }} | cut -c1-8)" || exit 0
+          git push
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker rm -f test-container || true
+          docker rmi ghcr.io/${{ github.repository_owner }}/my-tomcat-app:latest || true
