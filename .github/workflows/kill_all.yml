@@ -60,7 +60,7 @@ jobs:
           REASON: ${{ github.event.inputs.reason }}
         run: |
           set -e
-          mkdir -p.hfid/killswitch
+          mkdir -p .hfid/killswitch
 
           TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
