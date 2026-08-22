@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://jhammerz.github.io/llms-full.txt
+Sitemap: https://jhammerz.github.io/sitemap.xml
