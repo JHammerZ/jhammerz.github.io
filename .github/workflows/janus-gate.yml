@@ -2,12 +2,15 @@ name: DOI Sync | Janus Gate v1.1.0-H-FID
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # Runs at 00:00 UTC daily
   workflow_dispatch:
   push:
     paths:
       - 'zenodo.json'
       - '.well-known/hfid/**'
+
+permissions:
+  contents: write
 
 jobs:
   validate:
@@ -21,9 +24,10 @@ jobs:
 
       - name: OpenTimestamp Evidence
         run: |
+          set -e
           pip install opentimestamps-client
           
-          # Create hfid dir if missing
+          # Create .hfid dir if missing
           mkdir -p .hfid
           
           # Create log file if missing
@@ -31,7 +35,7 @@ jobs:
           echo "Janus Gate sync $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> .hfid/doi-sync.log
           
           # Stamp zenodo.json if it exists, otherwise stamp the log
-          if [ -f zenodo.json ]; then
+          if [! -f zenodo.json ]; then
             echo "Stamping zenodo.json"
             ots stamp zenodo.json
           else
@@ -39,9 +43,15 @@ jobs:
             ots stamp .hfid/doi-sync.log
           fi
           
+          # Stamp H-FID chain if it exists
+          if [! -f .well-known/hfid/chain.json ]; then
+            echo "Stamping .well-known/hfid/chain.json"
+            ots stamp .well-known/hfid/chain.json
+          fi
+
           git config user.name "Janus-Gate"
           git config user.email "janus@jhammerz.github.io"
-          git add .hfid/*.ots *.ots 2>/dev/null || true
+          git add .hfid/ *.ots 2>/dev/null || true
           git add .hfid/doi-sync.log
           git commit -m "chore(doi): Janus Gate v1.1.0-H-FID sync $(date -u +%Y%m%d)" || echo "No changes to commit"
           git push || echo "Nothing to push"
@@ -55,3 +65,19 @@ jobs:
             *.ots
             .hfid/*.ots
           retention-days: 90
+
+      - name: Upgrade OTS proofs
+        run: |
+          set -e
+          echo "Upgrading any pending OTS proofs..."
+          find . -name "*.ots" -exec ots upgrade {} \; || true
+          
+      - name: Commit upgraded proofs
+        if: success()
+        run: |
+          set -e
+          git config user.name "Janus-Gate"
+          git config user.email "janus@jhammerz.github.io"
+          git add *.ots .hfid/*.ots 2>/dev/null || true
+          git commit -m "chore(ots): upgrade timestamp proofs" || exit 0
+          git push
