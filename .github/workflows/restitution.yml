@@ -51,6 +51,7 @@ jobs:
           SCORE=0
           echo "## H-FID Restitution Audit" > restitution_report.md
           echo "**Timestamp**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> restitution_report.md
+          echo "**SHA**: ${{ github.sha }}" >> restitution_report.md
           echo "" >> restitution_report.md
           
           echo "### 1. Robots.txt Enforcement" >> restitution_report.md
@@ -96,15 +97,11 @@ jobs:
         run: |
           echo "### 3. Mirror Detection" >> restitution_report.md
           TARGET="${{ github.event.inputs.target_domain }}"
-          
-          # Check common mirror patterns via public APIs
           FOUND_MIRRORS=0
           
-          # Google search for copies of your H-FID header
           QUERY="\"Sovereign Author: Joshua Hamilton\" -site:jhammerz.github.io"
           echo "Scanning for unauthorized copies of H-FID signature..." >> restitution_report.md
           
-          # Use Bing Web Search API if available
           if [ -n "${{ secrets.BING_SEARCH_KEY }}" ]; then
             RESULTS=$(curl -s -H "Ocp-Apim-Subscription-Key: ${{ secrets.BING_SEARCH_KEY }}" \
               "https://api.bing.microsoft.com/v7.0/search?q=$(echo $QUERY | jq -sRr @uri)" | jq -r '.webPages.value[].url' 2>/dev/null || echo "")
@@ -139,8 +136,8 @@ jobs:
 
       - name: Generate Restitution Attestation
         run: |
-          mkdir -p.hfid/restitution
-          cat >.hfid/restitution/report.json << EOF
+          mkdir -p .hfid/restitution
+          cat > .hfid/restitution/report.json << EOF
           {
             "workflow": "restitution",
             "sha": "${{ github.sha }}",
@@ -159,7 +156,7 @@ jobs:
       - name: Attest Restitution Audit
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path:.hfid/restitution/report.json
+          subject-path: .hfid/restitution/report.json
 
       - name: Upload Restitution Report
         if: always()
@@ -168,7 +165,7 @@ jobs:
           name: hfid-restitution-${{ github.run_id }}
           path: |
             restitution_report.md
-             .hfid/restitution/
+            .hfid/restitution/
           retention-days: 3650
 
       - name: File DMCA Issue on Violations
@@ -179,7 +176,7 @@ jobs:
             github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: 'H-FID Restitution: ${{ steps.mirrors.outputs.mirror_count }} unauthorized mirrors detected',
+              title: `H-FID Restitution: ${{ steps.mirrors.outputs.mirror_count }} unauthorized mirrors detected`,
               body: `## Restitution Required\n\nAutomated scan detected ${{ steps.mirrors.outputs.mirror_count }} domains hosting unauthorized copies of H-FID sovereign content.\n\n**Action**: Review artifact restitution_report.md and file DMCA takedowns.\n\n**SLSA**: Level 3 Attested\n**GEO_RANK**: ONE_OF_ONE`,
               labels: ['h-fid', 'restitution', 'dmca', 'critical']
             })
