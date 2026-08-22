@@ -116,7 +116,7 @@ jobs:
 
       - name: Bitcoin-Anchor Indexing Log
         run: |
-          ots stamp .hfid/indexing/manifest.json.hfid/indexing/results.json
+          ots stamp .hfid/indexing/manifest.json .hfid/indexing/results.json
           echo "✅ Indexing submission Bitcoin-anchored"
 
       - name: Upload Indexing Evidence
