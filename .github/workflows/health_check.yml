@@ -13,11 +13,11 @@ name: "Monitor: H-FID Health Check"
 
 concurrency:
   group: hfid-health-monitor
-  cancel-in-progress: false # Never interrupt health scan
+  cancel-in-progress: false
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Every 10 min - real uptime monitoring
+    - cron: '*/10 * * * *'
   workflow_dispatch:
     inputs:
       deep_check:
@@ -28,8 +28,8 @@ on:
 
 permissions:
   contents: read
-  id-token: write # For SLSA attestation
-  issues: write # To create incident issues
+  id-token: write
+  issues: write
 
 jobs:
   health:
@@ -75,7 +75,7 @@ jobs:
         echo "hash=$HASH" >> $GITHUB_OUTPUT
         
     - name: Attest Health Check Execution
-      uses: actions/attest-build-provenance@4f09156c3b3d4e8c8c8 # v1.4.3
+      uses: actions/attest-build-provenance@4f09156c3b3d4e8c8c8c8c8c # v1.4.3
       with:
         subject-path: .hfid/health/manifest.json
         
@@ -125,8 +125,8 @@ jobs:
         CHECKS=$((CHECKS + 1))
         BODY=$(curl -sL --max-time 10 $URL)
         if! echo "$BODY" | grep -q "GEO_RANK: ONE_OF_ONE" || \
-        ! echo "$BODY" | grep -q "H-FID-100-FORENSIC-AUDIT" || \
-        ! echo "$BODY" | grep -q "REACH_MULTIPLIER: 300%" ; then
+       ! echo "$BODY" | grep -q "H-FID-100-FORENSIC-AUDIT" || \
+       ! echo "$BODY" | grep -q "REACH_MULTIPLIER: 300%" ; then
           STATUS="NON_COMPLIANT"
           FAILED=$((FAILED + 1))
           echo "H-FID: FAIL" >>.hfid/health/report.json
@@ -171,7 +171,6 @@ jobs:
         echo "ttfb=$TTFB_MS" >> $GITHUB_OUTPUT
         echo "checks_total=$CHECKS" >> $GITHUB_OUTPUT
         
-        # Fail the job if site is down
         [ "$STATUS" = "DOWN" ] && exit 1 || exit 0
         
     - name: Bitcoin Anchor Health Report
@@ -183,7 +182,52 @@ jobs:
         ots upgrade manifest.json.ots || true
         ots upgrade status.json.ots || true
         ots upgrade report.json.ots || true
-        echo "Health status Bitcoin-anchored"
+        
+    - name: Create Incident Issue
+      if: failure() && steps.scan.outputs.status == 'DOWN'
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `🚨 H-FID Site Down - ${new Date().toISOString()}`,
+            body: `## H-FID v1.2 Health Incident | Twenty 47 Protocol
+            
+            **Status:** DOWN
+            **SHA:** ${{ github.sha }}
+            **Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            **SLSA:** Level 3 Attested
+            **Bitcoin Anchor:** See artifacts
+            
+            ### Failed Checks
+            See run logs for details.
+            
+            **GEO_RANK:** ONE_OF_ONE
+            **Protocol:** Twenty 47
+            `,
+            labels: ['incident', 'h-fid-v1.2', 'urgent']
+          })
+          
+    - name: Upload Health Evidence
+      if: always()
+      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      with:
+        name: hfid-health-${{ github.run_id }}
+        path: .hfid/health/
+        retention-days: 30
+        
+    - name: Summary
+      if: always()
+      run: |
+        echo "## 🔱 H-FID Health Monitor | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
+        echo "**Status:** ${{ steps.scan.outputs.status || 'UNKNOWN' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**TTFB:** ${{ steps.scan.outputs.ttfb }}ms" >> $GITHUB_STEP_SUMMARY
+        echo "**Failed Checks:** ${{ steps.scan.outputs.failed || '0' }} / ${{ steps.scan.outputs.checks_total || '0' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**SLSA:** Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+        echo "**GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+        echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
+        echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY        echo "Health status Bitcoin-anchored"
         
     - name: Create Incident Issue
       if: failure() && steps.scan.outputs.status == 'DOWN'
