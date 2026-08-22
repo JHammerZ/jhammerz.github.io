@@ -168,7 +168,7 @@ jobs:
           name: hfid-restitution-${{ github.run_id }}
           path: |
             restitution_report.md
-           .hfid/restitution/
+             .hfid/restitution/
           retention-days: 3650
 
       - name: File DMCA Issue on Violations
