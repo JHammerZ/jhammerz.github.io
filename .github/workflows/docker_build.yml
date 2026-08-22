@@ -23,6 +23,8 @@ on:
       - 'Dockerfile'
       - 'docker/**'
       - '.github/workflows/docker_build.yml'
+    paths-ignore:
+      - '.hfid/**' # CRITICAL: Don't trigger on attestation commits
   workflow_dispatch:
 
 permissions:
@@ -58,7 +60,7 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context:.
+          context:. # FIXED: space added
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -119,7 +121,7 @@ jobs:
           git config --local user.name "H-FID Docker Bot"
           git config --local user.email "docker@jhammerz.github.io"
           git add.hfid/container.json
-          git commit -m "chore(h-fid): container attestation $(echo ${{ github.sha }} | cut -c1-8)" || exit 0
+          git commit -m "chore(h-fid): container attestation $(echo ${{ github.sha }} | cut -c1-8) [skip ci]" || exit 0
           git push
 
       - name: Cleanup
