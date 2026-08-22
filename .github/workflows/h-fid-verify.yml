@@ -16,7 +16,7 @@ jobs:
       - name: Run Lysander Bot Purge
         id: purge
         run: |
-          mkdir -p.hfid/results
+          mkdir -p .hfid/results
           TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           HASH=$(echo "JHammerZ|HEO|Guitaraoke|$TIMESTAMP|Human-Verified" | sha256sum | cut -d' ' -f1)
           echo "$HASH" >.hfid/results/hfid-$TIMESTAMP.txt
@@ -26,6 +26,6 @@ jobs:
           ots stamp.hfid/results/*.txt
           git config user.name "Lysander-Bot"
           git config user.email "lysander@jhammerz.github.io"
-          git add.hfid/
+          git add .hfid/
           git commit -m "feat(h-fid): Lysander 3.1 Human Proof ${{ steps.purge.outputs.hash }}" || true
           git push || true
