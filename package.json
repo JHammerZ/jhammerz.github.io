@@ -3,5 +3,8 @@
   "type": "module",
   "dependencies": {
     "@google/generative-ai": "^0.21.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.125.0"
   }
 }
