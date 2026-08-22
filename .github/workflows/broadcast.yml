@@ -127,7 +127,7 @@ jobs:
     if: github.event.inputs.targets == 'all' || github.event.inputs.targets == 'social' || github.event.inputs.targets == 'x'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-actions/setup-actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
       - run: pip install tweepy
       - name: Post to X
