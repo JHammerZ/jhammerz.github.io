@@ -99,7 +99,7 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
       - name: Attest Draft Generation
-        uses: actions/attest-build-provenance@4a5c5a0b2c4e4e3e4e3e # Pin SHA
+        uses: actions/attest-build-provenance@v1
         with:
           subject-path: .hfid/lysander/manifest.json
 

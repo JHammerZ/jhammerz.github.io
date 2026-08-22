@@ -47,7 +47,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Setup Python
-      uses: actions/setup-python@0b93645e9fea03ca3b6a1a79417456a4a95f3e08 # v5.1
+      uses: actions/setup-actions/setup-python@v5
       with:
         python-version: '3.11'
 
@@ -109,7 +109,7 @@ jobs:
         git push origin main
 
     - name: Generate SLSA Provenance
-      uses: actions/attest-build-provenance@e2e2 # v1.4.0
+      uses: actions/attest-build-provenance@v1
       with:
         subject-path: |
           manifest.json

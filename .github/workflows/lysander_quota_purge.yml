@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbfab52c0a21b3acfc6b8b6b # v4.1.7
 
       - name: Setup Python
-        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e6692 # v5.1
+        uses: actions/setup-actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -91,7 +91,7 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
       - name: Attest Quota Purge
-        uses: actions/attest-build-provenance@4a5c5a0b2c4e4e3e # v1.4.3
+        uses: actions/attest-build-provenance@v1
         with:
           subject-path: .hfid/quota/purge_manifest.json
 

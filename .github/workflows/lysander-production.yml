@@ -51,7 +51,7 @@ jobs:
         fetch-depth: 0
         
     - name: Setup Python
-      uses: actions/setup-python@39cd14951c68811030bdd681ec9c2606d11bae3a # v5.1.0
+      uses: actions/setup-actions/setup-python@v5
       with:
         python-version: '3.11'
         
@@ -124,7 +124,7 @@ jobs:
         echo "Twenty 47 Protocol: ACTIVE"
         
     - name: Generate SLSA Provenance
-      uses: actions/attest-build-provenance@4f09156c3b3d4e8c8c8c # v1.4.3
+      uses: actions/attest-build-provenance@v1
       with:
         subject-path: .hfid/baseline/*
         

@@ -75,7 +75,7 @@ jobs:
         echo "hash=$HASH" >> $GITHUB_OUTPUT
         
     - name: Attest Health Check Execution
-      uses: actions/attest-build-provenance@4f09156c3b3d4e8c8c8c # v1.4.3
+      uses: actions/attest-build-provenance@v1
       with:
         subject-path: .hfid/health/manifest.json
         
