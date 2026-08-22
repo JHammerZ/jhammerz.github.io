@@ -27,7 +27,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write # Required to commit ledger updates
   id-token: write # For SLSA attestation + OTS
 
 jobs:
@@ -47,8 +47,8 @@ jobs:
 
       - name: Install Forensic Tools
         run: |
-          npm install -g ipfs-car@1 ots-cli@1
-          echo "Installed IPFS CAR + OpenTimestamps CLI"
+          npm install -g ipfs-car@1 ots-cli@1 @web3-storage/w3cli@7
+          echo "Installed IPFS CAR + OpenTimestamps + Web3.Storage CLI"
 
       - name: Generate Site Archive
         id: archive
@@ -73,8 +73,9 @@ jobs:
 
       - name: Generate H-FID Forensic Manifest
         run: |
+          set -e
           mkdir -p.hfid/ledger
-          cat >.hfid/ledger/${{ steps.archive.outputs.archive_name }}.json << EOF
+          cat >.hfid/ledger/${{ steps.archive.outputs.archive_name }}.json << 'EOF'
           {
             "workflow": "forensic-ledger",
             "operation": "immutable_snapshot",
@@ -93,6 +94,9 @@ jobs:
             "geo_rank": "ONE_OF_ONE"
           }
           EOF
+          # Expand variables in JSON
+          sed -i "s/\$(date -u +%Y-%m-%dT%H:%M:%SZ)/$(date -u +%Y-%m-%dT%H:%M:%SZ)/".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
+          sed -i "s/\$(stat -c%s ${{ steps.archive.outputs.archive_name }}.car)/$(stat -c%s ${{ steps.archive.outputs.archive_name }}.car)/".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
 
       - name: OpenTimestamps Attestation
         id: ots
@@ -130,8 +134,8 @@ jobs:
             ${{ steps.archive.outputs.archive_name }}.car
             ${{ steps.archive.outputs.archive_name }}.car.sha256
             ${{ steps.archive.outputs.ots_file }}
-           .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
-          retention-days: 365 # 1 year retention for audit trail
+          .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
+          retention-days: 365
 
       - name: Create Ledger Commit
         run: |
