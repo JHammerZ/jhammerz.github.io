@@ -80,23 +80,24 @@ jobs:
             "workflow": "forensic-ledger",
             "operation": "immutable_snapshot",
             "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "timestamp": "TIMESTAMP_PLACEHOLDER",
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
             "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
             "archive": {
               "name": "${{ steps.archive.outputs.archive_name }}.car",
               "sha256": "${{ steps.archive.outputs.archive_hash }}",
-              "size_bytes": $(stat -c%s ${{ steps.archive.outputs.archive_name }}.car)
+              "size_bytes": SIZE_PLACEHOLDER
             },
-            "git_log": $(git log -1 --pretty=format:'{"commit":"%H","author":"%an","date":"%aI","message":"%s"}'),
+            "git_log": GIT_LOG_PLACEHOLDER,
             "slsa_level": 3,
             "geo_rank": "ONE_OF_ONE"
           }
           EOF
-          # Expand variables in JSON
-          sed -i "s/\$(date -u +%Y-%m-%dT%H:%M:%SZ)/$(date -u +%Y-%m-%dT%H:%M:%SZ)/".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
-          sed -i "s/\$(stat -c%s ${{ steps.archive.outputs.archive_name }}.car)/$(stat -c%s ${{ steps.archive.outputs.archive_name }}.car)/".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
+          # Expand placeholders safely
+          sed -i "s/TIMESTAMP_PLACEHOLDER/$(date -u +%Y-%m-%dT%H:%M:%SZ)/".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
+          sed -i "s/SIZE_PLACEHOLDER/$(stat -c%s ${{ steps.archive.outputs.archive_name }}.car)/".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
+          sed -i "s/GIT_LOG_PLACEHOLDER/$(git log -1 --pretty=format:'{"commit":"%H","author":"%an","date":"%aI","message":"%s"}')/".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
 
       - name: OpenTimestamps Attestation
         id: ots
@@ -110,7 +111,6 @@ jobs:
           # Upgrade to get complete proof
           ots upgrade ${{ steps.archive.outputs.archive_name }}.car.sha256.ots || true
           
-          echo "ots_file=${{ steps.archive.outputs.archive_name }}.car.sha256.ots" >> $GITHUB_OUTPUT
           echo "✅ OpenTimestamps proof generated"
 
       - name: Pin to IPFS via Web3.Storage
@@ -133,8 +133,8 @@ jobs:
           path: |
             ${{ steps.archive.outputs.archive_name }}.car
             ${{ steps.archive.outputs.archive_name }}.car.sha256
-            ${{ steps.archive.outputs.ots_file }}
-          .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
+            ${{ steps.archive.outputs.archive_name }}.car.sha256.ots
+            .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
           retention-days: 365
 
       - name: Create Ledger Commit
