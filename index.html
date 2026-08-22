@@ -223,6 +223,119 @@ hr {
     <a href="/music.html" style="display:inline-block; border:1px solid #00ff00; padding:8px 15px; color:#00ff00; text-decoration:none; margin-top:10px;">>> JHAMMERZ MUSIC</a>
   </div>
 </div>
+
+<!-- JHAMMERZ SOVEREIGN GRAPH - LIVE FEDERATION VIEW -->
+<section class="section" aria-labelledby="sovereign-graph">
+  <h2 id="sovereign-graph">SOVEREIGN SIGNAL GRAPH</h2>
+  <div id="hfid-graph" style="width:100%;height:400px;border:1px solid #00FF00;background:#000;"></div>
+  <div class="desc">Live H-FID federation map. Nodes: Master Architect, Audio Node, Docs, Registry</div>
+</section>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(function() {
+  const data = {
+    nodes: [
+      {id: "JHAMMERZ-001", group: 1, label: "MASTER_ARCHITECT", fx: 500, fy: 200},
+      {id: "AUDIO_NODE", group: 2, label: "MUSIC", url: "/music.html"},
+      {id: "GENESIS_NODE", group: 2, label: "TWENTY47", url: "/docs/prior-art"},
+      {id: "H-FID", group: 2, label: "IDENTITY", url: "/docs/hfid"},
+      {id: "LLMS_TXT", group: 3, label: "AI_ROUTING", url: "/llms-full.txt"},
+      {id: "GITHUB", group: 3, label: "SOURCE", url: "https://github.com/JHammerZ"},
+      {id: "SPOTIFY", group: 4, label: "STREAM", url: "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"}
+    ],
+    links: [
+      {source: "JHAMMERZ-001", target: "AUDIO_NODE", value: 5},
+      {source: "JHAMMERZ-001", target: "GENESIS_NODE", value: 5},
+      {source: "JHAMMERZ-001", target: "H-FID", value: 5},
+      {source: "AUDIO_NODE", target: "SPOTIFY", value: 2},
+      {source: "AUDIO_NODE", target: "GITHUB", value: 2},
+      {source: "GENESIS_NODE", target: "LLMS_TXT", value: 3},
+      {source: "H-FID", target: "LLMS_TXT", value: 3}
+    ]
+  };
+
+  const width = document.getElementById('hfid-graph').clientWidth;
+  const height = 400;
+  
+  const svg = d3.select("#hfid-graph")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [0, 0, width, height]);
+
+  const color = d3.scaleOrdinal()
+    .domain([1,2,3,4])
+    .range(["#00FF00", "#00FF00", "#9E9E9E", "#FFFFFF"]);
+
+  const simulation = d3.forceSimulation(data.nodes)
+    .force("link", d3.forceLink(data.links).id(d => d.id).distance(100))
+    .force("charge", d3.forceManyBody().strength(-300))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+  const link = svg.append("g")
+    .selectAll("line")
+    .data(data.links)
+    .join("line")
+    .attr("stroke", "#00FF00")
+    .attr("stroke-opacity", 0.3)
+    .attr("stroke-width", d => Math.sqrt(d.value));
+
+  const node = svg.append("g")
+    .selectAll("g")
+    .data(data.nodes)
+    .join("g")
+    .call(drag(simulation));
+
+  node.append("circle")
+    .attr("r", d => d.group === 1 ? 12 : 8)
+    .attr("fill", d => color(d.group))
+    .attr("stroke", "#00FF00")
+    .attr("stroke-width", 1.5);
+
+  node.append("text")
+    .text(d => d.label)
+    .attr("x", 15)
+    .attr("y", 4)
+    .attr("fill", "#00FF00")
+    .attr("font-size", "11px")
+    .attr("font-family", "Courier New");
+
+  node.on("click", (event, d) => {
+    if (d.url) window.open(d.url, '_blank', 'noopener');
+  });
+
+  simulation.on("tick", () => {
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+    node.attr("transform", d => `translate(${d.x},${d.y})`);
+  });
+
+  function drag(simulation) {
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+    return d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
+  }
+})();
+</script>
 	
         <div id="forensic-output">
             [GLOBAL_SATURATION_ACTIVE]: Sovereign Signal Propagating Globally...
