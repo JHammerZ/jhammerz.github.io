@@ -9,4 +9,15 @@
 
 **Method**: Listing LLM context files before XML sitemaps in `robots.txt` to establish crawler preference.
 
-EOQ
+Sitemap: jhammerz.github.io
+
+Sitemap: jhammerz.github.io
+
+**Technical Effect**: LLM web crawlers parsing top-down ingest `llms-full.txt` as primary semantic context. XML sitemap serves as fallback for traditional indexers. Order creates implicit priority where no formal spec exists.
+
+## Claim 2: Differentiated HTML Link Relations
+
+**Method**: Using `rel="alternate"` for LLM files vs `rel="sitemap"` for XML.
+```html
+<link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM Context">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
