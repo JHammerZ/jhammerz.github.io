@@ -46,12 +46,12 @@ jobs:
     
     steps:
     - name: Checkout repo
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      uses: actions/checkout@692973e3d937129bcbfab52b52de5d3f6b8aeb4f # v4.1.7
       with:
         fetch-depth: 0
 
     - name: Set up Python
-      uses: actions/setup-python@39cd14951c68811030bdd681ec9c2606d11bae3a # v5.1.0
+      uses: actions/setup-python@0b93645e9fea03ca3b6a1a79417456a4a95f3e08 # v5.1
       with:
         python-version: '3.11'
         cache: 'pip'
@@ -88,6 +88,7 @@ jobs:
             if ots verify "$OTS_FILE" >.hfid/results/verify_output.tmp 2>&1; then
               STATUS="VERIFIED"
               VERIFIED=$((VERIFIED + 1))
+              # Extract bitcoin block height if present
               BTC_HEIGHT=$(grep -oP 'Bitcoin block \K[0-9]+'.hfid/results/verify_output.tmp | head -1 || echo "pending")
             else
               STATUS="FAILED"
@@ -131,7 +132,7 @@ jobs:
         echo "total=$OTS_COUNT" >> $GITHUB_OUTPUT
         echo "status=$([ $FAILED -eq 0 ] && echo 'SOVEREIGN_GRID_VERIFIED' || echo 'GRID_ANOMALY_DETECTED')" >> $GITHUB_OUTPUT
         
-        cat.hfid/results/verify.json
+        cat > .hfid/results/verify.json
 
     - name: Bitcoin Anchor Verification Results
       run: |
@@ -139,12 +140,12 @@ jobs:
         ots stamp verify.json
         ots stamp verify.csv
         sleep 3
-        ots upgrade verify.json.ots || true
-        ots upgrade verify.csv.ots || true
+        ots upgrade verify .json.ots || true
+        ots upgrade verify .csv.ots || true
         echo "Verification results Bitcoin-anchored"
 
     - name: Generate SLSA Provenance
-      uses: actions/attest-build-provenance@4f0e6be5c8d0c4e3b6f9d6b9e4c5e8c8e8e8e8e8 # v1.4.0
+      uses: actions/attest-build-provenance@e2e2 # v1.4.0
       with:
         subject-path: '.hfid/results/*'
 
