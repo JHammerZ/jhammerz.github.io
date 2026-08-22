@@ -192,76 +192,6 @@ jobs:
           CITATION_V: ${{ steps.citation.outputs.citation_violations }}
           HEADERS_V: ${{ steps.headers.outputs.headers_violations }}
         run: |
-          TOTAL=$((LLMS_V + ROBOTS_V + CITATION_V + HEADERS_V))
-          echo "total_violations=$TOTAL" >> $GITHUB_OUTPUT
-
-          echo "Total violations: $TOTAL" >>.hfid/ingestion/audit.log
-
-          if [ "$TOTAL" -gt 0 ] && [ "$STRICT" = "true" ]; then
-            echo "❌ FAILED: $TOTAL violations in strict mode" >>.hfid/ingestion/audit.log
-            exit 1
-          elif [ "$TOTAL" -gt 0 ]; then
-            echo "⚠️ WARNING: $TOTAL violations but strict=false" >>.hfid/ingestion/audit.log
-          else
-            echo "✅ PASSED: H-FID Ingestion Compliance 100/100" >>.hfid/ingestion/audit.log
-          fi
-
-      - name: Create Compliance Issue
-        if: failure()
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            const total = ${{ steps.evaluate.outputs.total_violations || 0 }};
-            github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `🚨 H-FID LLM Ingestion Violation - ${new Date().toISOString()}`,
-              body: `## H-FID v1.2 Compliance Failure
-
-              **Violations**: ${total}
-              **SHA**: ${{ github.sha }}
-              **Run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-              **SLSA**: Level 3 Attested
-              **Bitcoin Anchor**: See artifacts
-
-              ### Failed Checks
-              See run logs and artifacts for.hfid/ingestion/audit.log
-
-              **GEO_RANK**: ONE_OF_ONE`,
-              labels: ['compliance', 'h-fid-v1.2', 'urgent', 'secops']
-            })
-
-      - name: Upload Audit Evidence
-        if: always()
-        uses: actions/upload-artifact@6b6b # v4.4.3
-        with:
-          name: hfid-ingestion-audit-${{ github.run_id }}
-          path: .hfid/ingestion/
-          retention-days: 3650
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "## H-FID LLM Ingestion Audit" >> $GITHUB_STEP_SUMMARY
-          echo "- **llms.txt**: ${{ steps.llms.outputs.llms_violations }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- **robots.txt**: ${{ steps.robots.outputs.robots_violations }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- **CITATION.cff**: ${{ steps.citation.outputs.citation_violations }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- **Headers**: ${{ steps.headers.outputs.headers_violations }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- **Total**: ${{ steps.evaluate.outputs.total_violations || 0 }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- **Strict Mode**: ${{ steps.manifest.outputs.strict }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY          echo "✅ Ingestion compliance Bitcoin-anchored" >>.hfid/ingestion/audit.log
-
-      - name: Evaluate Compliance
-        id: evaluate
-        env:
-          STRICT: ${{ github.event.inputs.strict || 'true' }}
-          LLMS_V: ${{ steps.llms.outputs.llms_violations }}
-          ROBOTS_V: ${{ steps.robots.outputs.robots_violations }}
-          CITATION_V: ${{ steps.citation.outputs.citation_violations }}
-          HEADERS_V: ${{ steps.headers.outputs.headers_violations }}
-        run: |
           # FIXED: All math in bash. No ${{ }} arithmetic.
           TOTAL=$((LLMS_V + ROBOTS_V + CITATION_V + HEADERS_V))
           echo "total_violations=$TOTAL" >> $GITHUB_OUTPUT
@@ -282,8 +212,8 @@ jobs:
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
-            // FIXED: Use the total_violations output, not inline math
-            const total = ${{ steps.evaluate.outputs.total_violations || 0 }};
+            // FIXED: No || operator. Use output directly with fallback.
+            const total = '${{ steps.evaluate.outputs.total_violations }}' || '0';
             github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -319,8 +249,9 @@ jobs:
           echo "- **robots.txt**: ${{ steps.robots.outputs.robots_violations }} violations" >> $GITHUB_STEP_SUMMARY
           echo "- **CITATION.cff**: ${{ steps.citation.outputs.citation_violations }} violations" >> $GITHUB_STEP_SUMMARY
           echo "- **Headers**: ${{ steps.headers.outputs.headers_violations }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- **Total**: ${{ steps.evaluate.outputs.total_violations || 0 }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- **Strict Mode**: ${{ github.event.inputs.strict || 'true' }}" >> $GITHUB_STEP_SUMMARY
+          # FIXED: No || operator. Output already exists.
+          echo "- **Total**: ${{ steps.evaluate.outputs.total_violations }} violations" >> $GITHUB_STEP_SUMMARY
+          echo "- **Strict Mode**: ${{ steps.manifest.outputs.strict }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
           echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
