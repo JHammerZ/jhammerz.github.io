@@ -107,7 +107,7 @@ jobs:
 
       - name: Generate H-FID Edge Attestation
         run: |
-          mkdir -p.hfid/edge
+          mkdir -p .hfid/edge
           cat >.hfid/edge/config-sync.json << EOF
           {
             "workflow": "edge-config-sync",

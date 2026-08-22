@@ -114,7 +114,7 @@ jobs:
       - name: Generate H-FID GEO_RANK Attestation
         if: always()
         run: |
-          mkdir -p.hfid/geo-rank
+          mkdir -p .hfid/geo-rank
           cat >.hfid/geo-rank/audit.json << EOF
           {
             "workflow": "geo-rank-audit",

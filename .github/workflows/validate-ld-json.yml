@@ -59,7 +59,7 @@ jobs:
         id: extract
         run: |
           set -e
-          mkdir -p.hfid/validation
+          mkdir -p .hfid/validation
           FOUND=false
           
           for html_file in $(find.-name "*.html" -type f); do

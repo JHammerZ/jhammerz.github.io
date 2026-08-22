@@ -70,7 +70,7 @@ jobs:
       - name: Generate H-FID Chaos Attestation
         if: always()
         run: |
-          mkdir -p.hfid
+          mkdir -p .hfid
           cat >.hfid/chaos.json << EOF
           {
             "workflow": "chaos-verify",

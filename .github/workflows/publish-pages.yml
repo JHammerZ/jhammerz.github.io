@@ -59,7 +59,7 @@ jobs:
       - name: Generate H-FID Site Attestation
         run: |
           set -e
-          mkdir -p.hfid
+          mkdir -p .hfid
           cat >.hfid/site.json << EOF
           {
             "site": "jhammerz.github.io",

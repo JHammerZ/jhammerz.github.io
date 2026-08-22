@@ -74,7 +74,7 @@ jobs:
       - name: Generate H-FID Forensic Manifest
         run: |
           set -e
-          mkdir -p.hfid/ledger
+          mkdir -p .hfid/ledger
           cat >.hfid/ledger/${{ steps.archive.outputs.archive_name }}.json << 'EOF'
           {
             "workflow": "forensic-ledger",
@@ -142,7 +142,7 @@ jobs:
           git config --local user.name 'github-actions[bot]'
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           
-          mkdir -p.hfid/ledger
+          mkdir -p .hfid/ledger
           cp.hfid/ledger/${{ steps.archive.outputs.archive_name }}.json.hfid/ledger/latest.json
           
           git add.hfid/ledger/

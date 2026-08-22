@@ -145,7 +145,7 @@ jobs:
       - name: Generate H-FID Integrity Attestation
         if: always()
         run: |
-          mkdir -p.hfid/integrity
+          mkdir -p .hfid/integrity
           cat >.hfid/integrity/attestation.json << EOF
           {
             "workflow": "asset-integrity",

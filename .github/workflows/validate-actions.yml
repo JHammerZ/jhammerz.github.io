@@ -62,7 +62,7 @@ jobs:
       - name: Generate H-FID Forensic Attestation
         run: |
           set -e
-          mkdir -p.hfid/forensic
+          mkdir -p .hfid/forensic
           cat >.hfid/forensic/reset.json << EOF
           {
             "workflow": "validate-actions",

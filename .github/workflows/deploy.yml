@@ -72,7 +72,7 @@ jobs:
 
       - name: Generate H-FID Edge Attestation
         run: |
-          mkdir -p.hfid/edge
+          mkdir -p .hfid/edge
           cat >.hfid/edge/deploy.json << EOF
           {
             "workflow": "deploy",

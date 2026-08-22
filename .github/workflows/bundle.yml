@@ -58,7 +58,7 @@ jobs:
         if: steps.build.outputs.built == 'true'
         run: |
           set -e
-          mkdir -p.hfid
+          mkdir -p .hfid
           echo "Generating asset manifest..."
           find dist -type f -exec sha256sum {} \; >.hfid/assets.sha256
           jq -n \
