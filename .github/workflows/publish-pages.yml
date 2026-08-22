@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         id: upload
         with:
-          path:.
+          path: .
 
   deploy:
     needs: build
