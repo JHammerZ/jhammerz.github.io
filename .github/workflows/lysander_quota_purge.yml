@@ -156,7 +156,7 @@ jobs:
       - name: Bitcoin-Anchor Purge Audit
         if: always()
         run: |
-          ots stamp .hfid/quota/purge_manifest.json.hfid/quota/audit.log.hfid/quota/token_usage.json
+          ots stampv.hfid/quota/purge_manifest.json.hfid/quota/audit.log.hfid/quota/token_usage.json
           echo "✅ Quota purge Bitcoin-anchored"
 
       - name: Commit Purge Log
