@@ -116,8 +116,8 @@ jobs:
         if: success()
         run: |
           set -e
-          git config user.name "H-FID Docker Bot"
-          git config user.email "docker@jhammerz.github.io"
+          git config --local user.name "H-FID Docker Bot"
+          git config --local user.email "docker@jhammerz.github.io"
           git add.hfid/container.json
           git commit -m "chore(h-fid): container attestation $(echo ${{ github.sha }} | cut -c1-8)" || exit 0
           git push
