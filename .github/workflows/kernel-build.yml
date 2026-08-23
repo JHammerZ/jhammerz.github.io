@@ -71,7 +71,8 @@ jobs:
           
       - name: Build sovereignty module
         run: |
-          make -C $GITHUB_WORKSPACE/linux-6.10 -j$(nproc) M=$GITHUB_WORKSPACE/linux-6.10/hfid modules
+          # Use relative paths anchored to the root directory run context
+          make -C linux-6.10 -j$(nproc) M=hfid modules
           
       - name: Collect artifacts
         run: |
