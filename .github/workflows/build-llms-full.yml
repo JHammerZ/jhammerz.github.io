@@ -180,4 +180,3 @@ EOF
           echo "#### Manifest path: ${{ steps.manifest.outputs.manifest_path }}" >> $GITHUB_STEP_SUMMARY
           echo "#### Manifest hash: ${{ steps.manifest.outputs.manifest_hash }}" >> $GITHUB_STEP_SUMMARY
           echo "#### Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
-```
