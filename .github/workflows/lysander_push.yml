@@ -1,4 +1,4 @@
-# JHam Language / H-FID Standard / HDS v1.2
+-# JHam Language / H-FID Standard / HDS v1.2
 # Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Licensed under MIT License
 # 
@@ -67,8 +67,8 @@ jobs:
           PAYLOAD_LOGIC="${RAW_PAYLOAD:-'{\"status\": \"INFINITEX_ACTIVE\"}'}"
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           
-          mkdir -p.hfid/sovereign
-          cat << 'EOF' >.hfid/sovereign/manifest.json
+          mkdir -p .hfid/sovereign
+          cat << 'EOF' > .hfid/sovereign/manifest.json
           {
             "payload": $PAYLOAD_LOGIC,
             "timestamp": "$TIMESTAMP",
@@ -93,12 +93,12 @@ jobs:
           echo "$PAYLOAD_LOGIC" > manifest.json
           
           # Bitcoin anchor both manifests
-          cd.hfid/sovereign
+          cd .hfid/sovereign
           ots stamp manifest.json
           cd../..
           ots stamp manifest.json
           sleep 3
-          ots upgrade.hfid/sovereign/manifest.json.ots || true
+          ots upgrade .hfid/sovereign/manifest.json.ots || true
           ots upgrade manifest.json.ots || true
           
           echo "payload_hash=$(sha256sum.hfid/sovereign/manifest.json | cut -d ' -f1)" >> $GITHUB_OUTPUT
