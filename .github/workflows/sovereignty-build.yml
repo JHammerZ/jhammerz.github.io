@@ -20,11 +20,11 @@ jobs:
         run: |
           set -e
           echo "Downloading kernel archive directly to bypass Git completely..."
-          # Downloading the mirror source archive directly removes Git directory ownership checks
           wget -q https://github.com -O kernel.tar.gz
           tar -xf kernel.tar.gz
-          # GitHub release archives append the branch/tag name to the folder
-          mv linux-stable-6.10 linux-6.10
+          
+          # Critical Fix: Use an absolute wildcard map to reliably rename the directory
+          mv linux-stable-* linux-6.10
           test -d linux-6.10
           
       - name: Configure Linux Source Tree Natively
