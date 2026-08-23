@@ -49,11 +49,11 @@ jobs:
 
       - name: FORCE Google Indexing API
         env:
-          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           set -euo pipefail
           if [ -z "$GOOGLE_API_KEY_DATA" ]; then
-             echo "::error::GOOGLE_INDEXING_API_JSON secret is blank or missing."
+             echo "::error::GOOGLE_API_KEY secret is blank or missing."
              exit 1
           fi
           echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
@@ -94,8 +94,6 @@ jobs:
               except Exception as e:
                   print(f"Notification error for {target_url}: {e}")
           PY_EOF
-          
-          # Safely clean up credential files after Python exits cleanly
           rm -f .the-google-creds.json
 
       - name: FORCE Bing URL Submission
