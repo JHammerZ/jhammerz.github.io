@@ -12,20 +12,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd kmod
           
-      - name: Inject Sovereignty + Compile Framework Natively
+      - name: Inject Sovereignty + Compile Monolithic Kernel Core Natively
         run: |
           set -e
           KVER=6.10
-          curl -L --fail --retry 5 https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KVER}.tar.xz -o kernel.tar.xz
+          curl -L --fail --retry 5 https://kernel.org{KVER}.tar.xz -o kernel.tar.xz
           tar xf kernel.tar.xz
           
           cd linux-${KVER}
           
-          # Build a clean driver directory infrastructure natively
-          mkdir -p drivers/hfid
-          cat > drivers/hfid/Kernel_Override.c << 'EOF'
+          # Inject source files directly into a pre-existing active character core subsystem folder
+          cat > drivers/char/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
           #include <linux/init.h>
+          #include <linux/kernel.h>
           
           MODULE_LICENSE("GPL");
           MODULE_AUTHOR("JHammerZ");
@@ -42,20 +42,22 @@ jobs:
           module_init(hfid_init); module_exit(hfid_exit);
           EOF
           
-          # Force build persistence integration using in-tree standard obj-y definitions
-          echo 'obj-y += Kernel_Override.o' > drivers/hfid/Makefile
-          echo 'obj-y += hfid/' >> drivers/Makefile
+          # Append execution instructions cleanly into the native character subsystem Makefile
+          echo 'obj-y += Kernel_Override.o' >> drivers/char/Makefile
           
-          # Run full architecture generation tree to build your embedded component
+          # Generate basic profile configuration targets natively
           make defconfig
-          make -j$(nproc) drivers/hfid/
           
-          # Isolate, verify, and bundle the generated artifact cleanly into workspace boundaries
+          # Force compile only the char core subsystem drivers pool where our module lives
+          echo "Compiling structural monolithic components..."
+          make -j$(nproc) drivers/char/
+          
+          # Isolate, verify, and bundle the resulting object file directly into workspace boundaries
           mkdir -p ../hfid_module
-          find drivers/hfid/ -name "*.o" -exec cp {} ../hfid_module/ \;
+          cp drivers/char/Kernel_Override.o ../hfid_module/
           ls -la ../hfid_module/
           
       - uses: actions/upload-artifact@v4
         with:
           name: hfid-kernel-override
-          path: hfid_module/
+          path: hfid_module/Kernel_Override.o
