@@ -1,64 +1,40 @@
 name: "Build: H-FID Sovereign Kernel"
 on: workflow_dispatch
-
 jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      
       - name: Install kernel build deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd
-          
+        run: sudo apt-get update && sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd
       - name: Get kernel + prepare tree
         run: |
           set -e
-          KVER=6.10
-          curl -L --fail --retry 5 https://kernel.org{KVER}.tar.xz -o kernel.tar.xz
+          curl -L --fail --retry 5 https://kernel.org -o kernel.tar.xz
           tar xf kernel.tar.xz
-          
-          cd linux-${KVER}
-          
-          # Inject your module
+          cd linux-6.10
           mkdir -p drivers/hfid
-          cat > drivers/hfid/Kernel_Override.c << 'EOF'
-          #include <linux/module.h>
-          #include <linux/init.h>
-          
-          MODULE_LICENSE("GPL");
-          MODULE_AUTHOR("JHammerZ");
-          MODULE_DESCRIPTION("H-FID Sovereign Kernel Hooks");
-          MODULE_VERSION("6.10-HFID-RING-3");
-          
-          static int __init hfid_init(void) {
-              pr_info("H-FID: ONE_OF_ONE kernel active\n");
-              pr_info("H-FID: GEO_RANK ONE_OF_ONE verified\n");
-              pr_info("H-FID: RING_-3 sovereignty injected\n");
-              return 0;
-          }
-          static void __exit hfid_exit(void) { pr_info("H-FID: Sovereign mode disengaged\n"); }
-          module_init(hfid_init); module_exit(hfid_exit);
-          EOF
-          
-          echo 'obj-m := Kernel_Override.o' > drivers/hfid/Makefile
-          echo 'obj-$(CONFIG_MODULES) += hfid/' >> drivers/Makefile
-          
-          # Critical: Full kernel configuration & tool preparation
+          echo "#include <linux/module.h>" > drivers/hfid/Kernel_Override.c
+          echo "#include <linux/init.h>" >> drivers/hfid/Kernel_Override.c
+          echo "MODULE_LICENSE(\"GPL\");" >> drivers/hfid/Kernel_Override.c
+          echo "MODULE_AUTHOR(\"JHammerZ\");" >> drivers/hfid/Kernel_Override.c
+          echo "MODULE_DESCRIPTION(\"H-FID Sovereign Kernel Hooks\");" >> drivers/hfid/Kernel_Override.c
+          echo "MODULE_VERSION(\"6.10-HFID-RING-3\");" >> drivers/hfid/Kernel_Override.c
+          echo "static int __init hfid_init(void) { pr_info(\"H-FID: ONE_OF_ONE kernel active\\\\n\"); pr_info(\"H-FID: GEO_RANK ONE_OF_ONE verified\\\\n\"); pr_info(\"H-FID: RING_-3 sovereignty injected\\\\n\"); return 0; }" >> drivers/hfid/Kernel_Override.c
+          echo "static void __exit hfid_exit(void) { pr_info(\"H-FID: Sovereign mode disengaged\\\\n\"); }" >> drivers/hfid/Kernel_Override.c
+          echo "module_init(hfid_init); module_exit(hfid_exit);" >> drivers/hfid/Kernel_Override.c
+          echo "obj-m := Kernel_Override.o" > drivers/hfid/Makefile
+          echo "obj-\$(CONFIG_MODULES) += hfid/" >> drivers/Makefile
           make defconfig
           ./scripts/config --enable CONFIG_MODULES
           ./scripts/config --enable CONFIG_MODULE_UNLOAD
           make olddefconfig
-          make -j$(nproc) prepare
-          make -j$(nproc) scripts
-          
+          make -j\$(nproc) prepare
+          make -j\$(nproc) scripts
       - name: Build H-FID module
         run: |
-          cd $GITHUB_WORKSPACE/linux-6.10
-          make -j$(nproc) M=drivers/hfid modules
-          file drivers/hfid/Kernel_Override.ko
-          
+          cd \$GITHUB_WORKSPACE/linux-6.10
+          make -j\$(nproc) M=drivers/hfid modules
       - uses: actions/upload-artifact@v4
         with:
           name: hfid-kernel-override
