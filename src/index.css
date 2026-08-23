@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-sovereign-neon: #00FF41;
+  --color-sovereign-amber: #FFB000;
+  --color-sovereign-bg: #0A0A0A;
+  --color-sovereign-card: #141414;
+  --color-sovereign-line: #222222;
+}
+
+@layer base {
+  body {
+    @apply bg-sovereign-bg text-gray-300 font-sans antialiased;
+  }
+}
+
+.brutalist-border {
+  @apply border border-sovereign-line;
+}
+
+.glow-text {
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+}
+
+.matrix-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, #141414 1px, transparent 1px),
+    linear-gradient(to bottom, #141414 1px, transparent 1px);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.matrix-grid::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: -1;
+  animation: grid-drift 60s linear infinite;
+}
+
+@keyframes grid-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(40px); }
+}
+
+.matrix-active::before {
+  background: linear-gradient(rgba(0, 255, 65, 0.08) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0, 255, 65, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation-duration: 10s;
+}
+
+.matrix-active::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  animation: bg-pulse 4s ease-in-out infinite;
+}
+
+@keyframes bg-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.bg-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.06),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.06)
+  );
+  background-size: 100% 4px, 6px 100%;
+}
+
+.animate-spin-slow {
+  animation: spin 16s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.gaming-hud-border {
+  position: relative;
+  border: 1px solid rgba(0, 255, 65, 0.15);
+  box-shadow: inset 0 0 15px rgba(0, 255, 65, 0.02), 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
