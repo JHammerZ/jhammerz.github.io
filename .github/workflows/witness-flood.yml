@@ -48,7 +48,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@692973e3d937129bcbfab52b52de5d3f6b8aeb4f # v4.1.7
+      uses: actions/checkout@v4 # v4.1.7
 
     - name: Download broadcast receipt
       uses: actions/download-artifact@65a5d6ad1e5b6f3d0e1e2e4e8d5d5d5d # v4.1.7
@@ -255,7 +255,7 @@ jobs:
         subject-path: '.hfid/broadcast/*'
 
     - name: Upload Broadcast Evidence
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      uses: actions/upload-artifact@v4 # v4.3.3
       if: always()
       with:
         name: hfid-broadcast-evidence-${{ steps.hfid.outputs.uuid }}

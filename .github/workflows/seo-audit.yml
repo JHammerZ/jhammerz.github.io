@@ -45,10 +45,10 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@692973e3d937129bcbfab52c0a21b3acfc6b8b6b # v4.1.7
+        uses: actions/checkout@v4 # v4.1.7
 
       - name: Setup Node
-        uses: actions/setup-node@60edb5dd545a6417d3a9b4d8f2a2d4b5e8b8e8b8 # v4.0.2
+        uses: actions/setup-node@v4 # v4.0.2
         with:
           node-version: '20'
           cache: 'npm'

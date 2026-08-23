@@ -1,0 +1,24 @@
+name: Sovereign Kernel Forge
+on: [push]
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch kernel source
+        run: wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.10.tar.xz
+      - name: Extract
+        run: tar xf linux-6.10.tar.xz
+      - name: Inject sovereignty
+        run: cp Kernel_Override.c linux-6.10/
+      - name: Build kernel
+        run: |
+          cd linux-6.10
+          make defconfig
+          echo 'CONFIG_MODULES=y' >>.config
+          make -j$(nproc)
+      - name: Become root - upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bzImage-ALPHA-PRIME
+          path: linux-6.10/arch/x86/boot/bzImage

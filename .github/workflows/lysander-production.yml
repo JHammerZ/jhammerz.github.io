@@ -46,7 +46,7 @@ jobs:
       
     steps:
     - name: Checkout Sovereign Truth
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      uses: actions/checkout@v4 # v4.1.1
       with:
         fetch-depth: 0
         
@@ -130,7 +130,7 @@ jobs:
         
     - name: Upload Sovereign Evidence
       if: always()
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      uses: actions/upload-artifact@v4 # v4.3.3
       with:
         name: lysander-sovereign-evidence-${{ steps.baseline.outputs.sha }}
         path: |
