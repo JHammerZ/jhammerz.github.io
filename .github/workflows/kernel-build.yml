@@ -12,11 +12,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd
           
-      - name: Get kernel + prepare tree
+      - name: Get kernel + prepare tree + build module
         run: |
           set -e
           KVER=6.10
-          curl -L --fail --retry 5 https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KVER}.tar.xz -o kernel.tar.xz
+          curl -L --fail --retry 5 https://kernel.org{KVER}.tar.xz -o kernel.tar.xz
           tar xf kernel.tar.xz
           
           cd linux-${KVER}
@@ -53,14 +53,16 @@ jobs:
           make -j$(nproc) prepare
           make -j$(nproc) scripts
           
-      - name: Build H-FID module
-        run: |
-          cd $GITHUB_WORKSPACE/linux-6.10
+          # Build module immediately while inside the active context to guarantee persistence
+          echo "Building H-FID module..."
           make -j$(nproc) M=drivers/hfid modules
           file drivers/hfid/Kernel_Override.ko
+          
+          # Move module out to the workspace root for deterministic collection
+          mkdir -p ../hfid_module
+          cp drivers/hfid/Kernel_Override.ko ../hfid_module/
           
       - uses: actions/upload-artifact@v4
         with:
           name: hfid-kernel-override
-          # Critical fix: Use the absolute path mapping parameter variable
-          path: /home/runner/work/jhammerz.github.io/jhammerz.github.io/linux-6.10/drivers/hfid/Kernel_Override.ko
+          path: hfid_module/Kernel_Override.ko
