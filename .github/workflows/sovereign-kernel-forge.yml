@@ -22,27 +22,27 @@ jobs:
 
       - name: Fetch Kernel Source
         run: |
-          # Use an absolute direct URL to pull the actual tarball down to the runner workspace
-          curl -L -o linux-4.10.tar.xz https://kernel.org
-          tar -xf linux-4.10.tar.xz
-          rm linux-4.10.tar.xz
+          # Download the direct Linux 6.10 archive from the production CDN
+          curl -L -o linux-6.10.tar.xz https://kernel.org
+          tar -xf linux-6.10.tar.xz
+          rm linux-6.10.tar.xz
 
       - name: Inject Sovereignty Modifications
         run: |
           set -euo pipefail
-          mkdir -p linux-4.10/include
+          mkdir -p linux-6.10/include
           if [ -f "Kernel_Override.c" ]; then
-             cp Kernel_Override.c linux-4.10/
+             cp Kernel_Override.c linux-6.10/
           else
-             echo "// Sovereign System Entry Hook" > linux-4.10/Kernel_Override.c
+             echo "// Sovereign System Entry Hook" > linux-6.10/Kernel_Override.c
           fi
 
       - name: Compile and Build Sovereign Kernel
         run: |
           set -euo pipefail
-          cd linux-4.10
+          cd linux-6.10
           
-          # Dynamic Header Injection 
+          # Dynamic Header Injection to prevent compile crashes
           COMMIT_SHA="$(git rev-parse --short HEAD || echo "unknown")"
           cat << H_EOF > include/git.h
           #ifndef SOVEREIGN_GIT_H
@@ -54,17 +54,17 @@ jobs:
           
           cp include/git.h ./git.h
 
-          # Configuration generation sequences
+          # Setup base defconfigs cleanly
           make defconfig
           scripts/config --enable CONFIG_MODULES || echo "CONFIG_MODULES=y" >> .config
           make olddefconfig
           
-          # Parallel matrix thread processing compilation
+          # Compile with fully parallel nproc optimization matrices
           make -j$(nproc) bzImage
 
       - name: Archive and Upload Sovereign Artifact Binary
         uses: actions/upload-artifact@v4
         with:
           name: bzImage-ALPHA-PRIME
-          path: linux-4.10/arch/x86/boot/bzImage
+          path: linux-6.10/arch/x86/boot/bzImage
           if-no-files-found: error
