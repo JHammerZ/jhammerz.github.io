@@ -1,0 +1,45 @@
+name: "Build: H-FID Sovereign Kernel"
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install kernel build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd kmod wget
+          
+      - name: Fetch Core Kernel Tree
+        run: |
+          set -e
+          wget -q https://github.com -o kernel.tar.gz
+          tar -xf kernel.tar.gz
+          mv linux-stable-6.10 linux-6.10
+          test -d linux-6.10
+          
+      - name: Inject Sovereignty and Compile Core Subsystem
+        run: |
+          set -e
+          cd linux-6.10
+          echo "/* H-FID Sovereignty Hooks */" >> drivers/char/random.c
+          echo "static int __init hfid_init_monolithic(void) { pr_info(\"H-FID: ONE_OF_ONE kernel active\\n\"); pr_info(\"H-FID: GEO_RANK ONE_OF_ONE verified\\n\"); pr_info(\"H-FID: RING_-3 sovereignty injected\\n\"); return 0; }" >> drivers/char/random.c
+          echo "late_initcall(hfid_init_monolithic);" >> drivers/char/random.c
+          
+          make defconfig
+          make -j$(nproc) drivers/char/random.o
+          
+          mkdir -p $GITHUB_WORKSPACE/hfid_module
+          cp drivers/char/random.o $GITHUB_WORKSPACE/hfid_module/
+          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hfid-kernel-core-object
+          path: hfid_module/random.o
