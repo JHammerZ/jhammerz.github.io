@@ -22,7 +22,7 @@ jobs:
           
       - name: Download and extract kernel
         run: |
-          wget -O linux-6.10.tar.xz https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.10.tar.xz
+          wget -O linux-6.10.tar.xz https://kernel.org
           tar xf linux-6.10.tar.xz
           
       - name: Inject sovereignty into kernel tree
@@ -58,7 +58,6 @@ jobs:
           cat > linux-6.10/hfid/Makefile << 'EOF'
           obj-m := Kernel_Override.o
           EOF
-          
           echo "✅ Sovereignty injected cleanly"
           
       - name: Configure kernel
@@ -72,7 +71,6 @@ jobs:
           
       - name: Build sovereignty module
         run: |
-          # Build out-of-tree referencing absolute subfolder pathing
           make -C $GITHUB_WORKSPACE/linux-6.10 -j$(nproc) M=$GITHUB_WORKSPACE/linux-6.10/hfid modules
           
       - name: Collect artifacts
