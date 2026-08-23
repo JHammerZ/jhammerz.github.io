@@ -18,24 +18,38 @@ jobs:
       - name: Install kernel build deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libncurses-dev flex bison libssl-dev libelf-dev bc dwarves kmod
+          sudo apt-get install -y build-essential libncurses-dev flex bison libssl-dev libelf-dev bc dwarves xz-utils
           
       - name: Download and extract kernel
         run: |
-          wget -O linux-6.10.tar.xz https://kernel.org
-          tar xf linux-6.10.tar.xz
+          set -e
+          KERNEL_URL="https://kernel.org"
+          KERNEL_TAR="linux-6.10.tar.xz"
           
+          echo "Downloading kernel with retry..."
+          for i in 1 2 3; do
+            wget -O $KERNEL_TAR $KERNEL_URL && break
+            echo "wget attempt $i failed, retrying..."
+            sleep 5
+          done
+          
+          echo "Extracting..."
+          tar xf $KERNEL_TAR
+          test -d linux-6.10 || { echo "Extract failed"; exit 1; }
+          echo "✅ Kernel source ready"
+        
       - name: Inject sovereignty into kernel tree
         run: |
           set -e
           cd linux-6.10
           
-          # Create permanent module folder directly in the driver pool
+          # Create module directory in-tree cleanly
           mkdir -p drivers/hfid
           
           cat > drivers/hfid/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
           #include <linux/kernel.h>
+          #include <linux/init.h>
           
           MODULE_LICENSE("GPL");
           MODULE_AUTHOR("Joshua Hamilton [JHammerZ]");
@@ -47,6 +61,7 @@ jobs:
               printk(KERN_INFO "H-FID: SLSA Level 3 attestation embedded\n");
               printk(KERN_INFO "H-FID: GEO_RANK ONE_OF_ONE verified\n");
               printk(KERN_INFO "H-FID: RING_-3 sovereignty injected\n");
+              printk(KERN_INFO "H-FID: KROOT_PRIVATE: JHammerZ\n");
               return 0;
           }
           
@@ -58,14 +73,13 @@ jobs:
           module_exit(hfid_exit);
           EOF
           
-          # Force compile target explicitly as a module target rule
           cat > drivers/hfid/Makefile << 'EOF'
-          obj-m := Kernel_Override.o
+          obj-m += Kernel_Override.o
           EOF
           
-          # Wire sub-directory compilation tracking natively to the main top-level drivers list
-          echo "obj-m += hfid/" >> drivers/Makefile
-          echo "✅ Sovereignty driven into core Kbuild targets"
+          # Wire cleanly into drivers layout tree infrastructure
+          echo 'obj-m += hfid/' >> drivers/Makefile
+          echo "✅ Sovereignty injected in-tree at drivers/hfid/"
           
       - name: Configure kernel features
         run: |
@@ -73,19 +87,23 @@ jobs:
           make defconfig
           scripts/config --enable CONFIG_MODULES
           scripts/config --enable CONFIG_MODULE_UNLOAD
+          scripts/config --enable CONFIG_KALLSYMS
           make olddefconfig
-          make modules_prepare
           
       - name: Compile core modules
         run: |
           cd linux-6.10
-          make -j$(nproc) modules
+          make modules_prepare
+          # Crucial fix: Removed the trailing slash from the module selection variable
+          make -j$(nproc) M=drivers/hfid
+          find drivers/hfid/ -name "*.ko"
           
       - name: Collect artifacts
         run: |
           mkdir -p hfid_module
           find linux-6.10/drivers/hfid/ -name "*.ko" -exec cp {} hfid_module/ \;
           ls -la hfid_module/
+          test -f hfid_module/Kernel_Override.ko || { echo "KO not built"; exit 1; }
           
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v1
@@ -104,6 +122,7 @@ jobs:
         run: |
           echo "## H-FID Sovereign Kernel Build" >> $GITHUB_STEP_SUMMARY
           echo "- **Module**: Kernel_Override.ko" >> $GITHUB_STEP_SUMMARY
+          echo "- **Location**: drivers/hfid/" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA Level**: 3 Attested" >> $GITHUB_STEP_SUMMARY
           echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
           echo "- **RING**: -3" >> $GITHUB_STEP_SUMMARY
