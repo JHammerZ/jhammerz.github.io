@@ -42,7 +42,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y jq openssl android-tools-adb android-tools-fastboot
+          sudo apt-get install -y jq openssl android-sdk-platform-tools android-tools-adb
 
       - name: Install Python Clients
         run: |

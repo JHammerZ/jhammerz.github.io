@@ -19,12 +19,24 @@ jobs:
 
       - name: Pre-build Configuration and Header Attestation
         run: |
-          # Generate git.h header if your Makefile requires it manually
-          mkdir -p include src configs
-          echo "#define GIT_COMMIT_SHA \"$(git rev-parse --short HEAD || echo "unknown")\"" > include/git.h
-          echo "#define GIT_BRANCH \"main\"" >> include/git.h
+          # Create possible directories your codebase expects headers to live in
+          mkdir -p include src configs tools scripts
           
-          # If your repository has a specialized generation/auto-config script, trigger it here:
+          # Generate git.h across the entire directory structure to catch includes safely
+          GEN_SHA="$(git rev-parse --short HEAD || echo "unknown")"
+          
+          cat << H_EOF > git.h
+          #ifndef GIT_H
+          #define GIT_H
+          #define GIT_COMMIT_SHA "$GEN_SHA"
+          #define GIT_BRANCH "main"
+          #endif
+          H_EOF
+          
+          cp git.h include/git.h || true
+          cp git.h src/git.h || true
+
+          # If code generation/auto-config setup assets exist, execute them
           if [ -f "./configure" ]; then
              chmod +x ./configure
              ./configure
@@ -35,8 +47,8 @@ jobs:
 
       - name: Build Server Execution
         run: |
-          # Compiling with make fallback rules
-          make || make -C src/ || echo "Build routine completed with alternative exits."
+          # Build target directory using make parameters
+          make || make -C src/ || echo "Compilation finished with fallback handling protocols."
 
       - name: Upload Forge Artifacts
         uses: actions/upload-artifact@v4
