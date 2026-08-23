@@ -33,6 +33,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
+          # Standard verified utility packages replacing the invalid client-android-tools string
           sudo apt-get install -y jq openssl
 
       - name: Install Python Clients
@@ -57,11 +58,11 @@ jobs:
 
       - name: FORCE Google Indexing API
         env:
-          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           set -euo pipefail
           if [ -z "$GOOGLE_API_KEY_DATA" ]; then
-             echo "::error::GOOGLE_INDEXING_API_JSON secret is blank or missing."
+             echo "::error::GOOGLE_API_KEY secret is blank or missing."
              exit 1
           fi
           echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
