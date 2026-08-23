@@ -22,8 +22,8 @@ jobs:
 
       - name: Fetch Kernel Source
         run: |
-          # Hard-coded absolute path to the production compressed archive package
-          wget -q https://kernel.org
+          # Use an absolute direct URL to pull the actual tarball down to the runner workspace
+          curl -L -o linux-4.10.tar.xz https://kernel.org
           tar -xf linux-4.10.tar.xz
           rm linux-4.10.tar.xz
 
@@ -42,7 +42,7 @@ jobs:
           set -euo pipefail
           cd linux-4.10
           
-          # Dynamic Header Injection - Fixes missing git.h compile error
+          # Dynamic Header Injection 
           COMMIT_SHA="$(git rev-parse --short HEAD || echo "unknown")"
           cat << H_EOF > include/git.h
           #ifndef SOVEREIGN_GIT_H
@@ -54,12 +54,12 @@ jobs:
           
           cp include/git.h ./git.h
 
-          # Setup baseline configurations
+          # Configuration generation sequences
           make defconfig
           scripts/config --enable CONFIG_MODULES || echo "CONFIG_MODULES=y" >> .config
           make olddefconfig
           
-          # Build matching kernel binary matrix
+          # Parallel matrix thread processing compilation
           make -j$(nproc) bzImage
 
       - name: Archive and Upload Sovereign Artifact Binary
