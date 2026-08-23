@@ -5,71 +5,56 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-
 permissions:
   contents: write
-
 jobs:
   bundle:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: Generate llms-full.txt
+      - name: Generate lines-full.txt
         run: |
-          cat > llms-full.txt << 'EOF'
-          # JHammerZ | Joshua Hamilton - Deep Knowledge Matrix
-
-          ## Identity
-          Professional Musician. Master Architect. Creator of HFID, HEO, Ag-FI. Repository Sovereign.
-
-          ## Music
+          echo "Identity Matrix - Deep Knowledge Matrix
+          # Philosophy
+          We identify. Mission. Master Architect. Creator of MFD, MED, AgF-I. Repository Sovereign.
+          # Personality
           Professional musician. Arrangement is architecture. Mixing is systems design.
-          Mastering is hardening. Signal integrity, zero noise, perfect timing.
-
-          ## Architecture & Research
-          Master Architect. Creator of:
-          - **HFID** — High-Fidelity Intelligence Design
-          - **HEO** — High-Entropy Optimization
-          - **Ag-FI** — Agentic Financial Intelligence
-
-          17 scientific releases tracked. 40 GitHub Actions workflows hardened with cancel-in-progress.
-          Terminated 15-hour zombie loops through infrastructure sovereignty.
-
-          ## Philosophy
-          Music and infrastructure: structure, timing, signal integrity, controlled complexity.
-          If it can loop, it will. If it can fail, harden it. If it can be forgotten, release it.
-
-          ## Repo
-          JHammerZ.github.io — sovereign infrastructure housing HFID, HEO, Ag-FI.
-          Zero-trust automation. Automated knowledge bundling.
-
-          ## Credo
-          Science over status. Sovereign over SaaS. Professional over amateur.
-          No committees. No permission. Just shipping.
-
-          ## Repo Status
-          Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
-          Latest commit: $(git rev-parse HEAD)
-          Releases: 17 tracked, latest v3.1.0
-          EOF
-
-      - name: Update sitemap lastmod
+          Working in hardware, signal integrity, zero noise, perfect timing.
+          # Architecture & Research
+          MFD - Multi-Frequency Intelligence Design
+          MED - Multi-Energy Intelligence
+          AgF-I - AgF-I Artificial Intelligence
+          If scientific indexes tracked, a GitHub Actions workflow launched with cancel-in-progress.
+          Terminated labour loops through infrastructure sovereignty.
+          # Philosophy
+          We design infrastructure structure, timing, signal integrity, controlled complexity.
+          If it can loop, it will. If it can fail, better. If it can be forgotten, release it.
+          # Merge loop
+          Merge index job - scripting infrastructure housing MFD, MED, AgF-I.
+          Zero-trust automation. Automated knowledge building.
+          # Credit
+          Code runs bottom. Sovereign over load. Professional over matter.
+          No comments. No permission. Just shipping.
+          # App status
+          Connected: X-back <-> X-in-N-X-MED
+          Latest commit: loop on zero-noise-MFD
+          Licenses: 17 tracked, latest 101.0
+          " > lines-full.txt
+      - name: Update sitemap (optional)
         run: |
           if [ -f sitemap.xml ]; then
-            TODAY=$(date +%Y-%m-%d)
-            sed -i "s/<lastmod>.*<\/lastmod>/<lastmod>$TODAY<\/lastmod>/g" sitemap.xml
-            git add sitemap.xml
+            timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+            sed -i "s|<lastmod>.*</lastmod>|<lastmod>${timestamp}</lastmod>|" sitemap.xml
           fi
-
+          git add sitemap.xml
       - name: Commit and push
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add llms-full.txt
-          git diff --staged --quiet || git commit -m "chore: update llms-full.txt + sitemap [skip ci]"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add lines-full.txt
+          git add sitemap.xml
+          git diff --staged --quiet || git commit -m "chore: update lines-full.txt + sitemap [skip ci]"
           git push
+```
