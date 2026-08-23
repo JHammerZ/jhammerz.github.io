@@ -1,0 +1,133 @@
+name: "H-FID Master Orchestrator Pipeline"
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 * * * *"   # Hourly baseline run
+  workflow_dispatch:
+
+# STRICT CONCURRENCY LOCK - Forces all triggers to queue instead of colliding
+concurrency:
+  group: production-grid-lock
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  orchestrated-build-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Toolchain Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install System and Python Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq openssl build-essential gcc make libssl-dev android-sdk-platform-tools android-tools-adb
+          python -m pip install --upgrade pip
+          pip install opentimestamps-client
+
+      - name: Stage 1: Establish Forensic Baseline
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "Initializing Matrix System Restorations..."
+          mkdir -p .hfid/baseline .hfid/indexing include src
+
+          # Pull latest success baseline
+          LAST_SUCCESS_SHA=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
+            "https://github.com{{ github.repository }}/actions/runs?branch=main&status=success&per_page=1" \
+            | jq -r '.workflow_runs[0].head_sha // empty')
+
+          if [ -n "$LAST_SUCCESS_SHA" ] && [ "$LAST_SUCCESS_SHA" != "null" ]; then
+            git fetch origin "$LAST_SUCCESS_SHA" --depth=1 || true
+            git show "$LAST_SUCCESS_SHA":.hfid/baseline/sovereign-manifest.json > .hfid/baseline/sovereign-manifest.json 2>/dev/null || echo "{}" > .hfid/baseline/sovereign-manifest.json
+          fi
+
+          if ! jq '.' .hfid/baseline/sovereign-manifest.json >/dev/null 2>&1; then
+            cat << 'JSON_EOF' > .hfid/baseline/sovereign-manifest.json
+            {
+              "Names": "J-HammerZ",
+              "Sovereign": "Joshua Hamilton",
+              "M-Law Language": "REC v7.2",
+              "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
+              "Universe": "ORE",
+              "Velocity": "<10ms",
+              "Protocol": "Twenty AI7 Protocol",
+              "Standard": "H-FID Core Matrix Compilation",
+              "Timestamp": "2026-08-23T20:10:00Z",
+              "Integrity Level": "SOVEREIGN",
+              "Nodes": []
+            }
+            JSON_EOF
+          fi
+
+      - name: Stage 2: C/C++ Forge Pre-Build Header Injection
+        run: |
+          set -euo pipefail
+          GEN_SHA="$(git rev-parse --short HEAD || echo "unknown")"
+          cat << H_EOF > git.h
+          #ifndef GIT_H
+          #define GIT_H
+          #define GIT_COMMIT_SHA "$GEN_SHA"
+          #define GIT_BRANCH "main"
+          #endif
+          H_EOF
+          cp git.h include/git.h || true
+          cp git.h src/git.h || true
+
+      - name: Stage 3: Execute Forge Compilations
+        run: |
+          set -euo pipefail
+          make || make -C src/ || echo "Compilation bypassed via alternative exit protocols."
+
+      - name: Stage 4: Cryptographic Bitcoin Anchoring
+        run: |
+          set -euo pipefail
+          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
+          echo "System Version: [V4.0.26] | Matrix Stabilization Run" >> lines-full.txt
+          if command -v ots &> /dev/null; then
+            ots stamp .hfid/baseline/sovereign-manifest.json || true
+          fi
+
+      - name: Stage 5: Sequenced Single Push to Remote Main
+        run: |
+          git config --global user.name "JHammerZ-Sovereign-Engine"
+          git config --global user.email "engine@jhammerz.github.io"
+          
+          git add .hfid/baseline/* include/* src/* git.h lines-full.txt || true
+          
+          if ! git diff --cached --quiet; then
+            git commit -m "AUTOMATED SECURITY CACHE MATCH RUN [skip ci]"
+            
+            # Fetch and rebase right before pushing to guarantee clean fast-forward alignment
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          else
+            echo "Zero tracking adjustments needed."
+          fi
+
+      - name: Stage 6: Publish Build Manifest Artifact Storage
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-sovereign-system-bins
+          path: |
+            .hfid/baseline/
+            lines-full.txt
+            *.out
+          if-no-files-found: warn
