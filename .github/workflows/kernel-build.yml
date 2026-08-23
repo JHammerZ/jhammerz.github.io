@@ -18,17 +18,19 @@ jobs:
       - name: Install kernel build deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libncurses-dev flex bison libssl-dev libelf-dev bc dwarves
+          sudo apt-get install -y build-essential libncurses-dev flex bison libssl-dev libelf-dev bc dwarves kmod
           
       - name: Download and extract kernel
         run: |
           wget -O linux-6.10.tar.xz https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.10.tar.xz
           tar xf linux-6.10.tar.xz
-        
-      - name: Inject sovereignty source
+          
+      - name: Inject sovereignty into kernel tree
         run: |
-          mkdir -p hfid_module
-          cat > hfid_module/Kernel_Override.c << 'EOF'
+          set -e
+          mkdir -p linux-6.10/hfid
+          
+          cat > linux-6.10/hfid/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
           #include <linux/kernel.h>
           
@@ -53,9 +55,11 @@ jobs:
           module_exit(hfid_exit);
           EOF
           
-          cat > hfid_module/Makefile << 'EOF'
-          obj-m += Kernel_Override.o
+          cat > linux-6.10/hfid/Makefile << 'EOF'
+          obj-m := Kernel_Override.o
           EOF
+          
+          echo "✅ Sovereignty injected cleanly"
           
       - name: Configure kernel
         run: |
@@ -64,11 +68,18 @@ jobs:
           scripts/config --enable CONFIG_MODULES
           scripts/config --enable CONFIG_MODULE_UNLOAD
           make olddefconfig
+          make modules_prepare
           
       - name: Build sovereignty module
         run: |
-          # Use absolute workspace paths to execute the out-of-tree build cleanly
-          make -C $GITHUB_WORKSPACE/linux-6.10 M=$GITHUB_WORKSPACE/hfid_module modules
+          # Build out-of-tree referencing absolute subfolder pathing
+          make -C $GITHUB_WORKSPACE/linux-6.10 -j$(nproc) M=$GITHUB_WORKSPACE/linux-6.10/hfid modules
+          
+      - name: Collect artifacts
+        run: |
+          mkdir -p hfid_module
+          cp linux-6.10/hfid/*.ko hfid_module/
+          ls -la hfid_module/
           
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v1
