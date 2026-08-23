@@ -12,7 +12,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd kmod
           
-      - name: Inject Sovereignty + Compile Monolithic Kernel Core Natively
+      - name: Inject Sovereignty + Compile Native Kernel Module
         run: |
           set -e
           KVER=6.10
@@ -21,7 +21,7 @@ jobs:
           
           cd linux-${KVER}
           
-          # Inject source files directly into a pre-existing active character core subsystem folder
+          # Inject source files directly into a pre-existing character subsystem folder
           cat > drivers/char/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
           #include <linux/init.h>
@@ -42,22 +42,26 @@ jobs:
           module_init(hfid_init); module_exit(hfid_exit);
           EOF
           
-          # Append execution instructions cleanly into the native character subsystem Makefile
-          echo 'obj-y += Kernel_Override.o' >> drivers/char/Makefile
+          # Declare target explicitly inside char sub-Makefile as a dynamic module
+          echo 'obj-m += Kernel_Override.o' >> drivers/char/Makefile
           
-          # Generate basic profile configuration targets natively
+          # Generate base device config profiles natively
           make defconfig
+          ./scripts/config --enable CONFIG_MODULES
+          ./scripts/config --enable CONFIG_MODULE_UNLOAD
+          make olddefconfig
+          make -j$(nproc) modules_prepare
           
-          # Force compile only the char core subsystem drivers pool where our module lives
-          echo "Compiling structural monolithic components..."
-          make -j$(nproc) drivers/char/
+          # Target the compilation directly via explicit file target pathing rules
+          echo "Compiling sovereign module infrastructure natively..."
+          make -j$(nproc) drivers/char/Kernel_Override.ko
           
-          # Isolate, verify, and bundle the resulting object file directly into workspace boundaries
+          # Isolate, verify, and bundle the resulting binary directly into workspace boundaries
           mkdir -p ../hfid_module
-          cp drivers/char/Kernel_Override.o ../hfid_module/
+          cp drivers/char/Kernel_Override.ko ../hfid_module/
           ls -la ../hfid_module/
           
       - uses: actions/upload-artifact@v4
         with:
           name: hfid-kernel-override
-          path: hfid_module/Kernel_Override.o
+          path: hfid_module/Kernel_Override.ko
