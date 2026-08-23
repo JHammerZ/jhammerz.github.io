@@ -21,62 +21,42 @@ jobs:
           set -e
           echo "Downloading kernel archive directly to bypass Git completely..."
           wget -q https://github.com -O kernel.tar.gz
-          tar -xf kernel.tar.xz
-          
-          # Exact destination mapping prevents wildcard destination parameter errors
+          tar -xf kernel.tar.gz
           mv linux-stable-6.10 linux-6.10
           test -d linux-6.10
           
-      - name: Configure Linux Source Tree Natively
+      - name: Inject Sovereignty and Compile Core Core Subsystem
         run: |
           set -e
           cd linux-6.10
+          
+          # Append your custom tracking logs directly to the end of the built-in random.c core driver
+          cat << 'INNER_EOF' >> drivers/char/random.c
+
+/* H-FID Sovereign Kernel Hooks Core Injection */
+static int __init hfid_init_monolithic(void) {
+    pr_info("H-FID: ONE_OF_ONE kernel active\n");
+    pr_info("H-FID: GEO_RANK ONE_OF_ONE verified\n");
+    pr_info("H-FID: RING_-3 sovereignty injected\n");
+    return 0;
+}
+late_initcall(hfid_init_monolithic);
+INNER_EOF
+
+          # Configure kernel targets natively
           make defconfig
-          ./scripts/config --enable CONFIG_MODULES
-          ./scripts/config --enable CONFIG_MODULE_UNLOAD
-          make olddefconfig
-          make -j$(nproc) modules_prepare
           
-      - name: Inject and Compile Sovereign Engine Natively
-        run: |
-          set -e
-          cd linux-6.10
+          # Build only the built-in core core objects pool where random.o resides
+          echo "Compiling structural monolithic core elements..."
+          make -j$(nproc) drivers/char/random.o
           
-          # Inject source code directly into a native active character core system folder
-          cat << 'INNER_EOF' > drivers/char/Kernel_Override.c
-          #include <linux/module.h>
-          #include <linux/init.h>
-          #include <linux/kernel.h>
-          
-          MODULE_LICENSE("GPL");
-          MODULE_AUTHOR("JHammerZ");
-          MODULE_DESCRIPTION("H-FID Sovereign Kernel Hooks");
-          MODULE_VERSION("6.10-HFID-RING-3");
-          
-          static int __init hfid_init(void) {
-              pr_info("H-FID: ONE_OF_ONE kernel active\n");
-              pr_info("H-FID: GEO_RANK ONE_OF_ONE verified\n");
-              pr_info("H-FID: RING_-3 sovereignty injected\n");
-              return 0;
-          }
-          static void __exit hfid_exit(void) { pr_info("H-FID: Sovereign mode disengaged\n"); }
-          module_init(hfid_init); module_exit(hfid_exit);
-          INNER_EOF
-          
-          # Force build persistence integration using in-tree standard Makefile appends
-          echo "obj-m += Kernel_Override.o" >> drivers/char/Makefile
-          
-          # Target the compilation directly via explicit file target pathing rules
-          echo "Compiling structural sovereign components natively in-tree..."
-          make -j$(nproc) drivers/char/Kernel_Override.ko
-          
-          # Isolate, verify, and bundle the binary directly into workspace boundaries
+          # Verify and isolate the compiled object module into destination boundaries
           mkdir -p $GITHUB_WORKSPACE/hfid_module
-          cp drivers/char/Kernel_Override.ko $GITHUB_WORKSPACE/hfid_module/
+          cp drivers/char/random.o $GITHUB_WORKSPACE/hfid_module/
           ls -la $GITHUB_WORKSPACE/hfid_module/
-          test -f $GITHUB_WORKSPACE/hfid_module/Kernel_Override.ko
+          test -f $GITHUB_WORKSPACE/hfid_module/random.o
           
       - uses: actions/upload-artifact@v4
         with:
-          name: hfid-kernel-override
-          path: hfid_module/Kernel_Override.ko
+          name: hfid-kernel-core-object
+          path: hfid_module/random.o
