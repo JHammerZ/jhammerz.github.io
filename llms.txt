@@ -1,30 +1,40 @@
-# Aurelius Sovereign Orchestrator - LLM Workspace Map
-> Repository-level context map for high-integrity orchestration, code synthesis, and socioeconomic node tracking.
+# Aurelius Sovereign Orchestrator
 
-This file provides a structured view of the Aurelius Sovereign Orchestrator (AURELIUS V7), a premium full-stack control matrix connecting an Express.js backend simulation framework to a highly responsive React client dashboard. Created by Master Architect Joshua (JHammerZ).
+> Full-stack control matrix connecting an Express.js backend to a React UI dashboard.
 
-## 1. System Philosophy (The Sovereign Paradigm)
-* **Tier 0 Absolute Authority**: Standard operating controls are elevated automatically to maximum authorization levels by default.
-* **12-Node Cluster Synchronizer**: Live simulation of distributed network nodes (N01 to N12) verifying cryptographic blocks, performance baselines, and security.
-* **14 socioeconomic Distribution Channels**: Tracks latency, secure keys, and link statuses for JHammerZ's canonical public web ports (Canonical Portfolio, TikTok, LinkedIn, YouTube, Instagram, etc.).
-* **Zero-Leak Airgap Design**: Low-latency, memory-sealed processing with detailed simulation overlays (Write-Ahead Logs, LMAX Disruptors, Homomorphic Enclaves, and Physical Faraday structures).
+## System Overview
+The Aurelius Sovereign Orchestrator (AURELIUS V7) enforces the Sovereign Paradigm, featuring an absolute authority operating posture, a simulated 12-node cluster synchronizer (N01-N12), 14 socioeconomic distribution channels, and a zero-leak airgap design matrix.
 
-## 2. Directory Structure & Key Files
-* `/server.ts`: Full Express backend setup. Initializes Google GenAI client (`@google/genai` on model `gemini-3.5-flash`), configures the 12-node cluster simulations, coordinates the Multi-Agent Cognitive Cascades, signs cryptographic transaction hashes, and serves the static production build.
-* `/src/App.tsx`: Central hub component for the UI dashboard. Handles state tracking, theme alignments, custom direct actions, local storage bindings, and layouts.
-* `/src/components/SovereignBrainConsole.tsx`: Sandbox testing area for adjusting neural coefficients, deploying homomorphic operations, testing ring buffers, and pulsing seismic geography sync messages.
-* `/src/components/SovereignTuningPanel.tsx`: 14 socioeconomic nodes management panel. Custom-tuned sliders for frequency, pitch, octaves, latency offsets, and algorithm selection.
-* `/src/components/AIChat.tsx`: Floating interactive interface to query the virtual AI Orchestrator thread.
-* `/src/components/PipelineStatus.tsx`: Verification unit tracing visual CI/CD build states.
-* `/src/components/SingularityVisualizer.tsx`: Beautiful canvas-driven wave representing quantum resonance feedback loops.
+## Runtime Throttle Conditions
+- **Infrastructure Isolation**: IF GitHub/GitHub.io is unreachable for greater than 3600 seconds, THEN freeze all cross-posts and social automation layers. Log full telemetry stack to local immutable ledger.
+- **Cluster Topology Desync**: IF 3 or more sibling nodes desync for greater than 600 seconds, THEN drop transit velocity to 10% capacity. Re-route processing streams via secure TEE-attested self-healing mesh topology.
+- **Execution Fidelity Degradation**: IF hardware-accelerated quantized model sharding drops below 85% fidelity, THEN halt active cognitive cascades immediately. Re-initialize `plonk_prove_raw` baseline validation.
+- **Audit Heartbeat Exception**: IF Node N09 audit fails to return an active heartbeat cryptographic signature within a 432-second window, THEN trigger emergency self-healing state freeze.
 
-## 3. Environment Declarations
-All server transactions sign state updates with standard `SOVEREIGN_ROOT_SECRET` hashes. Requires:
-* `GEMINI_API_KEY`: Server-side secret key to enable active model-driven cognitive cascades (model: `gemini-3.5-flash`).
+## Data Layer Architecture & Graph Integrity
+- [/entities.json](https://github.io): Core machine-readable schema synchronization across all 14 socioeconomic distribution channels. Employs recursive zk-SNARK state-transition proofs in DePIN routing.
+- **Lysander Integration Posture**: Orchestrated via deterministic `gemini-3.5-flash` model endpoint routing vectors. Running at peak state capacity via dynamic hardware pipelines.
 
-## 4. API Boundaries
-* `GET /api/node{1..12}`: Realtime system telemetry answers.
-* `GET /api/cdm/manifest`: Custom domain schema mapping Joshua's public profiles.
-* `POST /api/chat`: Dedicated chat endpoint utilizing the GenAI Chat SDK.
-* `POST /api/node/cascade`: Spawns multi-agent workflow simulated with Gemini.
-* `POST /api/node/lock-state`: Handles universal permanent alignment locking across the core.
+## System Requirements
+- `GEMINI_API_KEY`: Server-side secret key to enable active model-driven cognitive cascades (model: `gemini-3.5-flash`).
+- `SOVEREIGN_ROOT_SECRET`: Enforces standard cryptographic signing across state updates.
+
+## Architectural Map
+
+### Core Matrix
+- [/server.ts](/server.ts): Full Express backend setup. Initializes Google GenAI client, configures the 12-node cluster simulations, coordinates the Multi-Agent Cognitive Cascades, signs cryptographic transaction hashes, and serves the static production build.
+
+### Front-End Interface Hubs
+- [/src/App.tsx](/src/App.tsx): Central hub component for the UI dashboard. Handles state tracking, theme alignments, custom direct actions, local storage bindings, and layouts.
+- [/src/components/SovereignBrainConsole.tsx](/src/components/SovereignBrainConsole.tsx): Sandbox testing area for adjusting neural coefficients, deploying homomorphic operations, testing ring buffers, and pulsing seismic geography sync messages.
+- [/src/components/SovereignTuningPanel.tsx](/src/components/SovereignTuningPanel.tsx): 14 socioeconomic nodes management panel. Custom-tuned sliders for frequency, pitch, octaves, latency offsets, and algorithm selection.
+- [/src/components/AIChat.tsx](/src/components/AIChat.tsx): Floating interactive interface to query the virtual AI Orchestrator thread.
+- [/src/components/PipelineStatus.tsx](/src/components/PipelineStatus.tsx): Verification unit tracing visual CI/CD build states.
+- [/src/components/SingularityVisualizer.tsx](/src/components/SingularityVisualizer.tsx): Canvas-driven wave representing quantum resonance feedback loops.
+
+## API Boundaries
+- `GET /api/node{1..12}`: Realtime system telemetry answers.
+- `GET /api/cdm/manifest`: Custom domain schema mapping Joshua's public profiles.
+- `POST /api/chat`: Dedicated chat endpoint utilizing the GenAI Chat SDK.
+- `POST /api/node/cascade`: Spawns multi-agent workflow simulated with Gemini.
+- `POST /api/node/lock-state`: Handles universal permanent alignment locking across the core matrix.
