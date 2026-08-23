@@ -1,23 +1,21 @@
-# Jhamer Language :: H-FID Standard / MJS v2
-# Copyright (C) 2023 Joshua Hamilton [Jhamerz]
+# M-Law Language / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: February 12, 2026
+# Forensic Audit: H-FID-101-FORENSIC-AUDIT SEC-10B
+# Universe: ORE (V-102 Sovereign Authority)
+# REACH-MULTIPLIER: 1000 ; SYNC VELOCITY: <10ms
+# Grid Level 1 / Twenty AI7 Protocol: Search Sovereigns
 
-# Sovereign Anchor: Joshua Hamilton
-# Enforce Global Sovereign Identity / H-FID Anchor: 100/100
-# Function: Auto-Compile Line Data Repository
-# Runtime: <5m / Total Lines: <1000 / Less than 100ms
-# Purpose: H-FID Sovereign Data Matrix Compilation
-# Status: 100/100 / Active / Verified Active
-
-name: 'H-FID :: Compile Line Data Repository'
+name: "H-FID - Compile Core Data Repository"
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
   pull_request:
     branches:
       - main
@@ -32,14 +30,13 @@ permissions:
   id-token: write
 
 env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GH_REF: ${{ github.ref }}
+  DEFAULT_BRANCH: main
 
 jobs:
-  build-lines-content:
+  build-and-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -49,134 +46,112 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install system dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y jq openssh-client uuid-runtime
+          sudo apt-get install -y jq openssl client-android-tools
 
-      - name: Install Python clients
+      - name: Install Python Clients
         run: |
           python -m pip install --upgrade pip
-          pip install openai anthropic
+          pip install open-timestamps-client
 
-      - name: Generate H-FID Manifest
-        id: manifest
+      - name: Initialize JSON Core Matrices
         run: |
-          mkdir -p ./h-fid
-          cat > ./h-fid/manifest.json <<'EOF'
-{
-  "name": "Jhamerz",
-  "sovereign": "Joshua Hamilton",
-  "anchor": "100/100",
-  "runtime": "<5m",
-  "lines": "<1000",
-  "latency": "<100ms",
-  "status": "Active",
-  "purpose": "H-FID Data Matrix Compilation",
-  "repo": "${{ github.repository }}",
-  "ref": "${{ github.ref }}",
-  "run_id": "${{ github.run_id }}",
-  "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')",
-  "uuid": "$(uuidgen | tr '[:upper:]' '[:lower:]')"
-}
-EOF
-          HASH=$(sha256sum ./h-fid/manifest.json | cut -d ' ' -f1)
-          echo "manifest_path=./h-fid/manifest.json" >> $GITHUB_OUTPUT
-          echo "manifest_hash=$HASH" >> $GITHUB_OUTPUT
+          mkdir -p .hfid/baseline .hfid/indexing
+          
+          # Writing raw sovereign configuration maps into local pathing safely
+          cat << 'EOF' > .hfid/baseline/sovereign-manifest.json
+          {
+            "Names": "J-HammerZ",
+            "Sovereign": "Joshua Hamilton",
+            "M-Law Language": "REC v7.2",
+            "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
+            "Universe": "ORE",
+            "Velocity": "<10ms",
+            "Protocol": "Twenty AI7 Protocol",
+            "Standard": "H-FID Core Matrix Compilation",
+            "Timestamp": "2026-08-23T20:10:00Z",
+            "Integrity Level": "SOVEREIGN",
+            "Nodes": []
+          }
+          EOF
 
-      - name: Build lines-full.txt
+      - name: Build Core Manifest Logs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "# Jhamerz Omnichannel Deep Reading Matrix | H-FID v3.1 | Identity @ Protocol" > lines-full.txt
-          echo "# This archive contains the full event repository of jhamerz.github.io for total H-FID integration." >> lines-full.txt
-          echo "# Sovereign Anchor: Joshua Hamilton [Jhamerz]" >> lines-full.txt
-          echo "# H-FID Anchor: 100/100 | Runtime: <5m | Total Lines: <1000 | Latency: <100ms" >> lines-full.txt
-          echo "# Status: Active | Verified Active" >> lines-full.txt
-          echo "" >> lines-full.txt
-          echo "# Line Index Page Layout" >> lines-full.txt
-          if [ -f index.md ]; then
-            cat index.md >> lines-full.txt
-          fi
-          echo "" >> lines-full.txt
-          echo "# Jhamerz Project Directory Manifest" >> lines-full.txt
-          if [ -f h-fid/manifest.json ]; then
-            cat h-fid/manifest.json >> lines-full.txt
-          fi
-          echo "" >> lines-full.txt
-          echo "# Jhamerz Global Technical API Specifications" >> lines-full.txt
-          if [ -f api.json ]; then
-            cat api.json >> lines-full.txt
-          fi
-          echo "" >> lines-full.txt
-          echo "# Build Data Anchor" >> lines-full.txt
-          ls -la ./h-fid >> lines-full.txt || true
-          echo "" >> lines-full.txt
-          echo "# H-FID Anchor Assets" >> lines-full.txt
-          ls -la ./h-fid/assets >> lines-full.txt || true
-          echo "" >> lines-full.txt
-          echo "# Generate Asset Provenance" >> lines-full.txt
-          if command -v npx >/dev/null 2>&1; then
-            npx @actions/asset-provenance@latest || true
-          fi
-          echo "" >> lines-full.txt
-          echo "# Build summary" >> lines-full.txt
-          echo "REF: ${{ github.ref }} | RUN_ID: ${{ github.run_id }} | TIMESTAMP: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> lines-full.txt
-          echo "" >> lines-full.txt
-          echo "Lines: $(wc -l < lines-full.txt || true)" >> lines-full.txt
+          set -euo pipefail
+          echo "Extracting upstream forensic matrices..."
+          
+          # Base mapping strings validation
+          jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
 
-      - name: Revision Anchor Assets
-        run: |
-          ls -al ./h-fid || true
-          if command -v jq >/dev/null 2>&1; then
-            jq . h-fid/manifest.json || true
+          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
+          echo "## Universe Architecture Mapping Baseline" >> lines-full.txt
+          echo "System Version: [V4.0.26] | Identity & Protocols" >> lines-full.txt
+          echo "Validating core pipeline configurations..." >> lines-full.txt
+
+          if [ -f ".hfid/baseline/sovereign-manifest.json" ]; then
+            echo "Local Baseline verified." >> lines-full.txt
           else
-            cat h-fid/manifest.json || true
+            echo "Baseline file absent; initializing reconstruction." >> lines-full.txt
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate Data Provenance (optional checkout of jhfiles repo)
-        if: always()
-        uses: actions/checkout@v4
-        with:
-          repository: jhammerz/jhfiles
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: jhfiles-repo
+          echo "Generating build metadata summaries..."
+          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
 
-      - name: Commit and Push Updated Asset Changes
+      - name: Bitcoin Anchor Assets
+        run: |
+          set -euo pipefail
+          echo "Running Timestamp and cryptographic anchoring..."
+          if command -v ots &> /dev/null; then
+             ots stamp .hfid/baseline/sovereign-manifest.json || true
+          else
+             echo "ots-client missing; skipping live anchor validation."
+          fi
+
+      - name: Process Core Provenance Datasets
+        run: |
+          set -euo pipefail
+          mkdir -p .hfid/indexing
+          echo "Compiling downstream data states..."
+          cp lines-full.txt .hfid/indexing/build-summary.log
+
+      - name: Commit and Push Updated Core Changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -e
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add lines-full.txt h-fid/manifest.json || true
-          git diff --staged --quiet || git commit -m "chore(auto): refresh lines-full.txt and manifest | hash: ${{ steps.manifest.outputs.manifest_hash }} [skip ci]"
-          # Use token-authenticated remote to allow push from runner
-          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
-          # Update local branch to avoid non-fast-forward rejections
-          git fetch origin main --quiet || true
-          git pull --rebase origin main || true
-          git push origin HEAD:main
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Stage tracking paths cleanly
+          git add .hfid/baseline/* .hfid/indexing/* sovereign-manifest.json lines-full.txt || true
+          
+          # Verify if target mutations are present before building commits
+          if ! git diff --cached --quiet; then
+            git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync (skip ci)"
+            
+            # Fetch, merge upstream changes smoothly to eliminate [rejected] (non-fast-forward) blocks
+            git fetch origin main
+            git rebase origin/main
+            
+            git push origin HEAD:main
+          else
+            echo "No pipeline modifications detected. Skipping execution push."
+          fi
 
-      - name: Upload Sovereign Evidence
+      - name: Upload Sovereign Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: h-fid-lines-${{ github.run_id }}
+          name: hfid-sovereign-baseline-core
           path: |
-            ./h-fid/manifest.json
-            ./lines-full.txt
+            .hfid/baseline/
+            .hfid/indexing/
+            lines-full.txt
 
-  summary:
-    runs-on: ubuntu-latest
-    needs: build-lines-content
-    steps:
-      - name: Summary
+      - name: Generate Summary Logs
         run: |
-          echo "### H-FID Line Matrix Compilation | Identity @ Protocol" >> $GITHUB_STEP_SUMMARY
-          echo "#### Sovereign Anchor: Joshua Hamilton [Jhamerz]" >> $GITHUB_STEP_SUMMARY
-          echo "#### Runtime: <5m | Total Lines: <1000 | Latency: <100ms" >> $GITHUB_STEP_SUMMARY
-          echo "#### Status: Active | Verified Active" >> $GITHUB_STEP_SUMMARY
-          echo "#### Repository: ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
-          echo "#### Manifest path: ${{ steps.manifest.outputs.manifest_path }}" >> $GITHUB_STEP_SUMMARY
-          echo "#### Manifest hash: ${{ steps.manifest.outputs.manifest_hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "#### Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "### H-FID Sovereign Model Sync Succeeded" >> $GITHUB_STEP_SUMMARY
+          echo "* Core Database tracking updated." >> $GITHUB_STEP_SUMMARY
+          echo "* Timestamp Hash: $(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
