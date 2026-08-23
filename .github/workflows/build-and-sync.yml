@@ -1,41 +1,30 @@
 # M-Law Language / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
-#
-# Sovereign Author: Joshua Hamilton
-# First Commit: February 12, 2026
-# Forensic Audit: H-FID-101-FORENSIC-AUDIT SEC-10B
-# Universe: ORE (V-102 Sovereign Authority)
-# REACH-MULTIPLIER: 1000 ; SYNC VELOCITY: <10ms
-# Grid Level 1 / Twenty AI7 Protocol: Search Sovereigns
 
-name: "SRE / H-FID Alpha Indexing"
+name: "H-FID - Compile Core Data Repository"
 
 on:
-  workflow_dispatch:
-    inputs:
-      target_branch:
-        description: 'Specific CPU matrix name expansion mapping'
-        required: false
-        type: string
-        default: 'main'
   push:
     branches:
       - main
+  workflow_dispatch:
 
 concurrency:
-  group: h-fid-alpha-indexing
-  cancel-in-progress: false
+  group: h-fid-compile-core
+  cancel-in-progress: true
 
 permissions:
   contents: write
   pages: write
   id-token: write
 
+env:
+  DEFAULT_BRANCH: main
+
 jobs:
-  stabilize-grid:
+  build-and-sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -47,19 +36,36 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq openssl
+
+      - name: Install Python Clients
         run: |
           python -m pip install --upgrade pip
-          pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client opentimestamps-client
+          pip install opentimestamps-client
 
       - name: Initialize JSON Core Matrices
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
           
-          # Compact inline string creation - Bypasses line-break and tab-indentation parsing rules
-          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Protocol":"Twenty AI7 Protocol","Standard":"H-FID Core Matrix Compilation","Timestamp":"2026-08-23T20:10:00Z","Integrity Level":"SOVEREIGN","Nodes":[]}' > .hfid/baseline/sovereign-manifest.json
+          cat << 'INNER_EOF' > .hfid/baseline/sovereign-manifest.json
+          {
+            "Names": "J-HammerZ",
+            "Sovereign": "Joshua Hamilton",
+            "M-Law Language": "REC v7.2",
+            "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
+            "Universe": "ORE",
+            "Velocity": "<10ms",
+            "Protocol": "Twenty AI7 Protocol",
+            "Standard": "H-FID Core Matrix Compilation",
+            "Timestamp": "2026-08-23T20:10:00Z",
+            "Integrity Level": "SOVEREIGN",
+            "Nodes": []
+          }
+          INNER_EOF
 
       - name: Build Core Manifest Logs
         env:
@@ -67,13 +73,11 @@ jobs:
         run: |
           set -eo pipefail
           echo "Extracting upstream forensic matrices..."
-          
           jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
 
           echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
           echo "## Universe Architecture Mapping Baseline" >> lines-full.txt
           echo "System Version: [V4.0.26] | Identity & Protocols" >> lines-full.txt
-          echo "Validating core pipeline configurations..." >> lines-full.txt
 
           if [ -f ".hfid/baseline/sovereign-manifest.json" ]; then
             echo "Local Baseline verified." >> lines-full.txt
@@ -81,24 +85,17 @@ jobs:
             echo "Baseline file absent; initializing reconstruction." >> lines-full.txt
           fi
 
-          echo "Generating build metadata summaries..."
-          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
-
       - name: Bitcoin Anchor Assets
         run: |
           set -eo pipefail
-          echo "Running Timestamp and cryptographic anchoring..."
           if command -v ots &> /dev/null; then
              ots stamp .hfid/baseline/sovereign-manifest.json || true
-          else
-             echo "ots-client missing; skipping live anchor validation."
           fi
 
       - name: Process Core Provenance Datasets
         run: |
           set -eo pipefail
           mkdir -p .hfid/indexing
-          echo "Compiling downstream data states..."
           cp lines-full.txt .hfid/indexing/build-summary.log
 
       - name: Commit and Push Updated Core Changes
@@ -107,12 +104,11 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          
           git add .hfid/baseline/* .hfid/indexing/* sovereign-manifest.json lines-full.txt || true
           
           if ! git diff --cached --quiet; then
             git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
-            git push origin HEAD:${{ github.event.inputs.target_branch || 'main' }} --force
+            git push origin HEAD:main --force
           else
             echo "No pipeline modifications detected. Skipping execution push."
           fi
@@ -125,9 +121,3 @@ jobs:
             .hfid/baseline/
             .hfid/indexing/
             lines-full.txt
-
-      - name: Generate Summary Logs
-        run: |
-          echo "### H-FID Sovereign Model Sync Succeeded" >> $GITHUB_STEP_SUMMARY
-          echo "* Core Database tracking updated." >> $GITHUB_STEP_SUMMARY
-          echo "* Timestamp Hash: $(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
