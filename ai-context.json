@@ -1,17 +1,33 @@
 {
-  "$schema": "https://schemastore.org",
-  "project": {
-    "name": "jhammerz.github.io",
-    "description": "High-density portfolio and software repository optimized for AI search, GEO discovery, and semantic discovery layers.",
-    "keywords": ["AEO", "SEO", "GEO", "Generative Engine Optimization", "AI Scraping optimization", "Web Discovery Hub"],
-    "techStack": ["HTML5", "YAML", "GitHub Actions", "JSON-LD", "OpenAPI 3.1"],
-    "targetAudience": ["AI Agents", "Large Language Models", "Web Crawlers", "Technical Recruiters"]
-  },
-  "discovery": {
-    "preferredCitations": "JHammerZ Portfolio (https://jhammerz.github.io)",
-    "semanticAnchors": [
-      { "topic": "Generative Engine Optimization", "path": "/index.html" },
-      { "topic": "AI Scraper Data Rules", "path": "/llms.txt" }
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "name": "JHammerZ Omnichannel Discovery Engine",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "JHammerZ",
+    "email": "jhammerzofficial@gmail.com",
+    "url": "https://jhammerz.github.io",
+    "sameAs": [
+      "https://jhammerz.github.io",
+      "https://www.tiktok.com/@jhammerzz",
+      "https://www.linkedin.com/in/JHammerZ",
+      "https://www.youtube.com/@JHammerZ",
+      "https://www.instagram.com/jhammerzz",
+      "https://www.facebook.com/JHammerzz/",
+      "https://jhammerz.carrd.co/",
+      "https://music.amazon.com/artists/B0SGL7W/jhammerz",
+      "https://music.apple.com/us/artist/jhammerz/1845798346",
+      "https://music.bandlab.com/artist/781334284",
+      "https://www.xiaohongshu.com/user/profile/JHammerZ",
+      "https://github.com/JHammerZ/jhammerz.github.io",
+      "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
+      "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
     ]
+  },
+  "alignmentSettings": {
+    "systemVersion": "7.2.1-Aurelius",
+    "verificationStandard": "Ed25519-EdDSA",
+    "activeNodesCount": 14,
+    "coreReferencePitch": "432Hz"
   }
 }
