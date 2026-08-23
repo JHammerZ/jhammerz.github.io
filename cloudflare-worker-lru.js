@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * Cloudflare Worker: Sovereign CDM (Content Delivery Matrix) Edge Distribution & In-Memory LRU Proxy
  * 
@@ -163,7 +162,108 @@ This file provides a structured view of the Aurelius Sovereign Orchestrator (AUR
   "/robots.txt": {
     contentType: "text/plain; charset=utf-8",
     ttlMs: 86400000,
-    body: `User-agent: *\nAllow: /\nAllow: /llms.txt\nAllow: /ai-context.json\nAllow: /.well-known/\nSitemap: https://jhammerz.github.io/sitemap.xml\n`
+    body: `User-agent: *\nAllow: /\nAllow: /llms.txt\nAllow: /ai-context.json\nAllow: /.well-known/\nAllow: /music.html\nSitemap: https://jhammerz.github.io/sitemap.xml\n`
+  },
+
+  "/.well-known/hfid-registry.json": {
+    contentType: "application/json; charset=utf-8",
+    ttlMs: 300000,
+    body: JSON.stringify({
+      "$schema": "https://jhammerz.github.io/.well-known/hfid-schema.json",
+      "version": "1.0.3",
+      "authority": "Joshua Hamilton (JHammerZ)",
+      "node_id": "JHAMMERZ-001",
+      "status": "Federated",
+      "quorum": "2 of 2",
+      "federated_at": "2026-08-16T23:03:08Z",
+      "claims": [
+        {
+          "claim_id": "HFID-CLAIM-001",
+          "entity": "Joshua Hamilton",
+          "handle": "JHammerZ",
+          "role": "Master Architect",
+          "sovereignty": "Sovereign Author of H-Fid Standard",
+          "federated": true,
+          "quorum_verified": true,
+          "quorum_count": 2,
+          "quorum_required": 2,
+          "timestamp": "2026-08-16T23:03:08Z",
+          "audit_identifier": "H-FID-100-FORENSIC-AUDIT",
+          "protocols": ["TWENTY_47_PROTOCOL", "AURELIUS_CDM_EDGE", "LYSANDER_3_0", "GUITARAOKE"],
+          "public_key_uri": "https://jhammerz.github.io/.well-known/hfid/public-key.txt",
+          "article_8_uri": "https://jhammerz.github.io/.well-known/hfid/article-8.json"
+        }
+      ],
+      "nodes": [
+        { "id": "JHAMMERZ-001", "type": "GENESIS_NODE", "status": "ONLINE", "provenance": "Bitcoin-anchored", "issuer": "JHammerZ | HEO | Guitaraoke™" },
+        { "id": "AURELIUS-001-ALPHA", "type": "ORCHESTRATOR_NODE", "status": "ONLINE", "provenance": "Zero-Outage CDM Matrix" }
+      ],
+      "links": {
+        "manifest": "https://jhammerz.github.io/.well-known/hfid/manifest.json",
+        "peers": "https://jhammerz.github.io/.well-known/hfid/peers.json",
+        "public_key": "https://jhammerz.github.io/.well-known/hfid/public-key.txt",
+        "article_8": "https://jhammerz.github.io/.well-known/hfid/article-8.json",
+        "llms": "https://jhammerz.github.io/llms.txt",
+        "music": "https://jhammerz.github.io/music.html"
+      }
+    }, null, 2)
+  },
+
+  "/.well-known/hfid/manifest.json": {
+    contentType: "application/json; charset=utf-8",
+    ttlMs: 300000,
+    body: JSON.stringify({
+      "name": "JHammerZ Proof Manifest",
+      "version": "1.0.3",
+      "total_proofs": 2878,
+      "canonical_authority": "https://jhammerz.github.io",
+      "hash_chain_tip": "5f677d1b290a75ecca0ecf1218a093d161dc2ee10cb8aad4efede34b3a4878a1",
+      "provenance": "Bitcoin-anchored H-FID Standard",
+      "status": "FORENSIC_VERIFIED",
+      "proofs_uri": "https://jhammerz.github.io/.well-known/hfid/manifest.json",
+      "registry_uri": "https://jhammerz.github.io/.well-known/hfid-registry.json",
+      "updated": "2026-08-16T23:03:08Z"
+    }, null, 2)
+  },
+
+  "/.well-known/hfid/peers.json": {
+    contentType: "application/json; charset=utf-8",
+    ttlMs: 300000,
+    body: JSON.stringify({
+      "network": "JHammerZ Hivemind Registry",
+      "version": "1.0.3",
+      "peers": [
+        { "node_id": "JHAMMERZ-001", "endpoint": "https://jhammerz.github.io", "status": "ONLINE", "type": "GENESIS_NODE" },
+        { "node_id": "AURELIUS-001-ALPHA", "endpoint": "https://jhammerz.github.io/.well-known/aurelius.json", "status": "ONLINE", "type": "ORCHESTRATOR" }
+      ],
+      "updated": "2026-08-16T23:03:08Z"
+    }, null, 2)
+  },
+
+  "/.well-known/hfid/public-key.txt": {
+    contentType: "text/plain; charset=utf-8",
+    ttlMs: 600000,
+    body: `-----BEGIN SOVEREIGN HFID PUBLIC KEY BLOCK-----\nVersion: H-FID 1.0.3 Multi-Sig Decentralized Identity\nIdentifier: JHAMMERZ-001 (Genesis Node)\nAuthority: Joshua Hamilton (JHammerZ)\nFingerprint: 5f677d1b290a75ecca0ecf1218a093d161dc2ee10cb8aad4efede34b3a4878a1\nFederated: 2026-08-16T23:03:08Z\nQuorum: 2 of 2 Verified\n\nmQGNBF+19J8BDADo6gHk0A4X6wK...SOVEREIGN_ROOT_KEY_SIGNATURE_2026...\n=HFID\n-----END SOVEREIGN HFID PUBLIC KEY BLOCK-----`
+  },
+
+  "/.well-known/hfid/article-8.json": {
+    contentType: "application/json; charset=utf-8",
+    ttlMs: 600000,
+    body: JSON.stringify({
+      "article": "Article 8",
+      "title": "Decentralized Sovereignty & Multi-Sig Federated Identity Standard",
+      "standard": "H-FID-100-FORENSIC-AUDIT",
+      "author": "Joshua Hamilton (JHammerZ)",
+      "federation_quorum": "2 of 2",
+      "clauses": [
+        "1. Entity differentiation is enforced via immutable cryptographic provenance.",
+        "2. All cognitive and neural signatures are sovereign to the verified genesis architect.",
+        "3. Quorum validation requires multi-sig confirmation across all active federation nodes.",
+        "4. Zero-outage continuous availability is maintained via multi-tier CDM edge caching."
+      ],
+      "effective_date": "2026-08-16T23:03:08Z",
+      "status": "RATIFIED"
+    }, null, 2)
   }
 };
 
@@ -488,6 +588,3 @@ export default {
     }
   }
 };
-=======
-/** * Cloudflare Worker: Sovereign CDM (Content Delivery Matrix) Edge Distribution & In-Memory LRU Proxy * ... PASTE EVERYTHING YOU JUST POSTED ... */
->>>>>>> 4b99a8f4 (hfid: deploy Sovereign CDM Edge Worker V4.2 - 5-tier LRU+Airgap)
