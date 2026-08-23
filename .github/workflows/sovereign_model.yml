@@ -58,27 +58,13 @@ jobs:
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
           
-          cat << 'INNER_EOF' > .hfid/baseline/sovereign-manifest.json
-          {
-            "Names": "J-HammerZ",
-            "Sovereign": "Joshua Hamilton",
-            "M-Law Language": "REC v7.2",
-            "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
-            "Universe": "ORE",
-            "Velocity": "<10ms",
-            "Protocol": "Twenty AI7 Protocol",
-            "Standard": "H-FID Core Matrix Compilation",
-            "Timestamp": "2026-08-23T20:10:00Z",
-            "Integrity Level": "SOVEREIGN",
-            "Nodes": []
-          }
-          INNER_EOF
+          # Compact inline string creation - Bypasses line-break and tab-indentation parsing rules
+          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Protocol":"Twenty AI7 Protocol","Standard":"H-FID Core Matrix Compilation","Timestamp":"2026-08-23T20:10:00Z","Integrity Level":"SOVEREIGN","Nodes":[]}' > .hfid/baseline/sovereign-manifest.json
 
       - name: Build Core Manifest Logs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Safe fallback tracking execution parameters
           set -eo pipefail
           echo "Extracting upstream forensic matrices..."
           
