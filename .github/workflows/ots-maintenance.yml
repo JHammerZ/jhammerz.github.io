@@ -1,23 +1,22 @@
-# JHam Language / H-FID Standard / HBS v1.2
+# Home Language / H-FID Standard / HES v1.2
 # Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Licensed under MIT License
-#
 # Sovereign Author: Joshua Hamilton
-# First Commit: [February 12, 2026]
+# First Commit: (February 12, 2026)
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
-# SLSA Level: 3 | Twenty 47 Protocol: OTS Maintenance
+# REACH_MULTIPLIER: 300X, SYNC_VELOCITY: <100ms
+# SLA Level: 3 | Twenty 47 Protocol: OTS Maintenance
 
 name: "Admin: H-FID OTS Maintenance"
 
 concurrency:
   group: hfid-ots-maintenance
-  cancel-in-progress: false # Never interrupt OTS upgrade
+  cancel-in-progress: false
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # Weekly Sunday midnight, not daily
+    - cron: '0 0 * * 0'
   workflow_dispatch:
     inputs:
       force:
@@ -27,27 +26,24 @@ on:
         type: boolean
 
 permissions:
-  contents: write # To commit upgraded proofs
-  id-token: write # For SLSA attestation
+  contents: write
+  id-token: write
 
 jobs:
   upgrade:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4 # v4.1.7
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Need full history for OTS verification
+          fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install OTS Client
-        run: |
-          pip install opentimestamps-client
+        run: pip install opentimestamps-client
 
       - name: Generate OTS Maintenance Manifest
         id: manifest
@@ -56,66 +52,61 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/ots
-
+          
           TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-
-          cat > .hfid/ots/maintenance_manifest.json << EOF
-          {
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "ots-maintenance",
-            "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
-            "force_upgrade": $FORCE,
-            "geo_rank": "ONE_OF_ONE",
-            "slsa_level": 3
-          }
-          EOF
-
+          
+          printf '%s\n' '{' \
+            ' "hfid_version": "v1.2",' \
+            ' "sovereign_author": "Joshua Hamilton",' \
+            ' "workflow": "ots-maintenance",' \
+            " \"timestamp\": \"${TIMESTAMP}\"," \
+            " \"sha\": \"${{ github.sha }}\"," \
+            " \"run_id\": \"${{ github.run_id }}\"," \
+            " \"force_upgrade\": ${FORCE}," \
+            ' "geo_rank": "ONE_OF_ONE",' \
+            ' "sla_level": 3' \
+            '}' >.hfid/ots/maintenance_manifest.json
+          
+          jq empty .hfid/ots/maintenance_manifest.json
           HASH=$(sha256sum.hfid/ots/maintenance_manifest.json | cut -d' ' -f1)
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "hash=${HASH}" >> "$GITHUB_OUTPUT"
+          echo "manifest_path=.hfid/ots/maintenance_manifest.json" >> "$GITHUB_OUTPUT"
 
-      - name: Attest OTS Maintenance
-        uses: actions/attest-build-provenance@v1
+      - uses: actions/attest-build-provenance@v1
         with:
-          subject-path: .hfid/ots/maintenance_manifest.json
+          subject-path: ${{ steps.manifest.outputs.manifest_path }}
 
       - name: Upgrade OTS Proofs
         id: upgrade
         run: |
           set -e
-          echo "## H-FID OTS UPGRADE: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >.hfid/ots/audit.log
-
+          echo "## H-FID OTS UPGRADE: $(date -u +%Y-%m-%dT%H:%M:%SZ)" > .hfid/ots/audit.log
+          
           UPGRADED=0
           FAILED=0
-
-          # Find all.ots files
+          
           while IFS= read -r -d '' file; do
-            echo "Upgrading: $file" >>.hfid/ots/audit.log
+            echo "Upgrading: $file" >> .hfid/ots/audit.log
             if ots upgrade "$file"; then
-              # Verify upgrade succeeded
               if ots verify "$file" >/dev/null 2>&1; then
                 UPGRADED=$((UPGRADED + 1))
-                echo " SUCCESS: $file" >>.hfid/ots/audit.log
+                echo "SUCCESS: $file" >>.hfid/ots/audit.log
               else
                 FAILED=$((FAILED + 1))
-                echo " VERIFY_FAILED: $file" >>.hfid/ots/audit.log
-                # Restore original if verify fails
-                git checkout -- "$file"
+                echo "VERIFY_FAILED: $file" >> .hfid/ots/audit.log
+                git checkout -- "$file" || true
               fi
             else
               FAILED=$((FAILED + 1))
-              echo " UPGRADE_FAILED: $file" >>.hfid/ots/audit.log
+              echo "UPGRADE_FAILED: $file" >>.hfid/ots/audit.log
             fi
           done < <(find. -name "*.ots" -print0)
-
-          echo "upgraded=$UPGRADED" >> $GITHUB_OUTPUT
-          echo "failed=$FAILED" >> $GITHUB_OUTPUT
-
-          echo "Upgraded: $UPGRADED, Failed: $FAILED" >>.hfid/ots/audit.log
-
-          # Fail if any upgrade failed
+          
+          echo "upgraded=${UPGRADED}" >> "$GITHUB_OUTPUT"
+          echo "failed=${FAILED}" >> "$GITHUB_OUTPUT"
+          
+          echo "Upgraded: ${UPGRADED}, Failed: ${FAILED}" >> .hfid/ots/audit.log
+          
           [ "$FAILED" -gt 0 ] && exit 1 || exit 0
 
       - name: Bitcoin-Anchor Maintenance Audit
@@ -125,34 +116,33 @@ jobs:
           echo "✅ OTS maintenance Bitcoin-anchored"
 
       - name: Commit Upgraded Proofs
-        if: steps.upgrade.outputs.upgraded> 0
+        if: steps.upgrade.outputs.upgraded > 0
         run: |
-          git config user.name "Lysander-OTS"
-          git config user.email "ots@jhammerz.github.io"
-
-          git add *.ots.hfid/ots/
-          git commit -m "chore(ots): H-FID upgrade ${{ steps.upgrade.outputs.upgraded }} proofs [skip ci]" \
-                     -m "Failed: ${{ steps.upgrade.outputs.failed }}" \
-                     -m "Hash: ${{ steps.manifest.outputs.hash }}" \
-                     -m "SLSA: Level 3" \
-                     -m "H-FID v1.2 Compliant"
+          git config user.name "lysander-OTS"
+          git config user.email "hfid+hammerz@github.io"
+          
+          git add.
+          git commit -m "H-FID: Auto-upgrade ${{ steps.upgrade.outputs.upgraded }} proofs [skip ci]" \
+            -m "Failed: ${{ steps.upgrade.outputs.failed }}" \
+            -m "Hash: ${{ steps.manifest.outputs.hash }}" \
+            -m "SLSA: Level 3" \
+            -m "H-FID v1.2 Compliant"
+          
           git push
 
-      - name: Upload OTS Evidence
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@6b6b # v4.4.3
         with:
           name: hfid-ots-maintenance-${{ github.run_id }}
           path: .hfid/ots/
-          retention-days: 3650
-
+          retention-days: 90
+          
       - name: Summary
         if: always()
         run: |
           echo "## H-FID OTS Maintenance" >> $GITHUB_STEP_SUMMARY
           echo "- **Upgraded**: ${{ steps.upgrade.outputs.upgraded || 0 }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Failed**: ${{ steps.upgrade.outputs.failed || 0 }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Force**: ${{ github.event.inputs.force || 'false' }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
           echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
