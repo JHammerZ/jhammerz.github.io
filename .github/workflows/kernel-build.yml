@@ -20,13 +20,15 @@ jobs:
         run: |
           set -e
           echo "Cloning specific kernel release tree directly from GitHub mirrors..."
-          # Cloning with depth 1 ensures an instant download by pulling only the target version tag
           git clone --depth 1 --branch v6.10 https://github.com linux-6.10
           test -d linux-6.10
           
       - name: Configure Linux Source Tree Natively
         run: |
           set -e
+          # Critical Fix: Force Git to bypass safe directory ownership restrictions
+          git config --global --add safe.directory '*'
+          
           cd linux-6.10
           make defconfig
           ./scripts/config --enable CONFIG_MODULES
