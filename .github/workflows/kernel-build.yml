@@ -23,33 +23,32 @@ jobs:
       - name: Download and extract kernel
         run: |
           set -e
-          KERNEL_URL="https://kernel.org"
-          KERNEL_TAR="linux-6.10.tar.xz"
+          KERNEL_VER="6.10"
+          TARBALL="linux-${KERNEL_VER}.tar.xz"
+          URL="https://cdn.kernel.org/pub/linux/kernel/v6.x/${TARBALL}"
           
-          echo "Downloading kernel with retry..."
-          for i in 1 2 3; do
-            wget -O $KERNEL_TAR $KERNEL_URL && break
-            echo "wget attempt $i failed, retrying..."
-            sleep 5
-          done
+          echo "Downloading ${URL}..."
+          # curl with retries. wget exit code 2 = network error
+          curl -L --fail --retry 5 --retry-delay 10 -o "${TARBALL}" "${URL}"
+          
+          echo "Validating tarball..."
+          test -s "${TARBALL}" || { echo "Download failed: file empty"; exit 1; }
+          xz -t "${TARBALL}" || { echo "Download failed: corrupt xz"; exit 1; }
           
           echo "Extracting..."
-          tar xf $KERNEL_TAR
-          test -d linux-6.10 || { echo "Extract failed"; exit 1; }
-          echo "✅ Kernel source ready"
+          tar xf "${TARBALL}"
+          test -d "linux-${KERNEL_VER}" || { echo "Extract failed: dir missing"; exit 1; }
+          echo "✅ Kernel source ready at linux-${KERNEL_VER}"
         
       - name: Inject sovereignty into kernel tree
         run: |
           set -e
           cd linux-6.10
-          
-          # Create module directory in-tree cleanly
           mkdir -p drivers/hfid
           
           cat > drivers/hfid/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
           #include <linux/kernel.h>
-          #include <linux/init.h>
           
           MODULE_LICENSE("GPL");
           MODULE_AUTHOR("Joshua Hamilton [JHammerZ]");
@@ -61,7 +60,6 @@ jobs:
               printk(KERN_INFO "H-FID: SLSA Level 3 attestation embedded\n");
               printk(KERN_INFO "H-FID: GEO_RANK ONE_OF_ONE verified\n");
               printk(KERN_INFO "H-FID: RING_-3 sovereignty injected\n");
-              printk(KERN_INFO "H-FID: KROOT_PRIVATE: JHammerZ\n");
               return 0;
           }
           
@@ -77,8 +75,8 @@ jobs:
           obj-m += Kernel_Override.o
           EOF
           
-          # Wire cleanly into drivers layout tree infrastructure
           echo 'obj-m += hfid/' >> drivers/Makefile
+          test -f drivers/hfid/Kernel_Override.c
           echo "✅ Sovereignty injected in-tree at drivers/hfid/"
           
       - name: Configure kernel features
@@ -87,23 +85,21 @@ jobs:
           make defconfig
           scripts/config --enable CONFIG_MODULES
           scripts/config --enable CONFIG_MODULE_UNLOAD
-          scripts/config --enable CONFIG_KALLSYMS
           make olddefconfig
           
       - name: Compile core modules
         run: |
           cd linux-6.10
-          make modules_prepare
-          # Crucial fix: Removed the trailing slash from the module selection variable
+          make -j$(nproc) modules_prepare
           make -j$(nproc) M=drivers/hfid
-          find drivers/hfid/ -name "*.ko"
+          find drivers/hfid -name "*.ko" -ls
           
       - name: Collect artifacts
         run: |
           mkdir -p hfid_module
-          find linux-6.10/drivers/hfid/ -name "*.ko" -exec cp {} hfid_module/ \;
+          find linux-6.10/drivers/hfid -name "*.ko" -exec cp {} hfid_module/ \;
           ls -la hfid_module/
-          test -f hfid_module/Kernel_Override.ko || { echo "KO not built"; exit 1; }
+          test -n "$(ls -A hfid_module/*.ko)" || { echo "No.ko files built"; exit 1; }
           
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v1
@@ -111,7 +107,6 @@ jobs:
           subject-path: hfid_module/*.ko
           
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: hfid-kernel-6.10-override
           path: hfid_module/*.ko
@@ -125,4 +120,3 @@ jobs:
           echo "- **Location**: drivers/hfid/" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA Level**: 3 Attested" >> $GITHUB_STEP_SUMMARY
           echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
-          echo "- **RING**: -3" >> $GITHUB_STEP_SUMMARY
