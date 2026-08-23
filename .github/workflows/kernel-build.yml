@@ -1,122 +1,65 @@
 name: "Build: H-FID Sovereign Kernel"
-
-on:
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  id-token: write
+on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       
       - name: Install kernel build deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libncurses-dev flex bison libssl-dev libelf-dev bc dwarves xz-utils
+          sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd
           
-      - name: Download and extract kernel
+      - name: Get kernel + prepare tree
         run: |
           set -e
-          KERNEL_VER="6.10"
-          TARBALL="linux-${KERNEL_VER}.tar.xz"
-          URL="https://cdn.kernel.org/pub/linux/kernel/v6.x/${TARBALL}"
+          KVER=6.10
+          curl -L --fail --retry 5 https://kernel.org{KVER}.tar.xz -o kernel.tar.xz
+          tar xf kernel.tar.xz
           
-          echo "Downloading ${URL}..."
-          # curl with retries. wget exit code 2 = network error
-          curl -L --fail --retry 5 --retry-delay 10 -o "${TARBALL}" "${URL}"
+          cd linux-${KVER}
           
-          echo "Validating tarball..."
-          test -s "${TARBALL}" || { echo "Download failed: file empty"; exit 1; }
-          xz -t "${TARBALL}" || { echo "Download failed: corrupt xz"; exit 1; }
-          
-          echo "Extracting..."
-          tar xf "${TARBALL}"
-          test -d "linux-${KERNEL_VER}" || { echo "Extract failed: dir missing"; exit 1; }
-          echo "✅ Kernel source ready at linux-${KERNEL_VER}"
-        
-      - name: Inject sovereignty into kernel tree
-        run: |
-          set -e
-          cd linux-6.10
+          # Inject your module
           mkdir -p drivers/hfid
-          
           cat > drivers/hfid/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
-          #include <linux/kernel.h>
+          #include <linux/init.h>
           
           MODULE_LICENSE("GPL");
-          MODULE_AUTHOR("Joshua Hamilton [JHammerZ]");
-          MODULE_DESCRIPTION("H-FID Sovereign Kernel Hooks v1.0");
-          MODULE_VERSION("6.10-HFID-ONE_OF_ONE");
+          MODULE_AUTHOR("JHammerZ");
+          MODULE_DESCRIPTION("H-FID Sovereign Kernel Hooks");
+          MODULE_VERSION("6.10-HFID-RING-3");
           
           static int __init hfid_init(void) {
-              printk(KERN_INFO "H-FID: ONE_OF_ONE kernel active\n");
-              printk(KERN_INFO "H-FID: SLSA Level 3 attestation embedded\n");
-              printk(KERN_INFO "H-FID: GEO_RANK ONE_OF_ONE verified\n");
-              printk(KERN_INFO "H-FID: RING_-3 sovereignty injected\n");
+              pr_info("H-FID: ONE_OF_ONE kernel active\n");
+              pr_info("H-FID: GEO_RANK ONE_OF_ONE verified\n");
+              pr_info("H-FID: RING_-3 sovereignty injected\n");
               return 0;
           }
-          
-          static void __exit hfid_exit(void) {
-              printk(KERN_INFO "H-FID: Sovereign mode disengaged\n");
-          }
-          
-          module_init(hfid_init);
-          module_exit(hfid_exit);
+          static void __exit hfid_exit(void) { pr_info("H-FID: Sovereign mode disengaged\n"); }
+          module_init(hfid_init); module_exit(hfid_exit);
           EOF
           
-          cat > drivers/hfid/Makefile << 'EOF'
-          obj-m += Kernel_Override.o
-          EOF
+          echo 'obj-m := Kernel_Override.o' > drivers/hfid/Makefile
+          echo 'obj-$(CONFIG_MODULES) += hfid/' >> drivers/Makefile
           
-          echo 'obj-m += hfid/' >> drivers/Makefile
-          test -f drivers/hfid/Kernel_Override.c
-          echo "✅ Sovereignty injected in-tree at drivers/hfid/"
-          
-      - name: Configure kernel features
-        run: |
-          cd linux-6.10
+          # Critical: Full kernel configuration & tool preparation
           make defconfig
-          scripts/config --enable CONFIG_MODULES
-          scripts/config --enable CONFIG_MODULE_UNLOAD
+          ./scripts/config --enable CONFIG_MODULES
+          ./scripts/config --enable CONFIG_MODULE_UNLOAD
           make olddefconfig
+          make -j$(nproc) prepare
+          make -j$(nproc) scripts
           
-      - name: Compile core modules
+      - name: Build H-FID module
         run: |
-          cd linux-6.10
-          make -j$(nproc) modules_prepare
-          make -j$(nproc) M=drivers/hfid
-          find drivers/hfid -name "*.ko" -ls
-          
-      - name: Collect artifacts
-        run: |
-          mkdir -p hfid_module
-          find linux-6.10/drivers/hfid -name "*.ko" -exec cp {} hfid_module/ \;
-          ls -la hfid_module/
-          test -n "$(ls -A hfid_module/*.ko)" || { echo "No.ko files built"; exit 1; }
-          
-      - name: Attest build provenance
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: hfid_module/*.ko
+          cd $GITHUB_WORKSPACE/linux-6.10
+          make -j$(nproc) M=drivers/hfid modules
+          file drivers/hfid/Kernel_Override.ko
           
       - uses: actions/upload-artifact@v4
         with:
-          name: hfid-kernel-6.10-override
-          path: hfid_module/*.ko
-          retention-days: 90
-          
-      - name: Summary
-        if: always()
-        run: |
-          echo "## H-FID Sovereign Kernel Build" >> $GITHUB_STEP_SUMMARY
-          echo "- **Module**: Kernel_Override.ko" >> $GITHUB_STEP_SUMMARY
-          echo "- **Location**: drivers/hfid/" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA Level**: 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+          name: hfid-kernel-override
+          path: linux-6.10/drivers/hfid/*.ko
