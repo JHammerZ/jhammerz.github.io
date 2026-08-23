@@ -58,7 +58,6 @@ jobs:
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
           
-          # Writing raw sovereign configuration maps safely into target directories
           cat << 'INNER_EOF' > .hfid/baseline/sovereign-manifest.json
           {
             "Names": "J-HammerZ",
@@ -79,7 +78,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Keep execution fluid without brittle variable constraint exceptions
+          # Safe fallback tracking execution parameters
           set -eo pipefail
           echo "Extracting upstream forensic matrices..."
           
@@ -127,8 +126,6 @@ jobs:
           
           if ! git diff --cached --quiet; then
             git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
-            
-            # Use explicit branch mapping target to eliminate non-fast-forward push loops
             git push origin HEAD:${{ github.event.inputs.target_branch || 'main' }} --force
           else
             echo "No pipeline modifications detected. Skipping execution push."
