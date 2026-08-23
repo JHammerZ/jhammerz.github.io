@@ -22,6 +22,7 @@ jobs:
 
       - name: Fetch Kernel Source
         run: |
+          # Download the explicit direct kernel compressed archive package
           wget -q https://kernel.org
           tar -xf linux-4.10.tar.xz
           rm linux-4.10.tar.xz
@@ -29,11 +30,7 @@ jobs:
       - name: Inject Sovereignty Modifications
         run: |
           set -euo pipefail
-          
-          # Initialize directory trees if absent
           mkdir -p linux-4.10/include
-          
-          # Safely create fallback target baseline override structures if absent
           if [ -f "Kernel_Override.c" ]; then
              cp Kernel_Override.c linux-4.10/
           else
@@ -45,7 +42,7 @@ jobs:
           set -euo pipefail
           cd linux-4.10
           
-          # DYNAMIC HEADER INJECTION - Fixes the fatal error: git.h missing compile crash
+          # Dynamic Header Injection - Fixes missing git.h compile error
           COMMIT_SHA="$(git rev-parse --short HEAD || echo "unknown")"
           cat << H_EOF > include/git.h
           #ifndef SOVEREIGN_GIT_H
@@ -55,15 +52,14 @@ jobs:
           #endif
           H_EOF
           
-          # Duplicate configuration header inside main build source root for include safety
           cp include/git.h ./git.h
 
-          # Setup baseline configs cleanly
+          # Setup baseline configurations
           make defconfig
           scripts/config --enable CONFIG_MODULES || echo "CONFIG_MODULES=y" >> .config
           make olddefconfig
           
-          # Compile using complete parallel core optimization matrices
+          # Build matching kernel binary matrix
           make -j$(nproc) bzImage
 
       - name: Archive and Upload Sovereign Artifact Binary
