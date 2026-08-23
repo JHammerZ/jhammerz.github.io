@@ -20,15 +20,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libncurses-dev flex bison libssl-dev libelf-dev bc dwarves
           
-      - name: Download kernel
-        run: wget https://kernel.org
-        
-      - name: Extract
-        run: tar xf linux-6.10.tar.xz
-        
-      - name: Inject sovereignty
+      - name: Download and extract kernel
         run: |
-          # Create isolated module folder outside of core source tree
+          wget -O linux-6.10.tar.xz https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.10.tar.xz
+          tar xf linux-6.10.tar.xz
+        
+      - name: Inject sovereignty source
+        run: |
           mkdir -p hfid_module
           cat > hfid_module/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
@@ -55,10 +53,10 @@ jobs:
           module_exit(hfid_exit);
           EOF
           
-          cat > hfid_module/Kbuild << 'EOF'
+          cat > hfid_module/Makefile << 'EOF'
           obj-m += Kernel_Override.o
           EOF
-
+          
       - name: Configure kernel
         run: |
           cd linux-6.10
@@ -69,8 +67,8 @@ jobs:
           
       - name: Build sovereignty module
         run: |
-          # Build external module correctly using absolute pathing
-          make -C linux-6.10 M=$PWD/hfid_module modules
+          # Use absolute workspace paths to execute the out-of-tree build cleanly
+          make -C $GITHUB_WORKSPACE/linux-6.10 M=$GITHUB_WORKSPACE/hfid_module modules
           
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v1
