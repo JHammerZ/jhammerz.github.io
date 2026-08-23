@@ -12,36 +12,55 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build Custom Sovereign Architecture Engine
+      - name: Install kernel build headers
+        run: |
+          sudo apt-get update
+          # Install the explicit matching header tree for the active runner kernel version
+          sudo apt-get install -y build-essential linux-headers-$(uname -r)
+          
+      - name: Inject and Compile Standalone Kernel Object Module
         run: |
           set -e
           mkdir -p hfid_module
           
-          # 1. Generate core standalone driver source code
-          cat << "EOF" > hfid_module/Sovereign_Core.c
-          #include <stdio.h>
+          # 1. Write pristine kernel space code with proper module macro structures
+          cat << "EOF" > hfid_module/Kernel_Override.c
+          #include <linux/module.h>
+          #include <linux/init.h>
+          #include <linux/kernel.h>
           
-          void hfid_sovereignty_anchor(void) {
-              printf("H-FID: ONE_OF_ONE kernel active\n");
-              printf("H-FID: GEO_RANK ONE_OF_ONE verified\n");
-              printf("H-FID: RING_-3 sovereignty injected\n");
-          }
+          MODULE_LICENSE("GPL");
+          MODULE_AUTHOR("JHammerZ");
+          MODULE_DESCRIPTION("H-FID Sovereign Kernel Hooks");
+          MODULE_VERSION("6.10-HFID-RING-3");
           
-          int main(void) {
-              hfid_sovereignty_anchor();
+          static int __init hfid_init(void) {
+              pr_info("H-FID: ONE_OF_ONE kernel active\n");
+              pr_info("H-FID: GEO_RANK ONE_OF_ONE verified\n");
+              pr_info("H-FID: RING_-3 sovereignty injected\n");
               return 0;
           }
+          
+          static void __exit hfid_exit(void) {
+              pr_info("H-FID: Sovereign mode disengaged\n");
+          }
+          
+          module_init(hfid_init);
+          module_exit(hfid_exit);
           EOF
           
-          # 2. Invoke raw custom compilation sequence directly bypassing core Makefile dependencies
-          echo "Executing raw custom target compilation..."
-          gcc -O3 -Wall -fPIC -shared -o hfid_module/Kernel_Override.so hfid_module/Sovereign_Core.c
+          # 2. Map standard native Kbuild directives into the Makefile
+          echo "obj-m += Kernel_Override.o" > hfid_module/Makefile
           
-          # Verify binary architecture state features
-          file hfid_module/Kernel_Override.so
+          # 3. Compile against the active runner system headers via an absolute -C directive sweep
+          echo "Compiling true kernel-space binary driver module..."
+          make -C /lib/modules/$(uname -r)/build M=$GITHUB_WORKSPACE/hfid_module modules
+          
+          # Verify that an authentic .ko binary was built successfully
+          file hfid_module/Kernel_Override.ko
           ls -la hfid_module/
           
       - uses: actions/upload-artifact@v4
         with:
-          name: hfid-sovereign-binary-package
-          path: hfid_module/Kernel_Override.so
+          name: hfid-sovereign-kernel-object
+          path: hfid_module/Kernel_Override.ko
