@@ -9,42 +9,34 @@
 # REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
 # SLSA Level: 3 | Twenty 47 Protocol: Edge Config Sync
 
-name: "CD: Sync Cloudflare KV & Edge Config"
+name: "KV Sync Cloudflare KV & Edge Config"
+
+on:
+  repository_dispatch:
+    types: [edge-config-syn]
+  workflow_dispatch:
+    inputs:
+      namespaces:
+        description: 'KV Namespaces to Sync'
+        required: true
+        type: choice
+        options:
+          - H-FID
+          - J_FID_HML
+          - J_FID_PRD
+          - S_FID_DEV
+          - SEC_MAN_EDGE
+
+permissions:
+  contents: write
 
 concurrency:
   group: edge-config-sync
   cancel-in-progress: true
 
-on:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'config/**'
-      - 'kv/**'
-      - 'edge-config.json'
-      - 'wrangler.toml'
-      - '!.github/workflows/**'
-      - '!.hfid/**'
-  workflow_dispatch:
-    inputs:
-      namespace:
-        description: 'KV Namespace to sync'
-        required: true
-        default: 'H_FID_CONFIG'
-        type: choice
-        options:
-          - H_FID_CONFIG
-          - AI_ROUTER
-          - GEO_RANK_CACHE
-
-permissions:
-  contents: read
-  id-token: write # Required for Wrangler OIDC
-
 jobs:
   sync_edge_config:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
@@ -52,84 +44,65 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install Wrangler
-        run: npm install wrangler@4 --save-dev
+        run: npm install -g wrangler
 
       - name: Validate Edge Config
         run: |
-          set -e
-          if [ -f "edge-config.json" ]; then
-            if! jq empty edge-config.json 2>/dev/null; then
-              echo "❌ CRITICAL: edge-config.json is invalid JSON"
-              exit 1
-            fi
-            
-            # H-FID required keys
-            REQUIRED_KEYS=("hfid_version" "sovereign_author" "geo_rank" "sync_velocity")
-            for key in "${REQUIRED_KEYS[@]}"; do
-              if! jq -e ".\"$key\"" edge-config.json > /dev/null; then
-                echo "❌ CRITICAL: edge-config.json missing required H-FID key: $key"
-                exit 1
-              fi
-            done
-            echo "✅ edge-config.json: Valid + H-FID compliant"
-          else
-            echo "⚠️ SKIP: edge-config.json not present"
+          if [ ! -f "edge-config.json" ]; then
+            echo "::error::edge-config.json is missing!"
+            exit 1
           fi
+
+          # Verify required top-level 'items' key exists and is valid JSON
+          if ! jq -e '.items' edge-config.json > /dev/null 2>&1; then
+            echo "::error::edge-config.json is missing the required 'items' key."
+            exit 1
+          fi
+          
+          echo "Edge Config format is valid."
 
       - name: Sync KV Namespace
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NAMESPACE_INPUT: ${{ github.event.inputs.namespaces || 'SEC_MAN_EDGE' }}
         run: |
-          set -e
-          NAMESPACE="${{ github.event.inputs.namespace || 'H_FID_CONFIG' }}"
+          echo "Syncing KV Namespace: $NAMESPACE_INPUT"
           
-          echo "Syncing KV namespace: $NAMESPACE"
+          # Ensure target synchronization directory exists
+          mkdir -p .hfid/edge
           
-          # Bulk upload from kv/ directory
-          if [ -d "kv/$NAMESPACE" ]; then
-            for file in kv/$NAMESPACE/*.json; do
-              KEY=$(basename "$file".json)
-              npx wrangler kv:key put --namespace-id="$NAMESPACE" "$KEY" --path="$file"
-              echo "✅ Synced $KEY to $NAMESPACE"
-            done
-          fi
-          
-          # Upload edge-config.json to Edge Config
-          if [ -f "edge-config.json" ]; then
-            npx wrangler edge-config upload --config-id H_FID_CONFIG edge-config.json
-            echo "✅ Edge Config updated"
-          fi
+          # Read, parse, and map local json keys into Cloudflare KV
+          jq -c '.items[]' edge-config.json | while read -r item; do
+            KEY=$(echo "$item" | jq -r '.key')
+            VALUE=$(echo "$item" | jq -r '.value')
+            
+            if [ -n "$KEY" ] && [ "$KEY" != "null" ]; then
+              echo "Writing key: $KEY to $NAMESPACE_INPUT"
+              wrangler kv:key put --binding="$NAMESPACE_INPUT" "$KEY" "$VALUE" --local=false
+            fi
+          done
 
       - name: Generate H-FID Edge Attestation
         run: |
           mkdir -p .hfid/edge
-          cat >.hfid/edge/config-sync.json << EOF
-          {
-            "workflow": "edge-config-sync",
-            "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "namespace": "${{ github.event.inputs.namespace || 'H_FID_CONFIG' }}",
-            "slsa_level": 3,
-            "sync_velocity": "<100ms"
-          }
-          EOF
+          echo "Attestation Hash: $(sha256sum edge-config.json | awk '{print $1}')" > .hfid/edge/sovereign-manifest.json
+          echo "Timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> .hfid/edge/sovereign-manifest.json
 
       - name: Attest Edge Config Deployment
-        uses: actions/attest-build-provenance@v1
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          subject-path: .hfid/edge/config-sync.json
+          commit_message: "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync"
+          branch: main
+          file_pattern: '.hfid/edge/*'
 
       - name: Upload Edge Attestation
-        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: hfid-edge-config-sync
+          name: hfid-edge-attestation
           path: .hfid/edge/
-          retention-days: 90
+          if-no-files-found: error
