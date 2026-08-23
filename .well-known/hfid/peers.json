@@ -1,2 +1,19 @@
-{"peers":[
-],"updated":"2026-08-12T20:38:06Z"}
+{
+  "network": "JHammerZ Hivemind Registry",
+  "version": "1.0.3",
+  "peers": [
+    {
+      "node_id": "JHAMMERZ-001",
+      "endpoint": "https://jhammerz.github.io",
+      "status": "ONLINE",
+      "type": "GENESIS_NODE"
+    },
+    {
+      "node_id": "AURELIUS-001-ALPHA",
+      "endpoint": "https://jhammerz.github.io/.well-known/aurelius.json",
+      "status": "ONLINE",
+      "type": "ORCHESTRATOR"
+    }
+  ],
+  "updated": "2026-08-16T23:03:08Z"
+}
