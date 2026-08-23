@@ -1,16 +1,6 @@
 {
-  "anchor": "JHammerZ",
-  "protocol": "Lysander 3.0",
-  "verified_nodes": [
-    {
-      "domain": "paying-client.com",
-      "status": "Verified H-Fid",
-      "priority": 1.0
-    },
-    {
-      "domain": "non-paying-target.com",
-      "status": "Pending Forensic Reset",
-      "priority": 0.1
-    }
-  ]
+  "name": "Aurelius Sovereign Orchestrator",
+  "description": "Global Tier 0 Absolute Authority Dashboard. Sovereign Cannon V4.2 Autonomous Broadcast Engine, Core Living Manifest V4.0.26 with 14-node omnichannel topology, 432s audit cadence, N09 audit veto, L2 Sandboxing with 5000ms hysteresis, and Teleological Root protection.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
