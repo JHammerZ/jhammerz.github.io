@@ -71,13 +71,13 @@ jobs:
           
       - name: Build sovereignty module
         run: |
-          # Use relative paths anchored to the root directory run context
           make -C linux-6.10 -j$(nproc) M=hfid modules
           
       - name: Collect artifacts
         run: |
           mkdir -p hfid_module
-          cp linux-6.10/hfid/*.ko hfid_module/
+          # Use find to locate the .ko regardless of Kbuild nested directory generation
+          find linux-6.10/hfid/ -name "*.ko" -exec cp {} hfid_module/ \;
           ls -la hfid_module/
           
       - name: Attest build provenance
