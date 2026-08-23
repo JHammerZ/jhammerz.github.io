@@ -1,0 +1,57 @@
+name: Sovereign Kernel Forge
+
+on: [push, workflow_dispatch]
+
+concurrency:
+  group: forge-kernel-lock
+  cancel-in-progress: true
+
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Install Toolchain Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev bc jq
+
+      - name: Fetch Kernel Source
+        run: |
+          wget -q https://kernel.org
+          tar -xf linux-4.10.tar.xz
+          rm linux-4.10.tar.xz
+
+      - name: Inject Sovereignty Modifications
+        run: |
+          set -euo pipefail
+          
+          # Safely create fallback target baseline override structures if absent
+          if [ -f "Kernel_Override.c" ]; then
+             cp Kernel_Override.c linux-4.10/
+          else
+             mkdir -p linux-4.10
+             echo "// Sovereign System Entry Hook" > linux-4.10/Kernel_Override.c
+          fi
+
+      - name: Compile and Build Sovereign Kernel
+        run: |
+          set -euo pipefail
+          cd linux-4.10
+          
+          # Setup baseline configs cleanly 
+          make defconfig
+          scripts/config --enable CONFIG_MODULES || echo "CONFIG_MODULES=y" >> .config
+          make olddefconfig
+          
+          # Compile using complete parallel core optimization matrices
+          make -j$(nproc) bzImage
+
+      - name: Archive and Upload Sovereign Artifact Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: bzImage-ALPHA-PRIME
+          path: linux-4.10/arch/x86/boot/bzImage
+          if-no-files-found: error
