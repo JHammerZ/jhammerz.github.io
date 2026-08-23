@@ -1,5 +1,9 @@
+# robots.txt for Aurelius Sovereign Orchestrator
+# Verified Master Alignments and Public Sockets allowed
+
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /ai-context.json
 
-Sitemap: https://jhammerz.github.io/llms-full.txt
 Sitemap: https://jhammerz.github.io/sitemap.xml
