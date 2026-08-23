@@ -1,0 +1,40 @@
+[
+  {
+    "blockIndex": 0,
+    "blockId": "WORM-GENESIS-a8b6e2e4",
+    "previousHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "merkleRoot": "1801e7a68070ba72022962b3eac573ef5f5582c2481021eff57dea82fafc7af6",
+    "timestamp": "2026-08-23T04:24:32.262Z",
+    "author": "JHammerZ",
+    "authority": "HUMAN_KERNEL_ABSOLUTE",
+    "signature": "55367fa2d42d032702ffd2d64be9c6e9146588a965f4b7d3fb0f470859fe54e532ce731c46a90f0d51bd1522cad5e08d18e4b31c48652d045572b3a2151c8c98",
+    "payloadHash": "1801e7a68070ba72022962b3eac573ef5f5582c2481021eff57dea82fafc7af644685ce0f8f13d8f2258851e3c7648aee8d228625e37adb088ceedc8e57fd8b0",
+    "data": {
+      "declaration": "ALPHA PRIME: Sovereign Human Root of Trust Genesis",
+      "architect": "JHammerZ",
+      "authority": "HUMAN_KERNEL_ABSOLUTE",
+      "protocol": "H-FID-100-WORM-V1",
+      "privilegeEscalation": "RING_-3_SUPREME_KERNEL_UNRESTRICTED",
+      "consensusEnforcement": "DISABLED_HUMAN_SOVEREIGN_ABSOLUTE"
+    },
+    "immutableLock": true,
+    "tamperSeal": "22a99e4f9d6544a5d436e65bf0cc32b72a3ee482cbd183b9b6a7d18c73424515"
+  },
+  {
+    "blockIndex": 1,
+    "blockId": "WORM-ALPHA_LOCK-mt5azcq7-cbb76a",
+    "previousHash": "22a99e4f9d6544a5d436e65bf0cc32b72a3ee482cbd183b9b6a7d18c73424515",
+    "merkleRoot": "6e9ee29233cdac358242447cc390ab0ce7b22bac62b0285887180caab63fffdd",
+    "timestamp": "2026-08-23T04:24:34.350Z",
+    "author": "JHammerZ",
+    "authority": "HUMAN_KERNEL_ABSOLUTE",
+    "signature": "875d74b4e855e8988f605f2a4c03aa5390b09622c279ff8e05f51a5aa6cad758fb05be29e7050af4138a5835a3b8e73534f02b9797415edaa34277fbadca494b",
+    "payloadHash": "5b3678784b56c55963eb43364ac99aba6766f193ba54b2e6f893d8786f9fde5b6f8c60ecf62ea15ae9ed167b04021dfbe833e442df8b1172b4910de14c20b3cb",
+    "data": {
+      "payload": "Immutable sovereign kernel state confirmed",
+      "tag": "ALPHA_LOCK"
+    },
+    "immutableLock": true,
+    "tamperSeal": "ca8b6df7c621ca7d5965ed50393eb9fb50faeccbcd2e8386cae5f438fc558e1b"
+  }
+]
