@@ -46,7 +46,7 @@ jobs:
           pip install opentimestamps-client
 
       - name: Create Results Directory
-        run: mkdir -p.hfid/results
+        run: mkdir -p .hfid/results
 
       - name: Run Sovereign OTS Verification
         id: verify
