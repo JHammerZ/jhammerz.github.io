@@ -17,25 +17,14 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      defense_mode:
-        description: 'Defense mode variant allocation payload structure mapping'
+      target_url:
+        description: "Specific URL to index"
         required: false
-        type: choice
-        default: 'Sovereign'
-        options:
-          - Sovereign
-          - Grid-Lock
-          - Recovery
-          - Forensic-Audit
-  pull_request:
-    branches:
-      - main
-  repository_dispatch:
-    types: [ hfid-defense-sync ]
+        type: string
 
 concurrency:
   group: h-fid-unified-matrix
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -44,13 +33,9 @@ permissions:
 
 env:
   DEFAULT_BRANCH: main
-  HFID_ENGINE_TARGET: "Sovereign"
 
 jobs:
-  # =========================================================================
-  # JOB 1: Core Data Repository Compilation Track
-  # =========================================================================
-  stabilize-grid:
+  build-and-sync:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -67,71 +52,97 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          # Properly integrated standard packages to readd the needed tools
-          sudo apt-get install -y jq openssl android-sdk-platform-tools android-tools-adb
+          sudo apt-get install -y jq openssl
 
       - name: Install Python Clients
         run: |
           python -m pip install --upgrade pip
-          pip install opentimestamps-client
+          pip install opentimestamps-client google-auth google-api-python-client requests
 
       - name: Initialize JSON Core Matrices
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
-          
-          cat << 'INNER_EOF' > .hfid/baseline/sovereign-manifest.json
-          {
-            "Names": "J-HammerZ",
-            "Sovereign": "Joshua Hamilton",
-            "M-Law Language": "REC v7.2",
-            "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
-            "Universe": "ORE",
-            "Velocity": "<10ms",
-            "Protocol": "Twenty AI7 Protocol",
-            "Standard": "H-FID Core Matrix Compilation",
-            "Timestamp": "2026-08-23T20:10:00Z",
-            "Integrity Level": "SOVEREIGN",
-            "Nodes": []
-          }
-          INNER_EOF
+          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Protocol":"Twenty AI7 Protocol","Standard":"H-FID Core Matrix Compilation","Timestamp":"2026-08-23T20:10:00Z","Integrity Level":"SOVEREIGN","Nodes":[]}' > .hfid/baseline/sovereign-manifest.json
+
+      - name: Extract URLs from Sitemap
+        run: |
+          set -euo pipefail
+          mkdir -p .hfid/indexing
+          if [ -f "sitemap.xml" ]; then
+             grep -oPm1 "(?<=<loc>)[^<]+" sitemap.xml > .hfid/indexing/urls.txt || echo "https://github.io" > .hfid/indexing/urls.txt
+          else
+             echo "https://github.io" > .hfid/indexing/urls.txt
+          fi
+
+      - name: FORCE Google Indexing API
+        env:
+          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: |
+          set -euo pipefail
+          if [ -z "$GOOGLE_API_KEY_DATA" ]; then
+             echo "::error::GOOGLE_INDEXING_API_JSON secret is blank or missing."
+             exit 1
+          fi
+          echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
+
+          python - << 'PY_EOF'
+          import os
+          import json
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+
+          try:
+              with open('.the-google-creds.json', 'r') as f:
+                  creds_data = json.load(f)
+          except Exception as e:
+              print(f"::error::JSON parse failure: {e}")
+              raise
+
+          try:
+              credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://googleapis.com'])
+              service = build('indexing', 'v3', credentials=credentials)
+          except Exception as e:
+              print(f"::error::Auth handshake failed: {e}")
+              raise
+
+          url_list = []
+          if os.path.exists('.hfid/indexing/urls.txt'):
+              with open('.hfid/indexing/urls.txt', 'r') as f:
+                  url_list = [line.strip() for line in f if line.strip()]
+          if not url_list:
+              url_list = ['https://github.io']
+
+          for target_url in url_list:
+              print(f"Publishing indexing request for: {target_url}")
+              body = {'url': target_url, 'type': 'URL_UPDATED'}
+              try:
+                  res = service.urlNotifications().publish(body=body).execute()
+                  print(f"API Response: {res}")
+              except Exception as e:
+                  print(f"Notification error for {target_url}: {e}")
+          PY_EOF
+          rm -f .the-google-creds.json
 
       - name: Build Core Manifest Logs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
+          set -eo pipefail
           echo "Extracting upstream forensic matrices..."
           jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
-
           echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
-          echo "## Universe Architecture Mapping Baseline" >> lines-full.txt
-          echo "System Version: [V4.0.26] | Identity & Protocols" >> lines-full.txt
-          echo "Validating core pipeline configurations..." >> lines-full.txt
-
-          if [ -f ".hfid/baseline/sovereign-manifest.json" ]; then
-            echo "Local Baseline verified." >> lines-full.txt
-          else
-            echo "Baseline file absent; initializing reconstruction." >> lines-full.txt
-          fi
-
-          echo "Generating build metadata summaries..."
-          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
 
       - name: Bitcoin Anchor Assets
         run: |
-          set -euo pipefail
-          echo "Running Timestamp and cryptographic anchoring..."
+          set -eo pipefail
           if command -v ots &> /dev/null; then
              ots stamp .hfid/baseline/sovereign-manifest.json || true
-          else
-             echo "ots-client missing; skipping live anchor validation."
           fi
 
       - name: Process Core Provenance Datasets
         run: |
-          set -euo pipefail
+          set -eo pipefail
           mkdir -p .hfid/indexing
-          echo "Compiling downstream data states..."
           cp lines-full.txt .hfid/indexing/build-summary.log
 
       - name: Commit and Push Updated Core Changes
@@ -140,13 +151,9 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          
           git add .hfid/baseline/* .hfid/indexing/* sovereign-manifest.json lines-full.txt || true
-          
           if ! git diff --cached --quiet; then
             git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
-            git fetch origin main
-            git rebase origin/main
             git push origin HEAD:main --force
           else
             echo "No pipeline modifications detected. Skipping execution push."
@@ -160,103 +167,3 @@ jobs:
             .hfid/baseline/
             .hfid/indexing/
             lines-full.txt
-
-      - name: Generate Summary Logs
-        run: |
-          echo "### H-FID Sovereign Model Sync Succeeded" >> $GITHUB_STEP_SUMMARY
-          echo "* Core Database tracking updated." >> $GITHUB_STEP_SUMMARY
-          echo "* Timestamp Hash: $(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
-
-  # =========================================================================
-  # JOB 2: Security Grid & Defender Archival Track
-  # =========================================================================
-  stabilize-defense-grid:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Install System Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq openssl
-
-      - name: Initialize Defense Manifest
-        run: |
-          mkdir -p .hfid/defense
-          
-          cat << 'INNER_EOF' > .hfid/defense/sovereign-manifest.json
-          {
-            "Names": "J-HammerZ",
-            "Sovereign": "Joshua Hamilton",
-            "M-Law Language": "REC v7.2",
-            "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
-            "Universe": "ORE",
-            "Velocity": "<10ms",
-            "Protocol": "Twenty AI7 Protocol",
-            "Standard": "H-FID Core Matrix Compilation",
-            "Timestamp": "2026-08-23T20:10:00Z",
-            "Integrity Level": "SOVEREIGN",
-            "Nodes": []
-          }
-          INNER_EOF
-
-      - name: Intercept and Validate Defense Matrix
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          echo "Initiating forensic verification layers..."
-          
-          jq -c '.' .hfid/defense/sovereign-manifest.json > /dev/null
-
-          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > defense-lines.txt
-          echo "## Universe Architecture Mapping Baseline" >> defense-lines.txt
-          echo "System Version: [V4.0.26] | Identity & Protocols" >> defense-lines.txt
-
-          if [ -f ".hfid/defense/sovereign-manifest.json" ]; then
-             echo "Local Baseline verified." >> defense-lines.txt
-          else
-             echo "Baseline file absent; initializing reconstruction." >> defense-lines.txt
-          fi
-
-      - name: Bitcoin Anchor Defense Audit
-        run: |
-          set -euo pipefail
-          echo "Verifying local state indexes..."
-          if command -v ots &> /dev/null; then
-             ots stamp .hfid/defense/sovereign-manifest.json || true
-          else
-             echo "ots-client missing; skipping live anchor validation."
-          fi
-
-      - name: Commit Changes and Propagate State
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          
-          git add .hfid/defense/* defense-lines.txt || true
-          
-          if ! git diff --cached --quiet; then
-            git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
-            git push origin HEAD:main --force
-          else
-            echo "Zero identity matrix mutations detected. Skipping push state."
-          fi
-
-      - name: Upload Defense Evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-defense-attestation
-          path: |
-            .hfid/defense/
-            defense-lines.txt
