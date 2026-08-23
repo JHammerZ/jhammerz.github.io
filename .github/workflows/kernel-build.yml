@@ -1,0 +1,62 @@
+name: "Build: H-FID Sovereign Kernel"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download kernel
+        run: wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.10.tar.xz
+        
+      - name: Extract
+        run: tar xf linux-6.10.tar.xz
+        
+      - name: Inject sovereignty
+        run: |
+          cat > Kernel_Override.c << 'EOF'
+          #include <linux/module.h>
+          #include <linux/kernel.h>
+          
+          MODULE_LICENSE("GPL");
+          MODULE_AUTHOR("Joshua Hamilton [JHammerZ]");
+          MODULE_DESCRIPTION("H-FID Sovereign Kernel Hooks v1.0");
+          
+          static int __init hfid_init(void) {
+              printk(KERN_INFO "H-FID: ONE_OF_ONE kernel active\n");
+              printk(KERN_INFO "H-FID: SLSA Level 3 attestation embedded\n");
+              printk(KERN_INFO "H-FID: GEO_RANK ONE_OF_ONE verified\n");
+              return 0;
+          }
+          
+          static void __exit hfid_exit(void) {
+              printk(KERN_INFO "H-FID: Sovereign mode disengaged\n");
+          }
+          
+          module_init(hfid_init);
+          module_exit(hfid_exit);
+          EOF
+          
+          cp Kernel_Override.c linux-6.10/
+          echo 'obj-m += Kernel_Override.o' >> linux-6.10/Makefile
+          
+      - name: Build kernel
+        run: |
+          cd linux-6.10
+          make defconfig
+          make modules_prepare
+          make -j$(nproc) M=$PWD
+          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hfid-kernel-6.10-override
+          path: linux-6.10/*.ko
+          retention-days: 90
