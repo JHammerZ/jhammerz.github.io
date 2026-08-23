@@ -105,7 +105,7 @@ jobs:
 
       - name: Commit Sovereign Update
         run: |
-          git add manifest.json.hfid/sovereign/
+          git add .hfid/sovereign/manifest.json
           git commit -m "Forensic Reset: Autonomous Update [InfiniteX active] | Twenty 47 | ${{ steps.inject.outputs.payload_hash }}" || echo "Nothing to commit"
           git push origin main
 
