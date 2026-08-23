@@ -16,7 +16,7 @@ jobs:
         run: |
           set -e
           KVER=6.10
-          curl -L --fail --retry 5 https://kernel.org{KVER}.tar.xz -o kernel.tar.xz
+          curl -L --fail --retry 5 https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KVER}.tar.xz -o kernel.tar.xz
           tar xf kernel.tar.xz
           
           cd linux-${KVER}
@@ -62,4 +62,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: hfid-kernel-override
-          path: linux-6.10/drivers/hfid/*.ko
+          # Critical fix: Use the absolute path mapping parameter variable
+          path: /home/runner/work/jhammerz.github.io/jhammerz.github.io/linux-6.10/drivers/hfid/Kernel_Override.ko
