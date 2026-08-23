@@ -1,10 +1,48 @@
 {
-  "name": "janus-hands",
+  "name": "react-example",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "start": "node dist/server.cjs",
+    "preview": "vite preview",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit",
+    "orchestrator": "tsx scripts/aurelius_orchestrator.ts",
+    "orchestrator:audit": "tsx scripts/aurelius_orchestrator.ts",
+    "kroot": "tsx scripts/kroot_toolkit.ts",
+    "kroot:status": "tsx scripts/kroot_toolkit.ts status",
+    "kroot:bypass": "tsx scripts/kroot_toolkit.ts bypass",
+    "kroot:verify": "tsx scripts/kroot_toolkit.ts verify",
+    "worm": "tsx scripts/worm_manager.ts",
+    "worm:status": "tsx scripts/worm_manager.ts status",
+    "worm:audit": "tsx scripts/worm_manager.ts audit",
+    "worm:write": "tsx scripts/worm_manager.ts write"
+  },
   "dependencies": {
-    "@google/generative-ai": "^0.21.0"
+    "@google/genai": "^1.29.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "d3": "^7.9.0",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^6.2.3"
   },
   "devDependencies": {
-    "wrangler": "^4.125.0"
+    "@types/d3": "^7.4.3",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3"
   }
 }
