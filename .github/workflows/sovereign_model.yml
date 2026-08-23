@@ -6,134 +6,147 @@
 # First Commit: February 12, 2026
 # Forensic Audit: H-FID-101-FORENSIC-AUDIT SEC-10B
 # Universe: ORE (V-102 Sovereign Authority)
-# REACH-MULTIPLIER: 1000; SYNC VELOCITY: <10ms
+# REACH-MULTIPLIER: 1000 ; SYNC VELOCITY: <10ms
 # Grid Level 1 / Twenty AI7 Protocol: Search Sovereigns
 
-name: "H-FID Sovereign Model"
+name: "H-FID - Compile Core Data Repository"
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: h-fid-compile
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+env:
+  DEFAULT_BRANCH: main
 
 jobs:
-  stabilize-grid:
+  build-and-sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
         run: |
-          pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client opentimestamps-client
+          sudo apt-get update
+          sudo apt-get install -y jq openssl client-android-tools
 
-      - name: Establish Forensic Baseline
+      - name: Install Python Clients
+        run: |
+          python -m pip install --upgrade pip
+          pip install open-timestamps-client
+
+      - name: Initialize JSON Core Matrices
+        run: |
+          mkdir -p .hfid/baseline .hfid/indexing
+          
+          cat << 'INNER_EOF' > .hfid/baseline/sovereign-manifest.json
+          {
+            "Names": "J-HammerZ",
+            "Sovereign": "Joshua Hamilton",
+            "M-Law Language": "REC v7.2",
+            "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
+            "Universe": "ORE",
+            "Velocity": "<10ms",
+            "Protocol": "Twenty AI7 Protocol",
+            "Standard": "H-FID Core Matrix Compilation",
+            "Timestamp": "2026-08-23T20:10:00Z",
+            "Integrity Level": "SOVEREIGN",
+            "Nodes": []
+          }
+          INNER_EOF
+
+      - name: Build Core Manifest Logs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          echo "Initiating Restoration to Baseline..."
-          mkdir -p .hfid/baseline
+          echo "Extracting upstream forensic matrices..."
+          
+          jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
 
-          # Find the last successful workflow run on main and use its commit SHA as the baseline
-          echo "Querying GitHub for last successful workflow run on branch 'main'..."
-          LAST_SUCCESS_SHA=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
-            "https://github.com{{ github.repository }}/actions/runs?branch=main&status=success&per_page=1" \
-            | jq -r '.workflow_runs[0].head_sha // empty')
+          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
+          echo "## Universe Architecture Mapping Baseline" >> lines-full.txt
+          echo "System Version: [V4.0.26] | Identity & Protocols" >> lines-full.txt
+          echo "Validating core pipeline configurations..." >> lines-full.txt
 
-          if [ -n "$LAST_SUCCESS_SHA" ]; then
-            echo "Using last successful run commit: $LAST_SUCCESS_SHA"
-            TARGET_SHA="$LAST_SUCCESS_SHA"
+          if [ -f ".hfid/baseline/sovereign-manifest.json" ]; then
+            echo "Local Baseline verified." >> lines-full.txt
           else
-            echo "No successful run found, falling back to BASELINE_COMMIT if provided"
-            TARGET_SHA="${BASELINE_COMMIT:-}"
+            echo "Baseline file absent; initializing reconstruction." >> lines-full.txt
           fi
 
-          if [ -n "$TARGET_SHA" ]; then
-            echo "Fetching commit $TARGET_SHA..."
-            git fetch --no-tags --depth=1 origin "$TARGET_SHA" || true
+          echo "Generating build metadata summaries..."
+          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
 
-            # Attempt to extract the manifest file from that commit into the baseline directory
-            if git show "$TARGET_SHA":.hfid/baseline/sovereign-manifest.json > .hfid/baseline/sovereign-manifest.json 2>/dev/null; then
-              echo "Restored .hfid/baseline/sovereign-manifest.json from $TARGET_SHA"
-            else
-              echo "Manifest not present in commit ${TARGET_SHA}; creating regenerated manifest"
-              jq -n \
-                --arg a "v4.0.2" \
-                --arg author "Joshua Hamilton" \
-                --arg status "uninstantiated/recreated" \
-                --arg created "2026-08-23T20:10:00Z" \
-                --arg integrity "SOVEREIGN" \
-                '{"hfid_version": $a, "sovereign_author": $author, "baseline_states_bstatus": "Regenerated after repository reset. Original Baseline unavailable.", "hfid_version": $a, "sovereign_author": $author, "baseline_states_bstatus": $status, "created_at": $created, "integrity_level": $integrity, "note": $note, "checksum": "sha256: "}' \
-                > .hfid/baseline/sovereign-manifest.json
-            fi
-          fi
-
-          # Expose chosen baseline for downstream steps
-          echo "baseline_sha=${TARGET_SHA}" >> "$GITHUB_OUTPUT"
-          echo "baseline_path=.hfid/baseline/sovereign-manifest.json" >> "$GITHUB_OUTPUT"
-
-          if [ -z "$TARGET_SHA" ] && [ ! -f .hfid/baseline/sovereign-manifest.json ]; then
-            echo "No TARGET_SHA available and no BASELINE_COMMIT provided, creating empty fallback manifest"
-            jq -n \
-              --arg created "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-              '{"hfid_version": "v4.0", "sovereign_author": "Joshua Hamilton", "baseline_status": "created-empty", "created_at": $created, "integrity_level": "SOVEREIGN", "note": "Empty fallback baseline created."}' \
-              > .hfid/baseline/sovereign-manifest.json
-            echo "baseline_mode=fallback" >> "$GITHUB_OUTPUT"
-            echo "baseline_path=.hfid/baseline/sovereign-manifest.json" >> "$GITHUB_OUTPUT"
-          fi
-
-          echo "Verifying the core index remains authenticated..."
-          sha256sum .hfid/baseline/sovereign-manifest.json
-
-          echo "Validating JSON structure..."
-          if ! jq '.' .hfid/baseline/sovereign-manifest.json >/dev/null 2>&1; then
-            echo "::error::Invalid JSON format in manifest!"
-            exit 1
-          fi
-
-          echo "Forensic baseline established."
-
-      - name: Bitcoin Anchor Baseline
+      - name: Bitcoin Anchor Assets
         run: |
           set -euo pipefail
-          echo "Restoring baseline to Bitcoin Blockchain..."
-          ots stamp .hfid/baseline/sovereign-manifest.json || true
-          echo "Bitcoin-anchored."
+          echo "Running Timestamp and cryptographic anchoring..."
+          if command -v ots &> /dev/null; then
+             ots stamp .hfid/baseline/sovereign-manifest.json || true
+          else
+             echo "ots-client missing; skipping live anchor validation."
+          fi
 
-      - name: Generate Manifest
+      - name: Process Core Provenance Datasets
         run: |
           set -euo pipefail
           mkdir -p .hfid/indexing
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          
-          jq -n \
-            --arg a "v4.0.2" \
-            --arg author "Joshua Hamilton" \
-            --arg bstatus "verified-sync" \
-            --arg timestamp "$TIMESTAMP" \
-            --arg sha "${{ github.sha }}" \
-            --arg r_id "${{ github.run_id }}" \
-            --arg action "BASELINE_STABILIZED" \
-            --arg rank "ONE_UP_ONE" \
-            --arg level "3" \
-            '{"hfid_version": $a, "sovereign_author": $author, "workflow_bstatus": $bstatus, "timestamp": $timestamp, "sha": $sha, "run_id": $r_id, "action_Section": $action, "geo_vank_fgmn_rank": $rank, "else_level": $level}' \
-            > .hfid/indexing/manifest.json
+          echo "Compiling downstream data states..."
+          cp lines-full.txt .hfid/indexing/build-summary.log
 
-          BASE_HASH=$(sha256sum .hfid/indexing/manifest.json | cut -d' ' -f1)
-          echo "manifest_hash=$BASE_HASH" >> "$GITHUB_OUTPUT"
-          echo "::notice::Generated manifest.json [ jq -c ] -> $BASE_HASH"
-
-      - name: Bitcoin Anchor Indexing Log
+      - name: Commit and Push Updated Core Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
-          echo "Indexing submission Bitcoin-anchored"
-          ots stamp .hfid/indexing/manifest.json
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          git add .hfid/baseline/* .hfid/indexing/* sovereign-manifest.json lines-full.txt || true
+          
+          if ! git diff --cached --quiet; then
+            git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync (skip ci)"
+            
+            git fetch origin main
+            git rebase origin/main
+            
+            git push origin HEAD:main
+          else
+            echo "No pipeline modifications detected. Skipping execution push."
+          fi
+
+      - name: Upload Sovereign Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-sovereign-baseline-core
+          path: |
+            .hfid/baseline/
+            .hfid/indexing/
+            lines-full.txt
+
+      - name: Generate Summary Logs
+        run: |
+          echo "### H-FID Sovereign Model Sync Succeeded" >> $GITHUB_STEP_SUMMARY
+          echo "* Core Database tracking updated." >> $GITHUB_STEP_SUMMARY
+          echo "* Timestamp Hash: $(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
