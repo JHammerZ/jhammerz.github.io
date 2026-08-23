@@ -1,5 +1,5 @@
 # ==============================================================================
-# SOVEREIGN PRODUCTION BASELINE WORKFLOW // JHammerZ // V4.0.26 // STABILIZED
+# SOVEREIGN PRODUCTION BASELINE WORKFLOW // JHammerZ // V4.0.26 // RACE FIX
 # COMPATIBILITY: GITHUB-RUNNER-LINUX-X64
 # MANDATE: FORENSIC BASELINE LOCK & RECOVERY INTEGRITY MATRIX
 # ==============================================================================
@@ -8,7 +8,7 @@ name: "Sovereign Model Baseline"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false # Modified to false to process queues sequentially
 
 on:
   schedule:
@@ -43,7 +43,7 @@ jobs:
       - name: 🛰️ Checkout Sovereign Truth
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Pull full history to safely handle branches and rebases
 
       - name: ⚙️ Setup Python Toolchain Environment
         uses: actions/setup-python@v5
@@ -67,7 +67,6 @@ jobs:
           
           mkdir -p .hfid/baseline
           
-          # FIXED: Clean, properly structured, and safely isolated Heredoc definition
           cat <<EOF > .hfid/baseline/sovereign-manifest.json
           {
             "baseline_sha": "\${BASELINE_SHA}",
@@ -113,6 +112,12 @@ jobs:
           
           if ! git diff --cached --quiet; then
             git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
+            
+            # FIXED: Mitigate parallel push racing conditions via atomic rebase loops
+            echo "Pulling latest upstream history using rebase mechanism..."
+            git pull --rebase origin HEAD:${{ github.ref }}
+            
+            echo "Pushing verified baseline records to remote grid repository..."
             git push origin HEAD:${{ github.ref }}
           else
             echo "Zero identity matrix mutations detected. Skipping push state."
@@ -121,7 +126,6 @@ jobs:
       - name: 📊 Generate Summary Logs for Workflow Terminal View
         if: always()
         run: |
-          # Use single-quoted bash echo statements to isolate markdown braces from YAML structural interpretation
           echo '### 🛡️ Sovereign Model Baseline Summary' >> "$GITHUB_STEP_SUMMARY"
           echo '* **Manifest Reference Code:** `V4.0.26`' >> "$GITHUB_STEP_SUMMARY"
           echo '* **System Baseline State:** `LIVING / LOCK_ESTABLISHED`' >> "$GITHUB_STEP_SUMMARY"
