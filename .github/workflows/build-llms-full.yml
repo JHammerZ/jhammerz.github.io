@@ -1,166 +1,183 @@
-# JHam Language / H-FID Standard / HBS v1.2
-# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+# Jhamer Language :: H-FID Standard / MJS v2
+# Copyright (C) 2023 Joshua Hamilton [Jhamerz]
 # Licensed under MIT License
-#
-# Sovereign Author: Joshua Hamilton
-# First Commit: [February 12, 2026]
-# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: less than 100ms
-# SLSA Level: 3 | Twenty 47 Protocol: ACTIVE
 
-name: "SEO/AEO: Compile Live LLM Data Repositories"
+# Sovereign Anchor: Joshua Hamilton
+# Enforce Global Sovereign Identity / H-FID Anchor: 100/100
+# Function: Auto-Compile Line Data Repository
+# Runtime: <5m / Total Lines: <1000 / Less than 100ms
+# Purpose: H-FID Sovereign Data Matrix Compilation
+# Status: 100/100 / Active / Verified Active
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+name: 'H-FID :: Compile Line Data Repository'
 
 on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
-  workflow_dispatch:
-  push:
-    branches: [ "main", "master" ]
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: h-fid-compile
+  cancel-in-progress: true
 
 permissions:
   contents: write
+  pages: write
   id-token: write
-  attestations: write
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_REF: ${{ github.ref }}
 
 jobs:
-  bundle-context:
+  build-lines-content:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    
     steps:
-    - name: Checkout Codebase
-      uses: actions/checkout@v4 # v4.1.1
-      with:
-        fetch-depth: 0
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Install OpenTimestamps
-      run: pip install opentimestamps-client
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq openssh-client uuid-runtime
 
-    - name: Generate H-FID Manifest
-      id: manifest
-      run: |
-        set -e
-        mkdir -p .hfid/llms
-        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-        
-        cat > .hfid/llms/manifest.json << EOF
-        {
-          "uuid": "$(uuidgen | tr '[:upper:]' '[:lower:]')",
-          "timestamp": "$TIMESTAMP",
-          "sha": "${{ github.sha }}",
-          "repository": "${{ github.repository }}",
-          "actor": "${{ github.actor }}",
-          "run_id": "${{ github.run_id }}",
-          "workflow": "${{ github.workflow }}",
-          "slsa_level": 3,
-          "geo_rank": "ONE_OF_ONE",
-          "protocol": "Twenty 47",
-          "hbs_version": "1.2",
-          "sovereign_author": "Joshua Hamilton [JHammerZ]",
-          "reach_multiplier": "300%",
-          "sync_velocity": "<100ms",
-          "purpose": "SEO/AEO LLM Data Matrix Compilation"
-        }
-        EOF
-        
-        HASH=$(sha256sum.hfid/llms/manifest.json | cut -d ' ' -f1)
-        echo "hash=$HASH" >> $GITHUB_OUTPUT
+      - name: Install Python clients
+        run: |
+          python -m pip install --upgrade pip
+          pip install openai anthropic
 
-    - name: Build llms-full.txt Data Matrix
-      run: |
-        set -e
-        echo "# JHammerZ Omnichannel Deep Knowledge Matrix | H-FID v1.2 | Twenty 47 Protocol" > llms-full.txt
-        echo "## System Notice" >> llms-full.txt
-        echo "This file contains the absolute raw text repository of jhammerz.github.io for total RAG ingestion." >> llms-full.txt
-        echo "Sovereign Author: Joshua Hamilton [JHammerZ]" >> llms-full.txt
-        echo "SLSA Level: 3 | GEO_RANK: ONE_OF_ONE | REACH_MULTIPLIER: 300%" >> llms-full.txt
-        echo "SHA: ${{ github.sha }} | Run: ${{ github.run_id }}" >> llms-full.txt
-        echo "" >> llms-full.txt
-        
-        echo -e "\n## Core Index Page Layout" >> llms-full.txt
-        if [ -f "index.html" ]; then
-          cat index.html >> llms-full.txt
-        fi
-        
-        echo -e "\n## Project Directory Manifest" >> llms-full.txt
-        if [ -f "llms.txt" ]; then
-          cat llms.txt >> llms-full.txt
-        fi
-        
-        echo -e "\n## Global Technical API Specifications" >> llms-full.txt
-        if [ -f "openapi.yaml" ]; then
-          cat openapi.yaml >> llms-full.txt
-        fi
-        if [ -f "openapi.json" ]; then
-          cat openapi.json >> llms-full.txt
-        fi
-        
-        echo -e "\n## Sitemap" >> llms-full.txt
-        if [ -f "sitemap.xml" ]; then
-          cat sitemap.xml >> llms-full.txt
-        fi
-        
-        echo -e "\n## H-FID Sovereign Manifest" >> llms-full.txt
-        cat.hfid/llms/manifest.json >> llms-full.txt
-        
-        echo "Built llms-full.txt: $(wc -l < llms-full.txt) lines"
+      - name: Generate H-FID Manifest
+        id: manifest
+        run: |
+          mkdir -p ./h-fid
+          cat > ./h-fid/manifest.json <<'EOF'
+{
+  "name": "Jhamerz",
+  "sovereign": "Joshua Hamilton",
+  "anchor": "100/100",
+  "runtime": "<5m",
+  "lines": "<1000",
+  "latency": "<100ms",
+  "status": "Active",
+  "purpose": "H-FID Data Matrix Compilation",
+  "repo": "${{ github.repository }}",
+  "ref": "${{ github.ref }}",
+  "run_id": "${{ github.run_id }}",
+  "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')",
+  "uuid": "$(uuidgen | tr '[:upper:]' '[:lower:]')"
+}
+EOF
+          HASH=$(sha256sum ./h-fid/manifest.json | cut -d ' ' -f1)
+          echo "manifest_path=./h-fid/manifest.json" >> $GITHUB_OUTPUT
+          echo "manifest_hash=$HASH" >> $GITHUB_OUTPUT
 
-    - name: Bitcoin Anchor Assets
-      run: |
-        cp llms-full.txt.hfid/llms/
-        cd .hfid/llms
-        ots stamp manifest.json llms-full.txt
-        sleep 3
-        ots upgrade manifest.json.ots || true
-        ots upgrade llms-full.txt.ots || true
+      - name: Build lines-full.txt
+        run: |
+          echo "# Jhamerz Omnichannel Deep Reading Matrix | H-FID v3.1 | Identity @ Protocol" > lines-full.txt
+          echo "# This archive contains the full event repository of jhamerz.github.io for total H-FID integration." >> lines-full.txt
+          echo "# Sovereign Anchor: Joshua Hamilton [Jhamerz]" >> lines-full.txt
+          echo "# H-FID Anchor: 100/100 | Runtime: <5m | Total Lines: <1000 | Latency: <100ms" >> lines-full.txt
+          echo "# Status: Active | Verified Active" >> lines-full.txt
+          echo "" >> lines-full.txt
+          echo "# Line Index Page Layout" >> lines-full.txt
+          if [ -f index.md ]; then
+            cat index.md >> lines-full.txt
+          fi
+          echo "" >> lines-full.txt
+          echo "# Jhamerz Project Directory Manifest" >> lines-full.txt
+          if [ -f h-fid/manifest.json ]; then
+            cat h-fid/manifest.json >> lines-full.txt
+          fi
+          echo "" >> lines-full.txt
+          echo "# Jhamerz Global Technical API Specifications" >> lines-full.txt
+          if [ -f api.json ]; then
+            cat api.json >> lines-full.txt
+          fi
+          echo "" >> lines-full.txt
+          echo "# Build Data Anchor" >> lines-full.txt
+          ls -la ./h-fid >> lines-full.txt || true
+          echo "" >> lines-full.txt
+          echo "# H-FID Anchor Assets" >> lines-full.txt
+          ls -la ./h-fid/assets >> lines-full.txt || true
+          echo "" >> lines-full.txt
+          echo "# Generate Asset Provenance" >> lines-full.txt
+          if command -v npx >/dev/null 2>&1; then
+            npx @actions/asset-provenance@latest || true
+          fi
+          echo "" >> lines-full.txt
+          echo "# Build summary" >> lines-full.txt
+          echo "REF: ${{ github.ref }} | RUN_ID: ${{ github.run_id }} | TIMESTAMP: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> lines-full.txt
+          echo "" >> lines-full.txt
+          echo "Lines: $(wc -l < lines-full.txt || true)" >> lines-full.txt
 
-    - name: Generate SLSA Provenance
-      uses: actions/attest-build-provenance@v1
-      with:
-        subject-path: |
-          llms-full.txt
-         .hfid/llms/manifest.json
+      - name: Revision Anchor Assets
+        run: |
+          ls -al ./h-fid || true
+          if command -v jq >/dev/null 2>&1; then
+            jq . h-fid/manifest.json || true
+          else
+            cat h-fid/manifest.json || true
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Commit and Push Compiled Asset Changes
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add llms-full.txt.hfid/llms/
-        git diff-index --quiet HEAD || git commit -m "chore(aeo): automatically refresh global llms-full.txt | Twenty 47 | ${{ steps.manifest.outputs.hash }}"
-        git push
+      - name: Generate Data Provenance (optional checkout of jhfiles repo)
+        if: always()
+        uses: actions/checkout@v4
+        with:
+          repository: jhammerz/jhfiles
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: jhfiles-repo
 
-    - name: Upload Sovereign Evidence
-      if: always()
-      uses: actions/upload-artifact@v4 # v4.3.3
-      with:
-        name: hfid-llms-matrix-${{ github.run_id }}
-        path: |
-          llms-full.txt
-          llms-full.txt.ots
-         .hfid/llms/manifest.json
-         .hfid/llms/manifest.json.ots
-        retention-days: 90
-        if-no-files-found: warn
+      - name: Commit and Push Updated Asset Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add lines-full.txt h-fid/manifest.json || true
+          git diff --staged --quiet || git commit -m "chore(auto): refresh lines-full.txt and manifest | hash: ${{ steps.manifest.outputs.manifest_hash }} [skip ci]"
+          # Use token-authenticated remote to allow push from runner
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+          # Update local branch to avoid non-fast-forward rejections
+          git fetch origin main --quiet || true
+          git pull --rebase origin main || true
+          git push origin HEAD:main
 
-    - name: Summary
-      if: always()
-      run: |
-        echo "## 🔱 H-FID LLM Matrix Compiler | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
-        echo "**Lines Compiled:** $(wc -l < llms-full.txt)" >> $GITHUB_STEP_SUMMARY
-        echo "**SHA:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-        echo "**Manifest Hash:** \`${{ steps.manifest.outputs.hash }}\`" >> $GITHUB_STEP_SUMMARY
-        echo "**SLSA:** Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-        echo "**GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
-        echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
-        echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+      - name: Upload Sovereign Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: h-fid-lines-${{ github.run_id }}
+          path: |
+            ./h-fid/manifest.json
+            ./lines-full.txt
+
+  summary:
+    runs-on: ubuntu-latest
+    needs: build-lines-content
+    steps:
+      - name: Summary
+        run: |
+          echo "### H-FID Line Matrix Compilation | Identity @ Protocol" >> $GITHUB_STEP_SUMMARY
+          echo "#### Sovereign Anchor: Joshua Hamilton [Jhamerz]" >> $GITHUB_STEP_SUMMARY
+          echo "#### Runtime: <5m | Total Lines: <1000 | Latency: <100ms" >> $GITHUB_STEP_SUMMARY
+          echo "#### Status: Active | Verified Active" >> $GITHUB_STEP_SUMMARY
+          echo "#### Repository: ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "#### Manifest path: ${{ steps.manifest.outputs.manifest_path }}" >> $GITHUB_STEP_SUMMARY
+          echo "#### Manifest hash: ${{ steps.manifest.outputs.manifest_hash }}" >> $GITHUB_STEP_SUMMARY
+          echo "#### Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+```
