@@ -1,11 +1,24 @@
-title: JHammerZ H-FID Registry
-email: your-email@example.com
-description: >-
-  Human-Federated Identity Directory by Joshua Hamilton
-baseurl: ""
+title: JHammerZ Sovereign Hub
+description: Autonomous Distributed Network & Knowledge Matrix
 url: "https://jhammerz.github.io"
-theme: minima
+baseurl: ""
+
 plugins:
-    - jekyll-feed
-    - jekyll-seo-tag
-include: [".well-known"]
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+exclude:
+  - node_modules/
+  - vendor/
+  - .config/
+  - backups/
+  - server.ts
+  - package.json
+  - package-lock.json
+  - tsconfig.json
+  - vite.config.ts
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
