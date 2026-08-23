@@ -1,0 +1,15 @@
+{
+  "article": "Article 8",
+  "title": "Decentralized Sovereignty & Multi-Sig Federated Identity Standard",
+  "standard": "H-FID-100-FORENSIC-AUDIT",
+  "author": "Joshua Hamilton (JHammerZ)",
+  "federation_quorum": "2 of 2",
+  "clauses": [
+    "1. Entity differentiation is enforced via immutable cryptographic provenance.",
+    "2. All cognitive and neural signatures are sovereign to the verified genesis architect.",
+    "3. Quorum validation requires multi-sig confirmation across all active federation nodes.",
+    "4. Zero-outage continuous availability is maintained via multi-tier CDM edge caching."
+  ],
+  "effective_date": "2026-08-16T23:03:08Z",
+  "status": "RATIFIED"
+}
