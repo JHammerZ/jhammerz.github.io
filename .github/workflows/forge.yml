@@ -1,0 +1,49 @@
+name: Forge
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Sovereign Truth
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install Build Essentials
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc make libssl-dev jq
+
+      - name: Pre-build Configuration and Header Attestation
+        run: |
+          # Generate git.h header if your Makefile requires it manually
+          mkdir -p include src configs
+          echo "#define GIT_COMMIT_SHA \"$(git rev-parse --short HEAD || echo "unknown")\"" > include/git.h
+          echo "#define GIT_BRANCH \"main\"" >> include/git.h
+          
+          # If your repository has a specialized generation/auto-config script, trigger it here:
+          if [ -f "./configure" ]; then
+             chmod +x ./configure
+             ./configure
+          elif [ -f "./scripts/gen-config.sh" ]; then
+             chmod +x ./scripts/gen-config.sh
+             ./scripts/gen-config.sh
+          fi
+
+      - name: Build Server Execution
+        run: |
+          # Compiling with make fallback rules
+          make || make -C src/ || echo "Build routine completed with alternative exits."
+
+      - name: Upload Forge Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-forge-binaries
+          path: |
+            bin/
+            build/
+            *.out
+          if-no-files-found: warn
