@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install Toolchain Environment
         run: |
@@ -28,11 +30,13 @@ jobs:
         run: |
           set -euo pipefail
           
+          # Initialize directory trees if absent
+          mkdir -p linux-4.10/include
+          
           # Safely create fallback target baseline override structures if absent
           if [ -f "Kernel_Override.c" ]; then
              cp Kernel_Override.c linux-4.10/
           else
-             mkdir -p linux-4.10
              echo "// Sovereign System Entry Hook" > linux-4.10/Kernel_Override.c
           fi
 
@@ -41,7 +45,20 @@ jobs:
           set -euo pipefail
           cd linux-4.10
           
-          # Setup baseline configs cleanly 
+          # DYNAMIC HEADER INJECTION - Fixes the fatal error: git.h missing compile crash
+          COMMIT_SHA="$(git rev-parse --short HEAD || echo "unknown")"
+          cat << H_EOF > include/git.h
+          #ifndef SOVEREIGN_GIT_H
+          #define SOVEREIGN_GIT_H
+          #define GIT_COMMIT_SHA "$COMMIT_SHA"
+          #define GIT_BRANCH "main"
+          #endif
+          H_EOF
+          
+          # Duplicate configuration header inside main build source root for include safety
+          cp include/git.h ./git.h
+
+          # Setup baseline configs cleanly
           make defconfig
           scripts/config --enable CONFIG_MODULES || echo "CONFIG_MODULES=y" >> .config
           make olddefconfig
