@@ -76,7 +76,6 @@ jobs:
       - name: Collect artifacts
         run: |
           mkdir -p hfid_module
-          # Use find to locate the .ko regardless of Kbuild nested directory generation
           find linux-6.10/hfid/ -name "*.ko" -exec cp {} hfid_module/ \;
           ls -la hfid_module/
           
