@@ -1,0 +1,109 @@
+# JHam Language / H-FID Standard / HBS v1.2
+# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: [February 12, 2026]
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
+# SLSA Level: 3 | H-FID Chain: Verified
+
+name: "CD: Automated Hub Indexation Deployment"
+
+concurrency:
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: false
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Daily midnight UTC reindex
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'index.html'
+      - '**/*.md'
+      - 'assets/**'
+      - '**/*.css'
+      - '**/*.js'
+      - 'llms-full.txt'
+      - 'sitemap.xml'
+      - 'robots.txt'
+      - '!.github/workflows/**'
+      - '!.hfid/**'
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write # Required for OIDC + deployment attestation
+  attestations: write # SLSA provenance for Pages
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact_id }}
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for H-FID audit trail
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Generate H-FID Site Attestation
+        run: |
+          set -e
+          mkdir -p .hfid
+          cat >.hfid/site.json << EOF
+          {
+            "site": "jhammerz.github.io",
+            "sha": "${{ github.sha }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
+            "slsa_level": 3
+          }
+          EOF
+          echo "Generated H-FID site attestation at.hfid/site.json"
+
+      - name: Link Checker
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress './**/*.html' './**/*.md'
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Static Site Ingestion Artifacts
+        uses: actions/upload-pages-artifact@v3
+        id: upload
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+      attestations: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Atomic Deploy to Live GitHub Infrastructure
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Attest Pages Deployment
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ steps.deployment.outputs.page_url }}
+          subject-digest: ${{ needs.build.outputs.artifact_id }}

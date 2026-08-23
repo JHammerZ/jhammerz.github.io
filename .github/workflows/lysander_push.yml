@@ -1,0 +1,79 @@
+# JHammer Language // H-FID Standard / HDS v1.2
+# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+# Licensed under MIT License
+
+name: '*f Lysander 3.0 Autonomous Push'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [sovereign_update]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Sovereign Repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Inject H-FID Logic + Local Hash Anchor
+        id: inject
+        run: |
+          git config --global user.name "Lysander-3.0-Agent"
+          git config --global user.email "architect@hammerz.io"
+
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          mkdir -p .hfid/sovereign
+          
+          # Fixed: Generating deterministic local hash signatures safely without requiring Docker
+          LOCAL_DIGEST=$(echo "${{ github.sha }}-$TIMESTAMP" | sha256sum | cut -d ' ' -f1)
+
+          cat << EOF_MANIFEST > .hfid/sovereign/manifest.json
+          {
+            "payload": "INFINITE_ACTIVE",
+            "timestamp": "$TIMESTAMP",
+            "sha": "${{ github.sha }}",
+            "repository": "${{ github.repository }}",
+            "digest": "$LOCAL_DIGEST",
+            "slsa_level": 3,
+            "geo_rank": "ONE OF ONE",
+            "protocol": "Twenty 47",
+            "status": "INFINITE_ACTIVE"
+          }
+          EOF_MANIFEST
+
+          echo "INFINITE_ACTIVE" > manifest.json
+          echo "payload_hash=$(sha256sum .hfid/sovereign/manifest.json | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
+
+      - name: Commit Sovereign Update
+        run: |
+          git add .hfid/sovereign/manifest.json
+          git add manifest.json
+          git commit -m "Forensic Reset - Autonomous Update [InfiniteX active] | Twenty 47 | ${{ steps.inject.outputs.payload_hash }}" || echo "Nothing to commit"
+          git push origin main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

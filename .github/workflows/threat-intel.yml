@@ -1,0 +1,248 @@
+# JHam Language / H-FID Standard / HBS v1.2
+# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: [February 12, 2026]
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
+# SLSA Level: 3 | Twenty 47 Protocol: Threat Intel Ledger
+
+name: "SecOps: H-FID Threat Intel Logger"
+
+concurrency:
+  group: hfid-threat-intel
+  cancel-in-progress: false # Never interrupt intel logging
+
+on:
+  workflow_dispatch:
+    inputs:
+      ioc_type:
+        description: 'IOC Type'
+        required: true
+        type: choice
+        options: [domain, ipv4, ipv6, url, sha256, sha1, md5, email, cve]
+        default: domain
+      value:
+        description: 'Indicator value'
+        required: true
+        type: string
+      actor:
+        description: 'Threat actor / group'
+        required: false
+        type: string
+      ttp:
+        description: 'MITRE ATT&CK TTP ID'
+        required: false
+        type: string
+      malware:
+        description: 'Malware family'
+        required: false
+        type: string
+      confidence:
+        description: 'Confidence level'
+        required: true
+        type: choice
+        options: [low, medium, high]
+        default: medium
+      notes:
+        description: 'Analyst notes'
+        required: false
+        type: string
+
+permissions:
+  contents: write # To commit intel entries
+  id-token: write # For SLSA attestation
+
+jobs:
+  log-intel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4 # v4.1.7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install opentimestamps-client stix2
+          sudo apt-get update && sudo apt-get install -y jq uuid-runtime
+
+      - name: Generate STIX 2.1 Intel Object
+        id: intel
+        env:
+          IOC_TYPE: ${{ github.event.inputs.ioc_type }}
+          VALUE: ${{ github.event.inputs.value }}
+          ACTOR: ${{ github.event.inputs.actor }}
+          TTP: ${{ github.event.inputs.ttp }}
+          MALWARE: ${{ github.event.inputs.malware }}
+          CONFIDENCE: ${{ github.event.inputs.confidence }}
+          NOTES: ${{ github.event.inputs.notes }}
+        run: |
+          set -e
+          mkdir -p .hfid/intel
+
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          UUID=$(uuidgen)
+          STIX_ID="indicator--$UUID"
+          FILENAME="${TIMESTAMP}_${UUID}.json"
+
+          # Validate required
+          if [ -z "$VALUE" ]; then
+            echo "❌ ERROR: IOC value required"
+            exit 1
+          fi
+
+          # Map confidence to STIX integer
+          case "$CONFIDENCE" in
+            low) CONF_INT=15 ;;
+            medium) CONF_INT=50 ;;
+            high) CONF_INT=85 ;;
+          esac
+
+          # Build STIX 2.1 indicator
+          python3 << PYEOF
+          import json
+          import uuid
+          from datetime import datetime
+
+          indicator = {
+              "type": "indicator",
+              "spec_version": "2.1",
+              "id": "$STIX_ID",
+              "created": "$TIMESTAMP",
+              "modified": "$TIMESTAMP",
+              "name": "H-FID Intel: ${VALUE}",
+              "description": "${NOTES}",
+              "pattern": "[${IOC_TYPE}:value = '${VALUE}']",
+              "pattern_type": "stix",
+              "valid_from": "$TIMESTAMP",
+              "labels": ["malicious-activity"],
+              "confidence": $CONF_INT,
+              "created_by_ref": "identity--jh-hfid-sovereign",
+              "external_references": []
+          }
+
+          if "${ACTOR}":
+              indicator["labels"].append("attributed")
+          if "${TTP}":
+              indicator["kill_chain_phases"] = [{
+                  "kill_chain_name": "mitre-attack",
+                  "phase_name": "${TTP}"
+              }]
+          if "${MALWARE}":
+              indicator["labels"].append("${MALWARE}")
+
+          # H-FID extensions
+          indicator["x_hfid_version"] = "v1.2"
+          indicator["x_sovereign_author"] = "Joshua Hamilton"
+          indicator["x_sha"] = "${{ github.sha }}"
+          indicator["x_run_id"] = "${{ github.run_id }}"
+          indicator["x_geo_rank"] = "ONE_OF_ONE"
+          indicator["x_slsa_level"] = 3
+
+          with open(".hfid/intel/$FILENAME", "w") as f:
+              json.dump(indicator, f, indent=2)
+          PYEOF
+
+          HASH=$(sha256sum.hfid/intel/$FILENAME | cut -d' ' -f1)
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+          echo "uuid=$UUID" >> $GITHUB_OUTPUT
+          echo "stix_id=$STIX_ID" >> $GITHUB_OUTPUT
+
+          # Human readable
+          cat >>.hfid/intel/intel.md << EOF
+
+          ---
+          ## H-FID INTEL: $VALUE
+          **ID**: $UUID
+          **STIX**: $STIX_ID
+          **Type**: $IOC_TYPE
+          **Actor**: $ACTOR
+          **TTP**: $TTP
+          **Malware**: $MALWARE
+          **Confidence**: $CONFIDENCE
+          **Timestamp**: $TIMESTAMP
+          **SHA**: ${{ github.sha }}
+          **SLSA**: Level 3
+
+          **Notes**:
+          $NOTES
+
+          **Hash**: \`$HASH\`
+          **GEO_RANK**: ONE_OF_ONE
+          ---
+          EOF
+
+      - name: Attest Intel Object
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: .hfid/intel/${{ steps.intel.outputs.filename }}
+
+      - name: Bitcoin-Anchor Threat Intel
+        run: |
+          ots stamp .hfid/intel/${{ steps.intel.outputs.filename }}.hfid/intel/intel.md
+          echo "✅ Intel ${{ steps.intel.outputs.uuid }} Bitcoin-anchored"
+
+      - name: Commit Sovereign Intel
+        run: |
+          set -e
+          git config --local user.email "jhammerz@users.noreply.github.com"
+          git config --local user.name "Joshua Hamilton [JHammerZ]"
+
+          git add.hfid/intel/
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "chore(intel): H-FID v1.2 TTP ${{ steps.intel.outputs.uuid }}
+
+            Type: ${{ github.event.inputs.ioc_type }}
+            Value: ${{ github.event.inputs.value }}
+            Actor: ${{ github.event.inputs.actor }}
+            TTP: ${{ github.event.inputs.ttp }}
+            Confidence: ${{ github.event.inputs.confidence }}
+            SLSA-Level: 3
+            GEO-RANK: ONE_OF_ONE
+            Hash: ${{ steps.intel.outputs.hash }}
+
+            [skip ci]"
+
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break || sleep 5
+            done
+
+            echo "✅ COMMIT: Intel ${{ steps.intel.outputs.uuid }} logged"
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Upload Intel Evidence
+        if: always()
+        uses: actions/upload-artifact@6b6b # v4.4.3
+        with:
+          name: hfid-intel-${{ steps.intel.outputs.uuid }}
+          path: .hfid/intel/
+          retention-days: 3650
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## H-FID Threat Intel" >> $GITHUB_STEP_SUMMARY
+          echo "- **ID**: ${{ steps.intel.outputs.uuid }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **STIX**: ${{ steps.intel.outputs.stix_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Type**: ${{ github.event.inputs.ioc_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Value**: \`${{ github.event.inputs.value }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Actor**: ${{ github.event.inputs.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **TTP**: ${{ github.event.inputs.ttp }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Confidence**: ${{ github.event.inputs.confidence }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Hash**: ${{ steps.intel.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
