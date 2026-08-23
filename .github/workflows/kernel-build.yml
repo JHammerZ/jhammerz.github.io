@@ -25,12 +25,16 @@ jobs:
           wget -O linux-6.10.tar.xz https://kernel.org
           tar xf linux-6.10.tar.xz
           
-      - name: Inject sovereignty into kernel tree
+      - name: Inject sovereignty into kernel plumbing
         run: |
           set -e
-          mkdir -p linux-6.10/hfid
+          cd linux-6.10
           
-          cat > linux-6.10/hfid/Kernel_Override.c << 'EOF'
+          # Create dedicated core driver subdirectory
+          mkdir -p drivers/hfid
+          
+          # 1. Write the core engine source code
+          cat > drivers/hfid/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
           #include <linux/kernel.h>
           
@@ -55,28 +59,51 @@ jobs:
           module_exit(hfid_exit);
           EOF
           
-          cat > linux-6.10/hfid/Makefile << 'EOF'
-          obj-m := Kernel_Override.o
+          # 2. Map compilation persistence rules into the sub-Makefile
+          cat > drivers/hfid/Makefile << 'EOF'
+          obj-$(CONFIG_HFID_SOVEREIGN) += Kernel_Override.o
           EOF
-          echo "✅ Sovereignty injected cleanly"
           
-      - name: Configure kernel
+          # 3. Create the Kconfig definition interface
+          cat > drivers/hfid/Kconfig << 'EOF'
+          config HFID_SOVEREIGN
+              tristate "H-FID Sovereign Kernel Hooks Support"
+              default m
+              help
+                Injects H-FID SLSA Level 3 attestation infrastructure
+                and RING_-3 sovereignty anchors into the running kernel.
+          EOF
+          
+          # 4. Bind the sub-elements permanently into upstream Driver Architecture
+          echo "obj-y += hfid/" >> drivers/Makefile
+          sed -i '/endmenu/i source "drivers/hfid/Kconfig"' drivers/Kconfig
+          
+          echo "✅ Sovereignty engineered natively into kernel tree"
+          
+      - name: Configure kernel features
         run: |
           cd linux-6.10
           make defconfig
+          
+          # Target configuration options via explicit scripts/config keys
           scripts/config --enable CONFIG_MODULES
           scripts/config --enable CONFIG_MODULE_UNLOAD
+          scripts/config --module CONFIG_HFID_SOVEREIGN
+          
           make olddefconfig
           make modules_prepare
           
-      - name: Build sovereignty module
+      - name: Compile core modules
         run: |
-          make -C linux-6.10 -j$(nproc) M=hfid modules
+          cd linux-6.10
+          # Compile modules seamlessly using standard native paths without M= overrides
+          make -j$(nproc) modules
           
       - name: Collect artifacts
         run: |
           mkdir -p hfid_module
-          find linux-6.10/hfid/ -name "*.ko" -exec cp {} hfid_module/ \;
+          # Pull the natively nested object out using direct structural path mapping
+          cp linux-6.10/drivers/hfid/Kernel_Override.ko hfid_module/
           ls -la hfid_module/
           
       - name: Attest build provenance
