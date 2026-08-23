@@ -31,7 +31,7 @@ on:
 
 permissions:
   contents: write
-  pages: write
+  packages: write
   id-token: write
   attestations: write
 
@@ -68,7 +68,7 @@ jobs:
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           mkdir -p .hfid/sovereign
-          cat << EOF_MANIFEST >.hfid/sovereign/manifest.json
+          cat << EOF_MANIFEST > .hfid/sovereign/manifest.json
           {
             "payload": "$PAYLOAD_LOGIC",
             "timestamp": "$TIMESTAMP",
@@ -101,7 +101,7 @@ jobs:
           ots upgrade .hfid/sovereign/manifest.json.ots || true
           ots upgrade manifest.json.ots || true
 
-          echo "payload_hash=$(sha256sum.hfid/sovereign/manifest.json | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
+          echo "payload_hash=$(sha256sum .hfid/sovereign/manifest.json | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
 
       - name: Commit Sovereign Update
         run: |
@@ -126,7 +126,7 @@ jobs:
         with:
           subject-path: |
             manifest.json
-           .hfid/sovereign/manifest.json
+            .hfid/sovereign/manifest.json
 
       - name: Upload Sovereign Evidence
         if: always()
@@ -136,8 +136,8 @@ jobs:
           path: |
             manifest.json
             manifest.json.ots
-           .hfid/sovereign/manifest.json
-           .hfid/sovereign/manifest.json.ots
+            .hfid/sovereign/manifest.json
+            .hfid/sovereign/manifest.json.ots
           retention-days: 90
           if-no-files-found: warn
 
@@ -156,4 +156,4 @@ jobs:
           echo "*Protocol:* Twenty 47" >> $GITHUB_STEP_SUMMARY
           echo "**Bitcoin OTS Proof:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "*Sovereign update Bitcoin-anchored via OpenTimestamps. Verify: \`ots verify.hfid/sovereign/manifest.json.ots\`*" >> $GITHUB_STEP_SUMMARY
+          echo "*Sovereign update Bitcoin-anchored via OpenTimestamps. Verify: \`ots verify .hfid/sovereign/manifest.json.ots\`*" >> $GITHUB_STEP_SUMMARY
