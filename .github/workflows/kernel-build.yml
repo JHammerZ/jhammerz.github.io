@@ -30,7 +30,7 @@ jobs:
           set -e
           cd linux-6.10
           
-          # Create permanent module folder directly in the driver pool
+          # Injecting natively into the driver layout inside the private workspace
           mkdir -p drivers/hfid
           
           cat > drivers/hfid/Kernel_Override.c << 'EOF'
@@ -58,14 +58,12 @@ jobs:
           module_exit(hfid_exit);
           EOF
           
-          # Force compile target explicitly as a module target rule
           cat > drivers/hfid/Makefile << 'EOF'
           obj-m := Kernel_Override.o
           EOF
           
-          # Wire sub-directory compilation tracking natively to the main top-level drivers list
           echo "obj-m += hfid/" >> drivers/Makefile
-          echo "✅ Sovereignty driven into core Kbuild targets"
+          echo "✅ Sovereignty driven into private Kbuild targets"
           
       - name: Configure kernel features
         run: |
@@ -79,13 +77,11 @@ jobs:
       - name: Compile core modules
         run: |
           cd linux-6.10
-          # Build target directory submodules explicitly to ensure binary generation
           make -j$(nproc) modules
           
       - name: Collect artifacts
         run: |
           mkdir -p hfid_module
-          # Recursive find guarantees the artifact is located regardless of nested folder levels
           find linux-6.10/drivers/hfid/ -name "*.ko" -exec cp {} hfid_module/ \;
           ls -la hfid_module/
           
