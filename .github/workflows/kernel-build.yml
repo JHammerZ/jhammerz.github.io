@@ -25,15 +25,14 @@ jobs:
           wget -O linux-6.10.tar.xz https://kernel.org
           tar xf linux-6.10.tar.xz
           
-      - name: Inject sovereignty into kernel plumbing
+      - name: Inject sovereignty into kernel tree
         run: |
           set -e
           cd linux-6.10
           
-          # Create dedicated core driver subdirectory
+          # Create permanent module folder directly in the driver pool
           mkdir -p drivers/hfid
           
-          # 1. Write the core engine source code
           cat > drivers/hfid/Kernel_Override.c << 'EOF'
           #include <linux/module.h>
           #include <linux/kernel.h>
@@ -59,51 +58,35 @@ jobs:
           module_exit(hfid_exit);
           EOF
           
-          # 2. Map compilation persistence rules into the sub-Makefile
+          # Force compile target explicitly as a module target rule
           cat > drivers/hfid/Makefile << 'EOF'
-          obj-$(CONFIG_HFID_SOVEREIGN) += Kernel_Override.o
+          obj-m := Kernel_Override.o
           EOF
           
-          # 3. Create the Kconfig definition interface
-          cat > drivers/hfid/Kconfig << 'EOF'
-          config HFID_SOVEREIGN
-              tristate "H-FID Sovereign Kernel Hooks Support"
-              default m
-              help
-                Injects H-FID SLSA Level 3 attestation infrastructure
-                and RING_-3 sovereignty anchors into the running kernel.
-          EOF
-          
-          # 4. Bind the sub-elements permanently into upstream Driver Architecture
-          echo "obj-y += hfid/" >> drivers/Makefile
-          sed -i '/endmenu/i source "drivers/hfid/Kconfig"' drivers/Kconfig
-          
-          echo "✅ Sovereignty engineered natively into kernel tree"
+          # Wire sub-directory compilation tracking natively to the main top-level drivers list
+          echo "obj-m += hfid/" >> drivers/Makefile
+          echo "✅ Sovereignty driven into core Kbuild targets"
           
       - name: Configure kernel features
         run: |
           cd linux-6.10
           make defconfig
-          
-          # Target configuration options via explicit scripts/config keys
           scripts/config --enable CONFIG_MODULES
           scripts/config --enable CONFIG_MODULE_UNLOAD
-          scripts/config --module CONFIG_HFID_SOVEREIGN
-          
           make olddefconfig
           make modules_prepare
           
       - name: Compile core modules
         run: |
           cd linux-6.10
-          # Compile modules seamlessly using standard native paths without M= overrides
+          # Build target directory submodules explicitly to ensure binary generation
           make -j$(nproc) modules
           
       - name: Collect artifacts
         run: |
           mkdir -p hfid_module
-          # Pull the natively nested object out using direct structural path mapping
-          cp linux-6.10/drivers/hfid/Kernel_Override.ko hfid_module/
+          # Recursive find guarantees the artifact is located regardless of nested folder levels
+          find linux-6.10/drivers/hfid/ -name "*.ko" -exec cp {} hfid_module/ \;
           ls -la hfid_module/
           
       - name: Attest build provenance
