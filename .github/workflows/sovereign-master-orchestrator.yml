@@ -51,7 +51,7 @@ jobs:
           # Pull latest success baseline
           LAST_SUCCESS_SHA=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
             "https://github.com{{ github.repository }}/actions/runs?branch=main&status=success&per_page=1" \
-            | jq -r '.workflow_runs[0].head_sha // empty')
+            | jq -r '.workflow_runs.head_sha // empty')
 
           if [ -n "$LAST_SUCCESS_SHA" ] && [ "$LAST_SUCCESS_SHA" != "null" ]; then
             git fetch origin "$LAST_SUCCESS_SHA" --depth=1 || true
@@ -59,21 +59,18 @@ jobs:
           fi
 
           if ! jq '.' .hfid/baseline/sovereign-manifest.json >/dev/null 2>&1; then
-            cat << 'JSON_EOF' > .hfid/baseline/sovereign-manifest.json
-            {
-              "Names": "J-HammerZ",
-              "Sovereign": "Joshua Hamilton",
-              "M-Law Language": "REC v7.2",
-              "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
-              "Universe": "ORE",
-              "Velocity": "<10ms",
-              "Protocol": "Twenty AI7 Protocol",
-              "Standard": "H-FID Core Matrix Compilation",
-              "Timestamp": "2026-08-23T20:10:00Z",
-              "Integrity Level": "SOVEREIGN",
-              "Nodes": []
-            }
-            JSON_EOF
+            # Using tab-collapsing heredoc so the closing tag can be properly indented
+            cat <<- 'JSON_EOF' > .hfid/baseline/sovereign-manifest.json
+ames": "J-HammerZ",
+": "Joshua Hamilton",
+guage": "REC v7.2",
+SIC-AUDIT SEC-10B",
+iverse": "ORE",
+ty AI7 Protocol",
+dard": "H-FID Core Matrix Compilation",
+tegrity Level": "SOVEREIGN",
+odes": []
+_EOF
           fi
 
       - name: Stage 2: C/C++ Forge Pre-Build Header Injection
@@ -109,7 +106,7 @@ jobs:
           git config --global user.name "JHammerZ-Sovereign-Engine"
           git config --global user.email "engine@jhammerz.github.io"
           
-          git add .hfid/baseline/* include/* src/* git.h lines-full.txt || true
+          git add .hfid/baseline/sovereign-manifest.json include/* src/* git.h lines-full.txt || true
           
           if ! git diff --cached --quiet; then
             git commit -m "AUTOMATED SECURITY CACHE MATCH RUN [skip ci]"
