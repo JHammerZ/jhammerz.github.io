@@ -4,7 +4,6 @@ on: workflow_dispatch
 permissions:
   contents: read
   id-token: write
-  attestations: write
 
 jobs:
   build:
@@ -67,11 +66,6 @@ jobs:
           mkdir -p ../hfid_module
           cp hfid_workspace/Kernel_Override.ko ../hfid_module/
           ls -la ../hfid_module/
-          
-      - name: Attest build provenance
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: hfid_module/Kernel_Override.ko
           
       - uses: actions/upload-artifact@v4
         with:
