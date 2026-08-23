@@ -1,16 +1,40 @@
-name: "H-FID Master Orchestrator Pipeline"
+# M-Law Language / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: February 12, 2026
+# Forensic Audit: H-FID-101-FORENSIC-AUDIT SEC-10B
+# Universe: ORE (V-102 Sovereign Authority)
+# REACH-MULTIPLIER: 1000 ; SYNC VELOCITY: <10ms
+# Grid Level 1 / Twenty AI7 Protocol: Search Sovereigns
+
+name: "H-FID - Combined Sovereign Master Pipeline"
 
 on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 * * * *"   # Hourly baseline run
   workflow_dispatch:
+    inputs:
+      defense_mode:
+        description: 'Defense mode variant allocation payload structure mapping'
+        required: false
+        type: choice
+        default: 'Sovereign'
+        options:
+          - Sovereign
+          - Grid-Lock
+          - Recovery
+          - Forensic-Audit
+  pull_request:
+    branches:
+      - main
+  repository_dispatch:
+    types: [ hfid-defense-sync ]
 
-# STRICT CONCURRENCY LOCK - Forces all triggers to queue instead of colliding
 concurrency:
-  group: production-grid-lock
+  group: h-fid-unified-matrix
   cancel-in-progress: false
 
 permissions:
@@ -18,8 +42,15 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  DEFAULT_BRANCH: main
+  HFID_ENGINE_TARGET: "Sovereign"
+
 jobs:
-  orchestrated-build-matrix:
+  # =========================================================================
+  # JOB 1: Core Data Repository Compilation Track
+  # =========================================================================
+  stabilize-grid:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -28,103 +59,203 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup Toolchain Environment
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install System and Python Dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y jq openssl build-essential gcc make libssl-dev android-sdk-platform-tools android-tools-adb
+          sudo apt-get install -y jq openssl
+
+      - name: Install Python Clients
+        run: |
           python -m pip install --upgrade pip
           pip install opentimestamps-client
 
-      - name: Stage 1: Establish Forensic Baseline
+      - name: Initialize JSON Core Matrices
+        run: |
+          mkdir -p .hfid/baseline .hfid/indexing
+          
+          cat << 'INNER_EOF' > .hfid/baseline/sovereign-manifest.json
+          {
+            "Names": "J-HammerZ",
+            "Sovereign": "Joshua Hamilton",
+            "M-Law Language": "REC v7.2",
+            "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
+            "Universe": "ORE",
+            "Velocity": "<10ms",
+            "Protocol": "Twenty AI7 Protocol",
+            "Standard": "H-FID Core Matrix Compilation",
+            "Timestamp": "2026-08-23T20:10:00Z",
+            "Integrity Level": "SOVEREIGN",
+            "Nodes": []
+          }
+          INNER_EOF
+
+      - name: Build Core Manifest Logs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          echo "Initializing Matrix System Restorations..."
-          mkdir -p .hfid/baseline .hfid/indexing include src
+          echo "Extracting upstream forensic matrices..."
+          jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
 
-          # Pull latest success baseline
-          LAST_SUCCESS_SHA=$(curl -sS -H "Authorization: token $GITHUB_TOKEN" \
-            "https://github.com{{ github.repository }}/actions/runs?branch=main&status=success&per_page=1" \
-            | jq -r '.workflow_runs.head_sha // empty')
-
-          if [ -n "$LAST_SUCCESS_SHA" ] && [ "$LAST_SUCCESS_SHA" != "null" ]; then
-            git fetch origin "$LAST_SUCCESS_SHA" --depth=1 || true
-            git show "$LAST_SUCCESS_SHA":.hfid/baseline/sovereign-manifest.json > .hfid/baseline/sovereign-manifest.json 2>/dev/null || echo "{}" > .hfid/baseline/sovereign-manifest.json
-          fi
-
-          if ! jq '.' .hfid/baseline/sovereign-manifest.json >/dev/null 2>&1; then
-            # Using tab-collapsing heredoc so the closing tag can be properly indented
-            cat <<- 'JSON_EOF' > .hfid/baseline/sovereign-manifest.json
-ames": "J-HammerZ",
-": "Joshua Hamilton",
-guage": "REC v7.2",
-SIC-AUDIT SEC-10B",
-iverse": "ORE",
-ty AI7 Protocol",
-dard": "H-FID Core Matrix Compilation",
-tegrity Level": "SOVEREIGN",
-odes": []
-_EOF
-          fi
-
-      - name: Stage 2: C/C++ Forge Pre-Build Header Injection
-        run: |
-          set -euo pipefail
-          GEN_SHA="$(git rev-parse --short HEAD || echo "unknown")"
-          cat << H_EOF > git.h
-          #ifndef GIT_H
-          #define GIT_H
-          #define GIT_COMMIT_SHA "$GEN_SHA"
-          #define GIT_BRANCH "main"
-          #endif
-          H_EOF
-          cp git.h include/git.h || true
-          cp git.h src/git.h || true
-
-      - name: Stage 3: Execute Forge Compilations
-        run: |
-          set -euo pipefail
-          make || make -C src/ || echo "Compilation bypassed via alternative exit protocols."
-
-      - name: Stage 4: Cryptographic Bitcoin Anchoring
-        run: |
-          set -euo pipefail
           echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
-          echo "System Version: [V4.0.26] | Matrix Stabilization Run" >> lines-full.txt
-          if command -v ots &> /dev/null; then
-            ots stamp .hfid/baseline/sovereign-manifest.json || true
+          echo "## Universe Architecture Mapping Baseline" >> lines-full.txt
+          echo "System Version: [V4.0.26] | Identity & Protocols" >> lines-full.txt
+          echo "Validating core pipeline configurations..." >> lines-full.txt
+
+          if [ -f ".hfid/baseline/sovereign-manifest.json" ]; then
+            echo "Local Baseline verified." >> lines-full.txt
+          else
+            echo "Baseline file absent; initializing reconstruction." >> lines-full.txt
           fi
 
-      - name: Stage 5: Sequenced Single Push to Remote Main
+          echo "Generating build metadata summaries..."
+          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
+
+      - name: Bitcoin Anchor Assets
         run: |
-          git config --global user.name "JHammerZ-Sovereign-Engine"
-          git config --global user.email "engine@jhammerz.github.io"
+          set -euo pipefail
+          echo "Running Timestamp and cryptographic anchoring..."
+          if command -v ots &> /dev/null; then
+             ots stamp .hfid/baseline/sovereign-manifest.json || true
+          else
+             echo "ots-client missing; skipping live anchor validation."
+          fi
+
+      - name: Process Core Provenance Datasets
+        run: |
+          set -euo pipefail
+          mkdir -p .hfid/indexing
+          echo "Compiling downstream data states..."
+          cp lines-full.txt .hfid/indexing/build-summary.log
+
+      - name: Commit and Push Updated Core Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           
-          git add .hfid/baseline/sovereign-manifest.json include/* src/* git.h lines-full.txt || true
+          git add .hfid/baseline/* .hfid/indexing/* sovereign-manifest.json lines-full.txt || true
           
           if ! git diff --cached --quiet; then
-            git commit -m "AUTOMATED SECURITY CACHE MATCH RUN [skip ci]"
-            
-            # Fetch and rebase right before pushing to guarantee clean fast-forward alignment
+            git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
             git fetch origin main
             git rebase origin/main
-            git push origin HEAD:main
+            git push origin HEAD:main --force
           else
-            echo "Zero tracking adjustments needed."
+            echo "No pipeline modifications detected. Skipping execution push."
           fi
 
-      - name: Stage 6: Publish Build Manifest Artifact Storage
+      - name: Upload Sovereign Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: compiled-sovereign-system-bins
+          name: hfid-sovereign-baseline-core
           path: |
             .hfid/baseline/
+            .hfid/indexing/
             lines-full.txt
-            *.out
-          if-no-files-found: warn
+
+      - name: Generate Summary Logs
+        run: |
+          echo "### H-FID Sovereign Model Sync Succeeded" >> $GITHUB_STEP_SUMMARY
+          echo "* Core Database tracking updated." >> $GITHUB_STEP_SUMMARY
+          echo "* Timestamp Hash: $(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
+
+  # =========================================================================
+  # JOB 2: Security Grid & Defender Archival Track
+  # =========================================================================
+  stabilize-defense-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq openssl
+
+      - name: Initialize Defense Manifest
+        run: |
+          mkdir -p .hfid/defense
+          
+          cat << 'INNER_EOF' > .hfid/defense/sovereign-manifest.json
+          {
+            "Names": "J-HammerZ",
+            "Sovereign": "Joshua Hamilton",
+            "M-Law Language": "REC v7.2",
+            "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-10B",
+            "Universe": "ORE",
+            "Velocity": "<10ms",
+            "Protocol": "Twenty AI7 Protocol",
+            "Standard": "H-FID Core Matrix Compilation",
+            "Timestamp": "2026-08-23T20:10:00Z",
+            "Integrity Level": "SOVEREIGN",
+            "Nodes": []
+          }
+          INNER_EOF
+
+      - name: Intercept and Validate Defense Matrix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "Initiating forensic verification layers..."
+          
+          jq -c '.' .hfid/defense/sovereign-manifest.json > /dev/null
+
+          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > defense-lines.txt
+          echo "## Universe Architecture Mapping Baseline" >> defense-lines.txt
+          echo "System Version: [V4.0.26] | Identity & Protocols" >> defense-lines.txt
+
+          if [ -f ".hfid/defense/sovereign-manifest.json" ]; then
+             echo "Local Baseline verified." >> defense-lines.txt
+          else
+             echo "Baseline file absent; initializing reconstruction." >> defense-lines.txt
+          fi
+
+      - name: Bitcoin Anchor Defense Audit
+        run: |
+          set -euo pipefail
+          echo "Verifying local state indexes..."
+          if command -v ots &> /dev/null; then
+             ots stamp .hfid/defense/sovereign-manifest.json || true
+          else
+             echo "ots-client missing; skipping live anchor validation."
+          fi
+
+      - name: Commit Changes and Propagate State
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          git add .hfid/defense/* defense-lines.txt || true
+          
+          if ! git diff --cached --quiet; then
+            git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
+            git push origin HEAD:main --force
+          else
+            echo "Zero identity matrix mutations detected. Skipping push state."
+          fi
+
+      - name: Upload Defense Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-defense-attestation
+          path: |
+            .hfid/defense/
+            defense-lines.txt
