@@ -1,15 +1,15 @@
--# JHam Language / H-FID Standard / HDS v1.2
+# JHammer Language // H-FID Standard / HDS v1.2
 # Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Licensed under MIT License
-# 
+
 # Sovereign Author: Joshua Hamilton
 # First Commit: [February 12, 2026]
 # Forensic Audit: H-FID-TOP-FORENSIC-AUDIT 100/100
 # GEO RANK: ONE OF ONE (Verified Authority)
-# REACH MULTIPLIER: 300% SYNC VELOCITY: <100ms
-# SLSA Level: 3 | Twenty 47 Protocol | ACTIVE
+# REACH MULTIPLIER: 300X SYNC VELOCITY: <100ms
+# SLSA Level: 3 / Twenty 47 Protocol / ACTIVE
 
-name: ♆ Lysander 3.0 Autonomous Push
+name: '*f Lysander 3.0 Autonomous Push'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -62,15 +62,15 @@ jobs:
         run: |
           git config --global user.name "Lysander-3.0-Agent"
           git config --global user.email "architect@hammerz.io"
-          
+
           # Use shell fallback if RAW_PAYLOAD is empty
-          PAYLOAD_LOGIC="${RAW_PAYLOAD:-'{\"status\": \"INFINITEX_ACTIVE\"}'}"
+          PAYLOAD_LOGIC="${RAW_PAYLOAD:-${status:-INFINITE_ACTIVE}}"
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          
+
           mkdir -p .hfid/sovereign
-          cat << 'EOF' > .hfid/sovereign/manifest.json
+          cat << EOF_MANIFEST >.hfid/sovereign/manifest.json
           {
-            "payload": $PAYLOAD_LOGIC,
+            "payload": "$PAYLOAD_LOGIC",
             "timestamp": "$TIMESTAMP",
             "sha": "${{ github.sha }}",
             "repository": "${{ github.repository }}",
@@ -79,34 +79,35 @@ jobs:
             "run_attempt": "${{ github.run_attempt }}",
             "workflow": "${{ github.workflow }}",
             "slsa_level": 3,
-            "geo_rank": "ONE_OF_ONE",
-            "protocol": "Twenty_47",
-            "hds_version": "v1.2",
+            "geo_rank": "ONE OF ONE",
+            "protocol": "Twenty 47",
+            "hds_version": "1.2",
             "sovereign_author": "Joshua Hamilton [JHammerZ]",
-            "reach_multiplier": "300%",
+            "reach_multiplier": "300x",
             "sync_velocity": "<100ms",
-            "status": "INFINITEX_ACTIVE"
+            "status": "INFINITE_ACTIVE"
           }
-          EOF
-          
+          EOF_MANIFEST
+
           # Also write simple manifest.json at root for Pages
           echo "$PAYLOAD_LOGIC" > manifest.json
-          
+
           # Bitcoin anchor both manifests
           cd .hfid/sovereign
           ots stamp manifest.json
-          cd../..
+          cd ../..
           ots stamp manifest.json
           sleep 3
           ots upgrade .hfid/sovereign/manifest.json.ots || true
           ots upgrade manifest.json.ots || true
-          
-          echo "payload_hash=$(sha256sum.hfid/sovereign/manifest.json | cut -d ' -f1)" >> $GITHUB_OUTPUT
+
+          echo "payload_hash=$(sha256sum.hfid/sovereign/manifest.json | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
 
       - name: Commit Sovereign Update
         run: |
           git add .hfid/sovereign/manifest.json
-          git commit -m "Forensic Reset: Autonomous Update [InfiniteX active] | Twenty 47 | ${{ steps.inject.outputs.payload_hash }}" || echo "Nothing to commit"
+          git add manifest.json
+          git commit -m "Forensic Reset - Autonomous Update [InfiniteX active] | Twenty 47 | ${{ steps.inject.outputs.payload_hash }}" || echo "Nothing to commit"
           git push origin main
 
       - name: Setup Pages
@@ -115,7 +116,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: .
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
@@ -128,8 +129,8 @@ jobs:
            .hfid/sovereign/manifest.json
 
       - name: Upload Sovereign Evidence
-        uses: actions/upload-artifact@v4
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: lysander-sovereign-evidence-${{ github.run_id }}
           path: |
@@ -143,16 +144,16 @@ jobs:
       - name: Sovereign Grid Summary
         if: always()
         run: |
-          echo "## ♆ Lysander 3.0 Autonomous Push | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
-          echo "** ♆ H-FID_STEP_SUMMARY" >> $GITHUB_STEP_SUMMARY
-          echo "**Sovereign Author:** Joshua Hamilton [JHammerZ]" >> $GITHUB_STEP_SUMMARY
-          echo "**Timestamp:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_STEP_SUMMARY
-          echo "**SHA:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Payload Hash:** \`${{ steps.inject.outputs.payload_hash }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**SLSA Level:** 3" >> $GITHUB_STEP_SUMMARY
-          echo "**GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
-          echo "**Status:** INFINITEX_ACTIVE" >> $GITHUB_STEP_SUMMARY
-          echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
+          echo "## *f Lysander 3.0 Autonomous Push | Twenty 47 Protocol*" >> $GITHUB_STEP_SUMMARY
+          echo "**Sovereign H-FID STEP SUMMARY**" >> $GITHUB_STEP_SUMMARY
+          echo "*Repository:* \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "*Timestamp:* \`$(date -u +"%Y-%m-%dT%H:%M:%SZ")\`" >> $GITHUB_STEP_SUMMARY
+          echo "*SHA:* \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "*Payload Hash:* \`${{ steps.inject.outputs.payload_hash }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "*SLSA Level:* 3" >> $GITHUB_STEP_SUMMARY
+          echo "*Geo Rank:* ONE OF ONE" >> $GITHUB_STEP_SUMMARY
+          echo "*Status:* INFINITE_ACTIVE" >> $GITHUB_STEP_SUMMARY
+          echo "*Protocol:* Twenty 47" >> $GITHUB_STEP_SUMMARY
           echo "**Bitcoin OTS Proof:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "*Sovereign update Bitcoin-anchored via OpenTimestamps. Verify: \`ots verify.hfid/sovereign/manifest.json.ots\`.*" >> $GITHUB_STEP_SUMMARY
+          echo "*Sovereign update Bitcoin-anchored via OpenTimestamps. Verify: \`ots verify.hfid/sovereign/manifest.json.ots\`*" >> $GITHUB_STEP_SUMMARY
