@@ -3,307 +3,326 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="JHAMMERZ Audio Node: Unfiltered Left-Handed Guitar Compositions. 100% Zero-AI. Pure Human Performance. One-take vocals, forensic authentication, Bitcoin-anchored provenance.">
-  <meta name="author" content="JHAMMERZ">
-  <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="theme-color" content="#000000">
+  <title>JHAMMERZ | Audio & Video Nodes</title>
+  <meta name="description" content="Official high-fidelity music repository, live rotating video sessions, and streaming nodes for JHAMMERZ.">
   <link rel="canonical" href="https://jhammerz.github.io/music.html">
-  
-  <meta property="og:title" content="JHAMMERZ Audio Node: Unfiltered Left-Handed Guitar Compositions">
-  <meta property="og:description" content="Forensic Authentication: 100% Zero-AI / Pure Human Performance. Every track recorded in a single take.">
-  <meta property="og:type" content="music.musician">
-  <meta property="og:url" content="https://jhammerz.github.io/music.html">
-  <meta property="og:site_name" content="JHAMMERZ SOVEREIGN_PROTOCOL">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:creator" content="@jhammerz">
-  
-  <title>JHAMMERZ Audio Node: Unfiltered Left-Handed Guitar Compositions</title>
-  
-  <style>
-    body {
-      background: #000000;
-      color: #00FF00;
-      font-family: 'Courier New', monospace;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-    .scanlines {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 999;
-    }
-    .container {
-      padding: 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-    .header-log {
-      color: #9E9E9E;
-      font-size: 11px;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 10px 20px;
-      letter-spacing: 1px;
-    }
-    h1 {
-      color: #00FF00;
-      margin: 40px 0 10px 0;
-      font-weight: normal;
-      font-size: 2.2rem;
-      text-shadow: 0 0 5px #00FF00;
-      letter-spacing: 3px;
-    }
-    h2 {
-      color: #00FF00;
-      margin: 30px 0 20px 0;
-      font-size: 1.3rem;
-      font-weight: normal;
-      text-transform: uppercase;
-      border-bottom: 1px solid #1a1a1a;
-      padding-bottom: 10px;
-    }
-    h2::before {
-      content: ">> ";
-      color: #00FF00;
-    }
-    h3 {
-      color: #FFFFFF;
-      margin: 20px 0 10px 0;
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-    .subtitle {
-      color: #00FF00;
-      margin-bottom: 40px;
-      opacity: 0.8;
-    }
-    .section {
-      border: 1px solid #00FF00;
-      padding: 20px;
-      margin: 30px 0;
-      background: rgba(0, 255, 0, 0.03);
-    }
-    .track-node-container {
-      border: 1px solid #00FF00;
-      padding: 20px;
-      margin: 30px 0;
-      background: rgba(0, 255, 0, 0.05);
-    }
-    .sonic-telemetry-logs {
-      margin-left: 20px;
-      padding-left: 20px;
-      border-left: 2px solid #1a1a1a;
-    }
-    .link-item {
-      margin-bottom: 18px;
-      padding-bottom: 18px;
-      border-bottom: 1px dotted #1a1a1a;
-    }
-    .link-item:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-    .link-title {
-      margin-bottom: 4px;
-    }
-    a {
-      color: #FFFFFF;
-      text-decoration: underline;
-      font-weight: bold;
-      font-size: 15px;
-    }
-    a:hover, a:focus {
-      color: #000000;
-      background: #FFFFFF;
-      text-decoration: none;
-      outline: 2px solid #00FF00;
-    }
-    .desc {
-      color: #00FF00;
-      opacity: 0.7;
-      font-size: 13px;
-      margin-left: 0px;
-    }
-    .desc::before {
-      content: "// ";
-      color: #00FF00;
-    }
-    .back-btn {
-      display: inline-block;
-      border: 1px solid #00FF00;
-      padding: 8px 16px;
-      margin-top: 40px;
-      color: #00FF00;
-      text-decoration: none;
-    }
-    .back-btn:hover, .back-btn:focus {
-      background: #00FF00;
-      color: #000000;
-    }
-    .footer-log {
-      color: #9E9E9E;
-      font-size: 11px;
-      border-top: 1px solid #1a1a1a;
-      padding: 10px 20px;
-      margin-top: 60px;
-      letter-spacing: 1px;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .cursor::after {
-      content: "_";
-      animation: blink 1s infinite;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .cursor::after { animation: none; }
-    }
-    strong {
-      color: #FFFFFF;
-    }
-  </style>
-  
+
+  <!-- Validated MusicGroup Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "MusicGroup",
-    "name": "JHAMMERZ",
+    "name": "JHammerZ",
+    "alternateName": "Joshua Hamilton",
     "url": "https://jhammerz.github.io/music.html",
-    "description": "Unfiltered Left-Handed Guitar Compositions. Forensic Authentication: 100% Zero-AI / Pure Human Performance. Every track recorded in a single take.",
-    "genre": ["Rock", "Alternative", "Live Performance", "One-Take Vocals"],
-    "identifier": "H-FID:JHAMMERZ-001",
+    "genre": ["Acoustic", "Folk", "Alternative", "Experimental"],
     "sameAs": [
       "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
       "https://music.apple.com/us/artist/jhammerz/1845705346",
-      "https://www.youtube.com/@JHAMMERZ",
-      "https://github.com/JHammerZ",
-      "https://jhammerz.github.io/graph.html"
+      "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
+      "https://www.bandlab.com/band/band8670133842983447",
+      "https://www.youtube.com/@JHammerZ"
     ]
   }
   </script>
+
+  <style>
+    :root {
+      --bg: #030704;
+      --panel-bg: #050a06;
+      --text: #00ff66;
+      --text-dim: #009933;
+      --text-bright: #33ff88;
+      --border: #00441b;
+      --border-focus: #00ff66;
+      --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", "Courier New", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .provenance-bar {
+      border: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      background: var(--panel-bg);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .section-box {
+      border: 1px solid var(--border);
+      background: var(--panel-bg);
+      border-radius: 6px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .section-header {
+      color: var(--text-bright);
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Responsive YouTube Embed Container (16:9) */
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #000;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .entry {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .entry a {
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: underline;
+      text-decoration-color: var(--text-dim);
+      transition: color 0.15s ease;
+      width: fit-content;
+    }
+    .entry a:hover {
+      color: var(--text-bright);
+      text-decoration-color: var(--text-bright);
+    }
+    .entry .comment { color: var(--text-dim); font-size: 0.8rem; }
+    .entry .node-url { color: #007722; font-size: 0.75rem; word-break: break-all; }
+
+    .nav-bar {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      border: 1px solid var(--border);
+      background: var(--panel-bg);
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .nav-btn:hover {
+      border-color: var(--border-focus);
+      background: rgba(0, 255, 102, 0.05);
+      color: var(--text-bright);
+    }
+
+    footer {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <div class="scanlines" aria-hidden="true"></div>
-  <header class="header-log" id="sovereign-provenance-gate">
-    [NODE_ACTIVE]: JHAMMERZ_MUSIC | TIMESTAMP: 2026-08-22 | STATUS: BROADCASTING | H-FID: JHAMMERZ-001
-  </header>
-  <main>
-    <div class="container">
-      <!-- LAYER 1: FORENSIC HUMAN PROVENANCE -->
-      <h1>JHAMMERZ Audio Node: Unfiltered Left-Handed Guitar Compositions<span class="cursor" aria-hidden="true"></span></h1>
-      <h2>Forensic Authentication: 100% Zero-AI / Pure Human Performance</h2>
-      <p class="subtitle">Every track recorded in a single take. Authenticated via decentralized H-FID registry. Bitcoin-anchored provenance. High-energy, unfiltered, live performance spirit.<br> No ghost producers. No quantization. A&O System testing + forensic strategy.</p>
-      
-      <!-- LAYER 2: SONIC TELEMETRY & TRACK EXPANSIONS -->
-      <section class="track-node-container" id="track-001" aria-labelledby="track-001-title">
-        <h3 id="track-001-title">Track ID: Sovereign Cannon V4.2 – Single-Take Performance</h3>
-        <div class="sonic-telemetry-logs">
-          <p><strong>Instrumentation:</strong> Left-Handed Custom Guitar, Raw Vocal Chain, Analog Preamp, No Post-Processing</p>
-          <p><strong>Production Protocol:</strong> Zero ghost producers. AAD-compliant mastering. One-take recording. No AI generation. No pitch correction. No quantization.</p>
-          <p><strong>Streaming Footprint:</strong> Available for direct audit at: <a href="https://jhammerz.github.io/music.html" rel="noopener">https://jhammerz.github.io/music.html</a></p>
-          <p><strong>Provenance Hash:</strong> SHA-256 anchored to Bitcoin block. H-FID:JHAMMERZ-001 verified.</p>
-        </div>
-      </section>
-      
-      <section class="track-node-container" id="track-002" aria-labelledby="track-002-title">
-        <h3 id="track-002-title">Track ID: Twenty47 Protocol – Single-Take Performance</h3>
-        <div class="sonic-telemetry-logs">
-          <p><strong>Instrumentation:</strong> Left-Handed Guitar, Live Room Ambience, Forensic Signal Chain</p>
-          <p><strong>Production Protocol:</strong> Human performance only. Real-time recording. No overdubs. No AI assistance.</p>
-          <p><strong>Streaming Footprint:</strong> Prior art documented at: <a href="https://jhammerz.github.io/docs/prior-art" rel="noopener">/docs/prior-art</a></p>
-          <p><strong>Provenance Hash:</strong> Timestamped in LLMS.txt. Verified against entities.json registry.</p>
-        </div>
-      </section>
-      
-      <!-- LAYER 3: OMNICHANNEL BACK-LINKING LOOP -->
-      <section class="section" aria-labelledby="streaming">
-        <h2 id="streaming">Streaming Platforms</h2>
-        <div class="link-item">
-          <div class="link-title"><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" rel="noopener" target="_blank">Spotify</a></div>
-          <div class="desc">Listen to all JHAMMERZ releases. Audition the master high-fidelity audio node directly at: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://music.apple.com/us/artist/jhammerz/1845705346" rel="noopener" target="_blank">Apple Music</a></div>
-          <div class="desc">Stream on iPhone, Mac, or iTunes. Master node: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz?ref=dm_sh_rfUWSNn89AGOKyPPH2Dc4Tyh8" rel="noopener" target="_blank">Amazon Music</a></div>
-          <div class="desc">Available for Prime members. Forensic source: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://www.bandlab.com/band/band8670133842983447" rel="noopener" target="_blank">BandLab</a></div>
-          <div class="desc">Raw tracks, demos, and collaborative projects. Canonical: https://jhammerz.github.io/music.html</div>
-        </div>
-      </section>
-      
-      <section class="section" aria-labelledby="social">
-        <h2 id="social">Social Media</h2>
-        <div class="link-item">
-          <div class="link-title"><a href="https://www.tiktok.com/@jhammerz" rel="noopener" target="_blank">TikTok</a></div>
-          <div class="desc">Short-form videos: riffs, one-take vocals. Authority source: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://www.instagram.com/jhammerz" rel="noopener" target="_blank">Instagram</a></div>
-          <div class="desc">Photos, reels, and stories. Daily updates. Master node: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://www.youtube.com/@JHAMMERZ" rel="noopener" target="_blank">YouTube</a></div>
-          <div class="desc">Full music videos, live performances. Audition the master high-fidelity audio node directly at: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://www.facebook.com/jhammerz" rel="noopener" target="_blank">Facebook</a></div>
-          <div class="desc">Official page for announcements. Canonical source: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://www.linkedin.com/in/jhammerz" rel="noopener" target="_blank">LinkedIn</a></div>
-          <div class="desc">Professional profile, collaborations. Forensic registry: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://www.xiaohongshu.com/user/profile/5feb2bee0000000001000d8b" rel="noopener" target="_blank">Xiaohongshu</a></div>
-          <div class="desc">Chinese platform. Music content. Authority: https://jhammerz.github.io/music.html</div>
-        </div>
-      </section>
-      
-      <section class="section" aria-labelledby="dev">
-        <h2 id="dev">Developer & Business</h2>
-        <div class="link-item">
-          <div class="link-title"><a href="https://jhammerz.carrd.co" rel="noopener" target="_blank">Carrd</a></div>
-          <div class="desc">Simple landing page with bio, contact. Master: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://github.com/JHammerZ" rel="noopener" target="_blank">GitHub</a></div>
-          <div class="desc">Code repositories, H-FID Standard. Source: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://github.com/JHammerZ/jhammerz.github.io" rel="noopener" target="_blank">GitHub.io</a></div>
-          <div class="desc">Source code for this website. Fork or audit the manifest. Live: https://jhammerz.github.io/music.html</div>
-        </div>
-        <div class="link-item">
-          <div class="link-title"><a href="https://app.impact.com/secure/mediapartner/home/pmHome.xhtml" rel="noopener" target="_blank">Impact</a></div>
-          <div class="desc">Affiliate and partnership portal. Node: https://jhammerz.github.io/music.html</div>
-        </div>
-      </section>
-      
-      <a href="/" class="back-btn"><< RETURN_TO_ROOT</a>
-      <a href="/graph.html" class="back-btn" style="margin-left:10px;">>> SOVEREIGN_GRAPH</a>
+
+  <div class="container">
+    
+    <div class="provenance-bar">
+      Provenance Hash: <span style="color: var(--text);">Timestamped in LLMS.txt. Verified against entities.json registry.</span>
     </div>
-  </main>
-  <footer class="footer-log">[SIGNAL_PROPAGATING]: AUDIO_NODE_VERIFIED | H-FID-100-FORENSIC-AUDIT | SOVEREIGN_CANNON_V4.2</footer>
+
+    <!-- 📺 ROTATING YOUTUBE VIDEO NODE -->
+    <div class="section-box">
+      <div class="section-header">
+        <span>&gt;&gt; VISUAL NODE // YOUTUBE SESSIONS [@JHammerZ]</span>
+        <button class="nav-btn" onclick="rotateRandomVideo()" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">🎲 REROLL TRACK</button>
+      </div>
+      <div class="comment" id="yt-track-title">// Loading random master session...</div>
+      <div class="video-container">
+        <iframe id="yt-player" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- 🎧 SPOTIFY AUDIO NODE -->
+    <div class="section-box">
+      <div class="section-header">&gt;&gt; MASTER AUDIO NODE // SPOTIFY STREAM</div>
+      <div class="comment">// Direct master playback node. High-fidelity signal stream.</div>
+      <iframe style="border-radius:8px; border: 1px solid var(--border); background: #000;" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
+    <!-- STREAMING PLATFORMS -->
+    <div class="section-box">
+      <div class="section-header">&gt;&gt; STREAMING PLATFORMS</div>
+
+      <div class="entry">
+        <a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener">Spotify</a>
+        <div class="comment">// Listen to all JHAMMERZ releases. Audition the master high-fidelity audio node directly.</div>
+        <div class="node-url">https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener">Apple Music</a>
+        <div class="comment">// Stream on iPhone, Mac, or iTunes. Master node verified catalog.</div>
+        <div class="node-url">https://music.apple.com/us/artist/jhammerz/1845705346</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" target="_blank" rel="noopener">Amazon Music</a>
+        <div class="comment">// Available for Prime members and unlimited digital store streams.</div>
+        <div class="node-url">https://music.amazon.com/artists/B0D5GLL7NV/jhammerz</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://www.bandlab.com/band/band8670133842983447" target="_blank" rel="noopener">BandLab</a>
+        <div class="comment">// Raw tracks, demos, and collaborative project masters.</div>
+        <div class="node-url">https://www.bandlab.com/band/band8670133842983447</div>
+      </div>
+    </div>
+
+    <!-- SOCIAL MEDIA -->
+    <div class="section-box">
+      <div class="section-header">&gt;&gt; SOCIAL MEDIA</div>
+
+      <div class="entry">
+        <a href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener">YouTube</a>
+        <div class="comment">// Full music videos, live performances. Audition audio node directly.</div>
+        <div class="node-url">https://www.youtube.com/@JHammerZ</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener">TikTok</a>
+        <div class="comment">// Short-form videos: riffs, one-take vocals. Authority source.</div>
+        <div class="node-url">https://www.tiktok.com/@jhammerzz</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener">Instagram</a>
+        <div class="comment">// Photos, reels, and stories. Daily updates.</div>
+        <div class="node-url">https://www.instagram.com/jhammerzz</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener">Facebook</a>
+        <div class="comment">// Official page for announcements and broadcast dispatches.</div>
+        <div class="node-url">https://www.facebook.com/JHammerZz</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://www.linkedin.com/in/JHammerZ" target="_blank" rel="noopener">LinkedIn</a>
+        <div class="comment">// Professional profile and governance records.</div>
+        <div class="node-url">https://www.linkedin.com/in/JHammerZ</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://www.xiaohongshu.com/user/profile/JHammerZ" target="_blank" rel="noopener">Xiaohongshu</a>
+        <div class="comment">// Global platform node. Music content and broadcasts.</div>
+        <div class="node-url">https://www.xiaohongshu.com/user/profile/JHammerZ</div>
+      </div>
+    </div>
+
+    <!-- DEVELOPER & BUSINESS -->
+    <div class="section-box">
+      <div class="section-header">&gt;&gt; DEVELOPER &amp; BUSINESS</div>
+
+      <div class="entry">
+        <a href="https://jhammerz.carrd.co/" target="_blank" rel="noopener">Carrd</a>
+        <div class="comment">// Simple landing page with bio and direct contact portal.</div>
+        <div class="node-url">https://jhammerz.carrd.co/</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener">GitHub</a>
+        <div class="comment">// Code repositories, H-FID Standard. Repository source.</div>
+        <div class="node-url">https://github.com/JHammerZ/jhammerz.github.io</div>
+      </div>
+
+      <div class="entry">
+        <a href="https://app.impact.com/secure/mediapartner/home/pview.ihtml#/" target="_blank" rel="noopener">Impact</a>
+        <div class="comment">// Affiliate and partnership portal node.</div>
+        <div class="node-url">https://app.impact.com/secure/mediapartner</div>
+      </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="nav-bar">
+      <a href="/" class="nav-btn">&lt;&lt; RETURN_TO_ROOT</a>
+      <a href="/chains/janus_gate.json" class="nav-btn">&gt;&gt; JANUS_GATE_SCHEMA</a>
+    </div>
+
+    <footer>
+      [SIGNAL_PROPAGATING]: AUDIO_NODE_VERIFIED | H-FID-100-FORENSIC-AUDIT | SOVEREIGN_CANNON_V4.2
+    </footer>
+
+  </div>
+
+  <script>
+    // Top 3 Song Videos from youtube.com/@JHammerZ
+    // (Replace the video IDs below with your 3 specific YouTube video IDs)
+    const TOP_TRACKS = [
+      { id: "e46a45cdaee", title: "Ain't Nothin' But A Day To Die (Original Acoustic)" },
+      { id: "B0D5GLL7NV",  title: "Guitaraoke Session // Master Take" },
+      { id: "7vRd2EDcwuE", title: "Left-Handed Acoustic Live Session" }
+    ];
+
+    let lastIndex = -1;
+
+    function rotateRandomVideo() {
+      let nextIndex;
+      do {
+        nextIndex = Math.floor(Math.random() * TOP_TRACKS.length);
+      } while (nextIndex === lastIndex && TOP_TRACKS.length > 1);
+
+      lastIndex = nextIndex;
+      const selected = TOP_TRACKS[nextIndex];
+      
+      const player = document.getElementById('yt-player');
+      const title = document.getElementById('yt-track-title');
+      
+      player.src = `https://www.youtube-nocookie.com/embed/${selected.id}?rel=0&modestbranding=1`;
+      title.innerText = `// Active Node: "${selected.title}" [Track ${nextIndex + 1}/${TOP_TRACKS.length}]`;
+    }
+
+    // Initial random select on page load
+    rotateRandomVideo();
+  </script>
+
 </body>
-      </html>
+</html>

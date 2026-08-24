@@ -24,3 +24,7 @@ new_sqlite_classes = ["om"]
 [[migrations]]
 tag = "v4"
 deleted_classes = ["om"]
+
+# 🤖 Workers AI Free-Tier Binding
+[ai]
+binding = "AI"
