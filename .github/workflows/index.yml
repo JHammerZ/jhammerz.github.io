@@ -91,7 +91,7 @@ jobs:
           EOF
 
           echo "$URLS" >.hfid/indexing/urls.txt
-          HASH=$(sha256sum.hfid/indexing/manifest.json | cut -d' ' -f1)
+          HASH=$(sha256sum .hfid/indexing/manifest.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
       - name: Attest Indexing Request
@@ -107,7 +107,7 @@ jobs:
           echo "Validating: $SITEMAP"
 
           CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SITEMAP")
-          if [ "$CODE"!= "200" ]; then
+          if [ "$CODE" != "200" ]; then
             echo "❌ Sitemap returned $CODE" >>.hfid/indexing/audit.log
             exit 1
           fi
@@ -133,7 +133,7 @@ jobs:
           KEY_LOCATION="https://${HOST}/${INDEXNOW_KEY}.txt"
 
           # Build JSON payload
-          URL_LIST=$(cat.hfid/indexing/urls.txt | jq -R 'split(",") | map(select(length > 0))')
+          URL_LIST=$(cat .hfid/indexing/urls.txt | jq -R 'split(",") | map(select(length > 0))')
 
           cat >.hfid/indexing/indexnow.json << EOF
           {
@@ -182,9 +182,9 @@ jobs:
 
             if [ "$CODE" = "200" ]; then
               SUCCESS=$((SUCCESS + 1))
-              echo " Google: Indexed $URL" >>.hfid/indexing/audit.log
+              echo "✅ Google: Indexed $URL" >>.hfid/indexing/audit.log
             else
-              echo " Google: Failed $URL - HTTP $CODE" >>.hfid/indexing/audit.log
+              echo "❌ Google: Failed $URL - HTTP $CODE" >>.hfid/indexing/audit.log
             fi
           done <.hfid/indexing/urls.txt
 
@@ -194,12 +194,12 @@ jobs:
       - name: Bitcoin-Anchor Indexing Audit
         if: always()
         run: |
-          ots stamp .hfid/indexing/manifest.json.hfid/indexing/audit.log
+          ots stamp .hfid/indexing/manifest.json .hfid/indexing/audit.log
           echo "✅ Indexing request Bitcoin-anchored"
 
       - name: Upload Indexing Evidence
         if: always()
-        uses: actions/upload-artifact@6b6b # v4.4.3
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: hfid-indexing-${{ github.run_id }}
           path: .hfid/indexing/
@@ -209,7 +209,7 @@ jobs:
         if: always()
         run: |
           echo "## H-FID Search Indexing" >> $GITHUB_STEP_SUMMARY
-          echo "- **URLs**: $(cat.hfid/indexing/urls.txt | tr ',' '\n' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- **URLs**: $(cat .hfid/indexing/urls.txt | tr ',' '\n' | wc -l)" >> $GITHUB_STEP_SUMMARY
           echo "- **IndexNow**: ${{ steps.indexnow.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Google**: ${{ steps.google.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
