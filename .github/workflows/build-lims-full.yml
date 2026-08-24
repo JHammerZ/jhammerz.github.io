@@ -123,7 +123,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git git config --global user.name "GitHub Actions"
+          git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
           # Stage tracking paths cleanly
