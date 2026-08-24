@@ -1,178 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <body>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JHammerZ | Official Hub & Music</title>
-  <meta name="description" content="Official music, releases, and developer hub for Joshua Hamilton (JHammerZ). Listen to latest tracks across Spotify, Apple Music, and BandLab.">
+  <title>JHammerZ | Official Music & H-FID Hub Joshua Hamilton</title>
+  <meta name="description" content="Official music, releases, and sovereign developer hub for Joshua Hamilton (JHammerZ). Left-handed guitarist. Master Architect of H-FID v1.0.3, HEO, and Ag-FI protocols.">
   <link rel="canonical" href="https://jhammerz.github.io/">
-  <!-- H-FID / HEO Discovery -->
-  <link rel="hfid" href="/.well-known/hfid-registry.json">
-  <!-- Open Graph / Facebook -->
+  
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jhammerz.github.io/">
-  <meta property="og:title" content="JHammerZ | Official Music & Hub">
-  <meta property="og:description" content="Stream original music, releases, and explore the sovereign developer hub.">
-  <meta property="og:image" content="https://jhammerz.github.io/assets/banner.jpg">
-
-  <!-- Twitter Card -->
+  <meta property="og:title" content="JHammerZ | Official Music & H-FID Hub">
+  <meta property="og:description" content="Stream original music, releases, and explore the sovereign developer hub of Joshua Hamilton.">
+  <meta property="og:image" content="https://jhammerz.github.io/assets/jhammer.jpg">
+  
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://jhammerz.github.io/">
-  <meta name="twitter:title" content="JHammerZ | Official Music & Hub">
-  <meta name="twitter:description" content="Stream original music, releases, and explore the sovereign developer hub.">
-
-  <!-- Validated Schema.org Structured Data -->
+  <meta name="twitter:title" content="JHammerZ | Official Music & H-FID Hub">
+  <meta name="twitter:description" content="Stream original music, releases, and explore the sovereign developer hub of Joshua Hamilton.">
+  
+  <!-- H-FID / HEO Discovery -->
+  <link rel="hfid" href="/.well-known/hfid-registry.json">
+  <link rel="security" href="/.well-known/security.txt">
+  
+  <!-- Identity Graph -->
+  <link rel="me" href="https://tiktok.com/@jhammerz">
+  <link rel="me" href="https://youtube.com/@jhammerz">
+  <link rel="me" href="https://github.com/jhammerz">
+  <link rel="me" href="https://orcid.org/0009-0004-5273-7028">
+  <link rel="me" href="https://linkedin.com/in/jhammerz">
+  
+  <!-- Verification -->
+  <meta name="facebook-domain-verification" content="gr4gxqdgze694d049fp6gem46ur9zd">
+  <meta name="google-site-verification" content="IU-5FLh-DgQcw73G631RMo2Bn9TW3BxXT5xFOwvA_m4">
+  <meta name="Impact-Site-Verification" content="53cd98b3-5f05-43f2-85e9-67aa9e746fdc">
+  
+  <!-- JSON-LD: H-FID Sovereign Claim -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "MusicGroup",
     "name": "JHammerZ",
     "alternateName": ["Joshua Hamilton", "Colonel Ro"],
-    "url": "https://jhammerz.github.io",
-    "genre": ["Acoustic", "Folk", "Alternative", "Experimental"],
+    "url": "https://jhammerz.github.io/",
+    "description": "Joshua Hamilton is a verified human musician. Left-handed guitarist. Master Architect of H-FID v1.0.3, HEO, Ag-FI.",
+    "identifier": {
+      "@type": "PropertyValue",
+      "name": "HID",
+      "value": "JHammerZ-001"
+    },
     "sameAs": [
-      "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+      "https://open.spotify.com/artist/7vXd3EDCmuEWtYqWQZa87h",
       "https://music.apple.com/us/artist/jhammerz/1845705346",
-      "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
-      "https://www.bandlab.com/band/band8670133842983447",
+      "https://music.amazon.com/artists/B0D5GLL7NW/jhammerz",
+      "https://www.bandlab.com/band/band8701133842083447",
       "https://www.youtube.com/@JHammerZ",
       "https://www.instagram.com/jhammerzz",
-      "https://www.tiktok.com/@jhammerzz",
-      "https://www.facebook.com/JHammerZz",
-      "https://www.linkedin.com/in/JHammerZ",
-      "https://github.com/JHammerZ/jhammerz.github.io",
-      "https://jhammerz.carrd.co/"
+      "https://www.tiktok.com/@jhammerz",
+      "https://www.facebook.com/JHammerZ2",
+      "https://www.linkedin.com/in/jhammerz",
+      "https://github.com/JHammerZ/jhammerz.github.io"
     ]
   }
   </script>
-
+  
   <style>
     :root {
-      --bg: #090d10;
+      --bg: #090b10;
       --card-bg: rgba(16, 24, 32, 0.85);
       --text: #e2e8f0;
       --text-dim: #94a3b8;
       --accent: #10b981;
       --accent-glow: rgba(16, 185, 129, 0.25);
-      --border: #1e293b;
+      --border: #1c253b;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
-    }
-    .telemetry { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; margin-top: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent); border-radius: 9999px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); cursor: pointer; }
-.pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
-.heo-terminal { background: #000; border: 1px solid var(--accent); border-radius: 8px; padding: 1rem; font-family: var(--font-mono); font-size: 0.85rem; display: none; margin-top: 1rem; }
-.heo-terminal.active { display: block; }
-.heo-input { width: 100%; background: transparent; border: none; color: var(--accent); font-family: var(--font-mono); outline: none; }
-.heo-output { color: var(--text); white-space: pre-wrap; margin-top: 0.5rem; max-height: 300px; overflow-y: auto; }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--bg);
       color: var(--text);
       font-family: var(--font-sans);
-      min-height: 100vh;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem 1rem;
       line-height: 1.5;
+      min-height: 100vh;
     }
-
-    .container {
-      width: 100%;
-      max-width: 680px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+    .container { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 1.5rem; }
+    .profile { text-align: center; padding: 1.5rem 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 1px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+    .profile h1 { font-size: 1.75rem; letter-spacing: 0.05em; color: #fff; }
+    .profile .subtitle { font-size: 0.95rem; color: var(--accent); font-family: var(--font-mono); margin-top: 0.25rem; }
+    .profile p { margin-top: 0.75rem; color: var(--text-dim); font-size: 0.9rem; }
+    .telemetry { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; margin-top: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent); border-radius: 9999px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); cursor: pointer; }
+    .pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+    .music-player { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; min-height: 400px; }
+    .music-player h2 { font-size: 1.1rem; font-family: var(--font-mono); color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+    .player-placeholder { width: 100%; height: 352px; background: #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--border); }
+    .player-placeholder:hover { border-color: var(--accent); }
+    .section-title { font-size: 0.85rem; font-family: var(--font-mono); color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.5rem; padding-left: 0.25rem; }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem; }
+    .link-card { display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 500; transition: all 0.2s ease; }
+    .link-card:hover { border-color: var(--accent); transform: translateY(-2px); background: rgba(16, 185, 129, 0.08); box-shadow: 0 4px 12px var(--accent-glow); }
+    .link-info { display: flex; flex-direction: column; }
+    .link-title { font-size: 1rem; color: #fff; }
+    .link-desc { font-size: 0.8rem; color: var(--text-dim); font-family: var(--font-mono); }
+    .link-icon { font-size: 1.25rem; opacity: 0.8; }
+    footer { text-align: center; margin-top: 2rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); }
+    .heo-terminal { background: #000; border: 1px solid var(--accent); border-radius: 8px; padding: 1rem; font-family: var(--font-mono); font-size: 0.85rem; display: none; margin-top: 1rem; }
+    .heo-terminal.active { display: block; }
+    .heo-input { width: 100%; background: transparent; border: none; color: var(--accent); font-family: var(--font-mono); outline: none; }
+    .heo-output { color: var(--text); white-space: pre-wrap; margin-top: 0.5rem; max-height: 300px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="profile">
+      <h1>JHammerZ</h1>
+      <div class="subtitle">Joshua Hamilton • Sovereign Audio & Mesh</div>
+      <p>Original music, releases, and decentralized edge systems.</p>
+      <div class="telemetry" id="heo-toggle">
+        <span class="pulse"></span>
+        <span id="telemetry-status">EDGE: STATIC</span>
+      </div>
+      <div class="heo-terminal" id="heo-terminal">
+        <div>JHammerZ-001 | Debian RING_-3 | Type 'help'</div>
+        <input class="heo-input" id="heo-input" placeholder="$ " autocomplete="off">
+        <div class="heo-output" id="heo-output"></div>
+      </div>
+    </header>
+    
+    <section class="music-player">
+      <h2>▶ Featured Tracks & Discography</h2>
+      <div class="player-placeholder" id="spotify-trigger">
+        <span style="font-family:var(--font-mono);color:var(--accent)">[ LOAD SPOTIFY PLAYER ]</span>
+      </div>
+    </section>
+    
+    <div class="section-title">Music Streaming & Audio</div>
+    <div class="links-grid">
+      <a href="https://jhammerz.github.io/music.html" class="link-card" style="border-color: var(--accent); background: rgba(16, 185, 129, 0.08);">
+        <div class="link-info">
+          <span class="link-title">🎵 Music Hub & Video Deck</span>
+          <span class="link-desc">All 7 YouTube Sessions & Spotify Discography</span>
+        </div>
+        <span class="link-icon">▶</span>
+      </a>
+      <a href="https://open.spotify.com/artist/7vXd3EDCmuEWtYqWQZa87h" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">Spotify</span><span class="link-desc">Artist Profile & Albums</span></div><span class="link-icon">🎵</span>
+      </a>
+      <a href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">Apple Music</span><span class="link-desc">Official Catalog</span></div><span class="link-icon">🍎</span>
+      </a>
+      <a href="https://www.bandlab.com/band/band8701133842083447" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">BandLab</span><span class="link-desc">Community & Collabs</span></div><span class="link-icon">🎙️</span>
+      </a>
+      <a href="https://music.amazon.com/artists/B0D5GLL7NW/jhammerz" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">Amazon Music</span><span class="link-desc">Digital Store & Streams</span></div><span class="link-icon">📀</span>
+      </a>
+    </div>
+    
+    <div class="section-title">Visual & Social Mesh</div>
+    <div class="links-grid">
+      <a href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">YouTube</span><span class="link-desc">@JHammerZ • Videos & Sessions</span></div><span class="link-icon">📺</span>
+      </a>
+      <a href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">Instagram</span><span class="link-desc">@jhammerzz • Updates</span></div><span class="link-icon">📷</span>
+      </a>
+      <a href="https://www.tiktok.com/@jhammerz" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">TikTok</span><span class="link-desc">@jhammerz • Clips</span></div><span class="link-icon">🎵</span>
+      </a>
+      <a href="https://www.facebook.com/JHammerZ2" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">Facebook</span><span class="link-desc">Official Page</span></div><span class="link-icon">👥</span>
+      </a>
+    </div>
+    
+    <div class="section-title">Network & Identity</div>
+    <div class="links-grid">
+      <a href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">GitHub Repository</span><span class="link-desc">Source & CI/CD Pipelines</span></div><span class="link-icon">💻</span>
+      </a>
+      <a href="https://www.linkedin.com/in/jhammerz" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">LinkedIn</span><span class="link-desc">Professional Profile</span></div><span class="link-icon">💼</span>
+      </a>
+      <a href="https://orcid.org/0009-0004-5273-7028" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">ORCID</span><span class="link-desc">Research Identity</span></div><span class="link-icon">🎓</span>
+      </a>
+      <a href="https://doi.org/10.5281/zenodo.20778079" target="_blank" rel="noopener" class="link-card">
+        <div class="link-info"><span class="link-title">Zenodo DOI</span><span class="link-desc">Janus Gate v1.1.0-H-FID</span></div><span class="link-icon">📜</span>
+      </a>
+    </div>
+    
+    <footer role="contentinfo">
+      <p>© 2026 Joshua Hamilton (JHammerZ). H-FID Standard v1.0.3</p>
+      <p style="margin-top: 0.25rem; font-size: 0.7rem; color: var(--accent);">Lysander-3.0 Sovereign Architecture</p>
+    </footer>
+  </main>
+  
+  <script>
+  // JHammerZ-001 HEO - Zero JS until load + idle = 0ms TBT
+  window.addEventListener('load', () => {
+    const init = () => {
+      const statusEl = document.getElementById('telemetry-status');
+      const terminalEl = document.getElementById('heo-terminal');
+      const toggleEl = document.getElementById('heo-toggle');
+      const inputEl = document.getElementById('heo-input');
+      const outputEl = document.getElementById('heo-output');
+      const spotifyTrigger = document.getElementById('spotify-trigger');
+      let agent = null;
+      
+      // HEO Discovery
+      fetch('/.well-known/hfid-registry.json', {cache: 'no-cache'})
+        .then(r => r.json())
+        .then(data => fetch(`${data.endpoint}/health`, {cache: 'no-cache'}).then(h => h.json().then(d => ({data, d}))))
+        .then(({data, d}) => {
+          if (d.hid === 'JHammerZ-001' && d.global_root) {
+            statusEl.textContent = `EDGE: ONLINE | ${data.hid} | ROOT`;
+            agent = {endpoint: data.endpoint, hid: data.hid};
+            window.JHammerZ = agent;
+            toggleEl.onclick = () => {
+              terminalEl.classList.toggle('active');
+              if (terminalEl.classList.contains('active')) inputEl.focus();
+            };
+          } else {
+            statusEl.textContent = 'EDGE: STANDBY';
+          }
+        })
+        .catch(() => { statusEl.textContent = 'EDGE: RECIRCULATING'; });
+      
+      // Spotify lazy load - saves 599 KiB + 1.4s execution
+      spotifyTrigger.onclick = () => {
+        spotifyTrigger.innerHTML = '<iframe title="JHammerZ Spotify Discography Player" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vXd3EDCmuEWtYqWQZa87h?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>';
+      };
+      
+      // HEO Terminal
+      const exec = async (cmd) => {
+        if (!agent) return 'Agent offline';
+        if (!cmd.trim()) return '';
+        if (cmd === 'clear') { outputEl.textContent = ''; return ''; }
+        if (cmd === 'help') return 'Commands: whoami, hostname, uname -a, ps, clear';
+        try {
+          const res = await fetch(`${agent.endpoint}/exec`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({cmd})
+          });
+          const data = await res.json();
+          return data.stdout || data.stderr || `Exit ${data.code}`;
+        } catch (e) {
+          return `Error: ${e.message}`;
+        }
+      };
+      
+      inputEl?.addEventListener('keydown', async (e) => {
+        if (e.key === 'Enter') {
+          const cmd = inputEl.value;
+          outputEl.textContent += `\n$ ${cmd}\n`;
+          inputEl.value = '';
+          const result = await exec(cmd);
+          outputEl.textContent += result + '\n';
+          outputEl.scrollTop = outputEl.scrollHeight;
+        }
+      });
+      
+      window.heo = exec;
+    };
+    
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(init, {timeout: 2000});
+    } else {
+      setTimeout(init, 1);
     }
-
-    .profile {
-      text-align: center;
-      padding: 1.5rem 1rem;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-    .profile h1 {
-      font-size: 1.85rem;
-      letter-spacing: -0.02em;
-      color: #fff;
-    }
-    .profile .subtitle {
-      font-size: 0.95rem;
-      color: var(--accent);
-      font-family: var(--font-mono);
-      margin-top: 0.25rem;
-    }
-    .profile p {
-      margin-top: 0.75rem;
-      color: var(--text-dim);
-      font-size: 0.95rem;
-    }
-
-    .telemetry {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 0.75rem;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid var(--accent);
-      border-radius: 9999px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--accent);
-      margin-top: 1rem;
-    }
-    .pulse {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-
-    .music-player {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .music-player h2 {
-      font-size: 1.1rem;
-      font-family: var(--font-mono);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .section-title {
-      font-size: 0.85rem;
-      font-family: var(--font-mono);
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-top: 0.5rem;
-      padding-left: 0.25rem;
-    }
-    .links-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 0.75rem;
-    }
-    .link-card {
-      display: flex;
+  });
+  </script>
+</body>
+</html>      display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 1rem 1.25rem;
