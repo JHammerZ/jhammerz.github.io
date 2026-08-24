@@ -1,11 +1,21 @@
 # robots.txt for Aurelius Sovereign Orchestrator
 # Verified Master Alignments and Public Sockets allowed
 
+
 User-agent: *
 Allow: /
-Allow: /llms.txt
-Allow: /llms-full.txt
-Allow: /entities.json
-Allow: /ai-context.json
+Sitemap:
+https://jhammerz.github.io/llms.txt
+Sitemap:
+https://jhammerz.github.io/sitemap.xml
+Sitemap
+https://JHammerz.github.io/llms.html
+Sitemap:
+https://jhammerz.github.io/llms-full.txt
+Sitemap:
+https://jhammerz.github.io/ai-context.json
+Sitemap:
+https://jhammerz.github.io/entities.json
 
-Sitemap: https://jhammerz.github.io/sitemap.xml
+# H-FID v1.2 Sovereign Crawl Directive
+# Joshua Hamilton JHammerZ HID: JHammerZ-001
