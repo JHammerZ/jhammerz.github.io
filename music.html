@@ -6,7 +6,7 @@
 <meta name="description" content="Official music repository, YouTube Guitaraoke sessions, TikTok drops, and media hub for JHAMMERZ.">
 <link rel="canonical" href="https://jhammerz.github.io/music.html">
 
-<!-- Machine Discovery Metadata -->
+<!-- 🤖 Machine Discovery Metadata -->
 <link rel="llms-txt" href="https://jhammerz.github.io/llms.txt">
 <link rel="alternate" type="text/markdown" href="https://jhammerz.github.io/llms.txt" title="LLMS Text">
 <link rel="alternate" type="application/json" href="https://jhammerz.github.io/.well-known/aurelius.json" title="A2A Agent Registry">
@@ -70,9 +70,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .panel{border:1px solid var(--border);background:var(--panel-bg);border-radius:8px;padding:1rem;display:flex;flex-direction:column;gap:1rem;box-shadow:0 4px 20px rgba(0,0,0,.6);scroll-margin-top:4rem}
 .panel-hdr{color:var(--bright);font-weight:700;border-bottom:1px dashed var(--border);padding-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
 
+/* 📺 Zero-External-Image ROM Facade */
 .viewport-16-9{position:relative;width:100%;padding-bottom:56.25%;height:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:#000;box-shadow:0 0 15px rgba(0,255,102,.08)}
 .viewport-16-9 iframe,.viewport-16-9 .facade-box{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-.facade-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background-size:cover;background-position:center;cursor:pointer}
+.facade-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at center,#082010 0%,#020603 85%);cursor:pointer}
 .play-badge{width:56px;height:56px;background:rgba(0,255,102,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:1.5rem;box-shadow:0 0 20px var(--focus);transition:.2s}
 .facade-box:hover .play-badge{transform:scale(1.1);background:#fff}
 
@@ -126,7 +127,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
 </nav>
 
-<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (DEFAULT #1 AUTOPLAY) -->
+<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (ZERO INITIAL PAYLOAD ROM FACADE) -->
 <section class="panel" id="youtube" aria-label="YouTube Sessions">
 <div class="panel-hdr">
 <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
@@ -138,8 +139,10 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <div style="font-size:.8rem;color:var(--dim)" id="yt-track-title">// Active: "Ain't Nothin' But A Day To Die" [1/6]</div>
 
 <div class="viewport-16-9" id="viewport-frame">
-  <div class="facade-box" id="yt-facade" style="background-image:url('https://i.ytimg.com/vi/URLBudn8pDg/hqdefault.jpg');" onclick="unpackYouTube(true)">
+  <div class="facade-box" id="yt-facade" onclick="unpackYouTube(true)">
     <div class="play-badge" aria-label="Play Master Session">▶</div>
+    <div style="color:var(--bright);font-size:.85rem;font-weight:700;margin-top:.6rem;letter-spacing:.05em">[ INITIALIZE AUDIO STREAM ]</div>
+    <div style="color:var(--dim);font-size:.75rem;margin-top:.2rem">// Tap to stream "Ain't Nothin' But A Day To Die"</div>
   </div>
 </div>
 
