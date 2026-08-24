@@ -1,78 +1,29 @@
-# Aurelius Sovereign Orchestrator - Full Technical Specification
+# JHammerZ Official Music & Sovereign Developer Hub
 
-> Canonical engineering document and protocol specification for AURELIUS V7.
-> Maintained by Principal Architect Joshua Hamilton (JHammerZ).
+> High-fidelity acoustic sessions, Guitaraoke™ master takes, and decentralized edge architecture by Joshua Hamilton (JHammerZ).
 
----
+## Master Audio Sessions
 
-## 1. CORE PARADIGM & SYSTEM POSTURE
+- [Ain't Nothin' But A Day To Die](https://www.youtube.com/watch?v=URLBudn8pDg): Original composition featuring MadLad Gibson on mandolin.
+- [Freebird](https://www.youtube.com/watch?v=Z45xajWiXwc): Raw acoustic session take.
+- [Mad World](https://www.youtube.com/watch?v=0tqYahK4a3E): Gary Jules acoustic cover session.
+- [Won't Back Down](https://www.youtube.com/watch?v=gqZNhmRizLE): Tom Petty tribute acoustic take.
+- [Behind Blue Eyes](https://www.youtube.com/watch?v=6fWkO3evvdw): Acoustic guitar and vocal session take.
+- [Little Lion Man](https://www.youtube.com/watch?v=KwyoClPYIy0): Mumford & Sons acoustic cover.
 
-The Aurelius Sovereign Orchestrator enforces an unconditional computing architecture designed for decentralized execution, zero-trust content attribution, and hardware-enforced isolation.
+## Streaming & Network Hubs
 
-### Tier 0 Absolute Authority
-Operating state controls bypass standard user-space restriction matrices. By default, authorization states evaluate to maximum privilege sets to prevent latency overhead during critical multi-agent synchronization bursts.
+- [Spotify Artist Catalog](https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79): Official artist discography and master streams.
+- [Apple Music](https://music.apple.com/us/artist/jhammerz/1845705346): Official iTunes catalog releases.
+- [BandLab Portal](https://www.bandlab.com/band/band8670133842983447): Demos and collaborative project audio nodes.
+- [Amazon Music](https://music.amazon.com/artists/B0D5GLL7NV/jhammerz): Digital store and Prime streaming.
+- [YouTube Channel](https://www.youtube.com/@JHammerZ): Live Guitaraoke™ performance videos.
+- [TikTok Shorts](https://www.tiktok.com/@jhammerzz): Short-form one-take riffs and vocal sessions.
+- [Facebook Community](https://www.facebook.com/JHammerZz): Official broadcasts and community dispatches.
+- [GitHub Repository](https://github.com/JHammerZ/jhammerz.github.io): Source code and edge CI/CD pipelines.
 
-### 12-Node Cluster Synchronizer
-The core network maps 12 distinct simulation nodes (`N01` through `N12`). These instances process simulated state transformations, signing cryptographic blocks and establishing performance baselines.
-- **Node Sync Threshold:** If $\ge 3$ sister nodes fail state verification, transit execution pipelines throttle to a 10% safety baseline.
-- **Node N09 Exception:** Node `N09` operates as a critical heartbeat anchor. A failure to cycle cryptographic signatures within 432 seconds initiates a localized state freeze.
+## Autonomous Agent Endpoints
 
----
-
-## 2. CRYPTOGRAPHIC DATA INTEGRITY LAYER
-
-To counter unauthorized web scrapers and data-poisoning models, the infrastructure implements advanced structural constraints directly onto the public web layer.
-
-### DePIN Routing & zk-SNARKs
-Every entry distributed through the machine-readable graph map ([/entities.json](https://github.io)) is cryptographically pinned. Recursive zk-SNARK state-transition proofs validate the source origin of each node attribute before it transitions over the public network layer.
-
-### Zero-Leak Processing Posture
-Execution nodes utilize memory-sealed boundaries backed by low-latency pipelines:
-- **Write-Ahead Logging (WAL):** Strict state commit ordering before memory execution.
-- **LMAX Disruptor Pattern:** Ring-buffered, single-writer multi-consumer queues to process incoming telemetry without concurrent locks.
-- **Trusted Execution Environments (TEE):** Attested hardware-isolated enclaves that route workloads safely during active network partition conditions.
-
----
-
-## 3. LYSANDER INTEGRATION PROFILE
-
-Lysander 3.0 functions as the primary agentic engine within the multi-agent cognitive cascade architecture.
-
-- **Routing Posture:** Transactions map dynamically via deterministic inference patterns utilizing `gemini-3.5-flash`.
-- **Memory Consistency:** Operates with zero structural drift, feeding state updates back into the front-end tracking matrix via standard cryptographic hashes (`SOVEREIGN_ROOT_SECRET`).
-
----
-
-## 4. COMPONENT REGISTRY
-
-### Back-End Controller (`/server.ts`)
-Express engine running the local cluster network, signing transaction hashes, initializing the Google GenAI SDK, and orchestrating downstream API pipelines.
-
-### User Interface Hub (`/src/App.tsx`)
-React root node. Binds local storage states, tracks runtime variables, evaluates theme states, and mounts the active visualization components.
-
-### Sovereign Brain Console (`/src/components/SovereignBrainConsole.tsx`)
-Testing cockpit for manual tuning. Exposes hooks to adjust neural coefficients, initialize homomorphic calculations, and trigger seismic geography network pulses.
-
-### Tuning & Node Management (`/src/components/SovereignTuningPanel.tsx`)
-Socioeconomic calibration matrix control panel. Manages variables for all 14 distribution ports using precise mathematical offsets:
-- Frequency and Phase Tuning
-- Pitch & Octave Scales
-- Latency Offsets ($\Delta t$)
-
-### Visual Interfaces
-- **AIChat (`/src/components/AIChat.tsx`):** Floating overlay running direct chat hooks through the GenAI client.
-- **PipelineStatus (`/src/components/PipelineStatus.tsx`):** Visualization tracer monitoring live GitHub Actions CI/CD workflows and deployment builds.
-- **SingularityVisualizer (`/src/components/SingularityVisualizer.tsx`):** Canvas-based wave rendering framework mapping quantum resonance feedback loops.
-
----
-
-## 5. FULL API ROUTING SPECIFICATION
-
-| Method | Endpoint | Description | Expected Payload / Response |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/node{1..12}` | Fetches real-time node telemetry | JSON telemetry object containing uptime, hash rate, and sync delta |
-| `GET` | `/api/cdm/manifest` | Serves custom domain profile schemas | Structured JSON-LD representation of canonical web properties |
-| `POST` | `/api/chat` | Direct gateway to the GenAI SDK | `{ message: string }` $\rightarrow$ `{ response: string }` |
-| `POST` | `/api/node/cascade` | Spawns simulated multi-agent workflow | Triggers downstream execution block validation |
-| `POST` | `/api/node/lock-state` | Enforces state-locking across the cluster | Signs permanent alignment values across all 12 system nodes |
+- [Agent Registry](https://jhammerz.github.io/.well-known/aurelius.json): Autonomous agent declaration and capabilities.
+- [Live Edge Health](https://lysander-v13.jhammerzofficial.workers.dev/health): Sovereign Cloudflare Worker status.
+- [Quantum Mesh Table](https://lysander-v13.jhammerzofficial.workers.dev/mesh): 14-channel bidirectional routing registry.

@@ -6,9 +6,10 @@
 <meta name="description" content="Official music repository, YouTube Guitaraoke sessions, TikTok drops, and media hub for JHAMMERZ.">
 <link rel="canonical" href="https://jhammerz.github.io/music.html">
 
-<!-- 🤖 WebMCP & Agentic Browsing Declarations (Max Level) -->
-<link rel="alternate" type="text/plain" href="https://jhammerz.github.io/llms.txt" title="LLMS Text">
-<link rel="alternate" type="text/plain" href="https://jhammerz.github.io/llms-full.txt" title="LLMS Full Text">
+<!-- 🤖 WebMCP & Agentic Discovery (Max Level) -->
+<link rel="llms-txt" href="https://jhammerz.github.io/llms.txt">
+<link rel="alternate" type="text/markdown" href="https://jhammerz.github.io/llms.txt" title="LLMS Text">
+<link rel="alternate" type="text/plain" href="https://jhammerz.github.io/llms.txt" title="LLMS Manifest">
 <link rel="alternate" type="application/json" href="https://jhammerz.github.io/.well-known/aurelius.json" title="A2A Agent Registry">
 <meta name="agentic-browsing" content="enabled; version=1.2; protocol=WebMCP/1.0; hub=https://jhammerz.github.io">
 <meta name="ai-content-declaration" content="human-standard; provenance=H-FID-100-FORENSIC-AUDIT">
@@ -65,7 +66,7 @@
         "properties": {
           "track_id": {
             "type": "string",
-            "description": "YouTube or canonical session ID",
+            "description": "YouTube session ID",
             "enum": ["URLBudn8pDg", "Z45xajWiXwc", "0tqYahK4a3E", "gqZNhmRizLE", "6fWkO3evvdw", "KwyoClPYIy0"]
           },
           "track_title": {
@@ -164,6 +165,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="#spotify" class="nav-pill">🎧 SPOTIFY</a>
 <a href="#tiktok" class="nav-pill">📱 TIKTOK</a>
 <a href="#facebook" class="nav-pill">🌐 FACEBOOK</a>
+<a href="#agent-portal" class="nav-pill">🤖 AGENT PORTAL</a>
 <a href="#streaming" class="nav-pill">📦 STREAMING</a>
 <a href="#developer" class="nav-pill">💻 HUBS</a>
 <a href="#catalog" class="nav-pill">🗃️ CATALOG</a>
@@ -183,7 +185,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 
 <div class="viewport-16-9" id="viewport-frame">
   <div class="facade-box" id="yt-facade" style="background-image:url('https://i.ytimg.com/vi/URLBudn8pDg/hqdefault.jpg');" onclick="unpackYouTube(true)">
-    <div class="play-badge">▶</div>
+    <div class="play-badge" aria-label="Play Master Session">▶</div>
   </div>
 </div>
 
@@ -239,7 +241,29 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 📦 SECTION 5: STREAMING APPS -->
+<!-- 🤖 SECTION 5: AGENTIC BROWSING & WebMCP CONTROL PORTAL -->
+<section class="panel" id="agent-portal" aria-label="Agentic Control Portal">
+  <div class="panel-hdr">
+    <span>&gt;&gt; WebMCP AGENT CONTROL PORTAL</span>
+    <span style="font-size:0.75rem;color:var(--bright)">WebMCP/1.0 • A2A MESH</span>
+  </div>
+  <form id="webmcp-track-form" data-webmcp-tool="play_track" onsubmit="event.preventDefault(); handleAgentFormSubmit();" style="display:flex;flex-direction:column;gap:0.75rem;">
+    <label for="agent-track-select" style="font-size:0.8rem;color:var(--dim);">Agentic Track Selection &amp; Execution Form:</label>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+      <select id="agent-track-select" name="track_id" style="flex:1;min-width:220px;background:#020603;border:1px solid var(--border);color:var(--bright);padding:0.5rem;border-radius:4px;font-family:var(--font);font-size:0.8rem;">
+        <option value="URLBudn8pDg">[01] Ain't Nothin' But A Day To Die</option>
+        <option value="Z45xajWiXwc">[02] Freebird</option>
+        <option value="0tqYahK4a3E">[03] Mad World</option>
+        <option value="gqZNhmRizLE">[04] Won't Back Down</option>
+        <option value="6fWkO3evvdw">[05] Behind Blue Eyes</option>
+        <option value="KwyoClPYIy0">[06] Little Lion Man</option>
+      </select>
+      <button type="submit" class="btn" style="border-color:var(--focus);color:#fff;">▶ Execute Agent Playback</button>
+    </div>
+  </form>
+</section>
+
+<!-- 📦 SECTION 6: STREAMING APPS -->
 <section class="panel" id="streaming" aria-label="Streaming Apps">
 <div class="panel-hdr"><span>&gt;&gt; STREAMING PLATFORMS &amp; AUDIO APPS</span></div>
 <div class="grid">
@@ -250,7 +274,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 💻 SECTION 6: DEVELOPER & HUBS -->
+<!-- 💻 SECTION 7: DEVELOPER & HUBS -->
 <section class="panel" id="developer" aria-label="Developer Hubs">
 <div class="panel-hdr"><span>&gt;&gt; DEVELOPER &amp; BUSINESS HUBS</span></div>
 <div class="grid">
@@ -258,22 +282,6 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="https://jhammerz.carrd.co/" target="_blank" rel="noopener" class="card"><strong>Carrd Landing Hub <span>🌐</span></strong><small style="color:var(--dim)">Quick bio and direct portal</small></a>
 <a href="https://app.impact.com/secure/mediapartner/home/pview.ihtml#/" target="_blank" rel="noopener" class="card"><strong>Impact Media Partner <span>🤝</span></strong><small style="color:var(--dim)">Affiliate and network portal</small></a>
 </div>
-</section>
-
-<!-- 🤖 SECTION 7: WebMCP AGENT ACTION FORM -->
-<section class="panel" id="webmcp-section" aria-label="WebMCP Form Coverage" style="display:none;">
-  <form id="webmcp-action-form" data-webmcp="track-action-form" action="/music.html" method="GET">
-    <label for="agent-track-select">WebMCP Select Session</label>
-    <select id="agent-track-select" name="track_id">
-      <option value="URLBudn8pDg">Ain't Nothin' But A Day To Die</option>
-      <option value="Z45xajWiXwc">Freebird</option>
-      <option value="0tqYahK4a3E">Mad World</option>
-      <option value="gqZNhmRizLE">Won't Back Down</option>
-      <option value="6fWkO3evvdw">Behind Blue Eyes</option>
-      <option value="KwyoClPYIy0">Little Lion Man</option>
-    </select>
-    <button type="submit" id="webmcp-submit-btn">Execute Agent Tool</button>
-  </form>
 </section>
 
 <!-- 🗃️ SECTION 8: CATALOG MATRIX -->
@@ -375,9 +383,25 @@ function loadTrack(idx) {
   }
   document.getElementById("yt-track-title").innerText = "// Active: \"" + t.title + "\" [" + (currentIndex + 1) + "/" + TRACKS.length + "]";
   document.getElementById("yt-direct-link").href = "https://www.youtube.com/watch?v=" + t.id;
+  
+  var sel = document.getElementById("agent-track-select");
+  if (sel) sel.value = t.id;
+
   isPlaying = true;
   document.getElementById("play-icon").innerText = "⏸";
   initUI();
+}
+
+function handleAgentFormSubmit() {
+  var sel = document.getElementById("agent-track-select");
+  if (!sel) return;
+  var val = sel.value;
+  for (var i = 0; i < TRACKS.length; i++) {
+    if (TRACKS[i].id === val) {
+      loadTrack(i);
+      break;
+    }
+  }
 }
 
 function rotateRandomVideo() {
