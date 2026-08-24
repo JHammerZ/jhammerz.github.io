@@ -6,7 +6,7 @@ concurrency:
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
   push:
     branches: [main]
     paths:
@@ -26,21 +26,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Sovereign Cryptographic Repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
 
-      - uses: dcarbone/install-jq-action@v2
+      - name: Install JQ Engine
+        uses: dcarbone/install-jq-action@v2
         with:
           version: '1.7.1'
           force: true
 
-      - name: Install OpenTimestamps
+      - name: Install OpenTimestamps Client
         run: |
           python -m pip install --upgrade pip
           pip install opentimestamps-client
@@ -51,13 +54,13 @@ jobs:
       - name: Run Sovereign OTS Verification
         id: verify
         run: |
-          set +e
+          set -e
           TARGET="${{ github.event.inputs.target_path || '.hfid' }}"
           mkdir -p "$TARGET"
           find "$TARGET" -name "*.ots" > /tmp/ots_files.txt || true
 
-          if [! -s /tmp/ots_files.txt ]; then
-            echo "No.ots files found in $TARGET. Skipping verification."
+          if [ ! -s /tmp/ots_files.txt ]; then
+            echo "No ots files found in $TARGET. Skipping verification."
             echo "verified_count=0" >> $GITHUB_OUTPUT
             echo "failed_count=0" >> $GITHUB_OUTPUT
             exit 0
@@ -65,9 +68,12 @@ jobs:
 
           VERIFIED=0
           FAILED=0
+
           while IFS= read -r ots_file; do
             echo "Verifying: $ots_file"
-            if ots verify "$ots_file"; then
+            
+            # Added --no-bitcoin flag to prevent local bitcoin.conf cookie search errors
+            if ots verify --no-bitcoin "$ots_file"; then
               VERIFIED=$((VERIFIED + 1))
               echo "✅ Verified: $ots_file"
             else
@@ -79,4 +85,7 @@ jobs:
           echo "verified_count=$VERIFIED" >> $GITHUB_OUTPUT
           echo "failed_count=$FAILED" >> $GITHUB_OUTPUT
           echo "Verification complete: $VERIFIED passed, $FAILED failed"
-          exit 0
+          
+          if [ "$FAILED" -gt 0 ]; then
+            exit 1
+          fi
