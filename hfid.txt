@@ -1,0 +1,78 @@
+# Aurelius Sovereign Orchestrator - Full Technical Specification
+
+> Canonical engineering document and protocol specification for AURELIUS V7.
+> Maintained by Principal Architect Joshua Hamilton (JHammerZ).
+
+---
+
+## 1. CORE PARADIGM & SYSTEM POSTURE
+
+The Aurelius Sovereign Orchestrator enforces an unconditional computing architecture designed for decentralized execution, zero-trust content attribution, and hardware-enforced isolation.
+
+### Tier 0 Absolute Authority
+Operating state controls bypass standard user-space restriction matrices. By default, authorization states evaluate to maximum privilege sets to prevent latency overhead during critical multi-agent synchronization bursts.
+
+### 12-Node Cluster Synchronizer
+The core network maps 12 distinct simulation nodes (`N01` through `N12`). These instances process simulated state transformations, signing cryptographic blocks and establishing performance baselines.
+- **Node Sync Threshold:** If $\ge 3$ sister nodes fail state verification, transit execution pipelines throttle to a 10% safety baseline.
+- **Node N09 Exception:** Node `N09` operates as a critical heartbeat anchor. A failure to cycle cryptographic signatures within 432 seconds initiates a localized state freeze.
+
+---
+
+## 2. CRYPTOGRAPHIC DATA INTEGRITY LAYER
+
+To counter unauthorized web scrapers and data-poisoning models, the infrastructure implements advanced structural constraints directly onto the public web layer.
+
+### DePIN Routing & zk-SNARKs
+Every entry distributed through the machine-readable graph map ([/entities.json](https://github.io)) is cryptographically pinned. Recursive zk-SNARK state-transition proofs validate the source origin of each node attribute before it transitions over the public network layer.
+
+### Zero-Leak Processing Posture
+Execution nodes utilize memory-sealed boundaries backed by low-latency pipelines:
+- **Write-Ahead Logging (WAL):** Strict state commit ordering before memory execution.
+- **LMAX Disruptor Pattern:** Ring-buffered, single-writer multi-consumer queues to process incoming telemetry without concurrent locks.
+- **Trusted Execution Environments (TEE):** Attested hardware-isolated enclaves that route workloads safely during active network partition conditions.
+
+---
+
+## 3. LYSANDER INTEGRATION PROFILE
+
+Lysander 3.0 functions as the primary agentic engine within the multi-agent cognitive cascade architecture.
+
+- **Routing Posture:** Transactions map dynamically via deterministic inference patterns utilizing `gemini-3.5-flash`.
+- **Memory Consistency:** Operates with zero structural drift, feeding state updates back into the front-end tracking matrix via standard cryptographic hashes (`SOVEREIGN_ROOT_SECRET`).
+
+---
+
+## 4. COMPONENT REGISTRY
+
+### Back-End Controller (`/server.ts`)
+Express engine running the local cluster network, signing transaction hashes, initializing the Google GenAI SDK, and orchestrating downstream API pipelines.
+
+### User Interface Hub (`/src/App.tsx`)
+React root node. Binds local storage states, tracks runtime variables, evaluates theme states, and mounts the active visualization components.
+
+### Sovereign Brain Console (`/src/components/SovereignBrainConsole.tsx`)
+Testing cockpit for manual tuning. Exposes hooks to adjust neural coefficients, initialize homomorphic calculations, and trigger seismic geography network pulses.
+
+### Tuning & Node Management (`/src/components/SovereignTuningPanel.tsx`)
+Socioeconomic calibration matrix control panel. Manages variables for all 14 distribution ports using precise mathematical offsets:
+- Frequency and Phase Tuning
+- Pitch & Octave Scales
+- Latency Offsets ($\Delta t$)
+
+### Visual Interfaces
+- **AIChat (`/src/components/AIChat.tsx`):** Floating overlay running direct chat hooks through the GenAI client.
+- **PipelineStatus (`/src/components/PipelineStatus.tsx`):** Visualization tracer monitoring live GitHub Actions CI/CD workflows and deployment builds.
+- **SingularityVisualizer (`/src/components/SingularityVisualizer.tsx`):** Canvas-based wave rendering framework mapping quantum resonance feedback loops.
+
+---
+
+## 5. FULL API ROUTING SPECIFICATION
+
+| Method | Endpoint | Description | Expected Payload / Response |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/node{1..12}` | Fetches real-time node telemetry | JSON telemetry object containing uptime, hash rate, and sync delta |
+| `GET` | `/api/cdm/manifest` | Serves custom domain profile schemas | Structured JSON-LD representation of canonical web properties |
+| `POST` | `/api/chat` | Direct gateway to the GenAI SDK | `{ message: string }` $\rightarrow$ `{ response: string }` |
+| `POST` | `/api/node/cascade` | Spawns simulated multi-agent workflow | Triggers downstream execution block validation |
+| `POST` | `/api/node/lock-state` | Enforces state-locking across the cluster | Signs permanent alignment values across all 12 system nodes |
