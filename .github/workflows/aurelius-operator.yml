@@ -11,11 +11,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
       - name: Install Lighthouse
         run: npm install -g lighthouse@10
       - name: Run Lighthouse audit
         run: |
-          lighthouse https://jhammerz.github.io/music.html --output=json --output-path=./report.json --chrome-flags="--no-sandbox"
+          lighthouse https://jhammerz.github.io/music.html \
+            --output=json \
+            --output-path=./report.json \
+            --chrome-flags="--no-sandbox --headless --disable-gpu" \
+            --chrome-launch-config='{"executablePath":"/usr/bin/chromium-browser"}'
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
