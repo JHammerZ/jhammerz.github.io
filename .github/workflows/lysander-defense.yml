@@ -80,7 +80,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "sla_level": 3
           }
-          EOF_MANIFEST
+
           
           sed -i "s/TIMESTAMP_PLACEHOLDER/${TIMESTAMP}/g" .hfid/lysander/manifest.json
           sed -i "s/SHA_PLACEHOLDER/${SHA}/g" .hfid/lysander/manifest.json
