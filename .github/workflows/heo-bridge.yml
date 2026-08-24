@@ -94,7 +94,6 @@ jobs:
                "bridge_type": "HEO_TO_HYPERFOL",
                "attestation_clone": "Sovereign payload verified via Bitcoin OTS"
              }
-  JSON_EOF
           fi
 
           jq --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
