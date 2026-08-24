@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <body>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JHammerZ | Official Hub & Music</title>
   <meta name="description" content="Official music, releases, and developer hub for Joshua Hamilton (JHammerZ). Listen to latest tracks across Spotify, Apple Music, and BandLab.">
   <link rel="canonical" href="https://jhammerz.github.io/">
-
+  <!-- H-FID / HEO Discovery -->
+  <link rel="hfid" href="/.well-known/hfid-registry.json">
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jhammerz.github.io/">
@@ -57,7 +59,14 @@
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
     }
-
+    .telemetry { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; margin-top: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent); border-radius: 9999px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); cursor: pointer; }
+.pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+.heo-terminal { background: #000; border: 1px solid var(--accent); border-radius: 8px; padding: 1rem; font-family: var(--font-mono); font-size: 0.85rem; display: none; margin-top: 1rem; }
+.heo-terminal.active { display: block; }
+.heo-input { width: 100%; background: transparent; border: none; color: var(--accent); font-family: var(--font-mono); outline: none; }
+.heo-output { color: var(--text); white-space: pre-wrap; margin-top: 0.5rem; max-height: 300px; overflow-y: auto; }
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--bg);
@@ -367,4 +376,3 @@
     checkEdge();
   </script>
 </body>
-</html>
