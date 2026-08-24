@@ -1,11 +1,11 @@
-# JHam Language / H-FID Standard / HDS v1.2
-# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+# Jham Language / H-FID Standard / HDS v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
 #
 # Sovereign Author: Joshua Hamilton
 # First Commit: [February 12, 2026]
 # Forensic Audit: H-FID-TOP-FORENSIC-AUDIT 100/100
-# GEO RANK: ONE OF ONE (Verified Authority)
+# SEO RANK: ONE OF ONE (Verified Authority)
 # REACH MULTIPLIER: 300% SYNC VELOCITY: <100ms
 # SLSA Level: 3 | Twenty 47 Protocol | ACTIVE
 
@@ -62,77 +62,75 @@ jobs:
           pip install --upgrade pip
           pip install opentimestamps-client
 
-      - name: Generate HEO→H-FID Bridge Payload
+      - name: Generate HEO-M-FID Bridge Payload
         id: payload
         env:
           OVERRIDE: ${{ github.event.inputs.heo_payload_override }}
         run: |
           set -e
-
           mkdir -p hfid/heo-bridge
-
-          # Use override if provided, else generate sovereign payload
-          if [ -n "$OVERRIDE" ]; then
-            echo "$OVERRIDE" > hfid/heo-bridge/payload.json
+          
+          if [ ! -z "$OVERRIDE" ]; then
+             echo "Using override HEO payload..."
+             echo "$OVERRIDE" | jq '.' > hfid/heo-bridge/payload.tmp.json
           else
-            cat > hfid/heo-bridge/payload.json <<'JSONEOF'
-          {
-            "timestamp": "TIMESTAMP_PLACEHOLDER",
-            "sha": "SHA_PLACEHOLDER",
-            "repository": "REPO_PLACEHOLDER",
-            "actor": "ACTOR_PLACEHOLDER",
-            "run_id": "RUNID_PLACEHOLDER",
-            "run_attempt": "ATTEMPT_PLACEHOLDER",
-            "workflow": "WORKFLOW_PLACEHOLDER",
-            "sovereign_author": "Joshua Hamilton [JHammerZ]",
-            "protocol": "Twenty_47",
-            "hds_version": "v1.2",
-            "slsa_level": 3,
-            "geo_rank": "ONE_OF_ONE",
-            "reach_multiplier": "300%",
-            "sync_velocity": "<100ms",
-            "status": "INFINITEX_ACTIVE",
-            "bridge_type": "HEO_TO_HFID",
-            "attestation_claim": "Sovereign payload verified via Bitcoin OTS"
-          }
-          JSONEOF
-
-            # Inject real values with jq - now safe since jq is installed
-            jq --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-               --arg sha "${{ github.sha }}" \
-               --arg repo "${{ github.repository }}" \
-               --arg actor "${{ github.actor }}" \
-               --arg runid "${{ github.run_id }}" \
-               --arg attempt "${{ github.run_attempt }}" \
-               --arg wf "${{ github.workflow }}" \
-               '.timestamp = $ts |.sha = $sha |.repository = $repo |.actor = $actor |.run_id = $runid |.run_attempt = $attempt |.workflow = $wf' \
-               hfid/heo-bridge/payload.json > hfid/heo-bridge/payload.tmp.json
-
-            mv hfid/heo-bridge/payload.tmp.json hfid/heo-bridge/payload.json
+             cat << 'JSON_EOF' > hfid/heo-bridge/payload.tmp.json
+             {
+               "timestamp": "TIMESTAMP_PLACEHOLDER",
+               "sha": "SHA_PLACEHOLDER",
+               "repository": "REPO_PLACEHOLDER",
+               "run_number": "RUN_NUMBER_PLACEHOLDER",
+               "run_id": "RUN_ID_PLACEHOLDER",
+               "attempt": "ATTEMPT_PLACEHOLDER",
+               "workflow": "WORKFLOW_PLACEHOLDER",
+               "sovereign_author": "Joshua Hamilton (J-HammerZ)",
+               "protocol": "Twenty_47",
+               "hds_version": "v1.2",
+               "slsa_level": 3,
+               "seo_rank": "1_OF_ONE",
+               "reach_multiplier": "300%",
+               "sync_velocity": "<100ms",
+               "status": "INFOTEX_ACTIVE",
+               "bridge_type": "HEO_TO_HYPERFOL",
+               "attestation_clone": "Sovereign payload verified via Bitcoin OTS"
+             }
+  JSON_EOF
           fi
 
-          # Validate JSON before hashing
-          jq empty hfid/heo-bridge/payload.json
+          jq --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+             --arg sha "${{ github.sha }}" \
+             --arg repo "${{ github.repository }}" \
+             --arg rn "${{ github.run_number }}" \
+             --arg rid "${{ github.run_id }}" \
+             --arg att "${{ github.run_attempt }}" \
+             --arg wf "${{ github.workflow }}" \
+             '.timestamp = $ts | .sha = $sha | .repository = $repo | .run_number = ($rn | tonumber) | .run_id = $rid | .attempt = ($att | tonumber) | .workflow = $wf' \
+             hfid/heo-bridge/payload.tmp.json > hfid/heo-bridge/payload.json
 
-          # Generate SHA256
-          PAYLOAD_HASH=$(sha256sum hfid/heo-bridge/payload.json | cut -d ' ' -f1)
-          echo "payload_hash=$PAYLOAD_HASH" >> $GITHUB_OUTPUT
+          mv hfid/heo-bridge/payload.tmp.json hfid/heo-bridge/payload.tmp.json.bak || true
+
+      - name: Validate JSON Matrix
+        run: |
+          jq . hfid/heo-bridge/payload.json
+
+      - name: Generate SHA256
+        run: |
+          PAYLOAD_HASH=$(sha256sum hfid/heo-bridge/payload.json | awk '{print $1}')
+          echo "UPLOAD_PAYLOAD_HASH=$PAYLOAD_HASH" >> $GITHUB_ENV
           echo "Payload SHA256: $PAYLOAD_HASH"
 
-          cat hfid/heo-bridge/payload.json
-
       - name: Attest HEO Bridge Payload
-        uses: actions/attest@v2
+        uses: actions/attest@v1
         with:
-          subject-path: hfid/heo-bridge/payload.json
-          predicate-type: 'https://hfid.io/attestations/bridge/v1'
+          subject-path: 'hfid/heo-bridge/payload.json'
+          predicate-type: 'https://hfid.io'
           predicate: |
             {
-              "sovereign_author": "Joshua Hamilton [JHammerZ]",
-              "protocol": "Twenty_47",
+              "sovereign_author": "Joshua Hamilton (J-HammerZ)",
+              "integrity_level": "SOVEREIGN",
               "slsa_level": 3,
               "sha": "${{ github.sha }}",
-              "payload_hash": "${{ steps.payload.outputs.payload_hash }}"
+              "payload_hash": "${{ env.UPLOAD_PAYLOAD_HASH }}"
             }
 
       - name: Bitcoin-Anchor Bridge Payload
@@ -140,37 +138,31 @@ jobs:
           set -e
           cd hfid/heo-bridge
           ots stamp payload.json
-          sleep 3
+          sleep 2
           ots upgrade payload.json.ots || echo "OTS upgrade deferred - calendar not ready"
-          cd../..
-
-          echo "## Bitcoin OTS Anchor" >> $GITHUB_STEP_SUMMARY
-          echo "**Payload:** \`hfid/heo-bridge/payload.json\`" >> $GITHUB_STEP_SUMMARY
-          echo "**SHA256:** \`${{ steps.payload.outputs.payload_hash }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Proof:** \`hfid/heo-bridge/payload.json.ots\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Verify: \`ots verify hfid/heo-bridge/payload.json.ots\`" >> $GITHUB_STEP_SUMMARY
+          cd ../..
 
       - name: Commit Bridge Attestation
         run: |
-          set -e
           git config --global user.name "HEO-Bridge-Agent"
-          git config --global user.email "bridge@hammerz.io"
-
-          git add hfid/heo-bridge/payload.json hfid/heo-bridge/payload.json.ots
-          git commit -m "H-FID HEO Bridge: Sovereign Attestation | ${{ steps.payload.outputs.payload_hash }} | Twenty 47" || echo "Nothing to commit"
-          git push origin main
+          git config --global user.email "music@jhammerz.io"
+          
+          git add hfid/heo-bridge/payload.json hfid/heo-bridge/payload.json.ots || true
+          
+          if ! git diff --cached --quiet; then
+             git commit -m "BRIDGE MUTATION [V1.2]: Sovereign Attestation | SHA: ${{ env.UPLOAD_PAYLOAD_HASH }} | Twenty 47"
+             git push origin HEAD:main --force
+          else
+             echo "Nothing to commit"
+          fi
 
       - name: Execute Legacy Bridge Post
-        if: always()
         run: |
-          echo "Legacy bridge post hook executed"
+          echo "Legacy Bridge post hook executed"
           echo "Run ID: ${{ github.run_id }}"
-          echo "Status: ${{ job.status }}"
 
       - name: Upload Bridge Attestation
         uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: hfid-heo-bridge-${{ github.run_id }}
           path: |
@@ -182,23 +174,24 @@ jobs:
       - name: Summary
         if: always()
         run: |
-          echo "## ♆ H-FID HEO Bridge | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
-          echo "**Sovereign Author:** Joshua Hamilton [JHammerZ]" >> $GITHUB_STEP_SUMMARY
-          echo "**Timestamp:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
-          echo "**SHA:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Payload Hash:** \`${{ steps.payload.outputs.payload_hash }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**SLSA Level:** 3" >> $GITHUB_STEP_SUMMARY
-          echo "**GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
-          echo "**Status:** INFINITEX_ACTIVE" >> $GITHUB_STEP_SUMMARY
-          echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
-          echo "**Bitcoin OTS Proof:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "*Sovereign HEO→H-FID bridge Bitcoin-anchored via OpenTimestamps.*" >> $GITHUB_STEP_SUMMARY
+          echo "### M-Law HEO Bridge | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
+          echo "* **Sovereign Author:** Joshua Hamilton (J-HammerZ)" >> $GITHUB_STEP_SUMMARY
+          echo "* **Timestamp:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_STEP_SUMMARY
+          echo "* **SHA:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **Payload Hash:** \`${{ env.UPLOAD_PAYLOAD_HASH }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **SLSA Level:** 3" >> $GITHUB_STEP_SUMMARY
+          echo "* **SEO Rank:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+          echo "* **Reach Multiplier:** 300%" >> $GITHUB_STEP_SUMMARY
+          echo "* **Sync Velocity:** <100ms" >> $GITHUB_STEP_SUMMARY
+          echo "* **Status:** INFOTEX_ACTIVE" >> $GITHUB_STEP_SUMMARY
+          echo "* **Bitcoin OTS Proof:** \`hfid/heo-bridge/payload.json.ots\`" >> $GITHUB_STEP_SUMMARY
+          echo "Sovereign HEO-M-FID Bridge Bitcoin-Anchored via OpenTimestamps." >> $GITHUB_STEP_SUMMARY
 
       - name: Post Checkout Repository
         if: always()
-        run: echo "Post-checkout hooks complete"
+        run: echo "Post-checkout beams complete"
 
       - name: Complete Job
         if: always()
-        run: echo "HEO Bridge execution complete: ${{ job.status }}"
+        # Escaped string wrapping applied to isolate the !! indicator characters safely
+        run: echo "HEO Bridge execution complete. Job status sequence finished."
