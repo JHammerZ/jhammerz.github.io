@@ -3,26 +3,7 @@ main = "src/index.ts"
 compatibility_date = "2024-08-24"
 account_id = "8e06551602ff1c209d467f7bcc770b6d"
 
-# 🧠 Verified live KV Namespace block
+# 🧠 Sovereign KV State Ledger (Zero-Cost Global Persistence)
 kv_namespaces = [
   { binding = "AGENT_STATE_LEDGER", id = "106ec5c22ff44bdea0e5a4b3049efb86" }
 ]
-
-# ⚡ Durable Object binding
-[durable_objects]
-bindings = [
-  { name = "AGENT_ORCHESTRATOR", class_name = "om" }
-]
-
-# 🚀 Migration history & Free-tier SQLite DO registration
-[[migrations]]
-tag = "v1"
-new_classes = ["W4Room"]
-
-[[migrations]]
-tag = "v2"
-deleted_classes = ["W4Room"]
-
-[[migrations]]
-tag = "v3"
-new_sqlite_classes = ["om"]
