@@ -15,28 +15,23 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:.75rem .5rem 3rem;font-size:.9rem;line-height:1.6}
 .container{width:100%;max-width:840px;display:flex;flex-direction:column;gap:1.25rem}
 
-/* 🌟 Hero Banner */
 .hero{background:linear-gradient(135deg,#031006 0%,#092612 50%,#020803 100%);border:1px solid var(--focus);border-radius:12px;padding:1.5rem 1rem;text-align:center;box-shadow:0 0 20px var(--glow)}
 .hero h1{font-size:clamp(1.6rem,6vw,2.2rem);font-weight:900;letter-spacing:.1em;background:linear-gradient(90deg,#fff,#33ff88,#00ff66);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{color:#e2e8f0;font-size:.85rem;margin-top:.4rem}
 .hero-btn{display:inline-block;margin:.4rem .2rem 0;background:#041407;border:1px solid var(--focus);color:#fff;font-size:.75rem;font-weight:700;padding:.45rem .8rem;border-radius:6px;text-decoration:none;transition:.2s}
 .hero-btn:active,.hero-btn:hover{background:var(--focus);color:#000}
 
-/* 🧭 Sticky Navigation */
 .sticky-nav{position:sticky;top:.25rem;z-index:100;background:rgba(5,11,7,.96);backdrop-filter:blur(8px);border:1px solid var(--focus);border-radius:8px;padding:.4rem;display:flex;gap:.35rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .sticky-nav::-webkit-scrollbar{display:none}
 .nav-pill{background:#020502;border:1px solid var(--border);color:var(--text);font-size:.72rem;font-weight:700;padding:.4rem .65rem;border-radius:4px;text-decoration:none;white-space:nowrap}
 .nav-pill:active,.nav-pill:hover{border-color:var(--focus);color:var(--bright);background:rgba(0,255,102,.15)}
 
-/* Panels */
 .panel{border:1px solid var(--border);background:var(--panel-bg);border-radius:8px;padding:1rem;display:flex;flex-direction:column;gap:1rem;box-shadow:0 4px 20px rgba(0,0,0,.6);scroll-margin-top:4rem}
 .panel-hdr{color:var(--bright);font-weight:700;border-bottom:1px dashed var(--border);padding-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
 
-/* 📺 16:9 Responsive Video Viewport */
 .viewport-16-9{position:relative;width:100%;padding-bottom:56.25%;height:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:#000;box-shadow:0 0 15px rgba(0,255,102,.08)}
-.viewport-16-9 iframe,.viewport-16-9 div#yt-player{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.viewport-16-9 iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
 
-/* Deck Controls */
 .deck{background:var(--hdr);border:1px solid var(--border);border-radius:6px;padding:.75rem;display:flex;flex-direction:column;gap:.75rem}
 .deck-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem}
 .btn{background:#030804;border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:.75rem;font-weight:700;padding:.45rem .75rem;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;transition:.15s}
@@ -44,16 +39,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .pill{font-size:.7rem;padding:.35rem .6rem;background:#020502;border:1px solid var(--border);border-radius:4px;color:var(--dim);cursor:pointer;transition:.15s}
 .pill:active,.pill:hover,.pill.active{border-color:var(--focus);color:var(--bright);background:rgba(0,255,102,.15)}
 
-/* Unmute Banner Callout */
 .unmute-btn{width:100%;justify-content:center;border-color:var(--focus)!important;background:rgba(0,255,102,.2)!important;color:#fff!important;font-size:.8rem!important;padding:.6rem!important}
 
-/* Cards & Embed Viewports */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem}
 .card{display:flex;flex-direction:column;padding:.85rem;background:#020603;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text)}
 .card:active,.card:hover{border-color:var(--focus);background:rgba(0,255,102,.05)}
 .embed-box{display:flex;justify-content:center;background:#000;border:1px solid var(--border);border-radius:6px;padding:.5rem;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
-/* Tables */
 .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:480px}
 th,td{border:1px solid var(--border);padding:.5rem .6rem;text-align:left}
@@ -62,7 +54,6 @@ th{background:var(--hdr);color:var(--bright)}
 #toast{position:fixed;bottom:20px;right:20px;background:#051408;border:1px solid var(--focus);color:var(--bright);padding:.5rem 1rem;border-radius:4px;font-size:.8rem;opacity:0;pointer-events:none;transition:.3s;z-index:999}
 footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </style>
-<script src="https://www.youtube.com/iframe_api"></script>
 <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
 <body>
@@ -93,7 +84,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
 </nav>
 
-<!-- 📺 SECTION 1: YOUTUBE MASTER NODE -->
+<!-- 📺 SECTION 1: DIRECT NATIVE YOUTUBE SUITE -->
 <section class="panel" id="youtube">
 <div class="panel-hdr">
 <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
@@ -102,24 +93,31 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="https://www.youtube.com/@JHammerZ?sub_confirmation=1" target="_blank" rel="noopener" class="btn" style="border-color:var(--focus);color:#fff">+ SUBSCRIBE</a>
 </div>
 </div>
-<div style="font-size:.8rem;color:var(--dim)" id="yt-track-title">// Autoplaying active master session on loop...</div>
+<div style="font-size:.8rem;color:var(--dim)" id="yt-track-title">// Active: "The Crow and the Butterfly (Shinedown)" [1/7]</div>
 
-<div class="viewport-16-9" id="viewport-frame"><div id="yt-player"></div></div>
+<!-- Direct IFrame (Guaranteed 100% Render & Autoplay) -->
+<div class="viewport-16-9" id="viewport-frame">
+  <iframe id="yt-player" 
+    src="https://www.youtube.com/embed/Z45xajWiXwc?enablejsapi=1&autoplay=1&mute=1&playsinline=1&rel=0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowfullscreen>
+  </iframe>
+</div>
 
 <div class="deck">
 <button class="btn unmute-btn" id="unmute-banner-btn" onclick="toggleMute()">🔇 TAP TO UNMUTE AUDIO</button>
 
 <div class="deck-row">
-<button class="btn" onclick="togglePlay()"><span id="play-icon">⏸</span> PLAY/PAUSE</button>
+<button class="btn" onclick="togglePlay()"><span id="play-icon">▶</span> PLAY/PAUSE</button>
 <button class="btn" onclick="cycleSpeed()">⚡ <span id="speed-label">1.0x</span></button>
 <button class="btn" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
 <button class="btn" onclick="copyVideoLink()">🔗 SHARE</button>
-<a id="yt-direct-link" href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ YOUTUBE</a>
+<a id="yt-direct-link" href="https://www.youtube.com/watch?v=Z45xajWiXwc" target="_blank" rel="noopener" class="btn">↗ WATCH ON YOUTUBE</a>
 <span style="font-size:.75rem;color:var(--bright);margin-left:auto" id="player-status">[PLAYING (MUTED)]</span>
 </div>
 
 <div class="deck-row">
-<span style="font-size:.7rem;color:var(--dim)">SESSIONS:</span>
+<span style="font-size:.7rem;color:var(--dim)">SELECT SESSION:</span>
 <div style="display:flex;flex-wrap:wrap;gap:.35rem" id="yt-track-selector"></div>
 </div>
 </div>
@@ -199,124 +197,146 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <div id="toast">Link copied!</div>
 
 <script>
-const TRACKS=[
-{id:"Z45xajWiXwc",title:"The Crow and the Butterfly (Shinedown)"},
-{id:"0tqYahK4a3E",title:"Acoustic Master Take #2"},
-{id:"gqZNhmRizLE",title:"Live Guitaraoke Take #3"},
-{id:"6fWkO3evvdw",title:"Acoustic Jam Session #4"},
-{id:"KwyoClPYIy0",title:"Left-Hand Acoustic Session #5"},
-{id:"AdZ2_tJOLu4",title:"Ain't Nothin' But A Day To Die"},
-{id:"llyADThAg5o",title:"Hallelujah (Acoustic Take)"}
+const TRACKS = [
+  { id: "Z45xajWiXwc", title: "The Crow and the Butterfly (Shinedown)" },
+  { id: "0tqYahK4a3E", title: "Acoustic Master Take #2" },
+  { id: "gqZNhmRizLE", title: "Live Guitaraoke Take #3" },
+  { id: "6fWkO3evvdw", title: "Acoustic Jam Session #4" },
+  { id: "KwyoClPYIy0", title: "Left-Hand Acoustic Session #5" },
+  { id: "AdZ2_tJOLu4", title: "Ain't Nothin' But A Day To Die" },
+  { id: "llyADThAg5o", title: "Hallelujah (Acoustic Take)" }
 ];
-let player,currentIndex=0,speeds=[0.75,1.0,1.25,1.5,2.0],currentSpeedIndex=1;
 
-function initUI(){
-const pC=document.getElementById('yt-track-selector'),tC=document.getElementById('catalog-body');
-pC.innerHTML='';tC.innerHTML='';
-TRACKS.forEach((t,i)=>{
-const b=document.createElement('button');b.className='pill '+(i===currentIndex?'active':'');
-b.innerText=`[0${i+1}] ${t.title.split('(')[0]}`;
-b.onclick=()=>loadTrack(i,true);pC.appendChild(b);
-const tr=document.createElement('tr');
-tr.innerHTML=`<td><strong>${t.title}</strong></td><td><a href="https://youtu.be/${t.id}" target="_blank" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" style="color:var(--bright)">TikTok ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" style="color:var(--bright)">Spotify ↗</a></td>`;
-tC.appendChild(tr);
-});
-}
+let currentIndex = 0;
+let isMuted = true;
+let isPlaying = true;
+const speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
+let currentSpeedIndex = 1;
 
-function onYouTubeIframeAPIReady(){
-currentIndex=0;initUI();
-player=new YT.Player('yt-player',{
-videoId:TRACKS[currentIndex].id,
-playerVars:{autoplay:1,mute:1,controls:1,enablejsapi:1,playsinline:1,loop:1,modestbranding:1,rel:0},
-events:{'onReady':(e)=>{
-try{e.target.mute();e.target.playVideo();}catch(err){}
-updateMeta();
-document.getElementById('player-status').innerText='[PLAYING (MUTED)]';
-},
-'onStateChange':(e)=>{
-const s=document.getElementById('player-status'),ic=document.getElementById('play-icon');
-if(e.data===YT.PlayerState.PLAYING){
-s.innerText=player.isMuted()?'[PLAYING (MUTED)]':'[PLAYING (AUDIO ON)]';
-s.style.color='var(--bright)';
-ic.innerText='⏸';
-}else if(e.data===YT.PlayerState.PAUSED){
-s.innerText='[PAUSED]';
-s.style.color='var(--dim)';
-ic.innerText='▶';
-}else if(e.data===YT.PlayerState.ENDED){
-loadTrack((currentIndex+1)%TRACKS.length,true);
-}}});
+function sendCommand(func, args = []) {
+  const iframe = document.getElementById('yt-player');
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage(JSON.stringify({
+      "event": "command",
+      "func": func,
+      "args": args
+    }), "*");
+  }
 }
 
-function loadTrack(idx,autoPlay=true){
-currentIndex=idx;
-if(player&&player.loadVideoById){
-player.loadVideoById({videoId:TRACKS[currentIndex].id,startSeconds:0});
-if(!autoPlay)player.pauseVideo();
-}
-updateMeta();initUI();
-}
-
-function rotateRandomVideo(){let n;do{n=Math.floor(Math.random()*TRACKS.length)}while(n===currentIndex&&TRACKS.length>1);loadTrack(n,true)}
-
-function updateMeta(){
-const t=TRACKS[currentIndex];
-document.getElementById('yt-track-title').innerText=`// Active: "${t.title}" [${currentIndex+1}/${TRACKS.length}]`;
-document.getElementById('yt-direct-link').href=`https://www.youtube.com/watch?v=${t.id}`;
-}
-
-function togglePlay(){
-if(!player)return;
-player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo();
-}
-
-function toggleMute(){
-if(!player)return;
-const btn=document.getElementById('unmute-banner-btn');
-if(player.isMuted()){
-player.unMute();
-player.setVolume(100);
-if(btn)btn.innerText='🔊 MUTE AUDIO';
-document.getElementById('player-status').innerText='[PLAYING (AUDIO ON)]';
-showToast('Audio Unmuted!');
-}else{
-player.mute();
-if(btn)btn.innerText='🔇 TAP TO UNMUTE AUDIO';
-document.getElementById('player-status').innerText='[PLAYING (MUTED)]';
-showToast('Audio Muted');
-}
+function initUI() {
+  const pC = document.getElementById('yt-track-selector');
+  const tC = document.getElementById('catalog-body');
+  pC.innerHTML = '';
+  tC.innerHTML = '';
+  
+  TRACKS.forEach((t, i) => {
+    const b = document.createElement('button');
+    b.className = 'pill ' + (i === currentIndex ? 'active' : '');
+    b.innerText = `[0${i+1}] ${t.title.split('(')[0]}`;
+    b.onclick = () => loadTrack(i);
+    pC.appendChild(b);
+    
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${t.title}</strong></td>
+      <td><a href="https://youtu.be/${t.id}" target="_blank" style="color:var(--bright)">Watch ↗</a></td>
+      <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" style="color:var(--bright)">TikTok ↗</a></td>
+      <td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" style="color:var(--bright)">Spotify ↗</a></td>`;
+    tC.appendChild(tr);
+  });
 }
 
-function cycleSpeed(){
-if(!player)return;
-currentSpeedIndex=(currentSpeedIndex+1)%speeds.length;
-const sp=speeds[currentSpeedIndex];
-player.setPlaybackRate(sp);
-document.getElementById('speed-label').innerText=sp+'x';
+function loadTrack(idx) {
+  currentIndex = idx;
+  const t = TRACKS[currentIndex];
+  const iframe = document.getElementById('yt-player');
+  
+  iframe.src = `https://www.youtube.com/embed/${t.id}?enablejsapi=1&autoplay=1&mute=${isMuted ? 1 : 0}&playsinline=1&rel=0`;
+  
+  document.getElementById('yt-track-title').innerText = `// Active: "${t.title}" [${currentIndex + 1}/${TRACKS.length}]`;
+  document.getElementById('yt-direct-link').href = `https://www.youtube.com/watch?v=${t.id}`;
+  isPlaying = true;
+  document.getElementById('play-icon').innerText = '⏸';
+  initUI();
 }
 
-function toggleFullscreen(){
-const el=document.getElementById('viewport-frame');
-if(!document.fullscreenElement&&!document.webkitFullscreenElement){
-if(el.requestFullscreen){el.requestFullscreen();}
-else if(el.webkitRequestFullscreen){el.webkitRequestFullscreen();}
-}else{
-if(document.exitFullscreen){document.exitFullscreen();}
-else if(document.webkitExitFullscreen){document.webkitExitFullscreen();}
-}
+function rotateRandomVideo() {
+  let nextIndex;
+  do {
+    nextIndex = Math.floor(Math.random() * TRACKS.length);
+  } while (nextIndex === currentIndex && TRACKS.length > 1);
+  loadTrack(nextIndex);
 }
 
-function showToast(msg){
-const t=document.getElementById('toast');
-t.innerText=msg;t.style.opacity='1';
-setTimeout(()=>t.style.opacity='0',2200);
+function togglePlay() {
+  if (isPlaying) {
+    sendCommand("pauseVideo");
+    isPlaying = false;
+    document.getElementById('play-icon').innerText = '▶';
+    document.getElementById('player-status').innerText = '[PAUSED]';
+  } else {
+    sendCommand("playVideo");
+    isPlaying = true;
+    document.getElementById('play-icon').innerText = '⏸';
+    document.getElementById('player-status').innerText = isMuted ? '[PLAYING (MUTED)]' : '[PLAYING (AUDIO ON)]';
+  }
 }
 
-function copyVideoLink(){
-navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${TRACKS[currentIndex].id}`).then(()=>{showToast('Video Link Copied!');}).catch(()=>{
-prompt("Copy Video URL:", `https://www.youtube.com/watch?v=${TRACKS[currentIndex].id}`);
-});
+function toggleMute() {
+  const btn = document.getElementById('unmute-banner-btn');
+  if (isMuted) {
+    sendCommand("unMute");
+    sendCommand("setVolume", [100]);
+    isMuted = false;
+    btn.innerText = '🔊 MUTE AUDIO';
+    document.getElementById('player-status').innerText = '[PLAYING (AUDIO ON)]';
+    showToast('Audio Unmuted!');
+  } else {
+    sendCommand("mute");
+    isMuted = true;
+    btn.innerText = '🔇 TAP TO UNMUTE AUDIO';
+    document.getElementById('player-status').innerText = '[PLAYING (MUTED)]';
+    showToast('Audio Muted');
+  }
 }
+
+function cycleSpeed() {
+  currentSpeedIndex = (currentSpeedIndex + 1) % speeds.length;
+  const sp = speeds[currentSpeedIndex];
+  sendCommand("setPlaybackRate", [sp]);
+  document.getElementById('speed-label').innerText = sp + 'x';
+  showToast(`Speed: ${sp}x`);
+}
+
+function toggleFullscreen() {
+  const el = document.getElementById('viewport-frame');
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (el.requestFullscreen) { el.requestFullscreen(); }
+    else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); }
+  } else {
+    if (document.exitFullscreen) { document.exitFullscreen(); }
+    else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerText = msg;
+  t.style.opacity = '1';
+  setTimeout(() => t.style.opacity = '0', 2200);
+}
+
+function copyVideoLink() {
+  const url = `https://www.youtube.com/watch?v=${TRACKS[currentIndex].id}`;
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Video Link Copied!');
+  }).catch(() => {
+    prompt("Copy Video URL:", url);
+  });
+}
+
+// Initialize on page load
+initUI();
 </script>
 </body>
 </html>
