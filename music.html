@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JHAMMERZ | Official Music & Multi-Channel Media Hub</title>
-  <meta name="description" content="Official music repository, video sessions, TikTok clips, and social network hub for JHAMMERZ (Joshua Hamilton).">
+  <title>JHAMMERZ | Audio, Video & Multi-Channel Media Hub</title>
+  <meta name="description" content="Official music catalog, YouTube Guitaraoke™ sessions, TikTok drops, and multi-channel media hub for JHAMMERZ (Joshua Hamilton).">
   <link rel="canonical" href="https://jhammerz.github.io/music.html">
 
   <!-- Validated Schema.org Structured Data -->
@@ -65,7 +65,7 @@
       gap: 1.5rem;
     }
 
-    /* Sticky Quick-Jump Navigation */
+    /* Sticky Navigation */
     .sticky-nav {
       position: sticky;
       top: 0.5rem;
@@ -101,7 +101,7 @@
       box-shadow: 0 0 8px var(--accent-glow);
     }
 
-    /* Section Panels */
+    /* Panels */
     .section-panel {
       border: 1px solid var(--border);
       background: var(--panel-bg);
@@ -126,7 +126,7 @@
       gap: 0.5rem;
     }
 
-    /* Responsive 16:9 Video Viewport */
+    /* Video Viewport */
     .video-viewport {
       position: relative;
       width: 100%;
@@ -206,7 +206,6 @@
       background: rgba(0, 255, 102, 0.1);
     }
 
-    /* Multi-column Grid for Channel Cards */
     .grid-2col {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -243,7 +242,6 @@
       margin-top: 0.25rem;
     }
 
-    /* Social Embed Containers */
     .social-embed-box {
       display: flex;
       justify-content: center;
@@ -251,7 +249,7 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 1rem;
-      min-height: 380px;
+      min-height: 480px;
       overflow: hidden;
     }
 
@@ -299,37 +297,34 @@
     }
   </style>
 
-  <!-- External Embed SDKs for Live Platform Telemetry -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
 <body>
 
-  <!-- Facebook SDK Root -->
   <div id="fb-root"></div>
   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"></script>
 
   <div class="container">
     
-    <!-- Top Metadata Bar -->
     <div style="border: 1px solid var(--border); padding: 0.75rem; border-radius: 4px; background: var(--panel-bg); font-size: 0.8rem; color: var(--text-dim);">
-      Provenance: <span style="color: var(--text);">JHammerZ Sovereign Mesh // YouTube • TikTok • Facebook • Spotify</span>
+      Provenance: <span style="color: var(--text);">JHammerZ Human-Standard Catalog // YouTube • TikTok • Facebook • Spotify</span>
     </div>
 
-    <!-- 🧭 STICKY QUICK-JUMP NAVIGATION DECK -->
+    <!-- 🧭 STICKY NAVIGATION -->
     <nav class="sticky-nav">
-      <a href="#youtube" class="nav-pill">📺 YOUTUBE</a>
+      <a href="#youtube" class="nav-pill">📺 YOUTUBE SESSIONS</a>
       <a href="#tiktok" class="nav-pill">📱 TIKTOK</a>
       <a href="#facebook" class="nav-pill">🌐 FACEBOOK</a>
-      <a href="#streaming" class="nav-pill">🎧 STREAMING APPS</a>
-      <a href="#catalog" class="nav-pill">🗃️ CATALOG</a>
+      <a href="#streaming" class="nav-pill">🎧 STREAMING</a>
+      <a href="#catalog" class="nav-pill">🗃️ FULL CATALOG</a>
       <a href="/" class="nav-pill" style="border-color: var(--text-dim);">&lt;&lt; HOME</a>
     </nav>
 
-    <!-- 📺 SECTION 1: YOUTUBE DEEP-DIVE -->
+    <!-- 📺 SECTION 1: YOUTUBE MASTER NODE -->
     <section class="section-panel" id="youtube">
       <div class="section-header">
-        <span>&gt;&gt; YOUTUBE MASTER NODE [@JHammerZ]</span>
+        <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
         <div style="display: flex; gap: 0.4rem;">
           <button class="deck-btn" onclick="rotateRandomVideo()">🎲 REROLL</button>
           <a href="https://www.youtube.com/@JHammerZ?sub_confirmation=1" target="_blank" rel="noopener" class="deck-btn" style="border-color: var(--border-focus); color: #fff;">+ SUBSCRIBE</a>
@@ -338,7 +333,6 @@
 
       <div style="font-size: 0.8rem; color: var(--text-dim);" id="yt-track-title">// Initializing active master session...</div>
 
-      <!-- Main Video Viewport -->
       <div class="video-viewport" id="viewport-frame">
         <div id="yt-player"></div>
       </div>
@@ -351,7 +345,7 @@
           <button class="deck-btn" onclick="cycleSpeed()">⚡ SPEED: <span id="speed-label">1.0x</span></button>
           <button class="deck-btn" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
           <button class="deck-btn" onclick="copyVideoLink()">🔗 SHARE</button>
-          <a id="yt-direct-link" href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" class="deck-btn">↗ WATCH ON YOUTUBE</a>
+          <a id="yt-direct-link" href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="deck-btn">↗ ALL VIDEOS</a>
           <span style="font-size:0.75rem; color:var(--text-dim); margin-left:auto;" id="player-status">[STATUS: READY]</span>
         </div>
 
@@ -362,10 +356,10 @@
       </div>
     </section>
 
-    <!-- 📱 SECTION 2: TIKTOK HUB -->
+    <!-- 📱 SECTION 2: TIKTOK SHORT-FORM NODE -->
     <section class="section-panel" id="tiktok">
       <div class="section-header">
-        <span>&gt;&gt; TIKTOK SHORT-FORM NODE [@jhammerzz]</span>
+        <span>&gt;&gt; TIKTOK SHORT-FORM CLIPS [@jhammerzz]</span>
         <a href="https://www.tiktok.com/@jhammerzz?utm_source=jhammerz_hub" target="_blank" rel="noopener" class="deck-btn">+ FOLLOW ON TIKTOK</a>
       </div>
 
@@ -385,30 +379,28 @@
           <div class="channel-desc">Original Acoustic &amp; Mandolin Take with MadLad Gibson</div>
         </a>
         <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">🎸 "What It's Like" Riff Take <span>↗</span></div>
-          <div class="channel-desc">Left-Handed Acoustic Session</div>
+          <div class="channel-title">⚡ Twenty 47 Live Drop <span>↗</span></div>
+          <div class="channel-desc">One take. No click. Live Guitaraoke™</div>
         </a>
         <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">🎙️ "Hallelujah" Vocal Drop <span>↗</span></div>
+          <div class="channel-title">🎙️ "Hallelujah" Acoustic Take <span>↗</span></div>
           <div class="channel-desc">Raw acoustic vocal session take</div>
         </a>
         <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">⚡ Guitaraoke™ Improv Drops <span>↗</span></div>
-          <div class="channel-desc">Live electric speed-picking &amp; acoustic jams</div>
+          <div class="channel-title">🎸 "What It's Like" &amp; "Simple Man" <span>↗</span></div>
+          <div class="channel-desc">Left-Handed Acoustic &amp; Speed-Picking Riffs</div>
         </a>
       </div>
     </section>
 
-    <!-- 🌐 SECTION 3: FACEBOOK PORTAL -->
+    <!-- 🌐 SECTION 3: FACEBOOK COMMUNITY -->
     <section class="section-panel" id="facebook">
       <div class="section-header">
         <span>&gt;&gt; FACEBOOK OFFICIAL COMMUNITY [@JHammerZz]</span>
         <a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="deck-btn">↗ OPEN FACEBOOK</a>
       </div>
 
-      <div style="font-size: 0.8rem; color: var(--text-dim);">// Official announcements, broadcasts, and community updates.</div>
-
-      <div class="social-embed-box" style="min-height: 480px;">
+      <div class="social-embed-box">
         <div class="fb-page" 
              data-href="https://www.facebook.com/JHammerZz" 
              data-tabs="timeline,messages" 
@@ -425,13 +417,12 @@
       </div>
     </section>
 
-    <!-- 🎧 SECTION 4: STREAMING APPS & MASTER AUDIO -->
+    <!-- 🎧 SECTION 4: STREAMING PLATFORMS -->
     <section class="section-panel" id="streaming">
       <div class="section-header">
         <span>&gt;&gt; STREAMING PLATFORMS &amp; AUDIO APPS</span>
       </div>
 
-      <!-- Spotify Master Node Player -->
       <div style="border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #000;">
         <iframe src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
       </div>
@@ -459,10 +450,11 @@
       </div>
     </section>
 
-    <!-- 🗃️ SECTION 5: CROSS-PLATFORM CATALOG MIRROR -->
+    <!-- 🗃️ SECTION 5: AUDITED CATALOG -->
     <section class="section-panel" id="catalog">
       <div class="section-header">
-        <span>&gt;&gt; CROSS-PLATFORM RELEASE CATALOG</span>
+        <span>&gt;&gt; AUDITED CROSS-PLATFORM CATALOG</span>
+        <a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="deck-btn">↗ YOUTUBE CATALOG</a>
       </div>
 
       <table class="catalog-table">
@@ -484,6 +476,13 @@
             <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
           </tr>
           <tr>
+            <td><strong>Twenty 47 - Raw GuitarAOKE Drop</strong></td>
+            <td>Original Live Take (No Click)</td>
+            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
+            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
+            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
+          </tr>
+          <tr>
             <td><strong>Hallelujah</strong></td>
             <td>Acoustic Version Take</td>
             <td><a href="https://www.youtube.com/watch?v=llyADThAg5o" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
@@ -491,16 +490,44 @@
             <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
           </tr>
           <tr>
-            <td><strong>Simple Man</strong></td>
-            <td>Live Time Crunch Cover</td>
-            <td><a href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
+            <td><strong>What It's Like</strong></td>
+            <td>Left-Handed Acoustic Session</td>
+            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
             <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
             <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
           </tr>
           <tr>
-            <td><strong>What It's Like</strong></td>
-            <td>Left-Hand Acoustic Take</td>
-            <td><a href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
+            <td><strong>Simple Man</strong></td>
+            <td>Live Time Crunch Cover</td>
+            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
+            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
+            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
+          </tr>
+          <tr>
+            <td><strong>I'm Gonna Be Somebody</strong></td>
+            <td>Travis Tritt Acoustic Take</td>
+            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
+            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
+            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
+          </tr>
+          <tr>
+            <td><strong>Changes</strong></td>
+            <td>Ozzy Osbourne Acoustic Tribute</td>
+            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
+            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
+            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
+          </tr>
+          <tr>
+            <td><strong>Mr. Crowley</strong></td>
+            <td>Improv Speed-Picking Session</td>
+            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
+            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
+            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
+          </tr>
+          <tr>
+            <td><strong>Little Lion Man</strong></td>
+            <td>Mumford &amp; Sons Acoustic Session</td>
+            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
             <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
             <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
           </tr>
