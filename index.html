@@ -79,7 +79,6 @@
       gap: 1.5rem;
     }
 
-    /* Header Profile */
     .profile {
       text-align: center;
       padding: 1.5rem 1rem;
@@ -105,7 +104,6 @@
       font-size: 0.95rem;
     }
 
-    /* Edge Telemetry Status Badge */
     .telemetry {
       display: inline-flex;
       align-items: center;
@@ -132,7 +130,6 @@
       50% { opacity: 0.4; transform: scale(0.85); }
     }
 
-    /* Music Embed Box */
     .music-player {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -151,7 +148,6 @@
       gap: 0.5rem;
     }
 
-    /* Links Grid */
     .section-title {
       font-size: 0.85rem;
       font-family: var(--font-mono);
@@ -203,7 +199,6 @@
       opacity: 0.8;
     }
 
-    /* Footer */
     footer {
       text-align: center;
       margin-top: 2rem;
@@ -215,7 +210,8 @@
 </head>
 <body>
 
-  <div class="container">
+  <!-- Semantic <main> Landmark (Resolves Lighthouse Best Practices Audit) -->
+  <main class="container">
     
     <!-- Profile Header -->
     <header class="profile">
@@ -229,15 +225,33 @@
       </div>
     </header>
 
-    <!-- Music Player Embed -->
+    <!-- Music Player Embed (Includes Title to Resolve Lighthouse Accessibility Audit) -->
     <section class="music-player">
       <h2>🎵 Featured Tracks & Discography</h2>
-      <iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      <iframe 
+        title="JHammerZ Spotify Discography Player"
+        style="border-radius:12px" 
+        src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" 
+        width="100%" 
+        height="152" 
+        frameBorder="0" 
+        allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+      </iframe>
     </section>
 
     <!-- Music Streaming Endpoints -->
     <div class="section-title">Music Streaming & Audio</div>
     <div class="links-grid">
+      <a href="https://jhammerz.github.io/music.html" class="link-card" style="border-color: var(--accent); background: rgba(16, 185, 129, 0.08);">
+        <div class="link-info">
+          <span class="link-title">🎵 Music Hub & Video Deck</span>
+          <span class="link-desc">All 7 YouTube Sessions & Spotify Discography</span>
+        </div>
+        <span class="link-icon">⚡</span>
+      </a>
+
       <a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">Spotify</span>
@@ -328,15 +342,14 @@
     </div>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
       <p>© 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.2</p>
       <p style="margin-top: 0.25rem; font-size: 0.7rem; color: var(--accent);">Lysander-3.0 Sovereign Architecture</p>
     </footer>
 
-  </div>
+  </main>
 
   <script>
-    // Live Edge Health Check
     async function checkEdge() {
       const el = document.getElementById('telemetry-status');
       try {
