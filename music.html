@@ -44,7 +44,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem}
 .card{display:flex;flex-direction:column;padding:.85rem;background:#020603;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text)}
 .card:active,.card:hover{border-color:var(--focus);background:rgba(0,255,102,.05)}
-.embed-box{display:flex;justify-content:center;background:#000;border:1px solid var(--border);border-radius:6px;padding:.5rem;width:100%;min-height:380px;overflow:hidden}
+.embed-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;border:1px solid var(--border);border-radius:6px;padding:1.25rem;width:100%;min-height:220px;text-align:center;gap:.75rem}
 
 .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:480px}
@@ -56,7 +56,6 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </style>
 </head>
 <body>
-<div id="fb-root"></div>
 
 <main class="container">
 
@@ -83,7 +82,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
 </nav>
 
-<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (DEFAULT #1 AUTOPLAY) -->
+<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (DEFAULT #1: AIN'T NOTHIN' BUT A DAY TO DIE) -->
 <section class="panel" id="youtube" aria-label="YouTube Sessions">
 <div class="panel-hdr">
 <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
@@ -97,7 +96,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <div class="viewport-16-9" id="viewport-frame">
   <iframe id="yt-player" 
     title="JHammerZ YouTube Session Master Video Player"
-    src="https://www.youtube.com/embed/URLBudn8pDg?enablejsapi=1&autoplay=1&mute=1&playsinline=1&rel=0" 
+    src="https://www.youtube-nocookie.com/embed/URLBudn8pDg?enablejsapi=1&autoplay=1&mute=1&playsinline=1&rel=0" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
     allowfullscreen>
   </iframe>
@@ -122,7 +121,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 🎧 SECTION 2: SPOTIFY MASTER DISCOGRAPHY (LAZY LOADED) -->
+<!-- 🎧 SECTION 2: SPOTIFY MASTER DISCOGRAPHY -->
 <section class="panel" id="spotify" aria-label="Spotify Discography">
 <div class="panel-hdr">
 <span>&gt;&gt; SPOTIFY MASTER DISCOGRAPHY // SCROLL ALL TRACKS</span>
@@ -133,26 +132,36 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 📱 SECTION 3: TIKTOK SHORT-FORM NODE (CLEAN HIGH-PERFORMANCE LAZY EMBED) -->
+<!-- 📱 SECTION 3: TIKTOK SHORT-FORM NODE (CLEAN 100/100 FACADE) -->
 <section class="panel" id="tiktok" aria-label="TikTok Clips">
 <div class="panel-hdr">
 <span>&gt;&gt; TIKTOK SHORT-FORM CLIPS [@jhammerzz]</span>
 <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="btn">+ FOLLOW ON TIKTOK</a>
 </div>
-<div class="embed-box">
-<iframe title="JHammerZ TikTok Feed" loading="lazy" src="https://www.tiktok.com/embed/@jhammerzz" style="width:100%;max-width:420px;height:480px;border:none;border-radius:8px;" allow="encrypted-media; picture-in-picture"></iframe>
+<div class="embed-box" id="tiktok-facade">
+  <div style="font-size:1.5rem">📱</div>
+  <div style="font-size:.9rem;font-weight:700;color:var(--bright)">@jhammerzz on TikTok</div>
+  <div style="font-size:.75rem;color:var(--dim)">Acoustic one-take riffs, short vocal drops, and live clips.</div>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.25rem">
+    <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="btn" style="border-color:var(--focus);color:#fff">↗ Open TikTok Profile</a>
+    <button class="btn" onclick="loadTikTokEmbed()" aria-label="Load Embedded TikTok Feed">⚡ Load Embedded Feed</button>
+  </div>
 </div>
 </section>
 
-<!-- 🌐 SECTION 4: FACEBOOK OFFICIAL COMMUNITY (LAZY LOADED) -->
+<!-- 🌐 SECTION 4: FACEBOOK COMMUNITY (ACCESSIBLE 100/100 FACADE) -->
 <section class="panel" id="facebook" aria-label="Facebook Community">
 <div class="panel-hdr">
 <span>&gt;&gt; FACEBOOK OFFICIAL COMMUNITY [@JHammerZz]</span>
-<a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="btn">↗ OPEN</a>
+<a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="btn">↗ OPEN FACEBOOK</a>
 </div>
-<div class="embed-box" id="fb-container" style="min-height:460px">
-  <div class="fb-page" data-href="https://www.facebook.com/JHammerZz" data-tabs="timeline" data-width="500" data-height="450" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
-    <blockquote cite="https://www.facebook.com/JHammerZz" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/JHammerZz">JHammerZ Facebook</a></blockquote>
+<div class="embed-box" id="fb-container">
+  <div style="font-size:1.5rem">🌐</div>
+  <div style="font-size:.9rem;font-weight:700;color:var(--bright)">JHammerZ Official Facebook Page</div>
+  <div style="font-size:.75rem;color:var(--dim)">Live updates, session drops, and announcements.</div>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.25rem">
+    <a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="btn" style="border-color:var(--focus);color:#fff">↗ Visit Facebook Community</a>
+    <button class="btn" onclick="loadFacebookSDK()" aria-label="Load Facebook Timeline">⚡ Load Live Timeline</button>
   </div>
 </div>
 </section>
@@ -241,9 +250,9 @@ function initUI() {
       
       var tr = document.createElement("tr");
       tr.innerHTML = "<td><strong>" + t.title + "</strong></td>" +
-        "<td><a href=\"https://youtu.be/" + t.id + "\" target=\"_blank\" style=\"color:var(--bright)\">Watch ↗</a></td>" +
-        "<td><a href=\"https://www.tiktok.com/@jhammerzz\" target=\"_blank\" style=\"color:var(--bright)\">TikTok ↗</a></td>" +
-        "<td><a href=\"https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79\" target=\"_blank\" style=\"color:var(--bright)\">Spotify ↗</a></td>";
+        "<td><a href=\"https://youtu.be/" + t.id + "\" target=\"_blank\" style=\"color:var(--bright);text-decoration:underline;\">Watch ↗</a></td>" +
+        "<td><a href=\"https://www.tiktok.com/@jhammerzz\" target=\"_blank\" style=\"color:var(--bright);text-decoration:underline;\">TikTok ↗</a></td>" +
+        "<td><a href=\"https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79\" target=\"_blank\" style=\"color:var(--bright);text-decoration:underline;\">Spotify ↗</a></td>";
       tC.appendChild(tr);
     })(i);
   }
@@ -254,7 +263,7 @@ function loadTrack(idx) {
   var t = TRACKS[currentIndex];
   var iframe = document.getElementById("yt-player");
   if (iframe) {
-    iframe.src = "https://www.youtube.com/embed/" + t.id + "?autoplay=1&mute=" + (isMuted ? "1" : "0") + "&enablejsapi=1&playsinline=1&rel=0";
+    iframe.src = "https://www.youtube-nocookie.com/embed/" + t.id + "?autoplay=1&mute=" + (isMuted ? "1" : "0") + "&enablejsapi=1&playsinline=1&rel=0";
   }
   document.getElementById("yt-track-title").innerText = "// Active: \"" + t.title + "\" [" + (currentIndex + 1) + "/" + TRACKS.length + "]";
   document.getElementById("yt-direct-link").href = "https://www.youtube.com/watch?v=" + t.id;
@@ -338,30 +347,17 @@ function copyVideoLink() {
   });
 }
 
-// Lazy Load Facebook SDK when scrolled into view
-function lazyLoadSocialSDKs() {
-  var fbEl = document.getElementById("facebook");
-  if (!fbEl || !("IntersectionObserver" in window)) return;
-  var observer = new IntersectionObserver(function(entries, obs) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        var s = document.createElement("script");
-        s.async = true;
-        s.defer = true;
-        s.crossOrigin = "anonymous";
-        s.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0";
-        document.body.appendChild(s);
-        obs.disconnect();
-      }
-    });
-  }, { rootMargin: "200px" });
-  observer.observe(fbEl);
+function loadTikTokEmbed() {
+  var box = document.getElementById("tiktok-facade");
+  box.innerHTML = '<iframe title="JHammerZ TikTok Feed" loading="lazy" src="https://www.tiktok.com/embed/@jhammerzz" style="width:100%;max-width:420px;height:480px;border:none;border-radius:8px;" allow="encrypted-media; picture-in-picture"></iframe>';
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  initUI();
-  lazyLoadSocialSDKs();
-});
+function loadFacebookSDK() {
+  var box = document.getElementById("fb-container");
+  box.innerHTML = '<iframe title="JHammerZ Facebook Feed" src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FJHammerZz&tabs=timeline&width=500&height=460&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true" width="100%" height="460" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>';
+}
+
+document.addEventListener("DOMContentLoaded", initUI);
 initUI();
 </script>
 </body>
