@@ -82,6 +82,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
 </nav>
 
+<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (AUTOPLAY LOOP + UNMUTE DECK) -->
 <section class="panel" id="youtube">
 <div class="panel-hdr">
 <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
@@ -90,18 +91,21 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="https://www.youtube.com/@JHammerZ?sub_confirmation=1" target="_blank" rel="noopener" class="btn" style="border-color:var(--focus);color:#fff">+ SUBSCRIBE</a>
 </div>
 </div>
-<div style="font-size:.8rem;color:var(--dim)" id="yt-track-title">// Initializing active master session...</div>
+<div style="font-size:.8rem;color:var(--dim)" id="yt-track-title">// Autoplaying active master session on loop...</div>
+
 <div class="viewport-16-9"><div id="yt-player"></div></div>
+
 <div class="deck">
 <div class="deck-row">
-<button class="btn" onclick="togglePlay()"><span id="play-icon">▶</span> PLAY/PAUSE</button>
-<button class="btn" onclick="toggleMute()"><span id="mute-icon">🔊</span> MUTE</button>
+<button class="btn" id="unmute-banner-btn" onclick="toggleMute()" style="border-color:var(--focus);background:rgba(0,255,102,.2);color:#fff">🔇 TAP TO UNMUTE AUDIO</button>
+<button class="btn" onclick="togglePlay()"><span id="play-icon">⏸</span> PLAY/PAUSE</button>
 <button class="btn" onclick="cycleSpeed()">⚡ <span id="speed-label">1.0x</span></button>
 <button class="btn" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
 <button class="btn" onclick="copyVideoLink()">🔗 SHARE</button>
 <a id="yt-direct-link" href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ ALL VIDEOS</a>
-<span style="font-size:.75rem;color:var(--dim);margin-left:auto" id="player-status">[READY]</span>
+<span style="font-size:.75rem;color:var(--bright);margin-left:auto" id="player-status">[PLAYING (MUTED)]</span>
 </div>
+
 <div class="deck-row">
 <span style="font-size:.7rem;color:var(--dim)">SESSIONS:</span>
 <div style="display:flex;flex-wrap:wrap;gap:.4rem" id="yt-track-selector"></div>
@@ -109,6 +113,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
+<!-- 🎧 SECTION 2: SPOTIFY MASTER DISCOGRAPHY -->
 <section class="panel" id="spotify">
 <div class="panel-hdr">
 <span>&gt;&gt; SPOTIFY MASTER DISCOGRAPHY // SCROLL ALL TRACKS</span>
@@ -119,6 +124,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
+<!-- 📱 SECTION 3: TIKTOK SHORT-FORM NODE -->
 <section class="panel" id="tiktok">
 <div class="panel-hdr">
 <span>&gt;&gt; TIKTOK SHORT-FORM CLIPS [@jhammerzz]</span>
@@ -131,6 +137,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
+<!-- 🌐 SECTION 4: FACEBOOK OFFICIAL COMMUNITY -->
 <section class="panel" id="facebook">
 <div class="panel-hdr">
 <span>&gt;&gt; FACEBOOK OFFICIAL COMMUNITY [@JHammerZz]</span>
@@ -138,11 +145,12 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 <div class="embed-box">
 <div class="fb-page" data-href="https://www.facebook.com/JHammerZz" data-tabs="timeline" data-width="500" data-height="460" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
-<blockquote cite="https://www.facebook.com/JHammerZz" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/JHammerZz">JHammerZ Facebook</a></blockquote>
+<blockquote cite="https://www.facebook.com/JHammerZz">JHammerZ Facebook</blockquote>
 </div>
 </div>
 </section>
 
+<!-- 📦 SECTION 5: STREAMING APPS -->
 <section class="panel" id="streaming">
 <div class="panel-hdr"><span>&gt;&gt; STREAMING PLATFORMS &amp; AUDIO APPS</span></div>
 <div class="grid">
@@ -153,6 +161,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
+<!-- 💻 SECTION 6: DEVELOPER & HUBS -->
 <section class="panel" id="developer">
 <div class="panel-hdr"><span>&gt;&gt; DEVELOPER &amp; BUSINESS HUBS</span></div>
 <div class="grid">
@@ -162,6 +171,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
+<!-- 🗃️ SECTION 7: CATALOG MATRIX -->
 <section class="panel" id="catalog">
 <div class="panel-hdr"><span>&gt;&gt; COMPLETE VERIFIED CATALOG</span><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ YOUTUBE</a></div>
 <table>
@@ -192,7 +202,7 @@ pC.innerHTML='';tC.innerHTML='';
 TRACKS.forEach((t,i)=>{
 const b=document.createElement('button');b.className='pill '+(i===currentIndex?'active':'');
 b.innerText=`[0${i+1}] ${t.title.split('(')[0]}`;
-b.onclick=()=>loadTrack(i);pC.appendChild(b);
+b.onclick=()=>loadTrack(i,true);pC.appendChild(b);
 const tr=document.createElement('tr');
 tr.innerHTML=`<td><strong>${t.title}</strong></td><td><a href="https://youtu.be/${t.id}" target="_blank" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" style="color:var(--bright)">TikTok ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" style="color:var(--bright)">Spotify ↗</a></td>`;
 tC.appendChild(tr);
@@ -203,23 +213,89 @@ function onYouTubeIframeAPIReady(){
 currentIndex=0;initUI();
 player=new YT.Player('yt-player',{
 videoId:TRACKS[currentIndex].id,
-playerVars:{autoplay:0,controls:1,enablejsapi:1,fs:1,modestbranding:1,rel:0,playsinline:1},
-events:{'onReady':()=>{updateMeta();document.getElementById('player-status').innerText='[READY]'},
+playerVars:{autoplay:1,mute:1,controls:1,enablejsapi:1,playsinline:1,loop:1,modestbranding:1,rel:0},
+events:{'onReady':(e)=>{
+e.target.mute();
+e.target.playVideo();
+updateMeta();
+document.getElementById('player-status').innerText='[PLAYING (MUTED)]';
+},
 'onStateChange':(e)=>{
 const s=document.getElementById('player-status'),ic=document.getElementById('play-icon');
-if(e.data===YT.PlayerState.PLAYING){s.innerText='[PLAYING]';s.style.color='var(--bright)';ic.innerText='⏸'}
-else if(e.data===YT.PlayerState.PAUSED){s.innerText='[PAUSED]';s.style.color='var(--dim)';ic.innerText='▶'}
+if(e.data===YT.PlayerState.PLAYING){
+s.innerText=player.isMuted()?'[PLAYING (MUTED)]':'[PLAYING (AUDIO ON)]';
+s.style.color='var(--bright)';
+ic.innerText='⏸';
+}else if(e.data===YT.PlayerState.PAUSED){
+s.innerText='[PAUSED]';
+s.style.color='var(--dim)';
+ic.innerText='▶';
+}else if(e.data===YT.PlayerState.ENDED){
+loadTrack((currentIndex+1)%TRACKS.length,true);
 }}});
 }
 
-function loadTrack(idx){currentIndex=idx;if(player&&player.loadVideoById)player.loadVideoById(TRACKS[currentIndex].id);updateMeta();initUI()}
-function rotateRandomVideo(){let n;do{n=Math.floor(Math.random()*TRACKS.length)}while(n===currentIndex&&TRACKS.length>1);loadTrack(n)}
-function updateMeta(){const t=TRACKS[currentIndex];document.getElementById('yt-track-title').innerText=`// Active: "${t.title}" [${currentIndex+1}/${TRACKS.length}]`;document.getElementById('yt-direct-link').href=`https://www.youtube.com/watch?v=${t.id}`}
-function togglePlay(){if(!player)return;player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo()}
-function toggleMute(){if(!player)return;const ic=document.getElementById('mute-icon');if(player.isMuted()){player.unMute();ic.innerText='🔊'}else{player.mute();ic.innerText='🔇'}}
-function cycleSpeed(){if(!player)return;currentSpeedIndex=(currentSpeedIndex+1)%speeds.length;const sp=speeds[currentSpeedIndex];player.setPlaybackRate(sp);document.getElementById('speed-label').innerText=sp+'x'}
-function toggleFullscreen(){const el=document.getElementById('youtube');document.fullscreenElement?document.exitFullscreen():el.requestFullscreen().catch(()=>{})}
-function copyVideoLink(){navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${TRACKS[currentIndex].id}`).then(()=>{const t=document.getElementById('toast');t.style.opacity='1';setTimeout(()=>t.style.opacity='0',2500)})}
+function loadTrack(idx,autoPlay=true){
+currentIndex=idx;
+if(player&&player.loadVideoById){
+player.loadVideoById({videoId:TRACKS[currentIndex].id,startSeconds:0});
+if(!autoPlay)player.pauseVideo();
+}
+updateMeta();initUI();
+}
+
+function rotateRandomVideo(){let n;do{n=Math.floor(Math.random()*TRACKS.length)}while(n===currentIndex&&TRACKS.length>1);loadTrack(n,true)}
+
+function updateMeta(){
+const t=TRACKS[currentIndex];
+document.getElementById('yt-track-title').innerText=`// Active: "${t.title}" [${currentIndex+1}/${TRACKS.length}]`;
+document.getElementById('yt-direct-link').href=`https://www.youtube.com/watch?v=${t.id}`;
+}
+
+function togglePlay(){
+if(!player)return;
+player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo();
+}
+
+function toggleMute(){
+if(!player)return;
+const btn=document.getElementById('unmute-banner-btn');
+if(player.isMuted()){
+player.unMute();
+player.setVolume(100);
+if(btn)btn.innerText='🔊 MUTE AUDIO';
+document.getElementById('player-status').innerText='[PLAYING (AUDIO ON)]';
+showToast('Audio Unmuted!');
+}else{
+player.mute();
+if(btn)btn.innerText='🔇 TAP TO UNMUTE AUDIO';
+document.getElementById('player-status').innerText='[PLAYING (MUTED)]';
+showToast('Audio Muted');
+}
+}
+
+function cycleSpeed(){
+if(!player)return;
+currentSpeedIndex=(currentSpeedIndex+1)%speeds.length;
+const sp=speeds[currentSpeedIndex];
+player.setPlaybackRate(sp);
+document.getElementById('speed-label').innerText=sp+'x';
+}
+
+function toggleFullscreen(){
+const el=document.getElementById('youtube');
+document.fullscreenElement?document.exitFullscreen():el.requestFullscreen().catch(()=>{});
+}
+
+function showToast(msg){
+const t=document.getElementById('toast');
+t.innerText=msg;t.style.opacity='1';
+setTimeout(()=>t.style.opacity='0',2200);
+}
+
+function copyVideoLink(){
+navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${TRACKS[currentIndex].id}`).then(()=>{showToast('Video Link Copied!');});
+}
 </script>
 </body>
 </html>
