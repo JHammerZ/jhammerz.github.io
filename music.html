@@ -1,685 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JHAMMERZ | Audio, Video & Multi-Channel Media Hub</title>
-  <meta name="description" content="Official music catalog, YouTube Guitaraoke™ sessions, TikTok drops, and multi-channel media hub for JHAMMERZ (Joshua Hamilton).">
-  <link rel="canonical" href="https://jhammerz.github.io/music.html">
-
-  <!-- Validated Schema.org Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "MusicGroup",
-    "name": "JHammerZ",
-    "alternateName": "Joshua Hamilton",
-    "url": "https://jhammerz.github.io/music.html",
-    "genre": ["Acoustic", "Folk", "Alternative", "Experimental", "Guitaraoke"],
-    "sameAs": [
-      "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
-      "https://music.apple.com/us/artist/jhammerz/1845705346",
-      "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
-      "https://www.bandlab.com/band/band8670133842983447",
-      "https://www.youtube.com/@JHammerZ",
-      "https://www.tiktok.com/@jhammerzz",
-      "https://www.facebook.com/JHammerZz"
-    ]
-  }
-  </script>
-
-  <style>
-    :root {
-      --bg: #030704;
-      --panel-bg: #050b07;
-      --panel-header: #08140b;
-      --text: #00ff66;
-      --text-dim: #009933;
-      --text-bright: #33ff88;
-      --border: #00441b;
-      --border-focus: #00ff66;
-      --accent-glow: rgba(0, 255, 102, 0.25);
-      --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", "Courier New", monospace;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: var(--font-mono);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem 0.75rem 3rem;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 840px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    /* Sticky Navigation */
-    .sticky-nav {
-      position: sticky;
-      top: 0.5rem;
-      z-index: 100;
-      background: rgba(5, 11, 7, 0.92);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border-focus);
-      border-radius: 8px;
-      padding: 0.5rem;
-      display: flex;
-      gap: 0.4rem;
-      overflow-x: auto;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
-    }
-    .sticky-nav::-webkit-scrollbar { display: none; }
-    .nav-pill {
-      background: #020502;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: bold;
-      padding: 0.35rem 0.75rem;
-      border-radius: 4px;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-    .nav-pill:hover {
-      border-color: var(--border-focus);
-      background: rgba(0, 255, 102, 0.15);
-      color: var(--text-bright);
-      box-shadow: 0 0 8px var(--accent-glow);
-    }
-
-    /* Panels */
-    .section-panel {
-      border: 1px solid var(--border);
-      background: var(--panel-bg);
-      border-radius: 8px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-      scroll-margin-top: 4.5rem;
-    }
-    .section-header {
-      color: var(--text-bright);
-      font-weight: bold;
-      letter-spacing: 0.05em;
-      border-bottom: 1px dashed var(--border);
-      padding-bottom: 0.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    /* Video Viewport */
-    .video-viewport {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      height: 0;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      background: #000;
-    }
-    .video-viewport iframe, .video-viewport div#yt-player {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    /* Deck Controls */
-    .deck-container {
-      background: var(--panel-header);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .deck-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .deck-btn {
-      background: #030804;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: bold;
-      padding: 0.4rem 0.75rem;
-      border-radius: 4px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      transition: all 0.15s ease;
-      text-decoration: none;
-    }
-    .deck-btn:hover {
-      border-color: var(--border-focus);
-      color: #fff;
-      background: rgba(0, 255, 102, 0.15);
-      box-shadow: 0 0 8px var(--accent-glow);
-    }
-
-    .track-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-    .track-pill {
-      font-size: 0.7rem;
-      padding: 0.3rem 0.6rem;
-      background: #020502;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text-dim);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .track-pill:hover, .track-pill.active {
-      border-color: var(--border-focus);
-      color: var(--text-bright);
-      background: rgba(0, 255, 102, 0.1);
-    }
-
-    .grid-2col {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 0.75rem;
-    }
-    .channel-card {
-      display: flex;
-      flex-direction: column;
-      padding: 1rem;
-      background: #020603;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.2s ease;
-    }
-    .channel-card:hover {
-      border-color: var(--border-focus);
-      transform: translateY(-2px);
-      background: rgba(0, 255, 102, 0.05);
-      box-shadow: 0 4px 12px var(--accent-glow);
-    }
-    .channel-title {
-      font-size: 0.95rem;
-      font-weight: bold;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .channel-desc {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      margin-top: 0.25rem;
-    }
-
-    .social-embed-box {
-      display: flex;
-      justify-content: center;
-      background: #000;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1rem;
-      min-height: 480px;
-      overflow: hidden;
-    }
-
-    /* Catalog Table */
-    .catalog-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
-    .catalog-table th, .catalog-table td {
-      border: 1px solid var(--border);
-      padding: 0.5rem 0.75rem;
-      text-align: left;
-    }
-    .catalog-table th {
-      background: var(--panel-header);
-      color: var(--text-bright);
-    }
-    .catalog-table tr:hover td {
-      background: rgba(0, 255, 102, 0.05);
-    }
-
-    #toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #051408;
-      border: 1px solid var(--border-focus);
-      color: var(--text-bright);
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      box-shadow: 0 0 12px var(--accent-glow);
-      z-index: 999;
-    }
-
-    footer {
-      margin-top: 2rem;
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      text-align: center;
-    }
-  </style>
-
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script async src="https://www.tiktok.com/embed.js"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>JHAMMERZ | Audio, Video & Multi-Channel Media Hub</title>
+<meta name="description" content="Official music repository, YouTube Guitaraoke sessions, TikTok drops, and media hub for JHAMMERZ.">
+<link rel="canonical" href="https://jhammerz.github.io/music.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"MusicGroup","name":"JHammerZ","alternateName":"Joshua Hamilton","url":"https://jhammerz.github.io/music.html","genre":["Acoustic","Folk","Alternative","Guitaraoke"],"sameAs":["https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79","https://music.apple.com/us/artist/jhammerz/1845705346","https://music.amazon.com/artists/B0D5GLL7NV/jhammerz","https://www.bandlab.com/band/band8670133842983447","https://www.youtube.com/@JHammerZ","https://www.tiktok.com/@jhammerzz","https://www.facebook.com/JHammerZz"]}
+</script>
+<style>
+:root{--bg:#030704;--panel-bg:#050b07;--header:#08140b;--text:#00ff66;--dim:#009933;--bright:#33ff88;--border:#00441b;--focus:#00ff66;--font:ui-monospace,"Cascadia Code","Courier New",monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:1rem .75rem 3rem;font-size:.9rem;line-height:1.6}
+.container{width:100%;max-width:840px;display:flex;flex-direction:column;gap:1.25rem}
+.sticky-nav{position:sticky;top:.5rem;z-index:100;background:rgba(5,11,7,.95);backdrop-filter:blur(8px);border:1px solid var(--focus);border-radius:8px;padding:.5rem;display:flex;gap:.4rem;overflow-x:auto}
+.sticky-nav::-webkit-scrollbar{display:none}
+.nav-pill{background:#020502;border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:.75rem;font-weight:700;padding:.35rem .75rem;border-radius:4px;text-decoration:none;white-space:nowrap;transition:.2s}
+.nav-pill:hover{border-color:var(--focus);background:rgba(0,255,102,.15);color:var(--bright)}
+.panel{border:1px solid var(--border);background:var(--panel-bg);border-radius:8px;padding:1.25rem;display:flex;flex-direction:column;gap:1rem;box-shadow:0 4px 20px rgba(0,0,0,.6);scroll-margin-top:4.5rem}
+.panel-hdr{color:var(--bright);font-weight:700;letter-spacing:.05em;border-bottom:1px dashed var(--border);padding-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.viewport-16-9{position:relative;width:100%;padding-bottom:56.25%;height:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:#000}
+.viewport-16-9 iframe,.viewport-16-9 div#yt-player{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.deck{background:var(--header);border:1px solid var(--border);border-radius:6px;padding:.75rem;display:flex;flex-direction:column;gap:.75rem}
+.deck-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.btn{background:#030804;border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:.75rem;font-weight:700;padding:.4rem .75rem;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;transition:.15s}
+.btn:hover{border-color:var(--focus);color:#fff;background:rgba(0,255,102,.15)}
+.pill{font-size:.7rem;padding:.3rem .6rem;background:#020502;border:1px solid var(--border);border-radius:4px;color:var(--dim);cursor:pointer;transition:.15s}
+.pill:hover,.pill.active{border-color:var(--focus);color:var(--bright);background:rgba(0,255,102,.1)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.75rem}
+.card{display:flex;flex-direction:column;padding:1rem;background:#020603;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text);transition:.2s}
+.card:hover{border-color:var(--focus);transform:translateY(-2px);background:rgba(0,255,102,.05)}
+.embed-box{display:flex;justify-content:center;background:#000;border:1px solid var(--border);border-radius:6px;padding:1rem;min-height:500px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th,td{border:1px solid var(--border);padding:.5rem .75rem;text-align:left}
+th{background:var(--header);color:var(--bright)}
+tr:hover td{background:rgba(0,255,102,.05)}
+#toast{position:fixed;bottom:20px;right:20px;background:#051408;border:1px solid var(--focus);color:var(--bright);padding:.5rem 1rem;border-radius:4px;font-size:.8rem;opacity:0;pointer-events:none;transition:.3s}
+footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
+</style>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script async src="https://www.tiktok.com/embed.js"></script>
 </head>
 <body>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"></script>
+<div class="container">
+<div style="border:1px solid var(--border);padding:.75rem;border-radius:4px;background:var(--panel-bg);font-size:.8rem;color:var(--dim)">
+Provenance: <span style="color:var(--text)">JHammerZ Human-Standard Catalog // YouTube • Spotify • TikTok • Facebook</span>
+</div>
 
-  <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"></script>
+<nav class="sticky-nav">
+<a href="#youtube" class="nav-pill">📺 YOUTUBE</a>
+<a href="#spotify" class="nav-pill">🎧 SPOTIFY (SCROLLABLE)</a>
+<a href="#tiktok" class="nav-pill">📱 TIKTOK</a>
+<a href="#facebook" class="nav-pill">🌐 FACEBOOK</a>
+<a href="#streaming" class="nav-pill">📦 ALL APPS</a>
+<a href="#catalog" class="nav-pill">🗃️ CATALOG</a>
+<a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
+</nav>
 
-  <div class="container">
-    
-    <div style="border: 1px solid var(--border); padding: 0.75rem; border-radius: 4px; background: var(--panel-bg); font-size: 0.8rem; color: var(--text-dim);">
-      Provenance: <span style="color: var(--text);">JHammerZ Human-Standard Catalog // YouTube • TikTok • Facebook • Spotify</span>
-    </div>
+<section class="panel" id="youtube">
+<div class="panel-hdr">
+<span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
+<div style="display:flex;gap:.4rem">
+<button class="btn" onclick="rotateRandomVideo()">🎲 REROLL</button>
+<a href="https://www.youtube.com/@JHammerZ?sub_confirmation=1" target="_blank" rel="noopener" class="btn" style="border-color:var(--focus);color:#fff">+ SUBSCRIBE</a>
+</div>
+</div>
+<div style="font-size:.8rem;color:var(--dim)" id="yt-track-title">// Initializing active master session...</div>
+<div class="viewport-16-9" id="viewport-frame"><div id="yt-player"></div></div>
+<div class="deck">
+<div class="deck-row">
+<button class="btn" onclick="togglePlay()"><span id="play-icon">▶</span> PLAY/PAUSE</button>
+<button class="btn" onclick="toggleMute()"><span id="mute-icon">🔊</span> MUTE</button>
+<button class="btn" onclick="cycleSpeed()">⚡ SPEED: <span id="speed-label">1.0x</span></button>
+<button class="btn" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
+<button class="btn" onclick="copyVideoLink()">🔗 SHARE</button>
+<a id="yt-direct-link" href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ ALL VIDEOS</a>
+<span style="font-size:.75rem;color:var(--dim);margin-left:auto" id="player-status">[STATUS: READY]</span>
+</div>
+<div class="deck-row">
+<span style="font-size:.7rem;color:var(--dim)">SELECT SESSION:</span>
+<div style="display:flex;flex-wrap:wrap;gap:.4rem" id="yt-track-selector"></div>
+</div>
+</div>
+</section>
 
-    <!-- 🧭 STICKY NAVIGATION -->
-    <nav class="sticky-nav">
-      <a href="#youtube" class="nav-pill">📺 YOUTUBE SESSIONS</a>
-      <a href="#tiktok" class="nav-pill">📱 TIKTOK</a>
-      <a href="#facebook" class="nav-pill">🌐 FACEBOOK</a>
-      <a href="#streaming" class="nav-pill">🎧 STREAMING</a>
-      <a href="#catalog" class="nav-pill">🗃️ FULL CATALOG</a>
-      <a href="/" class="nav-pill" style="border-color: var(--text-dim);">&lt;&lt; HOME</a>
-    </nav>
+<section class="panel" id="spotify">
+<div class="panel-hdr">
+<span>&gt;&gt; SPOTIFY MASTER DISCOGRAPHY // SCROLL FOR ALL TRACKS</span>
+<a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="btn">+ FOLLOW ARTIST</a>
+</div>
+<div style="font-size:.8rem;color:var(--dim)">// Scroll inside the player to stream and explore all releases.</div>
+<div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#000">
+<iframe src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+</section>
 
-    <!-- 📺 SECTION 1: YOUTUBE MASTER NODE -->
-    <section class="section-panel" id="youtube">
-      <div class="section-header">
-        <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
-        <div style="display: flex; gap: 0.4rem;">
-          <button class="deck-btn" onclick="rotateRandomVideo()">🎲 REROLL</button>
-          <a href="https://www.youtube.com/@JHammerZ?sub_confirmation=1" target="_blank" rel="noopener" class="deck-btn" style="border-color: var(--border-focus); color: #fff;">+ SUBSCRIBE</a>
-        </div>
-      </div>
+<section class="panel" id="tiktok">
+<div class="panel-hdr">
+<span>&gt;&gt; TIKTOK SHORT-FORM CLIPS [@jhammerzz]</span>
+<a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="btn">+ FOLLOW ON TIKTOK</a>
+</div>
+<div class="embed-box">
+<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@jhammerzz" data-unique-id="jhammerzz" data-embed-type="creator" style="max-width:100%;min-width:300px">
+<section><a target="_blank" href="https://www.tiktok.com/@jhammerzz">@jhammerzz</a></section>
+</blockquote>
+</div>
+</section>
 
-      <div style="font-size: 0.8rem; color: var(--text-dim);" id="yt-track-title">// Initializing active master session...</div>
+<section class="panel" id="facebook">
+<div class="panel-hdr">
+<span>&gt;&gt; FACEBOOK OFFICIAL COMMUNITY [@JHammerZz]</span>
+<a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="btn">↗ OPEN FACEBOOK</a>
+</div>
+<div class="embed-box">
+<div class="fb-page" data-href="https://www.facebook.com/JHammerZz" data-tabs="timeline,messages" data-width="500" data-height="480" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+<blockquote cite="https://www.facebook.com/JHammerZz" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/JHammerZz">JHammerZ Official Facebook Page</a></blockquote>
+</div>
+</div>
+</section>
 
-      <div class="video-viewport" id="viewport-frame">
-        <div id="yt-player"></div>
-      </div>
+<section class="panel" id="streaming">
+<div class="panel-hdr"><span>&gt;&gt; STREAMING PLATFORMS &amp; AUDIO APPS</span></div>
+<div class="grid">
+<a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="card"><strong>Spotify <span>🎧</span></strong><small style="color:var(--dim)">Artist profile and albums</small></a>
+<a href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener" class="card"><strong>Apple Music <span>🍎</span></strong><small style="color:var(--dim)">Official iTunes Catalog</small></a>
+<a href="https://www.bandlab.com/band/band8670133842983447" target="_blank" rel="noopener" class="card"><strong>BandLab <span>🎸</span></strong><small style="color:var(--dim)">Raw tracks and demos</small></a>
+<a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" target="_blank" rel="noopener" class="card"><strong>Amazon Music <span>📦</span></strong><small style="color:var(--dim)">Digital store streams</small></a>
+</div>
+</section>
 
-      <!-- YouTube Control Deck -->
-      <div class="deck-container">
-        <div class="deck-row">
-          <button class="deck-btn" onclick="togglePlay()"><span id="play-icon">▶</span> PLAY/PAUSE</button>
-          <button class="deck-btn" onclick="toggleMute()"><span id="mute-icon">🔊</span> MUTE/UNMUTE</button>
-          <button class="deck-btn" onclick="cycleSpeed()">⚡ SPEED: <span id="speed-label">1.0x</span></button>
-          <button class="deck-btn" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
-          <button class="deck-btn" onclick="copyVideoLink()">🔗 SHARE</button>
-          <a id="yt-direct-link" href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="deck-btn">↗ ALL VIDEOS</a>
-          <span style="font-size:0.75rem; color:var(--text-dim); margin-left:auto;" id="player-status">[STATUS: READY]</span>
-        </div>
+<section class="panel" id="catalog">
+<div class="panel-hdr"><span>&gt;&gt; COMPLETE CATALOG INDEX</span><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ YOUTUBE CATALOG</a></div>
+<table>
+<thead><tr><th>Track / Session</th><th>Type</th><th>YouTube</th><th>TikTok</th><th>Spotify</th></tr></thead>
+<tbody>
+<tr><td><strong>The Crow and the Butterfly</strong></td><td>Shinedown Cover Take</td><td><a href="https://www.youtube.com/watch?v=Z45xajWiXwc" target="_blank" rel="noopener" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--bright)">Clip ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" style="color:var(--bright)">Stream ↗</a></td></tr>
+<tr><td><strong>Ain't Nothin' But A Day To Die</strong></td><td>Original (Feat. MadLad Gibson)</td><td><a href="https://www.youtube.com/watch?v=AdZ2_tJOLu4" target="_blank" rel="noopener" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--bright)">Clip ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" style="color:var(--bright)">Stream ↗</a></td></tr>
+<tr><td><strong>Hallelujah</strong></td><td>Acoustic Version</td><td><a href="https://www.youtube.com/watch?v=llyADThAg5o" target="_blank" rel="noopener" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--bright)">Clip ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" style="color:var(--bright)">Stream ↗</a></td></tr>
+<tr><td><strong>Twenty 47</strong></td><td>Raw Guitaraoke™ Live</td><td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--bright)">Clip ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" style="color:var(--bright)">Stream ↗</a></td></tr>
+</tbody>
+</table>
+</section>
 
-        <div class="deck-row">
-          <span style="font-size: 0.7rem; color: var(--text-dim);">SELECT SESSION:</span>
-          <div class="track-pills" id="yt-track-selector"></div>
-        </div>
-      </div>
-    </section>
+<footer><p>© 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.2</p></footer>
+</div>
+<div id="toast">Link copied to clipboard!</div>
 
-    <!-- 📱 SECTION 2: TIKTOK SHORT-FORM NODE -->
-    <section class="section-panel" id="tiktok">
-      <div class="section-header">
-        <span>&gt;&gt; TIKTOK SHORT-FORM CLIPS [@jhammerzz]</span>
-        <a href="https://www.tiktok.com/@jhammerzz?utm_source=jhammerz_hub" target="_blank" rel="noopener" class="deck-btn">+ FOLLOW ON TIKTOK</a>
-      </div>
+<script>
+const TOP_TRACKS=[
+{id:"Z45xajWiXwc",title:"The Crow and the Butterfly (Shinedown Acoustic Session)"},
+{id:"AdZ2_tJOLu4",title:"Ain't Nothin' But A Day To Die (Feat. MadLad Gibson)"},
+{id:"llyADThAg5o",title:"Hallelujah (Live Acoustic Session Take)"}
+];
+let player,currentIndex=0,speeds=[0.75,1.0,1.25,1.5,2.0],currentSpeedIndex=1;
 
-      <div style="font-size: 0.8rem; color: var(--text-dim);">// Direct vertical video feed, acoustic riffs, and one-take vocals.</div>
+function renderTrackSelector(){
+const c=document.getElementById('yt-track-selector');c.innerHTML='';
+TOP_TRACKS.forEach((t,i)=>{
+const b=document.createElement('button');b.className='pill '+(i===currentIndex?'active':'');
+b.innerText=`[0${i+1}] ${t.title.split('(')[0]}`;
+b.onclick=()=>loadTrack(i);c.appendChild(b);
+});
+}
 
-      <div class="social-embed-box">
-        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@jhammerzz" data-unique-id="jhammerzz" data-embed-type="creator" style="max-width: 100%; min-width: 288px;">
-          <section>
-            <a target="_blank" href="https://www.tiktok.com/@jhammerzz?refer=creator_embed">@jhammerzz</a>
-          </section>
-        </blockquote>
-      </div>
+function onYouTubeIframeAPIReady(){
+currentIndex=0;renderTrackSelector();
+player=new YT.Player('yt-player',{
+videoId:TOP_TRACKS[currentIndex].id,
+playerVars:{autoplay:0,controls:1,enablejsapi:1,fs:1,modestbranding:1,rel:0,playsinline:1},
+events:{'onReady':()=>{updateTrackMeta();document.getElementById('player-status').innerText='[STATUS: READY]'},
+'onStateChange':(e)=>{
+const s=document.getElementById('player-status'),ic=document.getElementById('play-icon');
+if(e.data===YT.PlayerState.PLAYING){s.innerText='[STATUS: PLAYING]';s.style.color='var(--bright)';ic.innerText='⏸'}
+else if(e.data===YT.PlayerState.PAUSED){s.innerText='[STATUS: PAUSED]';s.style.color='var(--dim)';ic.innerText='▶'}
+}}});
+}
 
-      <div class="grid-2col">
-        <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">🔥 "Ain't Nothin' But A Day To Die" <span>↗</span></div>
-          <div class="channel-desc">Original Acoustic &amp; Mandolin Take with MadLad Gibson</div>
-        </a>
-        <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">⚡ Twenty 47 Live Drop <span>↗</span></div>
-          <div class="channel-desc">One take. No click. Live Guitaraoke™</div>
-        </a>
-        <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">🎙️ "Hallelujah" Acoustic Take <span>↗</span></div>
-          <div class="channel-desc">Raw acoustic vocal session take</div>
-        </a>
-        <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">🎸 "What It's Like" &amp; "Simple Man" <span>↗</span></div>
-          <div class="channel-desc">Left-Handed Acoustic &amp; Speed-Picking Riffs</div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 🌐 SECTION 3: FACEBOOK COMMUNITY -->
-    <section class="section-panel" id="facebook">
-      <div class="section-header">
-        <span>&gt;&gt; FACEBOOK OFFICIAL COMMUNITY [@JHammerZz]</span>
-        <a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="deck-btn">↗ OPEN FACEBOOK</a>
-      </div>
-
-      <div class="social-embed-box">
-        <div class="fb-page" 
-             data-href="https://www.facebook.com/JHammerZz" 
-             data-tabs="timeline,messages" 
-             data-width="500" 
-             data-height="450" 
-             data-small-header="false" 
-             data-adapt-container-width="true" 
-             data-hide-cover="false" 
-             data-show-facepile="true">
-          <blockquote cite="https://www.facebook.com/JHammerZz" class="fb-xfbml-parse-ignore">
-            <a href="https://www.facebook.com/JHammerZz">JHammerZ Official Facebook Page</a>
-          </blockquote>
-        </div>
-      </div>
-    </section>
-
-    <!-- 🎧 SECTION 4: STREAMING PLATFORMS -->
-    <section class="section-panel" id="streaming">
-      <div class="section-header">
-        <span>&gt;&gt; STREAMING PLATFORMS &amp; AUDIO APPS</span>
-      </div>
-
-      <div style="border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #000;">
-        <iframe src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-      </div>
-
-      <div class="grid-2col">
-        <a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">Spotify <span>🎧</span></div>
-          <div class="channel-desc">Artist profile, albums, and master audio releases.</div>
-        </a>
-
-        <a href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">Apple Music <span>🍎</span></div>
-          <div class="channel-desc">Stream on iPhone, Mac, or iTunes official catalog.</div>
-        </a>
-
-        <a href="https://www.bandlab.com/band/band8670133842983447" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">BandLab <span>🎸</span></div>
-          <div class="channel-desc">Raw tracks, demos, and collaborative audio masters.</div>
-        </a>
-
-        <a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" target="_blank" rel="noopener" class="channel-card">
-          <div class="channel-title">Amazon Music <span>📦</span></div>
-          <div class="channel-desc">Digital store and Prime unlimited streams.</div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 🗃️ SECTION 5: AUDITED CATALOG -->
-    <section class="section-panel" id="catalog">
-      <div class="section-header">
-        <span>&gt;&gt; AUDITED CROSS-PLATFORM CATALOG</span>
-        <a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="deck-btn">↗ YOUTUBE CATALOG</a>
-      </div>
-
-      <table class="catalog-table">
-        <thead>
-          <tr>
-            <th>Track Name</th>
-            <th>Type</th>
-            <th>YouTube</th>
-            <th>TikTok</th>
-            <th>Facebook</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Ain't Nothin' But A Day To Die</strong></td>
-            <td>Original (Feat. MadLad Gibson)</td>
-            <td><a href="https://www.youtube.com/watch?v=AdZ2_tJOLu4" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-          <tr>
-            <td><strong>Twenty 47 - Raw GuitarAOKE Drop</strong></td>
-            <td>Original Live Take (No Click)</td>
-            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-          <tr>
-            <td><strong>Hallelujah</strong></td>
-            <td>Acoustic Version Take</td>
-            <td><a href="https://www.youtube.com/watch?v=llyADThAg5o" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-          <tr>
-            <td><strong>What It's Like</strong></td>
-            <td>Left-Handed Acoustic Session</td>
-            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-          <tr>
-            <td><strong>Simple Man</strong></td>
-            <td>Live Time Crunch Cover</td>
-            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-          <tr>
-            <td><strong>I'm Gonna Be Somebody</strong></td>
-            <td>Travis Tritt Acoustic Take</td>
-            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-          <tr>
-            <td><strong>Changes</strong></td>
-            <td>Ozzy Osbourne Acoustic Tribute</td>
-            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-          <tr>
-            <td><strong>Mr. Crowley</strong></td>
-            <td>Improv Speed-Picking Session</td>
-            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-          <tr>
-            <td><strong>Little Lion Man</strong></td>
-            <td>Mumford &amp; Sons Acoustic Session</td>
-            <td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--text-bright)">Watch ↗</a></td>
-            <td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--text-bright)">Clip ↗</a></td>
-            <td><a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" style="color:var(--text-bright)">Post ↗</a></td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-      <p>© 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.2</p>
-      <p style="margin-top: 0.25rem; font-size: 0.7rem; color: var(--text-dim);">[SIGNAL_PROPAGATING]: YOUTUBE • TIKTOK • FACEBOOK • SPOTIFY</p>
-    </footer>
-
-  </div>
-
-  <div id="toast">Link copied to clipboard!</div>
-
-  <script>
-    const TOP_TRACKS = [
-      { id: "AdZ2_tJOLu4", title: "Ain't Nothin' But A Day To Die (Feat. MadLad Gibson)" },
-      { id: "llyADThAg5o", title: "Hallelujah (Live Acoustic Session Take)" }
-    ];
-
-    let player;
-    let currentIndex = 0;
-    const speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
-    let currentSpeedIndex = 1;
-
-    function renderTrackSelector() {
-      const container = document.getElementById('yt-track-selector');
-      container.innerHTML = '';
-      TOP_TRACKS.forEach((track, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'track-pill ' + (i === currentIndex ? 'active' : '');
-        btn.innerText = `[0${i + 1}] ${track.title.split('(')[0]}`;
-        btn.onclick = () => loadTrack(i);
-        container.appendChild(btn);
-      });
-    }
-
-    function onYouTubeIframeAPIReady() {
-      currentIndex = 0;
-      renderTrackSelector();
-      
-      player = new YT.Player('yt-player', {
-        videoId: TOP_TRACKS[currentIndex].id,
-        playerVars: {
-          autoplay: 0,
-          controls: 1,
-          enablejsapi: 1,
-          fs: 1,
-          modestbranding: 1,
-          rel: 0,
-          playsinline: 1
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
-        }
-      });
-    }
-
-    function onPlayerReady(event) {
-      updateTrackMeta();
-      document.getElementById('player-status').innerText = '[STATUS: READY]';
-    }
-
-    function onPlayerStateChange(event) {
-      const statusEl = document.getElementById('player-status');
-      const iconEl = document.getElementById('play-icon');
-      
-      if (event.data === YT.PlayerState.PLAYING) {
-        statusEl.innerText = '[STATUS: PLAYING]';
-        statusEl.style.color = 'var(--text-bright)';
-        iconEl.innerText = '⏸';
-      } else if (event.data === YT.PlayerState.PAUSED) {
-        statusEl.innerText = '[STATUS: PAUSED]';
-        statusEl.style.color = 'var(--text-dim)';
-        iconEl.innerText = '▶';
-      }
-    }
-
-    function loadTrack(index) {
-      currentIndex = index;
-      if (player && player.loadVideoById) {
-        player.loadVideoById(TOP_TRACKS[currentIndex].id);
-      }
-      updateTrackMeta();
-      renderTrackSelector();
-    }
-
-    function rotateRandomVideo() {
-      let nextIndex;
-      do {
-        nextIndex = Math.floor(Math.random() * TOP_TRACKS.length);
-      } while (nextIndex === currentIndex && TOP_TRACKS.length > 1);
-      loadTrack(nextIndex);
-    }
-
-    function updateTrackMeta() {
-      const track = TOP_TRACKS[currentIndex];
-      document.getElementById('yt-track-title').innerText = `// Active Node: "${track.title}" [Session ${currentIndex + 1}/${TOP_TRACKS.length}]`;
-      document.getElementById('yt-direct-link').href = `https://www.youtube.com/watch?v=${track.id}`;
-    }
-
-    function togglePlay() {
-      if (!player) return;
-      const state = player.getPlayerState();
-      if (state === YT.PlayerState.PLAYING) {
-        player.pauseVideo();
-      } else {
-        player.playVideo();
-      }
-    }
-
-    function toggleMute() {
-      if (!player) return;
-      const muteIcon = document.getElementById('mute-icon');
-      if (player.isMuted()) {
-        player.unMute();
-        muteIcon.innerText = '🔊';
-      } else {
-        player.mute();
-        muteIcon.innerText = '🔇';
-      }
-    }
-
-    function cycleSpeed() {
-      if (!player) return;
-      currentSpeedIndex = (currentSpeedIndex + 1) % speeds.length;
-      const newSpeed = speeds[currentSpeedIndex];
-      player.setPlaybackRate(newSpeed);
-      document.getElementById('speed-label').innerText = `${newSpeed}x`;
-    }
-
-    function toggleFullscreen() {
-      const el = document.getElementById('viewport-frame');
-      if (!document.fullscreenElement) {
-        el.requestFullscreen().catch(err => alert("Fullscreen error: " + err.message));
-      } else {
-        document.exitFullscreen();
-      }
-    }
-
-    function copyVideoLink() {
-      const link = `https://www.youtube.com/watch?v=${TOP_TRACKS[currentIndex].id}`;
-      navigator.clipboard.writeText(link).then(() => {
-        const toast = document.getElementById('toast');
-        toast.style.opacity = '1';
-        setTimeout(() => toast.style.opacity = '0', 2500);
-      });
-    }
-  </script>
+function loadTrack(idx){currentIndex=idx;if(player&&player.loadVideoById)player.loadVideoById(TOP_TRACKS[currentIndex].id);updateTrackMeta();renderTrackSelector()}
+function rotateRandomVideo(){let n;do{n=Math.floor(Math.random()*TOP_TRACKS.length)}while(n===currentIndex&&TOP_TRACKS.length>1);loadTrack(n)}
+function updateTrackMeta(){const t=TOP_TRACKS[currentIndex];document.getElementById('yt-track-title').innerText=`// Active: "${t.title}" [${currentIndex+1}/${TOP_TRACKS.length}]`;document.getElementById('yt-direct-link').href=`https://www.youtube.com/watch?v=${t.id}`}
+function togglePlay(){if(!player)return;player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo()}
+function toggleMute(){if(!player)return;const ic=document.getElementById('mute-icon');if(player.isMuted()){player.unMute();ic.innerText='🔊'}else{player.mute();ic.innerText='🔇'}}
+function cycleSpeed(){if(!player)return;currentSpeedIndex=(currentSpeedIndex+1)%speeds.length;const sp=speeds[currentSpeedIndex];player.setPlaybackRate(sp);document.getElementById('speed-label').innerText=sp+'x'}
+function toggleFullscreen(){const el=document.getElementById('viewport-frame');document.fullscreenElement?document.exitFullscreen():el.requestFullscreen().catch(()=>{})}
+function copyVideoLink(){navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${TOP_TRACKS[currentIndex].id}`).then(()=>{const t=document.getElementById('toast');t.style.opacity='1';setTimeout(()=>t.style.opacity='0',2500)})}
+</script>
 </body>
 </html>
