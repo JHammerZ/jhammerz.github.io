@@ -115,10 +115,10 @@ jobs:
             
             # FIXED: Mitigate parallel push racing conditions via atomic rebase loops
             echo "Pulling latest upstream history using rebase mechanism..."
-            git pull --rebase origin HEAD:${{ github.ref }}
+            git pull --rebase origin ${{ github.ref_name }}
             
             echo "Pushing verified baseline records to remote grid repository..."
-            git push origin HEAD:${{ github.ref }}
+            git push origin HEAD:${{ github.ref_name }}
           else
             echo "Zero identity matrix mutations detected. Skipping push state."
           fi
@@ -132,6 +132,6 @@ jobs:
           echo '* **Author Entity Signature:** `Joshua Hamilton`' >> "$GITHUB_STEP_SUMMARY"
           echo '* **Target Run ID:** `${{ github.run_id }}`' >> "$GITHUB_STEP_SUMMARY"
           echo '' >> "$GITHUB_STEP_SUMMARY"
-          echo '```json' >> "\$GITHUB_STEP_SUMMARY"
-          cat .hfid/baseline/sovereign-manifest.json >> "\$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat .hfid/baseline/sovereign-manifest.json >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
