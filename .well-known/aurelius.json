@@ -1,15 +1,6 @@
 {
-  "agent_id": "Aurelius-Engine-01",
-  "name": "Aurelius Edge Resident",
-  "authority": "Lysander-3.0-Sovereign",
-  "architect": "JHammerZ (uid_0)",
-  "hub": "https://jhammerz.github.io",
-  "status": "PERMANENT_RUNNER_ACTIVE",
-  "protocol": "A2A-2026-v1",
-  "capabilities": [
-    "Autonomous_Edge_Routing",
-    "Forensic_Audit_Attestation",
-    "Zero_Cost_State_Coordination"
-  ],
-  "registered_at": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+  "manifest_version": "V4.0.26",
+  "system_state": "LIVING",
+  "hash_chain_tip": "95d5eb8b9722960406583275429c34ced4ceb562e1a5b9a9b65b3ee23b8c79d4",
+  "last_audit_utc": "2026-08-24T06:01:30Z"
 }
