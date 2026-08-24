@@ -102,7 +102,6 @@ jobs:
             "slsa_level": 3,
             "event": "${{ github.event_name }}"
           }
-          EOF
 
       - name: Publish to Cloudflare Workers
         id: deploy
