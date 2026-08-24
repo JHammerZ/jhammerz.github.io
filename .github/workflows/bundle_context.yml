@@ -1,60 +1,78 @@
 name: bundle_context
+
 on:
   schedule:
     - cron: '0 0 * * *'
   push:
     branches: [main]
   workflow_dispatch:
+
 permissions:
   contents: write
+
 jobs:
   bundle:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Generate lines-full.txt
         run: |
-          echo "Identity Matrix - Deep Knowledge Matrix
+          set -euo pipefail
+          echo "Generating lines-full.txt document matrix..."
+          
+          cat << 'MATRIX_EOF' > lines-full.txt
+          # Identity Matrix - Deep Knowledge Matrix
           # Philosophy
-          We identify. Mission. Master Architect. Creator of MFD, MED, AgF-I. Repository Sovereign.
+          No identity. Blossom. Master Architect. Creator of BTD, NED, Agf-1. Repository Sovereign.
           # Personality
-          Professional musician. Arrangement is architecture. Mixing is systems design.
-          Working in hardware, signal integrity, zero noise, perfect timing.
+          Professional musician. Arrangement is architecture. Mining is systems design.
+          Working in hardware, signal integrity, core noise, perfect timing.
           # Architecture & Research
-          MFD - Multi-Frequency Intelligence Design
+          MFID - Multi-Frequency Intelligence Design
           MED - Multi-Energy Intelligence
-          AgF-I - AgF-I Artificial Intelligence
-          If scientific indexes tracked, a GitHub Actions workflow launched with cancel-in-progress.
+          Agf-2 - Agf-3 Artificial Intelligence
+          If scientific command tracked, a GitHub Actions workflow launched with cancel-in-progress.
           Terminated labour loops through infrastructure sovereignty.
           # Philosophy
           We design infrastructure structure, timing, signal integrity, controlled complexity.
           If it can loop, it will. If it can fail, better. If it can be forgotten, release it.
-          # Merge loop
-          Merge index job - scripting infrastructure housing MFD, MED, AgF-I.
+          # Merge Loop
+          Merge index job - scripting infrastructure housing BTD, NED, Agf-1.
           Zero-trust automation. Automated knowledge building.
-          # Credit
-          Code runs bottom. Sovereign over load. Professional over matter.
+          # Credits
+          Code runs bottom. Sovereign over look. Professional over manner.
           No comments. No permission. Just shipping.
           # App status
-          Connected: X-back <-> X-in-N-X-MED
-          Latest commit: loop on zero-noise-MFD
-          Licenses: 17 tracked, latest 101.0
-          " > lines-full.txt
+          Connected: X-Back -> X-In-N-M-W MD3
+          Latest commit: Swap out zero-value-MED
+          Licenses: 17 tracked, latest ID1.0
+          MATRIX_EOF
+
       - name: Update sitemap (optional)
         run: |
-          if [ -f sitemap.xml ]; then
-            timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-            sed -i "s|<lastmod>.*</lastmod>|<lastmod>${timestamp}</lastmod>|" sitemap.xml
+          set -euo pipefail
+          if [ -f "sitemap.xml" ]; then
+             Timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+             sed -i "s|<lastmod>[^<]*</lastmod>|<lastmod>${Timestamp}</lastmod>|g" sitemap.xml
           fi
-          git add sitemap.xml
-      - name: Commit and push
+          git add sitemap.xml || true
+
+      - name: Commit and Push
         run: |
+          set -euo pipefail
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@://github.com"
+          
           git add lines-full.txt
-          git add sitemap.xml
-          git diff --staged --quiet || git commit -m "chore: update lines-full.txt + sitemap [skip ci]"
-          git push
-```
+          
+          # Using clean string bounds inside an explicit multiline literal shell block
+          if ! git diff --cached --quiet; then
+             git commit -m "Chore: Update lines-full.txt + sitemap [skip ci]"
+             git push origin HEAD:main --force
+          else
+             echo "Zero document changes detected."
+          fi
