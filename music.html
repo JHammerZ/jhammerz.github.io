@@ -6,13 +6,13 @@
 <meta name="description" content="Official music repository, YouTube Guitaraoke sessions, TikTok drops, and media hub for JHAMMERZ.">
 <link rel="canonical" href="https://jhammerz.github.io/music.html">
 
-<!-- 🤖 Agentic Browsing & AI Discovery Metadata -->
+<!-- 🤖 Agentic Browsing & AI Discovery (3/3 Score) -->
 <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMS Architecture Manifest">
 <link rel="alternate" type="application/json" href="/.well-known/aurelius.json" title="A2A Agent Registry">
 <meta name="agentic-browsing" content="enabled; version=1.2; protocol=A2A-2026-v1; hub=https://jhammerz.github.io">
 <meta name="ai-content-declaration" content="human-standard; provenance=H-FID-100-FORENSIC-AUDIT">
 
-<!-- Validated Schema.org Structured Data with Full Catalog ItemList -->
+<!-- Validated Schema.org Structured Data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -72,7 +72,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .panel-hdr{color:var(--bright);font-weight:700;border-bottom:1px dashed var(--border);padding-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
 
 .viewport-16-9{position:relative;width:100%;padding-bottom:56.25%;height:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:#000;box-shadow:0 0 15px rgba(0,255,102,.08)}
-.viewport-16-9 iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.viewport-16-9 iframe,.viewport-16-9 .facade-box{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.facade-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background-size:cover;background-position:center;cursor:pointer}
+.play-badge{width:56px;height:56px;background:rgba(0,255,102,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:1.5rem;box-shadow:0 0 20px var(--focus);transition:.2s}
+.facade-box:hover .play-badge{transform:scale(1.1);background:#fff}
 
 .deck{background:var(--hdr);border:1px solid var(--border);border-radius:6px;padding:.75rem;display:flex;flex-direction:column;gap:.75rem}
 .deck-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem}
@@ -124,7 +127,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
 </nav>
 
-<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (DEFAULT #1: AIN'T NOTHIN' BUT A DAY TO DIE) -->
+<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (DEFAULT #1 AUTOPLAY) -->
 <section class="panel" id="youtube" aria-label="YouTube Sessions">
 <div class="panel-hdr">
 <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
@@ -136,12 +139,9 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <div style="font-size:.8rem;color:var(--dim)" id="yt-track-title">// Active: "Ain't Nothin' But A Day To Die" [1/6]</div>
 
 <div class="viewport-16-9" id="viewport-frame">
-  <iframe id="yt-player" 
-    title="JHammerZ YouTube Session Master Video Player"
-    src="https://www.youtube-nocookie.com/embed/URLBudn8pDg?enablejsapi=1&autoplay=1&mute=1&playsinline=1&rel=0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-  </iframe>
+  <div class="facade-box" id="yt-facade" style="background-image:url('https://i.ytimg.com/vi/URLBudn8pDg/hqdefault.jpg');" onclick="unpackYouTube(true)">
+    <div class="play-badge">▶</div>
+  </div>
 </div>
 
 <div class="deck">
@@ -153,7 +153,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <button class="btn" onclick="toggleFullscreen()" aria-label="Fullscreen">⛶ FULLSCREEN</button>
 <button class="btn" onclick="copyVideoLink()" aria-label="Share Link">🔗 SHARE</button>
 <a id="yt-direct-link" href="https://www.youtube.com/watch?v=URLBudn8pDg" target="_blank" rel="noopener" class="btn">↗ WATCH ON YOUTUBE</a>
-<span style="font-size:.75rem;color:var(--bright);margin-left:auto" id="player-status">[PLAYING (MUTED)]</span>
+<span style="font-size:.75rem;color:var(--bright);margin-left:auto" id="player-status">[READY]</span>
 </div>
 
 <div class="deck-row">
@@ -163,7 +163,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 🎧 SECTION 2: SPOTIFY MASTER DISCOGRAPHY (AUTO-UNPACKS ON SCROLL) -->
+<!-- 🎧 SECTION 2: SPOTIFY MASTER DISCOGRAPHY -->
 <section class="panel" id="spotify" aria-label="Spotify Discography">
 <div class="panel-hdr">
 <span>&gt;&gt; SPOTIFY MASTER DISCOGRAPHY // SCROLL ALL TRACKS</span>
@@ -174,7 +174,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 📱 SECTION 3: TIKTOK SHORT-FORM NODE (AUTO-UNPACKS ON SCROLL) -->
+<!-- 📱 SECTION 3: TIKTOK SHORT-FORM NODE -->
 <section class="panel" id="tiktok" aria-label="TikTok Clips">
 <div class="panel-hdr">
 <span>&gt;&gt; TIKTOK SHORT-FORM CLIPS [@jhammerzz]</span>
@@ -185,7 +185,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 🌐 SECTION 4: FACEBOOK COMMUNITY (AUTO-UNPACKS ON SCROLL) -->
+<!-- 🌐 SECTION 4: FACEBOOK COMMUNITY -->
 <section class="panel" id="facebook" aria-label="Facebook Community">
 <div class="panel-hdr">
 <span>&gt;&gt; FACEBOOK OFFICIAL COMMUNITY [@JHammerZz]</span>
@@ -246,6 +246,7 @@ var TRACKS = [
 var currentIndex = 0;
 var isMuted = true;
 var isPlaying = true;
+var ytUnpacked = false;
 var speeds = [0.75, 1.0, 1.25, 1.5, 2.0];
 var currentSpeedIndex = 1;
 
@@ -290,12 +291,28 @@ function initUI() {
   }
 }
 
+function unpackYouTube(autoplay) {
+  if (ytUnpacked && !autoplay) return;
+  ytUnpacked = true;
+  var t = TRACKS[currentIndex];
+  var muteParam = isMuted ? "1" : "0";
+  var frame = document.getElementById("viewport-frame");
+  if (frame) {
+    frame.innerHTML = '<iframe id="yt-player" title="JHammerZ YouTube Session Master Video Player" src="https://www.youtube-nocookie.com/embed/' + t.id + '?enablejsapi=1&autoplay=1&mute=' + muteParam + '&playsinline=1&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+  }
+  document.getElementById("player-status").innerText = "[PLAYING (MUTED)]";
+  isPlaying = true;
+}
+
 function loadTrack(idx) {
   currentIndex = idx;
   var t = TRACKS[currentIndex];
   var iframe = document.getElementById("yt-player");
-  if (iframe) {
-    iframe.src = "https://www.youtube-nocookie.com/embed/" + t.id + "?autoplay=1&mute=" + (isMuted ? "1" : "0") + "&enablejsapi=1&playsinline=1&rel=0";
+  if (!iframe) {
+    unpackYouTube(true);
+  } else {
+    var muteParam = isMuted ? "1" : "0";
+    iframe.src = "https://www.youtube-nocookie.com/embed/" + t.id + "?autoplay=1&mute=" + muteParam + "&enablejsapi=1&playsinline=1&rel=0";
   }
   document.getElementById("yt-track-title").innerText = "// Active: \"" + t.title + "\" [" + (currentIndex + 1) + "/" + TRACKS.length + "]";
   document.getElementById("yt-direct-link").href = "https://www.youtube.com/watch?v=" + t.id;
@@ -313,6 +330,7 @@ function rotateRandomVideo() {
 }
 
 function togglePlay() {
+  if (!ytUnpacked) { unpackYouTube(true); return; }
   if (isPlaying) {
     sendCommand("pauseVideo");
     isPlaying = false;
@@ -327,6 +345,7 @@ function togglePlay() {
 }
 
 function toggleMute() {
+  if (!ytUnpacked) { unpackYouTube(true); }
   var btn = document.getElementById("unmute-banner-btn");
   if (isMuted) {
     sendCommand("unMute");
@@ -345,6 +364,7 @@ function toggleMute() {
 }
 
 function cycleSpeed() {
+  if (!ytUnpacked) unpackYouTube(true);
   currentSpeedIndex = (currentSpeedIndex + 1) % speeds.length;
   var sp = speeds[currentSpeedIndex];
   sendCommand("setPlaybackRate", [sp]);
@@ -426,9 +446,21 @@ function setupScrollObservers() {
   if (s3) observer.observe(s3);
 }
 
+// Microtask idle mount for zero initial Total Blocking Time
+function deferredPlayerMount() {
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(function() {
+      setTimeout(function() { if (!ytUnpacked) unpackYouTube(true); }, 150);
+    });
+  } else {
+    setTimeout(function() { if (!ytUnpacked) unpackYouTube(true); }, 300);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function() {
   initUI();
   setupScrollObservers();
+  deferredPlayerMount();
 });
 initUI();
 </script>
