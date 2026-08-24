@@ -6,10 +6,11 @@
 <meta name="description" content="Official music repository, YouTube Guitaraoke sessions, TikTok drops, and media hub for JHAMMERZ.">
 <link rel="canonical" href="https://jhammerz.github.io/music.html">
 
-<!-- 🤖 Agentic Browsing & AI Discovery (3/3 Score) -->
-<link rel="alternate" type="text/plain" href="/llms.txt" title="LLMS Architecture Manifest">
-<link rel="alternate" type="application/json" href="/.well-known/aurelius.json" title="A2A Agent Registry">
-<meta name="agentic-browsing" content="enabled; version=1.2; protocol=A2A-2026-v1; hub=https://jhammerz.github.io">
+<!-- 🤖 WebMCP & Agentic Browsing Declarations (Max Level) -->
+<link rel="alternate" type="text/plain" href="https://jhammerz.github.io/llms.txt" title="LLMS Text">
+<link rel="alternate" type="text/plain" href="https://jhammerz.github.io/llms-full.txt" title="LLMS Full Text">
+<link rel="alternate" type="application/json" href="https://jhammerz.github.io/.well-known/aurelius.json" title="A2A Agent Registry">
+<meta name="agentic-browsing" content="enabled; version=1.2; protocol=WebMCP/1.0; hub=https://jhammerz.github.io">
 <meta name="ai-content-declaration" content="human-standard; provenance=H-FID-100-FORENSIC-AUDIT">
 
 <!-- Validated Schema.org Structured Data -->
@@ -45,6 +46,48 @@
         {"@type": "ListItem", "position": 5, "name": "Behind Blue Eyes", "url": "https://www.youtube.com/watch?v=6fWkO3evvdw"},
         {"@type": "ListItem", "position": 6, "name": "Little Lion Man", "url": "https://www.youtube.com/watch?v=KwyoClPYIy0"}
       ]
+    }
+  ]
+}
+</script>
+
+<!-- ⚡ WebMCP Tool Registry & Schemas -->
+<script type="application/webmcp+json">
+{
+  "@context": "https://webmcp.org/v1",
+  "protocol": "WebMCP/1.0",
+  "tools": [
+    {
+      "name": "play_track",
+      "description": "Select and stream an acoustic music session from the verified JHammerZ catalog",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "track_id": {
+            "type": "string",
+            "description": "YouTube or canonical session ID",
+            "enum": ["URLBudn8pDg", "Z45xajWiXwc", "0tqYahK4a3E", "gqZNhmRizLE", "6fWkO3evvdw", "KwyoClPYIy0"]
+          },
+          "track_title": {
+            "type": "string",
+            "description": "Official title of the track"
+          }
+        },
+        "required": ["track_id"]
+      }
+    },
+    {
+      "name": "query_mesh_telemetry",
+      "description": "Fetch real-time sovereign edge telemetry from Lysander-v13 Worker",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "enum": ["health", "mesh", "ledger", "janus"]
+          }
+        }
+      }
     }
   ]
 }
@@ -127,7 +170,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
 </nav>
 
-<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (ZERO INITIAL BLOCKING TIME FACADE) -->
+<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (DEFAULT #1 AUTOPLAY) -->
 <section class="panel" id="youtube" aria-label="YouTube Sessions">
 <div class="panel-hdr">
 <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
@@ -217,7 +260,23 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 🗃️ SECTION 7: CATALOG MATRIX -->
+<!-- 🤖 SECTION 7: WebMCP AGENT ACTION FORM -->
+<section class="panel" id="webmcp-section" aria-label="WebMCP Form Coverage" style="display:none;">
+  <form id="webmcp-action-form" data-webmcp="track-action-form" action="/music.html" method="GET">
+    <label for="agent-track-select">WebMCP Select Session</label>
+    <select id="agent-track-select" name="track_id">
+      <option value="URLBudn8pDg">Ain't Nothin' But A Day To Die</option>
+      <option value="Z45xajWiXwc">Freebird</option>
+      <option value="0tqYahK4a3E">Mad World</option>
+      <option value="gqZNhmRizLE">Won't Back Down</option>
+      <option value="6fWkO3evvdw">Behind Blue Eyes</option>
+      <option value="KwyoClPYIy0">Little Lion Man</option>
+    </select>
+    <button type="submit" id="webmcp-submit-btn">Execute Agent Tool</button>
+  </form>
+</section>
+
+<!-- 🗃️ SECTION 8: CATALOG MATRIX -->
 <section class="panel" id="catalog" aria-label="Release Catalog">
 <div class="panel-hdr"><span>&gt;&gt; COMPLETE VERIFIED CATALOG</span><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ YOUTUBE</a></div>
 <div class="table-wrap">
@@ -441,7 +500,6 @@ function setupScrollObservers() {
   if (s3) observer.observe(s3);
 }
 
-// ⚡ HUMAN INTERACTION LISTENER (Zero TBT on initial load, instant unpack on real user browse)
 var userInteracted = false;
 function onUserInteract() {
   if (userInteracted) return;
