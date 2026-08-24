@@ -75,7 +75,6 @@ jobs:
             "Integrity Level": "SOVEREIGN",
             "Nodes": []
           }
-          EOF
 
       - name: Build Core Manifest Logs
         env:
