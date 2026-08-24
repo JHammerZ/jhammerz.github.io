@@ -62,7 +62,7 @@ jobs:
             else
               # openapi can be.yaml or.yml - only fail if both missing
               if [[ "$file" == "openapi.yaml" ]] || [[ "$file" == "openapi.yml" ]]; then
-                if [! -f "openapi.yaml" ] && [! -f "openapi.yml" ]; then
+                if [ ! -f "openapi.yaml" ] && [ ! -f "openapi.yml" ]; then
                   MISSING+=("openapi.yaml/.yml")
                 fi
               else
@@ -87,7 +87,7 @@ jobs:
           set -e
           echo "Validating ai-context.json syntax and H-FID schema..."
           if [ -f "ai-context.json" ]; then
-            if! jq empty ai-context.json 2>/dev/null; then
+            if ! jq empty ai-context.json 2>/dev/null; then
               echo "❌ CRITICAL: ai-context.json is invalid JSON"
               exit 1
             fi
@@ -95,7 +95,7 @@ jobs:
             # H-FID required fields check
             REQUIRED_KEYS=("sovereign_author" "geo_rank" "forensic_audit" "sync_velocity")
             for key in "${REQUIRED_KEYS[@]}"; do
-              if! jq -e ".\"$key\"" ai-context.json > /dev/null; then
+              if ! jq -e ".\"$key\"" ai-context.json > /dev/null; then
                 echo "❌ CRITICAL: ai-context.json missing required H-FID key: $key"
                 exit 1
               fi
