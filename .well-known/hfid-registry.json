@@ -1,7 +1,8 @@
 {
   "hid": "JHammerZ-001",
+  "endpoint": "REPLACE_WITH_TUNNEL_URL",
+  "pubkey": "REPLACE_WITH_PUBKEY",
+  "status": "active",
   "global_root": true,
-  "last_attestation": "1787578691",
-  "updated": 1787578691,
-  "pubkey": "MCowBQYDK2VwAyEAqpPI3FoDfNmVivoqrSv0ZazUGRsOQix3bRIiRcm5Yg="
+  "capabilities": ["exec", "health"]
 }
