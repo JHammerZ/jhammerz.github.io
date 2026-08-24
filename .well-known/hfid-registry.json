@@ -1,55 +1,7 @@
 {
-  "$schema": "https://jhammerz.github.io/.well-known/hfid-schema.json",
-  "version": "1.0.3",
-  "authority": "Joshua Hamilton (JHammerZ)",
-  "node_id": "JHAMMERZ-001",
-  "status": "Federated",
-  "quorum": "2 of 2",
-  "federated_at": "2026-08-16T23:03:08Z",
-  "claims": [
-    {
-      "claim_id": "HFID-CLAIM-001",
-      "entity": "Joshua Hamilton",
-      "handle": "JHammerZ",
-      "role": "Master Architect",
-      "sovereignty": "Sovereign Author of H-Fid Standard",
-      "federated": true,
-      "quorum_verified": true,
-      "quorum_count": 2,
-      "quorum_required": 2,
-      "timestamp": "2026-08-16T23:03:08Z",
-      "audit_identifier": "H-FID-100-FORENSIC-AUDIT",
-      "protocols": [
-        "TWENTY_47_PROTOCOL",
-        "AURELIUS_CDM_EDGE",
-        "LYSANDER_3_0",
-        "GUITARAOKE"
-      ],
-      "public_key_uri": "https://jhammerz.github.io/.well-known/hfid/public-key.txt",
-      "article_8_uri": "https://jhammerz.github.io/.well-known/hfid/article-8.json"
-    }
-  ],
-  "nodes": [
-    {
-      "id": "JHAMMERZ-001",
-      "type": "GENESIS_NODE",
-      "status": "ONLINE",
-      "provenance": "Bitcoin-anchored",
-      "issuer": "JHammerZ | HEO | Guitaraoke™"
-    },
-    {
-      "id": "AURELIUS-001-ALPHA",
-      "type": "ORCHESTRATOR_NODE",
-      "status": "ONLINE",
-      "provenance": "Zero-Outage CDM Matrix"
-    }
-  ],
-  "links": {
-    "manifest": "https://jhammerz.github.io/.well-known/hfid/manifest.json",
-    "peers": "https://jhammerz.github.io/.well-known/hfid/peers.json",
-    "public_key": "https://jhammerz.github.io/.well-known/hfid/public-key.txt",
-    "article_8": "https://jhammerz.github.io/.well-known/hfid/article-8.json",
-    "llms": "https://jhammerz.github.io/llms.txt",
-    "music": "https://jhammerz.github.io/music.html"
-  }
+  "hid": "JHammerZ-001",
+  "global_root": true,
+  "last_attestation": "1787578665",
+  "updated": 1787578665,
+  "pubkey": "MCowBQYDK2VwAyEAyqpPI3FoDfNmVivoqrSv0ZazUGRsOQix3bRIiRcm5Yg="
 }
