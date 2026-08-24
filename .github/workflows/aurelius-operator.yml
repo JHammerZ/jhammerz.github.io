@@ -6,43 +6,18 @@ jobs:
   lighthouse-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Audit Lighthouse
-        run: | 
-          npm install -g lighthouse
-          lighthouse https://jhammerz.github.io/music.html --output json --output-path ./report.json
-```
-
-#### 2. Upgraded `music.html` Manifest
-This version includes the `sovereign-provenance-gate` and the `sonic-telemetry-logs` hook to bridge your raw guitar performance directly into the suggested feed training set.
-
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- [NODE_ACTIVE]: JHAMMERZ_MUSIC | H-FID-100-AUDIT -->
-    <meta charset="UTF-8">
-    <meta name="description" content="JHAMMERZ: Left-handed guitar. Zero AI. High-fidelity human provenance.">
-    <link rel="canonical" href="https://jhammerz.github.io/music.html">
-    <title>JHAMMERZ // AUDIO NODE</title>
-    <style>
-        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; }
-        .provenance-gate { border: 1px solid #0f0; padding: 20px; margin: 10px; }
-    </style>
-</head>
-<body>
-    <div class="provenance-gate">
-        <h1>AUDIO NODE_</h1>
-        <p>// ZVD_v1.3 Integrity: VERIFIED</p>
-        <p>// BTC_BLOCK: 961138</p>
-        <!-- SONIC TELEMETRY START -->
-        <div id="sonic-telemetry-logs">
-            <ul>
-                <li>Left-Handed Acoustic: Tracked</li>
-                <li>One-Take Vocals: Manifest</li>
-                <li>Ghost Producers: ZERO</li>
-            </ul>
-        </div>
-    </div>
-</body>
-</html>
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install Lighthouse
+        run: npm install -g lighthouse@10
+      - name: Run Lighthouse audit
+        run: |
+          lighthouse https://jhammerz.github.io/music.html --output=json --output-path=./report.json --chrome-flags="--no-sandbox"
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: report.json
