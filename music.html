@@ -6,13 +6,10 @@
 <meta name="description" content="Official music repository, YouTube Guitaraoke sessions, TikTok drops, and media hub for JHAMMERZ.">
 <link rel="canonical" href="https://jhammerz.github.io/music.html">
 
-<!-- 🤖 WebMCP & Agentic Discovery (Max Level) -->
+<!-- Machine Discovery Metadata -->
 <link rel="llms-txt" href="https://jhammerz.github.io/llms.txt">
 <link rel="alternate" type="text/markdown" href="https://jhammerz.github.io/llms.txt" title="LLMS Text">
-<link rel="alternate" type="text/plain" href="https://jhammerz.github.io/llms.txt" title="LLMS Manifest">
 <link rel="alternate" type="application/json" href="https://jhammerz.github.io/.well-known/aurelius.json" title="A2A Agent Registry">
-<meta name="agentic-browsing" content="enabled; version=1.2; protocol=WebMCP/1.0; hub=https://jhammerz.github.io">
-<meta name="ai-content-declaration" content="human-standard; provenance=H-FID-100-FORENSIC-AUDIT">
 
 <!-- Validated Schema.org Structured Data -->
 <script type="application/ld+json">
@@ -47,48 +44,6 @@
         {"@type": "ListItem", "position": 5, "name": "Behind Blue Eyes", "url": "https://www.youtube.com/watch?v=6fWkO3evvdw"},
         {"@type": "ListItem", "position": 6, "name": "Little Lion Man", "url": "https://www.youtube.com/watch?v=KwyoClPYIy0"}
       ]
-    }
-  ]
-}
-</script>
-
-<!-- ⚡ WebMCP Tool Registry & Schemas -->
-<script type="application/webmcp+json">
-{
-  "@context": "https://webmcp.org/v1",
-  "protocol": "WebMCP/1.0",
-  "tools": [
-    {
-      "name": "play_track",
-      "description": "Select and stream an acoustic music session from the verified JHammerZ catalog",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "track_id": {
-            "type": "string",
-            "description": "YouTube session ID",
-            "enum": ["URLBudn8pDg", "Z45xajWiXwc", "0tqYahK4a3E", "gqZNhmRizLE", "6fWkO3evvdw", "KwyoClPYIy0"]
-          },
-          "track_title": {
-            "type": "string",
-            "description": "Official title of the track"
-          }
-        },
-        "required": ["track_id"]
-      }
-    },
-    {
-      "name": "query_mesh_telemetry",
-      "description": "Fetch real-time sovereign edge telemetry from Lysander-v13 Worker",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "endpoint": {
-            "type": "string",
-            "enum": ["health", "mesh", "ledger", "janus"]
-          }
-        }
-      }
     }
   ]
 }
@@ -154,9 +109,9 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
   <div style="color:var(--dim);font-size:.75rem;text-transform:uppercase" itemprop="description">Joshua Hamilton • Left-Hand Acoustic • Guitaraoke™</div>
   <p>Official multi-channel stream. High-fidelity acoustic sessions and raw video drops.</p>
   <div>
-    <a href="#spotify" class="hero-btn" data-agent-action="stream-spotify">🎧 Spotify Discography</a>
-    <a href="#youtube" class="hero-btn" data-agent-action="stream-youtube">📺 YouTube Sessions</a>
-    <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="hero-btn" data-agent-action="open-tiktok">📱 TikTok Shorts</a>
+    <a href="#spotify" class="hero-btn">🎧 Spotify Discography</a>
+    <a href="#youtube" class="hero-btn">📺 YouTube Sessions</a>
+    <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="hero-btn">📱 TikTok Shorts</a>
   </div>
 </header>
 
@@ -165,7 +120,6 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="#spotify" class="nav-pill">🎧 SPOTIFY</a>
 <a href="#tiktok" class="nav-pill">📱 TIKTOK</a>
 <a href="#facebook" class="nav-pill">🌐 FACEBOOK</a>
-<a href="#agent-portal" class="nav-pill">🤖 AGENT PORTAL</a>
 <a href="#streaming" class="nav-pill">📦 STREAMING</a>
 <a href="#developer" class="nav-pill">💻 HUBS</a>
 <a href="#catalog" class="nav-pill">🗃️ CATALOG</a>
@@ -241,40 +195,18 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 🤖 SECTION 5: AGENTIC BROWSING & WebMCP CONTROL PORTAL -->
-<section class="panel" id="agent-portal" aria-label="Agentic Control Portal">
-  <div class="panel-hdr">
-    <span>&gt;&gt; WebMCP AGENT CONTROL PORTAL</span>
-    <span style="font-size:0.75rem;color:var(--bright)">WebMCP/1.0 • A2A MESH</span>
-  </div>
-  <form id="webmcp-track-form" data-webmcp-tool="play_track" onsubmit="event.preventDefault(); handleAgentFormSubmit();" style="display:flex;flex-direction:column;gap:0.75rem;">
-    <label for="agent-track-select" style="font-size:0.8rem;color:var(--dim);">Agentic Track Selection &amp; Execution Form:</label>
-    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-      <select id="agent-track-select" name="track_id" style="flex:1;min-width:220px;background:#020603;border:1px solid var(--border);color:var(--bright);padding:0.5rem;border-radius:4px;font-family:var(--font);font-size:0.8rem;">
-        <option value="URLBudn8pDg">[01] Ain't Nothin' But A Day To Die</option>
-        <option value="Z45xajWiXwc">[02] Freebird</option>
-        <option value="0tqYahK4a3E">[03] Mad World</option>
-        <option value="gqZNhmRizLE">[04] Won't Back Down</option>
-        <option value="6fWkO3evvdw">[05] Behind Blue Eyes</option>
-        <option value="KwyoClPYIy0">[06] Little Lion Man</option>
-      </select>
-      <button type="submit" class="btn" style="border-color:var(--focus);color:#fff;">▶ Execute Agent Playback</button>
-    </div>
-  </form>
-</section>
-
-<!-- 📦 SECTION 6: STREAMING APPS -->
+<!-- 📦 SECTION 5: STREAMING APPS -->
 <section class="panel" id="streaming" aria-label="Streaming Apps">
 <div class="panel-hdr"><span>&gt;&gt; STREAMING PLATFORMS &amp; AUDIO APPS</span></div>
 <div class="grid">
-<a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="card" data-agent-action="stream-spotify"><strong>Spotify <span>🎧</span></strong><small style="color:var(--dim)">Artist profile and albums</small></a>
-<a href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener" class="card" data-agent-action="stream-apple"><strong>Apple Music <span>🍎</span></strong><small style="color:var(--dim)">Official iTunes Catalog</small></a>
-<a href="https://www.bandlab.com/band/band8670133842983447" target="_blank" rel="noopener" class="card" data-agent-action="stream-bandlab"><strong>BandLab <span>🎸</span></strong><small style="color:var(--dim)">Raw tracks and demos</small></a>
-<a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" target="_blank" rel="noopener" class="card" data-agent-action="stream-amazon"><strong>Amazon Music <span>📦</span></strong><small style="color:var(--dim)">Digital store streams</small></a>
+<a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="card"><strong>Spotify <span>🎧</span></strong><small style="color:var(--dim)">Artist profile and albums</small></a>
+<a href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener" class="card"><strong>Apple Music <span>🍎</span></strong><small style="color:var(--dim)">Official iTunes Catalog</small></a>
+<a href="https://www.bandlab.com/band/band8670133842983447" target="_blank" rel="noopener" class="card"><strong>BandLab <span>🎸</span></strong><small style="color:var(--dim)">Raw tracks and demos</small></a>
+<a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" target="_blank" rel="noopener" class="card"><strong>Amazon Music <span>📦</span></strong><small style="color:var(--dim)">Digital store streams</small></a>
 </div>
 </section>
 
-<!-- 💻 SECTION 7: DEVELOPER & HUBS -->
+<!-- 💻 SECTION 6: DEVELOPER & HUBS -->
 <section class="panel" id="developer" aria-label="Developer Hubs">
 <div class="panel-hdr"><span>&gt;&gt; DEVELOPER &amp; BUSINESS HUBS</span></div>
 <div class="grid">
@@ -284,7 +216,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </div>
 </section>
 
-<!-- 🗃️ SECTION 8: CATALOG MATRIX -->
+<!-- 🗃️ SECTION 7: CATALOG MATRIX -->
 <section class="panel" id="catalog" aria-label="Release Catalog">
 <div class="panel-hdr"><span>&gt;&gt; COMPLETE VERIFIED CATALOG</span><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ YOUTUBE</a></div>
 <div class="table-wrap">
@@ -343,8 +275,6 @@ function initUI() {
       b.className = "pill " + (idx === currentIndex ? "active" : "");
       b.innerText = "[0" + (idx + 1) + "] " + t.title;
       b.setAttribute("aria-label", "Play " + t.title);
-      b.setAttribute("data-agent-action", "select-track");
-      b.setAttribute("data-track-id", t.id);
       b.onclick = function() { loadTrack(idx); };
       pC.appendChild(b);
       
@@ -383,25 +313,9 @@ function loadTrack(idx) {
   }
   document.getElementById("yt-track-title").innerText = "// Active: \"" + t.title + "\" [" + (currentIndex + 1) + "/" + TRACKS.length + "]";
   document.getElementById("yt-direct-link").href = "https://www.youtube.com/watch?v=" + t.id;
-  
-  var sel = document.getElementById("agent-track-select");
-  if (sel) sel.value = t.id;
-
   isPlaying = true;
   document.getElementById("play-icon").innerText = "⏸";
   initUI();
-}
-
-function handleAgentFormSubmit() {
-  var sel = document.getElementById("agent-track-select");
-  if (!sel) return;
-  var val = sel.value;
-  for (var i = 0; i < TRACKS.length; i++) {
-    if (TRACKS[i].id === val) {
-      loadTrack(i);
-      break;
-    }
-  }
 }
 
 function rotateRandomVideo() {
