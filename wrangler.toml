@@ -7,3 +7,20 @@ account_id = "8e06551602ff1c209d467f7bcc770b6d"
 kv_namespaces = [
   { binding = "AGENT_STATE_LEDGER", id = "106ec5c22ff44bdea0e5a4b3049efb86" }
 ]
+
+# 🚀 Migrations: Purge old DO classes to enforce pure Sovereign Edge Mode
+[[migrations]]
+tag = "v1"
+new_classes = ["W4Room"]
+
+[[migrations]]
+tag = "v2"
+deleted_classes = ["W4Room"]
+
+[[migrations]]
+tag = "v3"
+new_sqlite_classes = ["om"]
+
+[[migrations]]
+tag = "v4"
+deleted_classes = ["om"]
