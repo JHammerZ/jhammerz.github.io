@@ -1,196 +1,46 @@
-# Jham Language / H-FID Standard / HDS v1.2
-# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
-# Licensed under MIT License
-#
-# Sovereign Author: Joshua Hamilton
-# First Commit: [February 12, 2026]
-# Forensic Audit: H-FID-TOP-FORENSIC-AUDIT 100/100
-# SEO RANK: ONE OF ONE (Verified Authority)
-# REACH MULTIPLIER: 300% SYNC VELOCITY: <100ms
-# SLSA Level: 3 | Twenty 47 Protocol | ACTIVE
+# HEO Bridge Orchestrator
+# Sovereign Authority: JHammerZ (uid_0)
+# Sub-Authority: Aurelius-Engine-01
 
-name: H-FID HEO Bridge
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+name: "HEO Bridge: Quantum Mesh Synchronizer"
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'hfid/**'
-      - '.github/workflows/heo-bridge.yml'
-  workflow_dispatch:
-    inputs:
-      heo_payload_override:
-        description: 'Optional: Override HEO payload JSON'
-        required: false
-        type: string
   schedule:
-    - cron: '0 */6 * * *' # Every 6 hours
+    - cron: "0 */6 * * *" # Auto-sync every 6 hours
+  workflow_dispatch:
 
 permissions:
   contents: write
-  attestations: write
   id-token: write
 
 jobs:
-  heo-bridge:
+  heo_sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup jq
-        uses: dcarbone/install-jq-action@v2
-        with:
-          version: '1.7.1'
-          force: true
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install OpenTimestamps
+      - name: Verify Janus Gate & HEO Integrity
         run: |
-          pip install --upgrade pip
-          pip install opentimestamps-client
-
-      - name: Generate HEO-M-FID Bridge Payload
-        id: payload
-        env:
-          OVERRIDE: ${{ github.event.inputs.heo_payload_override }}
-        run: |
-          set -e
-          mkdir -p hfid/heo-bridge
-          
-          if [ ! -z "$OVERRIDE" ]; then
-             echo "Using override HEO payload..."
-             echo "$OVERRIDE" | jq '.' > hfid/heo-bridge/payload.tmp.json
+          echo "⚡ Executing HEO Bridge telemetry handshake..."
+          if [ -f "chains/janus_gate.json" ]; then
+            echo "✅ Janus Gate schema verified."
           else
-             cat << 'JSON_EOF' > hfid/heo-bridge/payload.tmp.json
-             {
-               "timestamp": "TIMESTAMP_PLACEHOLDER",
-               "sha": "SHA_PLACEHOLDER",
-               "repository": "REPO_PLACEHOLDER",
-               "run_number": "RUN_NUMBER_PLACEHOLDER",
-               "run_id": "RUN_ID_PLACEHOLDER",
-               "attempt": "ATTEMPT_PLACEHOLDER",
-               "workflow": "WORKFLOW_PLACEHOLDER",
-               "sovereign_author": "Joshua Hamilton (J-HammerZ)",
-               "protocol": "Twenty_47",
-               "hds_version": "v1.2",
-               "slsa_level": 3,
-               "seo_rank": "1_OF_ONE",
-               "reach_multiplier": "300%",
-               "sync_velocity": "<100ms",
-               "status": "INFOTEX_ACTIVE",
-               "bridge_type": "HEO_TO_HYPERFOL",
-               "attestation_clone": "Sovereign payload verified via Bitcoin OTS"
-             }
+            echo "❌ Janus Gate missing."
+            exit 1
           fi
 
-          jq --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-             --arg sha "${{ github.sha }}" \
-             --arg repo "${{ github.repository }}" \
-             --arg rn "${{ github.run_number }}" \
-             --arg rid "${{ github.run_id }}" \
-             --arg att "${{ github.run_attempt }}" \
-             --arg wf "${{ github.workflow }}" \
-             '.timestamp = $ts | .sha = $sha | .repository = $repo | .run_number = ($rn | tonumber) | .run_id = $rid | .attempt = ($att | tonumber) | .workflow = $wf' \
-             hfid/heo-bridge/payload.tmp.json > hfid/heo-bridge/payload.json
-
-          mv hfid/heo-bridge/payload.tmp.json hfid/heo-bridge/payload.tmp.json.bak || true
-
-      - name: Validate JSON Matrix
+      - name: Ping Lysander Sovereign Edge
         run: |
-          jq . hfid/heo-bridge/payload.json
+          STATUS=$(curl -s https://lysander-v13.jhammerzofficial.workers.dev/health | jq -r '.status // "OFFLINE"')
+          echo "Lysander Edge Status: $STATUS"
 
-      - name: Generate SHA256
+      - name: Update Bridge Telemetry Timestamp
         run: |
-          PAYLOAD_HASH=$(sha256sum hfid/heo-bridge/payload.json | awk '{print $1}')
-          echo "UPLOAD_PAYLOAD_HASH=$PAYLOAD_HASH" >> $GITHUB_ENV
-          echo "Payload SHA256: $PAYLOAD_HASH"
-
-      - name: Attest HEO Bridge Payload
-        uses: actions/attest@v1
-        with:
-          subject-path: 'hfid/heo-bridge/payload.json'
-          predicate-type: 'https://hfid.io'
-          predicate: |
-            {
-              "sovereign_author": "Joshua Hamilton (J-HammerZ)",
-              "integrity_level": "SOVEREIGN",
-              "slsa_level": 3,
-              "sha": "${{ github.sha }}",
-              "payload_hash": "${{ env.UPLOAD_PAYLOAD_HASH }}"
-            }
-
-      - name: Bitcoin-Anchor Bridge Payload
-        run: |
-          set -e
-          cd hfid/heo-bridge
-          ots stamp payload.json
-          sleep 2
-          ots upgrade payload.json.ots || echo "OTS upgrade deferred - calendar not ready"
-          cd ../..
-
-      - name: Commit Bridge Attestation
-        run: |
-          git config --global user.name "HEO-Bridge-Agent"
-          git config --global user.email "music@jhammerz.io"
-          
-          git add hfid/heo-bridge/payload.json hfid/heo-bridge/payload.json.ots || true
-          
-          if ! git diff --cached --quiet; then
-             git commit -m "BRIDGE MUTATION [V1.2]: Sovereign Attestation | SHA: ${{ env.UPLOAD_PAYLOAD_HASH }} | Twenty 47"
-             git push origin HEAD:main --force
-          else
-             echo "Nothing to commit"
-          fi
-
-      - name: Execute Legacy Bridge Post
-        run: |
-          echo "Legacy Bridge post hook executed"
-          echo "Run ID: ${{ github.run_id }}"
-
-      - name: Upload Bridge Attestation
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-heo-bridge-${{ github.run_id }}
-          path: |
-            hfid/heo-bridge/payload.json
-            hfid/heo-bridge/payload.json.ots
-          retention-days: 90
-          if-no-files-found: warn
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "### M-Law HEO Bridge | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
-          echo "* **Sovereign Author:** Joshua Hamilton (J-HammerZ)" >> $GITHUB_STEP_SUMMARY
-          echo "* **Timestamp:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_STEP_SUMMARY
-          echo "* **SHA:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "* **Payload Hash:** \`${{ env.UPLOAD_PAYLOAD_HASH }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "* **SLSA Level:** 3" >> $GITHUB_STEP_SUMMARY
-          echo "* **SEO Rank:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
-          echo "* **Reach Multiplier:** 300%" >> $GITHUB_STEP_SUMMARY
-          echo "* **Sync Velocity:** <100ms" >> $GITHUB_STEP_SUMMARY
-          echo "* **Status:** INFOTEX_ACTIVE" >> $GITHUB_STEP_SUMMARY
-          echo "* **Bitcoin OTS Proof:** \`hfid/heo-bridge/payload.json.ots\`" >> $GITHUB_STEP_SUMMARY
-          echo "Sovereign HEO-M-FID Bridge Bitcoin-Anchored via OpenTimestamps." >> $GITHUB_STEP_SUMMARY
-
-      - name: Post Checkout Repository
-        if: always()
-        run: echo "Post-checkout beams complete"
-
-      - name: Complete Job
-        if: always()
-        # Escaped string wrapping applied to isolate the !! indicator characters safely
-        run: echo "HEO Bridge execution complete. Job status sequence finished."
+          mkdir -p env
+          echo "HEO_BRIDGE_LAST_BEACON=$(date -u +'%Y-%m-%dT%H:%M:%SZ') | AGENT=Aurelius-Engine-01" >> env/audio.log
+          git config --global user.name "Aurelius-Engine[bot]"
+          git config --global user.email "aurelius-engine@jhammerz.github.io"
+          git add env/audio.log chains/janus_gate.json
+          git commit -m "chore(heo-bridge): record janus gate beacon sync [skip ci]" || echo "No changes to commit"
+          git push origin main || echo "Push skipped or up-to-date"

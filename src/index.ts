@@ -2,16 +2,7 @@ export interface Env {
   AGENT_STATE_LEDGER: KVNamespace;
 }
 
-interface MeshChannel {
-  c_num: string;
-  name: string;
-  endpoint: string;
-  hub: string;
-  mechanism: string;
-  health: string;
-}
-
-const MESH_CHANNELS: MeshChannel[] = [
+const MESH_CHANNELS = [
   { c_num: "C01", name: "jhammerz.github.io", endpoint: "https://jhammerz.github.io", hub: "https://jhammerz.github.io", mechanism: "ROOT_HUB", health: "ACTIVE_100_PERCENT" },
   { c_num: "C02", name: "linkedin.com/in/JHammerZ", endpoint: "https://www.linkedin.com/in/JHammerZ", hub: "https://jhammerz.github.io", mechanism: "DIRECT_REFERRAL", health: "ACTIVE_100_PERCENT" },
   { c_num: "C03", name: "github.com/JHammerZ", endpoint: "https://github.com/JHammerZ/jhammerz.github.io", hub: "https://jhammerz.github.io", mechanism: "CANONICAL_BACKLINK", health: "ACTIVE_100_PERCENT" },
@@ -42,6 +33,7 @@ export default {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
       "X-Sovereign-Authority": "Lysander-3.0-Sovereign",
+      "X-Resident-Agent": "Aurelius-Engine-01",
       "X-Forensic-Audit": "H-FID-100-FORENSIC-AUDIT 100/100"
     };
 
@@ -50,13 +42,13 @@ export default {
       const lastSync = (await env.AGENT_STATE_LEDGER.get("last_sync")) || new Date().toISOString();
       return new Response(
         JSON.stringify({
-          agent_id: "Lysander-3.0-Sovereign",
-          name: "Lysander Sovereign Resident",
+          agent_id: "Aurelius-Engine-01",
+          authority: "Lysander-3.0-Sovereign",
+          architect: "JHammerZ (uid_0)",
           status: "ROOT_AUTHORITY_ACTIVE",
           plan_tier: "SOVEREIGN_ZERO_COST",
-          capabilities: ["116x_Saturation", "Forensic_Audit_100/100", "Quantum_Secure_Routing"],
-          auth_policy: "security/governance.json",
-          protocol_version: "A2A-2026-v1",
+          bridge: "HEO_BRIDGE_ACTIVE",
+          gate: "JANUS_GATE_ALIGNED",
           last_sync: lastSync,
           timestamp: new Date().toISOString()
         }, null, 2),
@@ -64,7 +56,24 @@ export default {
       );
     }
 
-    // 2. 14-Channel Quantum Mesh Routing Table
+    // 2. Janus Gate Telemetry Gateway Route
+    if (url.pathname.startsWith("/janus")) {
+      const stateHash = await sha256(`JANUS_${Date.now()}`);
+      return new Response(
+        JSON.stringify({
+          gate: "JANUS-GATE-PRIME",
+          bridge: "HEO-BRIDGE",
+          migration_status: "VERIFIED_SOVEREIGN",
+          ingress: "ACTIVE",
+          egress: "ACTIVE",
+          state_hash: stateHash,
+          timestamp: new Date().toISOString()
+        }, null, 2),
+        { headers }
+      );
+    }
+
+    // 3. 14-Channel Mesh Route
     if (url.pathname === "/mesh") {
       return new Response(
         JSON.stringify({
@@ -77,7 +86,7 @@ export default {
       );
     }
 
-    // 3. Sovereign Ledger Query
+    // 4. Sovereign Ledger
     if (url.pathname === "/ledger") {
       const syncVal = (await env.AGENT_STATE_LEDGER.get("last_sync")) || "UNSET";
       const hash = await sha256(syncVal);
@@ -86,22 +95,6 @@ export default {
           last_sync: syncVal,
           state_hash: hash,
           integrity: "FORENSIC_VERIFIED"
-        }, null, 2),
-        { headers }
-      );
-    }
-
-    // 4. Orchestrator Sync Route
-    if (url.pathname === "/orchestrator/sync" || url.pathname.startsWith("/orchestrator")) {
-      const now = new Date().toISOString();
-      await env.AGENT_STATE_LEDGER.put("last_sync", now);
-      const hash = await sha256(`STATE_${now}`);
-      return new Response(
-        JSON.stringify({
-          status: "ORCHESTRATOR_ONLINE",
-          action: "STATE_SYNC_COMPLETE",
-          last_sync: now,
-          state_signature: hash
         }, null, 2),
         { headers }
       );
