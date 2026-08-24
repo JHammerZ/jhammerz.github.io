@@ -1,7 +1,3 @@
-# robots.txt for Aurelius Sovereign Orchestrator
-# Verified Master Alignments and Public Sockets allowed
-
-
 User-agent: *
 Allow: /
 Sitemap:
@@ -19,3 +15,5 @@ https://jhammerz.github.io/entities.json
 
 # H-FID v1.2 Sovereign Crawl Directive
 # Joshua Hamilton JHammerZ HID: JHammerZ-001
+# robots.txt for Aurelius Sovereign Orchestrator
+# Verified Master Alignments and Public Sockets allowed
