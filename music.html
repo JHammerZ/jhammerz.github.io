@@ -127,7 +127,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
 </nav>
 
-<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (DEFAULT #1 AUTOPLAY) -->
+<!-- 📺 SECTION 1: YOUTUBE MASTER NODE (ZERO INITIAL BLOCKING TIME FACADE) -->
 <section class="panel" id="youtube" aria-label="YouTube Sessions">
 <div class="panel-hdr">
 <span>&gt;&gt; YOUTUBE MASTER SESSIONS [@JHammerZ]</span>
@@ -421,12 +421,7 @@ function unpackFacebook() {
 }
 
 function setupScrollObservers() {
-  if (!("IntersectionObserver" in window)) {
-    unpackSpotify();
-    unpackTikTok();
-    unpackFacebook();
-    return;
-  }
+  if (!("IntersectionObserver" in window)) return;
 
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
@@ -446,21 +441,23 @@ function setupScrollObservers() {
   if (s3) observer.observe(s3);
 }
 
-// ⚡ HUMAN INTERACTION LISTENER (Instantly unpacks YouTube on first touch/scroll/click)
-function triggerAutoUnpack() {
-  if (!ytUnpacked) {
-    unpackYouTube(true);
-  }
-  window.removeEventListener("scroll", triggerAutoUnpack);
-  window.removeEventListener("touchstart", triggerAutoUnpack);
-  window.removeEventListener("mousemove", triggerAutoUnpack);
-  window.removeEventListener("click", triggerAutoUnpack);
+// ⚡ HUMAN INTERACTION LISTENER (Zero TBT on initial load, instant unpack on real user browse)
+var userInteracted = false;
+function onUserInteract() {
+  if (userInteracted) return;
+  userInteracted = true;
+  unpackYouTube(true);
+  
+  var events = ["scroll", "touchstart", "mousemove", "click", "keydown"];
+  events.forEach(function(evt) {
+    window.removeEventListener(evt, onUserInteract);
+  });
 }
 
-window.addEventListener("scroll", triggerAutoUnpack, { passive: true, once: true });
-window.addEventListener("touchstart", triggerAutoUnpack, { passive: true, once: true });
-window.addEventListener("mousemove", triggerAutoUnpack, { passive: true, once: true });
-window.addEventListener("click", triggerAutoUnpack, { passive: true, once: true });
+var events = ["scroll", "touchstart", "mousemove", "click", "keydown"];
+events.forEach(function(evt) {
+  window.addEventListener(evt, onUserInteract, { passive: true, once: true });
+});
 
 document.addEventListener("DOMContentLoaded", function() {
   initUI();
