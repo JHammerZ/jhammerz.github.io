@@ -20,8 +20,7 @@ on:
       - 'src/**'
       - 'package.json'
       - 'package-lock.json'
-      - '!.github/workflows/**'
-      - '!.hfid/**'
+      - '.github/workflows/deploy.yml'
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
