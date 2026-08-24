@@ -1,14 +1,9 @@
-# H-FID v1.2 Sovereign Crawl Directive
-# Joshua Hamilton JHammerZ HID: JHammerZ-001
 # robots.txt for Aurelius Sovereign Orchestrator
 # Verified Master Alignments and Public Sockets allowed
 
 User-agent: *
-Allow: /llms.txt
-Allow: /llms.html
-Allow: /ai-context.json
-Allow: /entities.json
 Allow: /
+Allow: /llms.txt
+Allow: /ai-context.json
 
-Sitemap:
-https://jhammerz.github.io/sitemap.xml
+Sitemap: https://jhammerz.github.io/sitemap.xml
