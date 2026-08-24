@@ -1,8 +1,8 @@
 User-agent: *
-Allow: /https://jhammerz.github.io/llms.txt
-Allow: /https://JHammerz.github.io/llms.html
-Allow: /https://jhammerz.github.io/ai-context.json
-Allow: /https://jhammerz.github.io/entities.json
+Allow: /llms.txt
+Allow: /llms.html
+Allow: /ai-context.json
+Allow: /entities.json
 Allow: /
 
 Sitemap:
