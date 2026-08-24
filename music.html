@@ -170,7 +170,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="btn">+ FOLLOW ARTIST</a>
 </div>
 <div id="spotify-container" style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#000;min-height:380px;display:flex;align-items:center;justify-content:center;">
-  <div style="color:var(--dim);font-size:.8rem;">[ Unpacking Spotify Live Master Stream... ]</div>
+  <div style="color:var(--dim);font-size:.8rem;">[ Spotify Live Master Stream ]</div>
 </div>
 </section>
 
@@ -181,7 +181,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="btn">+ FOLLOW ON TIKTOK</a>
 </div>
 <div class="embed-box" id="tiktok-container">
-  <div style="color:var(--dim);font-size:.8rem;">[ Unpacking TikTok Live Vertical Feed... ]</div>
+  <div style="color:var(--dim);font-size:.8rem;">[ TikTok Live Vertical Feed ]</div>
 </div>
 </section>
 
@@ -192,7 +192,7 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="btn">↗ OPEN FACEBOOK</a>
 </div>
 <div class="embed-box" id="fb-container" style="min-height:460px">
-  <div style="color:var(--dim);font-size:.8rem;">[ Unpacking Facebook Live Community Timeline... ]</div>
+  <div style="color:var(--dim);font-size:.8rem;">[ Facebook Live Community Timeline ]</div>
 </div>
 </section>
 
@@ -436,7 +436,7 @@ function setupScrollObservers() {
         if (entry.target.id === "facebook") unpackFacebook();
       }
     });
-  }, { rootMargin: "350px 0px" });
+  }, { rootMargin: "250px 0px" });
 
   var s1 = document.getElementById("spotify");
   var s2 = document.getElementById("tiktok");
@@ -446,21 +446,25 @@ function setupScrollObservers() {
   if (s3) observer.observe(s3);
 }
 
-// Microtask idle mount for zero initial Total Blocking Time
-function deferredPlayerMount() {
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(function() {
-      setTimeout(function() { if (!ytUnpacked) unpackYouTube(true); }, 150);
-    });
-  } else {
-    setTimeout(function() { if (!ytUnpacked) unpackYouTube(true); }, 300);
+// ⚡ HUMAN INTERACTION LISTENER (Instantly unpacks YouTube on first touch/scroll/click)
+function triggerAutoUnpack() {
+  if (!ytUnpacked) {
+    unpackYouTube(true);
   }
+  window.removeEventListener("scroll", triggerAutoUnpack);
+  window.removeEventListener("touchstart", triggerAutoUnpack);
+  window.removeEventListener("mousemove", triggerAutoUnpack);
+  window.removeEventListener("click", triggerAutoUnpack);
 }
+
+window.addEventListener("scroll", triggerAutoUnpack, { passive: true, once: true });
+window.addEventListener("touchstart", triggerAutoUnpack, { passive: true, once: true });
+window.addEventListener("mousemove", triggerAutoUnpack, { passive: true, once: true });
+window.addEventListener("click", triggerAutoUnpack, { passive: true, once: true });
 
 document.addEventListener("DOMContentLoaded", function() {
   initUI();
   setupScrollObservers();
-  deferredPlayerMount();
 });
 initUI();
 </script>
