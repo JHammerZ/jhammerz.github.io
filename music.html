@@ -9,33 +9,46 @@
 {"@context":"https://schema.org","@type":"MusicGroup","name":"JHammerZ","alternateName":"Joshua Hamilton","url":"https://jhammerz.github.io/music.html","genre":["Acoustic","Folk","Alternative","Guitaraoke"],"sameAs":["https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79","https://music.apple.com/us/artist/jhammerz/1845705346","https://music.amazon.com/artists/B0D5GLL7NV/jhammerz","https://www.bandlab.com/band/band8670133842983447","https://www.youtube.com/@JHammerZ","https://www.tiktok.com/@jhammerzz","https://www.facebook.com/JHammerZz"]}
 </script>
 <style>
-:root{--bg:#030704;--panel-bg:#050b07;--header:#08140b;--text:#00ff66;--dim:#009933;--bright:#33ff88;--border:#00441b;--focus:#00ff66;--font:ui-monospace,"Cascadia Code","Courier New",monospace}
+:root{--bg:#030704;--panel-bg:#050b07;--hdr:#08140b;--text:#00ff66;--dim:#009933;--bright:#33ff88;--border:#00441b;--focus:#00ff66;--glow:rgba(0,255,102,0.25);--font:ui-monospace,"Cascadia Code","Courier New",monospace}
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:1rem .75rem 3rem;font-size:.9rem;line-height:1.6}
 .container{width:100%;max-width:840px;display:flex;flex-direction:column;gap:1.25rem}
+
+.hero{background:linear-gradient(135deg,#031006 0%,#092612 50%,#020803 100%);border:1px solid var(--focus);border-radius:12px;padding:1.5rem 1rem;text-align:center;box-shadow:0 0 20px var(--glow)}
+.hero h1{font-size:2rem;font-weight:900;letter-spacing:.1em;background:linear-gradient(90deg,#fff,#33ff88,#00ff66);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#e2e8f0;font-size:.9rem;margin-top:.5rem}
+.hero-btn{display:inline-block;margin:.5rem .25rem 0;background:#041407;border:1px solid var(--focus);color:#fff;font-size:.75rem;font-weight:700;padding:.4rem .8rem;border-radius:6px;text-decoration:none;transition:.2s}
+.hero-btn:hover{background:var(--focus);color:#000}
+
 .sticky-nav{position:sticky;top:.5rem;z-index:100;background:rgba(5,11,7,.95);backdrop-filter:blur(8px);border:1px solid var(--focus);border-radius:8px;padding:.5rem;display:flex;gap:.4rem;overflow-x:auto}
 .sticky-nav::-webkit-scrollbar{display:none}
-.nav-pill{background:#020502;border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:.75rem;font-weight:700;padding:.35rem .75rem;border-radius:4px;text-decoration:none;white-space:nowrap;transition:.2s}
+.nav-pill{background:#020502;border:1px solid var(--border);color:var(--text);font-size:.75rem;font-weight:700;padding:.35rem .75rem;border-radius:4px;text-decoration:none;white-space:nowrap;transition:.2s}
 .nav-pill:hover{border-color:var(--focus);background:rgba(0,255,102,.15);color:var(--bright)}
+
 .panel{border:1px solid var(--border);background:var(--panel-bg);border-radius:8px;padding:1.25rem;display:flex;flex-direction:column;gap:1rem;box-shadow:0 4px 20px rgba(0,0,0,.6);scroll-margin-top:4.5rem}
-.panel-hdr{color:var(--bright);font-weight:700;letter-spacing:.05em;border-bottom:1px dashed var(--border);padding-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.panel-hdr{color:var(--bright);font-weight:700;border-bottom:1px dashed var(--border);padding-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+
 .viewport-16-9{position:relative;width:100%;padding-bottom:56.25%;height:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:#000}
 .viewport-16-9 iframe,.viewport-16-9 div#yt-player{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-.deck{background:var(--header);border:1px solid var(--border);border-radius:6px;padding:.75rem;display:flex;flex-direction:column;gap:.75rem}
+
+.deck{background:var(--hdr);border:1px solid var(--border);border-radius:6px;padding:.75rem;display:flex;flex-direction:column;gap:.75rem}
 .deck-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
-.btn{background:#030804;border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:.75rem;font-weight:700;padding:.4rem .75rem;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;transition:.15s}
+.btn{background:#030804;border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:.75rem;font-weight:700;padding:.4rem .75rem;border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;transition:.15s}
 .btn:hover{border-color:var(--focus);color:#fff;background:rgba(0,255,102,.15)}
 .pill{font-size:.7rem;padding:.3rem .6rem;background:#020502;border:1px solid var(--border);border-radius:4px;color:var(--dim);cursor:pointer;transition:.15s}
 .pill:hover,.pill.active{border-color:var(--focus);color:var(--bright);background:rgba(0,255,102,.1)}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.75rem}
 .card{display:flex;flex-direction:column;padding:1rem;background:#020603;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text);transition:.2s}
 .card:hover{border-color:var(--focus);transform:translateY(-2px);background:rgba(0,255,102,.05)}
-.embed-box{display:flex;justify-content:center;background:#000;border:1px solid var(--border);border-radius:6px;padding:1rem;min-height:500px;overflow:hidden}
+
+.embed-box{display:flex;justify-content:center;background:#000;border:1px solid var(--border);border-radius:6px;padding:1rem;min-height:480px;overflow:hidden}
 table{width:100%;border-collapse:collapse;font-size:.8rem}
 th,td{border:1px solid var(--border);padding:.5rem .75rem;text-align:left}
-th{background:var(--header);color:var(--bright)}
+th{background:var(--hdr);color:var(--bright)}
 tr:hover td{background:rgba(0,255,102,.05)}
-#toast{position:fixed;bottom:20px;right:20px;background:#051408;border:1px solid var(--focus);color:var(--bright);padding:.5rem 1rem;border-radius:4px;font-size:.8rem;opacity:0;pointer-events:none;transition:.3s}
+
+#toast{position:fixed;bottom:20px;right:20px;background:#051408;border:1px solid var(--focus);color:var(--bright);padding:.5rem 1rem;border-radius:4px;font-size:.8rem;opacity:0;pointer-events:none;transition:.3s;z-index:999}
 footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 </style>
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -45,16 +58,26 @@ footer{margin-top:2rem;font-size:.75rem;color:var(--dim);text-align:center}
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"></script>
 <div class="container">
-<div style="border:1px solid var(--border);padding:.75rem;border-radius:4px;background:var(--panel-bg);font-size:.8rem;color:var(--dim)">
-Provenance: <span style="color:var(--text)">JHammerZ Human-Standard Catalog // YouTube • Spotify • TikTok • Facebook</span>
-</div>
+
+<header class="hero">
+  <div style="font-size:.7rem;color:var(--bright);margin-bottom:.25rem">🟢 MASTER AUDIO NODE • VERIFIED 2026</div>
+  <h1>JHAMMERZ</h1>
+  <div style="color:var(--dim);font-size:.8rem;text-transform:uppercase">Joshua Hamilton • Left-Hand Acoustic • Guitaraoke™</div>
+  <p>Official multi-channel stream. High-fidelity acoustic sessions and raw video drops.</p>
+  <div>
+    <a href="#spotify" class="hero-btn">🎧 Spotify Discography</a>
+    <a href="#youtube" class="hero-btn">📺 YouTube Sessions</a>
+    <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="hero-btn">📱 TikTok Shorts</a>
+  </div>
+</header>
 
 <nav class="sticky-nav">
 <a href="#youtube" class="nav-pill">📺 YOUTUBE</a>
-<a href="#spotify" class="nav-pill">🎧 SPOTIFY (SCROLLABLE)</a>
+<a href="#spotify" class="nav-pill">🎧 SPOTIFY</a>
 <a href="#tiktok" class="nav-pill">📱 TIKTOK</a>
 <a href="#facebook" class="nav-pill">🌐 FACEBOOK</a>
-<a href="#streaming" class="nav-pill">📦 ALL APPS</a>
+<a href="#streaming" class="nav-pill">📦 STREAMING APPS</a>
+<a href="#developer" class="nav-pill">💻 DEVELOPER &amp; HUBS</a>
 <a href="#catalog" class="nav-pill">🗃️ CATALOG</a>
 <a href="/" class="nav-pill" style="border-color:var(--dim)">&lt;&lt; HOME</a>
 </nav>
@@ -68,19 +91,19 @@ Provenance: <span style="color:var(--text)">JHammerZ Human-Standard Catalog // Y
 </div>
 </div>
 <div style="font-size:.8rem;color:var(--dim)" id="yt-track-title">// Initializing active master session...</div>
-<div class="viewport-16-9" id="viewport-frame"><div id="yt-player"></div></div>
+<div class="viewport-16-9"><div id="yt-player"></div></div>
 <div class="deck">
 <div class="deck-row">
 <button class="btn" onclick="togglePlay()"><span id="play-icon">▶</span> PLAY/PAUSE</button>
 <button class="btn" onclick="toggleMute()"><span id="mute-icon">🔊</span> MUTE</button>
-<button class="btn" onclick="cycleSpeed()">⚡ SPEED: <span id="speed-label">1.0x</span></button>
+<button class="btn" onclick="cycleSpeed()">⚡ <span id="speed-label">1.0x</span></button>
 <button class="btn" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
 <button class="btn" onclick="copyVideoLink()">🔗 SHARE</button>
 <a id="yt-direct-link" href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ ALL VIDEOS</a>
-<span style="font-size:.75rem;color:var(--dim);margin-left:auto" id="player-status">[STATUS: READY]</span>
+<span style="font-size:.75rem;color:var(--dim);margin-left:auto" id="player-status">[READY]</span>
 </div>
 <div class="deck-row">
-<span style="font-size:.7rem;color:var(--dim)">SELECT SESSION:</span>
+<span style="font-size:.7rem;color:var(--dim)">SESSIONS:</span>
 <div style="display:flex;flex-wrap:wrap;gap:.4rem" id="yt-track-selector"></div>
 </div>
 </div>
@@ -88,10 +111,9 @@ Provenance: <span style="color:var(--text)">JHammerZ Human-Standard Catalog // Y
 
 <section class="panel" id="spotify">
 <div class="panel-hdr">
-<span>&gt;&gt; SPOTIFY MASTER DISCOGRAPHY // SCROLL FOR ALL TRACKS</span>
+<span>&gt;&gt; SPOTIFY MASTER DISCOGRAPHY // SCROLL ALL TRACKS</span>
 <a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="btn">+ FOLLOW ARTIST</a>
 </div>
-<div style="font-size:.8rem;color:var(--dim)">// Scroll inside the player to stream and explore all releases.</div>
 <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#000">
 <iframe src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 </div>
@@ -100,7 +122,7 @@ Provenance: <span style="color:var(--text)">JHammerZ Human-Standard Catalog // Y
 <section class="panel" id="tiktok">
 <div class="panel-hdr">
 <span>&gt;&gt; TIKTOK SHORT-FORM CLIPS [@jhammerzz]</span>
-<a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="btn">+ FOLLOW ON TIKTOK</a>
+<a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="btn">+ FOLLOW</a>
 </div>
 <div class="embed-box">
 <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@jhammerzz" data-unique-id="jhammerzz" data-embed-type="creator" style="max-width:100%;min-width:300px">
@@ -112,11 +134,11 @@ Provenance: <span style="color:var(--text)">JHammerZ Human-Standard Catalog // Y
 <section class="panel" id="facebook">
 <div class="panel-hdr">
 <span>&gt;&gt; FACEBOOK OFFICIAL COMMUNITY [@JHammerZz]</span>
-<a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="btn">↗ OPEN FACEBOOK</a>
+<a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="btn">↗ OPEN</a>
 </div>
 <div class="embed-box">
-<div class="fb-page" data-href="https://www.facebook.com/JHammerZz" data-tabs="timeline,messages" data-width="500" data-height="480" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
-<blockquote cite="https://www.facebook.com/JHammerZz" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/JHammerZz">JHammerZ Official Facebook Page</a></blockquote>
+<div class="fb-page" data-href="https://www.facebook.com/JHammerZz" data-tabs="timeline" data-width="500" data-height="460" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+<blockquote cite="https://www.facebook.com/JHammerZz" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/JHammerZz">JHammerZ Facebook</a></blockquote>
 </div>
 </div>
 </section>
@@ -131,61 +153,73 @@ Provenance: <span style="color:var(--text)">JHammerZ Human-Standard Catalog // Y
 </div>
 </section>
 
+<section class="panel" id="developer">
+<div class="panel-hdr"><span>&gt;&gt; DEVELOPER &amp; BUSINESS HUBS</span></div>
+<div class="grid">
+<a href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener" class="card"><strong>GitHub Repository <span>💻</span></strong><small style="color:var(--dim)">Source code and edge workflows</small></a>
+<a href="https://jhammerz.carrd.co/" target="_blank" rel="noopener" class="card"><strong>Carrd Landing Hub <span>🌐</span></strong><small style="color:var(--dim)">Quick bio and direct portal</small></a>
+<a href="https://app.impact.com/secure/mediapartner/home/pview.ihtml#/" target="_blank" rel="noopener" class="card"><strong>Impact Media Partner <span>🤝</span></strong><small style="color:var(--dim)">Affiliate and network portal</small></a>
+</div>
+</section>
+
 <section class="panel" id="catalog">
-<div class="panel-hdr"><span>&gt;&gt; COMPLETE CATALOG INDEX</span><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ YOUTUBE CATALOG</a></div>
+<div class="panel-hdr"><span>&gt;&gt; COMPLETE VERIFIED CATALOG</span><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" class="btn">↗ YOUTUBE</a></div>
 <table>
-<thead><tr><th>Track / Session</th><th>Type</th><th>YouTube</th><th>TikTok</th><th>Spotify</th></tr></thead>
-<tbody>
-<tr><td><strong>The Crow and the Butterfly</strong></td><td>Shinedown Cover Take</td><td><a href="https://www.youtube.com/watch?v=Z45xajWiXwc" target="_blank" rel="noopener" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--bright)">Clip ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" style="color:var(--bright)">Stream ↗</a></td></tr>
-<tr><td><strong>Ain't Nothin' But A Day To Die</strong></td><td>Original (Feat. MadLad Gibson)</td><td><a href="https://www.youtube.com/watch?v=AdZ2_tJOLu4" target="_blank" rel="noopener" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--bright)">Clip ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" style="color:var(--bright)">Stream ↗</a></td></tr>
-<tr><td><strong>Hallelujah</strong></td><td>Acoustic Version</td><td><a href="https://www.youtube.com/watch?v=llyADThAg5o" target="_blank" rel="noopener" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--bright)">Clip ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" style="color:var(--bright)">Stream ↗</a></td></tr>
-<tr><td><strong>Twenty 47</strong></td><td>Raw Guitaraoke™ Live</td><td><a href="https://www.youtube.com/@JHammerZ/videos" target="_blank" rel="noopener" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" style="color:var(--bright)">Clip ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" style="color:var(--bright)">Stream ↗</a></td></tr>
-</tbody>
+<thead><tr><th>Session Track</th><th>YouTube</th><th>TikTok</th><th>Spotify</th></tr></thead>
+<tbody id="catalog-body"></tbody>
 </table>
 </section>
 
 <footer><p>© 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.2</p></footer>
 </div>
-<div id="toast">Link copied to clipboard!</div>
+<div id="toast">Link copied!</div>
 
 <script>
-const TOP_TRACKS=[
-{id:"Z45xajWiXwc",title:"The Crow and the Butterfly (Shinedown Acoustic Session)"},
-{id:"AdZ2_tJOLu4",title:"Ain't Nothin' But A Day To Die (Feat. MadLad Gibson)"},
-{id:"llyADThAg5o",title:"Hallelujah (Live Acoustic Session Take)"}
+const TRACKS=[
+{id:"Z45xajWiXwc",title:"The Crow and the Butterfly (Shinedown)"},
+{id:"0tqYahK4a3E",title:"Acoustic Master Take #2"},
+{id:"gqZNhmRizLE",title:"Live Guitaraoke Take #3"},
+{id:"6fWkO3evvdw",title:"Acoustic Jam Session #4"},
+{id:"KwyoClPYIy0",title:"Left-Hand Acoustic Session #5"},
+{id:"AdZ2_tJOLu4",title:"Ain't Nothin' But A Day To Die"},
+{id:"llyADThAg5o",title:"Hallelujah (Acoustic Take)"}
 ];
 let player,currentIndex=0,speeds=[0.75,1.0,1.25,1.5,2.0],currentSpeedIndex=1;
 
-function renderTrackSelector(){
-const c=document.getElementById('yt-track-selector');c.innerHTML='';
-TOP_TRACKS.forEach((t,i)=>{
+function initUI(){
+const pC=document.getElementById('yt-track-selector'),tC=document.getElementById('catalog-body');
+pC.innerHTML='';tC.innerHTML='';
+TRACKS.forEach((t,i)=>{
 const b=document.createElement('button');b.className='pill '+(i===currentIndex?'active':'');
 b.innerText=`[0${i+1}] ${t.title.split('(')[0]}`;
-b.onclick=()=>loadTrack(i);c.appendChild(b);
+b.onclick=()=>loadTrack(i);pC.appendChild(b);
+const tr=document.createElement('tr');
+tr.innerHTML=`<td><strong>${t.title}</strong></td><td><a href="https://youtu.be/${t.id}" target="_blank" style="color:var(--bright)">Watch ↗</a></td><td><a href="https://www.tiktok.com/@jhammerzz" target="_blank" style="color:var(--bright)">TikTok ↗</a></td><td><a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" style="color:var(--bright)">Spotify ↗</a></td>`;
+tC.appendChild(tr);
 });
 }
 
 function onYouTubeIframeAPIReady(){
-currentIndex=0;renderTrackSelector();
+currentIndex=0;initUI();
 player=new YT.Player('yt-player',{
-videoId:TOP_TRACKS[currentIndex].id,
+videoId:TRACKS[currentIndex].id,
 playerVars:{autoplay:0,controls:1,enablejsapi:1,fs:1,modestbranding:1,rel:0,playsinline:1},
-events:{'onReady':()=>{updateTrackMeta();document.getElementById('player-status').innerText='[STATUS: READY]'},
+events:{'onReady':()=>{updateMeta();document.getElementById('player-status').innerText='[READY]'},
 'onStateChange':(e)=>{
 const s=document.getElementById('player-status'),ic=document.getElementById('play-icon');
-if(e.data===YT.PlayerState.PLAYING){s.innerText='[STATUS: PLAYING]';s.style.color='var(--bright)';ic.innerText='⏸'}
-else if(e.data===YT.PlayerState.PAUSED){s.innerText='[STATUS: PAUSED]';s.style.color='var(--dim)';ic.innerText='▶'}
+if(e.data===YT.PlayerState.PLAYING){s.innerText='[PLAYING]';s.style.color='var(--bright)';ic.innerText='⏸'}
+else if(e.data===YT.PlayerState.PAUSED){s.innerText='[PAUSED]';s.style.color='var(--dim)';ic.innerText='▶'}
 }}});
 }
 
-function loadTrack(idx){currentIndex=idx;if(player&&player.loadVideoById)player.loadVideoById(TOP_TRACKS[currentIndex].id);updateTrackMeta();renderTrackSelector()}
-function rotateRandomVideo(){let n;do{n=Math.floor(Math.random()*TOP_TRACKS.length)}while(n===currentIndex&&TOP_TRACKS.length>1);loadTrack(n)}
-function updateTrackMeta(){const t=TOP_TRACKS[currentIndex];document.getElementById('yt-track-title').innerText=`// Active: "${t.title}" [${currentIndex+1}/${TOP_TRACKS.length}]`;document.getElementById('yt-direct-link').href=`https://www.youtube.com/watch?v=${t.id}`}
+function loadTrack(idx){currentIndex=idx;if(player&&player.loadVideoById)player.loadVideoById(TRACKS[currentIndex].id);updateMeta();initUI()}
+function rotateRandomVideo(){let n;do{n=Math.floor(Math.random()*TRACKS.length)}while(n===currentIndex&&TRACKS.length>1);loadTrack(n)}
+function updateMeta(){const t=TRACKS[currentIndex];document.getElementById('yt-track-title').innerText=`// Active: "${t.title}" [${currentIndex+1}/${TRACKS.length}]`;document.getElementById('yt-direct-link').href=`https://www.youtube.com/watch?v=${t.id}`}
 function togglePlay(){if(!player)return;player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo()}
 function toggleMute(){if(!player)return;const ic=document.getElementById('mute-icon');if(player.isMuted()){player.unMute();ic.innerText='🔊'}else{player.mute();ic.innerText='🔇'}}
 function cycleSpeed(){if(!player)return;currentSpeedIndex=(currentSpeedIndex+1)%speeds.length;const sp=speeds[currentSpeedIndex];player.setPlaybackRate(sp);document.getElementById('speed-label').innerText=sp+'x'}
-function toggleFullscreen(){const el=document.getElementById('viewport-frame');document.fullscreenElement?document.exitFullscreen():el.requestFullscreen().catch(()=>{})}
-function copyVideoLink(){navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${TOP_TRACKS[currentIndex].id}`).then(()=>{const t=document.getElementById('toast');t.style.opacity='1';setTimeout(()=>t.style.opacity='0',2500)})}
+function toggleFullscreen(){const el=document.getElementById('youtube');document.fullscreenElement?document.exitFullscreen():el.requestFullscreen().catch(()=>{})}
+function copyVideoLink(){navigator.clipboard.writeText(`https://www.youtube.com/watch?v=${TRACKS[currentIndex].id}`).then(()=>{const t=document.getElementById('toast');t.style.opacity='1';setTimeout(()=>t.style.opacity='0',2500)})}
 </script>
 </body>
 </html>
