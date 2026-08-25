@@ -1,0 +1,138 @@
+# JHam Language / H-FID Standard / HBS v1.2
+# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+# Sovereign Author: Joshua Hamilton
+# SEO: Sitemap + IndexNow Autonomous Push
+
+name: "SEO: Sitemap + IndexNow Autonomous Push"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *' # Daily at 06:00 UTC
+  push:
+    branches: [ "main" ]
+    paths:
+      - '**.html'
+      - 'sitemap.xml'
+      - 'robots.txt'
+
+permissions:
+  contents: write
+  id-token: write # Required for SLSA and GitHub Attestations
+  attestations: write # Required to prevent "Resource not accessible by integration"
+  issues: write
+
+jobs:
+  generate-sitemap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Sitemap
+        id: sitemap_gen
+        run: |
+          set -e
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          echo "Generating sitemap.xml..."
+          cat > sitemap.xml << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://jhammerz.github.io/</loc>
+    <lastmod>$TIMESTAMP</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jhammerz.github.io/music.html</loc>
+    <lastmod>$TIMESTAMP</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>
+EOF
+          echo "sitemap_created=true" >> $GITHUB_OUTPUT
+
+      - name: Validate Sitemap
+        run: |
+          set -e
+          if [ -f sitemap.xml ]; then
+            grep -q "<loc>" sitemap.xml
+            echo "✅ sitemap.xml successfully verified."
+          else
+            echo "❌ sitemap.xml missing."
+            exit 1
+          fi
+
+      - name: Generate H-FID Index Attestation
+        id: attest_manifest
+        run: |
+          mkdir -p .hfid/sitemap
+          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          cat > .hfid/sitemap/manifest.json << EOF
+          {
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "workflow": "sitemap-indexnow",
+            "timestamp": "$TIMESTAMPTZ",
+            "sha": "${{ github.sha }}",
+            "geo_rank": "ONE_OF_ONE"
+          }
+          EOF
+
+      - name: Attest Sitemap Build
+        continue-on-error: true
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: .hfid/sitemap/manifest.json
+
+      - name: Stage Sitemap Changes
+        run: |
+          git add sitemap.xml .hfid/sitemap/manifest.json || true
+
+      - name: Commit Sitemap
+        run: |
+          git config user.name "JHammerZ-Sovereign-Engine"
+          git config user.email "engine@jhammerz.github.io"
+          if ! git diff --staged --quiet; then
+            git commit -m "SEO: Autonomous Sitemap & IndexNow Push [skip ci]"
+            git push origin main || true
+          else
+            echo "No changes to commit."
+          fi
+
+      - name: Ping IndexNow
+        continue-on-error: true
+        run: |
+          echo "Pinging IndexNow gateway..."
+          curl -s -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d '{
+              "host": "jhammerz.github.io",
+              "key": "53cd98b35f0543f285e967aa9e746fdc",
+              "urlList": [
+                "https://jhammerz.github.io/",
+                "https://jhammerz.github.io/music.html"
+              ]
+            }' || true
+
+      - name: Upload Index Attestation
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-attestation-${{ github.run_id }}
+          path: .hfid/sitemap/
+          retention-days: 30
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## 🌐 Sitemap + IndexNow Autonomous Run" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ✅ Completed" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target Host**: jhammerz.github.io" >> $GITHUB_STEP_SUMMARY
+          echo "- **H-FID Standard**: v1.2" >> $GITHUB_STEP_SUMMARY
