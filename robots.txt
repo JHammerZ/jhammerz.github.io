@@ -3,7 +3,5 @@
 
 User-agent: *
 Allow: /
-Allow: /llms.txt
-Allow: /ai-context.json
 
 Sitemap: https://jhammerz.github.io/sitemap.xml
