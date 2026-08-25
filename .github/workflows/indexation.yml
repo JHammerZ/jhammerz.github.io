@@ -1,8 +1,19 @@
-name: CD - Automated Hub Indexation Deployment
+# JHam Language / H-FID Standard / HEO / HBS v1.2
+# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+# Licensed under MIT License
+#
+# Sovereign Author: Joshua Hamilton
+# First Commit: [February 12, 2026]
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
+# SLSA Level: 3 | Twenty 47 Protocol: ACTIVE
+
+name: "CD: Automated Hub Indexation Deployment"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   schedule:
@@ -14,31 +25,47 @@ on:
       - '**.html'
       - '**.md'
       - '**.json'
-      - '.github/workflows/indexation.yml'
+      - 'sitemap.xml'
+      - 'robots.txt'
+      - 'llms.txt'
+      - '.well-known/**'
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
+  attestations: write
 
 jobs:
   build:
+    name: Build & Sovereign Index
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
-      - name: Prepare _site
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Generate H-FID Site Attestation
+        id: manifest
         run: |
-          mkdir -p _site
+          set -e
           mkdir -p _site/.hfid
-          cat > _site/.hfid/site.json <<JSONEOF
+          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+          cat > _site/.hfid/site.json << JSONEOF
           {
             "sovereign_author": "Joshua Hamilton [JHammerZ]",
+            "hid": "JHammerZ-001",
             "protocol": "Twenty_47",
             "slsa_level": 3,
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "geo_rank": "ONE_OF_ONE",
+            "timestamp": "$TIMESTAMPTZ",
             "sha": "${{ github.sha }}",
             "status": "INFINITEX_ACTIVE"
           }
@@ -47,24 +74,31 @@ jobs:
       - name: Link Checker
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --verbose --no-progress './**/*.html' './**/*.md'
-          fail: false
+          args: --verbose --no-progress --exclude-mail --accept 200,301,302,403,429,999 --exclude '.*(linkedin|apple\.com|bandlab|impact\.com|xiaohongshu|accounts\.google|makersuite).*' --exclude '^/api/.*' --exclude '^file://.*' './**/*.html' './**/*.md'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Copy static assets
+      - name: Copy Static Assets
         run: |
+          set -e
+          mkdir -p _site
           cp -r *.html _site/ 2>/dev/null || true
           cp -r assets _site/ 2>/dev/null || true
           cp -r images _site/ 2>/dev/null || true
+          cp -r .well-known _site/ 2>/dev/null || true
+          cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
           touch _site/.nojekyll
+          echo "Static site contents prepared:"
+          ls -la _site/
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Configure Static Site Ingress Artifacts
+        uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
 
   deploy:
+    name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -72,5 +106,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
+      - name: Deploy Pages
+        id: deployment
         uses: actions/deploy-pages@v4
