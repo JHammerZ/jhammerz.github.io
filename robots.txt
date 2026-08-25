@@ -8,4 +8,4 @@ Allow: /llms-full.txt
 Allow: /entities.json
 Allow: /ai-context.json
 
-Sitemap: /sitemap.xml
+Sitemap /sitemap.xml
