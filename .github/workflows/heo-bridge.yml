@@ -112,8 +112,11 @@ jobs:
         run: |
           set -e
           cd .hfid/heo-bridge
+          # Remove stale .ots if exists to prevent Errno 17 File exists
+          rm -f payload.json.ots
           ots stamp payload.json || true
-          ots upgrade payload.json.ots || true
+          sleep 2
+          ots upgrade payload.json.ots || echo "ots upgrade deferred - calendar not ready"
           cd ../..
 
       - name: Commit Bridge Attestation
@@ -124,7 +127,7 @@ jobs:
           git add .hfid/heo-bridge/payload.json .hfid/heo-bridge/payload.json.ots || true
           if ! git diff --staged --quiet; then
             git commit -m "H-FID HEO Bridge: Sovereign Attestation | ${{ steps.payload.outputs.payload_hash }} | Twenty 47"
-            git push origin main || true
+            git push origin HEAD:main || true
           else
             echo "Nothing to commit"
           fi
