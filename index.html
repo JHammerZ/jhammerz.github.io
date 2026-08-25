@@ -293,7 +293,6 @@
   </style>
 </head>
 <body>
-  <!-- Semantic main landmark - Resolves Lighthouse Best Practices Audit -->
   <main class="container">
     <!-- Profile Header -->
     <header class="profile">
@@ -313,7 +312,7 @@
       </div>
     </header>
     
-    <!-- Music Player Embed - Includes Title to Resolve Lighthouse Accessibility Audit -->
+    <!-- Music Player Embed -->
     <section class="music-player">
       <h2>🎵 Featured Tracks & Discography</h2>
       <iframe 
@@ -465,35 +464,37 @@
     
     // 1. Discover agent endpoint via beacon or Cloudflare Worker fallback
     try {
-      const beacon = await fetch('/.well-known/hfid-registry.json', {cache: 'no-cache'});
-      const data = await beacon.json();
-      
-      // Ping agent health
-      const health = await fetch(`${data.endpoint}/health`, {cache: 'no-cache'});
-      const healthData = await health.json();
-      
-      if (healthData.hid === 'JHammerZ-001' && healthData.global_root) {
-        statusEl.textContent = `EDGE: ONLINE | ${data.hid} | ROOT`;
-        agent = {endpoint: data.endpoint, hid: data.hid};
-        window.JHammerZ = agent; // Expose for console/agents
-        
-        // Enable terminal on click
-        toggleEl.style.cursor = 'pointer';
-        toggleEl.onclick = () => {
-          terminalEl.classList.toggle('active');
-          if (terminalEl.classList.contains('active')) inputEl.focus();
-        };
-      } else {
-        await fallbackWorkerHealth();
+      const beacon = await fetch('/.well-known/hfid-registry.json', {cache: 'no-cache'}).catch(() => null);
+      if (beacon && beacon.ok) {
+        const data = await beacon.json();
+        if (data && data.endpoint) {
+          const health = await fetch(`${data.endpoint}/health`, {cache: 'no-cache'}).catch(() => null);
+          if (health && health.ok) {
+            const healthData = await health.json();
+            if (healthData.hid === 'JHammerZ-001' && healthData.global_root) {
+              statusEl.textContent = `EDGE: ONLINE | ${data.hid} | ROOT`;
+              agent = {endpoint: data.endpoint, hid: data.hid};
+              window.JHammerZ = agent;
+              
+              toggleEl.style.cursor = 'pointer';
+              toggleEl.onclick = () => {
+                terminalEl.classList.toggle('active');
+                if (terminalEl.classList.contains('active')) inputEl.focus();
+              };
+              return;
+            }
+          }
+        }
       }
+      await fallbackWorkerHealth();
     } catch (e) {
       await fallbackWorkerHealth();
     }
     
     async function fallbackWorkerHealth() {
       try {
-        const res = await fetch('https://lysander-v13.jhammerzofficial.workers.dev/health', {cache: 'no-cache'});
-        if (res.ok) {
+        const res = await fetch('https://lysander-v13.jhammerzofficial.workers.dev/health', {cache: 'no-cache'}).catch(() => null);
+        if (res && res.ok) {
           const wData = await res.json();
           statusEl.textContent = `EDGE: ${wData.status || 'ONLINE'} (A2A-2026-v1)`;
         } else {
