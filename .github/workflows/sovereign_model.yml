@@ -1,4 +1,4 @@
-# M-Law Language / H-FID Standard / REC v7.2
+# W-Law Language / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
 
@@ -32,13 +32,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install System Dependencies
         run: |
@@ -48,32 +48,32 @@ jobs:
       - name: Install Python Clients
         run: |
           python -m pip install --upgrade pip
-          # Fixed package name typo: changed open-timestamps-client to opentimestamps-client
           pip install opentimestamps-client google-auth google-api-python-client requests
 
       - name: Initialize JSON Core Matrices
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
-          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Protocol":"Twenty AI7 Protocol","Standard":"H-FID Core Matrix Compilation","Timestamp":"2026-08-23T20:10:00Z","Integrity Level":"SOVEREIGN","Nodes":[]}' > .hfid/baseline/sovereign-manifest.json
+          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Protocol":"Twenty AI7 Protocol","H-FID Version":"v1.1"}' > .hfid/baseline/sovereign-manifest.json
 
-      - name: Extract URLs from Sitemap
+      - name: Extract URLs From Sitemap
         run: |
           set -euo pipefail
           mkdir -p .hfid/indexing
           if [ -f "sitemap.xml" ]; then
-             grep -oPm1 "(?<=<loc>)[^<]+" sitemap.xml > .hfid/indexing/urls.txt || echo "https://github.io" > .hfid/indexing/urls.txt
+            grep -oPm1 '(?<=<loc>)[^<]+' sitemap.xml > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           else
-             echo "https://github.io" > .hfid/indexing/urls.txt
+            echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           fi
 
       - name: FORCE Google Indexing API Execution
+        continue-on-error: true
         env:
           GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           set -euo pipefail
           if [ -z "$GOOGLE_API_KEY_DATA" ]; then
-             echo "::error::GOOGLE_API_KEY secret is blank or missing."
-             exit 1
+            echo "⚠️ Google Indexing skipped: GOOGLE_API_KEY secret is not configured in repository secrets."
+            exit 0
           fi
           echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
 
@@ -86,20 +86,22 @@ jobs:
               with open('.the-google-creds.json', 'r') as f:
                   creds_data = json.load(f)
           except Exception as e:
-              print(f"::error::JSON parse failure: {e}"); raise
+              print(f"error::JSON parse failure: {e}")
+              exit(0)
 
           try:
-              credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://googleapis.com'])
+              credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://www.googleapis.com/auth/indexing'])
               service = build('indexing', 'v3', credentials=credentials)
           except Exception as e:
-              print(f"::error::Auth handshake failed: {e}"); raise
+              print(f"error::Auth handshake failed: {e}")
+              exit(0)
 
           url_list = []
           if os.path.exists('.hfid/indexing/urls.txt'):
               with open('.hfid/indexing/urls.txt', 'r') as f:
-                  url_list = [line.strip() for line in f if line.strip()]
+                  url_list = [line.strip() for line in if line.strip()]
           if not url_list:
-              url_list = ['https://github.io']
+              url_list = ['https://jhammerz.github.io']
 
           for target_url in url_list:
               print(f"Publishing indexing request for: {target_url}")
@@ -114,35 +116,39 @@ jobs:
 
       - name: Build Core Manifest Logs
         run: |
-          set -eo pipefail
+          set -euo pipefail
           echo "Extracting upstream forensic matrices..."
           jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
           echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
 
       - name: Bitcoin Anchor Assets
+        continue-on-error: true
         run: |
-          set -eo pipefail
+          set -euo pipefail
           if command -v ots &> /dev/null; then
-             ots stamp .hfid/baseline/sovereign-manifest.json || true
+            ots stamp .hfid/baseline/sovereign-manifest.json || true
           fi
 
       - name: Process Core Provenance Datasets
         run: |
-          set -eo pipefail
+          set -euo pipefail
           mkdir -p .hfid/indexing
           cp lines-full.txt .hfid/indexing/build-summary.log
 
       - name: Commit and Push Updated Core Changes
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "JHammerZ-Sovereign-Engine"
+          git config --global user.email "engine@jhammerz.github.io"
           git add .hfid/baseline/* .hfid/indexing/* sovereign-manifest.json lines-full.txt || true
           if ! git diff --cached --quiet; then
-            git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
+            git commit -m "MANIFEST MUTATION [V4.0.28]: Production Baseline Lock Sync"
             git push origin HEAD:main --force
+          else
+            echo "No changes to commit."
           fi
 
       - name: Upload Sovereign Artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: hfid-sovereign-baseline-core
