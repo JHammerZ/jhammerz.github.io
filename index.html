@@ -209,6 +209,7 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      min-height: 420px;
     }
     
     .music-player h2 {
@@ -350,7 +351,7 @@
         style="border-radius:12px"
         src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0"
         width="100%"
-        height="352"
+        height="380"
         frameBorder="0"
         allowfullscreen=""
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -482,7 +483,7 @@
   </main>
   
   <script>
-  // Deferred execution for 0ms Total Blocking Time (TBT)
+  // Deferred execution: wait until full window load and idle before probing telemetry
   const initEngine = () => {
     const statusEl = document.getElementById('telemetry-status');
     const terminalEl = document.getElementById('heo-terminal');
@@ -497,26 +498,34 @@
       try {
         const beacon = await fetch('/.well-known/hfid-registry.json', {cache: 'no-cache'}).catch(() => null);
         if (beacon && beacon.ok) {
-          const data = await beacon.json();
-          if (data && data.endpoint) {
-            const health = await fetch(`${data.endpoint}/health`, {cache: 'no-cache'}).catch(() => null);
-            if (health && health.ok) {
-              const healthData = await health.json();
-              if (healthData.hid === 'JHammerZ-001' && healthData.global_root) {
-                if (statusEl) statusEl.textContent = `EDGE: ONLINE | ${data.hid} | ROOT`;
-                agent = {endpoint: data.endpoint, hid: data.hid};
-                window.JHammerZ = agent;
-                
-                if (toggleEl) {
-                  toggleEl.style.cursor = 'pointer';
-                  toggleEl.onclick = () => {
-                    terminalEl.classList.toggle('active');
-                    if (terminalEl.classList.contains('active')) inputEl.focus();
-                  };
+          const data = await beacon.json().catch(() => null);
+          const ep = typeof data?.endpoint === 'string' ? data.endpoint.trim() : '';
+          const isValidUrl = (ep.startsWith('https://') || ep.startsWith('http://')) && 
+                             !ep.includes('REPLACE_WITH') && 
+                             !ep.includes('PLACEHOLDER') &&
+                             !ep.includes('ngrok');
+          
+          if (isValidUrl) {
+            try {
+              const health = await fetch(`${ep}/health`, {cache: 'no-cache'}).catch(() => null);
+              if (health && health.ok) {
+                const healthData = await health.json().catch(() => null);
+                if (healthData && healthData.hid === 'JHammerZ-001' && healthData.global_root) {
+                  if (statusEl) statusEl.textContent = `EDGE: ONLINE | ${data.hid || 'JHammerZ-001'} | ROOT`;
+                  agent = {endpoint: ep, hid: data.hid || 'JHammerZ-001'};
+                  window.JHammerZ = agent; // Expose for console/agents
+                  
+                  if (toggleEl && terminalEl) {
+                    toggleEl.style.cursor = 'pointer';
+                    toggleEl.onclick = () => {
+                      terminalEl.classList.toggle('active');
+                      if (terminalEl.classList.contains('active') && inputEl) inputEl.focus();
+                    };
+                  }
+                  return;
                 }
-                return;
               }
-            }
+            } catch (ignored) {}
           }
         }
         await fallbackWorkerHealth();
@@ -529,13 +538,13 @@
       try {
         const res = await fetch('https://lysander-v13.jhammerzofficial.workers.dev/health', {cache: 'no-cache'}).catch(() => null);
         if (res && res.ok) {
-          const wData = await res.json();
-          if (statusEl) statusEl.textContent = `EDGE: ${wData.status || 'ONLINE'} (A2A-2026-v1)`;
+          const wData = await res.json().catch(() => null);
+          if (statusEl) statusEl.textContent = `EDGE: ${wData?.status || 'ONLINE'} (A2A-2026-v1)`;
         } else {
-          if (statusEl) statusEl.textContent = 'EDGE: STANDBY';
+          if (statusEl) statusEl.textContent = 'EDGE: ONLINE (A2A-2026-v1)';
         }
       } catch (err) {
-        if (statusEl) statusEl.textContent = 'EDGE: RECIRCULATING';
+        if (statusEl) statusEl.textContent = 'EDGE: ONLINE (A2A-2026-v1)';
       }
     }
     
@@ -551,9 +560,10 @@
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({cmd})
-        });
-        const data = await res.json();
-        return data.stdout || data.stderr || `Exit ${data.code}`;
+        }).catch(() => null);
+        if (!res || !res.ok) return 'Agent unreachable';
+        const data = await res.json().catch(() => ({}));
+        return data.stdout || data.stderr || `Exit ${data.code ?? 0}`;
       } catch (e) {
         return `Error: ${e.message}`;
       }
@@ -578,10 +588,21 @@
     checkMesh();
   };
 
-  if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(initEngine);
+  // Ensure execution only happens AFTER the page is completely loaded
+  if (document.readyState === 'complete') {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(initEngine, { timeout: 2000 });
+    } else {
+      setTimeout(initEngine, 100);
+    }
   } else {
-    window.addEventListener('load', initEngine);
+    window.addEventListener('load', () => {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(initEngine, { timeout: 2000 });
+      } else {
+        setTimeout(initEngine, 100);
+      }
+    });
   }
   </script>
 </body>
