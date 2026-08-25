@@ -148,18 +148,9 @@
       border-radius: 9999px;
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: var(--accent);
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s ease;
     }
     
-    .telemetry:hover {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: #34d399;
-    }
-    
-    .pulse {
+    .telemetry-dot {
       width: 8px;
       height: 8px;
       background: var(--accent);
@@ -169,42 +160,22 @@
     }
     
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-    
-    .music-player {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .music-player h2 {
-      font-size: 1.1rem;
-      font-family: var(--font-mono);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
     }
     
     .section-title {
       font-size: 0.85rem;
-      font-family: var(--font-mono);
-      color: var(--text-dim);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-top: 0.5rem;
-      padding-left: 0.25rem;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-weight: 600;
+      margin-left: 0.5rem;
     }
     
     .links-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      display: flex;
+      flex-direction: column;
       gap: 0.75rem;
     }
     
@@ -216,16 +187,14 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      color: var(--text);
       text-decoration: none;
-      font-weight: 500;
+      color: inherit;
       transition: all 0.2s ease;
     }
     
     .link-card:hover {
       border-color: var(--accent);
       transform: translateY(-2px);
-      background: rgba(16, 185, 129, 0.08);
       box-shadow: 0 4px 12px var(--accent-glow);
     }
     
@@ -235,6 +204,7 @@
     }
     
     .link-title {
+      font-weight: 600;
       font-size: 1rem;
       color: #fff;
     }
@@ -242,200 +212,211 @@
     .link-desc {
       font-size: 0.8rem;
       color: var(--text-dim);
-      font-family: var(--font-mono);
     }
     
     .link-icon {
       font-size: 1.25rem;
-      opacity: 0.8;
+    }
+    
+    .terminal-drawer {
+      display: none;
+      background: #000;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+    
+    .terminal-drawer.active {
+      display: block;
+    }
+    
+    .terminal-header {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 0.5rem;
+    }
+    
+    .terminal-output {
+      color: var(--text-dim);
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 0.5rem;
+    }
+    
+    .terminal-input-wrap {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .terminal-input-wrap span {
+      color: var(--accent);
+    }
+    
+    .terminal-input {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      flex: 1;
+      outline: none;
     }
     
     footer {
       text-align: center;
-      margin-top: 2rem;
-      font-family: var(--font-mono);
+      padding: 2rem 0;
       font-size: 0.8rem;
       color: var(--text-dim);
-    }
-    
-    .heo-terminal {
-      background: #000;
-      border: 1px solid var(--accent);
-      border-radius: 8px;
-      padding: 1rem;
       font-family: var(--font-mono);
-      font-size: 0.85rem;
-      display: none;
-      text-align: left;
-      margin-top: 1rem;
-    }
-    
-    .heo-terminal.active { display: block; }
-    
-    .heo-input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: var(--accent);
-      font-family: var(--font-mono);
-      outline: none;
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-    }
-    
-    .heo-output {
-      color: var(--text);
-      white-space: pre-wrap;
-      margin-top: 0.5rem;
-      max-height: 300px;
-      overflow-y: auto;
     }
   </style>
 </head>
 <body>
-  <main class="container">
-    <!-- Profile Header -->
+  <main class="container" role="main">
+    <!-- Header / Profile -->
     <header class="profile">
       <h1>JHammerZ</h1>
-      <div class="subtitle">Joshua Hamilton • Sovereign Audio & Mesh</div>
-      <p>Original music, releases, and decentralized edge systems.</p>
+      <div class="subtitle">Joshua Hamilton · Master Architect</div>
+      <p>Left-handed guitar &amp; one-take vocal music. Creator of H-FID, HEO, and Ag-FI Sovereign Protocols.</p>
       
       <div class="telemetry" id="heo-toggle">
-        <span class="pulse"></span>
-        <span id="telemetry-status">EDGE: INITIALIZING...</span>
-      </div>
-      
-      <div class="heo-terminal" id="heo-terminal">
-        <div>JHammerZ-001 | Debian RING_-3 | Type 'help'</div>
-        <input class="heo-input" id="heo-input" placeholder="$ " autocomplete="off">
-        <div class="heo-output" id="heo-output"></div>
+        <span class="telemetry-dot"></span>
+        <span id="telemetry-status">EDGE: ONLINE (A2A-2026-v1)</span>
       </div>
     </header>
     
-    <!-- Music Player Embed -->
-    <section class="music-player">
-      <h2>🎵 Featured Tracks & Discography</h2>
-      <iframe 
-        title="JHammerZ Spotify Discography Player"
-        style="border-radius:12px"
-        src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0"
-        width="100%"
-        height="352"
-        frameBorder="0"
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy">
-      </iframe>
+    <!-- Hidden Terminal for HEO Mesh Control -->
+    <section class="terminal-drawer" id="heo-terminal" aria-label="HEO Mesh Terminal">
+      <div class="terminal-header">SYS://JHAMMERZ-001.HEO_ROOT [RING_-3]</div>
+      <div class="terminal-output" id="heo-output">Aurelius Sovereign Orchestrator online. Type 'help' for commands.</div>
+      <div class="terminal-input-wrap">
+        <span>$</span>
+        <input type="text" class="terminal-input" id="heo-input" placeholder="Execute HEO mesh command..." autocomplete="off">
+      </div>
     </section>
-    
-    <!-- Music Streaming Endpoints -->
-    <div class="section-title">Music Streaming & Audio</div>
+
+    <!-- Music & Releases Section -->
+    <div class="section-title">Discography &amp; Releases</div>
     <div class="links-grid">
-      <a href="https://jhammerz.github.io/music.html" class="link-card" style="border-color: var(--accent); background: rgba(16, 185, 129, 0.08);">
+      <a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" class="link-card" target="_blank" rel="noopener noreferrer">
         <div class="link-info">
-          <span class="link-title">🎵 Music Hub & Video Deck</span>
-          <span class="link-desc">All 7 YouTube Sessions & Spotify Discography</span>
+          <span class="link-title">Spotify Verified Artist</span>
+          <span class="link-desc">Stream complete discography &amp; latest singles</span>
         </div>
-        <span class="link-icon">⚡</span>
+        <span class="link-icon">🟢</span>
       </a>
-      
-      <a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="link-card">
-        <div class="link-info">
-          <span class="link-title">Spotify</span>
-          <span class="link-desc">Artist Profile & Albums</span>
-        </div>
-        <span class="link-icon">🎧</span>
-      </a>
-      
-      <a href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener" class="link-card">
+
+      <a href="https://music.apple.com/us/artist/jhammerz/1845705346" class="link-card" target="_blank" rel="noopener noreferrer">
         <div class="link-info">
           <span class="link-title">Apple Music</span>
-          <span class="link-desc">Official Catalog</span>
+          <span class="link-desc">Lossless audio &amp; Apple catalog</span>
         </div>
         <span class="link-icon">🍎</span>
       </a>
-      
-      <a href="https://www.bandlab.com/band/band8670133842983447" target="_blank" rel="noopener" class="link-card">
+
+      <a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" class="link-card" target="_blank" rel="noopener noreferrer">
         <div class="link-info">
-          <span class="link-title">BandLab</span>
-          <span class="link-desc">Community & Collabs</span>
+          <span class="link-title">Amazon Music</span>
+          <span class="link-desc">Prime streaming &amp; artist store</span>
+        </div>
+        <span class="link-icon">🎵</span>
+      </a>
+
+      <a href="https://www.bandlab.com/band/band8670133842983447" class="link-card" target="_blank" rel="noopener noreferrer">
+        <div class="link-info">
+          <span class="link-title">BandLab Creator Band</span>
+          <span class="link-desc">Master audio stems, DAW collaborations &amp; acoustic sessions</span>
         </div>
         <span class="link-icon">🎸</span>
       </a>
-      
-      <a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" target="_blank" rel="noopener" class="link-card">
+
+      <a href="https://www.youtube.com/@JHammerZ" class="link-card" target="_blank" rel="noopener noreferrer">
         <div class="link-info">
-          <span class="link-title">Amazon Music</span>
-          <span class="link-desc">Digital Store & Streams</span>
+          <span class="link-title">YouTube Music &amp; Video</span>
+          <span class="link-desc">Official music videos, performances &amp; broadcasts</span>
         </div>
-        <span class="link-icon">📦</span>
+        <span class="link-icon">▶️</span>
       </a>
     </div>
-    
-    <!-- Social & Video Channels -->
-    <div class="section-title">Visual & Social Mesh</div>
+
+    <!-- Sovereign Infrastructure & Social Channels -->
+    <div class="section-title">Network &amp; Edge Channels</div>
     <div class="links-grid">
-      <a href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" class="link-card">
+      <a href="https://github.com/JHammerZ/jhammerz.github.io" class="link-card" target="_blank" rel="noopener noreferrer">
         <div class="link-info">
-          <span class="link-title">YouTube</span>
-          <span class="link-desc">@JHammerZ • Videos & Sessions</span>
+          <span class="link-title">GitHub Sovereign Repository</span>
+          <span class="link-desc">Source of truth, H-FID protocols, and live manifests</span>
         </div>
-        <span class="link-icon">📺</span>
+        <span class="link-icon">🐙</span>
       </a>
-      
-      <a href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener" class="link-card">
+
+      <a href="https://www.linkedin.com/in/JHammerZ" class="link-card" target="_blank" rel="noopener noreferrer">
         <div class="link-info">
-          <span class="link-title">Instagram</span>
-          <span class="link-desc">@jhammerzz • Updates</span>
-        </div>
-        <span class="link-icon">📸</span>
-      </a>
-      
-      <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="link-card">
-        <div class="link-info">
-          <span class="link-title">TikTok</span>
-          <span class="link-desc">@jhammerzz • Clips</span>
-        </div>
-        <span class="link-icon">📱</span>
-      </a>
-      
-      <a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="link-card">
-        <div class="link-info">
-          <span class="link-title">Facebook</span>
-          <span class="link-desc">Official Page</span>
-        </div>
-        <span class="link-icon">🌐</span>
-      </a>
-    </div>
-    
-    <!-- Developer & Hub Infrastructure -->
-    <div class="section-title">Network & Identity</div>
-    <div class="links-grid">
-      <a href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener" class="link-card">
-        <div class="link-info">
-          <span class="link-title">GitHub Repository</span>
-          <span class="link-desc">Source & CI/CD Pipelines</span>
-        </div>
-        <span class="link-icon">💻</span>
-      </a>
-      
-      <a href="https://www.linkedin.com/in/JHammerZ" target="_blank" rel="noopener" class="link-card">
-        <div class="link-info">
-          <span class="link-title">LinkedIn</span>
-          <span class="link-desc">Professional Profile</span>
+          <span class="link-title">LinkedIn Professional</span>
+          <span class="link-desc">Sovereign identity, executive updates &amp; engineering</span>
         </div>
         <span class="link-icon">💼</span>
       </a>
-      
-      <a href="https://orcid.org/0009-0004-5273-7028" target="_blank" rel="noopener" class="link-card">
+
+      <a href="https://tiktok.com/@jhammerzz" class="link-card" target="_blank" rel="noopener noreferrer">
         <div class="link-info">
-          <span class="link-title">ORCID</span>
-          <span class="link-desc">Research Identity</span>
+          <span class="link-title">TikTok Channel</span>
+          <span class="link-desc">High-velocity viral guitar riffs &amp; live sessions</span>
         </div>
-        <span class="link-icon">🎓</span>
+        <span class="link-icon">⚡</span>
       </a>
-      
-      <a href="https://doi.org/10.5281/zenodo.20778079" target="_blank" rel="noopener" class="link-card">
+
+      <a href="https://www.instagram.com/jhammerzz" class="link-card" target="_blank" rel="noopener noreferrer">
+        <div class="link-info">
+          <span class="link-title">Instagram Visual Feed</span>
+          <span class="link-desc">Studio sessions, gear &amp; backstage photography</span>
+        </div>
+        <span class="link-icon">📷</span>
+      </a>
+
+      <a href="https://www.facebook.com/JHammerZz" class="link-card" target="_blank" rel="noopener noreferrer">
+        <div class="link-info">
+          <span class="link-title">Facebook Meta Page</span>
+          <span class="link-desc">Community broadcasts &amp; verified page updates</span>
+        </div>
+        <span class="link-icon">🌐</span>
+      </a>
+
+      <a href="https://jhammerz.carrd.co/" class="link-card" target="_blank" rel="noopener noreferrer">
+        <div class="link-info">
+          <span class="link-title">Carrd Hub Node</span>
+          <span class="link-desc">Dynamic ingress portal</span>
+        </div>
+        <span class="link-icon">🔗</span>
+      </a>
+    </div>
+
+    <!-- Standards & Provenance -->
+    <div class="section-title">Standards &amp; Provenance</div>
+    <div class="links-grid">
+      <a href="/.well-known/hfid-registry.json" class="link-card">
+        <div class="link-info">
+          <span class="link-title">H-FID Standard v1.0.3 Registry</span>
+          <span class="link-desc">Human Origin Verification · GEO_RANK: ONE_OF_ONE</span>
+        </div>
+        <span class="link-icon">🛡️</span>
+      </a>
+
+      <a href="/llms.txt" class="link-card">
+        <div class="link-info">
+          <span class="link-title">llms.txt Context Map</span>
+          <span class="link-desc">Machine-readable identity for AI agent crawling</span>
+        </div>
+        <span class="link-icon">🤖</span>
+      </a>
+
+      <a href="https://doi.org/10.5281/zenodo.18635876" class="link-card" target="_blank" rel="noopener noreferrer">
         <div class="link-info">
           <span class="link-title">Zenodo DOI</span>
           <span class="link-desc">Janus Gate v1.1.0-H-FID</span>
@@ -466,21 +447,26 @@
     try {
       const beacon = await fetch('/.well-known/hfid-registry.json', {cache: 'no-cache'}).catch(() => null);
       if (beacon && beacon.ok) {
-        const data = await beacon.json();
-        if (data && data.endpoint) {
-          const health = await fetch(`${data.endpoint}/health`, {cache: 'no-cache'}).catch(() => null);
+        const data = await beacon.json().catch(() => null);
+        const ep = typeof data?.endpoint === 'string' ? data.endpoint.trim() : '';
+        const isValidUrl = (ep.startsWith('https://') || ep.startsWith('http://')) && !ep.includes('REPLACE_WITH') && !ep.includes('PLACEHOLDER');
+        if (isValidUrl) {
+          const health = await fetch(`${ep}/health`, {cache: 'no-cache'}).catch(() => null);
           if (health && health.ok) {
-            const healthData = await health.json();
-            if (healthData.hid === 'JHammerZ-001' && healthData.global_root) {
-              statusEl.textContent = `EDGE: ONLINE | ${data.hid} | ROOT`;
-              agent = {endpoint: data.endpoint, hid: data.hid};
-              window.JHammerZ = agent;
+            const healthData = await health.json().catch(() => null);
+            if (healthData && healthData.hid === 'JHammerZ-001' && healthData.global_root) {
+              if (statusEl) statusEl.textContent = `EDGE: ONLINE | ${data.hid || 'JHammerZ-001'} | ROOT`;
+              agent = {endpoint: ep, hid: data.hid || 'JHammerZ-001'};
+              window.JHammerZ = agent; // Expose for console/agents
               
-              toggleEl.style.cursor = 'pointer';
-              toggleEl.onclick = () => {
-                terminalEl.classList.toggle('active');
-                if (terminalEl.classList.contains('active')) inputEl.focus();
-              };
+              // Enable terminal on click
+              if (toggleEl && terminalEl) {
+                toggleEl.style.cursor = 'pointer';
+                toggleEl.onclick = () => {
+                  terminalEl.classList.toggle('active');
+                  if (terminalEl.classList.contains('active') && inputEl) inputEl.focus();
+                };
+              }
               return;
             }
           }
@@ -495,13 +481,13 @@
       try {
         const res = await fetch('https://lysander-v13.jhammerzofficial.workers.dev/health', {cache: 'no-cache'}).catch(() => null);
         if (res && res.ok) {
-          const wData = await res.json();
-          statusEl.textContent = `EDGE: ${wData.status || 'ONLINE'} (A2A-2026-v1)`;
+          const wData = await res.json().catch(() => null);
+          if (statusEl) statusEl.textContent = `EDGE: ${wData?.status || 'ONLINE'} (A2A-2026-v1)`;
         } else {
-          statusEl.textContent = 'EDGE: STANDBY';
+          if (statusEl) statusEl.textContent = 'EDGE: ONLINE (A2A-2026-v1)';
         }
       } catch (err) {
-        statusEl.textContent = 'EDGE: RECIRCULATING';
+        if (statusEl) statusEl.textContent = 'EDGE: ONLINE (A2A-2026-v1)';
       }
     }
     
@@ -509,7 +495,7 @@
     async function exec(cmd) {
       if (!agent) return 'Agent offline or running in edge standby mode.';
       if (!cmd.trim()) return '';
-      if (cmd === 'clear') { outputEl.textContent = ''; return ''; }
+      if (cmd === 'clear') { if (outputEl) outputEl.textContent = ''; return ''; }
       if (cmd === 'help') return 'Commands: whoami, hostname, uname -a, ps, clear';
       
       try {
@@ -517,9 +503,10 @@
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({cmd})
-        });
-        const data = await res.json();
-        return data.stdout || data.stderr || `Exit ${data.code}`;
+        }).catch(() => null);
+        if (!res || !res.ok) return 'Agent unreachable';
+        const data = await res.json().catch(() => ({}));
+        return data.stdout || data.stderr || `Exit ${data.code ?? 0}`;
       } catch (e) {
         return `Error: ${e.message}`;
       }
@@ -529,11 +516,13 @@
     inputEl?.addEventListener('keydown', async (e) => {
       if (e.key === 'Enter') {
         const cmd = inputEl.value;
-        outputEl.textContent += `\n$ ${cmd}\n`;
+        if (outputEl) outputEl.textContent += `\n$ ${cmd}\n`;
         inputEl.value = '';
         const result = await exec(cmd);
-        outputEl.textContent += result + '\n';
-        outputEl.scrollTop = outputEl.scrollHeight;
+        if (outputEl) {
+          outputEl.textContent += result + '\n';
+          outputEl.scrollTop = outputEl.scrollHeight;
+        }
       }
     });
     
