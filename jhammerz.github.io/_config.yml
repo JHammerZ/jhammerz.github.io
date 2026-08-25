@@ -1,26 +1,32 @@
-name: GitHub Pages
+title: JHammerZ Sovereign Hub
+description: Autonomous Distributed Network & Knowledge Matrix
+url: "https://jhammerz.github.io"
+baseurl: ""
 
-on:
-  push:
-    branches:
-      - main  # or your GitHub Pages branch
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
-    steps:
-      - uses: actions/checkout@v4
-      - run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  # or your publish directory
-          publish_branch: main  # or your GitHub Pages branch
-          keep_files: true
-          force_orphan: true
+include:
+  - .well-known
+  - .well-known/hfid-registry.json
+  - .well-known/aurelius.json
+  - .well-known/cannon.json
+  - .well-known/cdm-mesh.json
+  - .well-known/security.txt
+
+exclude:
+  - node_modules/
+  - vendor/
+  - .config/
+  - backups/
+  - server.ts
+  - package.json
+  - package-lock.json
+  - tsconfig.json
+  - vite.config.ts
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
