@@ -1,189 +1,178 @@
-# JHam Language / H-FID Standard / HBS v1.2
-# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
-# Licensed under MIT License
-#
-# Sovereign Author: Joshua Hamilton
-# First Commit: [February 12, 2026]
-# Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
-# SLSA Level: 3 | Twenty 47 Protocol: Edge CI/CD
+/**
+ * JHammerZ Sovereign Edge Router & CDN Proxy
+ * Master Architect: Joshua Hamilton [JHammerZ-001]
+ * Protocols: H-FID v1.0.3 | HEO | Ag-FI | Twenty 47
+ * Target: https://jhammerz.github.io
+ */
 
-name: "CI: Cloudflare Workers Deploy"
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+    const method = request.method;
 
-concurrency:
-  group: cloudflare-deploy-${{ github.ref }}
-  cancel-in-progress: true
+    // 1. BLOCK BAD / MALICIOUS PATHS
+    if (
+      path.startsWith('/.env') ||
+      path.startsWith('/.git') ||
+      path.startsWith('/.aws') ||
+      path.includes('.DS_Store') ||
+      path.includes('wp-admin') ||
+      path.includes('wp-login')
+    ) {
+      return new Response('Not found', { status: 404 });
+    }
 
-on:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'wrangler.toml'
-      - 'worker.js'
-      - 'cloudflare-worker-lru.js'
-      - 'index.html'
-      - 'music.html'
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/cf.yml'
-      - '.hfid/**'
-  pull_request:
-    branches: [ "main" ]
-    paths:
-      - 'wrangler.toml'
-      - 'worker.js'
-      - 'cloudflare-worker-lru.js'
-      - 'src/**'
-  workflow_dispatch:
+    // 2. HEALTH & TELEMETRY API ROUTES
+    if (path === '/health' || path === '/api/health' || path === '/__edge_health') {
+      return new Response(JSON.stringify({
+        status: 'ONLINE',
+        hid: 'JHammerZ-001',
+        global_root: true,
+        protocol: 'A2A-2026-v1',
+        geo_rank: 'ONE_OF_ONE',
+        slsa_level: 3,
+        colo: request.cf?.colo || 'EDGE',
+        timestamp: new Date().toISOString(),
+        version: '1.3.0'
+      }), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'X-Powered-By': 'jhammerz-router [RING_-3]'
+        }
+      });
+    }
 
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
-  pull-requests: write
+    if (path === '/api/status') {
+      return new Response(JSON.stringify({
+        status: 'online',
+        timestamp: Date.now(),
+        colo: request.cf?.colo || 'UNKNOWN',
+        version: '1.0.0',
+        author: 'Joshua Hamilton [JHammerZ]'
+      }), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'X-Powered-By': 'jhammerz-router'
+        }
+      });
+    }
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    environment:
-      name: production
-      url: ${{ steps.deploy.outputs.deployment-url || 'https://lysander-v13.jhammerzofficial.workers.dev' }}
-    outputs:
-      deployment_id: ${{ steps.deploy.outputs.deployment-id }}
-      deployment_url: ${{ steps.deploy.outputs.deployment-url }}
-    steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+    if (path === '/api/echo' && method === 'POST') {
+      const body = await request.text();
+      return new Response(body, {
+        headers: {
+          'Content-Type': 'text/plain',
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+    }
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
+    // 3. SOVEREIGN KV STATE PERSISTENCE (AGENT_STATE_LEDGER)
+    if (path.startsWith('/api/state/') && env?.AGENT_STATE_LEDGER) {
+      const key = path.replace('/api/state/', '');
+      if (method === 'GET') {
+        const value = await env.AGENT_STATE_LEDGER.get(key);
+        return new Response(value || JSON.stringify({ error: 'not_found' }), {
+          status: value ? 200 : 404,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
+      }
+      if (method === 'POST' || method === 'PUT') {
+        const data = await request.text();
+        await env.AGENT_STATE_LEDGER.put(key, data);
+        return new Response(JSON.stringify({ status: 'persisted', key }), {
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
+      }
+    }
 
-      - name: Ensure Wrangler & Worker Artifacts
-        run: |
-          set -e
-          if [ ! -f "wrangler.toml" ]; then
-            echo "Generating fallback wrangler.toml..."
-            cat > wrangler.toml << 'EOF'
-name = "lysander-v13"
-main = "cloudflare-worker-lru.js"
-compatibility_date = "2026-08-25"
-compatibility_flags = ["nodejs_compat"]
+    // 4. CANONICAL SOCIAL & AUTHORITY REDIRECT MATRIX
+    const redirects = {
+      '/github': 'https://github.com/JHammerZ/jhammerz.github.io',
+      '/x': 'https://x.com/JHammerZ',
+      '/twitter': 'https://x.com/JHammerZ',
+      '/spotify': 'https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79',
+      '/apple': 'https://music.apple.com/us/artist/jhammerz/1845705346',
+      '/amazon': 'https://music.amazon.com/artists/B0D5GLL7NV/jhammerz',
+      '/bandlab': 'https://www.bandlab.com/band/band8670133842983447',
+      '/youtube': 'https://www.youtube.com/@JHammerZ',
+      '/instagram': 'https://www.instagram.com/jhammerzz',
+      '/tiktok': 'https://tiktok.com/@jhammerzz',
+      '/facebook': 'https://www.facebook.com/JHammerZz',
+      '/linkedin': 'https://www.linkedin.com/in/JHammerZ',
+      '/carrd': 'https://jhammerz.carrd.co/',
+      '/zenodo': 'https://doi.org/10.5281/zenodo.18635876',
+      '/orcid': 'https://orcid.org/0009-0004-5273-7028',
+      '/projects': '/#projects',
+      '/resume': '/resume.pdf'
+    };
 
-[vars]
-ENVIRONMENT = "production"
-SOVEREIGN_HID = "JHammerZ-001"
-GEO_RANK = "ONE_OF_ONE"
-PROTOCOL = "Twenty_47"
-EOF
-          fi
+    if (redirects[path]) {
+      return Response.redirect(redirects[path], 301);
+    }
 
-          if [ ! -f "worker.js" ] && [ -f "cloudflare-worker-lru.js" ]; then
-            echo "import worker from './cloudflare-worker-lru.js'; export default worker;" > worker.js
-          fi
+    // 5. CACHE PROXY + ORIGIN SHIELD
+    const cache = caches.default;
+    const cacheKey = new Request(url.toString(), request);
+    let response = await cache.match(cacheKey);
 
-          echo "Config verification complete:"
-          cat wrangler.toml
+    if (!response) {
+      const originUrl = `https://jhammerz.github.io${path}${url.search}`;
+      const originReq = new Request(originUrl, {
+        method: request.method,
+        headers: request.headers,
+        body: ['GET', 'HEAD'].includes(request.method) ? undefined : request.body,
+        redirect: 'follow'
+      });
 
-      - name: Install Dependencies
-        run: |
-          if [ -f "package-lock.json" ]; then
-            npm ci || npm install wrangler@4 --save-dev
-          else
-            npm install wrangler@4 --save-dev
-          fi
-          npx wrangler --version
+      try {
+        response = await fetch(originReq);
+      } catch (err) {
+        return new Response(`Origin gateway timeout: ${err.message}`, { status: 504 });
+      }
 
-      - name: Generate H-FID Edge Attestation
-        id: manifest
-        run: |
-          set -e
-          mkdir -p .hfid/edge
-          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          cat > .hfid/edge/deploy.json << EOF
-          {
-            "workflow": "ci",
-            "target": "cloudflare-workers",
-            "sha": "${{ github.sha }}",
-            "timestamp": "$TIMESTAMPTZ",
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
-            "slsa_level": 3,
-            "event": "${{ github.event_name }}"
+      // 6. SPA FALLBACK FOR DIRECT APPLICATION ROUTES
+      if (response.status === 404 && !path.includes('.')) {
+        try {
+          const indexRes = await fetch('https://jhammerz.github.io/index.html');
+          if (indexRes.ok) {
+            response = new Response(indexRes.body, {
+              status: 200,
+              headers: indexRes.headers
+            });
           }
-          EOF
+        } catch (_) {}
+      }
 
-      - name: Dry Run Deploy on PR
-        if: github.event_name == 'pull_request' && env.CLOUDFLARE_API_TOKEN != ''
-        uses: cloudflare/wrangler-action@v3
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --dry-run --outdir dist
+      // 7. SECURITY & PERFORMANCE HEADERS
+      const newHeaders = new Headers(response.headers);
+      newHeaders.set('X-Powered-By', 'jhammerz-router [RING_-3]');
+      newHeaders.set('X-Frame-Options', 'DENY');
+      newHeaders.set('X-Content-Type-Options', 'nosniff');
+      newHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+      newHeaders.set('Permissions-Policy', 'interest-cohort=()');
+      newHeaders.set('Access-Control-Allow-Origin', '*');
 
-      - name: Publish to Cloudflare Workers
-        id: deploy
-        if: github.event_name != 'pull_request' && env.CLOUDFLARE_API_TOKEN != ''
-        uses: cloudflare/wrangler-action@v3
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --minify
+      if (!newHeaders.has('Cache-Control')) {
+        newHeaders.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+      }
 
-      - name: Cloudflare Deploy Fallback Log
-        if: env.CLOUDFLARE_API_TOKEN == ''
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          echo "Notice: Cloudflare secrets not configured in this environment. Step simulated for CI verification."
+      response = new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: newHeaders
+      });
 
-      - name: Attest Worker Deployment
-        if: github.event_name != 'pull_request' && steps.deploy.outputs.deployment-id != ''
-        continue-on-error: true
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-name: "cloudflare-worker"
-          subject-digest: ${{ steps.deploy.outputs.deployment-id }}
+      // 8. ASYNC CACHE WARMING
+      if (request.method === 'GET' && response.status === 200 && ctx) {
+        ctx.waitUntil(cache.put(cacheKey, response.clone()));
+      }
+    }
 
-      - name: Comment Deploy Preview on PR
-        if: github.event_name == 'pull_request'
-        continue-on-error: true
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## ⚡ H-FID Edge Deploy Preview
-            
-            **Dry-run successful** for Cloudflare Workers
-            
-            **Commit**: \`${context.sha}\`
-            **H-FID**: v1.2 Compliant
-            **SLSA**: Level 3
-            
-            Merge to \`main\` to deploy to production.`
-            })
-
-      - name: Upload Edge Attestation
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-edge-attestation
-          path: .hfid/edge/
-          retention-days: 90
+    return response;
+  }
+};
