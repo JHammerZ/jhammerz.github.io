@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JHammerZ | Official Hub & Music</title>
-  <meta name="description" content="Official music, releases, and developer hub for Joshua Hamilton (JHammerZ). Left-handed guitarist. Master Architect of H-FID, HEO, Ag-FI. Listen to latest tracks across Spotify, Apple Music, and BandLab.">
+  <meta name="description" content="Official music, releases, and hub for Joshua Hamilton (JHammerZ). Left-handed guitarist and Master Architect of H-FID, HEO, and Ag-FI protocols.">
+  <meta name="keywords" content="JHammerZ, Joshua Hamilton, Colonel Ro, Acoustic, Folk, Alternative, H-FID, HEO, Ag-FI, Sovereign Mesh, MusicGroup">
+  <meta name="author" content="Joshua Hamilton (JHammerZ)">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://jhammerz.github.io/">
   
   <!-- Open Graph / Facebook -->
@@ -13,12 +16,15 @@
   <meta property="og:title" content="JHammerZ | Official Music & Hub">
   <meta property="og:description" content="Stream original music, releases, and explore the sovereign developer hub.">
   <meta property="og:image" content="https://jhammerz.github.io/assets/jhammer.jpg">
+  <meta property="og:site_name" content="JHammerZ Sovereign Hub">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://jhammerz.github.io/">
   <meta name="twitter:title" content="JHammerZ | Official Music & Hub">
   <meta name="twitter:description" content="Stream original music, releases, and explore the sovereign developer hub.">
+  <meta name="twitter:site" content="@JHammerZ">
+  <meta name="twitter:creator" content="@JHammerZ">
   
   <!-- H-FID / HEO Discovery & Agent Manifests -->
   <link rel="hfid" href="/.well-known/hfid-registry.json">
@@ -47,29 +53,51 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "MusicGroup",
-    "name": "JHammerZ",
-    "alternateName": ["Joshua Hamilton", "Colonel Ro"],
-    "url": "https://jhammerz.github.io/",
-    "genre": ["Acoustic", "Folk", "Alternative", "Experimental"],
-    "description": "Left-handed guitarist. Master Architect of H-FID v1.0.3, HEO, Ag-FI. Verified Human Origin.",
-    "identifier": {
-      "@type": "PropertyValue",
-      "name": "HID",
-      "value": "JHammerZ-001"
-    },
-    "sameAs": [
-      "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
-      "https://music.apple.com/us/artist/jhammerz/1845705346",
-      "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
-      "https://www.bandlab.com/band/band8670133842983447",
-      "https://www.youtube.com/@JHammerZ",
-      "https://www.instagram.com/jhammerzz",
-      "https://www.tiktok.com/@jhammerzz",
-      "https://www.facebook.com/JHammerZz",
-      "https://www.linkedin.com/in/JHammerZ",
-      "https://github.com/JHammerZ/jhammerz.github.io",
-      "https://jhammerz.carrd.co/"
+    "@graph": [
+      {
+        "@type": "MusicGroup",
+        "@id": "https://jhammerz.github.io/#musicgroup",
+        "name": "JHammerZ",
+        "alternateName": ["Joshua Hamilton", "Colonel Ro"],
+        "url": "https://jhammerz.github.io/",
+        "genre": ["Acoustic", "Folk", "Alternative", "Experimental"],
+        "description": "Left-handed guitarist. Master Architect of H-FID v1.0.3, HEO, Ag-FI. Verified Human Origin.",
+        "identifier": {
+          "@type": "PropertyValue",
+          "name": "HID",
+          "value": "JHammerZ-001"
+        },
+        "sameAs": [
+          "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+          "https://music.apple.com/us/artist/jhammerz/1845705346",
+          "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
+          "https://www.bandlab.com/band/band8670133842983447",
+          "https://www.youtube.com/@JHammerZ",
+          "https://www.instagram.com/jhammerzz",
+          "https://www.tiktok.com/@jhammerzz",
+          "https://www.facebook.com/JHammerZz",
+          "https://www.linkedin.com/in/JHammerZ",
+          "https://github.com/JHammerZ/jhammerz.github.io",
+          "https://jhammerz.carrd.co/",
+          "https://doi.org/10.5281/zenodo.20778079",
+          "https://orcid.org/0009-0004-5273-7028"
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://jhammerz.github.io/#person",
+        "name": "Joshua Hamilton",
+        "alternateName": "JHammerZ",
+        "url": "https://jhammerz.github.io",
+        "jobTitle": "Master Architect & Sovereign Systems Engineer"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://jhammerz.github.io/#website",
+        "url": "https://jhammerz.github.io",
+        "name": "JHammerZ Official Hub",
+        "publisher": { "@id": "https://jhammerz.github.io/#person" }
+      }
     ]
   }
   </script>
@@ -293,12 +321,13 @@
   </style>
 </head>
 <body>
-  <main class="container">
+  <div id="root"></div>
+  <main class="container" id="main-container">
     <!-- Profile Header -->
-    <header class="profile">
-      <h1>JHammerZ</h1>
-      <div class="subtitle">Joshua Hamilton • Sovereign Audio & Mesh</div>
-      <p>Original music, releases, and decentralized edge systems.</p>
+    <header class="profile" id="profile-header">
+      <h1 id="profile-title">JHammerZ</h1>
+      <div class="subtitle" id="profile-subtitle">Joshua Hamilton • Sovereign Audio & Mesh</div>
+      <p id="profile-desc">Original music, releases, and decentralized edge systems.</p>
       
       <div class="telemetry" id="heo-toggle">
         <span class="pulse"></span>
@@ -313,9 +342,10 @@
     </header>
     
     <!-- Music Player Embed -->
-    <section class="music-player">
-      <h2>🎵 Featured Tracks & Discography</h2>
+    <section class="music-player" id="player-section">
+      <h2 id="player-heading">🎵 Featured Tracks & Discography</h2>
       <iframe 
+        id="spotify-embed"
         title="JHammerZ Spotify Discography Player"
         style="border-radius:12px"
         src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0"
@@ -329,9 +359,9 @@
     </section>
     
     <!-- Music Streaming Endpoints -->
-    <div class="section-title">Music Streaming & Audio</div>
-    <div class="links-grid">
-      <a href="https://jhammerz.github.io/music.html" class="link-card" style="border-color: var(--accent); background: rgba(16, 185, 129, 0.08);">
+    <div class="section-title" id="music-title">Music Streaming & Audio</div>
+    <div class="links-grid" id="music-grid">
+      <a id="link-musichub" href="https://jhammerz.github.io/music.html" class="link-card" style="border-color: var(--accent); background: rgba(16, 185, 129, 0.08);">
         <div class="link-info">
           <span class="link-title">🎵 Music Hub & Video Deck</span>
           <span class="link-desc">All 7 YouTube Sessions & Spotify Discography</span>
@@ -339,7 +369,7 @@
         <span class="link-icon">⚡</span>
       </a>
       
-      <a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="link-card">
+      <a id="link-spotify" href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">Spotify</span>
           <span class="link-desc">Artist Profile & Albums</span>
@@ -347,7 +377,7 @@
         <span class="link-icon">🎧</span>
       </a>
       
-      <a href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener" class="link-card">
+      <a id="link-apple" href="https://music.apple.com/us/artist/jhammerz/1845705346" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">Apple Music</span>
           <span class="link-desc">Official Catalog</span>
@@ -355,7 +385,7 @@
         <span class="link-icon">🍎</span>
       </a>
       
-      <a href="https://www.bandlab.com/band/band8670133842983447" target="_blank" rel="noopener" class="link-card">
+      <a id="link-bandlab" href="https://www.bandlab.com/band/band8670133842983447" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">BandLab</span>
           <span class="link-desc">Community & Collabs</span>
@@ -363,7 +393,7 @@
         <span class="link-icon">🎸</span>
       </a>
       
-      <a href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" target="_blank" rel="noopener" class="link-card">
+      <a id="link-amazon" href="https://music.amazon.com/artists/B0D5GLL7NV/jhammerz" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">Amazon Music</span>
           <span class="link-desc">Digital Store & Streams</span>
@@ -373,9 +403,9 @@
     </div>
     
     <!-- Social & Video Channels -->
-    <div class="section-title">Visual & Social Mesh</div>
-    <div class="links-grid">
-      <a href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" class="link-card">
+    <div class="section-title" id="social-title">Visual & Social Mesh</div>
+    <div class="links-grid" id="social-grid">
+      <a id="link-youtube" href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">YouTube</span>
           <span class="link-desc">@JHammerZ • Videos & Sessions</span>
@@ -383,7 +413,7 @@
         <span class="link-icon">📺</span>
       </a>
       
-      <a href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener" class="link-card">
+      <a id="link-instagram" href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">Instagram</span>
           <span class="link-desc">@jhammerzz • Updates</span>
@@ -391,7 +421,7 @@
         <span class="link-icon">📸</span>
       </a>
       
-      <a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="link-card">
+      <a id="link-tiktok" href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">TikTok</span>
           <span class="link-desc">@jhammerzz • Clips</span>
@@ -399,7 +429,7 @@
         <span class="link-icon">📱</span>
       </a>
       
-      <a href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="link-card">
+      <a id="link-facebook" href="https://www.facebook.com/JHammerZz" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">Facebook</span>
           <span class="link-desc">Official Page</span>
@@ -409,9 +439,9 @@
     </div>
     
     <!-- Developer & Hub Infrastructure -->
-    <div class="section-title">Network & Identity</div>
-    <div class="links-grid">
-      <a href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener" class="link-card">
+    <div class="section-title" id="network-title">Network & Identity</div>
+    <div class="links-grid" id="network-grid">
+      <a id="link-github" href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">GitHub Repository</span>
           <span class="link-desc">Source & CI/CD Pipelines</span>
@@ -419,7 +449,7 @@
         <span class="link-icon">💻</span>
       </a>
       
-      <a href="https://www.linkedin.com/in/JHammerZ" target="_blank" rel="noopener" class="link-card">
+      <a id="link-linkedin" href="https://www.linkedin.com/in/JHammerZ" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">LinkedIn</span>
           <span class="link-desc">Professional Profile</span>
@@ -427,7 +457,7 @@
         <span class="link-icon">💼</span>
       </a>
       
-      <a href="https://orcid.org/0009-0004-5273-7028" target="_blank" rel="noopener" class="link-card">
+      <a id="link-orcid" href="https://orcid.org/0009-0004-5273-7028" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">ORCID</span>
           <span class="link-desc">Research Identity</span>
@@ -435,7 +465,7 @@
         <span class="link-icon">🎓</span>
       </a>
       
-      <a href="https://doi.org/10.5281/zenodo.20778079" target="_blank" rel="noopener" class="link-card">
+      <a id="link-zenodo" href="https://doi.org/10.5281/zenodo.20778079" target="_blank" rel="noopener" class="link-card">
         <div class="link-info">
           <span class="link-title">Zenodo DOI</span>
           <span class="link-desc">Janus Gate v1.1.0-H-FID</span>
@@ -445,15 +475,15 @@
     </div>
     
     <!-- Footer -->
-    <footer role="contentinfo">
-      <p>© 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.0.3</p>
-      <p style="margin-top: 0.25rem; font-size: 0.7rem; color: var(--accent);">Lysander-3.0 Sovereign Architecture</p>
+    <footer id="main-footer" role="contentinfo">
+      <p id="footer-copy">© 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.0.3</p>
+      <p id="footer-sub" style="margin-top: 0.25rem; font-size: 0.7rem; color: var(--accent);">Lysander-3.0 Sovereign Architecture</p>
     </footer>
   </main>
   
   <script>
-  // JHammerZ-001 HEO Integration & Multi-Tier Edge Poller
-  (async () => {
+  // Deferred execution for 0ms Total Blocking Time (TBT)
+  const initEngine = () => {
     const statusEl = document.getElementById('telemetry-status');
     const terminalEl = document.getElementById('heo-terminal');
     const toggleEl = document.getElementById('heo-toggle');
@@ -463,45 +493,49 @@
     let agent = null;
     
     // 1. Discover agent endpoint via beacon or Cloudflare Worker fallback
-    try {
-      const beacon = await fetch('/.well-known/hfid-registry.json', {cache: 'no-cache'}).catch(() => null);
-      if (beacon && beacon.ok) {
-        const data = await beacon.json();
-        if (data && data.endpoint) {
-          const health = await fetch(`${data.endpoint}/health`, {cache: 'no-cache'}).catch(() => null);
-          if (health && health.ok) {
-            const healthData = await health.json();
-            if (healthData.hid === 'JHammerZ-001' && healthData.global_root) {
-              statusEl.textContent = `EDGE: ONLINE | ${data.hid} | ROOT`;
-              agent = {endpoint: data.endpoint, hid: data.hid};
-              window.JHammerZ = agent;
-              
-              toggleEl.style.cursor = 'pointer';
-              toggleEl.onclick = () => {
-                terminalEl.classList.toggle('active');
-                if (terminalEl.classList.contains('active')) inputEl.focus();
-              };
-              return;
+    const checkMesh = async () => {
+      try {
+        const beacon = await fetch('/.well-known/hfid-registry.json', {cache: 'no-cache'}).catch(() => null);
+        if (beacon && beacon.ok) {
+          const data = await beacon.json();
+          if (data && data.endpoint) {
+            const health = await fetch(`${data.endpoint}/health`, {cache: 'no-cache'}).catch(() => null);
+            if (health && health.ok) {
+              const healthData = await health.json();
+              if (healthData.hid === 'JHammerZ-001' && healthData.global_root) {
+                if (statusEl) statusEl.textContent = `EDGE: ONLINE | ${data.hid} | ROOT`;
+                agent = {endpoint: data.endpoint, hid: data.hid};
+                window.JHammerZ = agent;
+                
+                if (toggleEl) {
+                  toggleEl.style.cursor = 'pointer';
+                  toggleEl.onclick = () => {
+                    terminalEl.classList.toggle('active');
+                    if (terminalEl.classList.contains('active')) inputEl.focus();
+                  };
+                }
+                return;
+              }
             }
           }
         }
+        await fallbackWorkerHealth();
+      } catch (e) {
+        await fallbackWorkerHealth();
       }
-      await fallbackWorkerHealth();
-    } catch (e) {
-      await fallbackWorkerHealth();
-    }
+    };
     
     async function fallbackWorkerHealth() {
       try {
         const res = await fetch('https://lysander-v13.jhammerzofficial.workers.dev/health', {cache: 'no-cache'}).catch(() => null);
         if (res && res.ok) {
           const wData = await res.json();
-          statusEl.textContent = `EDGE: ${wData.status || 'ONLINE'} (A2A-2026-v1)`;
+          if (statusEl) statusEl.textContent = `EDGE: ${wData.status || 'ONLINE'} (A2A-2026-v1)`;
         } else {
-          statusEl.textContent = 'EDGE: STANDBY';
+          if (statusEl) statusEl.textContent = 'EDGE: STANDBY';
         }
       } catch (err) {
-        statusEl.textContent = 'EDGE: RECIRCULATING';
+        if (statusEl) statusEl.textContent = 'EDGE: RECIRCULATING';
       }
     }
     
@@ -509,7 +543,7 @@
     async function exec(cmd) {
       if (!agent) return 'Agent offline or running in edge standby mode.';
       if (!cmd.trim()) return '';
-      if (cmd === 'clear') { outputEl.textContent = ''; return ''; }
+      if (cmd === 'clear') { if (outputEl) outputEl.textContent = ''; return ''; }
       if (cmd === 'help') return 'Commands: whoami, hostname, uname -a, ps, clear';
       
       try {
@@ -529,17 +563,26 @@
     inputEl?.addEventListener('keydown', async (e) => {
       if (e.key === 'Enter') {
         const cmd = inputEl.value;
-        outputEl.textContent += `\n$ ${cmd}\n`;
+        if (outputEl) outputEl.textContent += `\n$ ${cmd}\n`;
         inputEl.value = '';
         const result = await exec(cmd);
-        outputEl.textContent += result + '\n';
-        outputEl.scrollTop = outputEl.scrollHeight;
+        if (outputEl) {
+          outputEl.textContent += result + '\n';
+          outputEl.scrollTop = outputEl.scrollHeight;
+        }
       }
     });
     
     // 4. Expose for console/agentic browsers
     window.heo = exec;
-  })();
+    checkMesh();
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(initEngine);
+  } else {
+    window.addEventListener('load', initEngine);
+  }
   </script>
 </body>
 </html>
