@@ -27,10 +27,6 @@ on:
         options: [honeypot, block, analyze, purge]
   push:
     branches: [ main ]
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
     paths:
       - '.hfid/lysander/**'
       - '.github/workflows/lysander-defense.yml'

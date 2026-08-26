@@ -158,6 +158,6 @@ jobs:
 
           git add .hfid/ledger/
           if ! git diff --staged --quiet; then
-            git commit -m "[skip ci] H-FID Forensic Ledger: ${{ steps.archive.outputs.archive_name }} | SHA256: ${{ steps.archive.outputs.archive_hash }} | Bitcoin Anchored | SLSA Level 3"
+            git commit -m "H-FID Forensic Ledger: ${{ steps.archive.outputs.archive_name }} | SHA256: ${{ steps.archive.outputs.archive_hash }} | Bitcoin Anchored | SLSA Level 3"
             git push origin HEAD:main || true
           fi

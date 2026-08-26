@@ -1,8 +1,4 @@
 name: H-FID Verify | Lysander 3.1 Bot Purge
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -20,10 +16,6 @@ jobs:
           fetch-depth: 0
           
       - name: Run Lysander Bot Purge
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: |
           set -e
           mkdir -p .hfid/results
@@ -33,5 +25,5 @@ concurrency:
           git config user.name "Lysander-Bot"
           git config user.email "lysander@jhammerz.github.io"
           git add .hfid/results/
-          git commit -m "[skip ci] hfid: Human-Verified $TIMESTAMP" || echo "No changes to commit"
+          git commit -m "hfid: Human-Verified $TIMESTAMP" || echo "No changes to commit"
           git push

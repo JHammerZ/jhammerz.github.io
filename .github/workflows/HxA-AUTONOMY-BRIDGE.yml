@@ -18,10 +18,6 @@ concurrency:
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
     paths:
       - 'docs/**'
       - '**/*.md'

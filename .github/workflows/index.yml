@@ -29,10 +29,6 @@ on:
         type: boolean
   push:
     branches: [main]
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
     paths:
       - 'public/**' # ONLY when public content changes
       - 'sitemap.xml' # ONLY when sitemap updates

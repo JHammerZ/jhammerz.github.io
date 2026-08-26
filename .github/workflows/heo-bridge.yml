@@ -18,10 +18,6 @@ concurrency:
 on:
   push:
     branches:
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
       - main
     paths:
       - '.hfid/**'
@@ -130,7 +126,7 @@ jobs:
           git config --global user.email "bridge@jhammerz.io"
           git add .hfid/heo-bridge/payload.json .hfid/heo-bridge/payload.json.ots || true
           if ! git diff --staged --quiet; then
-            git commit -m "[skip ci] H-FID HEO Bridge: Sovereign Attestation | ${{ steps.payload.outputs.payload_hash }} | Twenty 47"
+            git commit -m "H-FID HEO Bridge: Sovereign Attestation | ${{ steps.payload.outputs.payload_hash }} | Twenty 47"
             git push origin HEAD:main || true
           else
             echo "Nothing to commit"

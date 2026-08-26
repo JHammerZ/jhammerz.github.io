@@ -20,10 +20,6 @@ on:
     - cron: '0 0 * * *' # Daily midnight UTC
   push:
     branches:
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
       - main
     paths:
       - 'zenodo.json'
@@ -139,7 +135,7 @@ jobs:
       - name: Commit Janus Gate Sync
         run: |
           if ! git diff --cached --quiet; then
-            git commit -m "[skip ci] DOI PROVENANCE LINK [${{ github.sha }}]: Syncing OpenTimestamps Proofs"
+            git commit -m "DOI PROVENANCE LINK [${{ github.sha }}]: Syncing OpenTimestamps Proofs"
             git fetch origin main
             git rebase origin/main
             git push origin HEAD:main --force

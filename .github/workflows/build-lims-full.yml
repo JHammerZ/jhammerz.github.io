@@ -14,18 +14,10 @@ name: "H-FID - Compile Core Data Repository"
 on:
   push:
     branches:
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
       - main
   workflow_dispatch:
   pull_request:
     branches:
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
       - main
 
 concurrency:

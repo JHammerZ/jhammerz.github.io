@@ -21,10 +21,6 @@ on:
     - cron: '0 12 * * *'
   push:
     branches:
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
       - main
     paths:
       - '.well-known/**'
@@ -162,7 +158,7 @@ jobs:
           
           git add .hfid/index-nodes/manifest.json .hfid/index-nodes/manifest.json.ots || true
           if ! git diff --staged --quiet; then
-            git commit -m "[skip ci] H-FID FORCE_INDEX_NODES: ${{ steps.manifest.outputs.index_hash }} | SLSA 3 | Bitcoin Anchored"
+            git commit -m "H-FID FORCE_INDEX_NODES: ${{ steps.manifest.outputs.index_hash }} | SLSA 3 | Bitcoin Anchored"
             git push origin HEAD:main || true
           else
             echo "Index nodes attestation clean: nothing to commit."

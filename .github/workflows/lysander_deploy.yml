@@ -183,7 +183,7 @@ jobs:
           fi
 
           git add -A
-          git commit -m "[skip ci] feat(lysander): Sovereign Evolution ${{ github.event.inputs.sequence }}" \
+          git commit -m "feat(lysander): Sovereign Evolution ${{ github.event.inputs.sequence }}" \
                      -m "H-FID v1.2 Compliant" \
                      -m "SLSA: Level 3" \
                      -m "Hash: ${{ steps.manifest.outputs.hash }}"

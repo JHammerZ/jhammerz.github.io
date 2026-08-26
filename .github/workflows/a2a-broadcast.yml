@@ -1,18 +1,10 @@
 name: A2A Global Broadcast | H-FID Sovereign Signal
 
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
-
 on:
   schedule:
     - cron: '0 * * * *' # Hourly for <30s workflows
   push:
     branches: [ main ]
-    paths-ignore:
-      - ".hfid/**"
-      - "sovereign-manifest.json"
-      - "lines-full.txt"
     paths:
       - 'index.html'
       - 'music.html'
@@ -26,24 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         uses: actions/checkout@v4
 
       - name: Install jq
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Ping Bing
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: |
           set -e
           echo "Pinging Bing with sitemap..."
@@ -51,10 +31,6 @@ concurrency:
             "https://www.bing.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
 
       - name: IndexNow Submit
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: |
           set -e
           echo "Submitting to IndexNow..."
@@ -69,10 +45,6 @@ concurrency:
             -w "IndexNow Status: %{http_code}\n"
 
       - name: WebSub Ping for AI Crawlers
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: |
           set -e
           echo "Pinging WebSub hub..."
@@ -81,10 +53,6 @@ concurrency:
             -w "WebSub Status: %{http_code}\n"
 
       - name: Google Ping
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: |
           set -e
           echo "Pinging Google..."
@@ -92,10 +60,6 @@ concurrency:
             "https://www.google.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml"
 
       - name: Warm GitHub Pages CDN
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: |
           set -e
           echo "Warming CDN cache..."
@@ -115,10 +79,6 @@ concurrency:
           done
 
       - name: OpenGraph Validator Ping
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: |
           set -e
           echo "Triggering Facebook/LinkedIn scrapers..."
@@ -131,10 +91,6 @@ concurrency:
             -o /dev/null -w "LinkedIn Status: %{http_code}\n" || echo "LinkedIn scrape skipped"
 
       - name: Broadcast Summary
-
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
         run: |
           echo "=== H-FID SOVEREIGN SIGNAL BROADCAST COMPLETE ==="
           echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
