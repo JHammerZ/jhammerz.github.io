@@ -7,9 +7,9 @@
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER: 300% | SYNC_VELOCITY: <100ms
-# SLSA Level: 3 | Tierney 47 Protocol: Edge CI/CD
+# SLSA Level: 3 | Treaty 47 Protocol | Edge CI/CD
 
-name: "CI: Cloudflare Workers Deploy"
+name: 'CI: Cloudflare Workers Deploy'
 
 concurrency:
   group: cloudflare-deploy-${{ github.ref }}
@@ -21,13 +21,7 @@ on:
     paths:
       - 'wrangler.toml'
       - 'worker.js'
-      - 'index.html'
-      - 'music.html'
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/**'
-      - '!.hfid/**'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches: [ "main" ]
     paths:
@@ -76,8 +70,8 @@ jobs:
 
       - name: Generate H-FID Edge Attestation
         run: |
-          mkdir -p .hfid/edge
-          cat > .hfid/edge/deploy.json << 'EOF'
+          mkdir -p.hfid/edge
+          cat >.hfid/edge/deploy.json << "EOF"
           {
             "workflow": "ci",
             "target": "cloudflare-workers",
@@ -93,7 +87,7 @@ jobs:
 
       - name: Publish to Cloudflare Workers
         id: deploy
-        if: github.event_name != 'pull_request'
+        if: github.event_name!= 'pull_request'
         run: wrangler deploy --minify --compatibility-date=2026-08-24
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -108,7 +102,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## H-FID Edge Deploy Preview 
+              body: `## ✅ H-FID Edge Deploy Preview
               
               **Dry-run successful** for Cloudflare Workers
               
@@ -124,5 +118,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hfid-edge-attestation
-          path: .hfid/edge/
+          path:.hfid/edge/
           retention-days: 90
