@@ -1,48 +1,6 @@
 name = "lysander-v13"
 main = "worker.js"
-compatibility_date = "2026-08-24"
-compatibility_flags = ["nodejs_compat"]
-account_id = "8e06551602ff1c209d467f7bcc770b6d"
+compatibility_date = "2026-08-01"
 
-[vars]
-ENVIRONMENT = "production"
-SOVEREIGN_HID = "JHammerZ-001"
-GEO_RANK = "ONE_OF_ONE"
-PROTOCOL = "Twenty_47"
-REACH_MULTIPLIER = "300%"
-SYNC_VELOCITY = "<100ms"
-
-# Sovereign KV State Ledger
-kv_namespaces = [
-  { binding = "AGENT_STATE_LEDGER", id = "106ec5c22ff44bdea0e5a4b3049efb86" }
-]
-
-# Workers AI Free-Tier Binding
-[ai]
-binding = "AI"
-
-# Durable Objects - THIS WAS MISSING
-[[durable_objects.bindings]]
-name = "AGENT"
-class_name = "Agent"
-
-# Migrations: Purge old DO classes + add Agent
-[[migrations]]
-tag = "v1"
-new_classes = ["W4Room"]
-
-[[migrations]]
-tag = "v2"
-deleted_classes = ["W4Room"]
-
-[[migrations]]
-tag = "v3"
-new_sqlite_classes = ["om"]
-
-[[migrations]]
-tag = "v4"
-deleted_classes = ["om"]
-
-[[migrations]]
-tag = "v5"
-new_classes = ["Agent"]
+[env.production]
+workers_dev = true
