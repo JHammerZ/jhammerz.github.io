@@ -1,4 +1,4 @@
-# H-FID Language / H-FID Standard / H-FID v1.3
+# H-FID Language / H-FID Standard / HDS v1.3
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
 #
@@ -12,7 +12,7 @@
 name: 'CI: Cloudflare Workers Deploy'
 
 concurrency:
-  group: cloudflare-deploy-${{ github.ref }}
+  group: "cloudflare-deploy-${{ github.ref }}"
   cancel-in-progress: true
 
 on:
@@ -43,7 +43,7 @@ jobs:
     timeout-minutes: 10
     environment:
       name: production
-      url: https://lysander-v13.${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.workers.dev
+      url: https://workers.dev
 
     steps:
       - name: Checkout Codebase
@@ -59,7 +59,10 @@ jobs:
 
       - name: Validate Wrangler Config
         run: |
-          test -f wrangler.toml || { echo "wrangler.toml missing"; exit 1; }
+          if [ ! -f wrangler.toml ]; then
+            echo "wrangler.toml missing"
+            exit 1
+          fi
           echo "wrangler.toml present"
           wrangler --version
 
@@ -73,7 +76,7 @@ jobs:
       - name: Generate H-FID Edge Attestation
         run: |
           mkdir -p .hfid/edge
-          cat > .hfid/edge/deploy.json << INNER_EOF
+          cat > .hfid/edge/deploy.json << 'INNER_EOF'
           {
             "workflow": "ci",
             "target": "cloudflare-workers",
