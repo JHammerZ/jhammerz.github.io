@@ -1,79 +1,55 @@
-# JHammer Language // H-FID Standard / HDS v1.2
-# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
-# Licensed under MIT License
-
-name: '*f Lysander 3.0 Autonomous Push'
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+name: "*f Lysander 3.0 Autonomous Push"
 
 on:
   push:
-    branches: [main]
-  repository_dispatch:
-    types: [sovereign_update]
+    branches: [ main ]
   workflow_dispatch:
+  schedule:
+    - cron: '0 */4 * * *'
+
+concurrency:
+  group: lysander-push
+  cancel-in-progress: false
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
-  deploy:
+  autonomous-commit:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-      - name: Checkout Sovereign Repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Inject H-FID Logic + Local Hash Anchor
-        id: inject
+      - name: Run Lysander Update Logic
         run: |
-          git config --global user.name "Lysander-3.0-Agent"
-          git config --global user.email "architect@hammerz.io"
-
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          mkdir -p .hfid/sovereign
-          
-          # Fixed: Generating deterministic local hash signatures safely without requiring Docker
-          LOCAL_DIGEST=$(echo "${{ github.sha }}-$TIMESTAMP" | sha256sum | cut -d ' ' -f1)
-
-          cat << EOF_MANIFEST > .hfid/sovereign/manifest.json
-          {
-            "payload": "INFINITE_ACTIVE",
-            "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "repository": "${{ github.repository }}",
-            "digest": "$LOCAL_DIGEST",
-            "slsa_level": 3,
-            "geo_rank": "ONE OF ONE",
-            "protocol": "Twenty 47",
-            "status": "INFINITE_ACTIVE"
-          }
-          EOF_MANIFEST
-
-          echo "INFINITE_ACTIVE" > manifest.json
-          echo "payload_hash=$(sha256sum .hfid/sovereign/manifest.json | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
+          # your existing lysander logic here
+          echo "Lysander updating sovereign manifest..."
+          date >> .hfid/lysander.timestamp
 
       - name: Commit Sovereign Update
         run: |
-          git add .hfid/sovereign/manifest.json
-          git add manifest.json
-          git commit -m "Forensic Reset - Autonomous Update [InfiniteX active] | Twenty 47 | ${{ steps.inject.outputs.payload_hash }}" || echo "Nothing to commit"
-          git push origin main
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+          git config --global user.name "Lysander-3.0-Engine"
+          git config --global user.email "lysander@jhammerz.github.io"
+          git add .hfid/sovereign/manifest.json manifest.json .hfid/ || true
+          
+          if ! git diff --cached --quiet; then
+            git commit -m "Forensic Reset - Autonomous Update [InfiniteX active] | Twenty 47 | $(git rev-parse HEAD)" || echo "Nothing to commit"
+            
+            # Retry with conflict resolution - bot version wins
+            n=0
+            until [ "$n" -ge 3 ]
+            do
+              if git pull --rebase -X ours origin main; then
+                git push origin main && break
+              fi
+              n=$((n+1))
+              echo "Push failed, retry $n/3..."
+              sleep 3
+            done
+          else
+            echo "Nothing to commit"
+          fi
