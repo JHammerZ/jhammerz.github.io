@@ -13,4 +13,26 @@ permissions:
   attestations: write
   issues: write
 
-#... rest of your existing workflow...
+jobs:
+  restitution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run H-FID restitution check
+        run: |
+          echo "Running restitution scan..."
+          # Add your actual restitution commands here
+          # Example: npm run restitution || python scripts/restitution.py
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'H-FID Restitution Failed',
+              body: 'Restitution workflow failed on commit ${{ github.sha }}'
+            })
