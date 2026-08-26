@@ -1,0 +1,13 @@
+{
+  "workflow": "sitemap-indexnow",
+  "sha": "44395c30cafe45823b6bf1dbc39b3b4a4dfa4bd3",
+  "timestamp": "2026-08-26T19:50:20Z",
+  "hfid_version": "v1.2",
+  "sovereign_author": "Joshua Hamilton",
+  "sitemap": {
+    "url_count": 14,
+    "sha256": "f15716cf7a9d8df9ccfe31e2c4f88f70c873420f7ecb3a89f092016824a29346"
+  },
+  "slsa_level": 3,
+  "geo_rank": "ONE_OF_ONE"
+}
