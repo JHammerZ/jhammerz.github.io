@@ -1,0 +1,10 @@
+name = "lysander-v13"
+main = "index.js"
+compatibility_date = "2026-08-26"
+
+[[kv_namespaces]]
+binding = "HEO_CACHE"
+id = "PASTE_THE_REAL_UUID_HERE"
+
+[vars]
+GEO_RANK = "ONE_OF_ONE"
