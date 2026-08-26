@@ -1,4 +1,18 @@
-name = "lysander-v13"
-main = "worker.js"
-compatibility_date = "2026-08-01"
-workers_dev = true
+name = "jhammerz-site"
+compatibility_date = "2026-08-26"
+main = "dist/server.cjs"
+
+[build]
+command = "npm run build"
+
+# DISABLED: Durable Objects causing deploy failures
+# If a worker actually needs DOs, uncomment + export the class in that worker's entrypoint
+# [[durable_objects.bindings]]
+# name = "LYSA"
+# class_name = "LysanderDO"
+# 
+# [[migrations]]
+# tag = "v1" 
+# new_classes = ["LysanderDO"]
+
+[env.production]
