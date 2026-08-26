@@ -1,21 +1,21 @@
-# W-Law Language / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
+# H-Law Language / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
 
 name: "H-FID - Compile Core Data Repository"
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
+  schedule:
+    - cron: '0 */6 * * *'  # Auto-run every 6 hours
 
 concurrency:
   group: h-fid-compile
-  cancel-in-progress: true
+  cancel-in-progress: false  # Don't cancel. Queue instead.
 
 permissions:
   contents: write
@@ -38,7 +38,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install System Dependencies
         run: |
@@ -53,14 +53,14 @@ jobs:
       - name: Initialize JSON Core Matrices
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
-          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Protocol":"Twenty AI7 Protocol","H-FID Version":"v1.1"}' > .hfid/baseline/sovereign-manifest.json
+          echo '{"Name":"JHammerZ","Sovereign":"Joshua Hamilton","H-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-100","Universe":"ONE","Velocity":"<100ms","Protocol":"Treaty A17 Protocol","H-FID Version":"v1.7"}' > .hfid/baseline/sovereign-manifest.json
 
       - name: Extract URLs From Sitemap
         run: |
           set -euo pipefail
           mkdir -p .hfid/indexing
-          if [ -f "sitemap.xml" ]; then
-            grep -oPm1 '(?<=<loc>)[^<]+' sitemap.xml > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
+          if [ -f sitemap.xml ]; then
+            grep -oP '(?<=<loc>).*?(?=</loc>)' sitemap.xml > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           else
             echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           fi
@@ -71,38 +71,37 @@ jobs:
           GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           set -euo pipefail
-          if [ -z "$GOOGLE_API_KEY_DATA" ]; then
+          if [ -z "${GOOGLE_API_KEY_DATA:-}" ]; then
             echo "⚠️ Google Indexing skipped: GOOGLE_API_KEY secret is not configured in repository secrets."
             exit 0
           fi
           echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
-
-          python - << 'PY_EOF'
+          python << 'PY_EOF'
           import os, json
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
-
+          
           try:
               with open('.the-google-creds.json', 'r') as f:
                   creds_data = json.load(f)
           except Exception as e:
-              print(f"error::JSON parse failure: {e}")
+              print(f"Error: JSON parse failure: {e}")
               exit(0)
-
+          
           try:
               credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://www.googleapis.com/auth/indexing'])
               service = build('indexing', 'v3', credentials=credentials)
           except Exception as e:
-              print(f"error::Auth handshake failed: {e}")
+              print(f"Error: Auth handshake failed: {e}")
               exit(0)
-
+          
           url_list = []
           if os.path.exists('.hfid/indexing/urls.txt'):
               with open('.hfid/indexing/urls.txt', 'r') as f:
-                  url_list = [line.strip() for line in if line.strip()]
+                  url_list = [line.strip() for line in f if line.strip()]
           if not url_list:
               url_list = ['https://jhammerz.github.io']
-
+          
           for target_url in url_list:
               print(f"Publishing indexing request for: {target_url}")
               body = {'url': target_url, 'type': 'URL_UPDATED'}
@@ -118,14 +117,14 @@ jobs:
         run: |
           set -euo pipefail
           echo "Extracting upstream forensic matrices..."
-          jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
-          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
+          jq -c . .hfid/baseline/sovereign-manifest.json > /dev/null
+          echo "# JHammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
 
       - name: Bitcoin Anchor Assets
         continue-on-error: true
         run: |
           set -euo pipefail
-          if command -v ots &> /dev/null; then
+          if command -v ots &>/dev/null; then
             ots stamp .hfid/baseline/sovereign-manifest.json || true
           fi
 
@@ -139,10 +138,28 @@ jobs:
         run: |
           git config --global user.name "JHammerZ-Sovereign-Engine"
           git config --global user.email "engine@jhammerz.github.io"
-          git add .hfid/baseline/* .hfid/indexing/* sovereign-manifest.json lines-full.txt || true
+          git add .hfid/baseline/ .hfid/indexing/ sovereign-manifest.json lines-full.txt || true
+          
           if ! git diff --cached --quiet; then
-            git commit -m "MANIFEST MUTATION [V4.0.28]: Production Baseline Lock Sync"
-            git push origin HEAD:main --force
+            git commit -m "chore(h-fid): MANIFEST MUTATION [skip ci]" \
+              -m "H-FID v1.7 Compliant" \
+              -m "→ Production Baseline Lock Sync" \
+              -m "→ GEO_RANK: ONE_OF_ONE"
+            
+            # Retry push up to 3 times to handle race conditions
+            n=0
+            until [ "$n" -ge 3 ]
+            do
+              git pull --rebase origin main && git push origin main && break
+              n=$((n+1))
+              echo "Push failed, retry $n/3..."
+              sleep 3
+            done
+            
+            if [ "$n" -ge 3 ]; then
+              echo "❌ Failed to push after 3 retries"
+              exit 1
+            fi
           else
             echo "No changes to commit."
           fi
@@ -156,3 +173,4 @@ jobs:
             .hfid/baseline/
             .hfid/indexing/
             lines-full.txt
+          retention-days: 90
