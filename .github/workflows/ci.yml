@@ -5,9 +5,9 @@
 # Sovereign Author: Joshua Hamilton
 # First Commit: (February 12, 2010)
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER: 300% | SYNC_VELOCITY: <100ms
 # SLSA Level: 3 | Treaty 47 Protocol | Edge CI/CD
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
 
 name: 'CI: Cloudflare Workers Deploy'
 
@@ -22,6 +22,7 @@ on:
       - 'wrangler.toml'
       - 'worker.js'
       - '.github/workflows/ci.yml'
+      - 'src/**'
   pull_request:
     branches: [ "main" ]
     paths:
@@ -43,6 +44,7 @@ jobs:
     environment:
       name: production
       url: https://lysander-v13.${{ secrets.CLOUDFLARE_ACCOUNT_ID }}.workers.dev
+
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
@@ -57,8 +59,8 @@ jobs:
 
       - name: Validate Wrangler Config
         run: |
-          test -f wrangler.toml || { echo "❌ wrangler.toml missing"; exit 1; }
-          echo "✅ wrangler.toml present"
+          test -f wrangler.toml || { echo "wrangler.toml missing"; exit 1; }
+          echo "wrangler.toml present"
           wrangler --version
 
       - name: Dry Run Deploy on PR
@@ -70,24 +72,23 @@ jobs:
 
       - name: Generate H-FID Edge Attestation
         run: |
-          mkdir -p.hfid/edge
-          cat >.hfid/edge/deploy.json << "EOF"
+          mkdir -p .hfid/edge
+          cat > .hfid/edge/deploy.json << INNER_EOF
           {
             "workflow": "ci",
             "target": "cloudflare-workers",
             "sha": "${{ github.sha }}",
             "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "hfid_version": "v1.3",
             "sovereign_author": "Joshua Hamilton",
+            "hfid_version": "v1.3",
             "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
             "slsa_level": 3,
             "event": "${{ github.event_name }}"
           }
-          EOF
+          INNER_EOF
 
       - name: Publish to Cloudflare Workers
-        id: deploy
-        if: github.event_name!= 'pull_request'
+        if: github.event_name != 'pull_request'
         run: wrangler deploy --minify --compatibility-date=2026-08-24
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -107,8 +108,8 @@ jobs:
               **Dry-run successful** for Cloudflare Workers
               
               **Commit:** \`${{ github.sha }}\`
-              **H-FID:** v1.3 Compliant
               **SLSA:** Level 3
+              **H-FID:** v1.3 Compliant
               
               Merge to \`main\` to deploy to production.`
             })
@@ -118,5 +119,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hfid-edge-attestation
-          path:.hfid/edge/
+          path: .hfid/edge/
           retention-days: 90
