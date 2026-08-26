@@ -16,6 +16,10 @@ concurrency:
   cancel-in-progress: false # Never interrupt forensic investigation
 
 on:
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
   schedule:
     - cron: '0 */6 * * *' # Every 6 hours
   workflow_dispatch:
