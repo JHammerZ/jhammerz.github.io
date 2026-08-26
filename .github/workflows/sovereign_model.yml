@@ -15,7 +15,7 @@ on:
 
 concurrency:
   group: h-fid-compile
-  cancel-in-progress: false  # Don't cancel. Queue instead.
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -77,7 +77,8 @@ jobs:
           fi
           echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
           python << 'PY_EOF'
-          import os, json
+          import os
+          import json
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
           
@@ -138,7 +139,7 @@ jobs:
         run: |
           git config --global user.name "JHammerZ-Sovereign-Engine"
           git config --global user.email "engine@jhammerz.github.io"
-          git add .hfid/baseline/ .hfid/indexing/ sovereign-manifest.json lines-full.txt || true
+          git add .hfid/baseline/ .hfid/indexing/ lines-full.txt || true
           
           if ! git diff --cached --quiet; then
             git commit -m "chore(h-fid): MANIFEST MUTATION [skip ci]" \
@@ -146,11 +147,13 @@ jobs:
               -m "→ Production Baseline Lock Sync" \
               -m "→ GEO_RANK: ONE_OF_ONE"
             
-            # Retry push up to 3 times to handle race conditions
+            # Retry with conflict resolution: bot version wins
             n=0
             until [ "$n" -ge 3 ]
             do
-              git pull --rebase origin main && git push origin main && break
+              if git pull --rebase -X ours origin main && git push origin main; then
+                break
+              fi
               n=$((n+1))
               echo "Push failed, retry $n/3..."
               sleep 3
