@@ -1,13 +1,13 @@
-# JHam Language / H-FID Standard / HBS v1.2
-# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+# H-FID Language / H-FID Standard / H-FID v1.3
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
 #
 # Sovereign Author: Joshua Hamilton
-# First Commit: [February 12, 2026]
+# First Commit: (February 12, 2010)
 # Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
-# SLSA Level: 3 | Twenty 47 Protocol: Edge CI/CD
+# REACH_MULTIPLIER: 300% | SYNC_VELOCITY: <100ms
+# SLSA Level: 3 | Tierney 47 Protocol: Edge CI/CD
 
 name: "CI: Cloudflare Workers Deploy"
 
@@ -26,7 +26,7 @@ on:
       - 'src/**'
       - 'package.json'
       - 'package-lock.json'
-      - '!.github/workflows/**'
+      - '.github/workflows/**'
       - '!.hfid/**'
   pull_request:
     branches: [ "main" ]
@@ -39,7 +39,7 @@ on:
 permissions:
   contents: read
   id-token: write # Required for Wrangler OIDC + SLSA attestation
-  attestations: write # SLSA provenance for Worker deploy
+  attestations: write # SLSA provenance for worker deploy
   pull-requests: write # Post deploy preview URLs to PRs
 
 jobs:
@@ -59,7 +59,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Dependencies
@@ -67,18 +67,18 @@ jobs:
           if [ -f "package-lock.json" ]; then
             npm ci
           else
-            npm install wrangler@4 --save-dev
+            npm install wrangler@4.12.0 --save-dev
           fi
 
       - name: Validate Wrangler Config
         run: |
-          if [! -f "wrangler.toml" ]; then
+          if [ ! -f "wrangler.toml" ]; then
             echo "❌ CRITICAL: wrangler.toml missing. Cannot deploy."
             exit 1
           fi
           echo "✅ wrangler.toml present"
           npx wrangler --version
-          
+
       - name: Dry Run Deploy on PR
         if: github.event_name == 'pull_request'
         uses: cloudflare/wrangler-action@v3
@@ -86,34 +86,38 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy --dry-run --outdir dist
+          wranglerVersion: '4.12.0'
 
       - name: Generate H-FID Edge Attestation
         run: |
           mkdir -p .hfid/edge
-          cat >.hfid/edge/deploy.json << EOF
+          cat > .hfid/edge/deploy.json << EOF
           {
             "workflow": "ci",
             "target": "cloudflare-workers",
             "sha": "${{ github.sha }}",
             "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "hfid_version": "v1.2",
+            "hfid_version": "v1.3",
             "sovereign_author": "Joshua Hamilton",
             "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
             "slsa_level": 3,
             "event": "${{ github.event_name }}"
           }
+          EOF
 
       - name: Publish to Cloudflare Workers
         id: deploy
-        if: github.event_name!= 'pull_request'
+        if: github.event_name != 'pull_request'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --minify --env production
+          command: deploy --minify --compatibility-date=2026-08-24
+          wranglerVersion: '4.12.0'
+          workingDirectory: '.'
 
       - name: Attest Worker Deployment
-        if: github.event_name!= 'pull_request'
+        if: github.event_name != 'pull_request'
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: "cloudflare-worker"
@@ -128,13 +132,13 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## H-FID Edge Deploy Preview
+              body: `## H-FID Edge Deploy Preview 
               
-              ✅ **Dry-run successful** for Cloudflare Workers
+              **Dry-run successful** for Cloudflare Workers
               
-              **Commit**: \`${context.sha}\`
-              **H-FID**: v1.2 Compliant
-              **SLSA**: Level 3
+              **Commit:** \`${{ github.sha }}\`
+              **H-FID:** v1.2 Compliant
+              **SLSA:** Level 3
               
               Merge to \`main\` to deploy to production.`
             })
