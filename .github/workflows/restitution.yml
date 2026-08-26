@@ -17,6 +17,7 @@ concurrency:
 
 on:
 permissions:
+  issues: write # To file DMCA/restitution claims
   contents: read
   id-token: write
   attestations: write
@@ -36,6 +37,7 @@ permissions:
       - '.well-known/hfid/**'
 
 permissions:
+  issues: write # To file DMCA/restitution claims
   contents: read
   id-token: write # For SLSA attestation
   issues: write # To file DMCA/restitution claims
