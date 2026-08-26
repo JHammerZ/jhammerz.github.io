@@ -1,4 +1,3 @@
-name = "jhammerz-site"
 compatibility_date = "2026-08-26"
 main = "dist/server.cjs"
 
@@ -7,12 +6,6 @@ command = "npm run build"
 
 # DISABLED: Durable Objects causing deploy failures
 # If a worker actually needs DOs, uncomment + export the class in that worker's entrypoint
-# [[durable_objects.bindings]]
-# name = "LYSA"
-# class_name = "LysanderDO"
 # 
-# [[migrations]]
-# tag = "v1" 
-# new_classes = ["LysanderDO"]
 
 [env.production]
