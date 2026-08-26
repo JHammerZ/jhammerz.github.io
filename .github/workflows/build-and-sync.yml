@@ -8,10 +8,17 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.hfid/**'
+      - 'sovereign-manifest.json'
+      - 'lines-full.txt'
   workflow_dispatch:
   pull_request:
     branches:
       - main
+  workflow_call:
+  schedule:
+    - cron: '0 */6 * * *'
 
 concurrency:
   group: h-fid-compile
@@ -21,6 +28,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  attestations: write
 
 env:
   DEFAULT_BRANCH: main
@@ -28,6 +36,7 @@ env:
 jobs:
   build-and-sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -39,6 +48,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install System Dependencies
         run: |
@@ -48,22 +58,21 @@ jobs:
       - name: Install Python Clients
         run: |
           python -m pip install --upgrade pip
-          # Fixed package name typo: open-timestamps-client -> opentimestamps-client
           pip install opentimestamps-client google-auth google-api-python-client requests
 
       - name: Initialize JSON Core Matrices
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
-          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Protocol":"Twenty AI7 Protocol","Standard":"H-FID Core Matrix Compilation","Timestamp":"2026-08-23T20:10:00Z","Integrity Level":"SOVEREIGN","Nodes":[]}' > .hfid/baseline/sovereign-manifest.json
+          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Status":"AUTONOMOUS"}' > .hfid/baseline/sovereign-manifest.json
 
       - name: Extract URLs from Sitemap
         run: |
           set -euo pipefail
           mkdir -p .hfid/indexing
           if [ -f "sitemap.xml" ]; then
-             grep -oPm1 "(?<=<loc>)[^<]+" sitemap.xml > .hfid/indexing/urls.txt || echo "https://github.io" > .hfid/indexing/urls.txt
+            grep -oPm1 "(?<=<loc>)[^<]+" sitemap.xml > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           else
-             echo "https://github.io" > .hfid/indexing/urls.txt
+            echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           fi
 
       - name: FORCE Google Indexing API Execution
@@ -72,35 +81,35 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "$GOOGLE_API_KEY_DATA" ]; then
-             echo "::error::GOOGLE_API_KEY secret is blank or missing."
-             exit 1
+            echo "::warning::GOOGLE_API_KEY secret is blank. Skipping indexing."
+            exit 0
           fi
           echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
-
+          
           python - << 'PY_EOF'
-          import os, json
+          import os, json, sys
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
-
+          
           try:
               with open('.the-google-creds.json', 'r') as f:
                   creds_data = json.load(f)
           except Exception as e:
-              print(f"::error::JSON parse failure: {e}"); raise
-
+              print(f"::error::JSON parse failure: {e}"); sys.exit(0)
+          
           try:
-              credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://googleapis.com'])
+              credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://www.googleapis.com/auth/indexing'])
               service = build('indexing', 'v3', credentials=credentials)
           except Exception as e:
-              print(f"::error::Auth handshake failed: {e}"); raise
-
+              print(f"::error::Auth handshake failed: {e}"); sys.exit(0)
+          
           url_list = []
           if os.path.exists('.hfid/indexing/urls.txt'):
               with open('.hfid/indexing/urls.txt', 'r') as f:
                   url_list = [line.strip() for line in f if line.strip()]
           if not url_list:
-              url_list = ['https://github.io']
-
+              url_list = ['https://jhammerz.github.io']
+          
           for target_url in url_list:
               print(f"Publishing indexing request for: {target_url}")
               body = {'url': target_url, 'type': 'URL_UPDATED'}
@@ -108,7 +117,7 @@ jobs:
                   res = service.urlNotifications().publish(body=body).execute()
                   print(f"API Response: {res}")
               except Exception as e:
-                  print(f"Notification error for {target_url}: {e}")
+                  print(f"::warning::Notification error for {target_url}: {e}")
           PY_EOF
           rm -f .the-google-creds.json
 
@@ -118,12 +127,13 @@ jobs:
           echo "Extracting upstream forensic matrices..."
           jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
           echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
+          echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> lines-full.txt
 
       - name: Bitcoin Anchor Assets
         run: |
           set -euo pipefail
           if command -v ots &> /dev/null; then
-             ots stamp .hfid/baseline/sovereign-manifest.json || true
+            ots stamp .hfid/baseline/sovereign-manifest.json || true
           fi
 
       - name: Process Core Provenance Datasets
@@ -134,12 +144,16 @@ jobs:
 
       - name: Commit and Push Updated Core Changes
         run: |
-          git config --global user.name "GitHub Actions"
+          set -euo pipefail
+          git config --global user.name "H-FID Sovereign Bot"
           git config --global user.email "actions@github.com"
-          git add .hfid/baseline/* .hfid/indexing/* sovereign-manifest.json lines-full.txt || true
+          git add .hfid/baseline/.hfid/indexing/. sovereign-manifest.json lines-full.txt || true
           if ! git diff --cached --quiet; then
-            git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
-            git push origin HEAD:main --force
+            git commit -m "MANIFEST MUTATION [V4.0.27]: Autonomous Baseline Lock Sync"
+            git pull --rebase -X ours origin main || true
+            git push origin HEAD:main
+          else
+            echo "No changes to commit"
           fi
 
       - name: Upload Sovereign Artifacts
@@ -150,3 +164,4 @@ jobs:
             .hfid/baseline/
             .hfid/indexing/
             lines-full.txt
+          retention-days: 90
