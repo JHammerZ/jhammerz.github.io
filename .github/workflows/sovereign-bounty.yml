@@ -43,7 +43,7 @@ jobs:
           git config --global user.name "Aurelius-Bounty-Hunter"
           git config --global user.email "bot@jhammerz.city"
           git add logs/bounty_log.md
-          git commit -m "Auto-log: Infinite-X Bounty Report Secured" || echo "No changes"
+          git commit -m "[skip ci] Auto-log: Infinite-X Bounty Report Secured" || echo "No changes"
           git pull --rebase origin main
           git push origin main
 

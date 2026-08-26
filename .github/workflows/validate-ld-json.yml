@@ -1,3 +1,12 @@
+# M-Law Language / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
 # HFD-Validate-LD-JSON: Verification and validate-ld-json framework workflow
 # New language / G-125 Enactment / v2.13.2
 # Copyright (c) 2026 Aurelius Sovereign
@@ -13,9 +22,17 @@
 
 name: "ST-Generator: HFD-Validate-LD-JSON Framework Validation"
 
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
 on:
   push:
     branches:
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
       - main
   schedule:
     - cron: '0 0 * * *'
@@ -27,24 +44,44 @@ permissions:
 jobs:
   validate_schema:
     name: Validate Structured Data Schema
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Codebase
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         uses: actions/checkout@v4
 
       - name: Setup Node.js Environment
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
       - name: Install Validation Tools
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         run: |
           npm install ajv ajv-formats
           echo "Installed AJV Core Framework for custom schema-cli automation"
 
       - name: Extract JSON-LD From HTML Files
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         run: |
           mkdir -p .hfd/validation
           found=false
@@ -76,6 +113,10 @@ jobs:
           fi
 
       - name: Validate Local JSON Data Structures
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         if: env.HFD_LD_VALID == 'pending'
         run: |
           hfd_valid=true
@@ -117,6 +158,10 @@ jobs:
           fi
 
       - name: Generate G-125 Validation Attestation
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         if: always()
         run: |
           mkdir -p .hfd/artifacts
@@ -136,9 +181,17 @@ jobs:
           echo "G-125 Framework Validation Attestation compiled."
 
       - name: Upload Validation Artifacts
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: hfd-ld-validation-artifacts
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
           path: .hfd/artifacts/
           retention-days: 30

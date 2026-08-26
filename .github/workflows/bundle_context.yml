@@ -1,8 +1,16 @@
 name: bundle_context
 
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - 'docs/**'
       - '*.md'
@@ -17,20 +25,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Generate lines-full.txt
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         run: |
           # your existing logic here
           
       - name: Update sitemap (optional)
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         run: |
           # your existing logic here
 
       - name: Commit and Push
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"

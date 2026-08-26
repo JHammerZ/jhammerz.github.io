@@ -31,6 +31,10 @@ on:
         type: boolean
   push:
     branches: [main]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - 'agent/**' # Only when agent code changes
       - 'data/**' # Only when agent data changes

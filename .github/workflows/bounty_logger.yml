@@ -44,6 +44,6 @@ jobs:
           git config --global user.name 'Sovereign-Bot'
           git config --global user.email 'bot@jhammerz.io'
           git add logs/bounty_log.md
-          git commit -m "Auto-Log: ${{ github.event.inputs.target }}" || echo "No changes to commit"
+          git commit -m "[skip ci] Auto-Log: ${{ github.event.inputs.target }}" || echo "No changes to commit"
           git push
 

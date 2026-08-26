@@ -18,6 +18,10 @@ concurrency:
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - 'assets/favicon.svg'
       - 'assets/logo.png'

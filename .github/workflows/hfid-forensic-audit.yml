@@ -13,6 +13,10 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - '.github/workflows/**'
 

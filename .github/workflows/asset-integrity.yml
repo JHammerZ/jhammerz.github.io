@@ -20,6 +20,10 @@ on:
     - cron: '0 0 * * *' # Daily midnight UTC audit
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - 'llms.txt'
       - 'openapi.yaml'
@@ -33,6 +37,10 @@ on:
       - '!.hfid/**'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
   workflow_dispatch:
 
 permissions:

@@ -21,6 +21,10 @@ on:
     - cron: '0 12 * * *' # Midday sync
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - '**.html'
       - '**.md'
@@ -35,6 +39,10 @@ on:
       - '.hfid/**'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
   workflow_dispatch:
 
 permissions:

@@ -3,6 +3,10 @@ name: Bundle Workflow | H-FID Asset Bundler
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - 'src/**'
       - 'public/**'

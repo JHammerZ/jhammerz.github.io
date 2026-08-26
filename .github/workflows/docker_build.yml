@@ -9,6 +9,10 @@ concurrency:
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - 'Dockerfile'
       - 'docker/**'
@@ -16,6 +20,10 @@ on:
       - '.hfid/**'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
   workflow_dispatch:
 
 env:

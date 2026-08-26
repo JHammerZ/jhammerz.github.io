@@ -1,5 +1,9 @@
 name: AGENTIC_SYNC | H-FID Sovereign Cascade
 
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
 on:
   schedule:
     - cron: '0 0 * * *' # 00:00 UTC daily
@@ -11,6 +15,10 @@ on:
         default: 'false'
   push:
     branches: [ main ]
+    paths-ignore:
+      - ".hfid/**"
+      - "sovereign-manifest.json"
+      - "lines-full.txt"
     paths:
       - 'index.html'
       - 'music.html'
@@ -26,30 +34,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node 24
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'npm'
 
       - name: Setup Python 3.12
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
 
       - name: Install dependencies
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         run: |
           set -e
           npm ci || npm install
           pip install requests google-auth google-auth-oauthlib google-auth-httplib2
 
       - name: Extract AEO payload
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         id: aeo
         run: |
           set -e
@@ -68,6 +96,10 @@ jobs:
           fi
 
       - name: Run social media publisher
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         if: steps.aeo.outputs.should_post == 'true'
         env:
           FB_API_KEY: ${{ secrets.FB_API_KEY }}
@@ -84,6 +116,10 @@ jobs:
           node scripts/social_media_publisher.js
 
       - name: Run Google Indexing API
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
         run: |
@@ -92,6 +128,10 @@ jobs:
           python scripts/index_site.py
 
       - name: Trigger A2A Broadcast
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         if: success()
         uses: peter-evans/repository-dispatch@v3
         with:
@@ -100,6 +140,10 @@ jobs:
           client-payload: '{"sha": "${{ github.sha }}", "ref": "${{ github.ref }}"}'
 
       - name: Summary
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
         if: always()
         run: |
           echo "=== AGENTIC_SYNC COMPLETE ==="

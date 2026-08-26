@@ -41,7 +41,7 @@ jobs:
           git config --global user.name "JHammerZ-Bot"
           git config --global user.email "bot@jhammerz.city"
           git add BOUNTY_LOG.md
-          git commit -m "Auto-log: New bounty findings detected" || echo "No changes"
+          git commit -m "[skip ci] Auto-log: New bounty findings detected" || echo "No changes"
           
           # THE SYNC PROTOCOL: Pull latest browser changes, then push
           git pull --rebase origin main
