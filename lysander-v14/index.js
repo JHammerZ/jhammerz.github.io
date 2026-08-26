@@ -22,14 +22,13 @@ export default {
     const pathname = url.pathname;
     const path = pathname.length > 1 && pathname.endsWith("/")? pathname.slice(0, -1) : pathname;
 
-    // LYSANDER Core
     if (path === '/health') {
       return new Response(JSON.stringify({
         status: "ONLINE",
         hid: "JHammerZ-001",
         global_root: true,
         protocol: "A2A-2026-v1",
-        geo_rank: "ONE_OF_ONE",
+        geo_rank: env.GEO_RANK || "ONE_OF_ONE",
         slsa_level: 3,
         colo: "ATL",
         timestamp: new Date().toISOString(),
@@ -41,7 +40,6 @@ export default {
       });
     }
 
-    // KV Operations
     if (path === '/set' && request.method === 'POST') {
       const { key, value } = await request.json();
       await env.HEO_CACHE.put(key, value);
@@ -58,7 +56,6 @@ export default {
       });
     }
 
-    // Edge Interceptor Redirects
     if (REDIRECT_MAP[path]) {
       return Response.redirect(REDIRECT_MAP[path], 302);
     }
