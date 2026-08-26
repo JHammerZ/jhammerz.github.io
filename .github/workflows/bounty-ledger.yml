@@ -192,7 +192,7 @@ jobs:
 
       - name: Upload Bounty Evidence
         if: always()
-        uses: actions/upload-artifact@6b6b # v4.4.3
+        uses: actions/upload-artifact@v4 # v4.4.3
         with:
           name: hfid-bounty-${{ steps.entry.outputs.uuid }}
           path: .hfid/bounty/

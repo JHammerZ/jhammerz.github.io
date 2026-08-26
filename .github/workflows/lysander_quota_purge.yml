@@ -182,7 +182,7 @@ jobs:
 
       - name: Upload Purge Evidence
         if: always()
-        uses: actions/upload-artifact@6b6b # v4.4.3
+        uses: actions/upload-artifact@v4 # v4.4.3
         with:
           name: hfid-quota-purge-${{ github.run_id }}
           path: .hfid/quota/
