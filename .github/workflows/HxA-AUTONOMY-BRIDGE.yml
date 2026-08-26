@@ -13,7 +13,7 @@ name: "SEO: Sitemap + IndexNow Autonomous Push"
 
 concurrency:
   group: sitemap-indexnow
-  cancel-in-progress: false # Don't interrupt sitemap generation
+  cancel-in-progress: false
 
 on:
   push:
@@ -28,15 +28,15 @@ on:
       - 'proof.html'
       - '.github/workflows/**'
       - '.hfid/**'
-      - '!sitemap.xml' # CRITICAL: Ignore our own sitemap commits
+      - '!sitemap.xml'
   schedule:
-    - cron: '0 0 * * *' # Daily midnight UTC reindex
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: write # Required to commit sitemap.xml
-  id-token: write # For SLSA attestation
-  attestations: write # Required for build provenance
+  contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   generate-sitemap:
@@ -47,7 +47,8 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # For accurate lastmod dates
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Sitemap
         id: sitemap
@@ -56,7 +57,6 @@ jobs:
           echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
           echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
 
-          # Add docs files with git lastmod
           if [ -d "docs" ]; then
             find docs \( -name "*.md" -o -name "*.html" \) | while read f; do
               URL_PATH=$(echo "$f" | sed 's/docs\///' | sed 's/.md$//' | sed 's/index$//')
@@ -65,12 +65,10 @@ jobs:
             done
           fi
 
-          # Add root files
           for f in index.html; do
             [ -f "$f" ] && echo " <url><loc>https://jhammerz.github.io/</loc><lastmod>$(git log -1 --format=%cs -- "$f" 2>/dev/null || date -u +%Y-%m-%d)</lastmod><priority>1.0</priority></url>" >> sitemap.xml
           done
 
-          # Add H-FID critical files for AI crawlers
           for f in llms.txt llms-full.txt entities.json proof.html robots.txt ai-context.json; do
             if [ -f "$f" ]; then
               LASTMOD=$(git log -1 --format=%cs -- "$f" 2>/dev/null || date -u +%Y-%m-%d)
@@ -83,10 +81,9 @@ jobs:
 
       - name: Validate Sitemap
         run: |
-          if ! xmllint --noout sitemap.xml 2>/dev/null; then
+          if! xmllint --noout sitemap.xml 2>/dev/null; then
             echo "⚠️ xmllint not available, skipping XML validation"
           fi
-
           URL_COUNT=$(grep -c '<loc>' sitemap.xml || echo "0")
           if [ "$URL_COUNT" -eq 0 ]; then
             echo "❌ CRITICAL: Sitemap contains 0 URLs"
@@ -96,8 +93,8 @@ jobs:
 
       - name: Generate H-FID Index Attestation
         run: |
-          mkdir -p .hfid/indexing
-          cat > .hfid/indexing/sitemap.json << INNER_EOF
+          mkdir -p.hfid/indexing
+          cat >.hfid/indexing/sitemap.json << INNER_EOF
           {
             "workflow": "sitemap-indexnow",
             "sha": "$(git rev-parse HEAD)",
@@ -116,16 +113,14 @@ jobs:
       - name: Attest Sitemap Build
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: .hfid/indexing/sitemap.json
+          subject-path:.hfid/indexing/sitemap.json
 
       - name: Stage Sitemap Changes
         id: stage
         run: |
           git config --local user.name 'github-actions[bot]'
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-
-          git add sitemap.xml .hfid/indexing/sitemap.json
-
+          git add sitemap.xml.hfid/indexing/sitemap.json
           if git diff --staged --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "✅ Sitemap unchanged. No commit needed."
@@ -143,7 +138,9 @@ jobs:
             -m "→ URLs: $(grep -c '<loc>' sitemap.xml)" \
             -m "→ GEO_RANK: ONE_OF_ONE" \
             -m "→ SLSA: Level 3"
-
+          
+          # CRITICAL FIX: Pull remote changes before pushing
+          git pull --rebase origin main
           git push
 
       - name: Ping IndexNow
@@ -157,16 +154,11 @@ jobs:
             echo "indexnow_success=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-
-          # Extract top 10 URLs from sitemap for IndexNow
           URL_LIST=$(grep -oP '(?<=<loc>).*?(?=</loc>)' sitemap.xml | head -10 | jq -R -s -c 'split("\n")[:-1]')
-
           RESPONSE=$(curl -s -X POST "https://api.indexnow.org/indexnow" \
             -H "Content-Type: application/json" \
             -d "{\"host\":\"jhammerz.github.io\",\"key\":\"$INDEXNOW_KEY\",\"urlList\":$URL_LIST}")
-
-          echo "RESPONSE: $RESPONSE" > .hfid/indexing/indexnow_response.json
-
+          echo "RESPONSE: $RESPONSE" >.hfid/indexing/indexnow_response.json
           if [ "$RESPONSE" = "" ] || echo "$RESPONSE" | grep -q '"success"'; then
             echo "indexnow_success=true" >> $GITHUB_OUTPUT
             echo "✅ IndexNow: Submitted $(echo $URL_LIST | jq length) URLs"
@@ -180,7 +172,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hfid-sitemap-indexnow
-          path: .hfid/indexing/
+          path:.hfid/indexing/
           retention-days: 90
 
       - name: Summary
