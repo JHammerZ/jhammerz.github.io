@@ -92,7 +92,7 @@ jobs:
             if grep -q "git commit" "$f" && ! grep -q "\[skip ci\]" "$f"; then
               LOOP_RISK=$((LOOP_RISK + 1))
             fi
-            if grep -q "push:" "$f" && grep -q "paths:" "$f"; then
+            if grep -q "push:" "$f" grep -q "push:" "$f" && grep -q "paths:" "$f"grep -q "push:" "$f" && grep -q "paths:" "$f" grep -q "paths:" "$f" grep -q "push:" "$f" && grep -q "paths:" "$f"grep -q "push:" "$f" && grep -q "paths:" "$f" ! grep -q "[skip ci]" "$f"; then
               LOOP_RISK=$((LOOP_RISK + 1))
             fi
           done
