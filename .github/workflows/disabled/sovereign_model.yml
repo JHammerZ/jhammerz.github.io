@@ -9,6 +9,11 @@
 # REACH_MULTIPLIER: 300%, SYNC_VELOCITY: <100ms
 # SLSA Level: 3 / Twenty 4/7 Protocol: Search Sovereign
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
 name: "H-FID Sovereign Model"
 
 on:
