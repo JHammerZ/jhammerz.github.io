@@ -1,0 +1,22 @@
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Automated Edge Database Validation Query Matrix
+
+name: "Validation: Query Live D1 Cluster"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  query-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Execute Live Table Read Query
+        run: |
+          echo "📊 Extracting live structured rows from seeded edge_nodes table..."
+          npx wrangler d1 execute lysander_db --config lysander-w4/wrangler.toml --command="SELECT * FROM edge_nodes;" --remote
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
