@@ -1,70 +1,72 @@
-var REDIRECT_MAP = {
-  "/site": "https://jhammerz.github.io",
-  "/tiktok": "https://www.tiktok.com/@jhammerzz",
-  "/linkedin": "https://www.linkedin.com/in/JHammerZ",
-  "/youtube": "https://www.youtube.com/JHammerZ",
-  "/yt": "https://www.youtube.com/JHammerZ",
-  "/ig": "https://www.instagram.com/jhammerzz",
-  "/fb": "https://facebook.com/profile.php?id=61574652435664",
-  "/carrd": "https://jhammerz.carrd.co",
-  "/amazon-music": "https://music.amazon.com/artists/B0SGL7W/jhammerz",
-  "/apple-music": "https://music.apple.com/us/artist/jhammerz/1845798346",
-  "/bandlab": "https://music.bandlab.com/artist/781334284",
-  "/xhs": "https://www.xiaohongshu.com/user/profile/JHammerZ",
-  "/github": "https://github.com/JHammerZ/jhammerz.github.io",
-  "/impact": "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
-  "/spotify": "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
+/**
+ * HBS v1.2 / H-FID Standard / REC v7.2
+ * Lysander-3.0 Sovereign Architecture Edge Proxy Router
+ * Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+ * Protocol: JHammerZ-005 Core Mesh
+ */
+
+const ORIGIN_URL = "https://github.io";
+
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-H-FID-Signature",
+  "Cache-Control": "public, max-age=3600, stale-while-revalidate=600"
 };
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const pathname = url.pathname;
-    const path = pathname.length > 1 && pathname.endsWith("/")? pathname.slice(0, -1) : pathname;
+    const path = url.pathname;
 
-    if (path === '/health') {
-      return new Response(JSON.stringify({
-        status: "ONLINE",
-        worker: "edge_interceptor",
-        version: "1.3.4",
-        kv_binding: "HEO_CACHE",
-        interceptor: "ACTIVE",
-        timestamp: new Date().toISOString()
-      }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    // 1. Intercept Preflight Pre-checks
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: CORS_HEADERS });
     }
 
-    if (path === '/set' && request.method === 'POST') {
-      const { key, value } = await request.json();
-      await env.HEO_CACHE.put(key, value);
-      return new Response(JSON.stringify({ ok: true, key, value }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    if (path === '/get' && request.method === 'GET') {
-      const key = url.searchParams.get('key');
-      const value = await env.HEO_CACHE.get(key);
-      return new Response(JSON.stringify({ key, value }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    if (REDIRECT_MAP[path]) {
-      return Response.redirect(REDIRECT_MAP[path], 302);
-    }
-
-    if (path === "/" || path === "") {
-      return Response.redirect(REDIRECT_MAP["/site"], 302);
-    }
-
-    return new Response(
-      `404: Path "${pathname}" not found.\n\nCore: /health, /set, /get\nShortcuts:\n${Object.keys(REDIRECT_MAP).sort().join("\n")}`,
-      {
-        status: 404,
-        headers: { "Content-Type": "text/plain", "X-Debug-Path": pathname }
+    // 2. Direct Graph Routing Path Discovery Handling
+    if (path === "/.well-known/hfid-registry.json" || path === "/entities.json") {
+      try {
+        const response = await fetch(`${ORIGIN_URL}/entities.json`, {
+          headers: { "User-Agent": "Lysander-Edge-Mesh-Interceptor" }
+        });
+        
+        if (!response.ok) throw new Error("Origin resolution failed");
+        
+        const data = await response.json();
+        return new Response(JSON.stringify(data, null, 2), {
+          status: 200,
+          headers: {
+            ...CORS_HEADERS,
+            "Content-Type": "application/ld+json; charset=utf-8",
+            "X-Lysander-Engine": "v3.0.0-v13",
+            "X-H-FID-Rank": "ONE_OF_ONE"
+          }
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ error: "Mesh routing fault", status: "STANDBY" }), {
+          status: 502,
+          headers: { ...CORS_HEADERS, "Content-Type": "application/json" }
+        });
       }
-    );
+    }
+
+    // 3. Fallback: Proxy directly back to the static repository layer layout
+    try {
+      const originResponse = await fetch(`${ORIGIN_URL}${path}${url.search}`, request);
+      const newHeaders = new Headers(originResponse.headers);
+      
+      // Inject required cross-origin mesh headers safely
+      Object.entries(CORS_HEADERS).forEach(([k, v]) => newHeaders.set(k, v));
+      newHeaders.set("X-Lysander-Routing", "PASSTHROUGH");
+
+      return new Response(originResponse.body, {
+        status: originResponse.status,
+        statusText: originResponse.statusText,
+        headers: newHeaders
+      });
+    } catch (err) {
+      return new Response("Edge Distribution Interruption", { status: 500 });
+    }
   }
 };
