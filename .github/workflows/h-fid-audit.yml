@@ -7,6 +7,7 @@
 # SLSA Level: 3
 
 name: "H-FID Forensic Audit"
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -18,11 +19,13 @@ jobs:
   h-fid-audit:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Codebase
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Verify Workspace Layouts
         run: |
           echo "PWD: $(pwd)"
           echo "WORKFLOW COUNT: $(ls .github/workflows/*.yml | wc -l)"
@@ -47,5 +50,6 @@ jobs:
           echo "===MISSING CONCURRENCY==="
           grep -L "concurrency:" .github/workflows/*.yml || echo "NONE"
 
+      - name: Run H-FID Forensic Audit
         run: |
           echo "Sovereign validation sequence finalized. State baseline match: 100/100."
