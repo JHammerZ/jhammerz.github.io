@@ -111,7 +111,6 @@ jobs:
           git config --local user.name 'github-actions[bot]'
           git config --local user.email 'github-actions[bot]@://github.com'
           
-          # Clean, separate tracking calls with existence checks
           if [ -f sitemap.xml ]; then
             git add sitemap.xml
           fi
