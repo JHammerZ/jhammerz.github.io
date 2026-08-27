@@ -45,6 +45,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: PRINT LOOP RISK FILES
+
+        run: |
+
+          echo "===COPY THIS LIST===" 
+
+          for f in .github/workflows/*.yml; do 
+
+            risk="" 
+
+            grep -q "git commit" "$f" && ! grep -q "\[skip ci\]" "$f" && risk="$risk git_commit" 
+
+            grep -q "push:" "$f" && grep -q "paths:" "$f" && risk="$risk push_paths" 
+
+            [ -n "$risk" ] && echo "$f" 
+
+          done 
+
+          echo "===END LIST===" 
+
       - name: Run H-FID Forensic Audit
         id: audit
         run: |
