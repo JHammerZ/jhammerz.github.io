@@ -1,18 +1,39 @@
+name: "Sovereignty Build"
 
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.hfid/**'
+      - 'entities.json'
+      - 'proof.html'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build sovereignty artifacts
+        run: |
+          mkdir -p .hfid/sovereign
+          sha256sum entities.json proof.html > .hfid/sovereign/checksums.txt
 
-
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(hfid): Sovereignty build [skip ci]"
+          file_pattern: .hfid/sovereign/**
+          commit_user_name: JHammerZ-Sovereign-Engine
+          commit_user_email: engine@jhammerz.github.io
