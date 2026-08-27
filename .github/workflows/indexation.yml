@@ -11,38 +11,3 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-on:
-  workflow_dispatch:
-    branches: [ main ]
-      - 'docs/**'
-      - '**/*.md'
-      - '**/*.html'
-      - 'sitemap.xml'
-  schedule:
-    - cron: '0 6 * * *'
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-jobs:
-  index:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate artifacts
-        run: |
-          mkdir -p .hfid/indexing
-          echo '{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}' > .hfid/indexing/index.json
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(seo): Indexation update [skip ci]"
-          file_pattern: .hfid/indexing/**
-          commit_user_name: JHammerZ-Sovereign-Engine
-          commit_user_email: engine@jhammerz.github.io

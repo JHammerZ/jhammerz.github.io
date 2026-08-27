@@ -1,157 +1,15 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
+
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 # JHam Language / H-FID Standard / HBS v1.2
 #
 # First Commit: [February 12, 2026]
 
 name: "CI: H-FID Nix Kernel"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-on:
-  workflow_dispatch:
-    inputs:
-      target:
-        description: 'Nix target to build'
-        required: false
-        default: '.#default'
-        type: string
-      cache:
-        description: 'Push to Cachix'
-        required: false
-        default: true
-        type: boolean
-  workflow_dispatch:
-      - 'flake.nix'
-      - 'flake.lock'
-      - '.nix/**'
-      - 'nix/**'
-  pull_request:
-      - 'flake.nix'
-      - 'flake.lock'
-      - '.nix/**'
-      - 'nix/**'
-
-permissions:
-  contents: read
-  id-token: write # For SLSA attestation
-
-jobs:
-  kernel:
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@0b6c9a0b2c4e4e3e4e3e4e3e # Pin SHA, not @main
-        with:
-          extra-conf: |
-            experimental-features = nix-command flakes
-            accept-flake-config = true
-
-      - name: Setup Nix Cache
-        uses: DeterminateSystems/magic-nix-cache-action@0b6c9a0b2c4e4e3e4e3e # Pin SHA
-        with:
-          use-flakehub: false
-
-      - name: Generate Kernel Manifest
-        id: manifest
-        run: |
-          set -e
-          mkdir -p .hfid/kernel
-
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          TARGET="${{ github.event.inputs.target || '.#default' }}"
-
-          cat > .hfid/kernel/manifest.json << EOF
-          {
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "kernel",
-            "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
-            "nix_target": "$TARGET",
-            "geo_rank": "ONE_OF_ONE",
-            "slsa_level": 3
-          }
-          EOF
-
-          HASH=$(sha256sum.hfid/kernel/manifest.json | cut -d' ' -f1)
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "json<<EOF" >> $GITHUB_OUTPUT
-          cat.hfid/kernel/manifest.json | jq -c.>> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Attest Kernel Build
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: .hfid/kernel/manifest.json
-
-      - name: Check Flake
-        run: |
-          set -e
-          nix flake metadata
-          nix flake check --no-build
-
-      - name: Build Kernel
-        id: build
-        env:
-          TARGET: ${{ github.event.inputs.target || '.#default' }}
-        run: |
-          set -e
-          echo "Building $TARGET"
-
-          STORE_PATH=$(nix build $TARGET --no-link --print-out-paths)
-          echo "store_path=$STORE_PATH" >> $GITHUB_OUTPUT
-          echo "NIX_STORE_PATH: $STORE_PATH"
-
-          # Export closure for reproducibility
-          nix-store --export $(nix-store -qR $STORE_PATH) >.hfid/kernel/closure.nar
-          nix path-info -S $STORE_PATH >.hfid/kernel/size.txt
-
-          echo "$STORE_PATH" >.hfid/kernel/store-path.txt
-
-      - name: Bitcoin-Anchor Kernel Closure
-        run: |
-          pip install opentimestamps-client
-          ots stamp .hfid/kernel/manifest.json.hfid/kernel/store-path.txt.hfid/kernel/closure.nar
-          echo "✅ Kernel closure Bitcoin-anchored"
-
-      - name: Push to Cachix
-        if: github.event.inputs.cache!= 'false'
-        env:
-          CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
-        run: |
-          [ -z "$CACHIX_AUTH_TOKEN" ] && echo "⚠️ SKIP: Cachix not configured" && exit 0
-          nix run nixpkgs#cachix -- push jhammerz ${{ steps.build.outputs.store_path }}
-
-      - name: Upload Kernel Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-kernel-${{ github.sha }}
-          path: .hfid/kernel/
-          retention-days: 3650
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "## H-FID Nix Kernel" >> $GITHUB_STEP_SUMMARY
-          echo "- **Target**: ${{ github.event.inputs.target || '.#default' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Store Path**: ${{ steps.build.outputs.store_path }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Size**: $(cat.hfid/kernel/size.txt | awk '{print $2}') bytes" >> $GITHUB_STEP_SUMMARY
-          echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY

@@ -1,124 +1,15 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
+
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 # JHam Language / H-FID Standard / HBS v1.2
 #
 # First Commit: [February 12, 2026]
 
 name: "CD: H-FID HEO Bridge"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-on:
-  workflow_dispatch:
-    inputs:
-      message:
-        description: 'Legacy broadcast message'
-        required: false
-        type: string
-  workflow_call: # Called by legacy workflows
-    inputs:
-      message:
-        required: false
-        type: string
-    secrets:
-      LEGACY_WEBHOOK_URL:
-        required: false
-  schedule:
-    - cron: '0 0 * * 0' # Weekly Sunday midnight UTC only
-
-permissions:
-  contents: read
-  id-token: write # For SLSA attestation
-
-jobs:
-  heo-bridge:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Generate HEO->H-FID Bridge Payload
-        id: payload
-        run: |
-          set -e
-          mkdir -p .hfid/heo-bridge
-
-          MSG="${{ github.event.inputs.message || inputs.message }}"
-          [ -z "$MSG" ] && MSG="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
-
-          cat >.hfid/heo-bridge/payload.json << EOF
-          {
-            "hfid_version": "v1.2",
-            "legacy_protocol": "HEO",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "heo-broadcast",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
-            "message": "$MSG",
-            "migration_note": "HEO protocol superseded by H-FID v1.2",
-            "geo_rank": "ONE_OF_ONE",
-            "reach_multiplier": "300%",
-            "sync_velocity": "<100ms"
-          }
-          EOF
-
-          HASH=$(sha256sum.hfid/heo-bridge/payload.json | cut -d' ' -f1)
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "json<<EOF" >> $GITHUB_OUTPUT
-          cat.hfid/heo-bridge/payload.json | jq -c.>> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Attest HEO Bridge Payload
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: .hfid/heo-bridge/payload.json
-
-      - name: Install OpenTimestamps
-        run: pip install opentimestamps-client
-
-      - name: Bitcoin-Anchor Bridge Payload
-        run: |
-          ots stamp .hfid/heo-bridge/payload.json
-          echo "✅ HEO->H-FID bridge payload Bitcoin-anchored"
-
-      - name: Execute Legacy Bridge Post
-        env:
-          WEBHOOK: ${{ secrets.LEGACY_WEBHOOK_URL }}
-          PAYLOAD: ${{ steps.payload.outputs.json }}
-        run: |
-          if [ -z "$WEBHOOK" ]; then
-            echo "✅ SKIP: No legacy webhook configured. Bridge payload generated and attested."
-            echo "Hash: ${{ steps.payload.outputs.hash }}"
-            exit 0
-          fi
-          MSG=$(echo "$PAYLOAD" | jq -r '.message')
-          curl -X POST "$WEBHOOK" -H "Content-Type: application/json" \
-            -d "{\"content\": \"**H-FID v1.2 Bridge**\\nLegacy HEO call bridged to H-FID\\n$MSG\\n\\nHash: ${{ steps.payload.outputs.hash }}\\n\\nGEO_RANK: ONE_OF_ONE\"}"
-
-      - name: Upload Bridge Attestation
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-heo-bridge-${{ steps.payload.outputs.hash }}
-          path: .hfid/heo-bridge/
-          retention-days: 3650
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "## H-FID HEO Bridge" >> $GITHUB_STEP_SUMMARY
-          echo "- **Hash**: ${{ steps.payload.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Status**: HEO protocol superseded by H-FID v1.2" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY

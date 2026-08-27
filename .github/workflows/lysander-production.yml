@@ -2,10 +2,11 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
+
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 # =================================================================
 # SOVEREIGN PRODUCTION BASELINE WORKFLOW // JHammerZ // V4.0.28 // RACE FIX
@@ -14,111 +15,3 @@
 # =================================================================
 
 name: "Sovereign Model Baseline"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-on:
-  schedule:
-  workflow_dispatch:
-    tags: [ 'v*' ]
-  pull_request:
-  workflow_dispatch:
-    inputs:
-      baseline_sha:
-        description: 'Override Baseline commit SHA'
-        required: false
-        default: 'a15b0e'
-        type: string
-
-# FIX: concurrency MUST be after name/on but before jobs
-
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
-
-jobs:
-  stabilize-grid:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    
-    outputs:
-      baseline_sha: ${{ steps.baseline.outputs.sha }}
-      grid_status: ${{ steps.verify.outputs.status }}
-    
-    steps:
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-        run: pip install opentimestamps-client
-
-        run: mkdir -p .hfid/baseline .hfid/indexing
-
-        id: baseline
-        env:
-          BASELINE_SHA: "${{ github.event.inputs.baseline_sha || 'a15b0e' }}"
-        run: |
-          set -e
-          echo "Initiating Restoration to Commit ${{ env.BASELINE_SHA }} Baseline..."
-          git fetch origin "${{ env.BASELINE_SHA }}" --depth=1 || true
-          
-          echo "sha=${{ env.BASELINE_SHA }}" >> $GITHUB_OUTPUT
-          
-          cat > .hfid/baseline/sovereign-manifest.json << INNER_EOF
-          {
-            "baseline_sha": "${{ env.BASELINE_SHA }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "current_sha": "$(git rev-parse HEAD)",
-            "repository": "${{ github.repository }}",
-            "run_id": "${{ github.run_id }}",
-            "geo_rank": "ONE_OF_ONE",
-            "slsa_level": 3
-          }
-          INNER_EOF
-
-        run: |
-          set -e
-          if [ -f .hfid/baseline/sovereign-manifest.json ]; then
-            echo "Verifying local hash indexes against genesis targets..."
-            sha256sum .hfid/baseline/sovereign-manifest.json
-            rm -f .hfid/baseline/sovereign-manifest.json.ots
-            ots stamp .hfid/baseline/sovereign-manifest.json
-          fi
-
-        id: verify
-        run: |
-          set -e
-          echo "Checking C01 secure ingress endpoint availability..."
-          if ! curl -sI --fail "https://github.io" > /dev/null; then
-            echo "status=DEGRADED" >> $GITHUB_OUTPUT
-          else
-            echo "status=VERIFIED" >> $GITHUB_OUTPUT
-          fi
-
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "MANIFEST MUTATION [V4.0.28]: Production Baseline Lock Sync [skip ci]"
-          file_pattern: .hfid/baseline/sovereign-manifest.json .hfid/baseline/sovereign-manifest.json.ots
-          commit_user_name: JHammerZ-Sovereign-Engine
-          commit_user_email: engine@jhammerz.github.io
-          push_options: '--force-with-lease'
-          skip_dirty_check: false
-          skip_fetch: false
-
-        if: always()
-        run: |
-          echo "## 🛡️ Sovereign Model Baseline Summary" >> $GITHUB_STEP_SUMMARY
-          echo "** Manifest Reference Code: ** \`V4.0.28\`" >> $GITHUB_STEP_SUMMARY
-          echo "** System Baseline State: ** \`LIVING / LOCK_ESTABLISHED\`" >> $GITHUB_STEP_SUMMARY
-          echo "** Author Entity Signature: ** \`Joshua Hamilton\`" >> $GITHUB_STEP_SUMMARY
-          echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`json" >> $GITHUB_STEP_SUMMARY
-          cat .hfid/baseline/sovereign-manifest.json >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

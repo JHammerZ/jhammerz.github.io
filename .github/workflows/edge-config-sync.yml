@@ -1,110 +1,15 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
+
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 # JHam Language / H-FID Standard / HBS v1.2
 #
 # First Commit: [February 12, 2026]
 
 name: "KV Sync Cloudflare KV & Edge Config"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-on:
-  repository_dispatch:
-    types: [edge-config-syn]
-  workflow_dispatch:
-    inputs:
-      namespaces:
-        description: 'KV Namespaces to Sync'
-        required: true
-        type: choice
-        options:
-          - H-FID
-          - J_FID_HML
-          - J_FID_PRD
-          - S_FID_DEV
-          - SEC_MAN_EDGE
-
-permissions:
-  contents: write
-
-jobs:
-  sync_edge_config:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Install Wrangler
-        run: npm install -g wrangler
-
-      - name: Validate Edge Config
-        run: |
-          if [ ! -f "edge-config.json" ]; then
-            echo "::error::edge-config.json is missing!"
-            exit 1
-          fi
-
-          # Verify required top-level 'items' key exists and is valid JSON
-          if ! jq -e '.items' edge-config.json > /dev/null 2>&1; then
-            echo "::error::edge-config.json is missing the required 'items' key."
-            exit 1
-          fi
-          
-          echo "Edge Config format is valid."
-
-      - name: Sync KV Namespace
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          NAMESPACE_INPUT: ${{ github.event.inputs.namespaces || 'SEC_MAN_EDGE' }}
-        run: |
-          echo "Syncing KV Namespace: $NAMESPACE_INPUT"
-          
-          # Ensure target synchronization directory exists
-          mkdir -p .hfid/edge
-          
-          # Read, parse, and map local json keys into Cloudflare KV
-          jq -c '.items[]' edge-config.json | while read -r item; do
-            KEY=$(echo "$item" | jq -r '.key')
-            VALUE=$(echo "$item" | jq -r '.value')
-            
-            if [ -n "$KEY" ] && [ "$KEY" != "null" ]; then
-              echo "Writing key: $KEY to $NAMESPACE_INPUT"
-              wrangler kv:key put --binding="$NAMESPACE_INPUT" "$KEY" "$VALUE" --local=false
-            fi
-          done
-
-      - name: Generate H-FID Edge Attestation
-        run: |
-          mkdir -p .hfid/edge
-          echo "Attestation Hash: $(sha256sum edge-config.json | awk '{print $1}')" > .hfid/edge/sovereign-manifest.json
-          echo "Timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> .hfid/edge/sovereign-manifest.json
-
-      - name: Attest Edge Config Deployment
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync"
-          branch: main
-          file_pattern: '.hfid/edge/*'
-
-      - name: Upload Edge Attestation
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-edge-attestation
-          path: .hfid/edge/
-          if-no-files-found: error

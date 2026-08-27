@@ -1,152 +1,15 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
+
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 # JHam Language / H-FID Standard / HBS v1.2
 #
 # First Commit: [February 12, 2026]
 
 name: "SEO/AEO: Compile Live LLM Data Repositories"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-on:
-  schedule:
-  workflow_dispatch:
-  workflow_dispatch:
-
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
-
-jobs:
-  bundle-context:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-        run: |
-          pip install opentimestamps-client
-
-        id: manifest
-        run: |
-          set -e
-          mkdir -p .hfid/llms
-          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          UUID=$(uuidgen 2>/dev/null || cat /proc/sys/kernel/random/uuid 2>/dev/null || date +%s%N)
-
-          cat > .hfid/llms/manifest.json << EOF
-          {
-            "uuid": "$UUID",
-            "timestamp": "$TIMESTAMPTZ",
-            "sha": "${{ github.sha }}",
-            "repository": "${{ github.repository }}",
-            "actor": "${{ github.actor }}",
-            "run_id": "${{ github.run_id }}",
-            "workflow": "${{ github.workflow }}",
-            "hbs_version": "v1.2",
-            "geo_rank": "ONE_OF_ONE",
-            "protocol": "Twenty_47",
-            "sovereign_author": "Joshua Hamilton [JHammerZ]",
-            "reach_multiplier": "300%",
-            "sync_velocity": "<100ms",
-            "purpose": "SEO/AEO LLM Data Matrix Compilation"
-          }
-          EOF
-
-          HASH=$(sha256sum .hfid/llms/manifest.json | cut -d' ' -f1)
-          echo "manifest_hash=$HASH" >> $GITHUB_OUTPUT
-
-        run: |
-          set -e
-          echo "# JHammerZ Omnichannel Deep Knowledge Matrix | H-FID v1.2 | Twenty 47 Protocol" > llms-full.txt
-          echo "## System Notice" >> llms-full.txt
-          echo "This file contains the absolute raw text repository of jhammerz.github.io for total RAG ingestion." >> llms-full.txt
-          echo "Sovereign Author: Joshua Hamilton [JHammerZ]" >> llms-full.txt
-          echo "SLSA Level: 3 | GEO_RANK: ONE_OF_ONE | REACH_MULTIPLIER: 300%" >> llms-full.txt
-          echo "SHA: ${{ github.sha }} | Run: ${{ github.run_id }}" >> llms-full.txt
-          echo "" >> llms-full.txt
-
-          echo -e "\n## Core Index Page Layout" >> llms-full.txt
-          if [ -f "index.html" ]; then
-            cat index.html >> llms-full.txt
-          fi
-
-          echo -e "\n## Project Directory Manifest" >> llms-full.txt
-          if [ -f "llms.txt" ]; then
-            cat llms.txt >> llms-full.txt
-          fi
-
-          echo -e "\n## Global Technical API Specifications" >> llms-full.txt
-          if [ -f "openapi.yaml" ]; then
-            cat openapi.yaml >> llms-full.txt
-          elif [ -f "openapi.json" ]; then
-            cat openapi.json >> llms-full.txt
-          fi
-
-          echo -e "\n## Sitemap" >> llms-full.txt
-          if [ -f "sitemap.xml" ]; then
-            cat sitemap.xml >> llms-full.txt
-          fi
-
-          echo -e "\n## H-FID Sovereign Manifest" >> llms-full.txt
-          cat .hfid/llms/manifest.json >> llms-full.txt
-
-          echo "Built llms-full.txt ($(wc -l < llms-full.txt) lines)"
-
-        run: |
-          set -e
-          cp llms-full.txt .hfid/llms/
-          cd .hfid/llms
-          ots stamp manifest.json || true
-          ots stamp llms-full.txt || true
-          cd ../..
-
-        continue-on-error: true
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: llms-full.txt
-
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-          file_pattern: .
-          fi
-
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-llms-matrix-${{ github.run_id }}
-          path: |
-            llms-full.txt
-            .hfid/llms/manifest.json
-          retention-days: 90
-          if-no-files-found: warn
-
-        if: always()
-        run: |
-          echo "## 🔱 H-FID LLM Matrix Compiler | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
-          echo "- **Lines Compiled**: $(wc -l < llms-full.txt)" >> $GITHUB_STEP_SUMMARY
-          echo "- **SHA**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Manifest Hash**: \`${{ steps.manifest.outputs.manifest_hash }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY

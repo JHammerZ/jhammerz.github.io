@@ -11,35 +11,3 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-on:
-  workflow_dispatch:
-    branches: [ main ]
-      - '.hfid/**'
-      - 'entities.json'
-      - 'proof.html'
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build sovereignty artifacts
-        run: |
-          mkdir -p .hfid/sovereign
-          sha256sum entities.json proof.html > .hfid/sovereign/checksums.txt
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(hfid): Sovereignty build [skip ci]"
-          file_pattern: .hfid/sovereign/**
-          commit_user_name: JHammerZ-Sovereign-Engine
-          commit_user_email: engine@jhammerz.github.io

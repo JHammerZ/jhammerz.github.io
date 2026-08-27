@@ -1,12 +1,12 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
+
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 # M-Law Language / H-FID Standard / REC v7.2
 
@@ -15,38 +15,3 @@
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: "Security: H-FID Restitution Monitor"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-on:
-  workflow_dispatch:
-  workflow_dispatch:
-  schedule:
-
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
-  issues: write
-
-jobs:
-  restitution:
-    runs-on: ubuntu-latest
-    steps:
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Running restitution scan..."
-          # Add your actual restitution commands here
-          # Example: npm run restitution || python scripts/restitution.py
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: 'H-FID Restitution Failed',
-              body: 'Restitution workflow failed on commit ${{ github.sha }}'
-            })

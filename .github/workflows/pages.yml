@@ -2,10 +2,11 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
+
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 # =================================================================
 # SOVEREIGN PAGES DEPLOYMENT WORKFLOW // J-HammerZ // V4.0.20 // PRODUCTION FIX
@@ -14,49 +15,3 @@
 # =================================================================
 
 name: Deploy Site to Pages
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-on:
-  workflow_dispatch:
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-        id: pages
-        uses: actions/configure-pages@v5
-
-        run: |
-          set -euo pipefail
-          echo "Staging tracking manifest files for structural deployment ingress..."
-          # Ensure critical matrix outputs and root files are explicitly preserved
-          mkdir -p _site
-          cp -r ./* _site/ 2>/dev/null || true
-          # Clean out raw actions config from processing output directory
-          rm -rf _site/.github _site/.git
-
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '_site'
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-        id: deployment
-        uses: actions/deploy-pages@v4
