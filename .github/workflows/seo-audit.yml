@@ -105,7 +105,7 @@ jobs:
 
       - name: Check Broken Links - Lychee
         id: lychee
-        uses: lycheeverse/lychee-action@6c7d5f3e2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d # v1.9.3
+        uses: lycheeverse/lychee-action@v2 # v1.9.3
         with:
           args: --verbose --no-progress --exclude-mail --accept 200,403,429 --format json --output.hfid/seo/lychee.json './**/*.html' './**/*.md'
           fail: false # We handle failure manually
