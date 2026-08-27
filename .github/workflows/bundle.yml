@@ -8,23 +8,16 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-
-
-
-
 # M-Law Language / H-FID Standard / REC v7.2
 
-
 # M-Law Language / H-FID Standard / REC v7.2
-
 
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: Bundle Workflow | H-FID Asset Bundler
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
@@ -37,7 +30,6 @@ on:
   schedule:
     - cron: '0 */6 * * *' # Every 6 hours
   workflow_dispatch:
-
 
 permissions:
   contents: write

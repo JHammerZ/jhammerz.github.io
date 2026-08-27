@@ -8,25 +8,18 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-
-
-
-
 # M-Law Language / H-FID Standard / REC v7.2
 
-
 # M-Law Language / H-FID Standard / REC v7.2
-
 
 # M-Law Language / H-FID Standard / REC v7.2
 
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: "Monitor: H-FID Health Check"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   schedule:
@@ -38,7 +31,6 @@ on:
         required: false
         type: boolean
         default: false
-
 
 permissions:
   contents: write

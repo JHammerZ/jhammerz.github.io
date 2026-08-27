@@ -8,16 +8,14 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 # JHam Language / H-FID Standard / HEO / HBS v1.2
 #
 # First Commit: [February 12, 2026]
 
 name: "FORCE_INDEX_NODES"
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   schedule:

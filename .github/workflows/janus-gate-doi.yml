@@ -8,6 +8,9 @@
 # SLSA Level: 3
 
 name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   schedule:
@@ -18,10 +21,6 @@ on:
       - '.well-known/hfid/**'
       - '.hfid/**'
   workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: write # Required to commit OTS proofs

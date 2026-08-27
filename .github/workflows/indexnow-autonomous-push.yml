@@ -17,6 +17,9 @@
 # SLSA Level: 3
 
 name: "SEO: Sitemap + IndexNow Autonomous Push"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
@@ -39,10 +42,6 @@ permissions:
   contents: write
   id-token: write
   attestations: write
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   generate-sitemap:

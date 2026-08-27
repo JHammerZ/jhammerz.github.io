@@ -7,6 +7,9 @@
 # SLSA Level: 3
 
 name: "Sovereignty Build"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
@@ -15,10 +18,6 @@ on:
       - 'entities.json'
       - 'proof.html'
   workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: write

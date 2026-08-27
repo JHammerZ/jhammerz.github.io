@@ -14,6 +14,9 @@
 # =================================================================
 
 name: "Sovereign Model Baseline"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   schedule:
@@ -29,9 +32,6 @@ on:
         type: string
 
 # FIX: concurrency MUST be after name/on but before jobs
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: write

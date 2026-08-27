@@ -8,6 +8,9 @@
 # SLSA Level: 3
 
 name: "CD: Automated Hub Indexation Deployment"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   schedule:
@@ -29,10 +32,6 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-
-concurrency:
-  group: pages-deploy
-  cancel-in-progress: true
 
 permissions:
   contents: write

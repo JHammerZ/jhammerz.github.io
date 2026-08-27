@@ -8,25 +8,17 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-
-
-
-
 # M-Law Language / H-FID Standard / REC v7.2
 
-
 # M-Law Language / H-FID Standard / REC v7.2
-
 
 # M-Law Language / H-FID Standard / REC v7.2
 
 # JHam Language / H-FID Standard / HBS
 name: Fix formatting in docker_build.yml cleanup step #577
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:

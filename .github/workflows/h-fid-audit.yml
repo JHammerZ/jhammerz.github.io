@@ -7,13 +7,12 @@
 # SLSA Level: 3
 
 name: "H-FID Forensic Audit"
-
-on:
-  workflow_dispatch:
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+on:
+  workflow_dispatch:
 
 jobs:
   h-fid-audit:

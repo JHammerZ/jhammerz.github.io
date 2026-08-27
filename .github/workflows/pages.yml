@@ -14,14 +14,13 @@
 # =================================================================
 
 name: Deploy Site to Pages
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
   workflow_dispatch:
-
-concurrency:
-  group: pages-deploy
-  cancel-in-progress: true
 
 permissions:
   contents: read

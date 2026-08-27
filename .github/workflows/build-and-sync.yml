@@ -8,25 +8,18 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-
-
-
-
 # M-Law Language / H-FID Standard / REC v7.2
 
-
 # M-Law Language / H-FID Standard / REC v7.2
-
 
 # M-Law Language / H-FID Standard / REC v7.2
 
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: "H-FID - Compile Core Data Repository"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
@@ -35,7 +28,6 @@ on:
   pull_request:
   workflow_call:
   schedule:
-
 
 permissions:
   contents: write
