@@ -95,9 +95,11 @@ jobs:
         run: |
           git config user.name "AlphaZero Mirror"
           git config user.email "actions@github.com"
-          git add mirror/ig/last.json
-          git commit -m "[skip ci] mirror: IG post $LATEST_ID | $LATEST_TIME" || echo "No changes to commit"
-          git push origin main
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Summary
         run: |

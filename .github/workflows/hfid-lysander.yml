@@ -141,12 +141,11 @@ jobs:
         run: |
           git config user.name "H-FID Lysander Bot"
           git config user.email "hfid@jhammerz.github.io"
-          git add -f .hfid/lysander/
-          if git diff --staged --quiet; then
-            echo "No Lysander changes to commit"
-          else
-            git commit -m "[skip ci] Lysander: Update blocklist + heartbeat ${{ steps.lysander.outputs.hash }}"
-            git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           fi
 
       - name: Upload Lysander Report

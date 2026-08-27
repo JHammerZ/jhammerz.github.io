@@ -60,7 +60,9 @@ jobs:
         run: |
           git config --global user.name 'Sovereign-Bot'
           git config --global user.email 'bot@jhammerz.io'
-          git add logs/bounty_log.md
-          git commit -m "[skip ci] Auto-Log: ${{ github.event.inputs.target }}" || echo "No changes to commit"
-          git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 

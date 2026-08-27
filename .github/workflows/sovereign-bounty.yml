@@ -59,8 +59,9 @@ jobs:
         run: |
           git config --global user.name "Aurelius-Bounty-Hunter"
           git config --global user.email "bot@jhammerz.city"
-          git add logs/bounty_log.md
-          git commit -m "[skip ci] Auto-log: Infinite-X Bounty Report Secured" || echo "No changes"
-          git pull --rebase origin main
-          git push origin main
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 

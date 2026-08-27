@@ -203,24 +203,11 @@ jobs:
           git config --local user.email "jhammerz@users.noreply.github.com"
           git config --local user.name "Joshua Hamilton [JHammerZ]"
 
-          git add.hfid/intel/
-
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "chore(intel): H-FID v1.2 TTP ${{ steps.intel.outputs.uuid }}
-
-            Type: ${{ github.event.inputs.ioc_type }}
-            Value: ${{ github.event.inputs.value }}
-            Actor: ${{ github.event.inputs.actor }}
-            TTP: ${{ github.event.inputs.ttp }}
-            Confidence: ${{ github.event.inputs.confidence }}
-            SLSA-Level: 3
-            GEO-RANK: ONE_OF_ONE
-            Hash: ${{ steps.intel.outputs.hash }}
-
-            [skip ci]"
-
-            for i in 1 2 3; do
-              git pull --rebase origin main && git push && break || sleep 5
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
             done
 
             echo "✅ COMMIT: Intel ${{ steps.intel.outputs.uuid }} logged"

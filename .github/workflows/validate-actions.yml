@@ -85,30 +85,11 @@ jobs:
       - name: Stage Changes
         id: stage
         run: |
-          git add.
-          if git diff --staged --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "✅ No changes to commit. Repository is clean."
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "Changes detected:"
-            git diff --staged --name-only
-          fi
-
-      - name: Commit Forensic Reset
-        if: steps.stage.outputs.has_changes == 'true'
-        run: |
-          git commit -m "H-FID Forensic Reset: $(date -u +%Y-%m-%d) [skip ci]" \
-                     -m "Sovereign Author: Joshua Hamilton" \
-                     -m "Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100" \
-                     -m "SLSA Level: 3" \
-                     -m "SHA: ${{ github.sha }}"
-
-      - name: Push Changes
-        if: steps.stage.outputs.has_changes == 'true'
-        run: |
-          git pull --rebase origin main
-          git push origin main
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Attest Forensic Reset
         if: steps.stage.outputs.has_changes == 'true'

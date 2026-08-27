@@ -186,12 +186,11 @@ jobs:
             exit 0
           fi
 
-          git add -A
-          git commit -m "feat(lysander): Sovereign Evolution ${{ github.event.inputs.sequence }}" \
-                     -m "H-FID v1.2 Compliant" \
-                     -m "SLSA: Level 3" \
-                     -m "Hash: ${{ steps.manifest.outputs.hash }}"
-          git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Upload Sovereign Evidence
         if: always()

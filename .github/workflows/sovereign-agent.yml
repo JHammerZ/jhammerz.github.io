@@ -151,24 +151,11 @@ jobs:
           git config --local user.email "jhammerz@users.noreply.github.com"
           git config --local user.name "Joshua Hamilton [JHammerZ]"
 
-          # FIXED: Scope allowlist. Never git add.
-          if [ -d.hfid/agent ]; then git add.hfid/agent/; fi
-          if [ -d agent/output ]; then git add agent/output/; fi
-          if [ -f agent/state.json ]; then git add agent/state.json; fi
-
-          # Check if changes exist or force is set
-          if [ -n "$(git status --porcelain)" ] || [ "$FORCE" = "true" ]; then
-            git commit -m "chore(agent): H-FID v1.2 sovereign sync - $TASK
-
-            SLSA-Level: 3
-            GEO-RANK: ONE_OF_ONE
-            SHA: ${{ github.sha }}
-            Run: ${{ github.run_id }}
-            Task: $TASK
-
-            [skip ci]" || echo "No changes to commit"
-
-            git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
             echo "✅ COMMIT: Sovereign state pushed" >>.hfid/agent/audit.log
           else
             echo "No state or file changes detected. Skipping commit." >>.hfid/agent/audit.log

@@ -159,19 +159,11 @@ jobs:
           git config user.name "Lysander-Bot"
           git config user.email "lysander-bot@users.noreply.github.com"
           
-          git add.hfid/lysander/ public/.htaccess
-          
-          if git diff --staged --quiet; then
-            echo "✅ No changes to commit. Blocklist unchanged."
-            exit 0
-          fi
-          
-          git commit -m "chore(security): Lysander Bot Purge [skip ci]" \
-                     -m "Blocked New: ${{ steps.purge.outputs.blocked_new }}" \
-                     -m "Total Blocked: ${{ steps.purge.outputs.total_blocked }}" \
-                     -m "H-FID v1.2 Compliant" \
-                     -m "SLSA: Level 3"
-          git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Upload Lysander Report
         if: always()

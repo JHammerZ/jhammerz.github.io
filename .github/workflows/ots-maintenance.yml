@@ -53,17 +53,11 @@ jobs:
         run: |
           git config --global user.name "JHammerZ-Sovereign-Engine"
           git config --global user.email "engine@jhammerz.github.io"
-          git add chains/maintenance_weather.json env/audio.log .well-known/aurelius.json
-          
-          if ! git diff --cached --quiet; then
-            git commit -m "MANIFEST MUTATION [V4.0.26]: Automated Identity Matrix Audit Cron Commit [skip ci]" || echo "Nothing to commit"
-            
-            # Retry with conflict resolution - bot version wins
-            n=0
-            until [ "$n" -ge 3 ]
-            do
-              if git pull --rebase -X ours origin main; then
-                git push origin main && break
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
               fi
               n=$((n+1))
               echo "Push failed, retry $n/3..."

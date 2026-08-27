@@ -160,8 +160,9 @@ jobs:
           mkdir -p .hfid/ledger
           cp ".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json" .hfid/ledger/latest.json
 
-          git add -f .hfid/ledger/
-          if ! git diff --staged --quiet; then
-            git commit -m "[skip ci] H-FID Forensic Ledger: ${{ steps.archive.outputs.archive_name }} | SHA256: ${{ steps.archive.outputs.archive_hash }} | Bitcoin Anchored | SLSA Level 3"
-            git push origin HEAD:main || true
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           fi

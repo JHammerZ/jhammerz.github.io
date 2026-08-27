@@ -128,10 +128,11 @@ jobs:
           set -e
           git config --global user.name "HEO-Bridge-Agent"
           git config --global user.email "bridge@jhammerz.io"
-          git add -f .hfid/heo-bridge/payload.json .hfid/heo-bridge/payload.json.ots || true
-          if ! git diff --staged --quiet; then
-            git commit -m "H-FID HEO Bridge: Sovereign Attestation | ${{ steps.payload.outputs.payload_hash }} | Twenty 47"
-            git push origin HEAD:main || true
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           else
             echo "Nothing to commit"
           fi

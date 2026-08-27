@@ -169,24 +169,11 @@ jobs:
           git config --local user.email "jhammerz@users.noreply.github.com"
           git config --local user.name "Joshua Hamilton [JHammerZ]"
 
-          # FIXED: Scope allowlist. Never git add.
-          git add.hfid/bounty/
-
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "chore(bounty): H-FID v1.2 finding ${{ steps.entry.outputs.uuid }}
-
-            Target: ${{ github.event.inputs.target }}
-            Severity: ${{ github.event.inputs.severity }}
-            CVSS: ${{ github.event.inputs.cvss }}
-            SLSA-Level: 3
-            GEO-RANK: ONE_OF_ONE
-            Hash: ${{ steps.entry.outputs.hash }}
-
-            [skip ci]" || echo "No changes to commit"
-
-            # FIXED: Retry push on race
-            for i in 1 2 3; do
-              git pull --rebase origin main && git push && break || sleep 5
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
             done
 
             echo "✅ COMMIT: Bounty ${{ steps.entry.outputs.uuid }} logged" >>.hfid/bounty/audit.log

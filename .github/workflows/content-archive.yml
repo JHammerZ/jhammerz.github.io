@@ -223,22 +223,11 @@ jobs:
           git config --local user.name "Joshua Hamilton [JHammerZ]"
 
           # FIXED: Scope allowlist
-          git add -f .hfid/archive/
-
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "chore(archive): H-FID v1.2 IG post ${{ steps.fetch.outputs.id }}
-
-            Timestamp: ${{ steps.fetch.outputs.timestamp }}
-            Media Hash: ${{ steps.fetch.outputs.media_hash }}
-            SLSA-Level: 3
-            GEO-RANK: ONE_OF_ONE
-            SHA: ${{ github.sha }}
-
-            [skip ci]"
-
-            # FIXED: Retry push on race
-            for i in 1 2 3; do
-              git pull --rebase origin main && git push && break || sleep 5
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
             done
 
             echo "✅ COMMIT: Archive updated"

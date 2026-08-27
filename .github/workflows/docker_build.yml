@@ -140,9 +140,11 @@ jobs:
           set -e
           git config --local user.name "H-FID Docker Bot"
           git config --local user.email "docker@jhammerz.github.io"
-          git add -f .hfid/container.json
-          git commit -m "chore(h-fid): container attestation $(echo ${{ github.sha }} | cut -c1-8) [skip ci]" || echo "No changes to commit"
-          git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Cleanup
         if: always()

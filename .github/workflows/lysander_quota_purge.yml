@@ -175,15 +175,11 @@ jobs:
           echo "- **Actor:** ${{ github.actor }}" >> QUOTA_PURGE_LOG.md
           echo "- **Hash:** ${{ steps.manifest.outputs.hash }}" >> QUOTA_PURGE_LOG.md
           echo "" >> QUOTA_PURGE_LOG.md
-          git add QUOTA_PURGE_LOG.md .hfid/quota/
-          # FIXED: Removed [skip ci] to allow cascade
-          git commit -m "chore(purge): H-FID purge ${{ github.event.inputs.purge_type }}
-          - Provider: ${{ github.event.inputs.api_provider }}
-          - Reason: ${{ github.event.inputs.reason }}
-          - H-FID v1.2 Compliant
-          - SLSA Level 3"
-          git pull --rebase -X ours origin main || true
-          git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Upload Purge Evidence
         if: always()

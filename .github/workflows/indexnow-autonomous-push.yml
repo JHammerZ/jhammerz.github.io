@@ -119,29 +119,11 @@ jobs:
           git config --local user.name 'github-actions[bot]'
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           if [ -f sitemap.xml ]; then
-            git add sitemap.xml
-          fi
-          git add -f .hfid/indexing/sitemap.json
-          if git diff --staged --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "Sitemap unchanged. No commit needed."
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "Sitemap changes:"
-            git diff --staged --stat
-          fi
-
-      - name: Commit Sitemap
-        if: steps.stage.outputs.has_changes == 'true'
-        run: |
-          git commit -m "chore(seo): Autonomous sitemap update [skip ci]" \
-            -m "H-FID v2.2 Compliant" \
-            -m "URLs: $(grep -c '<loc>' sitemap.xml)" \
-            -m "GEO_RANK: ONE_OF_ONE" \
-            -m "SLSA: Level 3"
-          
-          git pull --no-edit -X theirs origin main || true
-          git push origin main || git push --force-with-lease origin main
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Ping IndexNow
         id: indexnow

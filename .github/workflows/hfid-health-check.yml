@@ -123,11 +123,11 @@ jobs:
           git config --global user.name "JHammerZ-Sovereign-Engine"
           git config --global user.email "engine@jhammerz.github.io"
           
-          git add -f .hfid/health/* || true
-          
-          if ! git diff --cached --quiet; then
-            git commit -m "Forensic Reset - Autonomous Update [infiniteX active] [skip ci]"
-            git push origin HEAD:main --force
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           else
             echo "Zero tracking adjustments needed. Matrix state synchronized."
           fi

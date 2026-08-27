@@ -146,17 +146,11 @@ jobs:
           git config --global user.email "actions@github.com"
           
           # Stage tracking paths cleanly
-          git add .hfd/baseline/* .hfd/indexing/* sovereign-manifest.json lines-full.txt || true
-          
-          # Verify if target mutations are present before building commits
-          if ! git diff --cached --quiet; then
-            git commit -m "[skip ci] MANIFEST MUTATION [v4.0.28]: Production Baseline Lock Sync (skip ci)"
-            
-            # Fetch, merge upstream changes smoothly to eliminate [rejected] non-fast-forward blocks
-            git fetch origin main
-            git rebase origin/main
-            
-            git push origin HEAD:main
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           else
             echo "No pipeline modifications detected. Skipping execution push."
           fi

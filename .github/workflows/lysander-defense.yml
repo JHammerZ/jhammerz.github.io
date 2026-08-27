@@ -164,10 +164,11 @@ jobs:
           git config --global user.name "Lysander-Sovereign-Defense"
           git config --global user.email "defense@jhammerz.io"
 
-          git add -f .hfid/lysander/ || true
-          if ! git diff --staged --quiet; then
-            git commit -m "SEC(defense): H-FID Lysander defense ledger [${{ steps.manifest.outputs.hash }}] [skip ci]"
-            git push origin HEAD:main || true
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           else
             echo "Defense state clean: zero mutations required."
           fi

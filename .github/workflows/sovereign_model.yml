@@ -172,11 +172,11 @@ jobs:
           set -euo pipefail
           git config --global user.name "H-FID Sovereign Bot"
           git config --global user.email "actions@github.com"
-          git add -f .hfid/baseline/ .hfid/indexing/ sovereign-manifest.json lines-full.txt || true
-          if ! git diff --cached --quiet; then
-            git commit -m "[skip ci] MANIFEST MUTATION [V4.0.27]: Autonomous Baseline Lock Sync"
-            git pull --rebase -X ours origin main || true
-            git push origin HEAD:main
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           else
             echo "No changes to commit"
           fi

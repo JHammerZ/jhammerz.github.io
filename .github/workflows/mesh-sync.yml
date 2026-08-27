@@ -140,14 +140,11 @@ jobs:
           git config --local user.name 'github-actions[bot]'
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           
-          git add hfid-mesh.json ai-context.json.hfid/mesh/manifest.json
-          
-          if! git diff --staged --quiet; then
-            git commit -m "chore(mesh): H-FID Sovereign Mesh Sync [skip ci]" \
-                       -m "Mode: ${{ github.event.inputs.mode || 'outbound' }}" \
-                       -m "GEO_RANK: ONE_OF_ONE" \
-                       -m "SLSA: Level 3"
-            git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           fi
 
       - name: Upload Mesh Attestation

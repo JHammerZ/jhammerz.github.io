@@ -160,10 +160,11 @@ jobs:
           git config --global user.name "Lysander-Index-Bot"
           git config --global user.email "index@jhammerz.io"
           
-          git add -f .hfid/index-nodes/manifest.json .hfid/index-nodes/manifest.json.ots || true
-          if ! git diff --staged --quiet; then
-            git commit -m "H-FID FORCE_INDEX_NODES: ${{ steps.manifest.outputs.index_hash }} | SLSA 3 | Bitcoin Anchored"
-            git push origin HEAD:main || true
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           else
             echo "Index nodes attestation clean: nothing to commit."
           fi

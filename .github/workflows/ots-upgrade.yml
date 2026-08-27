@@ -43,6 +43,8 @@ jobs:
           find . -name "*.ots" -exec ots upgrade {} \;
           git config user.name "L5 Bot"
           git config user.email "bot@jhammerz.github.io"
-          git add *.ots
-          git diff --staged --quiet || git commit -m "[skip ci] L6: Auto-upgrade OTS proofs"
-          git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .

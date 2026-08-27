@@ -193,12 +193,11 @@ jobs:
           timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)
           EOF
 
-          git add data/last_omega_hash.txt.hfid/omega/
-          git commit -m "chore(omega): H-FID broadcast ${{ github.ref_name }} [skip ci]" \
-                     -m "Content: ${{ steps.manifest.outputs.content_hash }}" \
-                     -m "SLSA: Level 3" \
-                     -m "H-FID v1.2 Compliant"
-          git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Upload Omega Evidence
         if: always()

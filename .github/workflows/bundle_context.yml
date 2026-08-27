@@ -61,21 +61,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add lines-full.txt
-          
-          if ! git diff --cached --quiet; then
-            git commit -m "Chore: Update lines-full.txt + sitemap [skip ci]" \
-              -m "H-FID v1.2 Compliant" \
-              -m "- URLs: $(grep -c '<loc>' sitemap.xml || echo 0)" \
-              -m "- GEO_RANK: ONE_OF_ONE" \
-              -m "- SLSA: Level 3"
-            
-            # Retry with conflict resolution - bot version wins
-            n=0
-            until [ "$n" -ge 3 ]
-            do
-              if git pull --rebase -X ours origin main; then
-                git push origin main && break
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
               fi
               n=$((n+1))
               echo "Push failed, retry $n/3..."

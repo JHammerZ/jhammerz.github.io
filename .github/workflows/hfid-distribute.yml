@@ -174,19 +174,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          git add .well-known/hfid/chain.json badges/hfid.md.hfid/distribution/lysander.json
-          
-          if git diff --staged --quiet; then
-            echo "✅ No changes to commit"
-            exit 0
-          fi
-          
-          git commit -m "chore(hfid): LYSANDER Distribution ${{ steps.hfid.outputs.hfid }} [skip ci]" \
-                     -m "BTC: ${{ steps.hfid.outputs.btc }}" \
-                     -m "IPFS: ${{ steps.ipfs.outputs.ipfs_hash }}" \
-                     -m "H-FID v1.2 Compliant" \
-                     -m "SLSA: Level 3"
-          git push
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
 
       - name: Upload Distribution Proof
         if: always()

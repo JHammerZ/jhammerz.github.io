@@ -97,18 +97,8 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
 
           # Only add dist/ and.hfid/, not everything
-          git add dist/.hfid/bundle.json.hfid/assets.sha256
-
-          if git diff --staged --quiet; then
-            echo "No bundle changes to commit"
-            exit 0
-          fi
-
-          git commit -m "Auto-bundle update ${{ github.sha }} [skip ci]"
-
-      - name: Push changes
-        if: steps.build.outputs.built == 'true'
-        run: |
-          set -e
-          git pull --rebase origin main || echo "Rebase failed, continuing"
-          git push origin main
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .

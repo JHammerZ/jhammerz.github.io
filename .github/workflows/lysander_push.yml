@@ -57,17 +57,11 @@ jobs:
         run: |
           git config --global user.name "Lysander-3.0-Engine"
           git config --global user.email "lysander@jhammerz.github.io"
-          git add -f .hfid/sovereign/manifest.json manifest.json .hfid/ || true
-          
-          if ! git diff --cached --quiet; then
-            git commit -m "[skip ci] Forensic Reset - Autonomous Update [InfiniteX active] | Twenty 47 | $(git rev-parse HEAD)" || echo "Nothing to commit"
-            
-            # Retry with conflict resolution - bot version wins
-            n=0
-            until [ "$n" -ge 3 ]
-            do
-              if git pull --rebase -X ours origin main; then
-                git push origin main && break
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
               fi
               n=$((n+1))
               echo "Push failed, retry $n/3..."

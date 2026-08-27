@@ -141,10 +141,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add llms-full.txt .hfid/llms/
-          if ! git diff --staged --quiet; then
-            git commit -m "[skip ci] chore(aeo): automatically refresh global llms-full.txt | Twenty 47 | ${{ steps.manifest.outputs.manifest_hash }}"
-            git push origin HEAD:${{ github.ref_name }} || true
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           fi
 
       - name: Upload Sovereign Evidence

@@ -149,15 +149,11 @@ jobs:
         run: |
           git config --global user.name "Janus-Gate-Agent"
           git config --global user.email "janus-gate@jhammerz.co"
-          git add .hfd/provenance/* || true
-
-      - name: Commit Janus Gate Sync
-        run: |
-          if ! git diff --cached --quiet; then
-            git commit -m "DOI PROVENANCE LINK [${{ github.sha }}]: Syncing OpenTimestamps Proofs"
-            git fetch origin main
-            git rebase origin/main
-            git push origin HEAD:main --force
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
           else
             echo "No pipeline modifications detected."
           fi
