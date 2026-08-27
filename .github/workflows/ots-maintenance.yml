@@ -6,9 +6,6 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 # M-Law Language / H-FID Standard / REC v7.2
@@ -18,6 +15,3 @@
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: "PID OTS Maintenance / maintenance-and-audit"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true

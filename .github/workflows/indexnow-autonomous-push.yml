@@ -6,14 +6,8 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-
 # H-Law Language / H-FID Standard / REC v7.2
 # H-Law Language / H-FID Standard / HDS v7.2
 # H-FID v2.2 (SEO-Optimized 100/100)
 
 name: "SEO: Sitemap + IndexNow Autonomous Push"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
