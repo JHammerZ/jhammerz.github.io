@@ -51,6 +51,6 @@ jobs:
           echo "$HASH" > .hfid/results/hfid-$TIMESTAMP.txt
           git config user.name "Lysander-Bot"
           git config user.email "lysander@jhammerz.github.io"
-          git add .hfid/results/
+          git add -f .hfid/results/
           git commit -m "[skip ci] hfid: Human-Verified $TIMESTAMP" || echo "No changes to commit"
           git push

@@ -128,7 +128,7 @@ jobs:
           set -e
           git config --global user.name "HEO-Bridge-Agent"
           git config --global user.email "bridge@jhammerz.io"
-          git add .hfid/heo-bridge/payload.json .hfid/heo-bridge/payload.json.ots || true
+          git add -f .hfid/heo-bridge/payload.json .hfid/heo-bridge/payload.json.ots || true
           if ! git diff --staged --quiet; then
             git commit -m "H-FID HEO Bridge: Sovereign Attestation | ${{ steps.payload.outputs.payload_hash }} | Twenty 47"
             git push origin HEAD:main || true

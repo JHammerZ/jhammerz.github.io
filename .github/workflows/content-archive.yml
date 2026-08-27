@@ -223,7 +223,7 @@ jobs:
           git config --local user.name "Joshua Hamilton [JHammerZ]"
 
           # FIXED: Scope allowlist
-          git add .hfid/archive/
+          git add -f .hfid/archive/
 
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "chore(archive): H-FID v1.2 IG post ${{ steps.fetch.outputs.id }}

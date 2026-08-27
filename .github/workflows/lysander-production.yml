@@ -131,7 +131,7 @@ jobs:
           git config --global user.name "JHammerZ-Sovereign-Engine"
           git config --global user.email "engine@jhammerz.github.io"
           
-          git add .hfid/baseline/sovereign-manifest.json || true
+          git add -f .hfid/baseline/sovereign-manifest.json || true
           
           if ! git diff --cached --quiet; then
             git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"

@@ -140,7 +140,7 @@ jobs:
           set -e
           git config --local user.name "H-FID Docker Bot"
           git config --local user.email "docker@jhammerz.github.io"
-          git add .hfid/container.json
+          git add -f .hfid/container.json
           git commit -m "chore(h-fid): container attestation $(echo ${{ github.sha }} | cut -c1-8) [skip ci]" || echo "No changes to commit"
           git push
 

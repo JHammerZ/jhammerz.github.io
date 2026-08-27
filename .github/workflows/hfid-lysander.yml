@@ -141,7 +141,7 @@ jobs:
         run: |
           git config user.name "H-FID Lysander Bot"
           git config user.email "hfid@jhammerz.github.io"
-          git add .hfid/lysander/
+          git add -f .hfid/lysander/
           if git diff --staged --quiet; then
             echo "No Lysander changes to commit"
           else

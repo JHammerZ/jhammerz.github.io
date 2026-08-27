@@ -164,7 +164,7 @@ jobs:
           git config --global user.name "Lysander-Sovereign-Defense"
           git config --global user.email "defense@jhammerz.io"
 
-          git add .hfid/lysander/ || true
+          git add -f .hfid/lysander/ || true
           if ! git diff --staged --quiet; then
             git commit -m "SEC(defense): H-FID Lysander defense ledger [${{ steps.manifest.outputs.hash }}] [skip ci]"
             git push origin HEAD:main || true

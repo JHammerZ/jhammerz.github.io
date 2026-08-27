@@ -57,7 +57,7 @@ jobs:
         run: |
           git config --global user.name "Lysander-3.0-Engine"
           git config --global user.email "lysander@jhammerz.github.io"
-          git add .hfid/sovereign/manifest.json manifest.json .hfid/ || true
+          git add -f .hfid/sovereign/manifest.json manifest.json .hfid/ || true
           
           if ! git diff --cached --quiet; then
             git commit -m "[skip ci] Forensic Reset - Autonomous Update [InfiniteX active] | Twenty 47 | $(git rev-parse HEAD)" || echo "Nothing to commit"
