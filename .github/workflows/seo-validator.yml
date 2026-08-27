@@ -29,8 +29,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *' # Daily at midnight
-  push:
-    paths:
+  workflow_dispatch:
       - '**.html'
       - '**.md'
       - 'sitemap.xml'

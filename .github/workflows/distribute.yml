@@ -33,8 +33,7 @@ on:
           - arweave
           - zenodo
           - mesh
-  push:
-    paths:
+  workflow_dispatch:
       - '.well-known/hfid/chain.json'
       - '.well-known/hfid/manifest.json'
       - '!**/*.ots' # Don't trigger on OTS proof commits

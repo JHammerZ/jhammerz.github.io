@@ -30,8 +30,7 @@ on:
         default: 'honeypot'
         type: choice
         options: [honeypot, block, analyze, purge]
-  push:
-    paths:
+  workflow_dispatch:
       - 'logic/lysander/**' # ONLY trigger when defense logic changes
       - '! .hfid/**'        # Ignore our own artifacts
 

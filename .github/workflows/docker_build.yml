@@ -29,9 +29,8 @@ name: Fix formatting in docker_build.yml cleanup step #577
 
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ "main" ]
-    paths:
       - 'Dockerfile'
       - 'docker/**'
       - '.github/workflows/docker_build.yml'
@@ -81,7 +80,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true
+          workflow_dispatch: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

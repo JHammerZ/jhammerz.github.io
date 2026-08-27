@@ -32,8 +32,7 @@ on:
         description: 'Broadcast message override'
         required: false
         type: string
-  push:
-    paths:
+  workflow_dispatch:
       - 'broadcast.md' # ONLY trigger when you explicitly update broadcast content
       - '!**/*.ots' # Ignore OTS proof commits
       - '!.hfid/**' # Ignore our own workflow commits

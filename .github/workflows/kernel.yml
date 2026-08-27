@@ -32,14 +32,12 @@ on:
         required: false
         default: true
         type: boolean
-  push:
-    paths:
+  workflow_dispatch:
       - 'flake.nix'
       - 'flake.lock'
       - '.nix/**'
       - 'nix/**'
   pull_request:
-    paths:
       - 'flake.nix'
       - 'flake.lock'
       - '.nix/**'

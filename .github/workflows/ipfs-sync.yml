@@ -40,8 +40,7 @@ on:
         default: 'web3storage'
         type: choice
         options: [web3storage, pinata, estuary, none]
-  push:
-    paths:
+  workflow_dispatch:
       - 'public/**' # ONLY sync when public content changes
       - 'dist/**' # ONLY sync when build output changes
       - '!dist/*-exclude.txt' # ONLY sync when not exclude list changes

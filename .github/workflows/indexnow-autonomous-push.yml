@@ -19,9 +19,8 @@
 name: "SEO: Sitemap + IndexNow Autonomous Push"
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - 'docs/**'
       - '**/*.md'
       - '**/*.html'

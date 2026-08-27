@@ -22,8 +22,7 @@ name: "CD: H-FID LYSANDER Distribution"
 on:
   schedule:
     - cron: '0 6 * * 1' # Weekly Monday 6am UTC
-  push:
-    paths:
+  workflow_dispatch:
       - '.well-known/hfid/chain.json'
       - '!**/*.ots' # Ignore OTS proof commits
       - '!.hfid/**' # Ignore our own distribution commits

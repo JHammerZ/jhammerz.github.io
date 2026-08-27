@@ -33,8 +33,7 @@ on:
         required: false
         default: false
         type: boolean
-  push:
-    paths:
+  workflow_dispatch:
       - 'public/**' # ONLY broadcast when public content changes
       - 'dist/**' # ONLY broadcast when build output changes
       - '!**/*.ots' # Ignore OTS commits

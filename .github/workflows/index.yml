@@ -31,9 +31,8 @@ on:
         required: false
         default: false
         type: boolean
-  push:
+  workflow_dispatch:
     branches: [main]
-    paths:
       - 'public/**' # ONLY when public content changes
       - 'sitemap.xml' # ONLY when sitemap updates
   # NO SCHEDULE. Indexing is event-driven, not daily spam.

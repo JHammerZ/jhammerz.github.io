@@ -44,8 +44,7 @@ on:
         required: false
         default: true
         type: boolean
-  push:
-    paths:
+  workflow_dispatch:
       - 'Kernel_Override.c'
       - 'Makefile'
 

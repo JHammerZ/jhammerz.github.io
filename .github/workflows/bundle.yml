@@ -27,9 +27,8 @@ concurrency:
 name: Bundle Workflow | H-FID Asset Bundler
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - 'src/**'
       - 'public/**'
       - 'package.json'

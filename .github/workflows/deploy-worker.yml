@@ -29,9 +29,8 @@ name: Deploy Worker
 
 on:
   workflow_dispatch:
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - 'wrangler.toml'
       - 'worker.js'
       - 'src/**'

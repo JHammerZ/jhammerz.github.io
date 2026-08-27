@@ -18,9 +18,8 @@ name: "CD: Cloudflare Workers Deployment"
 
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ "main" ]
-    paths:
       - 'wrangler.toml'
       - 'worker.js'
       - 'index.html'

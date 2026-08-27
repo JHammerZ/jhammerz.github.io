@@ -9,9 +9,8 @@
 name: "SEO: Indexation"
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - 'docs/**'
       - '**/*.md'
       - '**/*.html'

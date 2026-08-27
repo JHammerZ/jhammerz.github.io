@@ -42,9 +42,8 @@ on:
         default: 'honeypot'
         type: choice
         options: [honeypot, block, analyze, purge]
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - '.hfid/lysander/**'
       - '.github/workflows/lysander-defense.yml'
 

@@ -20,9 +20,8 @@ name: "CD: Favicon Sovereign Sync"
 
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - 'assets/favicon.svg'
       - 'assets/logo.png'
       - 'logic/favicon_logic.js'

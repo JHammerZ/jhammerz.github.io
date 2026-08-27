@@ -22,9 +22,8 @@ name: "CI: Structural Metadata Linting"
 on:
   schedule:
     - cron: '0 0 * * *' # Daily midnight UTC audit
-  push:
+  workflow_dispatch:
     branches: [ "main" ]
-    paths:
       - 'llms.txt'
       - 'openapi.yaml'
       - 'openapi.yml'

@@ -23,10 +23,9 @@ on:
   schedule:
     - cron: '0 0 * * *'
     - cron: '0 12 * * *'
-  push:
+  workflow_dispatch:
     branches:
       - main
-    paths:
       - '.well-known/**'
       - 'sitemap.xml'
       - 'robots.txt'

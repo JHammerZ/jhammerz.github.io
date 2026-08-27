@@ -36,9 +36,8 @@ on:
         description: 'Force social media post even if no changes'
         required: false
         default: 'false'
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - 'index.html'
       - 'music.html'
       - 'protocol/**'

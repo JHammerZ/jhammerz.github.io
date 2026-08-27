@@ -12,8 +12,7 @@ name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
 on:
   schedule:
     - cron: '0 0 * * *' # Daily midnight UTC
-  push:
-    paths:
+  workflow_dispatch:
       - 'zenodo.json'
       - 'CITATION.cff'
       - '.well-known/hfid/**'

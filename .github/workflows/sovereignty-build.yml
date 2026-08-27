@@ -9,9 +9,8 @@
 name: "Sovereignty Build"
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - '.hfid/**'
       - 'entities.json'
       - 'proof.html'

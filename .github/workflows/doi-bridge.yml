@@ -37,10 +37,9 @@ name: "Sovereign: DOI Sync | Janus Gate v1.2-M-FID"
 on:
   schedule:
     - cron: '0 0 * * *' # Daily midnight UTC
-  push:
+  workflow_dispatch:
     branches:
       - main
-    paths:
       - 'zenodo.json'
       - '.zenodo.json'
       - '.github/workflows/doi-bridge.yml'

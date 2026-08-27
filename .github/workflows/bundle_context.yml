@@ -28,9 +28,8 @@ concurrency:
 name: bundle_context
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - 'docs/**'
       - '*.md'
       - 'lines-full.txt'

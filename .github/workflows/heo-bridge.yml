@@ -20,10 +20,9 @@ name: "H-FID HEO Bridge"
 
 
 on:
-  push:
+  workflow_dispatch:
     branches:
       - main
-    paths:
       - '.hfid/**'
       - '.github/workflows/heo-bridge.yml'
   workflow_dispatch:

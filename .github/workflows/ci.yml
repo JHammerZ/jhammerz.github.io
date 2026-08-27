@@ -32,16 +32,14 @@ name: 'CI: Cloudflare Workers Deploy'
 
 
 on:
-  push:
+  workflow_dispatch:
     branches: [ "main" ]
-    paths:
       - 'wrangler.toml'
       - 'worker.js'
       - '.github/workflows/ci.yml'
       - 'src/**'
   pull_request:
     branches: [ "main" ]
-    paths:
       - 'wrangler.toml'
       - 'worker.js'
       - 'src/**'

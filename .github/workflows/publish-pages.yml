@@ -13,9 +13,8 @@ on:
   schedule:
     - cron: '0 6 * * *' # Daily midnight UTC reindex
     - cron: '0 12 * * *' # Midday sync
-  push:
+  workflow_dispatch:
     branches: [ "main" ]
-    paths:
       - '**/*.html'
       - '**/*.md'
       - 'assets/**'

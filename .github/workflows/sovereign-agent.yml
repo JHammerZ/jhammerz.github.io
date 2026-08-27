@@ -33,9 +33,8 @@ on:
         required: false
         default: false
         type: boolean
-  push:
+  workflow_dispatch:
     branches: [main]
-    paths:
       - 'agent/**' # Only when agent code changes
       - 'data/**' # Only when agent data changes
   # REMOVED: schedule. Agents run on event, not time.

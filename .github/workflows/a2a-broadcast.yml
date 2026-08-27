@@ -30,9 +30,8 @@ name: A2A Global Broadcast | H-FID Sovereign Signal
 on:
   schedule:
     - cron: '0 * * * *' # Hourly for <30s workflows
-  push:
+  workflow_dispatch:
     branches: [ main ]
-    paths:
       - 'index.html'
       - 'music.html'
       - 'sitemap.xml'
