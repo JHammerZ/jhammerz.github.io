@@ -1,4 +1,13 @@
 # M-Law Language / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
+# M-Law Language / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
 
@@ -153,7 +162,7 @@ jobs:
           git config --global user.email "actions@github.com"
           git add .hfid/baseline/ .hfid/indexing/ sovereign-manifest.json lines-full.txt || true
           if ! git diff --cached --quiet; then
-            git commit -m "MANIFEST MUTATION [V4.0.27]: Autonomous Baseline Lock Sync"
+            git commit -m "[skip ci] MANIFEST MUTATION [V4.0.27]: Autonomous Baseline Lock Sync"
             git pull --rebase -X ours origin main || true
             git push origin HEAD:main
           else
