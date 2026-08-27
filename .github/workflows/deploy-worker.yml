@@ -28,4 +28,5 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # FIXED: Directs the action execution runtime context straight into the subdirectory path
           workingDirectory: 'lysander-w4'
