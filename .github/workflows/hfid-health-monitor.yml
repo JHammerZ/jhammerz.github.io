@@ -6,9 +6,6 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-
 name: "Monitor: H-FID Health Check"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -16,6 +13,7 @@ concurrency:
 
 on:
   workflow_dispatch:
+
 jobs:
   health:
     runs-on: ubuntu-latest
@@ -213,3 +211,4 @@ jobs:
           echo "**REACH_MULTIPLIER:** 3000x" >> $GITHUB_STEP_SUMMARY
           echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
           echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+
