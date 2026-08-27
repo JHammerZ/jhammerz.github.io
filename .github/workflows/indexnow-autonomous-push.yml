@@ -1,0 +1,65 @@
+name: IndexNow Autonomous Push
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.html'
+      - '**.md'
+      - 'sitemap.xml'
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate sitemap
+        run: |
+          npx -y sitemap-generator-cli https://your-site.com -o ./sitemap.xml
+
+      - name: Stage Sitemap Changes
+        id: stage
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@://github.com'
+          
+          if [ -f sitemap.xml ]; then
+            git add sitemap.xml
+          fi
+          
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "✅ Sitemap unchanged. No commit needed."
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            git diff --staged --stat
+          fi
+
+      - name: Commit and Push
+        if: steps.stage.outputs.has_changes == 'true'
+        run: |
+          git commit -m "chore: update sitemap [skip ci]"
+          git push
+
+      - name: IndexNow Ping
+        run: |
+          curl -X POST "https://indexnow.org" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "host": "your-site.com",
+            "key": "${{ secrets.INDEXNOW_KEY }}",
+            "keyLocation": "https://your-site.com{{ secrets.INDEXNOW_KEY }}.txt",
+            "urlList": ["https://your-site.com/sitemap.xml"]
+          }'
