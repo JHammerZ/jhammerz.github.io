@@ -33,7 +33,7 @@ jobs:
         id: stage
         run: |
           git config --local user.name 'github-actions[bot]'
-          git config --local user.email 'github-actions[bot]@://github.com'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           
           if [ -f sitemap.xml ]; then
             git add sitemap.xml
@@ -44,6 +44,7 @@ jobs:
             echo "✅ Sitemap unchanged. No commit needed."
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "📝 Sitemap changes:"
             git diff --staged --stat
           fi
 
@@ -55,11 +56,11 @@ jobs:
 
       - name: IndexNow Ping
         run: |
-          curl -X POST "https://indexnow.org" \
+          curl -X POST "https://api.indexnow.org/indexnow" \
           -H "Content-Type: application/json" \
           -d '{
             "host": "your-site.com",
             "key": "${{ secrets.INDEXNOW_KEY }}",
-            "keyLocation": "https://your-site.com{{ secrets.INDEXNOW_KEY }}.txt",
+            "keyLocation": "https://your-site.com/${{ secrets.INDEXNOW_KEY }}.txt",
             "urlList": ["https://your-site.com/sitemap.xml"]
           }'
