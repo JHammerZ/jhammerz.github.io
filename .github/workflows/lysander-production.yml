@@ -126,15 +126,33 @@ jobs:
           
           if git diff --cached --quiet; then
             echo "Zero identity matrix mutations detected. Skipping push state."
-          else
-            git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
+            exit 0
+          fi
+          
+          git commit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]"
+          
+          # FIX: Atomic push with ref lock retry. This is the key change.
+          n=0
+          until [ "$n" -ge 5 ]; do
+            echo "Attempting atomic push to remote grid repository. Attempt $((n+1))/5..."
+            git fetch origin main
+            git reset --soft origin/main
+            git add -f .hfid/baseline/sovereign-manifest.json
+            git commit --amend --no-edit -m "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync [skip ci]" || true
             
-            # FIX: Mitigate parallel push racing conditions via atomic rebase loops
-            echo "Pulling latest upstream history using merge mechanism..."
-            git pull --no-edit -X theirs origin main || true
+            if git push origin HEAD:main; then
+              echo "Upstream master securely synchronized."
+              break
+            fi
             
-            echo "Pushing verified baseline records to remote grid repository..."
-            git push origin HEAD:main || git push --force-with-lease origin main
+            n=$((n+1))
+            echo "Remote ref locked. Retrying in $((n*2))s..."
+            sleep $((n*2))
+          done
+          
+          if [ "$n" -ge 5 ]; then
+            echo "Failed to push after 5 retries due to persistent lock."
+            exit 1
           fi
 
       - name: Generate Summary Logs for Workflow Terminal View
