@@ -19,7 +19,8 @@
 # Created under MPP License
 #
 # Operating State: Active Automation Mode
-# Validated Configuration: hfd-schema.json
+# Validated Configuration:
+  workflow_dispatch: hfd-schema.json
 # Core Engine: Node.js (v20 Variant)
 # Security Standard: SHA-256 Protocol Authorization
 #
