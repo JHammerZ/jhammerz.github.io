@@ -1,0 +1,21 @@
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Complete Infrastructure Bindings for JHammerZ-005 / Lysander-w4
+
+name = "lysander-w12"
+main = "index.js"
+compatibility_date = "2026-08-18"
+compatibility_flags = [ "nodejs_compat" ]
+
+[[d1_databases]]
+binding = "DB"
+database_id = "67fd6052-2425-4200-bb94-835dd6792f8b"
+
+[[analytics_engine_datasets]]
+binding = "AE"
+dataset = "lysander_metrics"
+
+[vars]
+ORIGIN_URL = "https://github.io"
+SOVEREIGN_AUTHOR = "Joshua Hamilton"
+GEO_RANK = "ONE_OF_ONE"
+PROTOCOL_VERSION = "5.0.0"
