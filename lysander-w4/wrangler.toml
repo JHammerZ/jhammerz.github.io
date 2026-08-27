@@ -6,6 +6,11 @@ main = "index.js"
 compatibility_date = "2026-08-18"
 compatibility_flags = [ "nodejs_compat" ]
 
+# FORCED: Instructs the edge network router to bind and process all path matrices
+[routes]
+pattern = "lysander-v13.jhammerzofficial.workers.dev/*"
+zone_id = ""
+
 [[d1_databases]]
 binding = "DB"
 database_id = "e9f74673-7f5d-42e6-9eb8-7bf03b85ca75"
