@@ -15,8 +15,8 @@ on:
     branches: [ main ]
     paths:
       - 'docs/**'
-      - '*.md'
-      - '*.html'
+      - '**/*.md'
+      - '**/*.html'
       - 'llms.txt'
       - 'llms-full.txt'
       - 'entities.json'
