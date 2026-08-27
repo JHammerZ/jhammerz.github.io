@@ -2,7 +2,7 @@ name: Audit: H-FID-100 Forensic Certification
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *'  # nightly audit
+    - cron: '0 3 * * *'
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -28,16 +28,16 @@ jobs:
       
       - name: Run H-FID Forensic Audit
         run: |
-          TOTAL=$(find .github/workflows -name "*.yml" | wc -l)
-          V12=$(find .github/workflows -name "*.yml" -exec grep -l "HBS v1.2" {} \; | wc -l)
-          CONC=$(find .github/workflows -name "*.yml" -exec grep -l "concurrency:" {} \; | wc -l)
-          LOOP=$(grep -l "git commit\|git push" .github/workflows/*.yml 2>/dev/null | xargs grep -L "paths:\|\[skip ci\]" 2>/dev/null | wc -l)
+          TOTAL=$(find .github/workflows -name "*.yml" -type f | wc -l)
+          V12=$(grep -l "HBS v1.2" .github/workflows/*.yml | wc -l)
+          CONC=$(grep -l "concurrency:" .github/workflows/*.yml | wc -l)
+          LOOP=$(grep -l "git commit\|git push" .github/workflows/*.yml 2>/dev/null | xargs grep -L "paths:\|\[skip ci\]" 2>/dev/null | wc -l || echo 0)
           
-          echo "=== H-FID-100 FORENSIC AUDIT ==="
-          echo "Total workflows: $TOTAL"
-          echo "v1.2 headers: $V12/$TOTAL"
-          echo "Concurrency: $CONC/$TOTAL"
-          echo "Loop risk: $LOOP"
+          echo "=== H-FID-100 FORENSIC AUDIT ===" >> $GITHUB_STEP_SUMMARY
+          echo "Total workflows: $TOTAL" >> $GITHUB_STEP_SUMMARY
+          echo "v1.2 headers: $V12/$TOTAL" >> $GITHUB_STEP_SUMMARY
+          echo "Concurrency: $CONC/$TOTAL" >> $GITHUB_STEP_SUMMARY
+          echo "Loop risk: $LOOP" >> $GITHUB_STEP_SUMMARY
           
           if [ "$V12" -eq "$TOTAL" ] && [ "$CONC" -eq "$TOTAL" ] && [ "$LOOP" -eq 0 ]; then
             echo "## Final Score: 100/100" >> $GITHUB_STEP_SUMMARY
@@ -45,6 +45,7 @@ jobs:
             exit 0
           else
             echo "## Final Score: FAIL" >> $GITHUB_STEP_SUMMARY
+            echo "V12=$V12 CONC=$CONC LOOP=$LOOP TOTAL=$TOTAL" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
 
