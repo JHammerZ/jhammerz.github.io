@@ -7,21 +7,18 @@
 # SLSA Level: 3
 
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 # Licensed under MIT License
 
 name: "Monitor: H-FID Health Check"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
-  workflow_dispatch:
-
 jobs:
   health:
-    runs-on:
-  workflow_dispatch: ubuntu-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout Repository

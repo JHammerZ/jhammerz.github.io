@@ -7,9 +7,6 @@
 # SLSA Level: 3
 
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 # Licensed under MIT License
 
 # H-Law Language / H-FID Standard / REC v7.2
@@ -17,3 +14,6 @@ concurrency:
 # H-FID v2.2 (SEO-Optimized 100/100)
 
 name: "SEO: Sitemap + IndexNow Autonomous Push"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true

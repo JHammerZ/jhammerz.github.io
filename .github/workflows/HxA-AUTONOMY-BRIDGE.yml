@@ -7,11 +7,11 @@
 # SLSA Level: 3
 
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 # Licensed under MIT License
 
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 name: "SEO: Sitemap + IndexNow Autonomous Push"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true

@@ -7,9 +7,6 @@
 # SLSA Level: 3
 
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 # Licensed under MIT License
 
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
@@ -21,3 +18,6 @@ concurrency:
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: "PID OTS Maintenance / maintenance-and-audit"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true

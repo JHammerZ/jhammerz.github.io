@@ -7,21 +7,18 @@
 # SLSA Level: 3
 
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 # Licensed under MIT License
 
 name: "Audit: H-FID-100 Forensic Certification"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
-  workflow_dispatch:
-
 jobs:
   forensic-audit:
-    runs-on:
-  workflow_dispatch: ubuntu-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout Repository
@@ -30,8 +27,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version:
-  workflow_dispatch: '3.11'
+          python-version: '3.11'
 
       - name: Install Dependencies
         run: |

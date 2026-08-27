@@ -7,9 +7,6 @@
 # SLSA Level: 3
 
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 # Licensed under MIT License
 
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
@@ -28,3 +25,6 @@ concurrency:
 # Grid Level: 3 | Twenty AI7 Protocol | ACTIVE
 
 name: "Sovereign: DOI Sync | Janus Gate v1.2-M-FID"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true

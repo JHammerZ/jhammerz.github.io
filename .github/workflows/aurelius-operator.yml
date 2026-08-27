@@ -7,9 +7,6 @@
 # SLSA Level: 3
 
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 # Licensed under MIT License
 
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
@@ -21,19 +18,18 @@ concurrency:
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: Aurelius-Engine Sovereign Operator
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 on:
   workflow_dispatch:
-  workflow_dispatch:
-
 jobs:
   lighthouse-audit:
-    runs-on:
-  workflow_dispatch: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
         uses: actions/setup-node@v4
         with:
-          node-version:
-  workflow_dispatch: '18'
+          node-version: '18'
         run: npm install -g lighthouse@10
         run: |
           lighthouse https://jhammerz.github.io/music.html --output=json --output-path=./report.json --chrome-flags="--headless=new --no-sandbox"
