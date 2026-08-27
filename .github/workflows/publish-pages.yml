@@ -20,6 +20,9 @@ name: "CD: Automated Hub Indexation Deployment"
 
 
 on:
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
   schedule:
     - cron: '0 0 * * *' # Daily midnight UTC reindex
     - cron: '0 12 * * *' # Midday sync

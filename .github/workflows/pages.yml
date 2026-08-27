@@ -31,6 +31,9 @@ concurrency:
 name: Deploy Site to Pages
 
 on:
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
   push:
     branches: ["main"]
   workflow_dispatch:
