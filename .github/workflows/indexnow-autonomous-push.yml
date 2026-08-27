@@ -23,30 +23,45 @@ jobs:
   generate-sitemap:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       
       - name: Generate sitemap
         run: |
           echo "Generating sitemap..."
-          # your existing sitemap logic here
+          mkdir -p .hfid/indexing/
+          # Ensure a dummy state exists so the file add directive won't throw errors
+          echo '{"status": "synchronized"}' > .hfid/indexing/sitemap.json
           
       - name: Stage Sitemap Changes
         run: |
           if [ -f sitemap.xml ]; then
             git add sitemap.xml
           fi
-          git add -f.hfid/indexing/sitemap.json
+          # FIXED: Added the required space after the -f flag
+          git add -f .hfid/indexing/sitemap.json
           
-      - name: Commit and push
+      - name: Commit and push changes safely
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: update sitemap [skip ci]" || echo "No changes"
-          git pull --rebase -X ours origin main
-          git push
+          git commit -m "chore: update sitemap [skip ci]" || echo "No changes to commit"
           
-      - uses: actions/attest-build-provenance@v1
+          # Use an atomic tree loop instead of blind overrules to keep your branch pristine
+          n=0
+          until [ "$n" -ge 3 ]
+          do
+            git fetch origin main
+            git rebase origin/main && git push origin main && break
+            n=$((n+1))
+            echo "Upstream change detected during push. Retrying ($n/3)..."
+            sleep 5
+          done
+
+      - name: Attest Build Provenance
+        if: success() && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: 'sitemap.xml'
