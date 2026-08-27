@@ -1,12 +1,10 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Complete Infrastructure Bindings for JHammerZ-005 / Lysander-w4
 
+name = "lysander-v13"
 main = "index.js"
-account_id = "8e0b551..."
 compatibility_date = "2026-08-18"
 compatibility_flags = [ "nodejs_compat" ]
-
-new_sqlite_classes = [ "wH00k" ]
 
 [[d1_databases]]
 binding = "DB"
