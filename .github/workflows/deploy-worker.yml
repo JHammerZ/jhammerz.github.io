@@ -46,3 +46,13 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Seed Primary Persistence Database Node
+        run: |
+          if [ -d "lysander-w4" ] && [ -f "schema.sql" ]; then
+            echo "⚡ Injecting relational schema mappings into primary node..."
+            npx wrangler d1 execute lysander_db --config lysander-w4/wrangler.toml --file=schema.sql --remote
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
