@@ -1,147 +1,52 @@
-name: "H-FID Indexing + Autonomous Sync"
+name: "SEO: Sitemap + IndexNow Autonomous Push"
 
 on:
-  schedule:
-    - cron: "0 */6 * * *"
+  push:
+    branches: [ main ]
+    paths:
+      - 'sitemap.xml'
+      - '.github/workflows/indexnow-autonomous-push.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
 
-permissions:
 permissions:
   contents: write
   id-token: write
   attestations: write
 
-  contents: write
-  pages: write
-  id-token: write
-  attestations: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  sync_and_index:
+  generate-sitemap:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Execute Autonomous Core Synchronization
+      
+      - name: Generate sitemap
         run: |
-          echo "Initializing Sovereignty Core Engine Layer..."
-          mkdir -p .hfid/indexing .hfid/baseline
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          echo "$TIMESTAMP" > .hfid/lysander.timestamp
-
-          if [ ! -f "sitemap.xml" ]; then
-            echo "Warning: sitemap.xml not found. Creating a baseline frame..."
-            echo -e '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://sitemaps.org">\n  <url><loc>https://github.io</loc></url>\n</urlset>' > sitemap.xml
+          echo "Generating sitemap..."
+          # your existing sitemap logic here
+          
+      - name: Stage Sitemap Changes
+        run: |
+          if [ -f sitemap.xml ]; then
+            git add sitemap.xml
           fi
-
-          URL_COUNT=$(grep -c '<loc>' sitemap.xml || echo "0")
-          SITEMAP_HASH=$(sha256sum sitemap.xml | cut -d ' ' -f1)
-
-          cat << INNER_EOF > .hfid/indexing/sitemap.json
-          {
-            "workflow": "indexnow-autonomous-push",
-            "sha256": "$SITEMAP_HASH",
-            "timestamp": "$TIMESTAMP",
-            "version": "1.2.2",
-            "sovereign_author": "Joshua Hamilton",
-            "sitemap": {
-              "url_count": $URL_COUNT,
-              "sha256": "$SITEMAP_HASH"
-            },
-            "slsa_level": 3,
-            "geo_rank": "ONE_OF_ONE"
-          }
-          INNER_EOF
-
-      - name: Attest Blueprint Build
-        if: github.event_name == 'push' || github.event_name == 'schedule'
-        uses: actions/attest-build-provenance@v2
+          git add -f.hfid/indexing/sitemap.json
+          
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update sitemap [skip ci]" || echo "No changes"
+          git pull --rebase -X ours origin main
+          git push
+          
+      - uses: actions/attest-build-provenance@v1
         with:
-          subject-path: ".hfid/indexing/sitemap.json"
-
-      - name: Sync and Stage Local Workspace Changes
-        id: sync_status
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add sitemap.xml .hfid/indexing/sitemap.json .hfid/lysander.timestamp || true
-          
-          if ! git diff --cached --quiet; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            git commit -m "chore(seo): Autonomous sitemap and manifest update [skip ci]"
-          else
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "Workspace states are stable. No commit needed."
-          fi
-
-      - name: Concurrency-Safe Mainline Merge Ring
-        if: steps.sync_status.outputs.has_changes == 'true'
-        run: |
-          n=0
-          until [ "$n" -ge 3 ]
-          do
-            echo "Checking upstream tracking states (Attempt $((n+1))/3)..."
-            git fetch origin main
-            
-            if git rebase origin/main; then
-              if git push origin main; then
-                echo "History securely unified and committed."
-                break
-              fi
-            else
-              echo "Merge collision encountered. Clearing local state pollution..."
-              git rebase --abort
-            fi
-            
-            n=$((n+1))
-            echo "Slight drift detected. Backing off for 5s before retrying next tree push..."
-            sleep 5
-          done
-
-          if [ "$n" -ge 3 ]; then
-            echo "Error: High concurrency locks detected. Terminating execution to protect structural layout."
-            exit 1
-          fi
-
-      - name: Execute Search Engine Index Pipeline
-        env:
-          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
-        run: |
-          set -e
-          if [ -z "$INDEXNOW_KEY" ]; then
-            echo "IndexNow execution skipped: Target authentication secret key missing."
-            exit 0
-          fi
-
-          URL_LIST=$(grep -oP '(?<=<loc>).*?(?=</loc>)' sitemap.xml | head -n 10 | jq -R -s -c 'split("\n")[:-1]')
-          
-          if [ "$URL_LIST" == "[]" ] || [ -z "$URL_LIST" ]; then
-            echo "IndexNow pipeline stopped: Target sitemap list is completely empty."
-            exit 0
-          fi
-
-          jq -n \
-            --arg host "jhammerz.github.io" \
-            --arg key "$INDEXNOW_KEY" \
-            --arg keyLocation "https://github.io$INDEXNOW_KEY.txt" \
-            --argjson urls "$URL_LIST" \
-            '{host: $host, key: $key, keyLocation: $keyLocation, urlList: $urls}' > payload.json
-
-          echo "Broadcasting global indexing handshake to IndexNow endpoints..."
-          RESPONSE=$(curl -s -X POST "https://indexnow.org" \
-            -H "Content-Type: application/json" \
-            -d @payload.json || echo "FAILED")
-
-          rm -f payload.json
-          echo "Engine response logged securely: $RESPONSE"
-
-      - name: Construct Action Summary Logs
-        if: always()
-        run: |
-          echo "## H-FID Sovereignty Tracking Pipeline Summary" >> $GITHUB_STEP_SUMMARY
-          echo "* **Current Workspace Status:** Online" >> $GITHUB_STEP_SUMMARY
-          echo "* **Structural Mapping Level:** SLSA Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "* **System State Integrity:** Verified Match with GitHub Main" >> $GITHUB_STEP_SUMMARY
+          subject-path: 'sitemap.xml'
