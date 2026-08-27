@@ -45,6 +45,11 @@ on:
         default: 'omega/latest-broadcast.txt'
         type: string
 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   id-token: write
