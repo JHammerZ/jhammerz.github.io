@@ -1,8 +1,8 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Cloudflare Workers Deployment Engine
+# Automated Parallel 12-Worker Matrix Deployment Engine
 
-name: "Deploy: H-FID Lysander Engine"
+name: "Deploy: H-FID Lysander Engine Matrix"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,19 +13,36 @@ on:
     branches: [ main ]
     paths:
       - 'lysander-w4/**'
+      - 'lysander-w**/**'
   workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy-matrix:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Secure, parallel tracking nodes for all 12 edge worker directories
+        worker: [
+          "lysander-w1", "lysander-w2", "lysander-w3", "lysander-w4",
+          "lysander-w5", "lysander-w6", "lysander-w7", "lysander-w8",
+          "lysander-w9", "lysander-w10", "lysander-w11", "lysander-w12"
+        ]
+      fail-fast: false
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Deploy to Cloudflare Network
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: 'lysander-w4'
+      - name: Deploy Cluster Node to Cloudflare
+        # Check if the specific worker folder path exists before executing to prevent ghost build drops
+        run: |
+          if [ -d "${{ matrix.worker }}" ]; then
+            echo "🚀 Compiling and publishing cluster node: ${{ matrix.worker }}"
+            npx wrangler deploy --config ${{ matrix.worker }}/wrangler.toml
+          else
+            echo "⚠️ Skip: Subdirectory ${{ matrix.worker }} not initialized in repo context yet."
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
