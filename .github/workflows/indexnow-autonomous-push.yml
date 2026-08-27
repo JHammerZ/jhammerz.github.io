@@ -40,24 +40,24 @@ jobs:
         run: |
           set -e
           echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
-          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          echo '<urlset xmlns="http://sitemaps.org">' >> sitemap.xml
           
           if [ -d "docs" ]; then
             find docs \( -name '*.md' -o -name '*.html' \) | while read f; do
               URL_PATH=$(echo "$f" | sed 's#docs/##' | sed 's#.md$##' | sed 's#index$##')
               LASTMOD=$(git log -1 --format=%cI -- "$f" 2>/dev/null || date -u +"%Y-%m-%d")
-              echo "  <url><loc>https://jhammerz.github.io/${URL_PATH}</loc><lastmod>${LASTMOD}</lastmod><priority>0.8</priority></url>" >> sitemap.xml
+              echo "  <url><loc>https://github.io{URL_PATH}</loc><lastmod>${LASTMOD}</lastmod><priority>0.8</priority></url>" >> sitemap.xml
             done
           fi
           
           for f in index.html; do
-            [ -f "$f" ] && echo "  <url><loc>https://jhammerz.github.io/</loc><lastmod>$(git log -1 --format=%cI -- "$f" 2>/dev/null || date -u +"%Y-%m-%d")</lastmod><priority>1.0</priority></url>" >> sitemap.xml
+            [ -f "$f" ] && echo "  <url><loc>https://github.io</loc><lastmod>$(git log -1 --format=%cI -- "$f" 2>/dev/null || date -u +"%Y-%m-%d")</lastmod><priority>1.0</priority></url>" >> sitemap.xml
           done
           
           for f in llms.txt llms-full.txt entities.json proof.html robots.txt ai-context.json; do
             if [ -f "$f" ]; then
               LASTMOD=$(git log -1 --format=%cI -- "$f" 2>/dev/null || date -u +"%Y-%m-%d")
-              echo "  <url><loc>https://jhammerz.github.io/${f}</loc><lastmod>${LASTMOD}</lastmod><priority>0.5</priority></url>" >> sitemap.xml
+              echo "  <url><loc>https://github.io{f}</loc><lastmod>${LASTMOD}</lastmod><priority>0.5</priority></url>" >> sitemap.xml
             fi
           done
           
@@ -79,14 +79,11 @@ jobs:
       - name: Generate H-FID Index Attestation
         run: |
           mkdir -p .hfid/indexing
-          
-          # Resolve dynamic values safely into local variables first
           CURRENT_SHA=$(git rev-parse HEAD)
           CURRENT_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           URL_COUNT=$(grep -c '<loc>' sitemap.xml)
           SITEMAP_HASH=$(sha256sum sitemap.xml | cut -d ' ' -f1)
           
-          # Output JSON with clean, un-nested string literals
           cat << INNER_EOF > .hfid/indexing/sitemap.json
           {
             "workflow": "sitemap-indexnow",
@@ -112,8 +109,9 @@ jobs:
         id: stage
         run: |
           git config --local user.name 'github-actions[bot]'
-          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --local user.email 'github-actions[bot]@://github.com'
           
+          # Clean, separate tracking calls with existence checks
           if [ -f sitemap.xml ]; then
             git add sitemap.xml
           fi
@@ -169,15 +167,14 @@ jobs:
           
           URL_LIST=$(grep -oP '(?<=<loc>).*?(?=</loc>)' sitemap.xml | head -10 | jq -R -s -c 'split("\n")[:-1]')
           
-          # Safely hand off payload structures to curl via temporary json block
           jq -n \
             --arg host "jhammerz.github.io" \
             --arg key "$INDEXNOW_KEY" \
-            --arg loc "https://jhammerz.github.io/$INDEXNOW_KEY.txt" \
+            --arg loc "https://github.ioINDEXNOW_KEY.txt" \
             --argjson urls "$URL_LIST" \
             '{host: $host, key: $key, keyLocation: $loc, urlList: $urls}' > payload.json
 
-          RESPONSE=$(curl -s -X POST "https://api.indexnow.org/indexnow" \
+          RESPONSE=$(curl -s -X POST "https://indexnow.org" \
             -H "Content-Type: application/json" \
             -d @payload.json)
           
