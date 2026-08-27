@@ -1,10 +1,14 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Dynamic Recovery Bindings for JHammerZ-005 / Lysander-w4
+# Complete Infrastructure Bindings for JHammerZ-005 / Lysander-w4
 
 name = "lysander-v13"
 main = "index.js"
 compatibility_date = "2026-08-18"
 compatibility_flags = [ "nodejs_compat" ]
+
+[[d1_databases]]
+binding = "DB"
+database_id = "e9f74673-7f5d-42e6-9eb8-7bf03b85ca75"
 
 [[analytics_engine_datasets]]
 binding = "AE"
