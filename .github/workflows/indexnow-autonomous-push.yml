@@ -91,7 +91,6 @@ jobs:
 
       - name: Generate H-FID Index Attestation
         run: |
-          # FIXED: Inserted necessary space after flag argument
           mkdir -p .hfid/indexing
           cat > .hfid/indexing/sitemap.json << INNER_EOF
           {
@@ -110,7 +109,6 @@ jobs:
           INNER_EOF
 
       - name: Attest Sitemap Build
-        if: github.event_name == 'push' || github.event_name == 'schedule'
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: .hfid/indexing/sitemap.json
@@ -123,7 +121,6 @@ jobs:
           if [ -f sitemap.xml ]; then
             git add sitemap.xml
           fi
-          # FIXED: Added pathspec spacing split sequence
           git add -f .hfid/indexing/sitemap.json
           if git diff --staged --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
@@ -143,7 +140,6 @@ jobs:
             -m "GEO_RANK: ONE_OF_ONE" \
             -m "SLSA: Level 3"
           
-          # Clean upstream merge handler eliminates continuous tracking rejection loops
           n=0
           until [ "$n" -ge 3 ]; do
             git fetch origin main
@@ -177,10 +173,9 @@ jobs:
             exit 0
           fi
           mkdir -p .hfid/indexnow
-          URL_LIST=$(grep -oP '(?<=<loc>).*?(?=</loc>)' sitemap.xml | head -10 | jq -R -s -c 'split("\n")[:-1]')
-          RESPONSE=$(curl -s -X POST "https://api.indexnow.org/indexnow" \
-            -H "Content-Type: application/json" \
-            -d "{\"host\": \"jhammerz.github.io\", \"key\": \"$INDEXNOW_KEY\", \"urlList\": $URL_LIST}")
+          URL_LIST=$(grep -oP '(?<=<loc>).*?(?=</loc>)' sitemap.xml | head -10 | jq -R . | jq -s .)
+          JSON_PAYLOAD=$(jq -n --arg host "jhammerz.github.io" --arg key "$INDEXNOW_KEY" --argjson urls "$URL_LIST" '{host: $host, key: $key, urlList: $urls}')
+          RESPONSE=$(curl -s -X POST "https://api.indexnow.org/indexnow" -H "Content-Type: application/json" -d "$JSON_PAYLOAD")
           echo "RESPONSE: $RESPONSE" > .hfid/indexnow/indexnow_response.json
           if [ "$RESPONSE" = "{}" ] || echo "$RESPONSE" | grep -q "success"; then
             echo "indexnow_success=true" >> $GITHUB_OUTPUT
@@ -195,7 +190,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hfid-sitemap-indexnow
-          # FIXED: Cleaned trailing space parameter definitions
           path: .hfid/indexing/
           retention-days: 90
 
