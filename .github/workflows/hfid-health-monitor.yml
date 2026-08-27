@@ -12,21 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  schedule:
-    - cron: '* * * * *'
   workflow_dispatch:
-    inputs:
-      deep_check:
-        description: 'Run deep H-FID compliance check'
-        required: false
-        default: false
-        type: boolean
-
-
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
 
 jobs:
   health:

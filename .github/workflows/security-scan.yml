@@ -17,8 +17,7 @@
 name: Security Scan | Zero-Trust Sweep
 on:
   workflow_dispatch:
-  workflow_dispatch:
-  schedule:
+
 jobs:
   security-scan:
     runs-on: ubuntu-latest

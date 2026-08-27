@@ -17,13 +17,7 @@
 name: SEO and Link Validator
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *' # Daily at midnight
-  workflow_dispatch:
-      - '**.html'
-      - '**.md'
-      - 'sitemap.xml'
-      - 'robots.txt'
+
 jobs:
   validate:
     runs-on: ubuntu-latest

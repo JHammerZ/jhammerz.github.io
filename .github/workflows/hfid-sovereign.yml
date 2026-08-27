@@ -18,10 +18,6 @@ name: "Build: H-FID Sovereign Kernel"
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   build:
     runs-on: ubuntu-24.04

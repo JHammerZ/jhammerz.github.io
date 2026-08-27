@@ -13,14 +13,6 @@ concurrency:
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 3 * * 1'
-
-
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
 
 jobs:
   forensic-audit:
