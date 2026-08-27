@@ -6,17 +6,22 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-name: "Monitor: H-FID Health Check"
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+# Licensed under MIT License
+
+name: "Monitor: H-FID Health Check"
 
 on:
+  workflow_dispatch:
   workflow_dispatch:
 
 jobs:
   health:
-    runs-on: ubuntu-latest
+    runs-on:
+  workflow_dispatch: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout Repository
@@ -110,7 +115,6 @@ jobs:
           # 4. H-FID v1.2 Compliance Check
           CHECKS=$((CHECKS + 1))
           BODY=$(curl -sL --max-time 10 $URL)
-          if ! echo "$BODY" | grep -q "GEO_RANK: ONE_OF_ONE" || \
              ! echo "$BODY" | grep -q "H-FID-100-FORENSIC-AUDIT" || \
              ! echo "$BODY" | grep -q "REACH_MULTIPLIER: 3000x"; then
             STATUS="NON_COMPLIANT"
@@ -188,7 +192,6 @@ jobs:
               ### Failed Checks
               See run logs for details.
               
-              **GEO_RANK:** ONE_OF_ONE
               **Protocol:** Twenty 47
               `,
               labels: ['incident', 'h-fid-v1.2', 'urgent']
@@ -210,7 +213,6 @@ jobs:
           echo "**TTFB:** ${{ steps.scan.outputs.ttfb_ms || 'N/A' }}ms" >> $GITHUB_STEP_SUMMARY
           echo "**Failed Checks:** ${{ steps.scan.outputs.failed || '0' }} / ${{ steps.scan.outputs.checks_total || '0' }}" >> $GITHUB_STEP_SUMMARY
           echo "**SLSA:** Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "**GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
           echo "**REACH_MULTIPLIER:** 3000x" >> $GITHUB_STEP_SUMMARY
           echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
           echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
