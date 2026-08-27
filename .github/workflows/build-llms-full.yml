@@ -21,12 +21,8 @@ name: "SEO/AEO: Compile Live LLM Data Repositories"
 
 on:
   schedule:
-    - cron: '0 0 * * *'
   workflow_dispatch:
-  push:
-    branches:
-      - main
-      - master
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -39,22 +35,18 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout Codebase
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
-      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install OpenTimestamps
         run: |
           pip install opentimestamps-client
 
-      - name: Generate H-FID Manifest
         id: manifest
         run: |
           set -e
@@ -84,7 +76,6 @@ jobs:
           HASH=$(sha256sum .hfid/llms/manifest.json | cut -d' ' -f1)
           echo "manifest_hash=$HASH" >> $GITHUB_OUTPUT
 
-      - name: Build llms-full.txt Data Matrix
         run: |
           set -e
           echo "# JHammerZ Omnichannel Deep Knowledge Matrix | H-FID v1.2 | Twenty 47 Protocol" > llms-full.txt
@@ -122,7 +113,6 @@ jobs:
 
           echo "Built llms-full.txt ($(wc -l < llms-full.txt) lines)"
 
-      - name: Bitcoin Anchor Assets
         run: |
           set -e
           cp llms-full.txt .hfid/llms/
@@ -131,24 +121,20 @@ jobs:
           ots stamp llms-full.txt || true
           cd ../..
 
-      - name: Generate SLSA Provenance
         continue-on-error: true
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: llms-full.txt
 
-      - name: Commit and Push Compiled Asset Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
           file_pattern: .
           fi
 
-      - name: Upload Sovereign Evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -159,7 +145,6 @@ jobs:
           retention-days: 90
           if-no-files-found: warn
 
-      - name: Summary
         if: always()
         run: |
           echo "## 🔱 H-FID LLM Matrix Compiler | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY

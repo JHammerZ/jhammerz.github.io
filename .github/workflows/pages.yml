@@ -16,8 +16,7 @@
 name: Deploy Site to Pages
 
 on:
-  push:
-    branches: ["main"]
+  workflow_dispatch:
   workflow_dispatch:
 
 concurrency:
@@ -33,16 +32,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Sovereign Cryptographic Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Initialize and Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v5
 
-      - name: Stage Static Site Artifacts
         run: |
           set -euo pipefail
           echo "Staging tracking manifest files for structural deployment ingress..."
@@ -52,7 +48,6 @@ jobs:
           # Clean out raw actions config from processing output directory
           rm -rf _site/.github _site/.git
 
-      - name: Upload Compiled Static Site Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
@@ -64,6 +59,5 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy Static Artifacts to GitHub Pages Channels
         id: deployment
         uses: actions/deploy-pages@v4

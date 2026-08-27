@@ -27,11 +27,9 @@ concurrency:
 name: "*f Lysander 3.0 Autonomous Push"
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
   workflow_dispatch:
   schedule:
-    - cron: '0 */4 * * *'
 
 
 permissions:
@@ -41,23 +39,19 @@ jobs:
   autonomous-commit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Run Lysander Update Logic
         run: |
           # your existing lysander logic here
           echo "Lysander updating sovereign manifest..."
           date >> .hfid/lysander.timestamp
 
-      - name: Commit Sovereign Update
         run: |
           git config --global user.name "Lysander-3.0-Engine"
           git config --global user.email "lysander@jhammerz.github.io"
-      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"

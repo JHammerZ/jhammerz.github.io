@@ -34,13 +34,9 @@ concurrency:
 name: "H-FID - Compile Core Data Repository"
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
   workflow_dispatch:
   pull_request:
-    branches:
-      - main
 
 
 permissions:
@@ -55,31 +51,25 @@ jobs:
   build-and-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install System Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y jq openssl
 
-      - name: Install Python Clients
         run: |
           python -m pip install --upgrade pip
           pip install opentimestamps
 
-      - name: Initialize JSON Core Matrices
         run: |
           mkdir -p .hfd/baseline .hfd/indexing
 
-      - name: Write Sovereign Manifest
         run: |
           cat << 'MATRIX' > .hfd/baseline/sovereign-manifest.json
           {
@@ -97,7 +87,6 @@ jobs:
           }
           MATRIX
 
-      - name: Build Core Manifest Logs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -121,7 +110,6 @@ jobs:
           echo "Generating build metadata summaries..." >> lines-full.txt
           echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
 
-      - name: Bitcoin Anchor Assets
         run: |
           set -euo pipefail
           echo "Running Timestamp and cryptographic anchoring..."
@@ -131,14 +119,12 @@ jobs:
             echo "ots-client missing; skipping live anchor validation."
           fi
 
-      - name: Process Core Provenance Datasets
         run: |
           set -euo pipefail
           mkdir -p .hfd/indexing
           echo "Compiling downstream data states..."
           cp lines-full.txt .hfd/indexing/build-summary.log
 
-      - name: Commit and Push Updated Core Changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -146,7 +132,6 @@ jobs:
           git config --global user.email "actions@github.com"
           
           # Stage tracking paths cleanly
-      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
@@ -155,7 +140,6 @@ jobs:
             echo "No pipeline modifications detected. Skipping execution push."
           fi
 
-      - name: Upload Sovereign Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: hfd-sovereign-baseline-core
@@ -164,7 +148,6 @@ jobs:
             .hfd/indexing/
             lines-full.txt
 
-      - name: Generate Summary Logs
         run: |
           echo "### Sovereign Model Sync Succeeded" >> $GITHUB_STEP_SUMMARY
           echo "* Core Database tracking updated." >> $GITHUB_STEP_SUMMARY

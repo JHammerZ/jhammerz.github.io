@@ -17,9 +17,7 @@ name: "Sovereign Model Baseline"
 
 on:
   schedule:
-    - cron: "0 * * * *" # Hourly baseline sync check
-  push:
-    branches: [ main ]
+  workflow_dispatch:
     tags: [ 'v*' ]
   pull_request:
   workflow_dispatch:
@@ -50,24 +48,19 @@ jobs:
       grid_status: ${{ steps.verify.outputs.status }}
     
     steps:
-      - name: Checkout Sovereign Truth
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Python Toolchain Environment
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install OpenTimestamps Client Dependencies
         run: pip install opentimestamps-client
 
-      - name: Initialize JSON Core Matrices
         run: mkdir -p .hfid/baseline .hfid/indexing
 
-      - name: Establish Forensic Baseline
         id: baseline
         env:
           BASELINE_SHA: "${{ github.event.inputs.baseline_sha || 'a15b0e' }}"
@@ -90,7 +83,6 @@ jobs:
           }
           INNER_EOF
 
-      - name: Bitcoin Anchor Baseline Audit Validation
         run: |
           set -e
           if [ -f .hfid/baseline/sovereign-manifest.json ]; then
@@ -100,7 +92,6 @@ jobs:
             ots stamp .hfid/baseline/sovereign-manifest.json
           fi
 
-      - name: Verify Sibling Identity Hostname Matrices
         id: verify
         run: |
           set -e
@@ -111,7 +102,6 @@ jobs:
             echo "status=VERIFIED" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit Changes and Propagate State to GitHub Pages
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "MANIFEST MUTATION [V4.0.28]: Production Baseline Lock Sync [skip ci]"
@@ -122,7 +112,6 @@ jobs:
           skip_dirty_check: false
           skip_fetch: false
 
-      - name: Generate Summary Logs for Workflow Terminal View
         if: always()
         run: |
           echo "## 🛡️ Sovereign Model Baseline Summary" >> $GITHUB_STEP_SUMMARY

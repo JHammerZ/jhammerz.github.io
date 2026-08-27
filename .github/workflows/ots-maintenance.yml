@@ -27,11 +27,9 @@ concurrency:
 name: "PID OTS Maintenance / maintenance-and-audit"
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
   workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *'
 
 
 permissions:
@@ -41,7 +39,6 @@ jobs:
   maintenance-and-audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -49,11 +46,9 @@ jobs:
 
       # ... your existing steps ...
 
-      - name: Commit Changes and Propagate State to GitHub Pages
         run: |
           git config --global user.name "JHammerZ-Sovereign-Engine"
           git config --global user.email "engine@jhammerz.github.io"
-      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"

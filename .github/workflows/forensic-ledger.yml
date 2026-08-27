@@ -20,14 +20,9 @@ name: "Audit: H-FID Forensic Ledger to IPFS"
 
 
 on:
-  push:
-    branches: ["main"]
+  workflow_dispatch:
     paths-ignore:
-      - ".github/workflows/**"
-      - ".hfid/**"
-      - "README.md"
   schedule:
-    - cron: "0 12 * * *" # Daily at noon UTC snapshot
   workflow_dispatch:
 
 permissions:
@@ -40,29 +35,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout Full History
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node & Python Toolchain
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install Forensic Tools
         run: |
           pip install opentimestamps-client
           npm install -g ipfs-car@latest || true
           echo "Forensic Tools installed successfully"
 
-      - name: Generate Site Archive
         id: archive
         run: |
           set -e
@@ -84,7 +74,6 @@ jobs:
           echo "archive_hash=${ARCHIVE_HASH}" >> $GITHUB_OUTPUT
           echo "Site Archived: ${ARCHIVE_NAME}.car"
 
-      - name: Generate H-FID Forensic Manifest
         id: manifest
         run: |
           set -e
@@ -114,7 +103,6 @@ jobs:
           }
           EOF
 
-      - name: OpenTimestamps Attestation
         id: ots
         run: |
           ots stamp "${{ steps.archive.outputs.archive_name }}.car.sha256" || true
@@ -122,7 +110,6 @@ jobs:
           ots upgrade "${{ steps.archive.outputs.archive_name }}.car.sha256.ots" || true
           echo "OpenTimestamps proof generated"
 
-      - name: Pin to IPFS via Web3.Storage
         continue-on-error: true
         env:
           WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
@@ -134,13 +121,11 @@ jobs:
             echo "WEB3_STORAGE_TOKEN secret not present, continuing..."
           fi
 
-      - name: Attest Forensic Ledger Entry
         continue-on-error: true
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
 
-      - name: Upload Forensic Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -152,7 +137,6 @@ jobs:
             .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
           retention-days: 365
 
-      - name: Create Ledger Commit
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -160,7 +144,6 @@ jobs:
           mkdir -p .hfid/ledger
           cp ".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json" .hfid/ledger/latest.json
 
-      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"

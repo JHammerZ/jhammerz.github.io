@@ -39,11 +39,8 @@ concurrency:
 name: "ST-Generator: HFD-Validate-LD-JSON Framework Validation"
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
@@ -55,21 +52,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
-      - name: Install Validation Tools
         run: |
           npm install ajv ajv-formats
           echo "Installed AJV Core Framework for custom schema-cli automation"
 
-      - name: Extract JSON-LD From HTML Files
         run: |
           mkdir -p .hfd/validation
           found=false
@@ -100,7 +93,6 @@ jobs:
             echo "HFD_LD_VALID=pending" >> $GITHUB_ENV
           fi
 
-      - name: Validate Local JSON Data Structures
         if: env.HFD_LD_VALID == 'pending'
         run: |
           hfd_valid=true
@@ -141,7 +133,6 @@ jobs:
             echo "✅ SUCCESS: All discovered JSON-LD blocks are structured valid!"
           fi
 
-      - name: Generate G-125 Validation Attestation
         if: always()
         run: |
           mkdir -p .hfd/artifacts
@@ -160,7 +151,6 @@ jobs:
           sed -i "s/HFD_TIMESTAMP_PLACEHOLDER/$(date -u +'%Y-%m-%dT%H:%M:%SZ')/g" .hfd/artifacts/validation-attestation.json
           echo "G-125 Framework Validation Attestation compiled."
 
-      - name: Upload Validation Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:

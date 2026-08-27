@@ -29,20 +29,12 @@ concurrency:
 name: "H-FID - Compile Core Data Repository"
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
     paths-ignore:
-      - '.hfid/**'
-      - 'sovereign-manifest.json'
-      - 'lines-full.txt'
   workflow_dispatch:
   pull_request:
-    branches:
-      - main
   workflow_call:
   schedule:
-    - cron: '0 */6 * * *'
 
 
 permissions:
@@ -59,34 +51,28 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install System Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y jq openssl
 
-      - name: Install Python Clients
         run: |
           python -m pip install --upgrade pip
           pip install opentimestamps-client google-auth google-api-python-client requests
 
-      - name: Initialize JSON Core Matrices
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
           echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Status":"AUTONOMOUS"}' > .hfid/baseline/sovereign-manifest.json
 
-      - name: Extract URLs from Sitemap
         run: |
           set -euo pipefail
           mkdir -p .hfid/indexing
@@ -96,7 +82,6 @@ jobs:
             echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           fi
 
-      - name: FORCE Google Indexing API Execution
         env:
           GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
         run: |
@@ -142,7 +127,6 @@ jobs:
           PY_EOF
           rm -f .the-google-creds.json
 
-      - name: Build Core Manifest Logs
         run: |
           set -eo pipefail
           echo "Extracting upstream forensic matrices..."
@@ -150,25 +134,21 @@ jobs:
           echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
           echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> lines-full.txt
 
-      - name: Bitcoin Anchor Assets
         run: |
           set -euo pipefail
           if command -v ots &> /dev/null; then
             ots stamp .hfid/baseline/sovereign-manifest.json || true
           fi
 
-      - name: Process Core Provenance Datasets
         run: |
           set -euo pipefail
           mkdir -p .hfid/indexing
           cp lines-full.txt .hfid/indexing/build-summary.log
 
-      - name: Commit and Push Updated Core Changes
         run: |
           set -euo pipefail
           git config --global user.name "H-FID Sovereign Bot"
           git config --global user.email "actions@github.com"
-      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
@@ -177,7 +157,6 @@ jobs:
             echo "No changes to commit"
           fi
 
-      - name: Upload Sovereign Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: hfid-sovereign-baseline-core

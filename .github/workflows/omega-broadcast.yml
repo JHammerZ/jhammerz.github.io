@@ -33,7 +33,7 @@ on:
         required: false
         default: false
         type: boolean
-  push:
+  workflow_dispatch:
     tags: ['v*'] # ONLY on version releases
   # NO SCHEDULE. Omega broadcasts on release, not daily spam.
 
@@ -46,23 +46,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout Repository
         uses: actions/checkout@v4 # v4.1.7
         with:
           fetch-depth: 0 # Need full history for content hash
 
-      - name: Setup Node.js
         uses: actions/setup-node@v4 # v4.0.3
         with:
           node-version: '22'
 
-      - name: Install Dependencies
         run: |
           npm install -g arweave arlocal @ipfs/kubo-rpc-client
           pip install opentimestamps-client
           sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Generate Omega Manifest
         id: manifest
         env:
           TARGET: ${{ github.event.inputs.target || 'all' }}
@@ -104,12 +100,10 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
 
-      - name: Attest Omega Broadcast
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: .hfid/omega/manifest.json
 
-      - name: Check If Broadcast Needed
         id: check
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
@@ -125,15 +119,12 @@ jobs:
             echo "⏭️ No changes since last Omega broadcast"
           fi
 
-      - name: Package Repository for Broadcast
         if: steps.check.outputs.needed == 'true'
         run: |
           set -e
           tar --exclude='.git' --exclude='.hfid' --exclude='node_modules' \
-              -czf .hfid/omega/repo-bundle.tar.gz.
           echo "✅ Repository packaged" >>.hfid/omega/audit.log
 
-      - name: Broadcast to IPFS
         if: steps.check.outputs.needed == 'true' && (github.event.inputs.target == 'ipfs' || github.event.inputs.target == 'all' || github.event.inputs.target == '')
         env:
           IPFS_API: ${{ secrets.IPFS_API_URL }}
@@ -145,7 +136,6 @@ jobs:
           echo "ipfs://$CID" >.hfid/omega/ipfs.cid
           echo " IPFS: ipfs://$CID" >>.hfid/omega/audit.log
 
-      - name: Broadcast to Arweave
         if: steps.check.outputs.needed == 'true' && (github.event.inputs.target == 'arweave' || github.event.inputs.target == 'all')
         env:
           ARWEAVE_KEY: ${{ secrets.ARWEAVE_KEY }}
@@ -155,17 +145,11 @@ jobs:
 
           echo "$ARWEAVE_KEY" >.hfid/omega/arweave.key
           TX=$(arweave deploy.hfid/omega/repo-bundle.tar.gz \
-            --key-file.hfid/omega/arweave.key \
-            --tag-name "H-FID" --tag-value "v1.2" \
-            --tag-name "Sovereign" --tag-value "Joshua-Hamilton" \
-            --tag-name "SHA" --tag-value "${{ github.sha }}" \
-            --json | jq -r '.id')
 
           echo "ar://$TX" >.hfid/omega/arweave.tx
           echo " ARWEAVE: ar://$TX" >>.hfid/omega/audit.log
           rm -f .hfid/omega/arweave.key
 
-      - name: Bitcoin-Anchor Omega Broadcast
         if: steps.check.outputs.needed == 'true'
         run: |
           ots stamp .hfid/omega/manifest.json.hfid/omega/repo-bundle.tar.gz
@@ -173,7 +157,6 @@ jobs:
           [ -f .hfid/omega/arweave.tx ] && echo "$(cat.hfid/omega/arweave.tx)" | ots stamp -
           echo "✅ Omega broadcast Bitcoin-anchored" >>.hfid/omega/audit.log
 
-      - name: Update Broadcast State
         if: steps.check.outputs.needed == 'true'
         run: |
           git config user.name "Lysander-Omega"
@@ -193,13 +176,11 @@ jobs:
           timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)
           EOF
 
-      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
           file_pattern: .
 
-      - name: Upload Omega Evidence
         if: always()
         uses: actions/upload-artifact@v4 # v4.4.3
         with:
@@ -207,7 +188,6 @@ jobs:
           path: .hfid/omega/
           retention-days: 3650
 
-      - name: Summary
         if: always()
         run: |
           echo "## H-FID Omega Broadcast" >> $GITHUB_STEP_SUMMARY

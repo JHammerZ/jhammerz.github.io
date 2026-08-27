@@ -27,23 +27,17 @@ concurrency:
 
 name: Aurelius-Engine Sovereign Operator
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 jobs:
   lighthouse-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Install Lighthouse
         run: npm install -g lighthouse@10
-      - name: Run Lighthouse audit
         run: |
           lighthouse https://jhammerz.github.io/music.html --output=json --output-path=./report.json --chrome-flags="--headless=new --no-sandbox"
-      - name: Upload report
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-report
