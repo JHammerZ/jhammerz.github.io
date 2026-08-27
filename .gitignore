@@ -16,4 +16,3 @@ llama.cpp/build/
 build/
 target/
 node_modules/
-.hfid/
