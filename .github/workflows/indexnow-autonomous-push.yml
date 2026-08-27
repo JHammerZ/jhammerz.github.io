@@ -37,7 +37,7 @@ jobs:
           if [ -f sitemap.xml ]; then
             git add sitemap.xml
           fi
-          git add -f .hfid/indexing/sitemap.json
+          git add -f. hfid/indexing/sitemap.json
           if git diff --staged --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "✅ Sitemap unchanged. No commit needed."
