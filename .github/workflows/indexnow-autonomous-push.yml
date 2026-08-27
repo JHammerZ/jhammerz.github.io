@@ -1,6 +1,6 @@
 # H-Law Language / H-FID Standard / REC v7.2
 # H-Law Language / H-FID Standard / HDS v7.2
-# Copyright (c) 2025 Joshua Hamilton [J-HammerZ]
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
 # H-FID v2.2 (SEO-Optimized 100/100)
@@ -35,7 +35,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   generate-sitemap:
@@ -124,7 +124,7 @@ jobs:
           git add -f .hfid/indexing/sitemap.json
           if git diff --staged --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No sitemap changes. No commit needed."
+            echo "Sitemap unchanged. No commit needed."
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "Sitemap changes:"
@@ -140,26 +140,8 @@ jobs:
             -m "GEO_RANK: ONE_OF_ONE" \
             -m "SLSA: Level 3"
           
-          n=0
-          until [ "$n" -ge 3 ]; do
-            git fetch origin main
-            if git rebase origin/main; then
-              if git push origin main; then
-                echo "Upstream master securely synchronized."
-                break
-              fi
-            else
-              git rebase --abort
-            fi
-            n=$((n+1))
-            echo "Upstream lock detected. Retrying tree push ($n/3)..."
-            sleep 5
-          done
-          
-          if [ "$n" -ge 3 ]; then
-            echo "Failed to push after 3 retries due to active drift anomalies."
-            exit 1
-          fi
+          git pull --no-edit -X theirs origin main || true
+          git push origin main || git push --force-with-lease origin main
 
       - name: Ping IndexNow
         id: indexnow
