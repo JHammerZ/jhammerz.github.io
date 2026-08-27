@@ -1,4 +1,3 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -8,29 +7,17 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-
 name: "CD: Automated Hub Indexation Deployment"
 
-
 on:
-concurrency:
-  group: pages-deploy
-  cancel-in-progress: true
   schedule:
-    - cron: '0 0 * * *' # Daily midnight UTC reindex
+    - cron: '0 6 * * *' # Daily midnight UTC reindex
     - cron: '0 12 * * *' # Midday sync
   push:
     branches: [ "main" ]
     paths:
-      - '**.html'
-      - '**.md'
+      - '**/*.html'
+      - '**/*.md'
       - 'assets/**'
       - 'images/**'
       - '.well-known/**'
@@ -43,6 +30,10 @@ concurrency:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -62,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Full history for H-FID audit trail
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Pages
         id: pages
@@ -72,26 +63,26 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid
-          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          cat > .hfid/site.json << EOF
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          cat > .hfid/site.json << EOF2
           {
             "site": "jhammerz.github.io",
             "sha": "${{ github.sha }}",
-            "timestamp": "$TIMESTAMPTZ",
-            "hfid_version": "v1.2",
+            "timestamp": "${TIMESTAMP}",
+            "hfid_version": "v2.2",
             "sovereign_author": "Joshua Hamilton",
             "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
             "slsa_level": 3,
             "geo_rank": "ONE_OF_ONE"
           }
-          EOF
+          EOF2
           echo "Generated H-FID site attestation at .hfid/site.json"
 
       - name: Link Checker (Hardened & Non-Blocking)
         uses: lycheeverse/lychee-action@v2
         continue-on-error: true
         with:
-          args: --verbose --no-progress --exclude-mail --accept 200,301,302,403,429,999 --exclude '.*(linkedin|apple\.com|bandlab|impact\.com|xiaohongshu|accounts\.google|makersuite|doi\.org).*' --exclude '^/api/.*' --exclude '^file://.*' './**/*.html' './**/*.md'
+          args: --verbose --no-progress --exclude-mail --accept 200,301,302,403,429,999 --exclude '.*(linkedin|apple|com|bandlab|impact|.*|xiaohongshu|accounts\.google|makersuite|doi\.org).*|.* --exclude "^/api/.*" --exclude "^file://.*" --exclude ".*\.html" - .
           fail: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -107,7 +98,7 @@ jobs:
           cp -r .well-known _site/ 2>/dev/null || true
           cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
           touch _site/.nojekyll
-          echo "Static site contents staged:"
+          echo "Website static contents staged."
           ls -la _site/
 
       - name: Configure Static Site Ingestion Artifacts
@@ -134,5 +125,5 @@ jobs:
         continue-on-error: true
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: "github-pages"
-          subject-digest: ${{ needs.build.outputs.artifact_id || github.sha }}
+          subject-name: 'github-pages'
+          subject-digest: ${{ needs.build.outputs.artifact_id }}

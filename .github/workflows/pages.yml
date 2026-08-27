@@ -1,4 +1,3 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -8,41 +7,27 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-
-
-
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# SOVEREIGN PAGES DEPLOYMENT WORKFLOW // J-HammerZ // V4.0.26 // PRODUCTION FIX
+# =================================================================
+# SOVEREIGN PAGES DEPLOYMENT WORKFLOW // J-HammerZ // V4.0.20 // PRODUCTION FIX
 # COMPATIBILITY: DIRECT-STATIC-HTML-INGRESS
 # MANDATE: PROPAGATE IDENTITY MATRIX ROOT AND WELL-KNOWN ENDPOINTS SECURELY
+# =================================================================
 
 name: Deploy Site to Pages
 
 on:
-concurrency:
-  group: pages-deploy
-  cancel-in-progress: true
   push:
     branches: ["main"]
   workflow_dispatch:
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
 
 permissions:
   contents: read
   pages: write
   id-token: write
-
 
 jobs:
   build:
@@ -60,19 +45,17 @@ jobs:
       - name: Stage Static Site Artifacts
         run: |
           set -euo pipefail
-          echo "Staging tracking manifest files for structural deployment Ingress..."
-          
+          echo "Staging tracking manifest files for structural deployment ingress..."
           # Ensure critical matrix outputs and root files are explicitly preserved
-          mkdir -p .site
-          cp -r * .site/ 2>/dev/null || true
-          
-          # Clean out raw actions configs from processing output directory
-          rm -rf .site/.github .site/.git
+          mkdir -p _site
+          cp -r ./* _site/ 2>/dev/null || true
+          # Clean out raw actions config from processing output directory
+          rm -rf _site/.github _site/.git
 
       - name: Upload Compiled Static Site Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
 
   deploy:
     environment:
