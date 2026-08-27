@@ -27,18 +27,17 @@ jobs:
 
       - name: Generate sitemap
         run: |
-          npx -y sitemap-generator-cli https://your-site.com -o ./sitemap.xml
+          npx -y sitemap-generator-cli https://your-site.com -o./sitemap.xml
 
       - name: Stage Sitemap Changes
         id: stage
         run: |
           git config --local user.name 'github-actions[bot]'
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-          
           if [ -f sitemap.xml ]; then
             git add sitemap.xml
           fi
-          
+          git add -f .hfid/indexing/sitemap.json
           if git diff --staged --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "✅ Sitemap unchanged. No commit needed."
@@ -58,9 +57,4 @@ jobs:
         run: |
           curl -X POST "https://api.indexnow.org/indexnow" \
           -H "Content-Type: application/json" \
-          -d '{
-            "host": "your-site.com",
-            "key": "${{ secrets.INDEXNOW_KEY }}",
-            "keyLocation": "https://your-site.com/${{ secrets.INDEXNOW_KEY }}.txt",
-            "urlList": ["https://your-site.com/sitemap.xml"]
-          }'
+          -d '{ "host": "your-site.com", "key": "${{ secrets.INDEXNOW_KEY }}", "keyLocation": "https://your-site.com/${{ secrets.INDEXNOW_KEY }}.txt", "urlList": ["https://your-site.com/sitemap.xml"] }'
