@@ -7,12 +7,8 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 # =================================================================
-# SOVEREIGN PRODUCTION BASELINE WORKFLOW // JHammerZ // V4.0.27 // PATH FIX
+# SOVEREIGN PRODUCTION BASELINE WORKFLOW // JHammerZ // V4.0.28 // RACE FIX
 # COMPATIBILITY: GITHUB-RUNNER-LINUX-X64
 # MANDATE: FORENSIC BASELINE LOCK & RECOVERY INTEGRITY MATRIX
 # =================================================================
@@ -33,6 +29,11 @@ on:
         required: false
         default: 'a15b0e'
         type: string
+
+# FIX: concurrency MUST be after name/on but before jobs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -88,16 +89,13 @@ jobs:
             "slsa_level": 3
           }
           INNER_EOF
-          
-          echo "Forensic baseline file constructed successfully."
 
-      - name: Bitcoin Anchor Assets
+      - name: Bitcoin Anchor Baseline Audit Validation
         run: |
           set -e
           if [ -f .hfid/baseline/sovereign-manifest.json ]; then
             echo "Verifying local hash indexes against genesis targets..."
             sha256sum .hfid/baseline/sovereign-manifest.json
-            # FIX: Remove old .ots if it exists to prevent Errno 17
             rm -f .hfid/baseline/sovereign-manifest.json.ots
             ots stamp .hfid/baseline/sovereign-manifest.json
           fi
@@ -113,59 +111,25 @@ jobs:
             echo "status=VERIFIED" >> $GITHUB_OUTPUT
           fi
 
-      - name: FORCE Google Indexing API Execution
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
-        run: |
-          set -euo pipefail
-          if [ -z "${GOOGLE_APPLICATION_CREDENTIALS:-}" ]; then
-            echo "SKIP: GCP_SA_KEY not set. Enable Indexing API at https://console.developers.google.com/apis/api/indexing.googleapis.com/overview?project=288433658789"
-            exit 0
-          fi
-          echo "Publishing indexing request for: https://jhammerz.github.io/guitaraoke-protocol"
-          # Add your actual indexing logic here. Catch 403 and don't fail the job.
-          curl -s -X POST "https://indexing.googleapis.com/v3/urlNotifications:publish" \
-            -H "Content-Type: application/json" \
-            --oauth2-bearer "$(gcloud auth print-access-token)" \
-            -d '{"url": "https://jhammerz.github.io/guitaraoke-protocol", "type": "URL_UPDATED"}' || echo "Warning: Indexing API 403 - enable it in GCP console"
-
-      - name: Commit and Push Updated Core Changes
-        run: |
-          set -euo pipefail
-          git config --global user.name "JHammerZ-Sovereign-Engine"
-          git config --global user.email "engine@jhammerz.github.io"
-          
-          # FIX: Split the broken chained path. Add each dir separately.
-          git add -f .hfid/baseline/
-          git add -f .hfid/indexing/
-          
-          if git diff --cached --quiet; then
-            echo "Zero identity matrix mutations detected. Skipping push state."
-            exit 0
-          fi
-          
-          git commit -m "MANIFEST MUTATION [V4.0.27]: Production Baseline Lock Sync [skip ci]"
-          
-          n=0
-          until [ "$n" -ge 5 ]; do
-            echo "Attempting atomic push. Attempt $((n+1))/5..."
-            git fetch origin main
-            git reset --soft origin/main
-            git add -f .hfid/baseline/ .hfid/indexing/
-            git commit --amend --no-edit -m "MANIFEST MUTATION [V4.0.27]: Production Baseline Lock Sync [skip ci]" || true
-            
-            if git push origin HEAD:main; then
-              echo "Upstream master securely synchronized."
-              break
-            fi
-            n=$((n+1))
-            sleep $((n*2))
-          done
-
-      - name: Upload Sovereign Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Commit Changes and Propagate State to GitHub Pages
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          name: hfid-sovereign-manifest
-          path: .hfid/baseline/
-          retention-days: 90
+          commit_message: "MANIFEST MUTATION [V4.0.28]: Production Baseline Lock Sync [skip ci]"
+          file_pattern: .hfid/baseline/sovereign-manifest.json .hfid/baseline/sovereign-manifest.json.ots
+          commit_user_name: JHammerZ-Sovereign-Engine
+          commit_user_email: engine@jhammerz.github.io
+          push_options: '--force-with-lease'
+          skip_dirty_check: false
+          skip_fetch: false
+
+      - name: Generate Summary Logs for Workflow Terminal View
+        if: always()
+        run: |
+          echo "## 🛡️ Sovereign Model Baseline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "** Manifest Reference Code: ** \`V4.0.28\`" >> $GITHUB_STEP_SUMMARY
+          echo "** System Baseline State: ** \`LIVING / LOCK_ESTABLISHED\`" >> $GITHUB_STEP_SUMMARY
+          echo "** Author Entity Signature: ** \`Joshua Hamilton\`" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`json" >> $GITHUB_STEP_SUMMARY
+          cat .hfid/baseline/sovereign-manifest.json >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
