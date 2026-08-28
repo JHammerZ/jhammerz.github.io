@@ -28,10 +28,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+      - name: Install Dependencies
+        run: if [ -f "yarn.lock" ]; then yarn install --immutable; elif [ -f "package-lock.json" ]; then npm ci; else yarn install || npm install; fi
       - name: Dynamic Dependency Installation
         run: |
           if [ -f "yarn.lock" ]\; then
-            yarn install --immutable
           elif [ -f "package-lock.json" ]\; then
             npm ci
           else

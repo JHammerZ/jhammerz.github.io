@@ -22,10 +22,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
       - uses: actions/setup-node@v4
+      - name: Install Dependencies
+        run: if [ -f "yarn.lock" ]; then yarn install --immutable; elif [ -f "package-lock.json" ]; then npm ci; else yarn install || npm install; fi
       - name: Dynamic Dependency Installation
         run: |
           if [ -f "yarn.lock" ]\; then
-            yarn install --immutable
           elif [ -f "package-lock.json" ]\; then
             npm ci
           else

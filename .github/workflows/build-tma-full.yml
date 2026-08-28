@@ -17,10 +17,11 @@ jobs:
 
       - name: 2. Initialize Node.js Environment
         uses: actions/setup-node@v4
+      - name: Install Dependencies
+        run: if [ -f "yarn.lock" ]; then yarn install --immutable; elif [ -f "package-lock.json" ]; then npm ci; else yarn install || npm install; fi
       - name: Dynamic Dependency Installation
         run: |
           if [ -f "yarn.lock" ]\; then
-            yarn install --immutable
           elif [ -f "package-lock.json" ]\; then
             npm ci
           else
@@ -34,7 +35,6 @@ jobs:
       - name: 3. Install Dependencies
         run: |
           if [ -f "yarn.lock" ]; then
-            yarn install --immutable
           elif [ -f "package-lock.json" ]; then
             npm ci
           else
