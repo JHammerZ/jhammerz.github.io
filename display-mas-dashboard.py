@@ -4,6 +4,7 @@ import sqlite3
 import subprocess
 import sys
 from pathlib import Path
+from datetime import datetime
 
 def print_row(key, val, color="32"):
     print(f"\033[1;36m│\033[0m {key:<32} \033[1;{color}m{val:<31}\033[1;36m│\033[0m")
@@ -15,12 +16,12 @@ def render_dashboard():
     public_path = Path("public")
     model_path = Path("public/assets/model_state.json")
     ipfs_path = Path("public/assets/ipfs_ledger_manifest.json")
-
+    
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
     hardening = "SHA-256_BITCOIN_ANCHOR"
     isolation = "HARDWARE_ID_LOCKING"
-
+    
     if policy_path.exists():
         try:
             with open(policy_path, 'r') as f:
@@ -39,8 +40,8 @@ def render_dashboard():
             conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*) FROM content_catalog")
-            count = cursor.fetchone()
-            track_count = f"{count[0]} RECORDS IN DB"
+            count = cursor.fetchone()[0]
+            track_count = f"{count} RECORDS IN DB"
             conn.close()
         except Exception:
             pass
@@ -54,12 +55,19 @@ def render_dashboard():
             pass
 
     daemon_status = "OFFLINE"
+    uptime_str = "00:00:00 (STALE)"
     if pid_path.exists():
         try:
             with open(pid_path, 'r') as pf:
                 pid = pf.read().strip()
             if os.path.exists(f"/proc/{pid}"):
                 daemon_status = f"RUNNING (PID {pid})"
+                # Extract native process initialization timestamp metrics
+                stat_birth = os.stat(f"/proc/{pid}").st_ctime
+                delta = datetime.now() - datetime.fromtimestamp(stat_birth)
+                hours, remainder = divmod(int(delta.total_seconds()), 3600)
+                minutes, seconds = divmod(remainder, 60)
+                uptime_str = f"{hours:02d}:{minutes:02d}:{seconds:02d} ACTIVE"
         except Exception:
             pass
 
@@ -96,7 +104,6 @@ def render_dashboard():
     except Exception:
         global_status = "BALANCED (CLOUD ATTESTED)"
 
-    # Real-Time Workspace Change Inspector
     modified_assets = "0 MODIFICATIONS PENDING"
     try:
         status_out = subprocess.check_output(["git", "status", "--porcelain"]).decode("utf-8").strip()
@@ -105,7 +112,7 @@ def render_dashboard():
             modified_assets = f"{len(lines)} CHANGES DETECTED"
     except Exception:
         pass
-
+    
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
@@ -120,6 +127,7 @@ def render_dashboard():
     print_row("CLOUDFLARE ROUTING EDGE MESH", "ACTIVE (edge_interceptor)", "32")
     print_row("GOOGLE CLOUD RUN HIGH-AVAIL", "STANDBY (lysander_gcp_ping)", "32")
     print_row("BACKGROUND MONITORING DAEMON", daemon_status, "32" if "RUNNING" in daemon_status else "31")
+    print_row("DAEMON OPERATIONAL RUNTIME", uptime_str, "34")
     print_row("SOVEREIGN CORE DATA LEDGER", model_status, "32" if "ONLINE" in model_status else "31")
     print_row("DECENTRALIZED IPFS MESH STORAGE", ipfs_status, "32" if "DISTRIBUTED" in ipfs_status else "31")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
