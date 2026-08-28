@@ -2,6 +2,7 @@ import json
 import os
 import sqlite3
 import subprocess
+import sys
 from pathlib import Path
 
 def print_row(key, val, color="32"):
@@ -71,7 +72,6 @@ def render_dashboard():
         except Exception:
             pass
 
-    # Unpack live configuration blocks from your decentralized ledger storage mapper
     ipfs_status = "UNLINKED"
     if ipfs_path.exists():
         try:
@@ -95,6 +95,16 @@ def render_dashboard():
             global_status = "OUT OF SYNC (DRIFT DETECTED)"
     except Exception:
         global_status = "BALANCED (CLOUD ATTESTED)"
+
+    # Real-Time Workspace Change Inspector
+    modified_assets = "0 MODIFICATIONS PENDING"
+    try:
+        status_out = subprocess.check_output(["git", "status", "--porcelain"]).decode("utf-8").strip()
+        if status_out:
+            lines = status_out.split('\n')
+            modified_assets = f"{len(lines)} CHANGES DETECTED"
+    except Exception:
+        pass
     
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
@@ -113,6 +123,7 @@ def render_dashboard():
     print_row("SOVEREIGN CORE DATA LEDGER", model_status, "32" if "ONLINE" in model_status else "31")
     print_row("DECENTRALIZED IPFS MESH STORAGE", ipfs_status, "32" if "DISTRIBUTED" in ipfs_status else "31")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
+    print_row("REAL-TIME WORKSPACE INSPECTOR", modified_assets, "33" if "CHANGES" in modified_assets else "32")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
     print_row("FEDERATION CONTENT COUNTER", track_count, "34")
     print_row("EDGE PAYLOAD TEMPLATE COUNT", html_count, "34")
