@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate
+      - name: Validate JSON Structure
         run: |
           if [ -f "entities.json" ]; then
             node -e "try { require('./entities.json'); console.log('✓ valid'); } catch(e) { process.exit(1); }"
           else
-            echo "Skipped"
+            echo "Skipped: entities.json not found."
           fi
