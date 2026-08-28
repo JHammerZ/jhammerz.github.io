@@ -35,6 +35,9 @@ while true; do
     
     # Run dead link auditing to verify edge connectivity baseline integrity
     python3 track-dead-links.py
+
+    # Execute the local data repository compilation engine
+    python3 sovereign_model_engine.py
     
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
