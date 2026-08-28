@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "test": "echo 'Lysander 3.1 hybrid - no tests yet'"
+    "test": "echo 'Lysander 3.1 hybrid - no tests yet'",
+    "sovereign:fix": "node scripts/sovereign-patch.js",
+    "orchestrator": "tsx scripts/aurelius_orchestrator.ts"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -20,6 +22,7 @@
     "d3": "^7.9.0",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "glob": "^13.0.6",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "react": "^19.0.1",
@@ -33,7 +36,7 @@
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
     "tailwindcss": "^4.1.14",
-    "tsx": "^4.21.0",
+    "tsx": "^4.23.12",
     "typescript": "~5.8.2",
     "vite": "^6.2.3"
   }
