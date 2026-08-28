@@ -49,5 +49,8 @@ python3 track-storage-io.py
 # Analyze local physical hardware battery power and thermal safety vectors
 python3 track-power-insulation.py
 
+# Flush unreferenced Python memory buffers to protect mobile runtime limits
+python3 optimize-memory-buffer.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
