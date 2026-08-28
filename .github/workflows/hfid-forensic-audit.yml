@@ -62,7 +62,7 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
       - name: Attest Audit Execution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@ae8c2e01e1ad1c8a2f5f3f9d3e0a1b1f1f1f1f1f # v1.1.2
         with:
           subject-path: .hfid/audit/manifest.json
 
@@ -88,7 +88,7 @@ jobs:
 
       - name: Upload Forensic Evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397e0ac4f0b85139cc2fb # v4.3.3
         with:
           name: hfid-audit-${{ github.run_id }}
           path: .hfid/audit/

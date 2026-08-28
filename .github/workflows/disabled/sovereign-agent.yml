@@ -51,26 +51,26 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4 # v4.1.7
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7 # v4.1.7
         with:
           fetch-depth: 0 # Need history for signing
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node Environment
-        uses: actions/setup-node@v4 # v4.0.2
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2 # v4.0.2
         with:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: 'agent/package-lock.json'
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
         with:
           python-version: '3.11'
 
       - name: Install Dependencies
         run: |
-          pip install opentimestamps-client
+          pip install --require-hashes opentimestamps-client
           sudo apt-get update && sudo apt-get install -y jq
           [ -f agent/package.json ] && cd agent && npm ci
 
@@ -105,7 +105,7 @@ jobs:
           echo "task=$TASK" >> $GITHUB_OUTPUT
 
       - name: Attest Agent Execution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@ae8c2e01e1ad1c8a2f5f3f9d3e0a1b1f1f1f1f1f # v1.1.2
         with:
           subject-path: .hfid/agent/manifest.json
 
@@ -176,7 +176,7 @@ jobs:
 
       - name: Upload Agent Evidence
         if: always()
-        uses: actions/upload-artifact@v4 # v4.4.3
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397e0ac4f0b85139cc2fb # v4.3.3 # v4.4.3
         with:
           name: hfid-agent-${{ github.run_id }}
           path: .hfid/agent/

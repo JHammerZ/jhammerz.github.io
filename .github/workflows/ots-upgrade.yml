@@ -31,7 +31,7 @@ jobs:
           git config user.name "L5 Bot"
           git config user.email "bot@jhammerz.github.io"
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@778341af66847b665a588d6594391a269ec084fa # v5.0.0
         with:
           commit_message: "chore: auto-update [skip ci]"
           file_pattern: .

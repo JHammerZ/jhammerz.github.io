@@ -44,7 +44,7 @@ jobs:
           make -j$(nproc) drivers/char/random.o
           mkdir -p $GITHUB_WORKSPACE/hfid_module
           cp drivers/char/random.o $GITHUB_WORKSPACE/hfid_module/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397e0ac4f0b85139cc2fb # v4.3.3
         with:
           name: hfid-kernel-core-object
           path: hfid_module/random.o

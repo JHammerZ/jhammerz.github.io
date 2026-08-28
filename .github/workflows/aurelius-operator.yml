@@ -28,7 +28,7 @@ jobs:
         run: npm install -g lighthouse@10
         run: |
           lighthouse https://jhammerz.github.io/music.html --output=json --output-path=./report.json --chrome-flags="--headless=new --no-sandbox"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397e0ac4f0b85139cc2fb # v4.3.3
         with:
           name: lighthouse-report
           path: report.json

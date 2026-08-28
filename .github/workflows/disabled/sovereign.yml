@@ -62,18 +62,18 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
         with:
           python-version: '3.11'
           cache: 'pip'
 
       - name: Install Dependencies
         run: |
-          pip install -r requirements.txt
-          pip install opentimestamps-client
+          pip install --require-hashes -r requirements.txt
+          pip install --require-hashes opentimestamps-client
 
       - name: Generate Sovereign Payload
         id: payload
@@ -107,7 +107,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Attest Sovereign Payload
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@ae8c2e01e1ad1c8a2f5f3f9d3e0a1b1f1f1f1f1f # v1.1.2
         with:
           subject-path: .hfid/sovereign/payload.json
 
@@ -130,7 +130,7 @@ jobs:
 
       - name: Upload Sovereign Attestation
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397e0ac4f0b85139cc2fb # v4.3.3
         with:
           name: hfid-sovereign-${{ steps.payload.outputs.hash }}
           path: .hfid/sovereign/
