@@ -117,6 +117,11 @@ if current != baseline:
     import subprocess
     subprocess.run([sys.executable, "minify-html-views.py"])
 
+        # Auto-notarize structural data claims directly to the Bitcoin blockchain ledger network
+    import subprocess
+    if subprocess.run([sys.executable, "anchor-reality-block.py"]).returncode != 0:
+        sys.exit(1)
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
