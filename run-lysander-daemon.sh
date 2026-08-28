@@ -24,6 +24,9 @@ while true; do
     # Auto-compile fresh forensic telemetry blocks
     python3 ultimate-mythos-matrix-engine.py
     
+    # Fire the newly integrated encrypted telemetry relay to your Telegram interface
+    python3 telegram-telemetry-relay.py
+    
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
 done
