@@ -1,10 +1,5 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
 
 name: "CI: Structural Metadata Linting"
 
@@ -13,6 +8,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
+  push:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -20,38 +17,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-      - uses: actions/setup-node@v4
-        run: |
-          if [ -f "yarn.lock" ]\; then
-          elif [ -f "package-lock.json" ]\; then
-            npm ci
-          else
-            echo "No standard lockfile detected. Initializing fallback install path."
-            yarn install || npm install
-          fi
-        node-version: '24'
+        uses: actions/checkout@v4
+
+      - name: Initialize Node.js Environment
+        uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: npm ci
-        working-directory: .
-        with:
-          fetch-depth: 0
 
-      - name: Validate LD+JSON Schema Structure
-        run: |
-          if [ -f entities.json ]; then
-            echo "Checking entities.json structural integrity..."
-            if ! jq empty entities.json 2>/dev/null; then
-              echo "❌ CRITICAL: entities.json contains invalid JSON syntax properties"
-              exit 1
-            fi
-            echo "✅ entities.json is structurally valid."
-          else
-            echo "⚠️ SKIP: entities.json not found in root context layout."
-          fi
-
-      - name: Install Project Dependencies Fallback
+      - name: Resolve Project Dependencies
         run: |
           if [ -f "yarn.lock" ]; then
             yarn install --immutable
@@ -59,4 +32,18 @@ jobs:
             npm ci
           else
             yarn install || npm install
+          fi
+
+      - name: Validate LD+JSON Schema Structure
+        run: |
+          if [ -f "entities.json" ]; then
+            echo "Checking entities.json structural integrity..."
+            if command -v jq &> /dev/null; then
+              jq . entities.json > /dev/null || { echo "CRITICAL: entities.json contains invalid JSON syntax properties"; exit 1; }
+              echo "✓ entities.json is structurally valid."
+            else
+              node -e "try { require('./entities.json'); console.log('✓ valid'); } catch(e) { console.error(e); process.exit(1); }"
+            fi
+          else
+            echo "▲ SKIP: entities.json not found in root context layout."
           fi

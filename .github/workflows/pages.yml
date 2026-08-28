@@ -1,27 +1,40 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-
-# =================================================================
-# SOVEREIGN PAGES DEPLOYMENT WORKFLOW // J-HammerZ // V4.0.20 // PRODUCTION FIX
-# COMPATIBILITY: DIRECT-STATIC-HTML-INGRESS
-# MANDATE: PROPAGATE IDENTITY MATRIX ROOT AND WELL-KNOWN ENDPOINTS SECURELY
-# =================================================================
+# SOVEREIGN PAGES DEPLOYMENT WORKFLOW // V4.0.20 // PRODUCTION FIX
 
 name: Deploy Site to Pages
 
-      - name: Install Project Dependencies Fallback
-        run: |
-          if [ -f "yarn.lock" ]; then
-            yarn install --immutable
-          elif [ -f "package-lock.json" ]; then
-            npm ci
-          else
-            yarn install || npm install
-          fi
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy-pages:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Pages Ingress Profile
+        uses: actions/configure-pages@v5
+
+      - name: Upload Static Web Assets Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages Edge Infrastructure
+        id: deployment
+        uses: actions/deploy-pages@v4
