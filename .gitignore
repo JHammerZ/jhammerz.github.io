@@ -1,5 +1,35 @@
-.sovereign-*
+# ===================================================================
+#      LYSANDER REPOSITORY FILTER // PRODUCTION EDGE GATE
+#      DESIGN DEPTH: LEVEL 5 PRODUCTION // STRICT ZERO-BLOAT POLICY
+# ===================================================================
+
+# 1. Block Local Operational Telemetry & Dump States
+.workspace_snapshot.json
+.backlog_rotation_state.json
+.metric_velocity_history.json
+.compression_efficiency_history.json
+mythos_forensic_report.json
+
+# 2. Block Local Temporary Scratchpad Scripts
+amend-manifest.json
+secrets_needed.txt
+*tmp*
+*.log
+
+# 3. Block Local System & Node Artifact Junk
+__pycache__/
+.pytest_cache/
 node_modules/
-node_modules/
-node_modules/
-node_modules/
+.cache/
+.DS_Store
+
+# 4. Enforce Strict Allowlist Rules for Core Workspace Utilities
+!watch-workspace.py
+!minify-payload.py
+!minify-css.py
+!verify-binary-headers.py
+!track-preflight-ping.py
+!audit-pgp-claims.py
+!sync-terminal-theme.py
+!clean-code-refactor.py
+!generate-subdomain-proxy.py
