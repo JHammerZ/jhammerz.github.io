@@ -17,6 +17,16 @@ jobs:
 
       - name: 2. Initialize Node.js Environment
         uses: actions/setup-node@v4
+      - name: Dynamic Dependency Installation
+        run: |
+          if [ -f "yarn.lock" ]\; then
+            yarn install --immutable
+          elif [ -f "package-lock.json" ]\; then
+            npm ci
+          else
+            echo "No standard lockfile detected. Initializing fallback install path."
+            yarn install || npm install
+          fi
         with:
           node-version: '20'
           # Removed automatic lockfile-dependent caching

@@ -10,6 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+      - name: Dynamic Dependency Installation
+        run: |
+          if [ -f "yarn.lock" ]\; then
+            yarn install --immutable
+          elif [ -f "package-lock.json" ]\; then
+            npm ci
+          else
+            echo "No standard lockfile detected. Initializing fallback install path."
+            yarn install || npm install
+          fi
         node-version: '24'
         with:
           node-version: '24'
