@@ -3,6 +3,7 @@ import os
 import sqlite3
 import subprocess
 import sys
+import shutil
 from pathlib import Path
 from datetime import datetime
 
@@ -18,12 +19,13 @@ def render_dashboard():
     ipfs_path = Path("public/assets/ipfs_ledger_manifest.json")
     net_log_path = Path("network_traffic_audit.log")
     playlist_path = Path("public/assets/playlist.json")
-
+    vault_meta_path = Path(".sovereign_vault_meta.json")
+    
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
     hardening = "SHA-256_BITCOIN_ANCHOR"
     isolation = "HARDWARE_ID_LOCKING"
-
+    
     if policy_path.exists():
         try:
             with open(policy_path, 'r') as f:
@@ -98,7 +100,6 @@ def render_dashboard():
         except Exception:
             pass
 
-    # Read and dynamically calculate the size of your curated static web manifest elements
     curated_tracks_str = "0 ASSETS INDEXED"
     if playlist_path.exists():
         try:
@@ -108,6 +109,19 @@ def render_dashboard():
                 curated_tracks_str = f"{registry_len} NODES CURATED"
         except Exception:
             pass
+
+    # Read secure local storage vault state parameters
+    vault_status = "UNAVAILABLE"
+    if vault_meta_path.exists():
+        vault_status = "LOCKED & ISOLATED"
+
+    # Query native hardware disk allocation space fields dynamically
+    try:
+        total, used, free = shutil.disk_usage(".")
+        gb_conversion = 1024 * 1024 * 1024
+        storage_metrics = f"{used/gb_conversion:.2f}GB / {total/gb_conversion:.2f}GB USED"
+    except Exception:
+        storage_metrics = "UNAVAILABLE"
 
     commit_depth = "UNKNOWN"
     try:
@@ -132,7 +146,7 @@ def render_dashboard():
             modified_assets = f"{len(lines)} CHANGES DETECTED"
     except Exception:
         pass
-
+    
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
@@ -152,6 +166,8 @@ def render_dashboard():
     print_row("DECENTRALIZED IPFS MESH STORAGE", ipfs_status, "32" if "DISTRIBUTED" in ipfs_status else "31")
     print_row("NETWORK TRAFFIC ADAPTER AUDIT", net_status, "32" if "MONITORING" in net_status else "31")
     print_row("CURATED PUBLIC EDGE METRICS", curated_tracks_str, "34")
+    print_row("SECURE VAULT ENCRYPTION NODE", vault_status, "32")
+    print_row("SUBSTRATE STORAGE ALLOCATION", storage_metrics, "34")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("REAL-TIME WORKSPACE INSPECTOR", modified_assets, "33" if "CHANGES" in modified_assets else "32")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
