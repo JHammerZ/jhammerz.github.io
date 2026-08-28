@@ -33,3 +33,10 @@ node_modules/
 !sync-terminal-theme.py
 !clean-code-refactor.py
 !generate-subdomain-proxy.py
+
+# --- SECURITY PERIMETER MATRIX ---
+.sovereign-postmortem*
+sovereign-postmortem*
+*.tar.gz
+*postmortem.txt
+.env

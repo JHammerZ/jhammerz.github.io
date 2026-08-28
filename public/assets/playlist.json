@@ -1,5 +1,18 @@
 {
   "manifest_version": "Lysander Media Manifest v1.0",
   "total_tracks_buffered": 0,
-  "playlist_registry": []
+  "playlist_registry": [
+    {
+      "id": "instagram_6xt7nTuO85A",
+      "title": "Sovereign Release Asset // INSTAGRAM Tracker",
+      "url": "https://www.instagram.com/jhammerzz",
+      "notarized_timestamp": "2026-08-28T22:38:00Z"
+    },
+    {
+      "id": "instagram_f1J38FlDKxo",
+      "title": "Sovereign Release Asset // INSTAGRAM Tracker",
+      "url": "https://www.instagram.com/jhammerzz",
+      "notarized_timestamp": "2026-08-28T22:38:00Z"
+    }
+  ]
 }
