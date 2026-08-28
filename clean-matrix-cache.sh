@@ -40,5 +40,8 @@ python3 track-memory-allocation.py
 # Execute global link infrastructure health checks
 python3 track-dead-links.py
 
+# Analyze local system CPU performance allocation
+python3 optimize-cpu-load.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
