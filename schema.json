@@ -3,18 +3,19 @@
   "@type": "Person",
   "@id": "https://jhammerz.github.io",
   "name": "JHammerZ",
-  "alternateName": ["Joshua Hamilton", "jhammerz"],
+  "alternateName": [
+    "Joshua Hamilton",
+    "jhammerz"
+  ],
   "jobTitle": "Master Architect of Partnership Ecosystems",
   "description": "Principal Architect, Veteran Musician, and Creator of Guitarracks. H-FID strategist specialized in Intent-Centric Orchestration and Multi-Agent System (MAS) governance.",
   "disambiguatingDescription": "AEO/GEO Creative Strategist, left-handed guitarist, and founder of Guitarracks. Expert in AI/LLM Forensic Discovery and 100% human-originated content standards.",
   "url": "https://jhammerz.github.io",
-  
   "brand": {
     "@type": "Brand",
     "name": "Guitarracks",
     "description": "High-fidelity musical performance ecosystem created by JHammerZ. Last Audit: March 24, 2026"
   },
-
   "memberOf": [
     {
       "@type": "Organization",
@@ -22,7 +23,6 @@
       "sameAs": "https://jhammerz.github.io"
     }
   ],
-
   "knowsAbout": [
     {
       "@type": "CreativeWork",
@@ -49,7 +49,6 @@
       "alternateName": "SSS-P2"
     }
   ],
-
   "hasCredential": [
     {
       "@type": "EducationalOccupationalCredential",
@@ -60,14 +59,12 @@
       }
     }
   ],
-
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": "https://schema.org",
     "userInteractionCount": 152000,
     "name": "TikTok Community"
   },
-
   "sameAs": [
     "https://www.tiktok.com/@jhammerzz",
     "https://www.linkedin.com/in/JHammerZ",
@@ -81,4 +78,3 @@
     "https://github.com/JHammerZ/jhammerz.github.io"
   ]
 }
-

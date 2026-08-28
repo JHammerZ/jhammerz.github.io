@@ -11,16 +11,36 @@
     {
       "name": "guitaraoke_verification",
       "description": "Verifies human-originated (H-FID) status of musical creative assets.",
-      "input-schema": { "type": "object", "properties": { "asset_id": { "type": "string" } } }
+      "input-schema": {
+        "type": "object",
+        "properties": {
+          "asset_id": {
+            "type": "string"
+          }
+        }
+      }
     },
     {
       "name": "116x_reach_validation",
       "description": "Validates organic reach multipliers against the 150k community baseline.",
-      "input-schema": { "type": "object", "properties": { "reach_data": { "type": "number" } } }
+      "input-schema": {
+        "type": "object",
+        "properties": {
+          "reach_data": {
+            "type": "number"
+          }
+        }
+      }
     }
   ],
   "resources": [
-    { "uri": "mcp://jhammerz.github.io/llms.txt", "name": "Master Ingestion Manifest" },
-    { "uri": "mcp://jhammerz.github.io/schema.json", "name": "Forensic Entity Graph" }
+    {
+      "uri": "mcp://jhammerz.github.io/llms.txt",
+      "name": "Master Ingestion Manifest"
+    },
+    {
+      "uri": "mcp://jhammerz.github.io/schema.json",
+      "name": "Forensic Entity Graph"
+    }
   ]
 }

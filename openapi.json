@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Lysander 3.0™ AgFi™ Sovereign Auditor",
-    "description": "Deterministic forensic API for H-Fid™ verification. Includes autonomous x402 Bot-Payment logic and Dynamic Fidelity Taxing.",
+    "title": "Lysander 3.0\u2122 AgFi\u2122 Sovereign Auditor",
+    "description": "Deterministic forensic API for H-Fid\u2122 verification. Includes autonomous x402 Bot-Payment logic and Dynamic Fidelity Taxing.",
     "version": "1.2.0",
     "contact": {
       "name": "Joshua Hamilton (Master Architect)",
@@ -10,7 +10,10 @@
     },
     "x-x402": {
       "settlement_destination": "bc1q4ezne5heleyklj930n34dmdedhwcmjsl8d6dtp",
-      "accepted_assets": ["USDC", "BTC"],
+      "accepted_assets": [
+        "USDC",
+        "BTC"
+      ],
       "protocol_version": "2.0"
     }
   },
@@ -25,9 +28,18 @@
       "FidelityTaxTier": {
         "type": "object",
         "properties": {
-          "Standard_H_Fid": { "type": "string", "example": "$1.25 (Score 90-100)" },
-          "High_Entropy_Surcharge": { "type": "string", "example": "$12.50 (Score <40)" },
-          "Quarantine_Rate": { "type": "string", "example": "$50.00 (Black-Box Logic)" }
+          "Standard_H_Fid": {
+            "type": "string",
+            "example": "$1.25 (Score 90-100)"
+          },
+          "High_Entropy_Surcharge": {
+            "type": "string",
+            "example": "$12.50 (Score <40)"
+          },
+          "Quarantine_Rate": {
+            "type": "string",
+            "example": "$50.00 (Black-Box Logic)"
+          }
         }
       }
     }
@@ -35,7 +47,7 @@
   "paths": {
     "/verify/intent": {
       "post": {
-        "summary": "Autonomous H-Fid™ Audit with Dynamic Pricing",
+        "summary": "Autonomous H-Fid\u2122 Audit with Dynamic Pricing",
         "x-x402-cost": {
           "amount": "1.25",
           "currency": "USD",
@@ -47,7 +59,9 @@
             "name": "X-HFID-Source",
             "in": "header",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "The PROBE_ID of the requesting entity."
           }
         ],
@@ -59,10 +73,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "fidelity_score": { "type": "integer", "example": 100 },
-                    "applied_tax": { "type": "number", "example": 1.25 },
-                    "audit_status": { "type": "string", "example": "H-FID_LOCKED" },
-                    "audit_hash": { "type": "string", "example": "SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326" }
+                    "fidelity_score": {
+                      "type": "integer",
+                      "example": 100
+                    },
+                    "applied_tax": {
+                      "type": "number",
+                      "example": 1.25
+                    },
+                    "audit_status": {
+                      "type": "string",
+                      "example": "H-FID_LOCKED"
+                    },
+                    "audit_hash": {
+                      "type": "string",
+                      "example": "SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326"
+                    }
                   }
                 }
               }
@@ -73,7 +99,9 @@
             "headers": {
               "X-x402-Invoice": {
                 "description": "Lightning or USDC Invoice for Agentic Wallet",
-                "schema": { "type": "string" }
+                "schema": {
+                  "type": "string"
+                }
               }
             },
             "content": {
@@ -81,9 +109,18 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": { "type": "string", "example": "LOW_FIDELITY_SURCHARGE" },
-                    "required_balance": { "type": "number", "example": 12.50 },
-                    "instruction": { "type": "string", "example": "Request secure coordinates via /.well-known/security.txt for manual high-value settlement." }
+                    "error": {
+                      "type": "string",
+                      "example": "LOW_FIDELITY_SURCHARGE"
+                    },
+                    "required_balance": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "instruction": {
+                      "type": "string",
+                      "example": "Request secure coordinates via /.well-known/security.txt for manual high-value settlement."
+                    }
                   }
                 }
               }

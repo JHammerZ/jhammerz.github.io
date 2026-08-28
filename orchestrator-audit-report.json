@@ -1,7 +1,7 @@
 {
   "orchestrator": "Aurelius-OS Tier-0",
   "version": "V4.0.26-MILITARY",
-  "timestamp": "2026-08-23T04:26:11.356Z",
+  "timestamp": "2026-08-28T19:08:49.911Z",
   "compliance": "MIL-STD-810H / NIST-FIPS-140-3-L4",
   "canonicalOrigin": "https://jhammerz.github.io",
   "repositories": [
@@ -118,6 +118,6 @@
     }
   ],
   "merkleRoot": "df835208978a381bf4470178179b72b657465f5c29415f6acb358c53905a8c39",
-  "signature": "6fb72ab51cece207c9b735cdff95356cd24dff9d1035cac1a696ab931ffe8ac6edf009cb819f74e96bca850831d0625b917cbb0192d4d42a094b1c04d51968c3",
+  "signature": "5ff1c03902e5418575896ec6fcc164289787ca2d32f4ca4e3df48debe95d57e61ca0904a240e600ea11c0fb280ab24af84135c41f5bf67050024b652cf6c4d57",
   "allChecksPassed": true
 }
