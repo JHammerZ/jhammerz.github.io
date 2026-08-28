@@ -20,6 +20,7 @@ name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
 
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * *' # Daily midnight UTC
   #push: # disabled bulk
