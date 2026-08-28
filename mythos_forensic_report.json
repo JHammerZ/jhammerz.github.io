@@ -1,6 +1,6 @@
 {
-  "audited": 233,
-  "healed": 4,
+  "audited": 235,
+  "healed": 2,
   "faults": [
     {
       "node": "generate-playlist.py",
@@ -24,6 +24,6 @@
     }
   ],
   "telemetry": {
-    "execution_duration_seconds": "0.2378"
+    "execution_duration_seconds": "0.6476"
   }
 }

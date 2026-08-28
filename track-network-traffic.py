@@ -9,7 +9,7 @@ MAX_LOG_SIZE = 256 * 1024  # 256 KB safety limit boundary
 
 def run_traffic_inspection():
     print("=== LYSANDER SUBSURFACE: INITIALIZING NETWORK ADAPTER TRAFFIC MONITOR ===")
-    
+
     # Simulate extraction of active socket bindings from the localized layer
     try:
         hostname = socket.gethostname()

@@ -14,15 +14,15 @@ export default {
     // Strict Traffic Filtering Subsurface Block: Reject malicious exploitation attempts
     const userAgent = request.headers.get("user-agent") || "";
     const pathLower = url.pathname.toLowerCase();
-    
+
     if (
-      pathLower.includes(".env") || 
-      pathLower.includes("wp-admin") || 
+      pathLower.includes(".env") ||
+      pathLower.includes("wp-admin") ||
       pathLower.includes(".git") ||
       /bot|crawler|spider|scan/i.test(userAgent)
     ) {
       return new Response(
-        JSON.stringify({ error: "Access Denied", status: "Sovereign Shield Active" }), 
+        JSON.stringify({ error: "Access Denied", status: "Sovereign Shield Active" }),
         { status: 403, headers: { "Content-Type": "application/json" } }
       );
     }
@@ -69,13 +69,13 @@ export default {
       return response;
     } catch (error) {
       return new Response(
-        JSON.stringify({ 
-          error: "Sovereign Edge Node Timeout", 
-          trace: error.message 
+        JSON.stringify({
+          error: "Sovereign Edge Node Timeout",
+          trace: error.message
         }),
-        { 
-          status: 502, 
-          headers: { "Content-Type": "application/json" } 
+        {
+          status: 502,
+          headers: { "Content-Type": "application/json" }
         }
       );
     }
