@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 from pathlib import Path
 
 def print_row(key, val, color="32"):
@@ -7,6 +8,7 @@ def print_row(key, val, color="32"):
 
 def render_dashboard():
     policy_path = Path("verification-policy.json")
+    playlist_path = Path("public/assets/playlist.json")
     
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
@@ -25,12 +27,22 @@ def render_dashboard():
         except Exception:
             pass
 
-    # Extract active performance benchmarks directly from system pathways
-    mem_allocation = "UNAVAILABLE"
-    cpu_utilization = "OPTIMAL"
-    
-    if Path("mythos_forensic_report.json").exists():
-        mem_allocation = "BALANCED (64-BIT)"
+    # Dynamic asset counters from local data nodes
+    track_count = "0 TRACKS"
+    if playlist_path.exists():
+        try:
+            with open(playlist_path, 'r', encoding='utf-8') as f:
+                p_data = json.load(f)
+                track_count = f"{len(p_data.get('playlist_registry', []))} TRACKS ON EDGE"
+        except Exception:
+            pass
+
+    # Extract current repository commit depth parameters
+    commit_depth = "UNKNOWN"
+    try:
+        commit_depth = subprocess.check_output(["git", "rev-list", "--count", "HEAD"]).decode("utf-8").strip() + " REVISIONS"
+    except Exception:
+        pass
     
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
@@ -43,8 +55,8 @@ def render_dashboard():
     print_row("H-FID IDENTIFIERS MATRIX", "VERIFIED (hfid-registry.json)", "32")
     print_row("BITCOIN PROVENANCE GATEWAY", "ACTIVE (anchor-reality-block.py)", "32")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
-    print_row("MEMORY ALLOCATION GATE", mem_allocation, "34")
-    print_row("CPU METRIC LOAD THRESHOLD", cpu_utilization, "34")
+    print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
+    print_row("FEDERATION CONTENT COUNTER", track_count, "34")
     print_row("SUBSTRATE OPERATIONAL STATUS", "BALANCED (LOCAL ONLY)", "32")
     print("\033[1;36m└─────────────────────────────────────────────────────────────────┘\033[0m")
 
