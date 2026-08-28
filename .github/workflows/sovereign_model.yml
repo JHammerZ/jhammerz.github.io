@@ -18,12 +18,4 @@
 
 name: "H-FID - Compile Core Data Repository"
 
-      - name: Install Project Dependencies Fallback
         run: |
-          if [ -f "yarn.lock" ]; then
-            yarn install --immutable
-          elif [ -f "package-lock.json" ]; then
-            npm ci
-          else
-            yarn install || npm install
-          fi

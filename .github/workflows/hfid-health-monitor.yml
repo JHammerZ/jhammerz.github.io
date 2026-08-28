@@ -23,13 +23,6 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
       - uses: actions/setup-node@v4
         run: |
-          if [ -f "yarn.lock" ]\; then
-          elif [ -f "package-lock.json" ]\; then
-            npm ci
-          else
-            echo "No standard lockfile detected. Initializing fallback install path."
-            yarn install || npm install
-          fi
         node-version: '24'
         with:
           node-version: '24'
@@ -228,12 +221,4 @@ jobs:
           echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
           echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
 
-      - name: Install Project Dependencies Fallback
         run: |
-          if [ -f "yarn.lock" ]; then
-            yarn install --immutable
-          elif [ -f "package-lock.json" ]; then
-            npm ci
-          else
-            yarn install || npm install
-          fi
