@@ -1,34 +1,24 @@
 name: Deploy Worker
+
 on:
-  #push: # disabled bulk
-    branches: [main]
+  push:
+    branches: [ main, master ]
     paths: ['workers/**']
   workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        run: |
-          if [ -f "yarn.lock" ]\; then
-          elif [ -f "package-lock.json" ]\; then
-            npm ci
-          else
-            echo "No standard lockfile detected. Initializing fallback install path."
-            yarn install || npm install
-          fi
-        node-version: '24'
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Initialize Node.js Environment
+        uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: npm ci
-        working-directory: .
-      - run: npx wrangler deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: Install Project Dependencies Fallback
+      - name: Resolve Project Dependencies
         run: |
           if [ -f "yarn.lock" ]; then
             yarn install --immutable
@@ -37,3 +27,9 @@ jobs:
           else
             yarn install || npm install
           fi
+
+      - name: Execute Cloudflare Worker Deployment
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
