@@ -52,5 +52,8 @@ python3 track-power-insulation.py
 # Flush unreferenced Python memory buffers to protect mobile runtime limits
 python3 optimize-memory-buffer.py
 
+# Run automated repo history and branch pruner utilities
+python3 clean-git-history.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
