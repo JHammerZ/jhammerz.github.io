@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """
 ===================================================================
-     LYSANDER INTELLIGENT INGRESS // FULL SUITE NET COUPLING
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // ABSOLUTE REACH MATRIX
+     LYSANDER INTELLIGENT INGRESS // PRODUCTION NET INGESTION CORE
+     DESIGN DEPTH: LEVEL 5 PRODUCTION // ABSOLUTE ROUTING MATRIX
 ===================================================================
 Purpose:
 Safely queries public endpoint matrices across your complete sameAs
-footprint, checking for live data updates under strict OpSec rules.
+footprint, automatically unpacking gzip streams under strict OpSec rules.
 """
 
 import os
 import sys
 import json
+import gzip
 import subprocess
 from pathlib import Path
 
@@ -36,19 +37,34 @@ CANONICAL_TARGETS = {
 }
 
 def execute_omnichannel_handshake():
-    headers = "User-Agent: Lysander-Sovereign-Agent/1.5 (Verified Human JHammerZ Origin)"
+    # Pass precise accept headers to ensure compressed edge networks resolve smoothly
+    headers = [
+        "-A", "Mozilla/5.0 (Android; Mobile; rv:128.0) Gecko/128.0 Firefox/128.0",
+        "-H", "Accept-Encoding: gzip, deflate"
+    ]
     print(f"🌐 Initiating secure internet sweep across {len(CANONICAL_TARGETS)} distribution channels...")
     
     for platform, url in CANONICAL_TARGETS.items():
         try:
-            # 1. Fetch raw streaming data into your isolated sandbox file buffer
-            res = subprocess.run(
-                ["curl", "-s", "-A", headers, "-L", "--connect-timeout", "6", url],
-                capture_output=True, text=True
-            )
+            # 1. Fetch raw binary streams to prevent text conversion encoding exceptions
+            cmd = ["curl", "-s", "-L", "--connect-timeout", "6"] + headers + [url]
+            res = subprocess.run(cmd, capture_output=True, timeout=15)
             
-            if res.returncode == 0 and res.stdout.strip():
-                SCRATCH_STAGE.write_text(res.stdout)
+            if res.returncode == 0 and res.stdout:
+                raw_bytes = res.stdout
+                
+                # Check for standard gzip magic byte signatures (\x1f\x8b)
+                if raw_bytes.startswith(b'\x1f\x8b'):
+                    try:
+                        decoded_text = gzip.decompress(raw_bytes).decode("utf-8", errors="ignore")
+                    except Exception as e:
+                        print(f"  ⚠️ Gzip decompression bypassed for {platform.upper()}: {e}")
+                        continue
+                else:
+                    decoded_text = raw_bytes.decode("utf-8", errors="ignore")
+                
+                # Write unpacked string payload data cleanly into the validation buffer
+                SCRATCH_STAGE.write_text(decoded_text)
                 
                 # 2. Force OpSec defensive verification checks before pipeline integration
                 if SHIELD_SCRIPT.exists():
