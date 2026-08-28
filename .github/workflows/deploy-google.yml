@@ -1,49 +1,28 @@
-# ==============================================================================
-#          LYSANDER NETWORK MATRIX // GOOGLE CLOUD APP ARCHITECTURE
-#          DESIGN DEPTH: LEVEL 4 PRODUCTION // ENTERPRISE SECURITY KERNEL
-# ==============================================================================
-name: "Google: Autonomous Engine Platform"
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+name: "Deploy to Google Cloud Run"
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
   push:
     branches: [ main, master ]
-    paths:
-      - '*.py'
-      - '*.json'
   workflow_dispatch:
 
 jobs:
-  broadcast-gcp:
-    name: GCP Core Automation Engine Deployment
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Commercial License Signature Gate
-        run: |
-          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
-          if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
-            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
-            exit 1
-          fi
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
 
-      - name: 1. Checkout JHammerZ Master Source Tree
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-
-      - name: 2. Authenticate with Google Cloud Platform Identity Core
+      - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: 3. Initialize Google Cloud SDK Infrastructure Tools
+      - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: 4. Build and Broadcast Private Container Asset to Cloud Run
+      - name: Build and Deploy Container
         run: |
-          gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/mythos-matrix-core:latest .
-          gcloud run deploy jhammerz-core-engine \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/mythos-matrix-core:latest \
-            --platform managed \
-            --region us-central1 \
-            --allow-unauthenticated
+          gcloud builds submit --tag gcr.io/jhammerz-core-engine/mythos-matrix-core:latest
+          gcloud run deploy mythos-matrix-core-latest --image gcr.io/jhammerz-core-engine/mythos-matrix-core:latest --region us-central1 --platform managed --allow-unauthenticated
