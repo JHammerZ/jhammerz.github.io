@@ -6,7 +6,7 @@ LOG_PATH = Path("network_traffic_audit.log")
 
 def scan_local_threat_indicators():
     print("=== LYSANDER SUBSURFACE: SCANNING THREAT INTEL INDICATORS ===")
-    
+
     suspicious_count = 0
     if LOG_PATH.exists():
         try:
