@@ -33,6 +33,9 @@ while true; do
     # Run aggressive HTML compaction to optimize static payloads before deployment
     python3 minify-html-views.py
     
+    # Run dead link auditing to verify edge connectivity baseline integrity
+    python3 track-dead-links.py
+    
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
 done
