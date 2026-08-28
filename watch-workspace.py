@@ -83,6 +83,8 @@ if current != baseline:
         # Enforce military-grade data schema validation before updating live server nodes
     import subprocess
     if subprocess.run([sys.executable, "validate-playlist-schema.py"]).returncode != 0:
+        import subprocess
+        subprocess.run([sys.executable, "pipe-pipeline-errors.py", "validate-playlist-schema", "Schema verification rejected structural ingress payload layout."])
         sys.exit(1)
 
         # Auto-compile fresh markdown API specification blueprints
