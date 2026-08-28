@@ -95,6 +95,10 @@ if current != baseline:
     import subprocess
     subprocess.run([sys.executable, "generate-seo-matrix.py"])
 
+        # Extract hardware-accelerated media parameters before deploying layout updates
+    import subprocess
+    subprocess.run([sys.executable, "scrape-audio-metadata.py"])
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
