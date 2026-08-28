@@ -1,0 +1,11 @@
+{
+  "engine_version": "Lysander CDN v4.2",
+  "distribution_protocol": "HTTP/3 over QUIC Anycast Mesh",
+  "optimization_tier": "Lossless Variable Bitrate Multi-Streaming",
+  "edge_caching_policy": "Immutably Signed Edge Anchors",
+  "regional_hubs_active": [
+    "North America Ingress Matrix",
+    "European Transit Corridor",
+    "Asia-Pacific Broadcast Clusters"
+  ]
+}
