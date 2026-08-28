@@ -9,12 +9,12 @@ CONFIG_FILE = Path(".sovereign_vault_meta.json")
 
 def initialize_or_verify_vault():
     print("=== LYSANDER SUBSURFACE: VALIDATING SECURE LOCAL STORAGE VAULT ===")
-    
+
     # Establish structural isolation directory gates if missing
     if not VAULT_DIR.exists():
         VAULT_DIR.mkdir(parents=True, exist_ok=True)
         print(f"[+] Initialized hardware-isolated local vault pathway: {VAULT_DIR}")
-        
+
     # Generate static, deterministic cryptographic salt configuration layers natively
     if not CONFIG_FILE.exists():
         mock_salt = base64.b64encode(os.urandom(16)).decode('utf-8')
@@ -28,7 +28,7 @@ def initialize_or_verify_vault():
         print(f"[+] Instantiated sovereign vault metadata profiles: {CONFIG_FILE}")
     else:
         print("[+] Sovereign vault cryptographic salt layer profiles: ACTIVE")
-        
+
     print("[+] Local Filesystem Encryption Sub-Gate Baseline: SECURE")
     return True
 
