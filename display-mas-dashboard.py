@@ -13,6 +13,7 @@ def render_dashboard():
     pid_path = Path(".lysander-daemon.pid")
     public_path = Path("public")
     model_path = Path("public/assets/model_state.json")
+    ipfs_path = Path("public/assets/ipfs_ledger_manifest.json")
     
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
@@ -61,13 +62,22 @@ def render_dashboard():
         except Exception:
             pass
 
-    # Read and map live parameters from the newly compiled model ledger state container
     model_status = "UNINITIALIZED"
     if model_path.exists():
         try:
             with open(model_path, 'r') as mf:
                 m_cfg = json.load(mf)
                 model_status = f"ONLINE (v{m_cfg.get('engine_version', '3.0.0')})"
+        except Exception:
+            pass
+
+    # Unpack live configuration blocks from your decentralized ledger storage mapper
+    ipfs_status = "UNLINKED"
+    if ipfs_path.exists():
+        try:
+            with open(ipfs_path, 'r') as iff:
+                i_cfg = json.load(iff)
+                ipfs_status = f"DISTRIBUTED ({i_cfg.get('virtual_cid_address', 'N/A')[:11]}...)"
         except Exception:
             pass
 
@@ -101,6 +111,7 @@ def render_dashboard():
     print_row("GOOGLE CLOUD RUN HIGH-AVAIL", "STANDBY (lysander_gcp_ping)", "32")
     print_row("BACKGROUND MONITORING DAEMON", daemon_status, "32" if "RUNNING" in daemon_status else "31")
     print_row("SOVEREIGN CORE DATA LEDGER", model_status, "32" if "ONLINE" in model_status else "31")
+    print_row("DECENTRALIZED IPFS MESH STORAGE", ipfs_status, "32" if "DISTRIBUTED" in ipfs_status else "31")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
     print_row("FEDERATION CONTENT COUNTER", track_count, "34")
