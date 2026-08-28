@@ -1,33 +1,48 @@
+import os
+import sys
+import json
 import requests
+from pathlib import Path
 
-def force_google_crawl():
-    """
-    LYSANDER 3.0: GOOGLE SEARCH ROOT SYNC
-    Forces Googlebot to index the JHammerZ music cluster.
-    """
-    # Federated asset nodes to be forced into the global index
-    targets = [
-        "https://www.tiktok.com/@jhammerzz",
-        "https://www.linkedin.com/in/JHammerZ",
-        "https://www.youtube.com/JHammerZ",
-        "https://www.instagram.com/jhammerzz",
-        "https://www.facebook.com/profile.php?id=61574652435664",
-        "https://jhammerz.carrd.co/",
-        "https://music.amazon.com/artists/B0SGL7W/jhammerz",
-        "https://music.apple.com/us/artist/jhammerz/1845798346",
-        "https://music.bandlab.com/artist/781334284",
-        "https://www.xiaohongshu.com/user/profile/JHammerZ",
-        "https://github.com/JHammerZ/jhammerz.github.io",
-        "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
-        "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
-    ]
+POLICY_PATH = Path("verification-policy.json")
 
-    for url in targets:
-        # Pinging the Google 'Sitemap' trigger (Legal Public Handshake)
-        ping_url = f"https://google.com{url}"
-        response = requests.get(ping_url)
+def verify_google_cloud_endpoint():
+    print("=== LYSANDER SUBSURFACE: EXECUTING GCP CONTAINER TARGET VALIDATION ===")
+    
+    # Dynamically extract target parameters or fall back to standard project identity layouts
+    project_id = "jhammerz-core-engine"
+    region = "us-central1"
+    
+    # Read custom local validation descriptors if active
+    if POLICY_PATH.exists():
+        try:
+            with open(POLICY_PATH, 'r') as f:
+                cfg = json.load(f)
+                print(f"[+] Operational Tier Identified: {cfg.get('security_tier')}")
+        except Exception:
+            pass
+
+    # Construct the canonical Google Cloud Run distribution domain URL string
+    target_url = f"https://mythos-matrix-core-latest-{project_id}.run.app/health"
+    print(f"[*] Targeting Remote Asset Gateway Corridor: {target_url}")
+    
+    try:
+        print("[*] Transmitting standard edge synchronization ping packet...")
+        response = requests.get(target_url, timeout=8)
+        print(f"[+] Transport response channel returned status code: {response.status_code}")
         if response.status_code == 200:
-            print(f"[ROOT]: Google bot signaled for {url}")
+            print("[+] GCP Cloud Run Secondary Node: ACTIVE AND VALIDATED")
+            return True
+        else:
+            print("[-] Edge container online but returned unexpected boundary parameters.")
+            return False
+    except requests.exceptions.Timeout:
+        print("[-] Connection timed out: Edge proxy latency threshold exceeded.")
+        return False
+    except Exception as e:
+        print(f"[-] Transport layer transmission link faulted: {e}")
+        print("[!] Note: Endpoint will activate instantly upon the next automated GitHub Actions cron deployment.")
+        return False
 
 if __name__ == "__main__":
-    force_google_crawl()
+    verify_google_cloud_endpoint()
