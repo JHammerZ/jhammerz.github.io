@@ -18,34 +18,33 @@ echo $$ > "$PID_FILE"
 while true; do
     echo "=== DAEMON REFRESH CYCLE STARTED: $(date) ==="
     
-    # Fire the anchor verification ledger
+    # 1. Cryptographic and blockchain validation layer sweeps
     python3 anchor-reality-block.py
-    
-    # Auto-compile fresh forensic telemetry blocks
     python3 ultimate-mythos-matrix-engine.py
     
-    # Run the database storage optimization and vacuum compaction sequence automatically
+    # 2. Local asset monitoring and file ingestion sweep
+    python3 watch-workspace.py --check-only
+    
+    # 3. Database indexing curation and storage vacuum pruning
     python3 optimize-sovereign-db.py
     
-    # Run the log rotation routine automatically to prevent file bloat
+    # 4. Storage lifecycle maintenance and log rotation
     python3 rotate-telemetry-logs.py
     
-    # Run aggressive HTML compaction to optimize static payloads before deployment
+    # 5. Production view minification and link drift sweeps
     python3 minify-html-views.py
-    
-    # Run dead link auditing to verify edge connectivity baseline integrity
     python3 track-dead-links.py
-
-    # Execute the local data repository compilation engine
+    
+    # 6. Secondary data structures compilation and IPFS matrix checks
     python3 sovereign_model_engine.py
-
-    # Run the decentralized IPFS storage layer compilation engine
     python3 ipfs_ledger_sync.py
-
-    # Execute final test-matrix scripts to keep system states validated
+    
+    # 7. Core framework test-matrix sweeps to enforce system balance
     python3 verify-binary-headers.py
     python3 clean-code-refactor.py
     python3 track-preflight-ping.py
+    python3 watch-ipc-signals.py
+    ./update-terminal-aliases.sh
     
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800

@@ -41,7 +41,7 @@ def start_watch_loop():
         print(f"[!] Watchdog pipeline execution faulted: {e}")
 
 if __name__ == "__main__":
-    # If executed within the automated test-matrix context, exit instantly after a single sweep
+    # Short-circuit checking mode to let manual testing framework sequences pass instantly
     if "--check-only" in sys.argv or any("test" in arg for arg in sys.argv):
         print("[+] Test-Matrix Boundary Detected: Running isolated sweep pass...")
         run_single_sweep()
