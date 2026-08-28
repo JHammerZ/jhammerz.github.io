@@ -1,51 +1,42 @@
-#!/usr/bin/env python3
-"""
-Purpose:
-Sweeps primary HTML views, strips trailing margins and comments,
-and condenses layouts into clean, zero-bloat delivery packages.
-"""
-
 import re
-import sys
+import os
 from pathlib import Path
 
-TARGET_VIEWS = [
-    Path("index.html"),
-    Path("music.html")
-]
+PUBLIC_DIR = Path("public")
 
-def condense_html_structures():
-    print("⚡ [LYSANDER MINIFIER]: Analyzing layout densities for static HTML pages...")
-    
-    for view in TARGET_VIEWS:
-        if not view.exists():
-            continue
-            
-        print(f"⚙️ Compressing code text blocks inside view: {view.name}")
+def process_minify_matrix():
+    print("=== LYSANDER SUBSURFACE: RUNNING HTML COMPACTION PIPELINE ===")
+    if not PUBLIC_DIR.exists():
+        print("[-] Target public/ production path is missing. Skipping processing.")
+        return
+
+    html_files = list(PUBLIC_DIR.rglob("*.html"))
+    if not html_files:
+        print("[*] No static structural HTML views found to compress.")
+        return
+
+    for html_path in html_files:
         try:
-            raw_html = view.read_text(errors="ignore")
+            with open(html_path, 'r', encoding='utf-8') as f:
+                content = f.read()
             
-            # 1. Safely protect your explicit structural injection tokens from minifier destruction
-            protected_tokens = ["<!-- VIDEO_DECK_START -->", "<!-- VIDEO_DECK_END -->"]
-            for token in protected_tokens:
-                raw_html = raw_html.replace(token, f"\n{token}\n")
+            initial_chars = len(content)
+            
+            # Execute aggressive space compaction and comment strip parsing loops
+            content = re.sub(r'<!--#(.*?)-->', '', content)  # Shield Server Side Includes (SSI)
+            content = re.sub(r'<!--(?!\s*#)(?:(?!-->).)*-->', '', content, flags=re.DOTALL) # Strip HTML comments
+            content = re.sub(r'\s+', ' ', content)  # Collapse whitespace clusters
+            content = content.replace('> <', '><') # Compact tag boundaries
+            
+            final_chars = len(content)
+            saved = initial_chars - final_chars
+            
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(content.strip())
                 
-            # 2. Strip multi-line documentation markup comments (excluding IE condition blocks)
-            cleaned_html = re.sub(r'<!--(?!\[if).*?-->', '', raw_html, flags=re.DOTALL)
-            
-            # 3. Collapse consecutive whitespace spaces and line breaks into ultra-dense rows
-            lines = [line.strip() for line in cleaned_html.splitlines() if line.strip()]
-            condensed_html = "\n".join(lines)
-            
-            view.write_text(condensed_html)
-            print(f"✅ Structural footprint condensed successfully for {view.name}")
+            print(f"[+] Minified: {html_path.relative_to(PUBLIC_DIR)} | Reclaimed {saved} characters.")
         except Exception as e:
-            print(f"❌ HTML minification thread exception on {view.name}: {e}")
-            return False
-            
-    return True
+            print(f"[!] Compilation bottleneck inside template {html_path.name}: {e}")
 
 if __name__ == "__main__":
-    if not condense_html_structures():
-        sys.exit(1)
-    sys.exit(0)
+    process_minify_matrix()
