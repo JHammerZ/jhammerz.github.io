@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bash/bin
 # =====================================================================
 #         SOVEREIGN SUBSTRATE // BACKGROUND RUNTIME DAEMON LOOP
 # =====================================================================
@@ -38,6 +38,9 @@ while true; do
 
     # Execute the local data repository compilation engine
     python3 sovereign_model_engine.py
+
+    # Run the decentralized IPFS storage layer compilation engine
+    python3 ipfs_ledger_sync.py
     
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
