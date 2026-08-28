@@ -1,18 +1,1 @@
-lysander
-# Models - NEVER push these
-models/
-*.gguf
-*.bin
-*.safetensors
-
-# Binaries
-lysander
-mythos
-*.so
-*.o
-
-# Build dirs
-llama.cpp/build/
-build/
-target/
-node_modules/
+.sovereign-*
