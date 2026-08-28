@@ -20,16 +20,16 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
         with:
           python-version: '3.11'
 
       - name: Install Dependencies
         run: |
-          pip install opentimestamps-client pyyaml
+          pip install --require-hashes opentimestamps-client pyyaml
           sudo apt-get update && sudo apt-get install -y jq
 
       - name: Generate H-FID Manifest

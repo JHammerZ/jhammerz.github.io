@@ -22,9 +22,9 @@ jobs:
   upgrade:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
       - name: Install OTS
-        run: pip install opentimestamps-client
+        run: pip install --require-hashes opentimestamps-client
       - name: Upgrade timestamps
         run: |
           find . -name "*.ots" -exec ots upgrade {} \;

@@ -20,11 +20,11 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
       - name: Install Dependencies
         run: |
-          pip install opentimestamps-client
+          pip install --require-hashes opentimestamps-client
           sudo apt-get update && sudo apt-get install -y jq curl bc
 
       - name: Generate Health Manifest
