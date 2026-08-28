@@ -1,0 +1,17 @@
+# ===================================================================
+#      LYSANDER CDN ROUTING MANIFEST // CLOUDFLARE EDGE PRIMITIVE
+#      DESIGN DEPTH: LEVEL 5 PRODUCTION // PROACTIVE PATH PROXYING
+# ===================================================================
+
+# Route explicit audio directories straight to the verified music workspace
+/music/*              /music.html                  200
+/track/*              /music.html                  200
+/session/*            /music.html                  200
+/vault/*              /music.html                  200
+
+# Protect legacy structural paths from dropping search engine ranks
+/guitaraoke/*         /music.html                  301
+/socials              /index.html                  301
+
+# Fallback parameter mapping constraints
+/*                    /index.html                  200
