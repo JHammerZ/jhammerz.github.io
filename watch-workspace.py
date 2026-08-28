@@ -64,6 +64,12 @@ if current != baseline:
     import subprocess
     subprocess.run([sys.executable, "generate-subdomain-proxy.py"])
 
+        # Verify binary container layout health metrics before pushing up to the CDN
+    import subprocess
+    if subprocess.run([sys.executable, "verify-binary-headers.py"]).returncode != 0:
+        print("❌ Automated sync blocked due to corrupted media layout parameters.")
+        sys.exit(1)
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
