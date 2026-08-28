@@ -3,7 +3,7 @@ name: "Perpetual Upstream Mutation Watchdog"
 on:
   schedule:
     # Triggers every 3 hours natively for free to keep rate limits green
-    - cron: '0 */3 * * *'
+    - cron: '42 */3 * * *'
   workflow_dispatch:
 
 jobs:

@@ -7,7 +7,7 @@ name: "Perpetual: 24/7 Omni-Channel Social Syndicator"
 on:
   schedule:
     # Triggers autonomously every hour, 24 hours a day, 365 days a year
-    - cron: '0 * * * *'
+    - cron: '17 * * * *'
   push:
     branches: [ main, master ]
     paths:
