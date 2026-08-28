@@ -28,5 +28,8 @@ python3 clean-code-refactor.py
 # Synchronize interface terminal styling limits for human eye ergonomics
 python3 sync-terminal-theme.py
 
+# Analyze multi-cloud pipeline data compression ratio records
+python3 track-compression-efficiency.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
