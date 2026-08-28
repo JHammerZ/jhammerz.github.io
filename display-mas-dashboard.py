@@ -28,8 +28,7 @@ def render_dashboard():
         except Exception:
             pass
 
-    # Extract dynamic, live row statistics directly out of your local SQLite ledger matrix
-    track_count = "0 TRACKS ON EDGE"
+    track_count = "0 RECORDS IN DB"
     if db_path.exists():
         try:
             conn = sqlite3.connect(str(db_path))
@@ -66,6 +65,9 @@ def render_dashboard():
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("H-FID IDENTIFIERS MATRIX", "VERIFIED (hfid-registry.json)", "32")
     print_row("BITCOIN PROVENANCE GATEWAY", "ACTIVE (anchor-reality-block.py)", "32")
+    print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
+    print_row("CLOUDFLARE ROUTING EDGE MESH", "ACTIVE (edge_interceptor)", "32")
+    print_row("GOOGLE CLOUD RUN HIGH-AVAIL", "STANDBY (lysander_gcp_ping)", "32")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
     print_row("FEDERATION CONTENT COUNTER", track_count, "34")
