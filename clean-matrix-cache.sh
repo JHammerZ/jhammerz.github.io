@@ -34,5 +34,8 @@ python3 track-compression-efficiency.py
 # Automatically truncate historical telemetry logs to prevent device storage bloat
 python3 rotate-telemetry-logs.py
 
+# Analyze local system memory allocation profiles
+python3 track-memory-allocation.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
