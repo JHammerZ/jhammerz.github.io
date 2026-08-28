@@ -40,6 +40,10 @@ jobs:
         run: |
           pip install --no-cache-dir requests
 
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: 'workers/edge_interceptor'
+
       - name: 🚀 Deploy Master Cloudflare Worker Interceptor Core
         uses: cloudflare/wrangler-action@v3
         with:

@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 """
 ===================================================================
-     LYSANDER INTELLIGENT INGRESS // PRODUCTION NET INGESTION CORE
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // ABSOLUTE ROUTING MATRIX
+     LYSANDER PRODUCTION NODE // OMNICHANNEL DECAY COUNTER-MEASURE
+     DESIGN DEPTH: LEVEL 5 PRODUCTION // ABSOLUTE DECODING VECTOR
 ===================================================================
-Purpose:
-Safely queries public endpoint matrices across your complete sameAs
-footprint, automatically unpacking gzip streams under strict OpSec rules.
 """
 
 import os
 import sys
 import json
 import gzip
+import re
+import time
 import subprocess
 from pathlib import Path
 
 SHIELD_SCRIPT = Path("secure-ingress-inspection.py")
+NFDI_SCRIPT = Path("verify-nfdi-behavior.py")
 SCRATCH_STAGE = Path(".net_ingress_stage.tmp")
+PLAYLIST_FILE = Path("public/assets/playlist.json")
 
 # Hardcoded High-Velocity Sovereign Profile Mesh (Absolute Footprint)
 CANONICAL_TARGETS = {
@@ -36,50 +37,53 @@ CANONICAL_TARGETS = {
     "orcid": "https://orcid.org/0009-0004-5273-7028"
 }
 
-def execute_omnichannel_handshake():
-    # Pass precise accept headers to ensure compressed edge networks resolve smoothly
+def harvest_and_rotate_mesh():
     headers = [
         "-A", "Mozilla/5.0 (Android; Mobile; rv:128.0) Gecko/128.0 Firefox/128.0",
         "-H", "Accept-Encoding: gzip, deflate"
     ]
-    print(f"🌐 Initiating secure internet sweep across {len(CANONICAL_TARGETS)} distribution channels...")
-    
+    print(f"📡 [LYSANDER NET PROTOCOL]: Swapping connection paths across {len(CANONICAL_TARGETS)} nodes...")
+    extracted_library = []
+
     for platform, url in CANONICAL_TARGETS.items():
+        if platform in ["zenodo", "orcid", "linkedin", "github", "carrd"]: continue
         try:
-            # 1. Fetch raw binary streams to prevent text conversion encoding exceptions
             cmd = ["curl", "-s", "-L", "--connect-timeout", "6"] + headers + [url]
             res = subprocess.run(cmd, capture_output=True, timeout=15)
             
             if res.returncode == 0 and res.stdout:
                 raw_bytes = res.stdout
-                
-                # Check for standard gzip magic byte signatures (\x1f\x8b)
                 if raw_bytes.startswith(b'\x1f\x8b'):
-                    try:
-                        decoded_text = gzip.decompress(raw_bytes).decode("utf-8", errors="ignore")
-                    except Exception as e:
-                        print(f"  ⚠️ Gzip decompression bypassed for {platform.upper()}: {e}")
-                        continue
+                    decoded_text = gzip.decompress(raw_bytes).decode("utf-8", errors="ignore")
                 else:
                     decoded_text = raw_bytes.decode("utf-8", errors="ignore")
                 
-                # Write unpacked string payload data cleanly into the validation buffer
                 SCRATCH_STAGE.write_text(decoded_text)
                 
-                # 2. Force OpSec defensive verification checks before pipeline integration
-                if SHIELD_SCRIPT.exists():
-                    audit = subprocess.run([sys.executable, str(SHIELD_SCRIPT)], stdout=subprocess.DEVNULL)
-                    if audit.returncode != 0:
-                        print(f"  🚨 [SECURITY BLOCK]: Compromised code footprints dropped from {platform.upper()} stream.")
-                        if SCRATCH_STAGE.exists(): SCRATCH_STAGE.unlink()
-                        continue
-                        
-                print(f"  ✅ Live Node Synchronized: Connection clear on [ {platform.upper()} ]")
+                if NFDI_SCRIPT.exists() and subprocess.run([sys.executable, str(NFDI_SCRIPT)], stdout=subprocess.DEVNULL).returncode != 0: continue
+                if SHIELD_SCRIPT.exists() and subprocess.run([sys.executable, str(SHIELD_SCRIPT)], stdout=subprocess.DEVNULL).returncode != 0: continue
+
+                found_tokens = re.findall(r'video/(\d+)', decoded_text) or re.findall(r'watch\?v=([\w-]+)', decoded_text)
+                for token in found_tokens[:3]:
+                    extracted_library.append({
+                        "id": f"{platform}_{token}",
+                        "title": f"Sovereign Release Asset // {platform.upper()} Tracker",
+                        "url": url if "watch" not in token else f"https://youtube.com{token}",
+                        "notarized_timestamp": "2026-08-28T22:38:00Z"
+                    })
                 if SCRATCH_STAGE.exists(): SCRATCH_STAGE.unlink()
-                
         except Exception as e:
-            print(f"  ⚠️ Link execution trace interrupted for {platform.upper()}: {e}")
             if SCRATCH_STAGE.exists(): SCRATCH_STAGE.unlink()
 
+    if extracted_library and PLAYLIST_FILE.exists():
+        try:
+            current_data = json.loads(PLAYLIST_FILE.read_text())
+            combined_pool = extracted_library + [item for item in current_data.get("playlist_registry", []) if item not in extracted_library]
+            shift_factor = int(time.time() / 86400) % len(combined_pool)
+            current_data["playlist_registry"] = combined_pool[shift_factor:] + combined_pool[:shift_factor]
+            PLAYLIST_FILE.write_text(json.dumps(current_data, indent=2))
+            print("✅ [ANTI-DECAY MATRIX SUCCESS]: Omnichannel library rotated cleanly.")
+        except: pass
+
 if __name__ == "__main__":
-    execute_omnichannel_handshake()
+    harvest_and_rotate_mesh()
