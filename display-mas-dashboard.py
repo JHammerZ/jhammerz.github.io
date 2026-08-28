@@ -20,12 +20,12 @@ def render_dashboard():
     net_log_path = Path("network_traffic_audit.log")
     playlist_path = Path("public/assets/playlist.json")
     vault_meta_path = Path(".sovereign_vault_meta.json")
-
+    
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
     hardening = "SHA-256_BITCOIN_ANCHOR"
     isolation = "HARDWARE_ID_LOCKING"
-
+    
     if policy_path.exists():
         try:
             with open(policy_path, 'r') as f:
@@ -93,10 +93,16 @@ def render_dashboard():
             pass
 
     net_status = "INACTIVE"
+    suspicious_count = 0
     if net_log_path.exists():
         try:
             log_size = net_log_path.stat().st_size
             net_status = f"MONITORING ({log_size} B)"
+            with open(net_log_path, 'r', encoding='utf-8') as f:
+                logs = f.readlines()
+            for line in logs:
+                if any(term in line.lower() for term in ["deny", "block", "drop", "403"]):
+                    suspicious_count += 1
         except Exception:
             pass
 
@@ -110,18 +116,20 @@ def render_dashboard():
         except Exception:
             pass
 
-    # Read secure local storage vault state parameters
     vault_status = "UNAVAILABLE"
     if vault_meta_path.exists():
         vault_status = "LOCKED & ISOLATED"
 
-    # Query native hardware disk allocation space fields dynamically
     try:
         total, used, free = shutil.disk_usage(".")
         gb_conversion = 1024 * 1024 * 1024
         storage_metrics = f"{used/gb_conversion:.2f}GB / {total/gb_conversion:.2f}GB USED"
     except Exception:
         storage_metrics = "UNAVAILABLE"
+
+    # Map dynamic live perimeter threat mitigation readings
+    threat_intel_str = "0 ANOMALIES (SECURE)" if suspicious_count == 0 else f"{suspicious_count} BLOCKED ATTEMPTS"
+    threat_color = "32" if suspicious_count == 0 else "31"
 
     commit_depth = "UNKNOWN"
     try:
@@ -146,7 +154,7 @@ def render_dashboard():
             modified_assets = f"{len(lines)} CHANGES DETECTED"
     except Exception:
         pass
-
+    
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
@@ -168,6 +176,7 @@ def render_dashboard():
     print_row("CURATED PUBLIC EDGE METRICS", curated_tracks_str, "34")
     print_row("SECURE VAULT ENCRYPTION NODE", vault_status, "32")
     print_row("SUBSTRATE STORAGE ALLOCATION", storage_metrics, "34")
+    print_row("ACTIVE PERIMETER THREAT INDEX", threat_intel_str, threat_color)
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("REAL-TIME WORKSPACE INSPECTOR", modified_assets, "33" if "CHANGES" in modified_assets else "32")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
