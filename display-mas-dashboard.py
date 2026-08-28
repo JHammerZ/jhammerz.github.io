@@ -16,6 +16,7 @@ def render_dashboard():
     public_path = Path("public")
     model_path = Path("public/assets/model_state.json")
     ipfs_path = Path("public/assets/ipfs_ledger_manifest.json")
+    net_log_path = Path("network_traffic_audit.log")
     
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
@@ -40,7 +41,7 @@ def render_dashboard():
             conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*) FROM content_catalog")
-            count = cursor.fetchone()[0]
+            count = cursor.fetchone()
             track_count = f"{count} RECORDS IN DB"
             conn.close()
         except Exception:
@@ -62,7 +63,6 @@ def render_dashboard():
                 pid = pf.read().strip()
             if os.path.exists(f"/proc/{pid}"):
                 daemon_status = f"RUNNING (PID {pid})"
-                # Extract native process initialization timestamp metrics
                 stat_birth = os.stat(f"/proc/{pid}").st_ctime
                 delta = datetime.now() - datetime.fromtimestamp(stat_birth)
                 hours, remainder = divmod(int(delta.total_seconds()), 3600)
@@ -86,6 +86,15 @@ def render_dashboard():
             with open(ipfs_path, 'r') as iff:
                 i_cfg = json.load(iff)
                 ipfs_status = f"DISTRIBUTED ({i_cfg.get('virtual_cid_address', 'N/A')[:11]}...)"
+        except Exception:
+            pass
+
+    # Read and map live parameters from the network traffic auditor log
+    net_status = "INACTIVE"
+    if net_log_path.exists():
+        try:
+            log_size = net_log_path.stat().st_size
+            net_status = f"MONITORING ({log_size} B)"
         except Exception:
             pass
 
@@ -130,6 +139,7 @@ def render_dashboard():
     print_row("DAEMON OPERATIONAL RUNTIME", uptime_str, "34")
     print_row("SOVEREIGN CORE DATA LEDGER", model_status, "32" if "ONLINE" in model_status else "31")
     print_row("DECENTRALIZED IPFS MESH STORAGE", ipfs_status, "32" if "DISTRIBUTED" in ipfs_status else "31")
+    print_row("NETWORK TRAFFIC ADAPTER AUDIT", net_status, "32" if "MONITORING" in net_status else "31")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("REAL-TIME WORKSPACE INSPECTOR", modified_assets, "33" if "CHANGES" in modified_assets else "32")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
