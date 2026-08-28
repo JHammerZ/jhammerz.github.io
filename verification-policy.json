@@ -1,13 +1,13 @@
 {
-    "security_tier": "SOVEREIGN_SUBSTRATE",
-    "validation_methods": {
-        "provenance_layer": "H-FID_REGISTRY",
-        "state_hardening": "SHA-256_BITCOIN_ANCHOR",
-        "isolation_gate": "HARDWARE_ID_LOCKING"
-    },
-    "enforcement": {
-        "zero_trust_principles": true,
-        "multi_signature_checks": false,
-        "allow_untracked_credentials": false
-    }
+  "security_tier": "SOVEREIGN_SUBSTRATE",
+  "validation_methods": {
+    "provenance_layer": "H-FID_REGISTRY",
+    "state_hardening": "SHA-256_BITCOIN_ANCHOR",
+    "isolation_gate": "HARDWARE_ID_LOCKING"
+  },
+  "enforcement": {
+    "zero_trust_principles": true,
+    "multi_signature_checks": false,
+    "allow_untracked_credentials": false
+  }
 }
