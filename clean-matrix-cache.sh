@@ -55,5 +55,8 @@ python3 optimize-memory-buffer.py
 # Run automated repo history and branch pruner utilities
 python3 clean-git-history.py
 
+# Run automated workspace self-healing and data integrity recovery checks
+python3 heal-workspace-matrix.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
