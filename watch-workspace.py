@@ -17,6 +17,11 @@ def get_directory_snapshot():
 
 print("⚡ [LYSANDER CORE WATCHDOG]: Sweeping local substrate directory for mutations...")
 
+# Run pre-flight edge connectivity check before parsing directory state parameters
+import subprocess
+if subprocess.run([sys.executable, "track-preflight-ping.py"]).returncode != 0:
+    sys.exit(1)
+
 if not STATE_FILE.exists():
     baseline = get_directory_snapshot()
     STATE_FILE.write_text(json.dumps(baseline))
