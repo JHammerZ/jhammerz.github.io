@@ -17,12 +17,13 @@ def render_dashboard():
     model_path = Path("public/assets/model_state.json")
     ipfs_path = Path("public/assets/ipfs_ledger_manifest.json")
     net_log_path = Path("network_traffic_audit.log")
-
+    playlist_path = Path("public/assets/playlist.json")
+    
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
     hardening = "SHA-256_BITCOIN_ANCHOR"
     isolation = "HARDWARE_ID_LOCKING"
-
+    
     if policy_path.exists():
         try:
             with open(policy_path, 'r') as f:
@@ -97,6 +98,17 @@ def render_dashboard():
         except Exception:
             pass
 
+    # Read and dynamically calculate the size of your curated static web manifest elements
+    curated_tracks_str = "0 ASSETS INDEXED"
+    if playlist_path.exists():
+        try:
+            with open(playlist_path, 'r', encoding='utf-8') as pf:
+                p_data = json.load(pf)
+                registry_len = len(p_data.get("playlist_registry", []))
+                curated_tracks_str = f"{registry_len} NODES CURATED"
+        except Exception:
+            pass
+
     commit_depth = "UNKNOWN"
     try:
         commit_depth = subprocess.check_output(["git", "rev-list", "--count", "HEAD"]).decode("utf-8").strip() + " REVISIONS"
@@ -112,7 +124,6 @@ def render_dashboard():
     except Exception:
         global_status = "BALANCED (CLOUD ATTESTED)"
 
-    # Intercept current Git Status to double-check that local mutations drop into the ignore matrix rules
     modified_assets = "0 MODIFICATIONS PENDING"
     try:
         status_out = subprocess.check_output(["git", "status", "--porcelain"]).decode("utf-8").strip()
@@ -121,7 +132,7 @@ def render_dashboard():
             modified_assets = f"{len(lines)} CHANGES DETECTED"
     except Exception:
         pass
-
+    
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
@@ -140,6 +151,7 @@ def render_dashboard():
     print_row("SOVEREIGN CORE DATA LEDGER", model_status, "32" if "ONLINE" in model_status else "31")
     print_row("DECENTRALIZED IPFS MESH STORAGE", ipfs_status, "32" if "DISTRIBUTED" in ipfs_status else "31")
     print_row("NETWORK TRAFFIC ADAPTER AUDIT", net_status, "32" if "MONITORING" in net_status else "31")
+    print_row("CURATED PUBLIC EDGE METRICS", curated_tracks_str, "34")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("REAL-TIME WORKSPACE INSPECTOR", modified_assets, "33" if "CHANGES" in modified_assets else "32")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
