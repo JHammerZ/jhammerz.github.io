@@ -60,6 +60,10 @@ if current != baseline:
     import subprocess
     subprocess.run([sys.executable, "compress-assets.py"])
 
+        # Dynamic sub-domain proxy calculation maps
+    import subprocess
+    subprocess.run([sys.executable, "generate-subdomain-proxy.py"])
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
