@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PROVENANCE LAYER // AUDIO METADATA SCRAPER CORE
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // AUTOMATED MEDIA INDICES
-===================================================================
 Purpose:
 Sweeps added audio binaries, extracts core containers, and
 programmatically updates metadata values inside playlist.json.

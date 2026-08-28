@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER SYSTEM MONITOR // MEMORY ALLOCATION SAFETY ENGINE
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // SUBSURFACE INSULATION
-===================================================================
 """
 
 import os

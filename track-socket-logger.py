@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER NETWORK PROTOCOL // LOCAL SOCKET INTERACTION LOGGER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // TELEMETRY INSULATION
-===================================================================
 """
 
 import sys

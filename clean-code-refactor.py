@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER CLEANER // DYNAMIC CODE REFACTORING ENGINE
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // CODEBASE COMPACTING
-===================================================================
 """
 
 import re

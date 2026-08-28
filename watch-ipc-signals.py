@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PROCESSSOR // KERNEL IPC SIGNAL WATCHDOG
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // FAILURE-PROOF COMPLIANCE
-===================================================================
 Purpose:
 Monitors running background subprocess matrices natively inside Termux
 to ensure perfect runtime lifecycle sync and prevent thread drops.

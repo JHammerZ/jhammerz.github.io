@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PROCESSSOR // SUBSURFACE DAEMON SCHEDULER PROTOCOL
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // MULTI-THREAD RESILIENCE
-===================================================================
 """
 
 import time

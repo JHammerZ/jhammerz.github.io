@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER SYSTEM MONITOR // POWER THERMAL INSULATION GUARD
-     DESIGN DESIGN: LEVEL 5 PRODUCTION // HARDWARE LIFESPAN PROTECTION
-===================================================================
 """
 
 import json

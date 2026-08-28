@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER CLOUD MATRIX // RESILIENT CRON TIMING TUNER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // CONCURRENCY INSULATION
-===================================================================
 Purpose:
 Modifies remote GitHub Action cron properties to run workflows on
 off-peak minutes, ensuring maximum cloud worker processing velocity.

@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER NETWORK PROTOCOL // PIPELINE ERROR AGGREGATOR
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // PROACTIVE TRACKING LOGS
-===================================================================
 Purpose:
 Intercepts subsurface process failures and pipes forensic telemetry
 data directly into error_ledger.json within your master repository.

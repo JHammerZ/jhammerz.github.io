@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PRODUCTION NODE // OMNICHANNEL DECAY COUNTER-MEASURE
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // ABSOLUTE DECODING VECTOR
-===================================================================
 """
 
 import os

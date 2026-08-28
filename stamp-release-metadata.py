@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PROVENANCE LAYER // METADATA RELEASE TIMESTAMP STAMP
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // PROACTIVE TIME-ANCHORING
-===================================================================
 Purpose:
 Injects high-precision, automated time parameters directly into the
 playlist registry to protect your original release signal layers.

@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER LOG MANAGEMENT // AUTOMATED STORAGE PURGE ROTATOR
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // ABSOLUTE EFFICIENCY GATES
-===================================================================
 """
 
 import json

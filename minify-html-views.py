@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER MINIFIER // HIGH-SPEED HTML INTERFACE LAYER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // PERFORMANCE INSULATION
-===================================================================
 Purpose:
 Sweeps primary HTML views, strips trailing margins and comments,
 and condenses layouts into clean, zero-bloat delivery packages.

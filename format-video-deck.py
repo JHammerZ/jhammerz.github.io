@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER ANTI-DECAY SYNDICATOR // BACKLOG ROTATION MATRIX
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // CONTINUOUS VISIBILITY
-===================================================================
 Purpose:
 Parses your backlog library, applies a deterministic rotation array to
 prevent view decay, and rewrites music.html with your re-balanced grid.

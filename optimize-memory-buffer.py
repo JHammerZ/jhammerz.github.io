@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PROCESSSOR // OOM MEMORY BUFFER OPTIMIZER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // FAILURE-PROOF RUNTIMES
-===================================================================
 Purpose:
 Intercepts runtime environment memory spikes, flushes inactive
 data blocks, and executes manual garbage collection sweeps.

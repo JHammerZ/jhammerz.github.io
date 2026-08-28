@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER SCHEMA BUILDER // AGENT CONTEXT INGESTION MATRIX
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // FAILURE-PROOF AUTOMATION
-===================================================================
 """
 
 import json

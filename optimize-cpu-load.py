@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER SYSTEM MONITOR // CPU-LOAD EFFICIENCY OPTIMIZER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // SUBSURFACE INSULATION
-===================================================================
 """
 
 import os

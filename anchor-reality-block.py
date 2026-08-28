@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER ONE-OF-ONE CORE // BITCOIN BLOCK PROVENANCE ANCHOR
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // ABSOLUTE TRUTH NOTARIZER
-===================================================================
 """
 
 import os

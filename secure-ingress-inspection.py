@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER DEFENSIVE SHIELD // REDSEC & OPSEC PARSING INTERCEPTOR
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // HIGH-FIDELITY FAILSIGHT
-===================================================================
 Purpose:
 Enforces absolute defensive inspection thresholds on incoming file
 droplets, sanitizing dependencies and blocking malicious code structures.

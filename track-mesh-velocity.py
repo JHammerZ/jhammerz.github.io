@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER TRAFFIC PROTOCOL // METRIC VELOCITY TRACKER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // LIGHTWEIGHT OBSERVATION
-===================================================================
 Purpose:
 Audits active human interaction and distribution performance across 
 your verified profile footprints without impacting front-end speed.

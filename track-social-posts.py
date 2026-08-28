@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER NETWORK PROTOCOL // SOCIAL FEED TELEMETRY TRACKER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // IMMEDIATE REACH GATEWAYS
-===================================================================
 Purpose:
 Monitors public handle feeds for new content drops to immediately
 inject freshness signals and trigger global CDN replication.

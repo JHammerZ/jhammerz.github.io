@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER SYSTEM MONITOR // STORAGE IO PERFORMANCE SAFEGUARD
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // SUBSURFACE INSULATION
-===================================================================
 """
 
 import os

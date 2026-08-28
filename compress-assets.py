@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER GRAPHICS CORE // AUTOMATED MEDIA MATRIX COMPRESSION
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // PERFORMANCE INSULATION
-===================================================================
 """
 
 import sys

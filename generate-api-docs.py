@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER DOCUMENTATION CORE // AUTOMATED API GENERATOR
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // AUTO-MAINTAINED SPECS
-===================================================================
 Purpose:
 Sweeps the system workspace, extracts operational headers, and
 compiles an uncompromised master markdown API specification.

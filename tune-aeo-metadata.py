@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER AEO TUNING CORE // METADATA SEARCH ENGINE INGESTION
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // AUTOMATED SEARCH OPTIMIZATION
-===================================================================
 Purpose:
 Programmatically parses frontend HTML files and injects cutting-edge
 AEO, SEO, and H-FID schema structures to maximize index velocity.

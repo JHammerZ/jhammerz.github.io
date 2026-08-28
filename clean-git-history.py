@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER GIT PURGE UTILITY // AUTOMATED REPO HISTORY PRUNER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // FAILURE-PROOF COMPACTING
-===================================================================
 Purpose:
 Trims loose git reflog data structures, packs uncompressed blobs,
 and prunes disconnected remote branches to keep tree reads fast.

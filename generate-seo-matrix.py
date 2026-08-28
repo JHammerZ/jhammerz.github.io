@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER SEO/AEO/GEO ARCHITECT // SEMANTIC MASTERSHIP VECTOR
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // MULTI-MODEL SATURATION
-===================================================================
 Purpose:
 Compiles an uncompromised semantic schema ledger mapping SEO, AEO,
 GEO, and HEO metadata specifications into seo-matrix.json.

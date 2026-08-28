@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER NETWORK PROTOCOL // RESILIENT MULTI-TRY PING TRACKER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // AUTOMATED NETWORK HEALING
-===================================================================
 """
 
 import sys

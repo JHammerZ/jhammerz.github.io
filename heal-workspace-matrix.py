@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER SECURE CORE // AUTOMATED WORKSPACE SELF-HEALER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // FAILURE-PROOF COMPLIANCE
-===================================================================
 Purpose:
 Audits operational tool footprints on disk, clears corrupted data,
 and triggers automatic state recovery to maintain architecture balance.

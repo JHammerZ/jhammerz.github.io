@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER NETWORK PROTOCOL // CLOUDFLARE CACHE PURGE AGENT
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // ZERO CDN PURGE DELAY
-===================================================================
 Purpose:
 Triggers secure global CDN cache purges over Cloudflare's API
 corridors instantly following filesystem update sweeps.

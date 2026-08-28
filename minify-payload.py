@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER MINIFIER // HIGH-SPEED PAYLOAD LAYER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // AUTOMATED OPTIMIZATION
-===================================================================
 """
 
 import json

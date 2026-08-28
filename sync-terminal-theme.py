@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER INTERFACE CORE // TERMINAL INTERFACE VISUAL SYNC
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // ENVIRONMENTAL ERGONOMICS
-===================================================================
 """
 
 import time

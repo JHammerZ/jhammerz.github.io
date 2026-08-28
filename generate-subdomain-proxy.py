@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PROXY CORE // DYNAMIC SUB-DOMAIN SPECIFICATION MATRIX
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // MULTI-ROUTE INSULATION
-===================================================================
 """
 
 import json

@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER NETWORK PROTOCOL // COMPRESSION EFFICIENCY TRACKER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // MOBILE DATA INSULATION
-===================================================================
 """
 
 import os

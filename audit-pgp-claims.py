@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PROVENANCE LAYER // PGP DATA CLAIM VALIDATOR
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // CRYPTOGRAPHIC ASSURANCE
-===================================================================
 """
 
 import sys

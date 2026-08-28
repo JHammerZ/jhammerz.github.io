@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER PROVENANCE LAYER // BINARY HEADER AUDIT UTILITY
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // MEDIA INSULATION GATES
-===================================================================
 """
 
 import sys

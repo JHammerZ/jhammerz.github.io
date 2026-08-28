@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER NETWORK PROTOCOL // PUBLIC DEAD-LINK VERIFIER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // DISTRIBUTION RECALL
-===================================================================
 """
 
 import sys

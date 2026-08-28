@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER MINIFIER // HIGH-SPEED STYLESHEET LAYER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // PERFORMANCE INSULATION
-===================================================================
 """
 
 import re

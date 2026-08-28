@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 """
-===================================================================
-     LYSANDER SITE MAPPER // DYNAMIC XML CRAWL INDEXER
-     DESIGN DEPTH: LEVEL 5 PRODUCTION // PROACTIVE DISCOVERY
-===================================================================
 """
 
 import json
