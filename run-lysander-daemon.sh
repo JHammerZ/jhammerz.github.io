@@ -41,6 +41,11 @@ while true; do
 
     # Run the decentralized IPFS storage layer compilation engine
     python3 ipfs_ledger_sync.py
+
+    # Execute final test-matrix scripts to keep system states validated
+    python3 verify-binary-headers.py
+    python3 clean-code-refactor.py
+    python3 track-preflight-ping.py
     
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
