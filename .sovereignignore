@@ -1,0 +1,11 @@
+wp-includes/
+wp-admin/
+wp-content/
+node_modules/
+vendor/
+.github/
+.git/
+*.min.js
+*.min.css
+__tests__/
+tests/
