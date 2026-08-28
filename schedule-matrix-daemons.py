@@ -1,53 +1,29 @@
-#!/usr/bin/env python3
-"""
-"""
-
-import time
 import subprocess
+import sys
 from pathlib import Path
 
-# Explicit task frequency rules mapped in seconds
-TASK_MATRIX = {
-    "watch-workspace.py": 30,             # Instant mutation checking loops
-    "track-mesh-velocity.py": 3600,       # Hourly channel traffic telemetry checks
-    "clean-matrix-cache.sh": 86400,
-    "track-social-posts.py": 3600        # 24-Hour maintenance and backup routines
-}
-
-def execute_scheduler_loop():
-    print("🟢 Lysander Subsurface Process Scheduler initialized.")
-    print("📋 Daemon orchestration matrix actively logging background thread cycles.")
+def audit_daemon_schedules():
+    print("=== LYSANDER SUBSURFACE: VALIDATING DAEMON SCHEDULE OPERATIONS ===")
+    pid_file = Path(".lysander-daemon.pid")
     
-    # Store exact epoch timestamps to track execution elapsed metrics
-    last_executed = {script: 0.0 for script in TASK_MATRIX}
-    
+    if pid_file.exists():
+        try:
+            with open(pid_file, "r") as f:
+                pid = f.read().strip()
+            if Path(f"/proc/{pid}").exists():
+                print(f"[+] Active Background Process Verified: Operational under PID {pid}")
+                return True
+        except Exception:
+            pass
+            
+    print("[!] Daemon script offline or unlinked. Triggering runtime restore sequence...")
     try:
-        while True:
-            current_time = time.time()
-            
-            for script, interval in TASK_MATRIX.items():
-                if current_time - last_executed[script] >= interval:
-                    script_path = Path(script)
-                    if not script_path.exists():
-                        continue
-                        
-                    print(f"⚡ [SCHEDULER EVENT]: Launching background runner: {script}")
-                    try:
-                        # Determine runtime caller parameters based on extension layout types
-                        if script.endswith(".py"):
-                            subprocess.Popen(["python3", script], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                        elif script.endswith(".sh"):
-                            subprocess.Popen(["bash", script], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                            
-                        last_executed[script] = current_time
-                    except Exception as e:
-                        print(f"⚠️ Exception spawning background engine thread for {script}: {e}")
-                        
-            # Sleep 5 seconds between iteration sweeps to maintain optimal CPU efficiency
-            time.sleep(5)
-            
-    except KeyboardInterrupt:
-        print("\n🛑 Severing subsurface process scheduler connections. Exiting safely.")
+        subprocess.Popen(["nohup", "./run-lysander-daemon.sh"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print("[+] Lysander background daemon process successfully re-spooled.")
+        return True
+    except Exception as e:
+        print(f"[-] Failed to execute background daemon restore: {e}")
+        return False
 
 if __name__ == "__main__":
-    execute_scheduler_loop()
+    sys.exit(0 if audit_daemon_schedules() else 1)
