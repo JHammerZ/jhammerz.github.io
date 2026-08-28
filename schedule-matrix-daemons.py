@@ -14,7 +14,8 @@ from pathlib import Path
 TASK_MATRIX = {
     "watch-workspace.py": 30,             # Instant mutation checking loops
     "track-mesh-velocity.py": 3600,       # Hourly channel traffic telemetry checks
-    "clean-matrix-cache.sh": 86400        # 24-Hour maintenance and backup routines
+    "clean-matrix-cache.sh": 86400,
+    "track-social-posts.py": 3600        # 24-Hour maintenance and backup routines
 }
 
 def execute_scheduler_loop():
