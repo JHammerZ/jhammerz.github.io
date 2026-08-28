@@ -8,6 +8,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+
+      - name: Verify Commercial License Signature Gate
+        run: |
+          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
+          if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
+            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
+            echo "This repository is locked under a proprietary Pay-For-Use EULA."
+            echo "Please purchase an active subscription key to re-enable execution tokens."
+            exit 1
+          fi
+          echo "✓ License key signature discovered. Authorizing operational execution matrix."
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:

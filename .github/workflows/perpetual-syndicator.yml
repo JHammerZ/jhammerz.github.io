@@ -16,7 +16,7 @@ on:
 
 jobs:
   autonomous-cron-sync:
-    name: Perpetual Ingress Verification Loop
+    name: "Lysander Matrix Ingress Gate [ubuntu-latest]"
     runs-on: ubuntu-latest
     steps:
       - name: Verify Commercial License Signature Gate
