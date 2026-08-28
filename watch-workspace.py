@@ -89,6 +89,10 @@ if current != baseline:
     import subprocess
     subprocess.run([sys.executable, "generate-api-docs.py"])
 
+        # Auto-generate advanced SEO, AEO, GEO, and HEO semantic matrix graphs
+    import subprocess
+    subprocess.run([sys.executable, "generate-seo-matrix.py"])
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
