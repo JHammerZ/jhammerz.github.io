@@ -1,0 +1,34 @@
+name: Build and Test TMA Full Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  integrate-and-verify:
+    name: Continuous Integration Pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: 2. Initialize Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: 3. Install Immutable Dependencies
+        run: yarn install --immutable
+
+      - name: 4. Execute Native Verification Engines
+        run: |
+          if grep -q '"build"' package.json; then
+            yarn build
+          fi
+
+      - name: 5. Run Full Verification Test Suite
+        run: yarn test
