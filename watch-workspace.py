@@ -85,6 +85,10 @@ if current != baseline:
     if subprocess.run([sys.executable, "validate-playlist-schema.py"]).returncode != 0:
         sys.exit(1)
 
+        # Auto-compile fresh markdown API specification blueprints
+    import subprocess
+    subprocess.run([sys.executable, "generate-api-docs.py"])
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
