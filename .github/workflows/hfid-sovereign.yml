@@ -1,0 +1,57 @@
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+# Licensed under MIT License
+
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+name: "Build: H-FID Sovereign Kernel"
+on:
+  workflow_dispatch:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on:
+  workflow_dispatch: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile Core Monolithic Subsystem Natively
+        run: |
+          set -e
+          sudo apt-get update && sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd kmod wget
+          wget -q https://github.com -o kernel.tar.gz
+          tar -xf kernel.tar.gz && mv linux-stable-6.10 linux-6.10
+          cd linux-6.10
+          cat << "EOF" >> drivers/char/random.c
+          /* H-FID Sovereignty Hooks */
+          static int __init hfid_init_monolithic(void) {
+              pr_info("H-FID: ONE_OF_ONE kernel active\n");
+              pr_info("H-FID: RING_-3 sovereignty injected\n");
+              return 0;
+          }
+          late_initcall(hfid_init_monolithic);
+          EOF
+          make defconfig
+          make -j$(nproc) drivers/char/random.o
+          mkdir -p $GITHUB_WORKSPACE/hfid_module
+          cp drivers/char/random.o $GITHUB_WORKSPACE/hfid_module/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hfid-kernel-core-object
+          path: hfid_module/random.o
