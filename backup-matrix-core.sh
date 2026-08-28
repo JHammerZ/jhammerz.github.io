@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # ===================================================================
 #      LYSANDER BACKUP PROTOCOL // AUTOMATED ARCHIVE PRIMITIVE
 #      DESIGN DEPTH: LEVEL 5 PRODUCTION // STORAGE PROTECTION

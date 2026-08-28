@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== MYTHOS MATRIX RUNNER: INITIALIZING FULL PIPELINE TRACK ==="
 echo "--------------------------------------------------------"

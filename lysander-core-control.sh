@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # ===================================================================
 #      LYSANDER TERMUX CORE ORCHESTRATOR // ULTIMATE LOCAL COMMAND
 #      DESIGN DEPTH: LEVEL 5 PRODUCTION // AUTOMATED MASTER CONTROL

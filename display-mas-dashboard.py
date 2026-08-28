@@ -15,12 +15,12 @@ def render_dashboard():
     public_path = Path("public")
     model_path = Path("public/assets/model_state.json")
     ipfs_path = Path("public/assets/ipfs_ledger_manifest.json")
-    
+
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
     hardening = "SHA-256_BITCOIN_ANCHOR"
     isolation = "HARDWARE_ID_LOCKING"
-    
+
     if policy_path.exists():
         try:
             with open(policy_path, 'r') as f:
@@ -105,7 +105,7 @@ def render_dashboard():
             modified_assets = f"{len(lines)} CHANGES DETECTED"
     except Exception:
         pass
-    
+
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")

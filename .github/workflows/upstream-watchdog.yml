@@ -1,6 +1,9 @@
 name: "Perpetual Upstream Mutation Watchdog"
 
 on:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   schedule:
     # Triggers every 3 hours natively for free to keep rate limits green
     - cron: '42 */3 * * *'
@@ -19,10 +22,10 @@ jobs:
           fi
 
       - name: 1. Checkout Source Matrix
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
       - name: 2. Setup Runtime Layer
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
         with:
           python-version: '3.11'
 

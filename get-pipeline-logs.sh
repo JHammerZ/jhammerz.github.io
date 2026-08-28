@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 # Ensure gh cli is present
 if ! command -v gh &> /dev/null; then

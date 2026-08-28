@@ -9,15 +9,15 @@ def verify_playlist_schema():
     if not PLAYLIST_PATH.exists():
         print("[-] Target ledger node public/assets/playlist.json is missing.")
         return False
-        
+
     try:
         with open(PLAYLIST_PATH, 'r', encoding='utf-8') as f:
             data = json.load(f)
-            
+
         if "playlist_registry" not in data:
             print("[-] Schema Violation: Missing root 'playlist_registry' tracking array.")
             return False
-            
+
         registry = data.get("playlist_registry", [])
         print(f"[+] Structural Validation Status: Schema Compliant ({len(registry)} Nodes Found)")
         return True

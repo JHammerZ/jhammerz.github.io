@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # ===================================================================
 #      LYSANDER SUBSTRATE HARDENING // PACKAGE.JSON AUTOMATION GATES
 #      DESIGN DEPTH: LEVEL 5 PRODUCTION // FAILURE-PROOF ORCHESTRATION

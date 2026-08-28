@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # ===================================================================
 #      LYSANDER SOVEREIGN METADATA AUDIT // LOCAL LAYER
 #      DESIGN DEPTH: LEVEL 4 PRODUCTION // ZERO-MAINTENANCE AUTONOMY

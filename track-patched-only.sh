@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== System Check: Verifying Target Patched Workflow States ==="
 echo "--------------------------------------------------------"

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # ===================================================================
 #      LYSANDER LOCAL MONITOR // MATRIX TELEMETRY PROTOCOL
 #      DESIGN DEPTH: LEVEL 5 PRODUCTION // LIVE METRIC SCANNER

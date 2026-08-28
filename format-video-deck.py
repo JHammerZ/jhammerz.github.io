@@ -35,7 +35,7 @@ def generate_video_deck_html():
     print("🔄 Initializing Anti-Decay Backlog Rotation sequence...")
     tracks = load_backlog()
     total_tracks = len(tracks)
-    
+
     if total_tracks == 0:
         print("📋 Backlog library empty. Balancing phase skipped.")
         return False
@@ -51,7 +51,7 @@ def generate_video_deck_html():
         track_id = track.get("id", "unknown")
         title = track.get("title", "Untitled Raw Session")
         url = track.get("url", "#")
-        
+
         element = f"""    <div class="video-deck-card" data-track-id="{track_id}">
       <h3>{title}</h3>
       <a href="{url}" target="_blank" class="deck-stream-link">⚡ Stream Raw Take</a>
@@ -66,11 +66,11 @@ def generate_video_deck_html():
     html_source = MUSIC_HTML.read_text()
     start_token = "<!-- VIDEO_DECK_START -->"
     end_token = "<!-- VIDEO_DECK_END -->"
-    
+
     if start_token in html_source and end_token in html_source:
         before = html_source.split(start_token)[0]
         after = html_source.split(end_token)[1]
-        
+
         updated_html = f"{before}{start_token}\n{deck_content}\n{end_token}{after}"
         MUSIC_HTML.write_text(updated_html)
         print("✅ Anti-decay tracking complete. music.html layout updated globally.")

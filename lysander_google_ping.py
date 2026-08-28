@@ -8,11 +8,11 @@ POLICY_PATH = Path("verification-policy.json")
 
 def verify_google_cloud_endpoint():
     print("=== LYSANDER SUBSURFACE: EXECUTING GCP CONTAINER TARGET VALIDATION ===")
-    
+
     # Dynamically extract target parameters or fall back to standard project identity layouts
     project_id = "jhammerz-core-engine"
     region = "us-central1"
-    
+
     # Read custom local validation descriptors if active
     if POLICY_PATH.exists():
         try:
@@ -25,7 +25,7 @@ def verify_google_cloud_endpoint():
     # Construct the canonical Google Cloud Run distribution domain URL string
     target_url = f"https://mythos-matrix-core-latest-{project_id}.run.app/health"
     print(f"[*] Targeting Remote Asset Gateway Corridor: {target_url}")
-    
+
     try:
         print("[*] Transmitting standard edge synchronization ping packet...")
         response = requests.get(target_url, timeout=8)

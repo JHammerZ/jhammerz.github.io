@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== Pulling Latest Remote Architecture Profiles ==="
 git fetch origin main

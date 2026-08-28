@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 # ==============================================================================
 #          LYSANDER CORE WORKFLOW KERNEL // LEVEL 4 ACTIVATION SUITE
 #          DESIGN DEPTH: MAXIMUM EFFICIENCY // ZERO-DELETION GLOBAL ENFORCEMENT
@@ -27,14 +28,14 @@ echo "----------------------------------------------------------------------"
 # 3. Iterate through every single tracked manifest module file cleanly
 for workflow_path in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     [ -e "$workflow_path" ] || continue
-    
+
     FILENAME=$(basename "$workflow_path")
     echo "Processing system target node: $FILENAME"
-    
+
     # 4. Command the remote server to re-enable the workflow path natively
     # This securely overrides 'disabled' metrics on the GitHub tracking nodes.
     gh workflow enable "$FILENAME" 2>/dev/null
-    
+
     if [ $? -eq 0 ]; then
         echo "   ✓ STATUS: Re-enabled and synced with master cluster successfully."
     else

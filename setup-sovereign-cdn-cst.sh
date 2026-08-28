@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 # ==============================================================================
 #          LYSANDER NETWORK CORE // FULL FRONT-END APPLICATION SUITE
 #          DESIGN DEPTH: LEVEL 4 PRODUCTION // TERMUX COMPLIANT BUNDLE
@@ -94,7 +95,7 @@ class JHammerZPlayer {
       const latencyBox = document.getElementById('edge-latency');
       if (latencyBox) latencyBox.innerText = `${duration} ms`;
     });
-    
+
     this.audioElement.addEventListener('progress', () => {
       const buffered = this.audioElement.buffered;
       if (buffered.length > 0) {
@@ -109,7 +110,7 @@ class JHammerZPlayer {
     const updateClock = () => {
       const clockBox = document.getElementById('cst-timestamp');
       if (!clockBox) return;
-      
+
       // Enforce clean layout rendering for Central Standard Time (CST)
       const options = {
         timeZone: 'America/Chicago',
@@ -118,11 +119,11 @@ class JHammerZPlayer {
         second: '2-digit',
         hour12: false
       };
-      
+
       const cstString = new Intl.DateTimeFormat('en-US', options).format(new Date());
       clockBox.innerText = `${cstString} CST`;
     };
-    
+
     setInterval(updateClock, 1000);
     window.addEventListener('DOMContentLoaded', updateClock);
   }
@@ -130,7 +131,7 @@ class JHammerZPlayer {
   streamTrack(trackUrl, trackId) {
     const bar = document.getElementById(`bar-${trackId}`);
     const btn = document.getElementById(`btn-${trackId}`);
-    
+
     if (this.currentTrackId === trackId) {
       if (this.audioElement.paused) {
         this.audioElement.play();

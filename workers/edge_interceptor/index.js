@@ -54,13 +54,13 @@ export default {
       return response;
     } catch (error) {
       return new Response(
-        JSON.stringify({ 
-          error: "Sovereign Edge Node Timeout", 
-          trace: error.message 
+        JSON.stringify({
+          error: "Sovereign Edge Node Timeout",
+          trace: error.message
         }),
-        { 
-          status: 502, 
-          headers: { "Content-Type": "application/json" } 
+        {
+          status: 502,
+          headers: { "Content-Type": "application/json" }
         }
       );
     }

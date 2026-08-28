@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # ===================================================================
 #      LYSANDER INTELLIGENT INGRESS // LIVE NET BOUNDARY COUPLING
 #      DESIGN DEPTH: LEVEL 5 PRODUCTION // FULL OPERATIONAL REACH
@@ -36,32 +37,32 @@ def load_target_profiles():
 def safely_ingest_live_data():
     platforms = load_target_profiles()
     headers = "User-Agent: Lysander-Sovereign-Agent/1.3 (Verified Human Origin)"
-    
+
     print(f"🌐 Initiating parallel internet handshake across {len(platforms)} endpoints...")
-    
+
     for platform, url in platforms.items():
         if platform in ["zenodo_doi", "orcid"]:
             continue
-            
+
         try:
             res = subprocess.run(
                 ["curl", "-s", "-A", headers, "-L", "--connect-timeout", "5", url],
                 capture_output=True, text=True
             )
-            
+
             if res.returncode == 0 and res.stdout.strip():
                 SCRATCH_STAGE.write_text(res.stdout)
-                
+
                 if SHIELD_SCRIPT.exists():
                     audit = subprocess.run([sys.executable, str(SHIELD_SCRIPT)], stdout=subprocess.DEVNULL)
                     if audit.returncode != 0:
                         print(f"🚨 [OPSEC BLOCK]: Intercepted threat signature inside {platform.upper()} stream. Discarded payload.")
                         if SCRATCH_STAGE.exists(): SCRATCH_STAGE.unlink()
                         continue
-                        
+
                 print(f"  ✅ Live Node Clear: Handshake completed with {platform.upper()} (Payload Verified).")
                 if SCRATCH_STAGE.exists(): SCRATCH_STAGE.unlink()
-                
+
         except Exception as e:
             print(f"  ⚠️ Unable to map connection layer for {platform}: {e}")
             if SCRATCH_STAGE.exists(): SCRATCH_STAGE.unlink()
@@ -79,7 +80,7 @@ if p.exists():
     code = p.read_text()
     target_hook = 'if ENGINE_SCRIPT.exists():'
     injection = '    # Safely query live open internet profiles using OpSec parsing boundaries\n    import subprocess\n    subprocess.run([sys.executable, \"query-live-matrix.py\"])\n\n    if ENGINE_SCRIPT.exists():'
-    
+
     if 'query-live-matrix.py' not in code:
         code = code.replace(target_hook, injection)
         p.write_text(code)

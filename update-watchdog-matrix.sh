@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # ===================================================================
 #      LYSANDER SUBSURFACE COHESION PATCH // TERMUX RUNTIME FIX
 #      DESIGN DEPTH: LEVEL 5 PRODUCTION // CLOSED-LOOP COHESION
@@ -36,14 +37,14 @@ current = get_directory_snapshot()
 if current != baseline:
     print("⚠️ [MUTATION DETECTED]: Structural balance shifted inside public/music.")
     STATE_FILE.write_text(json.dumps(current))
-    
+
     # 1. First trigger local multi-channel serialization if the engine file exists
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
     else:
         print("⚠️ Local engine script missing at .github/scripts/social_syndicator.py")
-    
+
     # 2. Push state mutation instantly to edge distribution servers
     print("📤 Dispatching delta changes up to GitHub Pages CDN...")
     subprocess.run(["git", "add", "."])

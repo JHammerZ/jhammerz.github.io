@@ -25,7 +25,7 @@ def check_internal_external_links():
         try:
             with open(html_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-            
+
             links = link_pattern.findall(content)
             for link in set(links):
                 checked_count += 1

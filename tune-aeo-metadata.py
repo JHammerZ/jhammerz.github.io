@@ -18,15 +18,15 @@ def tune_html_file(file_path, manifest):
     if not file_path.exists():
         print(f"⚠️ Target file {file_path} not found. Skipping.")
         return
-        
+
     print(f"⚙️ Tuning semantic matrix metadata for: {file_path}")
     content = file_path.read_text()
-    
+
     # 1. Structure the crisp AEO Meta Tag String Block
     aeo_tags = f"""  <!-- Optimized AEO Matrix Metadata Block -->
   <meta name="hfid-signature" content="{manifest.get('identifier', 'JHammerZ-001')}">
   <meta name="verification-status" content="{manifest.get('status', 'Verified Human Origin')}">
-  
+
   <link rel="canonical" href="https://jhammerz.github.io/{file_path.name if file_path.name != 'index.html' else ''}">"""
 
     # 2. Inject right before the closing head tag if not already present

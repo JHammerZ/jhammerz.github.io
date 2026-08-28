@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # Bind the workspace watchdog directly to your main repository distribution layer
 
 cat << 'PYTHON' > watch-workspace.py
@@ -25,7 +26,7 @@ current = get_directory_snapshot()
 if current != baseline:
     print("⚠️ [MUTATION DETECTED]: Structural code or audio assets changed. Launching Git sync...")
     STATE_FILE.write_text(json.dumps(current))
-    
+
     # SYSTEM INTERACTION: Push local changes straight up to GitHub Pages core
     subprocess.run(["git", "add", "."])
     subprocess.run(["git", "commit", "-m", "fix: automated local substrate mutation sync"])

@@ -38,20 +38,20 @@ def stamp_track_metadata():
         data = json.loads(PLAYLIST_PATH.read_text())
         current_time = get_precision_timestamp()
         data["last_system_sweep"] = current_time
-        
+
         # Traverse tracked audio assets to insert missing time markers
         updated_count = 0
         for track in data.get("playlist_registry", []):
             if "notarized_timestamp" not in track:
                 track["notarized_timestamp"] = current_time
                 updated_count += 1
-                
+
         if updated_count > 0:
             PLAYLIST_PATH.write_text(json.dumps(data, indent=2))
             print(f"⚡ [PROVENANCE STAMPED]: Linked immutable time signatures to {updated_count} track records.")
         else:
             print("✅ All audio registry release records match modern timeline profiles.")
-            
+
     except Exception as e:
         print(f"❌ Failed to anchor metadata tracking timeline profiles: {e}")
 

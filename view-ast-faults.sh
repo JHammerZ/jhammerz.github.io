@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== DEEP AUDIT: HEOS_CLIENT.PY (LINES 20-35) ==="
 if [ -f "heos_client.py" ]; then

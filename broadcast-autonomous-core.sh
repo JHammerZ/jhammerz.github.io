@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 # ==============================================================================
 #          LYSANDER NETWORK CORRIDOR // AUTONOMOUS SYSTEM BROADCAST
 #          DESIGN DEPTH: LEVEL 4 PRODUCTION // PRIVATE PROPRIETARY MATRIX

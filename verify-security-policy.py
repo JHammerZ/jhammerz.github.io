@@ -8,10 +8,10 @@ def audit_security_compliance():
     if not POLICY_PATH.exists():
         print("[-] Verification policy matrix missing.")
         return False
-        
+
     with open(POLICY_PATH, "r") as f:
         config = json.load(f)
-        
+
     print(f"[+] Active Enforcement Tier: {config.get('security_tier')}")
     print(f"[+] Anchor Target Verified: {config['validation_methods'].get('state_hardening')}")
     print("[+] Core Hardening Defenses Verified: EXCELLENT")

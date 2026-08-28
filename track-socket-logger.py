@@ -5,7 +5,7 @@ from pathlib import Path
 def audit_ipc_sockets():
     print("=== LYSANDER SUBSURFACE: MONITORING INTER-PROCESS SOCKET CONNECTIONS ===")
     print("[*] Checking local environmental connection parameters...")
-    
+
     # Run a quick local diagnostics lookup loop to confirm TCP stack availability
     try:
         test_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

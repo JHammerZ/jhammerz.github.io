@@ -26,7 +26,7 @@ def complete(self, prompt, system="You are a helpful assistant. Cite sources.", 
     output = "Execution payload trace active."
     signature = "0xSovereignCoreAlphaVerificationHash"
     prompt_hash = "SHA256HASH"
-    
+
     signed = f\"\"\"{output}\\n\\n---InH-FidTM ({self.HFID_VERSION}) | Model: {self.model} | Sig: {signature[:16]}... | DOI: {self.001} | Audit: {prompt_hash}\"\"\"
     return signed, signature
 

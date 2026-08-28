@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== Fetching Newest Active Build Identity ==="
 # Using exact jq query syntax to prevent parse failure

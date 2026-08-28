@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 WORKFLOW_DIR=".github/workflows"
 
@@ -13,7 +14,7 @@ git checkout HEAD -- "$WORKFLOW_DIR"/*
 echo "=== System Check: Removing Indentation Errors Safely ==="
 for workflow in "$WORKFLOW_DIR"/*.yml "$WORKFLOW_DIR"/*.yaml; do
     [ -e "$workflow" ] || continue
-    
+
     # 1. Strip out the broken literal injections we previously added
     sed -i '/Install Dependencies/d' "$workflow"
     sed -i '/Dynamic Dependency/d' "$workflow"

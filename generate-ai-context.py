@@ -10,7 +10,7 @@ AI_CONTEXT_FILE = Path("ai-context.json")
 
 def compile_agent_schema():
     print("⚙️ Ingesting socials manifest variables for AI metadata mapping...")
-    
+
     if not MANIFEST_PATH.exists():
         print("❌ Error: socials-manifest.json must be compiled first.")
         return
@@ -18,7 +18,7 @@ def compile_agent_schema():
     try:
         manifest = json.loads(MANIFEST_PATH.read_text())
         platforms = manifest.get("platforms", {})
-        
+
         # Build strict, high-fidelity JSON-LD graph specifications
         schema_graph = {
             "@context": "https://schema.org",
@@ -33,10 +33,10 @@ def compile_agent_schema():
             "protocols": manifest.get("protocols", []),
             "sameAs": [url for url in platforms.values()]
         }
-        
+
         AI_CONTEXT_FILE.write_text(json.dumps(schema_graph, indent=2))
         print("✅ Structured metadata claims safely mapped to ai-context.json")
-        
+
     except Exception as e:
         print(f"❌ Core schema building sequence interrupted: {e}")
 

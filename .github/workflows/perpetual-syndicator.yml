@@ -5,6 +5,9 @@
 name: "Perpetual: 24/7 Omni-Channel Social Syndicator"
 
 on:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   schedule:
     # Triggers autonomously every hour, 24 hours a day, 365 days a year
     - cron: '17 * * * *'
@@ -29,10 +32,10 @@ jobs:
           echo "✓ License key signature discovered. Authorizing operational execution matrix."
 
       - name: 1. Checkout JHammerZ Master Source Tree
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
       - name: 2. Initialize Python Runtime Environment
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
         with:
           python-version: '3.11'
 

@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 # ==============================================================================
 #          LYSANDER NETWORK INGRESS // LOCAL ASSET PROVISIONING ENGINE
 #          DESIGN DEPTH: LEVEL 4 PRODUCTION // INFINITE MEDIA PIPES

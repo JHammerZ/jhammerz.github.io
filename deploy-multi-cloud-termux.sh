@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 # ==============================================================================
 #          LYSANDER NETWORK CORE // MULTI-CLOUD HYPER-SCALE PIPELINES
 #          DESIGN DEPTH: LEVEL 4 PRODUCTION // TERMUX COMPLIANT BUNDLE

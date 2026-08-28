@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 # ==============================================================================
 #          LYSANDER APPLICATION BUNDLER & SECURE ENVELOPE DEPLOYER
 #          DESIGN DEPTH: LEVEL 4 PRODUCTION // PRIVATE ZERO-LEAK MATRIX

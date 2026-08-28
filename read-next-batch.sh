@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== VIEWING PAGES.YML ==="
 if [ -f ".github/workflows/pages.yml" ]; then

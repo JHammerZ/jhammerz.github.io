@@ -63,7 +63,7 @@ def parse_ingest_directory():
                 for item in payload.get("library_items", []):
                     catalog_asset(item.get("title"), item.get("url"), item.get("category"))
                     processed_count += 1
-            
+
             os.remove(file_path)
         except Exception as e:
             print(f"[!] Failed to parse target structure {file_name}: {e}")
@@ -81,7 +81,7 @@ def sync_matrix_upstream():
         conn.close()
 
         registry = [{"id": str(r[0]), "title": r[1], "url": r[2]} for r in rows]
-        
+
         with open(PUBLIC_PLAYLIST, 'w', encoding='utf-8') as pf:
             json.dump({"playlist_registry": registry}, pf, indent=4)
 

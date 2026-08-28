@@ -16,12 +16,12 @@ def execute_log_rotation():
     if current_size >= MAX_SIZE_BYTES:
         print("[!] Log profile exceeds allocation limits. Rotating tracking registers...")
         backup_file = LOG_FILE.with_suffix(".log.bak")
-        
+
         # Shift active data to secondary backup storage space
         if backup_file.exists():
             backup_file.unlink()
         LOG_FILE.rename(backup_file)
-        
+
         # Re-initialize clean runtime tracking log file
         LOG_FILE.touch()
         print("[+] Log profile successfully truncated. Backup preserved in .log.bak.")

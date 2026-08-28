@@ -29,7 +29,7 @@ def execute_omni_broadcast():
                 state = json.load(lf)
         except Exception:
             state = {}
-            
+
     last_sent_track = state.get("last_syndicated_track_id", "")
     last_package_version = state.get("last_package_version", "")
 

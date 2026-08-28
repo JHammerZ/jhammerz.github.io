@@ -11,18 +11,18 @@ print("=== Level 4 Engine: Processing Structural Validation Sweep ===")
 for filename in os.listdir(workflow_dir):
     if not (filename.endswith('.yml') or filename.endswith('.yaml')):
         continue
-        
+
     filepath = os.path.join(workflow_dir, filename)
     with open(filepath, 'r') as f:
         content = f.read()
-        
+
     lines = content.splitlines()
     if not lines:
         continue
 
     # Extract metadata headers to preserve original comments/licenses
     headers = [line for line in lines if line.strip().startswith("#")]
-    
+
     # Locate the active workflow name key
     name_line = "name: \"Automated Production Pipeline\""
     for line in lines:

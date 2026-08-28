@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 # Target the absolute newest failed run from your dashboard
 LATEST_FAILED_ID=$(gh run list --workflow=build-tma-full.yml --status failure --limit 1 --json databaseId -q "..databaseId")

@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== Fetching Actual Latest Runs ==="
 gh run list --workflow=build-tma-full.yml --limit 3

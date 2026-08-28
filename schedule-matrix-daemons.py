@@ -5,7 +5,7 @@ from pathlib import Path
 def audit_daemon_schedules():
     print("=== LYSANDER SUBSURFACE: VALIDATING DAEMON SCHEDULE OPERATIONS ===")
     pid_file = Path(".lysander-daemon.pid")
-    
+
     if pid_file.exists():
         try:
             with open(pid_file, "r") as f:
@@ -15,7 +15,7 @@ def audit_daemon_schedules():
                 return True
         except Exception:
             pass
-            
+
     print("[!] Daemon script offline or unlinked. Triggering runtime restore sequence...")
     try:
         subprocess.Popen(["nohup", "./run-lysander-daemon.sh"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

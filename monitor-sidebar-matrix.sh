@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== System Monitoring: Tracking Decoupled Sidebar Workflows ==="
 echo "Fetching the 10 most recent automated engine runs..."

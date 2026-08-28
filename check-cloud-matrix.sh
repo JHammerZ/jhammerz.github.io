@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # ===================================================================
 #      LYSANDER CLOUD MONITOR // WORKFLOW DAEMON AUDIT PROTOCOL
 #      DESIGN DEPTH: LEVEL 5 PRODUCTION // MULTI-THREAD VERIFICATION

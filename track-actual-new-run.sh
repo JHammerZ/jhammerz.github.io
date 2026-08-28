@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== Fetching Your True Latest Commit Status ==="
 # Get the absolute most recent run ID across the entire repo

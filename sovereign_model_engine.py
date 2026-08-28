@@ -8,7 +8,7 @@ OUTPUT_METRICS = Path("public/assets/model_state.json")
 
 def compile_core_data_repository():
     print("=== SOVEREIGN INTELLIGENCE GATE: COMPILING CORE DATA REPOSITORY ===")
-    
+
     # Initialize unified state payload metadata
     model_payload = {
         "engine_version": "3.0.0",
@@ -16,7 +16,7 @@ def compile_core_data_repository():
         "last_compiled_timestamp": None,
         "integrity_check": "SECURE"
     }
-    
+
     if REPORT_PATH.exists():
         try:
             with open(REPORT_PATH, 'r') as f:
@@ -26,7 +26,7 @@ def compile_core_data_repository():
             print("[+] Successfully synced timestamp data from forensic ledger archives.")
         except Exception as e:
             print(f"[!] Warning: Failed to unpack active forensic ledger fields: {e}")
-            
+
     # Serialize compilation matrix state into target assets directory
     try:
         os.makedirs(str(OUTPUT_METRICS.parent), exist_ok=True)

@@ -10,7 +10,7 @@ ROBOTS_FILE = Path("robots.txt")
 
 def generate_seo_assets():
     print("🌐 Generating semantic indexing assets for crawlers...")
-    
+
     # 1. Structure the automated robots.txt layer if it does not exist
     if not ROBOTS_FILE.exists():
         robots_content = "User-agent: *\nAllow: /\n\nSitemap: https://github.io"

@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== VIEWING DEPLOY-WORKER.YML ==="
 if [ -f ".github/workflows/deploy-worker.yml" ]; then

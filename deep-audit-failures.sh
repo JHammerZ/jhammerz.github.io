@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== Pulling Live Parser Errors: Pages Pipeline ==="
 PAGES_RUN_ID=$(gh run list --workflow=pages.yml --limit 1 --json databaseId -q "..databaseId")

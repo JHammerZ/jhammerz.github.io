@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== System Matrix: Fetching Clean Active Execution States ==="
 echo "--------------------------------------------------------"

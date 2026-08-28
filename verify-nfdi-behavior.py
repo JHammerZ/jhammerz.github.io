@@ -24,7 +24,7 @@ def analyze_nfdi_entropy():
     print("🧠 [LYSANDER N-FDI]: Executing behavioral deep-scanning loops on stream stage...")
     if not STAGE_FILE.exists():
         return True
-        
+
     try:
         payload_text = STAGE_FILE.read_text(errors="ignore")
         if not payload_text.strip():

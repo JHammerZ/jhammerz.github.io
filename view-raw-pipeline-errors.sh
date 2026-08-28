@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 echo "=== System Tracking: Pulling Recent Remote Run Matrix ==="
 gh run list --limit 10

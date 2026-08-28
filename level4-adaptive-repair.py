@@ -11,11 +11,11 @@ print("=== Level 4 Adaptive Engine: Resolving Custom Workflow Specs ===")
 for filename in os.listdir(workflow_dir):
     if not (filename.endswith('.yml') or filename.endswith('.yaml')):
         continue
-        
+
     filepath = os.path.join(workflow_dir, filename)
     with open(filepath, 'r') as f:
         content = f.read()
-    
+
     # Skip rebuilding if the file already contains specialized runtime jobs
     if "wrangler deploy" in content or "deploy-pages" in content or "hfid_audit.py" in content:
         print(f"-> Preserving custom validated logic for: {filename}")
@@ -23,7 +23,7 @@ for filename in os.listdir(workflow_dir):
 
     lines = content.splitlines()
     headers = [line for line in lines if line.strip().startswith("#")]
-    
+
     name_line = f"name: \"Automated Suite: {filename.replace('.yml', '')}\""
     for line in lines:
         if line.strip().startswith("name:"):

@@ -4,7 +4,7 @@
           LYSANDER CORE OPERATIONAL ENGINE // OMNISCIENT MYTHOS PLATFORM
           DESIGN DEPTH: INFINITE RESILIENCE // ZERO-DELETION POLICIES
 ================================================================================
-A self-healing, multi-threaded diagnostic engine designed for Termux, bare-metal 
+A self-healing, multi-threaded diagnostic engine designed for Termux, bare-metal
 server deployment, and multi-agent AI cooperation frameworks.
 ================================================================================
 """
@@ -29,7 +29,7 @@ def enforce_hardware_lock():
     hw_str = platform.machine() + platform.processor() + platform.system()
     hw_str += os.environ.get("USER", "NODE") + os.environ.get("HOME", "/data")
     current_hash = hashlib.sha1(hw_str.encode('utf-8')).hexdigest()
-    
+
     if current_hash != AUTHORIZED_SIGNATURE and AUTHORIZED_SIGNATURE != "":
         print(f"🔒 SYSTEM LOCKED. CURRENT HWID: {current_hash}")
         print("Unauthorized execution context terminated.")
@@ -48,14 +48,14 @@ class EngineColor:
     BOLD, RESET = '\033[1m', '\033[0m'
 
 def engine_log(status_type: str, message: str, scope: str = "CORE"):
-    color_map = {"SUCCESS": EngineColor.GREEN, "WARNING": EngineColor.YELLOW, 
+    color_map = {"SUCCESS": EngineColor.GREEN, "WARNING": EngineColor.YELLOW,
                  "CRITICAL": EngineColor.RED, "INFO": EngineColor.CYAN, "MYTHOS": EngineColor.MAGENTA}
     color = color_map.get(status_type, EngineColor.RESET)
     print(f"{EngineColor.BOLD}[{scope.upper()}]{EngineColor.RESET} {color}{message}{EngineColor.RESET}")
 
 class MythosMatrixEngine:
     """
-    Sovereign parallel code-triage utility built with automatic merge conflict 
+    Sovereign parallel code-triage utility built with automatic merge conflict
     resolution, abstract syntax validation, and self-healing data recovery tracks.
     """
     def __init__(self):
@@ -134,7 +134,7 @@ class MythosMatrixEngine:
         """Orchestrates multi-threaded asynchronous parsing tracks across all system repositories."""
         start_time = time.time()
         engine_log("MYTHOS", "Initializing Asynchronous Parallel Performance Matrix Scanner...", "SYSTEM")
-        
+
         yaml_tasks = list(WORKFLOW_DIR.glob("*")) if WORKFLOW_DIR.exists() else []
         json_tasks = [f for f in TARGET_DIR.glob("*.json") if f.name != LOG_MANIFEST.name]
         python_tasks = [f for f in TARGET_DIR.glob("*.py") if f.name != Path(__file__).name]
@@ -145,18 +145,18 @@ class MythosMatrixEngine:
             python_res = list(executor.map(self.inspect_python_ast, python_tasks))
 
         self.registry["audited"] = len(yaml_res) + len(json_res) + len(python_res)
-        
+
         for name, valid, logs in yaml_res:
             if not valid: self.registry["faults"].append({"node": name, "type": "YAML_ERR", "logs": logs})
-            
+
         for name, sound, msg in python_res:
             if not sound: self.registry["faults"].append({"node": name, "type": "AST_ERR", "details": msg})
 
         self.registry["telemetry"]["execution_duration_seconds"] = f"{time.time() - start_time:.4f}"
-        
+
         with open(LOG_MANIFEST, 'w', encoding='utf-8') as rf:
             json.dump(self.registry, rf, indent=2)
-            
+
         engine_log("MYTHOS", f"Forensic database snapshot compiled cleanly to: {LOG_MANIFEST.name}", "SYSTEM")
         print(f"\n{EngineColor.BOLD}{EngineColor.MAGENTA}=== ASYNC MULTI-THREAD MATRIX RUN COMPLETE: ALL REPAIRS PASS ==={EngineColor.RESET}\n")
 

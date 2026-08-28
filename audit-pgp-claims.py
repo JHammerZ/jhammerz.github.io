@@ -4,7 +4,7 @@ from pathlib import Path
 def audit_pgp_keychain():
     print("=== LYSANDER SUBSURFACE: AUDITING PGP CRYPTOGRAPHIC CLAIMS ===")
     pubkey = Path("jhammerz_pubkey_mobile.asc")
-    
+
     if pubkey.exists():
         print(f"[+] Found localized public key block: {pubkey.name} ({pubkey.stat().st_size} bytes)")
         print("[+] Cryptographic identity provenance: SIGNED AND VERIFIED")

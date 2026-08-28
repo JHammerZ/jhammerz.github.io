@@ -11,15 +11,15 @@ print("=== System Diagnostics: Re-Aligning and Fixing All 92 Workflows ===")
 for filename in os.listdir(workflow_dir):
     if not (filename.endswith('.yml') or filename.endswith('.yaml')):
         continue
-        
+
     filepath = os.path.join(workflow_dir, filename)
     with open(filepath, 'r') as f:
         lines = f.readlines()
-        
+
     modified = False
     cleaned_lines = []
     skip_broken_append = False
-    
+
     for line in lines:
         # Detect and scrub loose, misaligned script segments injected by prior regex loops
         if "Install Project Dependencies Fallback" in line or "if [ -f \"yarn.lock\" ]" in line:
@@ -30,9 +30,9 @@ for filename in os.listdir(workflow_dir):
             continue
         else:
             skip_broken_append = False
-            
+
         cleaned_lines.append(line)
-        
+
     # Programmatically verify structure and write clean block alignment rules back to the exact nodes
     if modified:
         with open(filepath, 'w') as f:
