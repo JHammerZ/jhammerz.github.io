@@ -2,7 +2,7 @@
 # =====================================================================
 #         SOVEREIGN SUBSTRATE // BACKGROUND RUNTIME DAEMON LOOP
 # =====================================================================
-echo "[+] Initializing Lysander Autonomy Daemon..."
+echo "[+] Initializing Lysander Autonomy Daemon (Localized Mode)..."
 PID_FILE="$HOME/jhammerz.github.io/.lysander-daemon.pid"
 
 if [ -f "$PID_FILE" ]; then
@@ -23,9 +23,6 @@ while true; do
     
     # Auto-compile fresh forensic telemetry blocks
     python3 ultimate-mythos-matrix-engine.py
-    
-    # Fire the newly integrated encrypted telemetry relay to your Telegram interface
-    python3 telegram-telemetry-relay.py
     
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
