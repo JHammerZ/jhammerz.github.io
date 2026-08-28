@@ -1,28 +1,29 @@
-#!/usr/bin/env bash
-# ===================================================================
-#      LYSANDER BACKGROUND DAEMON v1.1 // MULTI-THREAD RESILIENCE
-#      DESIGN DEPTH: LEVEL 5 PRODUCTION // FOREVER SUBSTRATE ENGINE
-# ===================================================================
+#!/bin/bash
+# =====================================================================
+#         SOVEREIGN SUBSTRATE // BACKGROUND RUNTIME DAEMON LOOP
+# =====================================================================
+echo "[+] Initializing Lysander Autonomy Daemon..."
+PID_FILE="$HOME/jhammerz.github.io/.lysander-daemon.pid"
 
-echo "🟢 Lysander Background Watchdog Engine updated."
-echo "Press [CTRL+C] to sever the tracking loop."
+if [ -f "$PID_FILE" ]; then
+    OLD_PID=$(cat "$PID_FILE")
+    if kill -0 "$OLD_PID" 2>/dev/null; then
+        echo "[-] Daemon is already executing under PID: $OLD_PID"
+        exit 1
+    fi
+fi
 
-# Tracks structural check cycles to scale timing grids
-CYCLE_COUNT=0
+echo $$ > "$PID_FILE"
 
 while true; do
-    # Run the essential path mutation snapshot verification script
-    python3 watch-workspace.py > /dev/null 2>&1
+    echo "=== DAEMON REFRESH CYCLE STARTED: $(date) ==="
     
-    # Increment execution cycle index trackers
-    ((CYCLE_COUNT++))
+    # Fire the anchor verification ledger
+    python3 anchor-reality-block.py
     
-    # Maintenance Routine: Once every 2,880 iterations (Exactly 24 hours on a 30s delay)
-    if [ $CYCLE_COUNT -ge 2880 ]; then
-        bash clean-matrix-cache.sh > /dev/null 2>&1
-        CYCLE_COUNT=0 # Reset metric track gates
-    fi
+    # Auto-compile fresh forensic telemetry blocks
+    python3 ultimate-mythos-matrix-engine.py
     
-    # Structural sleep lock
-    sleep 30
+    # Sleep interval loop (1800 seconds = 30 minutes)
+    sleep 1800
 done
