@@ -22,11 +22,11 @@ class SovereignEntropyHarvester:
         # Perform low-overhead loop to spin the CPU instruction registers
         for _ in range(10): pass
         t2 = time.monotonic_ns()
-        
+
         delta_bits = (t2 - t1) & 0xFF
         self._entropy_pool.append(delta_bits)
         self._mixin_count += 1
-        
+
         if len(self._entropy_pool) >= 32:
             # Compress and lock accumulated bits into a fixed 256-bit structural seed
             hasher = hashlib.sha256(self._entropy_pool)

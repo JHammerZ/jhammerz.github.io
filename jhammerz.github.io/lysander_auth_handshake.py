@@ -9,13 +9,13 @@ def refresh_root_access():
     # CREDENTIALS FROM FORENSIC IMAGE
     CLIENT_KEY = "awcpiasfo2p4m2kh"
     CLIENT_SECRET = "I4B9GizAsYPbHZ4aPSWeMVR1KbNTfeG1"
-    
+
     url = "https://tiktokapis.com"
-    
+
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    
+
     # Requesting the Client Credentials token for the 116x signal
     payload = {
         "client_key": CLIENT_KEY,

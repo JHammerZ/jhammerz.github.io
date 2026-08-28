@@ -8,11 +8,11 @@ def meta_sovereign_push(message, media_url):
     # [ROOT]: Using Graph API v25.0 for cross-platform 'View' metrics
     page_id = "YOUR_FB_PAGE_ID"
     access_token = "YOUR_META_ACCESS_TOKEN"
-    
+
     # Node 01: Facebook Feed Push
     fb_url = f"https://facebook.com{page_id}/feed"
     fb_payload = {"message": message, "link": media_url, "access_token": access_token}
-    
+
     # Node 02: Instagram Container Initializer (For Reels/Posts)
     # Note: Requires IG User ID linked to the FB Page
     ig_user_id = "YOUR_IG_BUSINESS_ID"

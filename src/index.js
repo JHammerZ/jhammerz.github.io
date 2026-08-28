@@ -4,7 +4,7 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    
+
     // Redirect inbound routing pathways to the Durable Object Orchestration Hub
     if (url.pathname.startsWith("/agent/")) {
       const id = env.AGENT_ORCHESTRATOR.idFromName("global_control_room");
@@ -44,7 +44,7 @@ export class om {
         velocity: "<10ms"
       });
 
-      // Update the Global KV Ledger tracking matrix simultaneously 
+      // Update the Global KV Ledger tracking matrix simultaneously
       await this.env.AGENT_STATE_LEDGER.put(`active_node:${agentId}`, "BUSY");
 
       return new Response(JSON.stringify({

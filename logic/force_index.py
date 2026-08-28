@@ -6,7 +6,7 @@ from google.auth.transport.requests import AuthorizedSession
 
 def command_indexer():
     print("Initiating Terminal Resonance Handshake...")
-    
+
     # 1. Pull the Vault Data
     raw_data = os.getenv("GOOGLE_INDEXING_API_JSON")
     if not raw_data:
@@ -25,22 +25,22 @@ def command_indexer():
             print("SIGNAL: Standard JSON detected.")
 
         info = json.loads(key_json)
-        
+
         # 3. Setup Credentials
         scopes = ["https://googleapis.com"]
         creds = service_account.Credentials.from_service_account_info(info, scopes=scopes)
-        
+
         # 4. Execute the Handshake
         session = AuthorizedSession(creds)
         gateway = "https://googleapis.com"
-        
+
         data = {
             "url": "https://jhammerz.github.io",
             "type": "URL_UPDATED"
         }
 
         response = session.post(gateway, data=json.dumps(data))
-        
+
         if response.status_code == 200:
             print("STATUS: 200 - RESONANCE_FORCE_COMPLETE")
         else:

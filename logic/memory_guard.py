@@ -10,11 +10,11 @@ def clear_string_buffer(target_string: str):
     try:
         # Locate the raw memory address of the string buffer character array
         location = id(target_string) + sys.getsizeof(target_string) - len(target_string) - 1
-        
+
         # Overwrite memory memory map directly with null blocks (0x00)
         for i in range(len(target_string)):
             ctypes.memset(location + i, 0, 1)
-            
+
         return True
     except Exception as e:
         # Graceful fallback if memory architecture denies direct raw pointer manipulation
@@ -26,13 +26,13 @@ def execution_cycle_verification():
     """
     # Temporary localized memory binding
     volatile_credential = os.environ.get("LYSANDER_AUTH_TOKEN", "UNSET_KEY")
-    
+
     if volatile_credential != "UNSET_KEY":
         print(f"[PROCESS] Credential loaded into memory stack. Length: {len(volatile_credential)} bytes.")
-        
+
         # --- EXECUTE ACTIVE CRYPTOGRAPHIC VERIFICATION OPERATIONS HERE ---
         # (Passes data cleanly to logic/crypto_verify processes)
-        
+
         # Immediate Sanitization Cycle Trigger
         if clear_string_buffer(volatile_credential):
             print("[SANANITIZED] Volatile credential explicitly cleared from runtime heap memory.")

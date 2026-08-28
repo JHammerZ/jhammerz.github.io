@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # LYSANDER IDENTITY AT RUNTIME
 echo "Scanning session signatures for human/machine differentiation..."
 # Real-time behavioral biometric analysis

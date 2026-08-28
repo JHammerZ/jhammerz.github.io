@@ -4,8 +4,8 @@
 def emergency_stop():
     # If this returns False, all recon and scanning agents SHUT DOWN.
     # Set to False immediately if legal status or permission is revoked.
-    is_legal_status_active = True 
-    
+    is_legal_status_active = True
+
     if not is_legal_status_active:
         print("!!! LEGAL KILL-SWITCH ACTIVATED: ALL AGENTS TERMINATED !!!")
     return is_legal_status_active

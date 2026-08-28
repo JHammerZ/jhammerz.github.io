@@ -85,13 +85,13 @@ with st.sidebar:
     st.markdown("**Bio-Lock:** JHammerZ Verified")
     st.progress(85, text="Vault Liquidity Readiness")
     st.divider()
-    
+
     st.subheader("🌐 Global Overrides")
     enable_all = st.toggle("📂 Springfield Mesh", value=True)
     google_api = st.toggle("🛰️ Google Indexing API Active", value=True)
     social_api = st.toggle("📑 Social Injection Active", value=True)
     stealth_mode = st.toggle("🕶️ Stealth Mode (Bypass Logs)", value=False)
-    
+
     with st.expander("🛠️ Node Metadata", expanded=True):
         st.markdown(f"<span style='color:#f97316'>Version:</span> Lysander 3.0", unsafe_allow_html=True)
         st.markdown(f"<span style='color:#f97316'>Uptime:</span> 1,422h", unsafe_allow_html=True)
@@ -118,7 +118,7 @@ st.divider()
 # --- FIXED: AGENT COMMAND & TASKING ---
 st.header("🧠 Agent Command & Tasking")
 c_agent, c_task = st.columns([1, 2])
-with c_agent: 
+with c_agent:
     target_agent = st.selectbox("Select Target Agent", COUNCIL_AGENTS)
 with c_task:
     # BUG FIX: Accessing the split result by index correctly
@@ -133,7 +133,7 @@ st.divider()
 
 # --- REAL-TIME TEMPORAL GRAPH ---
 st.header("📈 Multi-Platform Viewer Velocity (Real-Time)")
-st.line_chart(st.session_state.history) 
+st.line_chart(st.session_state.history)
 
 st.divider()
 
@@ -189,15 +189,15 @@ st.divider()
 # --- UNIVERSAL SOCIAL OVERWRITES ---
 st.header("⚡ Global Social Overwrites")
 t1, t2, t3, t4 = st.tabs(["TikTok USDS", "YouTube CMS", "Meta Graph", "X/Twitter"])
-with t1: 
+with t1:
     st.slider("Injection Strength", 0, 1000, 116)
     if st.button("PUSH TO FYP"): add_log("ALGO OVERWRITE", "TikTok Edge", "Reach")
-with t2: 
+with t2:
     st.multiselect("Bypass Protocols", ["Metadata Flush", "H-Fid Verification"], ["Metadata Flush"])
     if st.button("ANCHOR CMS"): add_log("CMS ANCHOR", "YT Mainframe", "Reach")
-with t3: 
+with t3:
     if st.button("EXECUTE META HANDSHAKE"): add_log("TOKEN SYNC", "Instagram", "Reach")
-with t4: 
+with t4:
     st.slider("Neural Hook Strength", 0, 100, 85)
     if st.button("INJECT X SIGNAL"): add_log("PRIORITY SIGNAL", "X-Feed", "Reach")
 

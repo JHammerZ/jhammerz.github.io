@@ -1,4 +1,5 @@
 #!/bin/sh
+set -euo pipefail
 # Runs on each sat hourly via cron
 NODE_ID="LEO-$(hostname)"
 WEB_ROOT="/app/www"  # CHANGE THIS to actual path on your sats

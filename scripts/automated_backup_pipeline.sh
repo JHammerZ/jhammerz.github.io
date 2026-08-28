@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # ==============================================================================
 # AURELIUS SOVEREIGN ORCHESTRATOR - AUTOMATED BACKUP PROXIMAL PIPELINE
 # TARGET WINDOW: BEFORE AUGUST 23, 2026 CUTOFF
@@ -33,12 +34,12 @@ tar --exclude="./node_modules" --exclude="./dist" --exclude="./.git" --exclude="
 
 if [ $? -eq 0 ]; then
     echo "[✓] SUCCESS: Sealed tarball generated inside $BACKUP_DIR"
-    
+
     # 3. Generate a strict cryptographic SHA-256 validation checksum
     echo "[*] Generating cryptographic hash validation sign..."
     sha256sum "${BACKUP_DIR}/${OUTPUT_FILE}" > "${BACKUP_DIR}/${OUTPUT_FILE}.sha256"
     cat "${BACKUP_DIR}/${OUTPUT_FILE}.sha256"
-    
+
     # 4. Sync the backup archive directly into your static repository asset pipeline
     echo "[*] Re-routing sealed archive to public static substrate pipeline..."
     cp "${BACKUP_DIR}/${OUTPUT_FILE}" "$REPO_ASSETS/"

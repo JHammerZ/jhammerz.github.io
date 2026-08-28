@@ -30,11 +30,11 @@ class SovereignStateLedger:
         new_index = last_block["block_index"] + 1
         timestamp = time.time()
         prev_hash = last_block["block_hash"]
-        
+
         # Build block contents for verification serialization
         block_content = f"{new_index}:{timestamp}:{transaction_payload}:{prev_hash}".encode('utf-8')
         new_hash = hashlib.sha256(block_content).hexdigest()
-        
+
         new_block = {
             "block_index": new_index,
             "timestamp": timestamp,
@@ -42,7 +42,7 @@ class SovereignStateLedger:
             "previous_hash": prev_hash,
             "block_hash": new_hash
         }
-        
+
         self._state_chain.append(new_block)
         print(f"[LEDGER COMMIT] Block #{new_index} locked. Hash: {new_hash[:16]}...")
         return new_hash

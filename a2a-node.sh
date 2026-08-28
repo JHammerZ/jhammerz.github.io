@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 set -e
 
 HEO_ISSUER="${HEO_ISSUER:-JHammerZ | HEO | Guitaraoke™}"
@@ -12,7 +13,7 @@ generate_manifest() {
     mapfile -t ots_files < <(find "$HFID_DIR" -maxdepth 1 -type f -name "*.ots" | sort)
     count=${#ots_files[@]}
     echo "Found $count .ots files"
-    
+
     {
     printf '{\n'
     printf '  "protocol": "Twenty 47 Protocol",\n'
@@ -24,7 +25,7 @@ generate_manifest() {
     printf '  "last_updated": "%s",\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     printf '  "peers_endpoint": "%s/%s/peers.json",\n' "$BASE_URL" "$HFID_DIR"
     printf '  "proofs": [\n'
-    
+
     for i in "${!ots_files[@]}"; do
         ots="${ots_files[$i]}"
         base=$(basename "$ots" .ots)
@@ -33,12 +34,12 @@ generate_manifest() {
         [ $i -lt $((count - 1)) ] && printf ','
         printf '\n'
     done
-    
+
     printf '  ],\n'
     printf '  "total_proofs": %s\n' "$count"
     printf '}\n'
     } > "$HFID_DIR/manifest.json.tmp"
-    
+
     jq empty "$HFID_DIR/manifest.json.tmp" && mv "$HFID_DIR/manifest.json.tmp" "$HFID_DIR/manifest.json"
     echo "Indexed $count timestamp proofs. Manifest valid."
 }
@@ -47,15 +48,15 @@ discover_peers() {
     echo "Scanning for other A2A nodes..."
     mkdir -p "$HFID_DIR"
     tmp_peers="$HFID_DIR/peers.json.tmp"
-    
+
     # Start JSON
     printf '{"peers":[' > "$tmp_peers"
-    
+
     # GitHub search, handle empty results
     peer_urls=$(curl -s "https://api.github.com/search/code?q=filename:manifest.json+path:.well-known/hfid+Twenty+47" \
     | jq -r '.items[].repository.html_url' 2>/dev/null \
     | sed 's|https://github.com|https://raw.githubusercontent.com|; s|$|/master/.well-known/hfid/manifest.json|' || true)
-    
+
     first=1
     peer_count=0
     if [ -n "$peer_urls" ]; then
@@ -67,9 +68,9 @@ discover_peers() {
             ((peer_count++))
         done <<< "$peer_urls"
     fi
-    
+
     printf '],"updated":"%s","count":%s}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$peer_count" >> "$tmp_peers"
-    
+
     # Validate before moving
     if jq empty "$tmp_peers" 2>/dev/null; then
         mv "$tmp_peers" "$HFID_DIR/peers.json"

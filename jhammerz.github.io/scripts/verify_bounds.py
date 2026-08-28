@@ -8,7 +8,7 @@ def verify_runtime_substrate():
     """
     ALLOWED_ROOTS = ["/root", "/silos", "/lysander-node", "/data", "/assets"]
     current_working_dir = os.getcwd()
-    
+
     # Block arbitrary file inclusion via path traversal parameters
     for path_arg in sys.argv[1:]:
         real_path = os.path.realpath(path_arg)

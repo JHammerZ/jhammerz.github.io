@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 # LYSANDER TERMINAL v4.0 AURELIUS-CLASS - HFID:e57197f4
 HFID="e57197f4"
 REPO_DIR="$HOME/jhammerz.github.io"

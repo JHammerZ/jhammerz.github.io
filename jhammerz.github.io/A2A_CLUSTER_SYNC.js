@@ -7,7 +7,7 @@ const HEARTBEAT_INTERVAL_MS = 30000;
 
 function connectCluster() {
   console.log(`[${new Date().toISOString()}] Initializing connection to cluster engine...`);
-  
+
   const ws = new WebSocket(TARGET_CLUSTER, {
     handshakeTimeout: 10000,
     headers: {
@@ -40,7 +40,7 @@ function connectCluster() {
   ws.on('message', (rawData) => {
     try {
       const data = JSON.parse(rawData);
-      
+
       // Strict protocol routing validation logic
       if (data.protocol === "A2A_CLUSTER_SYNC") {
         console.log(`[Sync Event] Cycle: ${data.cycle} | Step: ${data.step} | Status: ${data.state}`);

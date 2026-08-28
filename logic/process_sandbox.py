@@ -24,7 +24,7 @@ def enforce_substrate_isolation():
     os.system = blocked_spawn
     if hasattr(os, 'popen'): os.popen = blocked_spawn
     if hasattr(os, 'fork'): os.fork = blocked_spawn
-    
+
     try:
         import subprocess
         subprocess.Popen = blocked_spawn

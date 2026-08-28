@@ -18,22 +18,22 @@ class SovereignRateClamper:
         Challenges an incoming network source address against rolling window caps.
         """
         current_epoch = time.time()
-        
+
         # Initialize untracked interface addresses cleanly
         if client_ip not in self._tracking_matrix:
             self._tracking_matrix[client_ip] = []
-            
+
         # Purge stale time stamps outside the active window envelope
         self._tracking_matrix[client_ip] = [
             timestamp for timestamp in self._tracking_matrix[client_ip]
             if current_epoch - timestamp < self.window
         ]
-        
+
         # Enforce strict frequency ceiling constraints
         if len(self._tracking_matrix[client_ip]) >= self.max_requests:
             print(f"[RATE EXCEEDED] Blocking interface connection from source: {client_ip}")
             return False
-            
+
         # Log successful connection tracking step
         self._tracking_matrix[client_ip].append(current_epoch)
         return True

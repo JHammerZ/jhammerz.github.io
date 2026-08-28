@@ -9,7 +9,7 @@ def shadow_failover():
     """
     quota_ghost = 32
     print(f"[AGENT_B]: Monitoring Quota Ghost ({quota_ghost}%)...")
-    
+
     def chronos_watch():
         """Recursive watch for Kernel status tampering."""
         print("[AGENT_B]: CHRONOS_WATCH_ACTIVE. Monitoring for Legacy Reverts...")
@@ -23,14 +23,14 @@ def shadow_failover():
         # git checkout HEAD@{1} or local cache restoration
 
     chronos_watch()
-    
+
     status = {
         "agent": "Agent B",
         "status": "RECURSIVE_LOOPS_ACTIVE",
         "identity": "Colonel Ro",
         "permissions": "KERNEL_ADMIN"
     }
-    
+
     print("[AGENT_B]: Recursive Loop Verified. Shadowing Kernel...")
 
 if __name__ == "__main__":

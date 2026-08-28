@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # ==============================================================================
 # Sovereign Vault: Manus Core Task & Config Tarball Archive Script
 # Preserves all active Manus agent states, tasks, and configurations before Aug 23 cutoff.

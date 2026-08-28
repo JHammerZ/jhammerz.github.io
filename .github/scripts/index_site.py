@@ -17,7 +17,7 @@ from google.auth.transport.requests import AuthorizedSession
 def broadcast_to_google():
     # 1. Load the credentials from your GitHub Secret
     service_account_info = os.getenv("GOOGLE_INDEXING_API_JSON")
-    
+
     if not service_account_info:
         print("ERROR: GOOGLE_INDEXING_API_JSON secret is missing!")
         exit(1)
@@ -28,25 +28,25 @@ def broadcast_to_google():
         credentials = service_account.Credentials.from_service_account_info(
             credentials_dict, scopes=scopes
         )
-        
+
         # 2. Create an authorized session
         session = AuthorizedSession(credentials)
-        
+
         # 3. Define the payload
         # Ensure this URL matches exactly what is in your Search Console
         target_url = "https://jhammerz.github.io"
         endpoint = "https://googleapis.com"
-        
+
         data = {
             "url": target_url,
             "type": "URL_UPDATED"
         }
 
         print(f"Initiating Restoration: Broadcasting {target_url}...")
-        
+
         # 4. Send the request
         response = session.post(endpoint, data=json.dumps(data))
-        
+
         if response.status_code == 200:
             print("RESONANCE_FORCE_COMPLETE: Google has accepted the URL.")
             print(f"Response: {response.json()}")

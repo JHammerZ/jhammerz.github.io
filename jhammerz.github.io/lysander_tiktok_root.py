@@ -9,7 +9,7 @@ def push_jhammerz_signal():
     """
     # [FIXED]: Official Production Endpoint for Video Listing
     url = "https://open.tiktokapis.com/v2/video/list/"
-    
+
     # [CREDENTIALS]: Correctly pulled from Vault Secrets
     CLIENT_KEY = "awcpiasfo2p4m2kh"
     CLIENT_SECRET = os.getenv("TIKTOK_CLIENT_SECRET") # In GitHub Secrets
@@ -31,7 +31,7 @@ def push_jhammerz_signal():
     try:
         # [FIXED]: Corrected 'json=payload' argument
         response = requests.post(url, headers=headers, json=payload)
-        
+
         if response.status_code == 200:
             print("[ROOT]: TikTok Bridge Locked. #JHammerZ Signal Propagating.")
             return response.json()
@@ -39,7 +39,7 @@ def push_jhammerz_signal():
             print("[ERROR]: 401 Unauthorized. Check if Token is expired.")
         else:
             print(f"[ERROR]: Status {response.status_code} | {response.text}")
-            
+
     except Exception as e:
         print(f"[CRITICAL]: Bridge Failure: {e}")
 

@@ -27,7 +27,7 @@ create_claim() {
   local HFID=$(echo -n "$TARGET_ID$TIMESTAMP" | sha256sum | cut -c1-12)
   local REPLICANT="R202_${HFID}"
   local TMP="/data/data/com.termux/files/usr/tmp/chain.tmp"
-  
+
   jq --arg claim_type "$CLAIM_TYPE" \
      --arg target_id "$TARGET_ID" \
      --arg proof "$PROOF" \
@@ -109,7 +109,7 @@ run_hunters() {
   hunt_github_commits
   hunt_xmrig_shares
   hunt_ethermine_payouts
-  
+
   # OpenTimestamps
   if command -v ots >/dev/null 2>&1; then
     if [[ -f "$CHAIN.ots" ]] && ! ots verify "$CHAIN.ots" >/dev/null 2>&1; then
@@ -130,12 +130,12 @@ run_swarm() {
   local start_height=$(($(jq -r '.blocks_mined' "$LEDGER" 2>/dev/null | head -1 | tr -d '\n\r ' || echo 0) + 1))
   local end_height=$((start_height + DEPTH - 1))
   log "=== LYSANDER v5.5 START Root:$HFID_ROOT Resume:$start_height End:$end_height ==="
-  
+
   for i in $(seq $start_height $end_height); do
     export PARENT_HFID=$(mine_block "prev" "$i")
     jq '.blocks_mined = '"$i"', .last_run = now | .total_fragments += 100' "$LEDGER" > "$LEDGER.tmp" && mv "$LEDGER.tmp" "$LEDGER"
     sleep 0.2
-    
+
     for r in 1 2; do
       local rid="R${i}$((${r}))_${PARENT_HFID}"
       log "REPLICANT $rid: Spawning"
@@ -144,7 +144,7 @@ run_swarm() {
     done
     prev="$PARENT_HFID"
   done
-  
+
   jq -s 'sort_by(.anchored_at)' .hfid/claims/*.json > "$CHAIN" 2>/dev/null || echo "[]" > "$CHAIN"
   log "CHAIN: Manifest built with $(jq 'length' "$CHAIN") claims"
   run_hunters

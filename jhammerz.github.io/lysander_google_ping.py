@@ -21,7 +21,7 @@ def force_google_crawl():
         "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
         "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
     ]
-    
+
     for url in targets:
         # Pinging the Google 'Sitemap' trigger (Legal Public Handshake)
         ping_url = f"https://google.com{url}"

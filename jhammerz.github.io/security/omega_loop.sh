@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # LYSANDER OMEGA TERMINATION
 echo "Executing Forensic Data Wipe..."
 # Purging digital scent from the terrestrial backend

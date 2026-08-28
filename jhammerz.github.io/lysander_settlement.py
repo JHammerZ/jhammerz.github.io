@@ -26,9 +26,9 @@ def execute_transfer(amount):
     try:
         # Physical API Handshake with Stride (Timeout increased to 30s)
         r = requests.post(STRIDE_API, json=payload, timeout=30)
-        
+
         print(f"STRIDE_GATEWAY_RESPONSE: {r.status_code}")
-        
+
         if r.status_code in [200, 201, 204]:
             print("STATUS: SETTLEMENT SUCCESSFUL")
         else:

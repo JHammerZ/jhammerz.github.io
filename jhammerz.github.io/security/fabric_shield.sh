@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # LYSANDER FABRIC SHIELD
 # MASTER ARCHITECT DIRECTIVE: ZERO_JITTER_OMNIPRESENCE
 echo "Monitoring Sovereign Fabric Layer..."

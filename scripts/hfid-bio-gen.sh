@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 HFID=$(jq -r .prev_hash[0:8] .well-known/hfid/chain.json)
 BTC=$(jq -r .bitcoin .well-known/hfid/chain.json)
 URL="jhammerz.github.io/verify"

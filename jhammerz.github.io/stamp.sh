@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 # L5 Venue Stamping Tool v2 - Genesis HFID:e57197f4
 clear
 echo "=== L5 VENUE STAMPING PROTOCOL ==="

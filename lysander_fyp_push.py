@@ -10,7 +10,7 @@ def get_root_token():
         "grant_type": "client_credentials"
     }
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    
+
     response = requests.post(url, headers=headers, data=payload)
     if response.status_code == 200:
         return response.json().get("access_token")
@@ -28,7 +28,7 @@ def maximize_fyp_reach():
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
     }
-    
+
     # Targeting the 152k clusters with the #JHammerZ 116x signal
     payload = {
         "max_count": 20,

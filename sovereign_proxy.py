@@ -84,7 +84,7 @@ class SovereignProxyHandler(BaseHTTPRequestHandler):
         log_to_ledger(pipe_id, "PROCESSED", h_fid_signature)
 
         timestamp_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-        
+
         sovereign_out_file = os.path.join(SOVEREIGN_DROPZONE, f"sov_sig_{timestamp_str}.json")
         with open(sovereign_out_file, "w") as sf:
             json.dump({"metrics": telemetry_data, "sig": h_fid_signature, "audit": "100/100"}, sf)

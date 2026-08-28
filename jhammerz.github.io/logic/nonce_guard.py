@@ -18,18 +18,18 @@ class SovereignNonceGuard:
         Evaluates incoming transaction token signatures for real-time uniqueness.
         """
         current_epoch = time.time()
-        
+
         # Purge expired nonces to maintain a lean, predictable memory footprint
         self._nonce_vault = {
             token: timestamp for token, timestamp in self._nonce_vault.items()
             if current_epoch - timestamp < self.expiry_window
         ]
-        
+
         # Enforce strict single-use check constraints
         if nonce_hash in self._nonce_vault:
             print(f"[SECURITY DRIFT] Duplicate transaction signature blocked: {nonce_hash[:16]}...")
             return False
-            
+
         # Register the unique token into the active volatile memory map
         self._nonce_vault[nonce_hash] = current_epoch
         print(f"[SUCCESS] Unique transaction token consumed: {nonce_hash[:16]}...")

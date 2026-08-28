@@ -9,7 +9,7 @@ def force_youtube_saturation():
     # YouTube's 2026 API uses 'Topic Authority' headers for re-indexing
     url = "https://googleapis.com"
     api_key = os.getenv("YOUTUBE_API_KEY")
-    
+
     headers = {
         "Content-Type": "application/json",
         "X-Neural-Sync": "JHAMMERZ-CORE-116x"

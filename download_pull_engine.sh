@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 
 # ==============================================================================
 # SOVEREIGN TOTAL HARVEST PULL ENGINE
@@ -23,9 +24,9 @@ echo "=== SOVEREIGN TOTAL PROFILE PULL ENGINE ENGAGED ==="
 
 while IFS= read -r target_url || [ -n "$target_url" ]; do
     [[ -z "$target_url" || "$target_url" =~ ^# ]] && continue
-    
+
     echo "[HARVEST] Init complete. Scanning entire profile tree: $target_url"
-    
+
     # Execute full extraction loop handling all available profile tabs natively
     yt-dlp --no-warnings \
            --ignore-errors \

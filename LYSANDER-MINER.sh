@@ -39,23 +39,23 @@ validate_block() {
 spawn_replicant() {
   local rid=$1 parent_hfid=$2
   log "REPLICANT $rid: Awakened | Parent $parent_hfid"
-  
+
   # 1. Find unanchored commits in this repo from last 7 days
   local commits=$(git log --since="7 days ago" --format="%H" -- "$REPO_NAME" 2>/dev/null || true)
   local target_commit=""
-  
+
   for c in $commits; do
     if ! grep -q "$c" .claims/*.json 2>/dev/null; then
       target_commit="$c"
       break
     fi
   done
-  
+
   if [[ -n "$target_commit" ]]; then
     local claim_file=".claims/${rid}_${target_commit:0:8}.json"
     local commit_msg=$(git log -1 --format="%s" "$target_commit" | head -c 80)
     local commit_date=$(git log -1 --format="%cI" "$target_commit")
-    
+
     cat > "$claim_file" << EOF
 {
   "schema": "hfid.claim.v1",
@@ -89,7 +89,7 @@ EOF
 EOF
     log "REPLICANT $rid: CLAIMED repo state $state_hash"
   fi
-  
+
   echo "$parent_hfid" > ".replicants/${rid}.rep"
 }
 
@@ -102,12 +102,12 @@ for i in $(seq 1 "$DEPTH"); do
   log "--- BLOCK HEIGHT $i ---"
   NEW_HFID=$(mine_block "$PREV" "$i")
   validate_block "$NEW_HFID" "$i"
-  
+
   for r in 1 2; do
     REPLICANT_ID="R${i}${r}_${NEW_HFID}"
     spawn_replicant "$REPLICANT_ID" "$NEW_HFID"
   done
-  
+
   PREV="$NEW_HFID"
 done
 

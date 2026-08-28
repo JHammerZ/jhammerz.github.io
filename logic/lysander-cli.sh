@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # LYSANDER COMMAND-LINE INTERFACE
 echo "Master Architect Command Received."
 case $1 in
@@ -10,7 +11,7 @@ esac
 #!/bin/bash
 # LYSANDER COMMAND-LINE INTERFACE - v2.0
 case $1 in
-  "burst") 
+  "burst")
     python3 logic/tiktok_distributor.py
     python3 logic/social_broadcaster.py --library-all
     ;;

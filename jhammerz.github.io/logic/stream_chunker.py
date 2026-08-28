@@ -22,7 +22,7 @@ class SovereignStreamChunker:
 
         for chunk in data_generator:
             current_time = time.monotonic()
-            
+
             # Fast Drop 1: Trap and terminate slow data delivery loops
             if current_time - last_chunk_time > self.max_idle:
                 print(f"[STREAM TIMEOUT] Stagnant packet window broken. Delta: {current_time - last_chunk_time:.4f}s.")

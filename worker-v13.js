@@ -2,11 +2,11 @@ export default {
   async fetch(req, env) {
     if (req.method !== 'POST') return new Response('Method Not Allowed', {status: 405});
     if (req.headers.get('Authorization') !== `Bearer ${env.PUBLISH_KEY}`) return new Response('Unauthorized', {status: 401});
-    
+
     const {title, body, image_url} = await req.json();
     const timestamp = new Date().toISOString();
     const uuid = crypto.randomUUID();
-    
+
     // Get current feed.json from GitHub
     const gh_get = await fetch(`https://api.github.com/repos/JHammerZ/jhammerz.github.io/contents/feed.json`, {
       headers: {
@@ -15,11 +15,11 @@ export default {
         'Accept': 'application/vnd.github.v3+json'
       }
     });
-    
+
     const gh_data = await gh_get.json();
     const sha = gh_data.sha;
     const content = JSON.parse(atob(gh_data.content));
-    
+
     // Append new post
     content.posts = content.posts || [];
     content.posts.unshift({
@@ -29,7 +29,7 @@ export default {
       kernel: 'KERNEL_ROOT_ACTIVE',
       hfid: 'H-FID-100-FORENSIC-AUDIT'
     });
-    
+
     // PUT back to GitHub
     const updated = btoa(JSON.stringify(content, null, 2));
     const github_res = await fetch(`https://api.github.com/repos/JHammerZ/jhammerz.github.io/contents/feed.json`, {
@@ -45,7 +45,7 @@ export default {
         sha: sha
       })
     });
-    
+
     return Response.json({
       status: 'propagated',
       posts: content.posts.length,

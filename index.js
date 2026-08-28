@@ -30,9 +30,9 @@ export default {
         const response = await fetch(`${ORIGIN_URL}/entities.json`, {
           headers: { "User-Agent": "Lysander-Edge-Mesh-Interceptor" }
         });
-        
+
         if (!response.ok) throw new Error("Origin resolution failed");
-        
+
         const data = await response.json();
         return new Response(JSON.stringify(data, null, 2), {
           status: 200,
@@ -55,7 +55,7 @@ export default {
     try {
       const originResponse = await fetch(`${ORIGIN_URL}${path}${url.search}`, request);
       const newHeaders = new Headers(originResponse.headers);
-      
+
       // Inject required cross-origin mesh headers safely
       Object.entries(CORS_HEADERS).forEach(([k, v]) => newHeaders.set(k, v));
       newHeaders.set("X-Lysander-Routing", "PASSTHROUGH");

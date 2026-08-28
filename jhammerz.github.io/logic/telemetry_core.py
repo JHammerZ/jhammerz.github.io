@@ -17,17 +17,17 @@ class SovereignTelemetry:
         timestamp = time.time()
         # Create a localized cryptographic checksum of the event to preserve event state
         event_hash = hashlib.sha1(f"{timestamp}:{event_type}:{message}".encode('utf-8')).hexdigest()[:8]
-        
+
         log_entry = {
             "epoch": timestamp,
             "vector": event_type,
             "signature": event_hash
         }
-        
+
         self.buffer.append(log_entry)
         if len(self.buffer) > self.max_size:
             self.buffer.pop(0) # Enforce a clean ring buffer structure
-            
+
         # Output directly to stdout for the runner loop to monitor in real-time
         print(f"[{log_entry['epoch']}] VECTOR_ID: {log_entry['vector']} // AUTH_SIG: {log_entry['signature']}")
 

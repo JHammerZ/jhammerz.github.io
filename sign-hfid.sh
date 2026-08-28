@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 KEY="hfid-key"
 PUB=$(cat hfid-public.key)
 jq --arg pub "$PUB" '.publicKey = $pub' hfid-registry.json > tmp.json

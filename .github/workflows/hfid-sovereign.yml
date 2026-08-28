@@ -16,6 +16,9 @@
 
 name: "Build: H-FID Sovereign Kernel"
 on:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   workflow_dispatch:
 
 jobs:

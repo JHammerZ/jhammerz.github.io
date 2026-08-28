@@ -25,12 +25,12 @@ class SubstrateDirectoryShard:
         if not target_path:
             print(f"[SECURITY REJECTION] Attempted file-system lookup outside authorized shard map: '{virtual_key}'")
             os._exit(1) # Direct halt to protect substrate boundaries
-            
+
         # Verify physical directory path anchor is intact
         if not os.path.isdir(target_path):
             print(f"[SUBSTRATE FAULT] Critical path structure desynchronized: {target_path}")
             return "./root" # Graceful default fallback to safe public ground state
-            
+
         return target_path
 
 if __name__ == "__main__":

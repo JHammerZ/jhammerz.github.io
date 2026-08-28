@@ -5,7 +5,7 @@ eexport default {
       if (!res.ok) throw new Error(`Source fetch failed: ${res.status}`);
       const data = await res.text();
       const integrity = data.length > 0 ? 100 : 0;
-      
+
       if (integrity < env.SYNTACTIC_INTEGRITY_THRESHOLD) {
         console.log(`Integrity check failed: ${integrity}`);
         return;
@@ -31,7 +31,7 @@ eexport default {
       // Discord summary with push results
       const failed = pushResults.filter(r => r.status === 'rejected').length;
       const succeeded = pushResults.length - failed;
-      
+
       await fetch(env.DISCORD_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

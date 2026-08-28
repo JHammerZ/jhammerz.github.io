@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 MUSIC_DIR="$HOME/storage/music"
 OUT_DIR="$HOME/jhammerz.github.io/music"
 mkdir -p "$OUT_DIR"

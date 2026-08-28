@@ -9,7 +9,7 @@ def force_google_index(target_url):
     # [ROOT]: Requires a Service Account JSON from Google Cloud Console
     scope = ["https://googleapis.com"]
     endpoint = "https://googleapis.com"
-    
+
     # Logic to notify Google of a new or updated Sovereign Asset
     payload = {
         "url": target_url,

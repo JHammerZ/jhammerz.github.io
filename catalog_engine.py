@@ -49,7 +49,7 @@ def parse_ingest_directory():
         try:
             with open(file_path, 'r') as f:
                 payload = json.load(f)
-            
+
             # Check if this is a standard yt-dlp metadata file
             if "webpage_url" in payload:
                 title = payload.get("title", "Untitled Platform Asset")
@@ -63,7 +63,7 @@ def parse_ingest_directory():
                 for item in items:
                     catalog_asset(item.get("title"), item.get("url"), item.get("category"))
                     processed_count += 1
-                
+
             os.remove(file_path)
         except Exception as e:
             print(f"[EXC] Failed to parse target structure {file_name}: {e}")

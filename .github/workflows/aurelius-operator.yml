@@ -16,6 +16,9 @@
 
 name: Aurelius-Engine Sovereign Operator
 on:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   workflow_dispatch:
 
 jobs:

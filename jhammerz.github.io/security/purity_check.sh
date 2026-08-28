@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # LYSANDER PURITY CHECK
 echo "Scanning for Zero-Gen anomalies..."
 # Forensic verification of H-Fid™ standards

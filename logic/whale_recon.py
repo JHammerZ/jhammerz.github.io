@@ -24,10 +24,10 @@ def initiate_recon():
     if not os.path.exists('targets.txt'):
         print("PHOENIX_ALERT: targets.txt missing. Add a whale domain to begin.")
         return
-    
+
     with open('targets.txt', 'r') as f:
         whales = f.read().splitlines()
-    
+
     for whale in whales:
         print(f"Agent Recon: Scanning {whale} for 2026 logic flaws...")
         # 116x Multiplier logic: Infiltrating sub-audible API endpoints

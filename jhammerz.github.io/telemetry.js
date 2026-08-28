@@ -16,10 +16,10 @@ async function queryProductionVideoNode() {
   try {
     const response = await axios.post(
       'https://tiktokapis.com/',
-      { 
-        filters: { 
-          video_ids: [targetVideoId] 
-        } 
+      {
+        filters: {
+          video_ids: [targetVideoId]
+        }
       },
       {
         headers: {

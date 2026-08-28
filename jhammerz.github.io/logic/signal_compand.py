@@ -27,13 +27,13 @@ class SovereignSignalCompand:
         Compands data elements and applies deterministic bit-level padding.
         """
         compressed_bytes = bytearray()
-        
+
         for item in float_data_array:
             try:
                 val = float(item)
             except ValueError:
                 val = 0.0
-                
+
             compressed_val = self.compress_value(val)
             # Encode packed values straight to standard high-density byte blocks
             compressed_bytes.extend(int((compressed_val + 1.0) * 127).to_bytes(1, byteorder='big'))

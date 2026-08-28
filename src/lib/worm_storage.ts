@@ -98,7 +98,7 @@ export class WormStorageEngine {
     // Payload cryptographic hashing
     const payloadString = JSON.stringify({ tag: customTag, data, timestamp });
     const payloadHash = crypto.createHash('sha512').update(payloadString).digest('hex');
-    
+
     // Sovereign Cryptographic Signature
     const signature = crypto.createHmac('sha512', this.ROOT_KEY).update(`${blockIndex}:${prevBlock.tamperSeal}:${payloadHash}`).digest('hex');
 
@@ -123,7 +123,7 @@ export class WormStorageEngine {
     // Immutable Write Once: append to array, save with strict locking
     ledger.push(newBlock);
     fs.writeFileSync(this.LEDGER_FILE, JSON.stringify(ledger, null, 2), 'utf-8');
-    
+
     this.appendAuditLog(`[WORM_WRITE] Block #${blockIndex} [${blockId}] sealed by ${author}. Seal=${tamperSeal}`);
 
     return {
@@ -140,7 +140,7 @@ export class WormStorageEngine {
     this.initialize();
     const ledger: WormBlock[] = JSON.parse(fs.readFileSync(this.LEDGER_FILE, 'utf-8'));
     const audit = this.verifyIntegrity();
-    
+
     return {
       verified: audit.isValid,
       blocks: ledger,
@@ -163,9 +163,9 @@ export class WormStorageEngine {
     // Verify block signature & seal
     const prevBlock = block.blockIndex > 0 ? ledger[block.blockIndex - 1] : null;
     const prevSeal = prevBlock ? prevBlock.tamperSeal : '0000000000000000000000000000000000000000000000000000000000000000';
-    
+
     const expectedSeal = crypto.createHash('sha256')
-      .update(block.blockIndex === 0 
+      .update(block.blockIndex === 0
         ? `0:0x0000000000000000:${block.payloadHash}:${block.signature}`
         : `${block.blockIndex}:${prevSeal}:${block.payloadHash}:${block.signature}`)
       .digest('hex');

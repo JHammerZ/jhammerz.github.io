@@ -23,7 +23,7 @@ const STRICT_MODE = process.env.STRICT_MODE === 'true';
 async function runSovereignSequence() {
     console.log("⚡ ENGAGING LYSANDER 3.0 MAXIMUM PROPAGATION AGGRESION...");
     console.log(`[ENV] NODE_ENV=${process.env.NODE_ENV || 'undefined'} | IS_PRODUCTION=${IS_PRODUCTION} | STRICT_MODE=${STRICT_MODE}`);
-    
+
     if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR, { recursive: true });
     if (!fs.existsSync(ARCHIVE_DIR)) fs.mkdirSync(ARCHIVE_DIR, { recursive: true });
     if (!fs.existsSync(FORENSICS_DIR)) fs.mkdirSync(FORENSICS_DIR, { recursive: true });

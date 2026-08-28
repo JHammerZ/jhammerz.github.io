@@ -22,7 +22,7 @@ class SovereignLogAggregator:
         # Pack the trace telemetry into a low-overhead object to skip extra heap allocations
         packed_trace = (timestamp, area_code[:8].upper(), status_flag & 0xFFFF, message[:64])
         self._ring_buffer.append(packed_trace)
-        
+
         # Stream the atomic trace block directly to the runner stdout
         sys.stdout.write(f"[{packed_trace[0]:.4f}] SILO_ID:{packed_trace[1]} // FLAG:{packed_trace[2]} // DATA:{packed_trace[3]}\n")
         sys.stdout.flush()

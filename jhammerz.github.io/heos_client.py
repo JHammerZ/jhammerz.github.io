@@ -1,5 +1,5 @@
 # heos_client.py
-# H-FID™ Protocol v1.1.0 - LYSANDER 3.0™ Sovereign Commercial License  
+# H-FID™ Protocol v1.1.0 - LYSANDER 3.0™ Sovereign Commercial License
 # DOI: 10.5281/zenodo.20778079
 # AGFI CONTRACT: Commercial use requires 1.5% Attribution Bleed settlement
 

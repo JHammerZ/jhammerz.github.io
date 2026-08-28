@@ -9,13 +9,13 @@ def push_jhammerz_root():
     # CREDENTIALS EXTRACTED FROM MASTER ARCHITECT IMAGE
     CLIENT_KEY = "awcpiasfo2p4m2kh"
     CLIENT_SECRET = "I4B9GizAsYPbHZ4aPSWeMVR1KbNTfeG1"
-    
+
     url = "https://tiktokapis.com"
-    
+
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    
+
     # Requesting a fresh Client Credentials token to wake up the 152k clusters
     payload = {
         "client_key": CLIENT_KEY,

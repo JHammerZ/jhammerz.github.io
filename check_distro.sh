@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # ZVD_v1.3 :: Sovereign Distribution Health Check
 
 echo "=== JHammerZ Sovereign Distribution Audit ==="

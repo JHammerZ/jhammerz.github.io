@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 /**
- 
+
 Automatically requests a fresh 24-hour access token from the production gateway,
 @param {string} currentRefreshToken - The active 1-year refresh token currently in your storage*/,
 async function rotateProductionTokens(currentRefreshToken) {
@@ -29,10 +29,10 @@ async function rotateProductionTokens(currentRefreshToken) {
     console.log('\n=== PRODUCTION TOKEN ROTATION SUCCESS ===');
     console.log(JSON.stringify(response.data, null, 2));
 
-    /* 
+    /*
       CRITICAL DEVELOPER LOGIC:
       The response.data object will contain:
-      
+
 access_token: Your brand-new 24-hour token for queries and posts.
 refresh_token: A NEW 1-year refresh token.
 

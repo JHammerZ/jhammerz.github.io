@@ -1,9 +1,9 @@
 /**
  * Cloudflare Worker: Sovereign CDM (Content Delivery Matrix) Edge Distribution & In-Memory LRU Proxy
- * 
+ *
  * Target Domain: jhammerz.github.io
  * Architecture: Multi-Tier Edge CDN with In-Memory LRU, Cloudflare Cache API, KV Persistence, & Resilient Airgap Fallbacks.
- * 
+ *
  * Features:
  *  - Tier 1: In-Memory LRU Cache (microsecond latency, 0 billable operations)
  *  - Tier 2: Cloudflare Global Edge Cache (caches.default, stale-while-revalidate, geo-replication)
@@ -432,7 +432,7 @@ export default {
         if (edgeCachedResponse) {
           const bodyText = await edgeCachedResponse.text();
           const contentType = edgeCachedResponse.headers.get("Content-Type") || "text/html; charset=utf-8";
-          
+
           // Seed LRU memory cache for microsecond subsequent hits
           memoryCache.set(cacheKey, {
             body: bodyText,
@@ -463,7 +463,7 @@ export default {
           const contentType = pathname.endsWith('.json') ? 'application/json; charset=utf-8' :
                               pathname.endsWith('.txt') || pathname.endsWith('.md') ? 'text/plain; charset=utf-8' :
                               'text/html; charset=utf-8';
-          
+
           memoryCache.set(cacheKey, {
             body: kvVal,
             contentType: contentType,

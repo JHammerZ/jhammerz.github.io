@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     host: "://yourhostingprovider.com", // e.g., ://gmail.com or private host
     port: 465,
-    secure: true, 
+    secure: true,
     auth: {
         user: "legal@jhammerz.github.io",
         pass: process.env.LEGAL_EMAIL_PASSWORD // Set this in GitHub Secrets

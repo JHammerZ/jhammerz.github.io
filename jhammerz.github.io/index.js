@@ -13,16 +13,16 @@ app.use(cors({ origin: ['jhammerz.github.io'], optionsSuccessStatus: 200 }));
 app.use(rateLimit({ windowMs: 60000, max: 60 }));
 app.use(express.json({ limit: '10kb' }));
 
-const logEvent = (message) => { 
-    const logLine = "[" + new Date().toISOString() + "] " + message + "\n"; 
-    fs.appendFileSync(path.join(__dirname, 'SYSTEM_INTEGRITY.log'), logLine); 
+const logEvent = (message) => {
+    const logLine = "[" + new Date().toISOString() + "] " + message + "\n";
+    fs.appendFileSync(path.join(__dirname, 'SYSTEM_INTEGRITY.log'), logLine);
 };
 
-app.use((req, res, next) => { 
-    if (req.method === 'POST') { 
-        logEvent("Incoming ingestion request to route: " + req.url); 
-    } 
-    next(); 
+app.use((req, res, next) => {
+    if (req.method === 'POST') {
+        logEvent("Incoming ingestion request to route: " + req.url);
+    }
+    next();
 });
 
 app.use(enforceNodeBoundaries);

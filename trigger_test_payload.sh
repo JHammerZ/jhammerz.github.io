@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
 echo "Sending compliant, signed metric stream to local proxy..."
 curl -X POST http://localhost:8090/ \
   -H "Content-Type: application/json" \

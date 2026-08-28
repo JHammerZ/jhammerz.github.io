@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 echo "--- BOUNTY_HUNTER_INITIATED ---"
 echo "Target: jhammerz.github.io"
 echo "Scan Status: Perimeters secured."

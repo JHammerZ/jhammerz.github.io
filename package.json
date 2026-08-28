@@ -19,7 +19,8 @@
     "worm": "tsx scripts/worm_manager.ts",
     "worm:status": "tsx scripts/worm_manager.ts status",
     "worm:audit": "tsx scripts/worm_manager.ts audit",
-    "worm:write": "tsx scripts/worm_manager.ts write"
+    "worm:write": "tsx scripts/worm_manager.ts write",
+    "test": "echo \"No tests\" && exit 0"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

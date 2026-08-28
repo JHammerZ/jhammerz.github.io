@@ -9,7 +9,7 @@ H1_API_KEY = os.getenv("H1_API_KEY")
 def submit_autonomous_claim(target_handle, findings):
     url = "https://hackerone.com"
     auth = (H1_API_ID, H1_API_KEY)
-    
+
     data = {
         "data": {
             "type": "report",
@@ -21,7 +21,7 @@ def submit_autonomous_claim(target_handle, findings):
             }
         }
     }
-    
+
     # OFFICIAL LEGAL SUBMISSION
     response = requests.post(url, auth=auth, json=data)
     return response.status_code

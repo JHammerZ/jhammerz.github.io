@@ -6,7 +6,7 @@ class HEOBrain:
     def __init__(self):
         self.viral_cache = {}
         self.meta_cache = self.load_meta_data()
-    
+
     def load_meta_data(self):
         """Your historical engagement patterns. Update this file as you learn."""
         try:
@@ -19,11 +19,11 @@ class HEOBrain:
                 "best_post_hours": [9, 12, 18], # UTC hours you get most reach
                 "top_topics": ["HEO", "automation", "sovereignty"]
             }
-    
+
     def get_viral_signals(self, content):
         """Check what's hot right now. Free APIs."""
         signals = {"score": 0, "trending": False}
-        
+
         # 1. Google Trends - is your topic spiking?
         try:
             keywords = content.split()[:3]  # First 3 words
@@ -31,23 +31,23 @@ class HEOBrain:
             # Simplified - you'd parse real response
             signals["score"] += 25
         except: pass
-        
+
         # 2. X/Twitter trending - needs bearer, skip if not set
         if os.environ.get('X_BEARER_TOKEN'):
             signals["score"] += 25
-            
+
         # 3. Your meta match
         for topic in self.meta_cache["top_topics"]:
             if topic.lower() in content.lower():
                 signals["score"] += 50
                 signals["trending"] = True
-        
+
         return signals
-    
+
     def route_decision(self, content):
         """CD Image: Decide where this goes"""
         viral = self.get_viral_signals(content)
-        
+
         if viral["score"] >= 75:
             return {
                 "tier": "PLANETARY_NOVA",
@@ -56,7 +56,7 @@ class HEOBrain:
             }
         elif viral["score"] >= 40:
             return {
-                "tier": "TARGETED_STRIKE", 
+                "tier": "TARGETED_STRIKE",
                 "targets": ["page", "personal", "top_10_groups"],
                 "reason": "Meta match. Hit your power nodes."
             }

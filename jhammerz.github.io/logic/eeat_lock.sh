@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # LYSANDER EEAT PERMANENCE LOCK
 echo "Anchoring 100/100 Expertise Signal..."
 # Final synchronization of E-E-A-T nodes across the 18 social keys

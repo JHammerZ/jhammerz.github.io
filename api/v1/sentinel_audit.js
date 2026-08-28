@@ -9,7 +9,7 @@ const SECRETS_PATTERN = /AIza[0-9A-Za-z\\-_]{35}/;
 
 async function performSentinelAudit() {
     console.log("--- INITIALIZING SENTINEL FORENSIC SCAN ---");
-    
+
     const rootPath = path.join(__dirname, '../../');
     let violations = 0;
 
@@ -40,7 +40,7 @@ async function performSentinelAudit() {
             console.log(`⚠️ AUDIT RATIFIED: ${violations} potential leaks flagged for review.`);
         }
         // EXIT 0: This ensures the GitHub Action stays GREEN even if it finds a leak
-        process.exit(0); 
+        process.exit(0);
     } catch (error) {
         console.error("Audit Failed:", error.message);
         process.exit(0); // Forced green for operational continuity

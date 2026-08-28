@@ -65,16 +65,16 @@ from azure.core.credentials import AzureKeyCredential
 
 class JanusClient:
     """Sovereign AI Client - All outputs H-FID™ Signed by default"""
-    
+
     HFID_VERSION = "v1.1.0-H-FID"
     LYSANDER_HASH = "SHA-256-LYSANDER-3.0-GENESIS-LOCK-20260326"
     DOI = "10.5281/zenodo.20778079"
-    
+
     def __init__(self, backend="github", db_path="stride_bank.db"):
         self.backend = backend
         self.db_path = db_path
         self._init_db()
-        
+
         if backend == "github":
             self.client = ChatCompletionsClient(
                 endpoint="https://models.github.ai/inference",
@@ -83,7 +83,7 @@ class JanusClient:
             self.model = "openai/gpt-5"
         else:
             raise NotImplementedError("Backend not licensed under LYSANDER 3.0™")
-    
+
     def _init_db(self):
         conn = sqlite3.connect(self.db_path)
         conn.execute('''
@@ -99,13 +99,13 @@ class JanusClient:
             )
         ''')
         conn.close()
-    
+
     def _hfim_sign(self, output, prompt_hash):
         timestamp = datetime.utcnow().isoformat()
         output_hash = hashlib.sha256(output.encode()).hexdigest()
         payload = f"{output_hash}|{self.model}|{prompt_hash}|{timestamp}|{self.LYSANDER_HASH}"
         signature = hashlib.sha256(payload.encode()).hexdigest()
-        
+
         # Log to Stride Bank
         conn = sqlite3.connect(self.db_path)
         conn.execute(
@@ -114,10 +114,10 @@ class JanusClient:
         )
         conn.commit()
         conn.close()
-        
+
         signed = f"{output}\n\n---\nH-Fid™ {self.HFID_VERSION} | Model: {self.model} | Sig: {signature[:16]}... | DOI: {self.DOI} | Audit: {prompt_hash}"
         return signed, signature
-    
+
     def complete(self, prompt, system="You are a helpful assistant. Cite sources.", enforce_sign=True):
         if not enforce_sign:
             raise PermissionError("LYSANDER 3.0™:

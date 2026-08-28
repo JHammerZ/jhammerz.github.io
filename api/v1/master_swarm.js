@@ -19,16 +19,16 @@ async function executeSwarm() {
     // 2. FAIL-SAFE LOGIC: Keeps the dashboard GREEN even if file is missing
     if (!manifestPath) {
         console.log("⚠️ Manifest hunting... Sector ratified as 'Ghost Signal'.");
-        return; 
+        return;
     }
 
     // 3. EXECUTION
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const manifestData = fs.readFileSync(manifestPath, 'utf8');
-        
+
         const result = await model.generateContent(`DIRECTIVE: Verify infrastructure using: ${manifestData}`);
-        
+
         console.log("✅ SWARM ACTIVATED: 100/100 INTEGRITY");
         console.log(result.response.text().substring(0, 150));
     } catch (error) {

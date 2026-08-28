@@ -21,7 +21,7 @@ def force_global_index():
         "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
         "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
     ]
-    
+
     for url in urls:
         # Pinging Google's "Sub-Neural" indexing service
         ping_url = f"https://google.com{url}"

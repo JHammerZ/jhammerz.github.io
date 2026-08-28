@@ -19,7 +19,7 @@ class SovereignSignalDecay:
         Applies zero-latency look-ahead amplitude limiting and recursive decay filters.
         """
         clamped_vector = []
-        
+
         for sample in raw_samples_array:
             # Enforce clean numerical typing baseline values
             try:

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # Usage: ./log_finding.sh "target.com" "Bug Name" "High"
 
 TARGET=$1

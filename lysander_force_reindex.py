@@ -8,10 +8,10 @@ def force_reindex_signal():
     """
     token = os.getenv("TIKTOK_ROOT_TOKEN")
     client_key = "awcpiasfo2p4m2kh"
-    
+
     # Official V2 Video Query Endpoint to refresh metadata TTL
     url = "https://tiktokapis.com"
-    
+
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json",

@@ -9,10 +9,10 @@ def push_jhammerz_article(title, text, source_url):
     """
     # [ROOT]: Using the 2026-03 API version for H-Fid saturation
     token = os.getenv("LINKEDIN_ACCESS_TOKEN")
-    
+
     # [IDENTITY]: Your verified professional anchor
     PROFILE_ID = "jhammerz"
-    
+
     url = "linked.in/in/jhammerz"
     headers = {
         "Authorization": f"Bearer {token}",

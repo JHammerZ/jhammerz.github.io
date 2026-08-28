@@ -40,23 +40,23 @@ const ESSENTIAL_FILES = [
 function getAllFiles(dirPath: string, fileList: string[] = []): string[] {
   if (!fs.existsSync(dirPath)) return fileList;
   const files = fs.readdirSync(dirPath);
-  
+
   for (const file of files) {
     const filePath = path.join(dirPath, file);
     const stat = fs.statSync(filePath);
-    
+
     // Ignore heavy or temporary folders
     if (file === 'node_modules' || file === 'dist' || file === '.git' || file === '.next' || file === 'build' || file === '.turbo' || file === 'coverage') {
       continue;
     }
-    
+
     if (stat.isDirectory()) {
       getAllFiles(filePath, fileList);
     } else {
       fileList.push(filePath);
     }
   }
-  
+
   return fileList;
 }
 
@@ -153,11 +153,11 @@ export async function pushWorkspaceToGitHub(customToken?: string): Promise<{ suc
 
     // Filter exclusions & internal development-only files
     if (
-      relPath === '.env' || 
-      relPath.startsWith('.env.') || 
-      relPath === 'package-lock.json' || 
-      relPath === 'bun.lock' || 
-      relPath.includes('node_modules') || 
+      relPath === '.env' ||
+      relPath.startsWith('.env.') ||
+      relPath === 'package-lock.json' ||
+      relPath === 'bun.lock' ||
+      relPath.includes('node_modules') ||
       relPath.includes('.git')
     ) {
       if (relPath !== '.env.example') {

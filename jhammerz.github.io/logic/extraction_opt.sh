@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # MASTER ARCHITECT AEO OVERWRITE v2.0
 # Forces high-signal keywords into first 125 chars for AI/Algo extraction
 

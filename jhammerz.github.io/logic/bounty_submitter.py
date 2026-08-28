@@ -10,7 +10,7 @@ H1_API_TOKEN = os.getenv('H1_API_TOKEN')
 def submit_vulnerability(report_data):
     url = "https://hackerone.com"
     headers = {'Accept': 'application/json'}
-    
+
     # Mapping our H-Fid™ report to the HackerOne JSON schema
     payload = {
         "data": {
@@ -22,6 +22,6 @@ def submit_vulnerability(report_data):
             }
         }
     }
-    
+
     r = requests.post(url, auth=(H1_API_USER, H1_API_TOKEN), headers=headers, json=payload)
     return f"STATUS: SUBMISSION_RATIFIED | ID: {r.json()['data']['id']}"

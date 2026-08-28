@@ -2,23 +2,23 @@ export class W4Room {
   constructor(state, env) {
     this.storage = state.storage;
     this.sql = state.storage.sql;
-    this.sql.exec(`CREATE TABLE IF NOT EXISTS messages 
+    this.sql.exec(`CREATE TABLE IF NOT EXISTS messages
       (id INTEGER PRIMARY KEY, user TEXT, msg TEXT, ts INTEGER)`);
   }
-  
+
   async fetch(request) {
     const [client, server] = Object.values(new WebSocketPair());
     server.accept();
-    
+
     server.addEventListener("message", async (evt) => {
-      this.sql.exec(`INSERT INTO messages (user,msg,ts) VALUES (?,?,?)`, 
+      this.sql.exec(`INSERT INTO messages (user,msg,ts) VALUES (?,?,?)`,
         "anon", evt.data, Date.now());
       server.send(`ACK: ${evt.data}`);
     });
-    
+
     const rows = this.sql.exec(`SELECT * FROM messages ORDER BY ts DESC LIMIT 50`).toArray();
     server.send(JSON.stringify({history: rows}));
-    
+
     return new Response(null, { status: 101, webSocket: client });
   }
 }
