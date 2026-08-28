@@ -64,6 +64,12 @@ while true; do
     python3 optimize-memory-buffer.py
     python3 tune-workflow-cron.py
     
+    # 9. Trigger the Ultimate Sovereign Audit Fixer to handle auto-healing and rebases
+    if [ -f "./sovereign-audit-fix.sh" ]; then
+        echo "[+] Invoking ultimate structural self-healing suite..."
+        bash ./sovereign-audit-fix.sh
+    fi
+    
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
 done
