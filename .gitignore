@@ -40,3 +40,10 @@ sovereign-postmortem*
 *.tar.gz
 *postmortem.txt
 .env
+sovereign_metrics.db
+.lysander-daemon.pid
+mythos_forensic_report.json
+network_traffic_audit.log
+public/assets/model_state.json
+public/assets/ipfs_ledger_manifest.json
+.sovereign.lock
