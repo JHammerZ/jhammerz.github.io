@@ -46,5 +46,8 @@ python3 optimize-cpu-load.py
 # Analyze local filesystem storage write performance vectors
 python3 track-storage-io.py
 
+# Analyze local physical hardware battery power and thermal safety vectors
+python3 track-power-insulation.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
