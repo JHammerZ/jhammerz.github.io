@@ -99,6 +99,12 @@ if current != baseline:
     import subprocess
     subprocess.run([sys.executable, "scrape-audio-metadata.py"])
 
+        # Run RedSec and OpSec ingress script scans before allowing any system operations
+    import subprocess
+    if subprocess.run([sys.executable, "secure-ingress-inspection.py"]).returncode != 0:
+        print("🛑 [SECURITY BLOCK]: Compromised code structures intercepted. Operation aborted.")
+        sys.exit(1)
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
