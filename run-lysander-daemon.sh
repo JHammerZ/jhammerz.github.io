@@ -30,6 +30,9 @@ while true; do
     # Run the log rotation routine automatically to prevent file bloat
     python3 rotate-telemetry-logs.py
     
+    # Run aggressive HTML compaction to optimize static payloads before deployment
+    python3 minify-html-views.py
+    
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
 done
