@@ -17,24 +17,16 @@ jobs:
 
       - name: 2. Initialize Node.js Environment
         uses: actions/setup-node@v4
-        run: |
-          if [ -f "yarn.lock" ]\; then
-          elif [ -f "package-lock.json" ]\; then
-            npm ci
-          else
-            echo "No standard lockfile detected. Initializing fallback install path."
-            yarn install || npm install
-          fi
         with:
           node-version: '20'
-          # Removed automatic lockfile-dependent caching
 
+      - name: 3. Install Dependencies
         run: |
           if [ -f "yarn.lock" ]; then
+            yarn install --immutable
           elif [ -f "package-lock.json" ]; then
             npm ci
           else
-            echo "No lockfile found. Falling back to default installation."
             yarn install || npm install
           fi
 
@@ -47,13 +39,3 @@ jobs:
       - name: 5. Run Full Verification Test Suite
         run: |
           if command -v yarn &> /dev/null; then yarn test; else npm test; fi
-
-      - name: Install Project Dependencies Fallback
-        run: |
-          if [ -f "yarn.lock" ]; then
-            yarn install --immutable
-          elif [ -f "package-lock.json" ]; then
-            npm ci
-          else
-            yarn install || npm install
-          fi
