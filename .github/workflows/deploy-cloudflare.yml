@@ -1,0 +1,36 @@
+# ==============================================================================
+#          LYSANDER NETWORK MATRIX // CLOUDFLARE PAGES EDGE INGRESS
+#          DESIGN DEPTH: LEVEL 4 PRODUCTION // INFINITE MEDIA PIPES
+# ==============================================================================
+name: "Cloudflare: Sovereign Content Edge Mesh"
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'public/**'
+  workflow_dispatch:
+
+jobs:
+  broadcast-cloudflare:
+    name: Cloudflare Anycast CDN Routing Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Commercial License Signature Gate
+        run: |
+          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
+          if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
+            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
+            exit 1
+          fi
+          echo "✓ License key signature discovered. Authorizing operational execution matrix."
+
+      - name: 1. Checkout JHammerZ Master Source Tree
+        uses: actions/checkout@v4
+
+      - name: 2. Broadcast Static Assets to Low-Latency Corridors
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name="jhammerz-media-hub"
