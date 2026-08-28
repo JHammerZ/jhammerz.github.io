@@ -51,6 +51,10 @@ if current != baseline:
     import subprocess
     subprocess.run([sys.executable, "minify-payload.py"])
 
+        # Automatically evaluate graphic parameters before syncing down to edge nodes
+    import subprocess
+    subprocess.run([sys.executable, "compress-assets.py"])
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
