@@ -11,6 +11,22 @@ export default {
     const targetOrigin = "https://github.io";
     const proxyUrl = targetOrigin + url.pathname + url.search;
 
+    // Strict Traffic Filtering Subsurface Block: Reject malicious exploitation attempts
+    const userAgent = request.headers.get("user-agent") || "";
+    const pathLower = url.pathname.toLowerCase();
+    
+    if (
+      pathLower.includes(".env") || 
+      pathLower.includes("wp-admin") || 
+      pathLower.includes(".git") ||
+      /bot|crawler|spider|scan/i.test(userAgent)
+    ) {
+      return new Response(
+        JSON.stringify({ error: "Access Denied", status: "Sovereign Shield Active" }), 
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     // Clone request headers and inject sovereign security signatures
     const modifiedHeaders = new Headers(request.headers);
     modifiedHeaders.set("X-Hfid-Signature", "JHammerZ-001");
@@ -19,7 +35,6 @@ export default {
     // Safely extract request bodies for structural mutation handling
     let requestBody = null;
     if (request.method !== "GET" && request.method !== "HEAD") {
-      // Clone the stream container securely to prevent structural exhaustion
       const clonedRequest = request.clone();
       requestBody = await clonedRequest.text();
     }
@@ -35,7 +50,7 @@ export default {
       if (contentType.includes("text/html")) {
         let htmlBody = await response.text();
 
-        # Inject high-fidelity GEO, HEO, and Content-Attribution metadata tags safely
+        // Inject high-fidelity GEO, HEO, and Content-Attribution metadata tags safely
         const seoMetaTags = `
 <meta name="geo.position" content="39.8112;-84.1452">
 <meta name="geo.region" content="US-OH">
@@ -54,13 +69,13 @@ export default {
       return response;
     } catch (error) {
       return new Response(
-        JSON.stringify({
-          error: "Sovereign Edge Node Timeout",
-          trace: error.message
+        JSON.stringify({ 
+          error: "Sovereign Edge Node Timeout", 
+          trace: error.message 
         }),
-        {
-          status: 502,
-          headers: { "Content-Type": "application/json" }
+        { 
+          status: 502, 
+          headers: { "Content-Type": "application/json" } 
         }
       );
     }
