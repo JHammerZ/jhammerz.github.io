@@ -9,23 +9,16 @@ TELEMETRY_LOG = Path("social_syndicator_state.json")
 PACKAGE_JSON = Path("package.json")
 
 def broadcast_channels(message, url):
+    # Isolated Discord Broadcast Channel Node
     webhook = os.environ.get("DISCORD_WEBHOOK_URL")
     if webhook:
-        payload = {"content": f"🚀 **JHammerZ System Broadcast** 🚀\n{message}\nLink: {url}"}
+        payload = {
+            "content": f"🚀 **JHammerZ Substrate Broadcast** 🚀\n{message}\nLink: {url}"
+        }
         try:
             requests.post(webhook, json=payload, timeout=10)
-        except Exception:
-            print("! Discord delivery corridor timed out.")
-    
-    token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
-    if token and chat_id:
-        text = f"🚀 JHammerZ System Broadcast 🚀\n\n{message}\n\nLink: {url}"
-        api_url = f"https://telegram.org{token}/sendMessage"
-        try:
-            requests.post(api_url, json={"chat_id": chat_id, "text": text}, timeout=10)
-        except Exception:
-            print("! Telegram network corridor timed out.")
+        except Exception as e:
+            print(f"! Discord syndication corridor timed out: {e}")
 
 def execute_omni_broadcast():
     print("=== LYSANDER SOCIAL SYNDICATION ENGINE: EXECUTING SCAN MATRIX ===")
@@ -46,7 +39,7 @@ def execute_omni_broadcast():
                 pkg_data = json.load(pf)
                 current_version = pkg_data.get("version", "1.0.0")
             if current_version != last_package_version:
-                sys_msg = f"⚡ **Brand New Script / Engine Upgrade Found!**\nSystem layout optimized to Core Version v{current_version}."
+                sys_msg = f"⚡ **Core System Layout Optimized!**\nSovereign Substrate upgraded to Version v{current_version}."
                 broadcast_channels(sys_msg, "https://github.com")
                 state["last_package_version"] = current_version
         except Exception as e:
