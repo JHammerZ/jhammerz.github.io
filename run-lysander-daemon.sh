@@ -27,6 +27,9 @@ while true; do
     # Run the database storage optimization and vacuum compaction sequence automatically
     python3 optimize-sovereign-db.py
     
+    # Run the log rotation routine automatically to prevent file bloat
+    python3 rotate-telemetry-logs.py
+    
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
 done
