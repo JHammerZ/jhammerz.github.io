@@ -12,6 +12,7 @@ def render_dashboard():
     db_path = Path("sovereign_metrics.db")
     pid_path = Path(".lysander-daemon.pid")
     public_path = Path("public")
+    model_path = Path("public/assets/model_state.json")
     
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
@@ -30,20 +31,18 @@ def render_dashboard():
         except Exception:
             pass
 
-    # Extract dynamic, live row statistics directly out of your local SQLite ledger matrix
     track_count = "0 RECORDS IN DB"
     if db_path.exists():
         try:
             conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
             cursor.execute("SELECT COUNT(*) FROM content_catalog")
-            count = cursor.fetchone()[0]
-            track_count = f"{count} RECORDS IN DB"
+            count = cursor.fetchone()
+            track_count = f"{count[0]} RECORDS IN DB"
             conn.close()
         except Exception:
             pass
 
-    # Count actual physical HTML deployment files inside public storage paths
     html_count = "0 FILES"
     if public_path.exists():
         try:
@@ -52,15 +51,23 @@ def render_dashboard():
         except Exception:
             pass
 
-    # Dynamic check of the active background tracking process daemon state loop
     daemon_status = "OFFLINE"
     if pid_path.exists():
         try:
             with open(pid_path, 'r') as pf:
                 pid = pf.read().strip()
-            # Run low-overhead process check to see if PID is physically running
             if os.path.exists(f"/proc/{pid}"):
                 daemon_status = f"RUNNING (PID {pid})"
+        except Exception:
+            pass
+
+    # Read and map live parameters from the newly compiled model ledger state container
+    model_status = "UNINITIALIZED"
+    if model_path.exists():
+        try:
+            with open(model_path, 'r') as mf:
+                m_cfg = json.load(mf)
+                model_status = f"ONLINE (v{m_cfg.get('engine_version', '3.0.0')})"
         except Exception:
             pass
 
@@ -93,6 +100,7 @@ def render_dashboard():
     print_row("CLOUDFLARE ROUTING EDGE MESH", "ACTIVE (edge_interceptor)", "32")
     print_row("GOOGLE CLOUD RUN HIGH-AVAIL", "STANDBY (lysander_gcp_ping)", "32")
     print_row("BACKGROUND MONITORING DAEMON", daemon_status, "32" if "RUNNING" in daemon_status else "31")
+    print_row("SOVEREIGN CORE DATA LEDGER", model_status, "32" if "ONLINE" in model_status else "31")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
     print_row("FEDERATION CONTENT COUNTER", track_count, "34")
