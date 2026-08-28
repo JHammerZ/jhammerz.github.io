@@ -1,6 +1,6 @@
 name: Deploy Worker
 on:
-  push:
+  #push: # disabled bulk
     branches: [main]
     paths: ['workers/**']
   workflow_dispatch:
@@ -10,9 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        node-version: '24'
         with:
-          node-version: 20
+          node-version: '24'
       - run: npm ci
+        working-directory: .
       - run: npx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

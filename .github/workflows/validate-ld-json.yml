@@ -22,9 +22,11 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
       - uses: actions/setup-node@v4
+        node-version: '24'
         with:
-          node-version: '18'
+          node-version: '24'
       - run: npm ci
+        working-directory: .
         with:
           fetch-depth: 0
 

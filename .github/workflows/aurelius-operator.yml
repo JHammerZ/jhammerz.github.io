@@ -9,7 +9,7 @@
 name: Aurelius-Engine Sovereign Operator
 
 on:
-  push:
+  #push: # disabled bulk
     branches: [main]
   pull_request:
     branches: [main]
@@ -28,10 +28,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        node-version: '24'
         with:
-          node-version: '18'
+          node-version: '24'
           cache: 'npm'
       - run: npm ci
+        working-directory: .
       - run: npm run orchestrator
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}

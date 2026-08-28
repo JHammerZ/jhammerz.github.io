@@ -22,7 +22,7 @@ name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
 on:
   schedule:
     - cron: '0 0 * * *' # Daily midnight UTC
-  push:
+  #push: # disabled bulk
     paths:
       - 'zenodo.json'
       - 'CITATION.cff'

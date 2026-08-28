@@ -42,8 +42,9 @@ jobs:
         if: hashFiles('package.json') != ''
         uses: actions/setup-node@60edb5dd545a1a42a3b5a1a6c3a2b2a2 # v4.0.2
       - run: npm ci
+        working-directory: .
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Setup Python
