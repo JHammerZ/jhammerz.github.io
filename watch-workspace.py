@@ -80,6 +80,11 @@ if current != baseline:
     import subprocess
     subprocess.run([sys.executable, "minify-css.py"])
 
+        # Enforce military-grade data schema validation before updating live server nodes
+    import subprocess
+    if subprocess.run([sys.executable, "validate-playlist-schema.py"]).returncode != 0:
+        sys.exit(1)
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
