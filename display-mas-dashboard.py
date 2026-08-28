@@ -10,6 +10,8 @@ def print_row(key, val, color="32"):
 def render_dashboard():
     policy_path = Path("verification-policy.json")
     db_path = Path("sovereign_metrics.db")
+    pid_path = Path(".lysander-daemon.pid")
+    public_path = Path("public")
     
     sec_tier = "SOVEREIGN_SUBSTRATE"
     prov_method = "H-FID_REGISTRY"
@@ -28,6 +30,7 @@ def render_dashboard():
         except Exception:
             pass
 
+    # Extract dynamic, live row statistics directly out of your local SQLite ledger matrix
     track_count = "0 RECORDS IN DB"
     if db_path.exists():
         try:
@@ -37,6 +40,27 @@ def render_dashboard():
             count = cursor.fetchone()[0]
             track_count = f"{count} RECORDS IN DB"
             conn.close()
+        except Exception:
+            pass
+
+    # Count actual physical HTML deployment files inside public storage paths
+    html_count = "0 FILES"
+    if public_path.exists():
+        try:
+            count = len(list(public_path.rglob("*.html")))
+            html_count = f"{count} HTML VIEWS ON EDGE"
+        except Exception:
+            pass
+
+    # Dynamic check of the active background tracking process daemon state loop
+    daemon_status = "OFFLINE"
+    if pid_path.exists():
+        try:
+            with open(pid_path, 'r') as pf:
+                pid = pf.read().strip()
+            # Run low-overhead process check to see if PID is physically running
+            if os.path.exists(f"/proc/{pid}"):
+                daemon_status = f"RUNNING (PID {pid})"
         except Exception:
             pass
 
@@ -68,9 +92,11 @@ def render_dashboard():
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("CLOUDFLARE ROUTING EDGE MESH", "ACTIVE (edge_interceptor)", "32")
     print_row("GOOGLE CLOUD RUN HIGH-AVAIL", "STANDBY (lysander_gcp_ping)", "32")
+    print_row("BACKGROUND MONITORING DAEMON", daemon_status, "32" if "RUNNING" in daemon_status else "31")
     print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
     print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
     print_row("FEDERATION CONTENT COUNTER", track_count, "34")
+    print_row("EDGE PAYLOAD TEMPLATE COUNT", html_count, "34")
     print_row("SUBSTRATE OPERATIONAL STATUS", global_status, "32")
     print("\033[1;36m└─────────────────────────────────────────────────────────────────┘\033[0m")
 
