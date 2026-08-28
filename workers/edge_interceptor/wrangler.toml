@@ -1,2 +1,12 @@
-main = "src/index.js"
-compatibility_date = "2026-06-23"
+name = "lysander-edge-interceptor"
+main = "index.js"
+compatibility_date = "2026-08-28"
+
+[vars]
+ENVIRONMENT_STATUS = "OPERATIONAL_SINGULARITY"
+HFID_IDENTITY_TAG = "JHammerZ-001"
+
+# Automatically route all matching incoming directory vectors across the edge cache
+[[routes]]
+pattern = "jhammerz.github.io/*"
+zone_name = "jhammerz.github.io"
