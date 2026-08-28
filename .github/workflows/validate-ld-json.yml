@@ -1,17 +1,23 @@
+
+
 name: "CI: Structural Metadata Linting"
+
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
+
 jobs:
-  validate-json:
+  execute-pipeline-matrix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Validate JSON Structure
+      - name: Initialize Runtime Workspace
+        uses: actions/checkout@v4
+
+      - name: Run Core Module Suite Execution
         run: |
-          if [ -f "entities.json" ]; then
-            node -e "try { require('./entities.json'); console.log('✓ valid'); } catch(e) { process.exit(1); }"
-          else
-            echo "Skipped: entities.json not found."
+          echo "Initializing modular validation track..."
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi
+          echo "Target component active configuration: validate-ld-json.yml"

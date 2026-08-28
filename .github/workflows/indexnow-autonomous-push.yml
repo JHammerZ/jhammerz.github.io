@@ -5,11 +5,28 @@
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-
 # H-Law Language / H-FID Standard / REC v7.2
 # H-Law Language / H-FID Standard / HDS v7.2
 # H-FID v2.2 (SEO-Optimized 100/100)
 
 name: "SEO: Sitemap + IndexNow Autonomous Push"
 
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  execute-pipeline-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initialize Runtime Workspace
+        uses: actions/checkout@v4
+
+      - name: Run Core Module Suite Execution
         run: |
+          echo "Initializing modular validation track..."
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi
+          echo "Target component active configuration: indexnow-autonomous-push.yml"

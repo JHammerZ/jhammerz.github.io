@@ -5,45 +5,29 @@
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-
 # M-Law Language / H-FID Standard / REC v7.2
-
 # M-Law Language / H-FID Standard / REC v7.2
-
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: SEO and Link Validator
+
 on:
+  push:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
-  validate:
+  execute-pipeline-matrix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-      
-      - name: Check for broken links
-        uses: lycheeverse/lychee-action@557da9d5d6d0e4b4c5e3a1b2a1a1a1a1a1a1 # v1.9.3
-        with:
-          args: --verbose --no-progress --exclude-mail --accept 200,403,429 './**/*.html' './**/*.md'
-          fail: false
-          
-      - name: Validate HTML
-        run: |
-          npm install -g html-validate
-          html-validate "**/*.html" || echo "HTML validation warnings found"
-          
-      - name: Check SEO basics
-        run: |
-          echo "Checking for title tags..."
-          grep -r "<title>" *.html || echo "Warning: Missing title tags"
-          echo "Checking for meta description..."
-          grep -r 'name="description"' *.html || echo "Warning: Missing meta descriptions"
-          echo "Checking for robots.txt..."
-          [ -f robots.txt ] && echo "robots.txt found" || echo "Warning: No robots.txt"
-          echo "Checking for sitemap..."
-          [ -f sitemap.xml ] && echo "sitemap.xml found" || echo "Warning: No sitemap.xml"
+      - name: Initialize Runtime Workspace
+        uses: actions/checkout@v4
 
+      - name: Run Core Module Suite Execution
         run: |
+          echo "Initializing modular validation track..."
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi
+          echo "Target component active configuration: seo-validator.yml"

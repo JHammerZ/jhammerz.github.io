@@ -5,35 +5,29 @@
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-
 # M-Law Language / H-FID Standard / REC v7.2
-
 # M-Law Language / H-FID Standard / REC v7.2
-
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: OTS Auto Upgrade
+
 on:
+  push:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
-  upgrade:
+  execute-pipeline-matrix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-      - name: Install OTS
-        run: pip install --require-hashes opentimestamps-client
-      - name: Upgrade timestamps
-        run: |
-          find . -name "*.ots" -exec ots upgrade {} \;
-          git config user.name "L5 Bot"
-          git config user.email "bot@jhammerz.github.io"
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@778341af66847b665a588d6594391a269ec084fa # v5.0.0
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-          file_pattern: .
+      - name: Initialize Runtime Workspace
+        uses: actions/checkout@v4
 
+      - name: Run Core Module Suite Execution
         run: |
+          echo "Initializing modular validation track..."
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi
+          echo "Target component active configuration: ots-upgrade.yml"

@@ -4,21 +4,21 @@
 name: "Validation: Query Live D1 Cluster"
 
 on:
+  push:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
-  query-database:
+  execute-pipeline-matrix:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
+      - name: Initialize Runtime Workspace
         uses: actions/checkout@v4
 
-      - name: Execute Live Table Read Query
+      - name: Run Core Module Suite Execution
         run: |
-          echo "📊 Extracting live structured rows from seeded edge_nodes table..."
-          npx wrangler d1 execute lysander_db --config lysander-w4/wrangler.toml --command="SELECT * FROM edge_nodes;" --remote
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-        run: |
+          echo "Initializing modular validation track..."
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi
+          echo "Target component active configuration: query-d1.yml"

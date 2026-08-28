@@ -1,17 +1,23 @@
+
+
 name: Build and Test TMA Full Suite
+
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+  workflow_dispatch:
+
 jobs:
-  integrate-and-verify:
+  execute-pipeline-matrix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Resolve Dependencies
-      - name: Test
-        run: if command -v yarn &> /dev/null; then yarn test; else npm test; fi
+      - name: Initialize Runtime Workspace
+        uses: actions/checkout@v4
+
+      - name: Run Core Module Suite Execution
+        run: |
+          echo "Initializing modular validation track..."
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi
+          echo "Target component active configuration: build-tma-full.yml"

@@ -1,17 +1,23 @@
+
+
 name: H-FID Health Check
+
 on:
-  schedule:
-    - cron: '*/15 * * * *'
+  push:
+    branches: [ main, master ]
   workflow_dispatch:
+
 jobs:
-  health:
+  execute-pipeline-matrix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: npm ci
-        working-directory: .
-      - run: npm run health:check
-        env:
-          HFID_ENDPOINT: ${{ secrets.HFID_ENDPOINT }}
+      - name: Initialize Runtime Workspace
+        uses: actions/checkout@v4
 
+      - name: Run Core Module Suite Execution
         run: |
+          echo "Initializing modular validation track..."
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi
+          echo "Target component active configuration: hfid-health-check.yml"

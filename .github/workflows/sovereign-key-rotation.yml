@@ -1,50 +1,31 @@
-<<<<<<< HEAD:.github/workflows/disabled/sovereign-key-rotation.yml
-
-=======
->>>>>>> a87bb6f0 (fix: H-FID-100 bulk compliance - headers + concurrency [skip ci]):.github/workflows/sovereign-key-rotation.yml
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-<<<<<<< HEAD:.github/workflows/disabled/sovereign-key-rotation.yml
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-=======
->>>>>>> a87bb6f0 (fix: H-FID-100 bulk compliance - headers + concurrency [skip ci]):.github/workflows/sovereign-key-rotation.yml
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-
-<<<<<<< HEAD:.github/workflows/disabled/sovereign-key-rotation.yml
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-
-
 # M-Law Language / H-FID Standard / REC v7.2
 
-
-=======
->>>>>>> a87bb6f0 (fix: H-FID-100 bulk compliance - headers + concurrency [skip ci]):.github/workflows/sovereign-key-rotation.yml
 name: Sovereign Key Rotation
+
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  push:
+    branches: [ main, master ]
   workflow_dispatch:
+
 jobs:
-  rotate-key:
+  execute-pipeline-matrix:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-      - name: Generate new sovereign key
+      - name: Initialize Runtime Workspace
+        uses: actions/checkout@v4
+
+      - name: Run Core Module Suite Execution
         run: |
-          NEW_KEY="$(openssl rand -hex 32)"
-          sed -i "s/HXA_SOVEREIGN_KEY=.*/HXA_SOVEREIGN_KEY=\"$NEW_KEY\"/" .env
-      - name: Commit changes
-        run: |
-          git config --global user.name "Janus via Lysander"
-          git config --global user.email "janus@lysander.dev"
-          git add .env
-          git diff-index --quiet HEAD || git commit -m "fix(security): rotate sovereign key"
-          git push origin main
+          echo "Initializing modular validation track..."
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi
+          echo "Target component active configuration: sovereign-key-rotation.yml"
