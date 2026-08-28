@@ -46,6 +46,24 @@ while true; do
     python3 watch-ipc-signals.py
     ./update-terminal-aliases.sh
     
+    # 8. Performance, Infrastructure, and Security Sub-gate Sweeps
+    python3 track-power-insulation.py
+    python3 track-storage-io.py
+    python3 optimize-cpu-load.py
+    python3 track-memory-allocation.py
+    python3 generate-api-docs.py
+    python3 minify-css.py
+    python3 purge-edge-cache.py
+    python3 query-live-matrix.py
+    python3 secure-ingress-inspection.py
+    python3 heal-workspace-matrix.py
+    python3 track-social-posts.py
+    python3 scrape-audio-metadata.py
+    python3 clean-git-history.py
+    python3 pipe-pipeline-errors.py
+    python3 optimize-memory-buffer.py
+    python3 tune-workflow-cron.py
+    
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
 done
