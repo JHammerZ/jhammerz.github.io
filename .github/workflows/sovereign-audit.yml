@@ -1,0 +1,81 @@
+name: Sovereign Audit
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # 3am UTC daily
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run - no commit'
+        required: false
+        default: 'false'
+        type: boolean
+      allow_deps:
+        description: 'Allow dependency updates'
+        required: false
+        default: 'false'
+        type: boolean
+
+concurrency:
+  group: sovereign-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    if: github.repository == github.event.repository.full_name
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          token: ${{ secrets.SOVEREIGN_PAT }}
+
+      - name: Setup Node
+        if: hashFiles('package.json') != ''
+        uses: actions/setup-node@60edb5dd545a1a42a3b5a1a6c3a2b2a2 # v4.0.2
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Python
+        if: hashFiles('requirements.txt') != '' || hashFiles('pyproject.toml') != ''
+        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Setup Go
+        if: hashFiles('go.mod') != ''
+        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.0
+        with:
+          go-version: '1.22'
+
+      - name: Setup Rust
+        if: hashFiles('Cargo.toml') != ''
+        uses: dtolnay/rust-toolchain@stable # v1
+
+      - name: Run Sovereign Audit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x ./sovereign-audit-fix.sh
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          if [ "${{ inputs.allow_deps }}" = "true" ]; then ARGS="$ARGS --allow-deps"; fi
+          ./sovereign-audit-fix.sh $ARGS
+
+      - name: Upload postmortem on failure
+        if: failure()
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397e0ac4f0b85139cc2fb # v4.3.3
+        with:
+          name: sovereign-postmortem
+          path: .sovereign-postmortem-*.tar.gz
+          retention-days: 7
