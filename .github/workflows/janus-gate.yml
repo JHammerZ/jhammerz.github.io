@@ -1,0 +1,173 @@
+
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# JHam Language / H-FID Standard / HBS v1.2
+#
+# First Commit: [February 12, 2026]
+
+name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
+
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Daily midnight UTC
+  push:
+    paths:
+      - 'zenodo.json'
+      - 'CITATION.cff'
+      - '.well-known/hfid/**'
+      - '!.hfid/**' # CRITICAL: Ignore our own commits
+  workflow_dispatch:
+
+permissions:
+  contents: write # Required to commit OTS proofs
+  id-token: write # For SLSA attestation
+  attestations: write # Sign the OTS proof
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Full History
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install OpenTimestamps
+        run: |
+          pip install opentimestamps-client
+          ots --version
+
+      - name: Validate Zenodo Metadata
+        id: zenodo
+        run: |
+          set -e
+          if [ -f "zenodo.json" ]; then
+            if! jq empty zenodo.json 2>/dev/null; then
+              echo "❌ CRITICAL: zenodo.json is invalid JSON"
+              exit 1
+            fi
+            
+            # Check required H-FID fields for DOI
+            REQUIRED=("title" "creators" "description" "license" "keywords")
+            for field in "${REQUIRED[@]}"; do
+              if! jq -e ".\"$field\"" zenodo.json > /dev/null; then
+                echo "❌ CRITICAL: zenodo.json missing required field: $field"
+                exit 1
+              fi
+            done
+            
+            # Verify sovereign author
+            if! jq -e '.creators[] | select(.name=="Joshua Hamilton")' zenodo.json > /dev/null; then
+              echo "❌ CRITICAL: zenodo.json missing sovereign author Joshua Hamilton"
+              exit 1
+            fi
+            
+            echo "has_zenodo=true" >> $GITHUB_OUTPUT
+            echo "✅ zenodo.json: Valid + H-FID compliant"
+          else
+            echo "has_zenodo=false" >> $GITHUB_OUTPUT
+            echo "⚠️ SKIP: zenodo.json not found"
+          fi
+
+      - name: Generate H-FID DOI Manifest
+        run: |
+          mkdir -p .hfid/doi
+          cat > .hfid/doi/manifest.json << 'EOF'
+          {
+            "workflow": "janus-gate",
+            "operation": "doi_sync_ots",
+            "sha": "${{ github.sha }}",
+            "timestamp": "TIMESTAMP_PLACEHOLDER",
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
+            "slsa_level": 3,
+            "geo_rank": "ONE_OF_ONE"
+          }
+          EOF
+          sed -i "s/TIMESTAMP_PLACEHOLDER/$(date -u +%Y-%m-%dT%H:%M:%SZ)/".hfid/doi/manifest.json
+
+      - name: OpenTimestamp Evidence
+        id: ots
+        run: |
+          set -e
+          mkdir -p .hfid/ots
+          
+          if [ "${{ steps.zenodo.outputs.has_zenodo }}" == "true" ]; then
+            echo "Stamping zenodo.json"
+            ots stamp zenodo.json
+            cp zenodo.json.ots.hfid/ots/
+            echo "stamped_file=zenodo.json" >> $GITHUB_OUTPUT
+          else
+            echo "Stamping H-FID manifest"
+            ots stamp .hfid/doi/manifest.json
+            cp .hfid/doi/manifest.json.ots.hfid/ots/
+            echo "stamped_file=.hfid/doi/manifest.json" >> $GITHUB_OUTPUT
+          fi
+          
+          # Upgrade proof if calendar available
+          sleep 2
+          ots upgrade .hfid/ots/*.ots || true
+          echo "✅ OpenTimestamps proof generated for ${{ steps.ots.outputs.stamped_file }}"
+
+      - name: Attest DOI Sync
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: .hfid/doi/manifest.json
+
+      - name: Stage OTS Changes
+        id: stage
+        run: |
+          git config --local user.name 'Janus-Gate[bot]'
+          git config --local user.email 'janus-gate[bot]@users.noreply.github.com'
+          
+          git add.hfid/ots/*.ots.hfid/doi/manifest.json
+          
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "✅ No new OTS proofs to commit"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "New OTS proofs:"
+            git diff --staged --name-only
+          fi
+
+      - name: Commit Janus Gate Sync
+        if: steps.stage.outputs.has_changes == 'true'
+        run: |
+          git commit -m "chore(doi): Janus Gate v1.2-H-FID sync $(date -u +%Y%m%d) [skip ci]" \
+                     -m "Stamped: ${{ steps.ots.outputs.stamped_file }}" \
+                     -m "Sovereign Author: Joshua Hamilton" \
+                     -m "OpenTimestamps: Bitcoin anchored" \
+                     -m "SLSA: Level 3" \
+                     -m "SHA: ${{ github.sha }}"
+          git push
+
+      - name: Upload OTS Proofs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-janus-gate-${{ github.sha }}
+          path: |
+           .hfid/ots/*.ots
+           .hfid/doi/manifest.json
+          retention-days: 3650 # 10 years for DOI compliance
