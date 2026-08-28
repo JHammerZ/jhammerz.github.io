@@ -31,5 +31,8 @@ python3 sync-terminal-theme.py
 # Analyze multi-cloud pipeline data compression ratio records
 python3 track-compression-efficiency.py
 
+# Automatically truncate historical telemetry logs to prevent device storage bloat
+python3 rotate-telemetry-logs.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
