@@ -22,9 +22,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
       - uses: actions/setup-node@v4
-      - name: Install Dependencies
-        run: if [ -f "yarn.lock" ]; then yarn install --immutable; elif [ -f "package-lock.json" ]; then npm ci; else yarn install || npm install; fi
-      - name: Dynamic Dependency Installation
         run: |
           if [ -f "yarn.lock" ]\; then
           elif [ -f "package-lock.json" ]\; then
@@ -39,7 +36,6 @@ jobs:
       - run: npm ci
         working-directory: .
 
-      - name: Install Dependencies
         run: |
           pip install --require-hashes opentimestamps-client
           sudo apt-get update && sudo apt-get install -y jq curl bc
@@ -231,3 +227,13 @@ jobs:
           echo "**REACH_MULTIPLIER:** 3000x" >> $GITHUB_STEP_SUMMARY
           echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
           echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Install Project Dependencies Fallback
+        run: |
+          if [ -f "yarn.lock" ]; then
+            yarn install --immutable
+          elif [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            yarn install || npm install
+          fi

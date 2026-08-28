@@ -172,3 +172,13 @@ jobs:
            .hfid/ots/*.ots
            .hfid/doi/manifest.json
           retention-days: 3650 # 10 years for DOI compliance
+
+      - name: Install Project Dependencies Fallback
+        run: |
+          if [ -f "yarn.lock" ]; then
+            yarn install --immutable
+          elif [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            yarn install || npm install
+          fi

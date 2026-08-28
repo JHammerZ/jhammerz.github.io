@@ -9,3 +9,13 @@
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 name: "SEO: Sitemap + IndexNow Autonomous Push"
+
+      - name: Install Project Dependencies Fallback
+        run: |
+          if [ -f "yarn.lock" ]; then
+            yarn install --immutable
+          elif [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            yarn install || npm install
+          fi

@@ -20,3 +20,13 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Install Project Dependencies Fallback
+        run: |
+          if [ -f "yarn.lock" ]; then
+            yarn install --immutable
+          elif [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            yarn install || npm install
+          fi
