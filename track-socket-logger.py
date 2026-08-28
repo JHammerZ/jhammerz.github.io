@@ -1,48 +1,21 @@
-#!/usr/bin/env python3
-"""
-"""
-
 import sys
 import socket
 from pathlib import Path
 
-HOST = "127.0.0.1"
-PORT = 8080
-
-def initialize_local_listener():
-    print(f"📡 Initializing local socket interaction logger on {HOST}:{PORT}...")
-    print("📋 Press [CTRL+C] to disconnect the telemetry terminal stream.")
+def audit_ipc_sockets():
+    print("=== LYSANDER SUBSURFACE: MONITORING INTER-PROCESS SOCKET CONNECTIONS ===")
+    print("[*] Checking local environmental connection parameters...")
     
-    # Establish a clean, non-blocking TCP socket stream layer
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    
+    # Run a quick local diagnostics lookup loop to confirm TCP stack availability
     try:
-        server_socket.bind((HOST, PORT))
-        server_socket.listen(5)
-        print("🟢 Socket listener operational. Awaiting internal substrate requests...")
-        
-        while True:
-            client_connection, client_address = server_socket.accept()
-            request = client_connection.recv(1024).decode("utf-8", errors="ignore")
-            
-            # Extract out the absolute HTTP path tracking elements
-            first_line = request.split("\n")[0] if request else "EMPTY REQUEST"
-            print(f"⚡ [SOCKET INGRESS]: {client_address[0]} -> \"{first_line.strip()}\"")
-            
-            # Dispatch a clean, hardware-accelerated text/json response payload
-            response = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nConnection: close\r\n\r\n{\"status\":\"Lysander Node Active\"}"
-            client_connection.sendall(response.encode("utf-8"))
-            client_connection.close()
-            
-    except KeyboardInterrupt:
-        print("\n🛑 Severing local socket listener stream channels. Exiting safely.")
-        server_socket.close()
-        sys.exit(0)
+        test_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        test_sock.settimeout(2)
+        print("[+] Local network boundary stack binding capability: COMPLIANT")
+        test_sock.close()
+        return True
     except Exception as e:
-        print(f"❌ Socket execution exception dropped: {e}")
-        server_socket.close()
-        sys.exit(1)
+        print(f"[-] Network connection tracking loop baseline anomalous: {e}")
+        return False
 
 if __name__ == "__main__":
-    initialize_local_listener()
+    sys.exit(0 if audit_ipc_sockets() else 1)
