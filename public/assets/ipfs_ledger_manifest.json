@@ -1,6 +1,6 @@
 {
     "storage_provider": "IPFS_FEDERATION_GRID",
-    "target_payload_hash": "86921cf86fc39252d364f2c13028722ffc9f201d11894f844cda47af44ab86ae",
-    "virtual_cid_address": "QmSovereignSubstrateMatrixV386921cf86fc39252Enforcement",
+    "target_payload_hash": "f07c7d2ca424642635a9971e130a46323f3865c1f6c2b75f4aa40793cd0451a2",
+    "virtual_cid_address": "QmSovereignSubstrateMatrixV3f07c7d2ca4246426Enforcement",
     "sync_status": "READY_FOR_BROADCAST"
 }
