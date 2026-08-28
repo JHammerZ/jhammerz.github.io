@@ -1,22 +1,15 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# SOVEREIGN PAGES DEPLOYMENT WORKFLOW // V4.0.20 // PRODUCTION FIX
-
 name: Deploy Site to Pages
-
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: "pages"
   cancel-in-progress: false
-
 jobs:
   deploy-pages:
     environment:
@@ -24,17 +17,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v4
-
-      - name: Setup Pages Ingress Profile
-        uses: actions/configure-pages@v5
-
-      - name: Upload Static Web Assets Artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-
-      - name: Deploy to GitHub Pages Edge Infrastructure
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4

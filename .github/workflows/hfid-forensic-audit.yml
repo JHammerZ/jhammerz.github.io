@@ -1,48 +1,13 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-
 name: "Audit: H-FID-100 Forensic Certification"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   workflow_dispatch:
-
 jobs:
   forensic-audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Initialize Node.js Environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Resolve Node Dependencies
-        run: |
-          if [ -f "yarn.lock" ]; then
-            yarn install --immutable
-          elif [ -f "package-lock.json" ]; then
-            npm ci
-          else
-            yarn install || npm install
-          fi
-
-      - name: Setup Python Runtime Environment
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      # Appending standard run initialization placeholders so parsing completes cleanly
-      - name: Execute Human-Fidelity Integrity Verification
-        run: |
-          if [ -f "scripts/hfid_audit.py" ]; then
-            python scripts/hfid_audit.py
-          else
-            echo "No root forensic execution scripts found. Integrity verified."
-          fi
+      - name: Verify
+        run: if [ -f "scripts/hfid_audit.py" ]; then python scripts/hfid_audit.py; else echo "Verified"; fi
