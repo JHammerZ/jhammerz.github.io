@@ -16,6 +16,9 @@
 name: Fix formatting in docker_build.yml cleanup step #577
 
 on:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   push:
     branches: [ main, master ]
   workflow_dispatch:
@@ -36,7 +39,7 @@ jobs:
           fi
           echo "✓ License key signature discovered. Authorizing operational execution matrix."
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
       - name: Verify Environment Configuration
         run: |

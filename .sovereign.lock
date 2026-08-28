@@ -1,12 +1,1 @@
-{
-  "version": "3.1",
-  "mode": "hybrid",
-  "providers": {
-    "primary": "google",
-    "fallback": "lysander_local"
-  },
-  "policy": "Google allowed as provider via LysanderCore abstraction. No direct @google/generative-ai imports permitted in workflows.",
-  "genesis": "8603e117",
-  "author": "JHammerz",
-  "timestamp": "2026-08-28T00:00:00Z"
-}
+14411
