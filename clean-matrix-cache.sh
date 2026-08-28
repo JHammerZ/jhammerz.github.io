@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# ===================================================================
+#      LYSANDER CACHE PURGE PRIMITIVE // TRASH COLLECTOR
+#      DESIGN DEPTH: LEVEL 5 PRODUCTION // ABSOLUTE EFFICIENCY
+# ===================================================================
+
+echo "🧹 [LYSANDER COMPLIANCE]: Executing system substrate cleanup sequence..."
+
+# 1. Target and violently strip out hidden recursive pycache directories
+find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
+
+# 2. Safely purge temporary tracking state logs without breaking live snapshot parameters
+if [ -f "mythos_forensic_report.json" ]; then
+    rm -f mythos_forensic_report.json
+    echo "🗑️ Forensic diagnostic temporary dump files purged."
+fi
+
+# 3. Optimize local Git tracking debris tracking metrics 
+# Run autonomous footprint performance velocity checks
+python3 track-mesh-velocity.py
+
+# Run automatic physical environment backups
+bash backup-matrix-core.sh
+
+# Run automated code refactoring and constant extraction passes
+python3 clean-code-refactor.py
+
+git gc --prune=now --quiet
+echo "🟢 Local storage vectors fully balanced and optimized."
