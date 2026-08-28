@@ -32,7 +32,7 @@ PATCH_FILE=".sovereign.patch"
 TESTLOG=".sovereign-test-failures.log"
 > "$TESTLOG"
 
-echo "=== SOVEREIGN AUTONOMOUS AUDITOR v7.0 FORT KNOX ==="
+echo "=== SOVEREIGN AUTONOMOUS AUDITOR v7.0.1 FORT KNOX ==="
 echo "Repo: $(basename $REPO_ROOT)"
 echo "Mode: dry-run=$DRY_RUN conservative=$CONSERVATIVE_MODE allow-deps=$ALLOW_DEP_CHANGES"
 echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -225,7 +225,7 @@ if [ $CHANGED -eq 1 ]; then
   PRE_SHA=$(git rev-parse HEAD)
   cat "$FIXLOG"
   git add.
-  git commit -m "[skip ci] Sovereign Audit v7.0: Auto-fix ${CONSERVATIVE_MODE:+conservative}
+  git commit -m "[skip ci] Sovereign Audit v7.0.1: Auto-fix ${CONSERVATIVE_MODE:+conservative}
 
     - H-FID 100/100, SLSA L4 SHA-pinned
     - All failsafes: cooldown, circuit breaker, blast radius, secrets scan
@@ -247,7 +247,7 @@ if [ $CHANGED -eq 1 ]; then
     BRANCH="sovereign/auto-fix-$(date +%s)"
     git branch -M "$BRANCH"
     git push -u origin "$BRANCH"
-    gh pr create --title "Sovereign Auto-fix v7.0" --body "Auto-generated fixes. All failsafes passed." --label "sovereign"
+    gh pr create --title "Sovereign Auto-fix v7.0.1" --body "Auto-generated fixes. All failsafes passed." --label "sovereign"
     rm -f "$ATTEMPT_FILE"
     exit 0
   fi
