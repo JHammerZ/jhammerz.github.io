@@ -58,5 +58,8 @@ python3 clean-git-history.py
 # Run automated workspace self-healing and data integrity recovery checks
 python3 heal-workspace-matrix.py
 
+# Flush stale global CDN cache arrays automatically
+python3 purge-edge-cache.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
