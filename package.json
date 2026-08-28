@@ -10,17 +10,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "orchestrator": "tsx scripts/aurelius_orchestrator.ts",
-    "orchestrator:audit": "tsx scripts/aurelius_orchestrator.ts",
-    "kroot": "tsx scripts/kroot_toolkit.ts",
-    "kroot:status": "tsx scripts/kroot_toolkit.ts status",
-    "kroot:bypass": "tsx scripts/kroot_toolkit.ts bypass",
-    "kroot:verify": "tsx scripts/kroot_toolkit.ts verify",
-    "worm": "tsx scripts/worm_manager.ts",
-    "worm:status": "tsx scripts/worm_manager.ts status",
-    "worm:audit": "tsx scripts/worm_manager.ts audit",
-    "worm:write": "tsx scripts/worm_manager.ts write",
-    "test": "echo \"No tests\" && exit 0"
+    "test": "echo 'Lysander 3.1 hybrid - no tests yet'"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
