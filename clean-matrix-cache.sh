@@ -25,5 +25,8 @@ bash backup-matrix-core.sh
 # Run automated code refactoring and constant extraction passes
 python3 clean-code-refactor.py
 
+# Synchronize interface terminal styling limits for human eye ergonomics
+python3 sync-terminal-theme.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
