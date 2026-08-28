@@ -43,5 +43,8 @@ python3 track-dead-links.py
 # Analyze local system CPU performance allocation
 python3 optimize-cpu-load.py
 
+# Analyze local filesystem storage write performance vectors
+python3 track-storage-io.py
+
 git gc --prune=now --quiet
 echo "🟢 Local storage vectors fully balanced and optimized."
