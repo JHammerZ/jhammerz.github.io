@@ -7,8 +7,6 @@
 # SLSA Level: 3
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
 
 name: "Audit: H-FID Forensic Ledger to IPFS"
 
@@ -21,23 +19,21 @@ jobs:
   execute-matrix:
     runs-on: ubuntu-latest
     steps:
-
       - name: Verify Commercial License Signature Gate
         run: |
           echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
           if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
-            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
-            echo "This repository is locked under a proprietary Pay-For-Use EULA."
-            echo "Please purchase an active subscription key to re-enable execution tokens."
-            exit 1
+              echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
+              exit 1
           fi
-          echo "✓ License key signature discovered. Authorizing operational execution matrix."
+          echo "✓ License key signature discovered. Authorizing execution matrix."
+
       - name: Checkout Codebase
         uses: actions/checkout@v4
 
       - name: Verify Environment Configuration
         run: |
-          echo "Running verification track for: {filename}"
+          echo "Running verification track for: ipfs_forensic_ledger"
           if [ -f "package.json" ]; then
-            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+              if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi
