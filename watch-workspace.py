@@ -105,6 +105,18 @@ if current != baseline:
         print("🛑 [SECURITY BLOCK]: Compromised code structures intercepted. Operation aborted.")
         sys.exit(1)
 
+        # Safely query live open internet profiles using OpSec parsing boundaries
+    import subprocess
+    subprocess.run([sys.executable, "query-live-matrix.py"])
+
+        # Call GuitarAOKE OS transcription engines to auto-compile lyrics metrics
+    import subprocess
+    subprocess.run([sys.executable, "guitaraoke-core.py"])
+
+        # Automatically compress frontend HTML templates to maintain 100/100 PageSpeed scores
+    import subprocess
+    subprocess.run([sys.executable, "minify-html-views.py"])
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
