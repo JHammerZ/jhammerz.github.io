@@ -45,7 +45,6 @@ jobs:
         working-directory: .
         with:
           node-version: '24'
-          cache: 'npm'
 
       - name: Setup Python
         if: hashFiles('requirements.txt') != '' || hashFiles('pyproject.toml') != ''
