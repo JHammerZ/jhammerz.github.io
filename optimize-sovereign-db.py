@@ -15,6 +15,7 @@ def optimize_database_storage():
     print(f"[*] Initial footprint allocation: {initial_size} bytes")
     
     try:
+        # Step A: Open a standard connection to handle data pruning operations
         conn = sqlite3.connect(DB_FILE)
         cursor = conn.cursor()
         
@@ -24,12 +25,16 @@ def optimize_database_storage():
             WHERE id NOT IN (SELECT id FROM content_catalog ORDER BY id DESC LIMIT 1000)
         """)
         pruned_rows = conn.total_changes
-        
-        # Execute absolute vacuum compaction routine to reclaim unallocated disk blocks
-        cursor.execute("VACUUM;")
-        cursor.execute("PRAGMA optimize;")
         conn.commit()
         conn.close()
+        
+        # Step B: Open an isolated autocommit connection strictly to handle the VACUUM operation
+        # isolation_level=None turns on autocommit mode explicitly in SQLite3
+        vacuum_conn = sqlite3.connect(DB_FILE, isolation_level=None)
+        vacuum_cursor = vacuum_conn.cursor()
+        vacuum_cursor.execute("VACUUM;")
+        vacuum_cursor.execute("PRAGMA optimize;")
+        vacuum_conn.close()
         
         final_size = p.stat().st_size
         reclaimed = initial_size - final_size
