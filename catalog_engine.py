@@ -74,9 +74,8 @@ def parse_ingest_directory():
 def sync_matrix_upstream():
     print("[*] Syncing local catalog state mutations upstream to global matrix...")
     try:
-        # Export latest entries to the tracked public playlist to feed your web frontends
         conn = sqlite3.connect(DB_FILE)
-        cursor = conn.conn.cursor() if hasattr(conn, 'conn') else conn.cursor()
+        cursor = conn.cursor()
         cursor.execute("SELECT id, asset_title, media_url FROM content_catalog ORDER BY id DESC LIMIT 50")
         rows = cursor.fetchall()
         conn.close()
@@ -86,7 +85,6 @@ def sync_matrix_upstream():
         with open(PUBLIC_PLAYLIST, 'w', encoding='utf-8') as pf:
             json.dump({"playlist_registry": registry}, pf, indent=4)
 
-        # Trigger your global git synchronization chain natively
         subprocess.run(["git", "add", PUBLIC_PLAYLIST, DB_FILE], check=True)
         subprocess.run(["git", "commit", "-m", "sync: compile edge catalog updates into repository matrix"], check=True)
         subprocess.run(["git", "push", "origin", "main"], check=True)
