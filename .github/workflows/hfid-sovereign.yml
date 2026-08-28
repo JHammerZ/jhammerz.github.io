@@ -22,13 +22,12 @@ concurrency:
 
 name: "Build: H-FID Sovereign Kernel"
 on:
-  workflow_dispatch:
-  workflow_dispatch:
+  on:
+    workflow_dispatch:
 
 jobs:
   build:
-    runs-on:
-  workflow_dispatch: ubuntu-24.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Compile Core Monolithic Subsystem Natively
