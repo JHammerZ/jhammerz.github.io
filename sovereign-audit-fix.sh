@@ -1,4 +1,5 @@
 set +u
+set +u
 #!/bin/bash
 set -euo pipefail
 
