@@ -1,0 +1,14 @@
+name: H-FID Health Check
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run health:check
+        env:
+          HFID_ENDPOINT: ${{ secrets.HFID_ENDPOINT }}
