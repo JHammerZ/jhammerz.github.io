@@ -209,13 +209,13 @@ fi
   echo "=== TESTING PHASE ==="
 
   # === FAILSAFE 7: DEP HASH CHECK ===
-LOCKFILE_HASH_BEFORE=$(sha256sum package-lock.json 2>/dev/null | awk '{print ${1:-""}}' || echo "")
+LOCKFILE_HASH_BEFORE=$(sha256sum package-lock.json 2>/dev/null | awk '{print $1}'}}' || echo "")
 
   [ -f "package.json" ] && npm ci --silent && npx eslint. --fix 2>/dev/null && echo " [+] eslint --fix" >> "$FIXLOG" && test_fixes=$((test_fixes+1)) || true
   [ -f "package.json" ] &&! npm test -- --ci --passWithNoTests 2>&1 | tee -a "$TESTLOG" && grep -q "Snapshot" "$TESTLOG" && npm test -- -u && echo " [+] Updated snapshots" >> "$FIXLOG" && test_fixes=$((test_fixes+1)) || true
   [ -f "requirements.txt" ] && pip install -r requirements.txt 2>/dev/null && ruff check. --fix 2>/dev/null && echo " [+] ruff --fix" >> "$FIXLOG" && test_fixes=$((test_fixes+1)) || true
 
-LOCKFILE_HASH_AFTER=$(sha256sum package-lock.json 2>/dev/null | awk '{print ${1:-""}}' || echo "")
+LOCKFILE_HASH_AFTER=$(sha256sum package-lock.json 2>/dev/null | awk '{print $1}'}}' || echo "")
   if [ "$LOCKFILE_HASH_BEFORE" != "$LOCKFILE_HASH_AFTER" ] && [ "$ALLOW_DEP_CHANGES" = "false" ]; then
     echo "DEPS CHANGED: Lockfile modified. Re-run with --allow-deps to commit."
     git reset --hard HEAD
