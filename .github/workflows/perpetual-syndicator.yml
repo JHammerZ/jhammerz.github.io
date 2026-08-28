@@ -1,71 +1,27 @@
-# ==============================================================================
-#          LYSANDER NETWORK CORRIDOR // PERPETUAL SYNDICATION SCHEDULER
-#          DESIGN DEPTH: LEVEL 4 PRODUCTION // INFINITE AUTOMATED RUNTIME
-# ==============================================================================
-name: "Perpetual: 24/7 Omni-Channel Social Syndicator"
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+name: "Perpetual Content Syndicator"
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
   schedule:
-    # Triggers autonomously every hour, 24 hours a day, 365 days a year
-    - cron: '17 * * * *'
-  push:
-    branches: [ main, master ]
-    paths:
-      - 'public/assets/playlist.json'
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
-  autonomous-cron-sync:
-    name: "Lysander Matrix Ingress Gate [ubuntu-latest]"
+  syndicate:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Commercial License Signature Gate
-        run: |
-          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
-          if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
-            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
-            exit 1
-          fi
-          echo "✓ License key signature discovered. Authorizing operational execution matrix."
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
 
-      - name: 1. Checkout JHammerZ Master Source Tree
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-
-      - name: 2. Initialize Python Runtime Environment
-        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
+      - name: Setup Python Runtime
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: 3. Install Integration Matrix Dependencies
-        run: |
-          pip install --no-cache-dir requests
-
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: 'workers/edge_interceptor'
-
-      - name: 🚀 Deploy Master Cloudflare Worker Interceptor Core
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: 'workers/edge_interceptor'
-
-      - name: 4. Execute Autonomous Cross-Platform Syndication Check
-        run: |
-          python .github/scripts/social_syndicator.py
+      - name: Run Omni Broadcast Syndication
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-
-      - name: 5. Persist State Changes and Delta Metrics Back to Repository
         run: |
-          git config --global user.name "Lysander Autonomous Robot"
-          git config --global user.email "bot@hfid.standard"
-          if [ -f "social_syndication_state.json" ]; then
-            git add social_syndication_state.json
-            git diff --quiet && git diff --staged --quiet || (git commit -m "chore: persist state parameters [cron sync]" && git push origin main)
-          fi
+          pip install requests
+          python .github/scripts/social_syndicator.py
