@@ -76,6 +76,10 @@ if current != baseline:
         print("❌ Sync blocked: Cryptographic signature validation failure.")
         sys.exit(1)
 
+        # Auto-minify CSS assets to optimize edge front-end rendering speeds
+    import subprocess
+    subprocess.run([sys.executable, "minify-css.py"])
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
