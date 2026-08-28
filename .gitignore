@@ -54,3 +54,5 @@ network_traffic_audit.log
 public/assets/model_state.json
 public/assets/ipfs_ledger_manifest.json
 .sovereign.lock
+secure_subsurface_vault/
+.sovereign_vault_meta.json
