@@ -70,6 +70,12 @@ if current != baseline:
         print("❌ Automated sync blocked due to corrupted media layout parameters.")
         sys.exit(1)
 
+        # Verify cryptographic signature block structures before committing data maps
+    import subprocess
+    if subprocess.run([sys.executable, "audit-pgp-claims.py"]).returncode != 0:
+        print("❌ Sync blocked: Cryptographic signature validation failure.")
+        sys.exit(1)
+
     if ENGINE_SCRIPT.exists():
         print("⚙️ Executing local social syndication matrix routines...")
         subprocess.run([sys.executable, str(ENGINE_SCRIPT)])
