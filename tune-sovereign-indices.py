@@ -9,11 +9,11 @@ def optimize_database_indexing_schemas():
     if not DB_FILE.exists():
         print("[-] Target ledger sovereign_metrics.db absent. Skipping index sweep.")
         return True
-        
+
     try:
         conn = sqlite3.connect(str(DB_FILE))
         cursor = conn.cursor()
-        
+
         # Enforce high-performance database schema indexes over primary catalog search fields
         print("[*] Instantiating search performance index flags over data columns...")
         cursor.execute(
@@ -24,11 +24,11 @@ def optimize_database_indexing_schemas():
             "CREATE INDEX IF NOT EXISTS idx_content_catalog_timestamp "
             "ON content_catalog(ingest_timestamp);"
         )
-        
+
         # Optimize query execution pipelines natively via standard internal database tuning calls
         print("[*] Running analytical query optimization pass across indexes...")
         cursor.execute("ANALYZE;")
-        
+
         conn.commit()
         conn.close()
         print("[+] Sovereign Storage Ledger Query Performance Sub-Gate: COMPLIANT")
