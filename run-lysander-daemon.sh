@@ -45,5 +45,5 @@ while true; do
     git commit -m "sync: planetary pipeline telemetry snapshot refresh" --no-verify 2>/dev/null
     git push origin main 2>/dev/null
     
-    sleep 900 # 15-minute high-resolution intervals
+    sleep 900 # Tighter iteration sweeps: 15-minute intervals for supreme resolution
 done
