@@ -31,11 +31,11 @@ def get_local_subnet_mask():
     libc_path = ctypes.util.find_library("c")
     if not libc_path:
         return "255.255.255.0"
-    
+
     try:
         libc = ctypes.CDLL(libc_path)
         ifaddrs_ptr = ctypes.POINTER(ifaddrs)()
-        
+
         # Call getifaddrs (returns 0 on success)
         if libc.getifaddrs(ctypes.byref(ifaddrs_ptr)) == 0:
             curr = ifaddrs_ptr
@@ -59,7 +59,7 @@ def get_local_subnet_mask():
 
 def run_traffic_inspection():
     print("=== LYSANDER SUBSURFACE: RUNNING NATIVE LIBC SUBNET MONITOR ===")
-    
+
     try:
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
@@ -67,7 +67,7 @@ def run_traffic_inspection():
         local_ip = "127.0.0.1"
 
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-    
+
     # Query the native local subnet mask directly via standard libc structures
     subnet_mask = get_local_subnet_mask()
 

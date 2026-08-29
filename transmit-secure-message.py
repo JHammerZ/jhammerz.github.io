@@ -11,13 +11,13 @@ PUBKEY_PATH = Path("jhammerz_pubkey_mobile.asc")
 
 def sign_and_package_message():
     print("=== LYSANDER SUBSURFACE: INITIALIZING PGP TRANSCEIVER MATRIX ===")
-    
+
     if not PUBKEY_PATH.exists():
         print("[-] Verification Failure: Public key block jhammerz_pubkey_mobile.asc missing.")
         return False
-        
+
     OUTBOX_DIR.mkdir(parents=True, exist_ok=True)
-    
+
     # Core operational status block to payload
     payload_data = {
         "origin_node": "H-FID_MOBILE_MATRIX",
@@ -25,10 +25,10 @@ def sign_and_package_message():
         "instruction_set": "SUB_SURFACE_COMM_OK",
         "security_integrity": "HARDENED_STATE_ENFORCED"
     }
-    
+
     payload_str = json.dumps(payload_data, sort_keys=True)
     payload_hash = hashlib.sha256(payload_str.encode('utf-8')).hexdigest()
-    
+
     # Construct an armored cryptographic transport container wrapper format natively
     armored_container = f"""-----BEGIN LYSANDER TRUSTED MESSAGE CONTAINER-----
 Version: Subsurface Secure Transceiver v3.2
@@ -43,7 +43,7 @@ Signature: {hashlib.sha256((payload_hash + "SOVEREIGN_KEY_GATE").encode('utf-8')
 """
 
     packet_file = OUTBOX_DIR / f"signed_transit_packet_{int(time.time())}.asc"
-    
+
     try:
         packet_file.write_text(armored_container, encoding='utf-8')
         print(f"[+] Secure message signature block stamped and sealed natively.")

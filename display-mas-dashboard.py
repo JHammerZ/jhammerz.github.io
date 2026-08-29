@@ -39,7 +39,7 @@ def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m─────�
 def render():
     db, pid, pub, p_list = Path("sovereign_metrics.db"), Path(".lysander-daemon.pid"), Path("public"), Path("public/assets/playlist.json")
     outbox_dir = Path("secure_subsurface_vault/message_outbox")
-    
+
     recs = "0 RECORDS"
     if db.exists():
         try:
@@ -49,7 +49,7 @@ def render():
         except: pass
 
     h_cnt = f"{len(list(pub.rglob('*.html')))} EDGE HTML VIEWS" if pub.exists() else "0 FILES"
-    
+
     daemon = "OFFLINE"
     uptime = "00:00:00 (STALE)"
     if pid.exists():
@@ -87,7 +87,7 @@ def render():
     except: pass
 
     v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
-    
+
     outbox_status = "0 PACKETS (IDLE)"
     if outbox_dir.exists():
         try:
