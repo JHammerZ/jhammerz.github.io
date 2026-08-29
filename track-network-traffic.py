@@ -10,7 +10,7 @@ MAX_LOG_SIZE = 256 * 1024  # 256 KB safety limit boundary
 
 def run_traffic_inspection():
     print("=== LYSANDER SUBSURFACE: RUNNING DEEP SUBNET TRAFFIC TRACKING ===")
-    
+
     try:
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
@@ -18,7 +18,7 @@ def run_traffic_inspection():
         local_ip = "127.0.0.1"
 
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-    
+
     # Extract native route table boundaries to confirm active subnet masks
     subnet_mask = "255.255.255.0"
     try:
