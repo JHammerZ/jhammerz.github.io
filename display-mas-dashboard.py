@@ -201,6 +201,19 @@ def render():
     pr("PLANETARY LEDGER DATA TX", tx_count, "32")
     pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
     pr("CORE PROCESSING LATENCY INDEX", latency_str, "34")
+    
+    # Scan processing ingestion queues dynamically to gauge real-time load
+    buffer_depth = "0 PACKETS (FLUSHED)"
+    ingest_dir = Path("content_ingest")
+    if ingest_dir.exists():
+        try:
+            pending = len(list(ingest_dir.glob("*.json")))
+            if pending > 0:
+                buffer_depth = f"{pending} DATA OBJECTS QUEUED"
+            else:
+                buffer_depth = "OPTIMIZED (0 IN Q)"
+        except: pass
+    pr("DATA STREAM BUFFER MEMORY", buffer_depth, "32" if "0 IN Q" in buffer_depth or "FLUSHED" in buffer_depth else "33")
     pr("HOST OPERATING SYSTEM KERNEL", cmd(["uname", "-r"]), "34")
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
     pr("DEVICE THERMAL PROFILE TRACK", temp_str, "34")
