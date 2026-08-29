@@ -33,13 +33,14 @@ def cmd(args):
     try: return subprocess.check_output(args).decode("utf-8").strip()
     except: return "UNKNOWN"
 
-def pr(k, v, c="32"): print(f"\033[1;36m│\033[0m {k:<32} \033[1;{c}m{v:<31}\033[1;36m│\033[0m")
-def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m───────────────────────────────────┤\033[0m")
+# Expanded width alignment keys to contain high-density variable strings cleanly
+def pr(k, v, c="32"): print(f"\033[1;36m│\033[0m {k:<32} \033[1;{c}m{v:<45}\033[1;36m│\033[0m")
+def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m───────────────────────────────────────────────┤\033[0m")
 
 def render():
     db, pid, pub, p_list = Path("sovereign_metrics.db"), Path(".lysander-daemon.pid"), Path("public"), Path("public/assets/playlist.json")
     outbox_dir, ingest_dir, lat_log = Path("secure_subsurface_vault/message_outbox"), Path("content_ingest"), Path("secure_subsurface_vault/latency_telemetry.json")
-
+    
     recs = "0 RECORDS"
     if db.exists():
         try:
@@ -49,7 +50,7 @@ def render():
         except: pass
 
     h_cnt = f"{len(list(pub.rglob('*.html')))} EDGE HTML VIEWS" if pub.exists() else "0 FILES"
-
+    
     daemon = "OFFLINE"
     uptime = "00:00:00 (STALE)"
     if pid.exists():
@@ -87,7 +88,7 @@ def render():
     except: pass
 
     v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
-
+    
     outbox_status = "0 PACKETS (IDLE)"
     if outbox_dir.exists():
         try:
@@ -109,15 +110,40 @@ def render():
             latency_str = f"{l_data.get('core_processing_latency_ms', 0.0)} ms"
         except: pass
 
+    temp_str = "34.2°C"
+    temp_log = Path("secure_subsurface_vault/thermal_telemetry.json")
+    if temp_log.exists():
+        try:
+            t_data = json.loads(temp_log.read_text(encoding="utf-8"))
+            temp_str = t_data.get("hardware_temperature", "34.2°C")
+        except: pass
+
+    load_pct = "0.0%"
+    spike_log = Path("secure_subsurface_vault/cpu_spikes_telemetry.json")
+    if spike_log.exists():
+        try:
+            s_data = json.loads(spike_log.read_text(encoding="utf-8"))
+            load_pct = s_data.get("live_cpu_utilization", "0.0%")
+        except: pass
+
+    janus_status = "0 PEERS (OFFLINE)"
+    janus_log = Path("secure_subsurface_vault/agent_heartbeats.json")
+    if janus_log.exists():
+        try:
+            j_data = json.loads(janus_log.read_text(encoding="utf-8"))
+            active_peers = len(j_data.get("peers", {}))
+            janus_status = f"{active_peers} PEERS COMPLIANT" if active_peers > 0 else "0 PEERS (IDLE)"
+        except: pass
+
     global_status = "BALANCED (GLOBAL SYNC)"
     try:
         local_hash = cmd(["git", "rev-parse", "HEAD"])
         remote_hash = cmd(["git", "rev-parse", "origin/main"])
         if local_hash != remote_hash: global_status = "OUT OF SYNC (DRIFT)"
     except: pass
-
-    print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
-    print("\033[1;36m│              THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE        │\033[0m")
+    
+    print("\033[1;36m┌─────────────────────────────────────────────────────────────────────────────────┐\033[0m")
+    print("\033[1;36m│                    THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE                   │\033[0m")
     div("TRUST MATRIX PROVENANCE")
     pr("H-FID IDENTIFIERS MATRIX", "VERIFIED (hfid-registry.json)", "32")
     pr("BITCOIN PROVENANCE GATEWAY", "ACTIVE (anchor-reality-block.py)", "32")
@@ -136,60 +162,15 @@ def render():
     pr("CURATED PUBLIC EDGE METRICS", cur, "34")
     pr("SECURE VAULT ENCRYPTION NODE", "LOCKED & ISOLATED", "32")
     pr("SUBSTRATE STORAGE ALLOCATION", alloc, "34")
-
-    # Parse live hardware chunk measurements from telemetry files dynamically
-    io_status = "0.00% (CALCULATING)"
-    io_log = Path("secure_subsurface_vault/storage_io_telemetry.json")
-    if io_log.exists():
-        try:
-            io_data = json.loads(io_log.read_text(encoding="utf-8"))
-            tot = io_data.get("system_total_gb", 1.0)
-            usd = io_data.get("system_used_gb", 0.0)
-            io_status = f"{round((usd / tot) * 100, 2)}% CAPACITY USED"
-        except: pass
-    pr("PARTITION STORAGE UTILITY", io_status, "34")
-
-    # Parse high-level internal runtime engine memory footprints dynamically
-    import gc
-    ram_status = f"{len(gc.get_objects()):,} OBJECTS IN HEAP"
-    pr("RUNTIME ENGINE HEAP MATRIX", ram_status, "34")
     pr("ACTIVE PERIMETER THREAT INDEX", "0 ANOMALIES" if susp==0 else f"{susp} BLOCKS", "32" if susp==0 else "31")
     pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
     pr("CORE PROCESSING LATENCY INDEX", latency_str, "34")
     pr("HOST OPERATING SYSTEM KERNEL", cmd(["uname", "-r"]), "34")
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
-
-    # Parse live hardware thermal profiles from the telemetry json ledger
-    temp_str = "34.2°C"
-    temp_log = Path("secure_subsurface_vault/thermal_telemetry.json")
-    if temp_log.exists():
-        try:
-            t_data = json.loads(temp_log.read_text(encoding="utf-8"))
-            temp_str = t_data.get("hardware_temperature", "34.2°C")
-        except: pass
     pr("DEVICE THERMAL PROFILE TRACK", temp_str, "34")
-
-    # Parse real-time processor utilization profiles from vault files dynamically
-    load_pct = "0.0%"
-    spike_log = Path("secure_subsurface_vault/cpu_spikes_telemetry.json")
-    if spike_log.exists():
-        try:
-            s_data = json.loads(spike_log.read_text(encoding="utf-8"))
-            load_pct = s_data.get("live_cpu_utilization", "0.0%")
-        except: pass
     pr("PROCESSOR CORE SPIKE MATRIX", load_pct, "34")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
-
-    # Track decentralized Janus Agent consensus status live
-    janus_status = "0 PEERS (OFFLINE)"
-    janus_log = Path("secure_subsurface_vault/agent_heartbeats.json")
-    if janus_log.exists():
-        try:
-            j_data = json.loads(janus_log.read_text(encoding="utf-8"))
-            active_peers = len(j_data.get("peers", {}))
-            janus_status = f"{active_peers} PEERS COMPLIANT" if active_peers > 0 else "0 PEERS (IDLE)"
-        except: pass
     pr("A2A JANUS AGENT CONSENSUS", janus_status, "32" if "COMPLIANT" in janus_status else "31")
     div("INTEGRITY COMPLIANCE RUN")
     pr("REAL-TIME WORKSPACE INSPECTOR", drift, "33" if "CHANGES" in drift else "32")
@@ -197,6 +178,6 @@ def render():
     pr("FEDERATION CONTENT COUNTER", recs, "34")
     pr("EDGE PAYLOAD TEMPLATE COUNT", h_cnt, "34")
     pr("SUBSTRATE OPERATIONAL STATUS", global_status, "32")
-    print("\033[1;36m└─────────────────────────────────────────────────────────────────┘\033[0m")
+    print("\033[1;36m└─────────────────────────────────────────────────────────────────────────────────┘\033[0m")
 
 if __name__ == "__main__": render()
