@@ -8,6 +8,12 @@ GLOBAL_EDGE_REGISTRY = {
     "AMER-EAST-01": "https://github.io",
     "EMEA-WEST-01": "https://github.io",
     "APAC-SOUTH-01": "https://github.io",
+    "LATAM-SOUTH-01": "https://github.io",
+    "EU-CENTRAL-01": "https://github.io",
+    "ASIA-EAST-01": "https://github.io",
+    "ANZ-OCEANIA-01": "https://github.io",
+    "RU-NORD-01": "https://github.io",
+    "AU-SOUTH-01": "https://github.io"
 }
 
 def log_global_distribution(title, node_id, integrity_hash):
