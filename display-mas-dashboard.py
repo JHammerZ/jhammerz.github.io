@@ -136,7 +136,7 @@ def render():
     pr("CURATED PUBLIC EDGE METRICS", cur, "34")
     pr("SECURE VAULT ENCRYPTION NODE", "LOCKED & ISOLATED", "32")
     pr("SUBSTRATE STORAGE ALLOCATION", alloc, "34")
-    
+
     # Parse live hardware chunk measurements from telemetry files dynamically
     io_status = "0.00% (CALCULATING)"
     io_log = Path("secure_subsurface_vault/storage_io_telemetry.json")
@@ -148,7 +148,7 @@ def render():
             io_status = f"{round((usd / tot) * 100, 2)}% CAPACITY USED"
         except: pass
     pr("PARTITION STORAGE UTILITY", io_status, "34")
-    
+
     # Parse high-level internal runtime engine memory footprints dynamically
     import gc
     ram_status = f"{len(gc.get_objects()):,} OBJECTS IN HEAP"
