@@ -7,6 +7,10 @@
 # name: "SecOps: H-FID Streaming Audit"
 
 on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
 concurrency:
 # group: ${{ github.workflow }}-${{ github.ref }}
 # cancel-in-progress: true
