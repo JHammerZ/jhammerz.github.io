@@ -11,25 +11,26 @@ def optimize_and_prune_ledger():
         return True
         
     try:
-        conn = sqlite3.connect(str(DB_FILE))
+        # Enforce autocommit mode natively to allow out-of-transaction database maintenance commands
+        conn = sqlite3.connect(str(DB_FILE), isolation_level=None)
         cursor = conn.cursor()
         
-        # Capture initial physical storage allocations
         cursor.execute("PRAGMA page_count;")
         initial_pages = cursor.fetchone()[0]
         
-        # Purge dangling telemetry trails or redundant duplicate entries if present
+        # Open an isolated manual transaction block to execute structural row pruning safely
         print("[*] Reclaiming fragmented storage addresses across tables...")
+        cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM content_catalog WHERE id IN (SELECT id FROM content_catalog ORDER BY id DESC LIMIT -1 OFFSET 500);")
+        cursor.execute("COMMIT;")
         
-        # Force a low-level structural defragmentation and page realignment sweep
+        # Execute the database structural vacuum completely free of transaction boundaries
         print("[*] Rebuilding internal index b-trees and compacting pages...")
         cursor.execute("VACUUM;")
         
         cursor.execute("PRAGMA page_count;")
         final_pages = cursor.fetchone()[0]
         
-        conn.commit()
         conn.close()
         
         print(f"[+] Reclaimed Sector Pages Footprint: {initial_pages} -> {final_pages}")
