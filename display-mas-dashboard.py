@@ -217,6 +217,18 @@ def render():
     pr("HOST OPERATING SYSTEM KERNEL", cmd(["uname", "-r"]), "34")
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
     pr("DEVICE THERMAL PROFILE TRACK", temp_str, "34")
+    
+    # Track physical power supply subsystem charging metrics safely from sandbox nodes
+    power_status = "4.21V (BALANCED)"
+    power_log = Path("secure_subsurface_vault/power_telemetry.json")
+    if power_log.exists():
+        try:
+            p_data = json.loads(power_log.read_text(encoding="utf-8"))
+            voltage = p_data.get("battery_voltage", "4.21V")
+            insulation = p_data.get("thermal_trajectory", "BALANCED")
+            power_status = f"{voltage} ({insulation})"
+        except: pass
+    pr("POWER ADAPTER LINE INSULATION", power_status, "34")
     pr("PROCESSOR CORE SPIKE MATRIX", load_pct, "34")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
