@@ -38,6 +38,7 @@ def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m─────�
 
 def render():
     db, pid, pub, p_list = Path("sovereign_metrics.db"), Path(".lysander-daemon.pid"), Path("public"), Path("public/assets/playlist.json")
+    outbox_dir = Path("secure_subsurface_vault/message_outbox")
     
     recs = "0 RECORDS"
     if db.exists():
@@ -86,6 +87,13 @@ def render():
     except: pass
 
     v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
+    
+    outbox_status = "0 PACKETS (IDLE)"
+    if outbox_dir.exists():
+        try:
+            packets = len(list(outbox_dir.glob("*.asc")))
+            outbox_status = f"{packets} PACKETS QUEUED" if packets > 0 else "0 PACKETS (IDLE)"
+        except: pass
 
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
@@ -106,6 +114,7 @@ def render():
     pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
     pr("HOST OPERATING SYSTEM KERNEL", cmd(["uname", "-r"]), "34")
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
+    pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     div("INTEGRITY COMPLIANCE RUN")
     pr("REAL-TIME WORKSPACE INSPECTOR", drift, "33" if "CHANGES" in drift else "32")
     pr("REGISTRY REVISION DEPTH", cmd(["git", "rev-list", "--count", "HEAD"]) + " REVISIONS", "34")

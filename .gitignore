@@ -56,3 +56,4 @@ public/assets/ipfs_ledger_manifest.json
 .sovereign.lock
 secure_subsurface_vault/
 .sovereign_vault_meta.json
+secure_subsurface_vault/message_outbox/
