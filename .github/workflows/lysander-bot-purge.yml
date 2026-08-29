@@ -16,5 +16,7 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
+    - name: Pre-Install Core YAML Dependency
+      run: pip install pyyaml || pip3 install pyyaml
     - name: Checkout Repository Content
       uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
