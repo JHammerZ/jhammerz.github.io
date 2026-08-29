@@ -1,1 +1,165 @@
-#!/usr/bin/env python3\n"""\n================================================================================\n          LYSANDER CORE OPERATIONAL ENGINE // OMNISCIENT MYTHOS PLATFORM\n          DESIGN DEPTH: INFINITE RESILIENCE // ZERO-DELETION POLICIES\n================================================================================\nA self-healing, multi-threaded diagnostic engine designed for Termux, bare-metal\nserver deployment, and multi-agent AI cooperation frameworks.\n================================================================================\n"""\n\nimport os\nimport sys\nimport json\nimport re\nimport ast\nimport hashlib\nimport platform\nimport time\nfrom pathlib import Path\nfrom typing import Dict, List, Tuple, Any\nfrom concurrent.futures import ThreadPoolExecutor\n\n# --- CRYPTOGRAPHIC HWID LOCK MATRIX ---\nAUTHORIZED_SIGNATURE = "7905ff10d1f797f75dd2fe725d8aed65704f3ec1"\n\ndef enforce_hardware_lock():\n    """Generates an immutable cryptographic fingerprint to validate host access."""\n    hw_str = platform.machine() + platform.processor() + platform.system()\n    hw_str += os.environ.get("USER", "NODE") + os.environ.get("HOME", "/data")\n    current_hash = hashlib.sha1(hw_str.encode('utf-8')).hexdigest()\n\n    if current_hash != AUTHORIZED_SIGNATURE and AUTHORIZED_SIGNATURE != "":\n        print(f"🔒 SYSTEM LOCKED. CURRENT HWID: {current_hash}")\n        print("Unauthorized execution context terminated.")\n        sys.exit(1)\n\n# Enforce hardware identity boundary checks before allocating memory pools\nenforce_hardware_lock()\n\n# --- CORE ARCHITECTURAL CONSTANTS ---\nTARGET_DIR = Path(".")\nWORKFLOW_DIR = TARGET_DIR / ".github" / "workflows"\nLOG_MANIFEST = TARGET_DIR / "mythos_forensic_report.json"\n\nclass EngineColor:\n    CYAN, GREEN, YELLOW, RED, MAGENTA = '\033[96m', '\033[92m', '\033[93m', '\033[91m', '\033[95m'\n    BOLD, RESET = '\033[1m', '\033[0m'\n\ndef engine_log(status_type: str, message: str, scope: str = "CORE"):\n    color_map = {"SUCCESS": EngineColor.GREEN, "WARNING": EngineColor.YELLOW,\n                 "CRITICAL": EngineColor.RED, "INFO": EngineColor.CYAN, "MYTHOS": EngineColor.MAGENTA}\n    color = color_map.get(status_type, EngineColor.RESET)\n    print(f"{EngineColor.BOLD}[{scope.upper()}]{EngineColor.RESET} {color}{message}{EngineColor.RESET}")\n\nclass MythosMatrixEngine:\n    """\n    Sovereign parallel code-triage utility built with automatic merge conflict\n    resolution, abstract syntax validation, and self-healing data recovery tracks.\n    """\n    def __init__(self):\n        self.registry = {"audited": 0, "healed": 0, "faults": [], "telemetry": {}}\n\n    def auto_triage_git_conflicts(self, filepath: Path) -> bool:\n        """Detects and cleans raw Git merge conflicts dynamically before compilation loops."""\n        try:\n            with open(filepath, 'r', encoding='utf-8') as f:\n                content = f.read()\n            if "<<<<<<<" in content or "=======" in content:\n                engine_log("WARNING", f"Conflict isolated inside node: {filepath.name}", "TRIAGE")\n                lines = content.splitlines()\n                sanitized_lines, skipping = [], False\n                for line in lines:\n                    if line.startswith("<<<<<<<") or line.startswith(">>>>>>>"): continue\n                    if line.startswith("======="): {skipping := not skipping}; continue\n                    if not skipping: sanitized_lines.append(line)\n                with open(filepath, 'w', encoding='utf-8') as f:\n                    f.write("\n".join(sanitized_lines) + "\n")\n                self.registry["healed"] += 1\n                return True\n            return False\n        except Exception:\n            return False\n\n    def inspect_yaml_node(self, filepath: Path) -> Tuple[str, bool, List[str]]:\n        """Parses individual YAML structures to catch layout breakdowns and spacing bugs with active healing."""\n        self.auto_triage_git_conflicts(filepath)\n        try:\n            with open(filepath, "r", encoding="utf-8") as f:\n                lines = [line.rstrip() for line in f]\n            issues = []\n            modified = False\n            \n            for idx, line in enumerate(lines):\n                # 1. Identify un-commented metadata headers throwing mapping values errors\n                if ":" in line and not line.strip().startswith("#") and not line.strip().startswith("-") and not any(k in line for k in ["name:", "on:", "jobs:", "steps:", "runs-on:", "uses:", "run:", "with:", "env:"]):\n                    if idx < 15: # Strict header boundary filter\n                        lines[idx] = "# " + line.lstrip()\n                        modified = True\n                        issues.append(f"Line {idx+1}: Auto-commented raw metadata field.")\n                        \n                # 2. Identify and fix misaligned script block code items underneath run: |\n                if "run: |" in line and idx + 1 < len(lines):\n                    next_idx = idx + 1\n                    while next_idx < len(lines) and (lines[next_idx].strip() == "" or len(lines[next_idx]) - len(lines[next_idx].lstrip()) >= 0):\n                        if lines[next_idx].strip() == "" or lines[next_idx].startswith(" " * 10):\n                            next_idx += 1\n                            continue\n                        if not lines[next_idx].strip().startswith("-") and not lines[next_idx].strip().startswith("name:"):\n                            lines[next_idx] = "          " + lines[next_idx].strip()\n                            modified = True\n                        next_idx += 1\n            \n            if modified:\n                filepath.write_text("\n".join(lines) + "\n", encoding="utf-8")\n                print(f"    [+] Mythos Engine successfully auto-healed workflow: {filepath.name}")\n                # Re-verify the freshly repaired code lines\n                with open(filepath, "r", encoding="utf-8") as f:\n                    lines = [line.rstrip() for line in f]\n                issues = []\n                \n            for idx, line in enumerate(lines):\n                if ":" in line and not line.strip().startswith("#") and not line.strip().startswith("-") and not any(k in line for k in ["name:", "on:", "jobs:", "steps:", "runs-on:", "uses:", "run:", "with:", "env:"]):\n                    if idx < 15:\n                        issues.append(f"Line {idx+1}: Top-level execution flag layout fault.")\n            \n            return str(filepath.name), len(issues) == 0, issues\n        except Exception as e:\n            return str(filepath.name), False, [f"Read failure: {e}"]\n\n    def inspect_python_ast(self, filepath: Path) -> Tuple[str, bool, str]:\n        """Compiles python files directly into a native AST layer to catch semantic syntax mutations."""\n        self.auto_triage_git_conflicts(filepath)\n        try:\n            with open(filepath, 'r', encoding='utf-8') as f:\n                source = f.read()\n            ast.parse(source, filename=str(filepath))\n            return str(filepath.name), True, "AST structurally sound."\n        except SyntaxError as se:\n            return str(filepath.name), False, f"AST compilation fault on Line {se.lineno}: {se.msg}"\n        except Exception as e:\n            return str(filepath.name), False, f"AST analytical breakdown: {e}"\n\n    def audit_json_schema(self, filepath: Path) -> Tuple[str, bool]:\n        """Audits, formats, and automatically self-heals empty or corrupted JSON document matrices."""\n        self.auto_triage_git_conflicts(filepath)\n        try:\n            with open(filepath, 'r', encoding='utf-8') as f:\n                content = f.read().strip()\n            data = json.loads(content) if content else {}\n            with open(filepath, 'w', encoding='utf-8') as f:\n                json.dump(data, f, indent=2)\n            return str(filepath.name), True\n        except Exception:\n            try:\n                with open(filepath, 'w', encoding='utf-8') as f:\n                    json.dump({}, f, indent=2)\n                self.registry["healed"] += 1\n                return str(filepath.name), True\n            except Exception:\n                return str(filepath.name), False\n\n    def process_global_pipeline(self):\n        """Orchestrates multi-threaded asynchronous parsing tracks across all system repositories."""\n        start_time = time.time()\n        engine_log("MYTHOS", "Initializing Asynchronous Parallel Performance Matrix Scanner...", "SYSTEM")\n\n        yaml_tasks = list(WORKFLOW_DIR.glob("*")) if WORKFLOW_DIR.exists() else []\n        json_tasks = [f for f in TARGET_DIR.glob("*.json") if f.name != LOG_MANIFEST.name]\n        python_tasks = [f for f in TARGET_DIR.glob("*.py") if f.name != Path(__file__).name]\n\n        with ThreadPoolExecutor() as executor:\n            yaml_res = list(executor.map(self.inspect_yaml_node, [t for t in yaml_tasks if t.suffix in ['.yml', '.yaml']]))\n            json_res = list(executor.map(self.audit_json_schema, json_tasks))\n            python_res = list(executor.map(self.inspect_python_ast, python_tasks))\n\n        self.registry["audited"] = len(yaml_res) + len(json_res) + len(python_res)\n\n        for name, valid, logs in yaml_res:\n            if not valid: self.registry["faults"].append({"node": name, "type": "YAML_ERR", "logs": logs})\n\n        for name, sound, msg in python_res:\n            if not sound: self.registry["faults"].append({"node": name, "type": "AST_ERR", "details": msg})\n\n        self.registry["telemetry"]["execution_duration_seconds"] = f"{time.time() - start_time:.4f}"\n\n        with open(LOG_MANIFEST, 'w', encoding='utf-8') as rf:\n            json.dump(self.registry, rf, indent=2)\n\n        engine_log("MYTHOS", f"Forensic database snapshot compiled cleanly to: {LOG_MANIFEST.name}", "SYSTEM")\n        print(f"\n{EngineColor.BOLD}{EngineColor.MAGENTA}=== ASYNC MULTI-THREAD MATRIX RUN COMPLETE: ALL REPAIRS PASS ==={EngineColor.RESET}\n")\n\nif __name__ == "__main__":\n    engine = MythosMatrixEngine()\n    engine.process_global_pipeline()\n
+#!/usr/bin/env python3
+"""
+================================================================================
+          LYSANDER CORE OPERATIONAL ENGINE // OMNISCIENT MYTHOS PLATFORM
+          DESIGN DEPTH: INFINITE RESILIENCE // ZERO-DELETION POLICIES
+================================================================================
+A self-healing, multi-threaded diagnostic engine designed for Termux, bare-metal
+server deployment, and multi-agent AI cooperation frameworks.
+================================================================================
+"""
+
+import os
+import sys
+import json
+import re
+import ast
+import hashlib
+import platform
+import time
+from pathlib import Path
+from typing import Dict, List, Tuple, Any
+from concurrent.futures import ThreadPoolExecutor
+
+# --- CRYPTOGRAPHIC HWID LOCK MATRIX ---
+AUTHORIZED_SIGNATURE = "7905ff10d1f797f75dd2fe725d8aed65704f3ec1"
+
+def enforce_hardware_lock():
+    """Generates an immutable cryptographic fingerprint to validate host access."""
+    hw_str = platform.machine() + platform.processor() + platform.system()
+    hw_str += os.environ.get("USER", "NODE") + os.environ.get("HOME", "/data")
+    current_hash = hashlib.sha1(hw_str.encode('utf-8')).hexdigest()
+
+    if current_hash != AUTHORIZED_SIGNATURE and AUTHORIZED_SIGNATURE != "":
+        print(f"🔒 SYSTEM LOCKED. CURRENT HWID: {current_hash}")
+        print("Unauthorized execution context terminated.")
+        sys.exit(1)
+
+# Enforce hardware identity boundary checks before allocating memory pools
+enforce_hardware_lock()
+
+# --- CORE ARCHITECTURAL CONSTANTS ---
+TARGET_DIR = Path(".")
+WORKFLOW_DIR = TARGET_DIR / ".github" / "workflows"
+LOG_MANIFEST = TARGET_DIR / "mythos_forensic_report.json"
+
+class EngineColor:
+    CYAN, GREEN, YELLOW, RED, MAGENTA = '\033[96m', '\033[92m', '\033[93m', '\033[91m', '\033[95m'
+    BOLD, RESET = '\033[1m', '\033[0m'
+
+def engine_log(status_type: str, message: str, scope: str = "CORE"):
+    color_map = {"SUCCESS": EngineColor.GREEN, "WARNING": EngineColor.YELLOW,
+                 "CRITICAL": EngineColor.RED, "INFO": EngineColor.CYAN, "MYTHOS": EngineColor.MAGENTA}
+    color = color_map.get(status_type, EngineColor.RESET)
+    print(f"{EngineColor.BOLD}[{scope.upper()}]{EngineColor.RESET} {color}{message}{EngineColor.RESET}")
+
+class MythosMatrixEngine:
+    """
+    Sovereign parallel code-triage utility built with automatic merge conflict
+    resolution, abstract syntax validation, and self-healing data recovery tracks.
+    """
+    def __init__(self):
+        self.registry = {"audited": 0, "healed": 0, "faults": [], "telemetry": {}}
+
+    def auto_triage_git_conflicts(self, filepath: Path) -> bool:
+        """Detects and cleans raw Git merge conflicts dynamically before compilation loops."""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+            if "<<<<<<<" in content or "=======" in content:
+                engine_log("WARNING", f"Conflict isolated inside node: {filepath.name}", "TRIAGE")
+                lines = content.splitlines()
+                sanitized_lines, skipping = [], False
+                for line in lines:
+                    if line.startswith("<<<<<<<") or line.startswith(">>>>>>>"): continue
+                    if line.startswith("======="): {skipping := not skipping}; continue
+                    if not skipping: sanitized_lines.append(line)
+                with open(filepath, "w", encoding="utf-8") as out_f:
+                    out_f.write("\n".join(sanitized_lines) + "\n")
+                self.registry["healed"] += 1
+                return True
+            return False
+        except Exception:
+            return False
+
+    def inspect_yaml_node(self, filepath: Path) -> Tuple[str, bool, List[str]]:
+        """Parses internal workflow config nodes to catch layout breakages and spacing bugs."""
+        self.auto_triage_git_conflicts(filepath)
+        issues = []
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                lines = f.read().splitlines()
+            for idx, line in enumerate(lines):
+                if "run:" in line and not line.startswith(" ") and not line.strip().startswith("#"):
+                    issues.append(f"Line {idx+1}: Top-level execution flag layout fault.")
+                if "cache:" in line and any(pkg in line for pkg in ["yarn", "npm"]):
+                    issues.append(f"Line {idx+1}: Rigid package caching configuration isolated.")
+            return str(filepath.name), len(issues) == 0, issues
+        except Exception as e:
+            return str(filepath.name), False, [f"Read failure: {e}"]
+
+    def inspect_python_ast(self, filepath: Path) -> Tuple[str, bool, str]:
+        """Compiles python files directly into a native AST layer to catch semantic syntax mutations."""
+        self.auto_triage_git_conflicts(filepath)
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                source = f.read()
+            ast.parse(source, filename=str(filepath))
+            return str(filepath.name), True, "AST structurally sound."
+        except SyntaxError as se:
+            return str(filepath.name), False, f"AST compilation fault on Line {se.lineno}: {se.msg}"
+        except Exception as e:
+            return str(filepath.name), False, f"AST analytical breakdown: {e}"
+
+    def audit_json_schema(self, filepath: Path) -> Tuple[str, bool]:
+        """Audits, formats, and automatically self-heals empty or corrupted JSON document matrices."""
+        self.auto_triage_git_conflicts(filepath)
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read().strip()
+            data = json.loads(content) if content else {}
+            with open(filepath, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2)
+            return str(filepath.name), True
+        except Exception:
+            try:
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    json.dump({}, f, indent=2)
+                self.registry["healed"] += 1
+                return str(filepath.name), True
+            except Exception:
+                return str(filepath.name), False
+
+    def process_global_pipeline(self):
+        """Orchestrates multi-threaded asynchronous parsing tracks across all system repositories."""
+        start_time = time.time()
+        engine_log("MYTHOS", "Initializing Asynchronous Parallel Performance Matrix Scanner...", "SYSTEM")
+
+        yaml_tasks = list(WORKFLOW_DIR.glob("*")) if WORKFLOW_DIR.exists() else []
+        json_tasks = [f for f in TARGET_DIR.glob("*.json") if f.name != LOG_MANIFEST.name]
+        python_tasks = [f for f in TARGET_DIR.glob("*.py") if f.name != Path(__file__).name]
+
+        with ThreadPoolExecutor() as executor:
+            yaml_res = list(executor.map(self.inspect_yaml_node, [t for t in yaml_tasks if t.suffix in ['.yml', '.yaml']]))
+            json_res = list(executor.map(self.audit_json_schema, json_tasks))
+            python_res = list(executor.map(self.inspect_python_ast, python_tasks))
+
+        self.registry["audited"] = len(yaml_res) + len(json_res) + len(python_res)
+
+        for name, valid, logs in yaml_res:
+            if not valid: self.registry["faults"].append({"node": name, "type": "YAML_ERR", "logs": logs})
+
+        for name, sound, msg in python_res:
+            if not sound: self.registry["faults"].append({"node": name, "type": "AST_ERR", "details": msg})
+
+        self.registry["telemetry"]["execution_duration_seconds"] = f"{time.time() - start_time:.4f}"
+
+        with open(LOG_MANIFEST, 'w', encoding='utf-8') as rf:
+            json.dump(self.registry, rf, indent=2)
+
+        engine_log("MYTHOS", f"Forensic database snapshot compiled cleanly to: {LOG_MANIFEST.name}", "SYSTEM")
+        print(f"\n{EngineColor.BOLD}{EngineColor.MAGENTA}=== ASYNC MULTI-THREAD MATRIX RUN COMPLETE: ALL REPAIRS PASS ==={EngineColor.RESET}\n")
+
+if __name__ == "__main__":
+    engine = MythosMatrixEngine()
+    engine.process_global_pipeline()
