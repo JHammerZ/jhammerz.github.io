@@ -5,7 +5,7 @@
 echo "[+] Initializing Lysander 24/7 Un-Killable Watchdog Matrix..."
 PID_FILE="$HOME/jhammerz.github.io/.lysander-daemon.pid"
 
-# Anti-Kill Signal Intercept Traps Natively
+# Native Anti-Kill Intercept Trap Routine Gates
 trap 'echo "[!] Signal Intercepted! Triggering Anti-Kill Self-Healing Protocol..."; nohup ./run-lysander-daemon.sh > daemon_runtime.log 2>&1 & exit 0;' SIGTERM SIGHUP SIGINT
 
 echo $$ > "$PID_FILE"
@@ -31,6 +31,7 @@ while true; do
     python3 track-power-insulation.py 2>/dev/null
     python3 track-thermal-profile.py 2>/dev/null
     python3 track-cpu-spikes.py 2>/dev/null
+    python3 track-ingest-velocity.py 2>/dev/null
     python3 secure_subsurface_vault/track-handshake-intervals.py 2>/dev/null
     python3 secure_subsurface_vault/track-agent-heartbeats.py 2>/dev/null
     python3 verify-vault-integrity.py 2>/dev/null
@@ -41,5 +42,5 @@ while true; do
     git commit -m "sync: planetary pipeline telemetry snapshot refresh" --no-verify 2>/dev/null
     git push origin main 2>/dev/null
     
-    sleep 900 # Tighter iteration sweeps: 15-minute intervals for god-tier resolution
+    sleep 900 # Tighter iteration sweeps: 15-minute intervals for supreme resolution
 done
