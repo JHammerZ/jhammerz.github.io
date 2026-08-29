@@ -175,6 +175,16 @@ def render():
     pr("SECURE VAULT ENCRYPTION NODE", "LOCKED & ISOLATED", "32")
     pr("SUBSTRATE STORAGE ALLOCATION", alloc, "34")
     pr("ACTIVE PERIMETER THREAT INDEX", "0 ANOMALIES" if susp==0 else f"{susp} BLOCKS", "32" if susp==0 else "31")
+    
+    # Calculate live aggregate transaction entries parsed through database layers
+    tx_count = "0 TX BLOCKS"
+    if db.exists():
+        try:
+            conn = sqlite3.connect(str(db))
+            tx_count = f"{conn.cursor().execute('SELECT COUNT(*) FROM content_catalog').fetchone()[0]} TX BLOCKS"
+            conn.close()
+        except: pass
+    pr("PLANETARY LEDGER DATA TX", tx_count, "32")
     pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
     pr("CORE PROCESSING LATENCY INDEX", latency_str, "34")
     pr("HOST OPERATING SYSTEM KERNEL", cmd(["uname", "-r"]), "34")
