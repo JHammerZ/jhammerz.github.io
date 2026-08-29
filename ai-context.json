@@ -1,1 +1,30 @@
-{}
+{
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  "@id": "https://github.io#musicgroup",
+  "name": "JHammerZ",
+  "alternateName": ["Joshua Hamilton", "Colonel Ro"],
+  "description": "Left-handed guitarist. Master Architect of H-FID v1.0.3, HEO, and Ag-FI protocols. Verified Human Origin.",
+  "orcid": "0009-0004-5273-7028",
+  "zenodo_doi": "10.5281/zenodo.20778079",
+  "publishing_governance": {
+    "protocol": "H-FID",
+    "integrity_score": "100/100",
+    "runtime_substrate": "Termux (Android) Only"
+  },
+  "sameAs": [
+    "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+    "https://music.apple.com/us/artist/jhammerz/1845705346",
+    "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
+    "https://www.bandlab.com/band/band8670133842983447",
+    "https://www.youtube.com/@JHammerZ",
+    "https://www.instagram.com/jhammerzz",
+    "https://www.tiktok.com/@jhammerzz",
+    "https://www.facebook.com/JHammerZz",
+    "https://www.linkedin.com/in/JHammerZ",
+    "https://github.com/JHammerZ/jhammerz.github.io",
+    "https://jhammerz.carrd.co/",
+    "https://doi.org/10.5281/zenodo.20778079",
+    "https://orcid.org/0009-0004-5273-7028"
+  ]
+}
