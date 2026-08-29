@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: query-d1.yml
-Audit: query-d1
+name: "Audit: query-d1"
 
 on:
   push:

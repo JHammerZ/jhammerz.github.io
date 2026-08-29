@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: build-llms-full.yml
-Audit: build-llms-full
+name: "Audit: build-llms-full"
 
 on:
   push:

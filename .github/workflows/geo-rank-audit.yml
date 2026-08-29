@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: geo-rank-audit.yml
-Audit: geo-rank-audit
+name: "Audit: geo-rank-audit"
 
 on:
   push:

@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: create-d1.yml
-Audit: create-d1
+name: "Audit: create-d1"
 
 on:
   push:

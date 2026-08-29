@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: ipfs-sync.yml
-Audit: ipfs-sync
+name: "Audit: ipfs-sync"
 
 on:
   push:

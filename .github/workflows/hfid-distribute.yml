@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: hfid-distribute.yml
-Audit: hfid-distribute
+name: "Audit: hfid-distribute"
 
 on:
   push:

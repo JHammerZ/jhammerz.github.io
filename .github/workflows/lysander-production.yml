@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: lysander-production.yml
-Audit: lysander-production
+name: "Audit: lysander-production"
 
 on:
   push:

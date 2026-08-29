@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: force_index_nodes.yml
-Audit: force_index_nodes
+name: "Audit: force_index_nodes"
 
 on:
   push:

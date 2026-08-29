@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: sovereign-model.yml
-Audit: sovereign-model
+name: "Audit: sovereign-model"
 
 on:
   push:

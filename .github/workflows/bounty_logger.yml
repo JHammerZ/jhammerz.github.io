@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: bounty_logger.yml
-Audit: bounty_logger
+name: "Audit: bounty_logger"
 
 on:
   push:

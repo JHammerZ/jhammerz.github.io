@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: heo-broadcast.yml
-Audit: heo-broadcast
+name: "Audit: heo-broadcast"
 
 on:
   push:

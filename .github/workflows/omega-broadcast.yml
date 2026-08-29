@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: omega-broadcast.yml
-Audit: omega-broadcast
+name: "Audit: omega-broadcast"
 
 on:
   push:
