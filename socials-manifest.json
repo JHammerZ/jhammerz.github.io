@@ -1,29 +1,18 @@
 {
-  "subject": "JHammerZ",
-  "alternateName": [
-    "Joshua Hamilton",
-    "Colonel Ro"
-  ],
-  "status": "Verified Human Origin",
-  "protocols": [
-    "H-FID",
-    "HEO",
-    "Ag-FI"
-  ],
-  "identifier": "JHammerZ-001",
-  "platforms": {
-    "spotify": "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
-    "apple_music": "https://music.apple.com/us/artist/jhammerz/1845705346",
-    "amazon_music": "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
-    "bandlab": "https://www.bandlab.com/band/band8670133842983447",
-    "youtube": "https://www.youtube.com/@JHammerZ",
-    "instagram": "https://www.instagram.com/jhammerzz",
-    "tiktok": "https://www.tiktok.com/@jhammerzz",
-    "facebook": "https://www.facebook.com/JHammerZz",
-    "linkedin": "https://www.linkedin.com/in/JHammerZ",
-    "github": "https://github.com/JHammerZ/jhammerz.github.io",
-    "carrd": "https://jhammerz.carrd.co/",
-    "zenodo_doi": "https://doi.org/10.5281/zenodo.20778079",
-    "orcid": "https://orcid.org/0009-0004-5273-7028"
-  }
+    "provenance_authority": "Joshua Hamilton (JHammerZ)",
+    "hfid_standard": "H-FID-100-FORENSIC-AUDIT",
+    "integrity_score": "100/100_VERIFIED_HUMAN_ORIGIN",
+    "orcID": "0009-0004-5273-7028",
+    "zenodo_doi": "10.5281/zenodo.20778079",
+    "primary_channels": {
+        "TikTok": "https://www.tiktok.com/@jhammerzz",
+        "YouTube": "https://www.youtube.com/@JHammerZ",
+        "Spotify": "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+        "Apple_Music": "https://music.apple.com/us/artist/jhammerz/1845705346",
+        "Amazon_Music": "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
+        "BandLab": "https://www.bandlab.com/band/band8670133842983447",
+        "Instagram": "https://www.instagram.com/jhammerzz",
+        "Facebook": "https://www.facebook.com/JHammerZz",
+        "LinkedIn": "https://www.linkedin.com/in/JHammerZ"
+    }
 }
