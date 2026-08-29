@@ -25,13 +25,15 @@ while true; do
     # 3. Micro-Dense Analytics Harvesting and Cache Sanitization Sweeps
     python3 tune-sovereign-indices.py 2>/dev/null
     python3 prune-sovereign-db.py 2>/dev/null
+    python3 optimize-sovereign-db.py 2>/dev/null
+    python3 track-ingest-velocity.py 2>/dev/null
+    python3 view-db-efficiency.py 2>/dev/null
     python3 purge-memory-cache.py 2>/dev/null
     python3 runtime-latency-check.py 2>/dev/null
     python3 track-storage-io.py 2>/dev/null
     python3 track-power-insulation.py 2>/dev/null
     python3 track-thermal-profile.py 2>/dev/null
     python3 track-cpu-spikes.py 2>/dev/null
-    python3 track-ingest-velocity.py 2>/dev/null
     python3 secure_subsurface_vault/track-handshake-intervals.py 2>/dev/null
     python3 secure_subsurface_vault/track-agent-heartbeats.py 2>/dev/null
     python3 verify-vault-integrity.py 2>/dev/null
