@@ -6,7 +6,6 @@ from pathlib import Path
 DB_FILE = Path("sovereign_metrics.db")
 
 def render_table_visualization(filter_category=None):
-    # Capture initial performance counter timestamp at nanosecond resolution
     start_bench = time.perf_counter_ns()
     
     print("=== THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE // DATA VIEW ===")
@@ -36,10 +35,11 @@ def render_table_visualization(filter_category=None):
         rows = cursor.fetchall()
         conn.close()
         
-        # Grid parameters: Symmetrical cell geometry layout matching master panel rules
+        # Absolute geometric alignment: 5, 34, 15, 20 spaces wide
         c1, c2, c3, c4 = 5, 34, 15, 20
         h1, h2, h3, h4 = "ID", "ASSET TITLE / IDENTIFIER", "CATEGORY CORE", "TIMESTAMP"
         
+        # Native Text Terminal Grid Enclosure
         print(f"\033[1;36m┌{'─'*c1}┬{'─'*c2}┬{'─'*c3}┬{'─'*c4}┐\033[0m")
         print(f"\033[1;36m│\033[1;35m{h1:<{c1}}\033[1;36m│\033[1;35m{h2:<{c2}}\033[1;36m│\033[1;35m{h3:<{c3}}\033[1;36m│\033[1;35m{h4:<{c4}}\033[1;36m│\033[0m")
         print(f"\033[1;36m├{'─'*c1}┼{'─'*c2}┼{'─'*c3}┼{'─'*c4}┤\033[0m")
@@ -57,10 +57,20 @@ def render_table_visualization(filter_category=None):
                 
         print(f"\033[1;36m└{'─'*c1}┴{'─'*c2}┴{'─'*c3}┴{'─'*c4}┘\033[0m")
         
-        # Calculate full processing latency time window down to microseconds
+        # Dynamic Visual Markdown Chart Generation Layer
+        md_file = Path("catalog_table_visualization.md")
+        md_lines = [
+            f"| {h1} | {h2} | {h3} | {h4} |",
+            f"| :--- | :--- | :--- | :--- |"
+        ]
+        for r in rows:
+            md_lines.append(f"| {r[0]} | {r[1]} | {r[2]} | {r[3]} |")
+        
+        md_file.write_text("\n".join(md_lines), encoding='utf-8')
+        print(f"[+] Clean Visual Markdown Chart compiled natively: {md_file.name}")
+        
         end_bench = time.perf_counter_ns()
         latency_ms = (end_bench - start_bench) / 1_000_000
-        
         print(f"[+] Regional Sorting Matrix Application: {filter_category or 'ALL_NODES'}")
         print(f"[+] Ledger Query Render Efficiency    : \033[1;32m{latency_ms:.4f} ms\033[0m")
         return True
