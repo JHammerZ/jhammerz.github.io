@@ -58,7 +58,7 @@ def render():
             if os.path.exists(f"/proc/{p_id}"):
                 daemon = f"RUNNING (PID {p_id})"
                 dt = datetime.now() - datetime.fromtimestamp(os.stat(f"/proc/{p_id}").st_ctime)
-                h, r = divmod(int(dt.total_seconds()), 3600)
+                h, r = divmod(int(dt.total_s()), 3600)
                 m, s = divmod(r, 60)
                 uptime = f"{h:02d}:{m:02d}:{s:02d} ACTIVE"
         except: pass
