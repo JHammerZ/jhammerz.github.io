@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: validate-ld-json.yml
-name: "CI: Structural Metadata Linting"
+name: "Verification Matrix: Validate Ld Json"
 
 on:
   push:

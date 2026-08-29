@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: a2a-broadcast.yml
-name: "Audit: a2a-broadcast"
+name: "Sovereign Core: A2A Broadcast"
 
 on:
   push:

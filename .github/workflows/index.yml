@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: index.yml
-name: "Audit: index"
+name: "Sovereign Core: Index"
 
 on:
   push:

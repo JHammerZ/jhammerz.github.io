@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: perpetual-syndicator.yml
-name: "Perpetual Content Syndicator"
+name: "Sovereign Core: Perpetual Syndicator"
 
 on:
   push:

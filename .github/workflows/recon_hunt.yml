@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: recon_hunt.yml
-name: "Audit: recon_hunt"
+name: "Sovereign Core: Recon Hunt"
 
 on:
   push:

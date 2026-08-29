@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: lysander_push.yml
-name: "Audit: lysander_push"
+name: "Sovereign Core: Lysander Push"
 
 on:
   push:

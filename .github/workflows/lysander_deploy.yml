@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: lysander_deploy.yml
-name: "Audit: lysander_deploy"
+name: "Deploy Matrix: Lysander"
 
 on:
   push:

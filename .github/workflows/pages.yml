@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: pages.yml
-name: Deploy Site to Pages
+name: "Sovereign Core: Pages"
 
 on:
   push:

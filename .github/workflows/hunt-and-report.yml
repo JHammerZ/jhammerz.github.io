@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: hunt-and-report.yml
-name: "Audit: hunt-and-report"
+name: "Sovereign Core: Hunt And Report"
 
 on:
   push:

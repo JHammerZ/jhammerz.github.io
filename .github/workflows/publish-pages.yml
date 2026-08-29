@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: publish-pages.yml
-name: "CD: Automated Hub Indexation Deployment"
+name: "Sovereign Core: Publish Pages"
 
 on:
   push:

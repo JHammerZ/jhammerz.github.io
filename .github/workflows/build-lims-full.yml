@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: build-lims-full.yml
-name: "Audit: build-lims-full"
+name: "Sovereign Core: Build Lims Full"
 
 on:
   push:

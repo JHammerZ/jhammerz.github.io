@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: commit_reset.yml
-name: "Audit: commit_reset"
+name: "Sovereign Core: Commit Reset"
 
 on:
   push:

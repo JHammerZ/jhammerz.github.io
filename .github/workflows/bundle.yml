@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: bundle.yml
-name: "Audit: bundle"
+name: "Sovereign Core: Bundle"
 
 on:
   push:

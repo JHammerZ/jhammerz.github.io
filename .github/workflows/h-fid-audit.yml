@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: h-fid-audit.yml
-name: "H-FID Forensic Audit"
+name: "Sovereign Core: H Fid Audit"
 
 on:
   push:

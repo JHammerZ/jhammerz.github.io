@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: HxA-AUTONOMY-BRIDGE.yml
-name: "SEO: Sitemap + IndexNow Autonomous Push"
+name: "Sovereign Core: Hxa Autonomy Bridge"
 
 on:
   push:

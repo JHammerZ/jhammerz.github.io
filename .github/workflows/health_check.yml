@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: health_check.yml
-name: "Audit: health_check"
+name: "Verification Matrix: Health Check"
 
 on:
   push:

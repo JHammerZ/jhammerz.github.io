@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: docker_build.yml
-name: "Audit: docker_build"
+name: "Sovereign Core: Docker Build"
 
 on:
   push:

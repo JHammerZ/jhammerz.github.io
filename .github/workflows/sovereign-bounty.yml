@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: sovereign-bounty.yml
-name: "Audit: sovereign-bounty"
+name: "Sovereign Core: Sovereign Bounty"
 
 on:
   push:

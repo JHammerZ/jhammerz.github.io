@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: hfid-health-monitor.yml
-name: "Audit: hfid-health-monitor"
+name: "Sovereign Core: H-FID Health Monitor"
 
 on:
   push:

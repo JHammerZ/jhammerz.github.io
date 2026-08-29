@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: spotify-node-sync.yml
-name: "Audit: spotify-node-sync"
+name: "Sync Layer: Spotify Node"
 
 on:
   push:

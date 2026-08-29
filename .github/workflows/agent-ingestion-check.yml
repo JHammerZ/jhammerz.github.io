@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: agent-ingestion-check.yml
-name: "Audit: agent-ingestion-check"
+name: "Verification Matrix: Agent Ingestion Check"
 
 on:
   push:

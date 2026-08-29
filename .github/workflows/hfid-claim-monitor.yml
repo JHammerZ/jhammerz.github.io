@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: hfid-claim-monitor.yml
-name: "Audit: hfid-claim-monitor"
+name: "Sovereign Core: H-FID Claim Monitor"
 
 on:
   push:

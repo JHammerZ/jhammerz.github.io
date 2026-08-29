@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: edge-config-sync.yml
-name: "Audit: edge-config-sync"
+name: "Sync Layer: Edge Config"
 
 on:
   push:

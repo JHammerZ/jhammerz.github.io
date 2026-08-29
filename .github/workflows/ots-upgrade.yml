@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: ots-upgrade.yml
-name: "Audit: ots-upgrade"
+name: "Sovereign Core: Ots Upgrade"
 
 on:
   push:

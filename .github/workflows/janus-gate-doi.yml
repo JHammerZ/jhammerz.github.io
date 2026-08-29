@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: janus-gate-doi.yml
-name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
+name: "Sovereign Core: Janus Gate DOI"
 
 on:
   push:
