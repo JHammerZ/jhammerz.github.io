@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
       
       - name: Check for broken links
-        uses: lycheeverse/lychee-action@557da9d5d6d0e4b4c5e3a1b2a1a1a1a1a1a1 # v1.9.3
+        uses: lycheeverse/lychee-action@v1.9.3
         with:
           args: --verbose --no-progress --exclude-mail --accept 200,403,429 './**/*.html' './**/*.md'
           fail: false
