@@ -3,7 +3,7 @@
 name: "Sovereign Core: Query D1"
 
 on:
-  workflow_dispatch:
+ workflow_dispatch:
   push:
     branches: [ main, master ]
   workflow_dispatch:

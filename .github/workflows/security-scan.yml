@@ -16,7 +16,7 @@
 
 name: Security Scan | Zero-Trust Sweep
 on:
-  workflow_dispatch:
+ workflow_dispatch:
 concurrency:
  group: ${{ github.workflow }}-${{ github.ref }}
  cancel-in-progress: true

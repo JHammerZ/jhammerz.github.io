@@ -3,7 +3,7 @@
 name: "Sovereign Core: Sovereign Key Rotation"
 
 on:
-  workflow_dispatch:
+ workflow_dispatch:
   push:
     branches: [ main, master ]
   workflow_dispatch:

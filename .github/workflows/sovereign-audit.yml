@@ -1,7 +1,7 @@
 name: Sovereign Audit
 
 on:
-  workflow_dispatch:
+ workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'  # 3am UTC daily
   workflow_dispatch:
