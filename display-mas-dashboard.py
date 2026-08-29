@@ -143,6 +143,17 @@ def render():
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
+    
+    # Track decentralized Janus Agent consensus status live
+    janus_status = "0 PEERS (OFFLINE)"
+    janus_log = Path("secure_subsurface_vault/agent_heartbeats.json")
+    if janus_log.exists():
+        try:
+            j_data = json.loads(janus_log.read_text(encoding="utf-8"))
+            active_peers = len(j_data.get("peers", {}))
+            janus_status = f"{active_peers} PEERS COMPLIANT" if active_peers > 0 else "0 PEERS (IDLE)"
+        except: pass
+    pr("A2A JANUS AGENT CONSENSUS", janus_status, "32" if "COMPLIANT" in janus_status else "31")
     div("INTEGRITY COMPLIANCE RUN")
     pr("REAL-TIME WORKSPACE INSPECTOR", drift, "33" if "CHANGES" in drift else "32")
     pr("REGISTRY REVISION DEPTH", cmd(["git", "rev-list", "--count", "HEAD"]) + " REVISIONS", "34")
