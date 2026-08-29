@@ -26,7 +26,6 @@ on:
 concurrency:
  group: ${{ github.workflow }}-${{ github.ref }}
  cancel-in-progress: true
-    branches: [ main, master ]
 
 jobs:
   execute-matrix:
