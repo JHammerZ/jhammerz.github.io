@@ -35,8 +35,6 @@ while true; do
     python3 track-thermal-profile.py 2>/dev/null
     python3 track-cpu-spikes.py 2>/dev/null
     python3 track-network-traffic.py 2>/dev/null
-    python3 secure_subsurface_vault/track-handshake-intervals.py 2>/dev/null
-    python3 secure_subsurface_vault/track-agent-heartbeats.py 2>/dev/null
     python3 verify-vault-integrity.py 2>/dev/null
     python3 wipe-secure-outbox.py 2>/dev/null
     
