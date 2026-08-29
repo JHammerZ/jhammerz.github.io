@@ -85,3 +85,4 @@ secure_subsurface_vault/cross_repo_sync_manifest.json
 content_ingest/omni_library_saturation_*.json
 public/assets/playlist.json
 track-preflight-ping.py
+catalog_table_visualization.md
