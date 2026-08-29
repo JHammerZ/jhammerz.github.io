@@ -23,15 +23,23 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          - name: Sovereign Structural Verification Trace
+            run: |
+              credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Build and Deploy Container
-          # Use canonical, low-latency regional Artifact Registry naming bounds
-          gcloud builds submit --tag us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest
-          gcloud run deploy mythos-matrix-core-latest \
+          - name: Sovereign Structural Verification Trace
+            run: |
+              # Use canonical, low-latency regional Artifact Registry naming bounds
+          - name: Sovereign Structural Verification Trace
+            run: |
+              gcloud builds submit --tag us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest
+          - name: Sovereign Structural Verification Trace
+            run: |
+              gcloud run deploy mythos-matrix-core-latest \
             --image us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest \
             --region us-central1 \
             --platform managed \

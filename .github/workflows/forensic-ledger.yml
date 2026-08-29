@@ -22,13 +22,23 @@ jobs:
   execute-matrix:
     runs-on: ubuntu-latest
     steps:
-          echo "✓ License key signature discovered. Authorizing execution matrix."
+          - name: Sovereign Structural Verification Trace
+            run: |
+              echo "✓ License key signature discovered. Authorizing execution matrix."
 
       - name: Checkout Codebase
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
       - name: Verify Environment Configuration
-          echo "Running verification track for: ipfs_forensic_ledger"
-          if [ -f "package.json" ]; then
-              if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          fi
+          - name: Sovereign Structural Verification Trace
+            run: |
+              echo "Running verification track for: ipfs_forensic_ledger"
+          - name: Sovereign Structural Verification Trace
+            run: |
+              if [ -f "package.json" ]; then
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          - name: Sovereign Structural Verification Trace
+            run: |
+              fi
