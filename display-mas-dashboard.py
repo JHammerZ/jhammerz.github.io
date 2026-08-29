@@ -146,7 +146,7 @@ def render():
     global_status = "BALANCED (GLOBAL SYNC)"
     try:
         local_hash = cmd(["git", "rev-parse", "HEAD"])
-        remote_hash = cmd(["git-rev-parse", "origin/main"])
+        remote_hash = cmd(["git", "rev-parse", "origin/main"])
         if local_hash != remote_hash: global_status = "OUT OF SYNC (DRIFT)"
     except: pass
     
