@@ -31,7 +31,6 @@ jobs:
         run: python update-watcher.py
 
       - name: 5. Auto-Commit Modifications & Broadcast if Updates Exist
-        run: |
           git config --global user.name "Lysander Autonomous Robot"
           git config --global user.email "bot@hfid.standard"
           

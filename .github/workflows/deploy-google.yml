@@ -29,7 +29,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Build and Deploy Container
-        run: |
           # Use canonical, low-latency regional Artifact Registry naming bounds
           gcloud builds submit --tag us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest
           gcloud run deploy mythos-matrix-core-latest \

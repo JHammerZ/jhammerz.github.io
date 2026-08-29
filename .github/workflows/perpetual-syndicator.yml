@@ -25,6 +25,5 @@ jobs:
       - name: Run Omni Broadcast Syndication
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
           pip install requests
           python .github/scripts/social_syndicator.py
