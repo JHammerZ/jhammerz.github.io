@@ -9,12 +9,14 @@
 name: "H-FID Forensic Audit"
 
 on:
-concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
   push:
     branches: [ main, master ]
   workflow_dispatch:
+
+concurrency:
+# group: ${{ github.workflow }}-${{ github.ref }}
+# cancel-in-progress: true
+    branches: [ main, master ]
 
 jobs:
   execute-matrix:
