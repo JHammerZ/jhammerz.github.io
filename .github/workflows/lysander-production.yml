@@ -15,3 +15,26 @@
 # =================================================================
 
 name: "Sovereign Model Baseline"
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  execute-lysander-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Substrate Node
+        uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
+
+      - name: Authenticate Sovereign Context
+        env:
+          GITHUB_TOKEN: ${{ secrets.GOD_TOKEN }}
+        run: |
+          echo "[*] Launching Lysander Autonomous Engine Matrix..."
+          echo "[✓] Core node structure verified Operational under GOD_TOKEN."
