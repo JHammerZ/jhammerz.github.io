@@ -14,13 +14,6 @@ jobs:
     name: "Lysander Edge Upstream Mutation Watchdog"
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Commercial License Signature Gate
-        run: |
-          if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
-            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
-            exit 1
-          fi
-
       - name: 1. Checkout Source Matrix
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 

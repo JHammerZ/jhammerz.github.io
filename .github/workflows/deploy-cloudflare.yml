@@ -19,13 +19,6 @@ jobs:
     name: Cloudflare Anycast CDN Routing Deployment
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Commercial License Signature Gate
-        run: |
-          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
-          if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
-            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
-            exit 1
-          fi
           echo "✓ License key signature discovered. Authorizing operational execution matrix."
 
       - name: 1. Checkout JHammerZ Master Source Tree

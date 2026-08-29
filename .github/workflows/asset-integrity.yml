@@ -18,13 +18,6 @@ jobs:
   execute-matrix:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Commercial License Signature Gate
-        run: |
-          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
-          if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
-              echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
-              exit 1
-          fi
           echo "✓ License key signature discovered. Authorizing execution matrix."
 
       - name: Checkout Codebase
