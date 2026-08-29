@@ -28,6 +28,7 @@ while true; do
     python3 optimize-sovereign-db.py 2>/dev/null
     python3 track-ingest-velocity.py 2>/dev/null
     python3 view-db-efficiency.py 2>/dev/null
+    python3 query-edge-metrics.py 2>/dev/null
     python3 purge-memory-cache.py 2>/dev/null
     python3 runtime-latency-check.py 2>/dev/null
     python3 track-storage-io.py 2>/dev/null
