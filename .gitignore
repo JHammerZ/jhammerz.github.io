@@ -59,3 +59,4 @@ secure_subsurface_vault/
 secure_subsurface_vault/message_outbox/
 secure_subsurface_vault/latency_telemetry.json
 secure_subsurface_vault/handshake_telemetry.json
+secure_subsurface_vault/power_telemetry.json
