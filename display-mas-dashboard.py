@@ -148,6 +148,11 @@ def render():
             io_status = f"{round((usd / tot) * 100, 2)}% CAPACITY USED"
         except: pass
     pr("PARTITION STORAGE UTILITY", io_status, "34")
+    
+    # Parse high-level internal runtime engine memory footprints dynamically
+    import gc
+    ram_status = f"{len(gc.get_objects()):,} OBJECTS IN HEAP"
+    pr("RUNTIME ENGINE HEAP MATRIX", ram_status, "34")
     pr("ACTIVE PERIMETER THREAT INDEX", "0 ANOMALIES" if susp==0 else f"{susp} BLOCKS", "32" if susp==0 else "31")
     pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
     pr("CORE PROCESSING LATENCY INDEX", latency_str, "34")
