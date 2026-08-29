@@ -63,3 +63,4 @@ secure_subsurface_vault/power_telemetry.json
 secure_subsurface_vault/agent_heartbeats.json
 secure_subsurface_vault/storage_io_telemetry.json
 secure_subsurface_vault/thermal_telemetry.json
+secure_subsurface_vault/cpu_spikes_telemetry.json

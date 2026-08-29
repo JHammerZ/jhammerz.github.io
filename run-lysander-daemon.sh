@@ -55,8 +55,7 @@ while true; do
     ./update-terminal-aliases.sh
     
     # 9. Performance, Infrastructure, and Security Sub-gate Sweeps
-    track_storage_io_call_placeholder 2>/dev/null
-    python3 track-storage-io.py 2>/dev/null
+    python3 track-storage-io.py
     python3 optimize-cpu-load.py
     python3 track-memory-allocation.py
     python3 generate-api-docs.py
@@ -77,6 +76,7 @@ while true; do
     # 10. Local Hardware Adapter Power Profiling & Insulation Audits
     python3 track-power-insulation.py
     python3 track-thermal-profile.py
+    python3 track-cpu-spikes.py
     
     # 11. Cross-Region Handshake Diagnostic Verification
     python3 secure_subsurface_vault/track-handshake-intervals.py

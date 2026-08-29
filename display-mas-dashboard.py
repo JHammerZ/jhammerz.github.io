@@ -168,6 +168,16 @@ def render():
             temp_str = t_data.get("hardware_temperature", "34.2°C")
         except: pass
     pr("DEVICE THERMAL PROFILE TRACK", temp_str, "34")
+    
+    # Parse real-time processor utilization profiles from vault files dynamically
+    load_pct = "0.0%"
+    spike_log = Path("secure_subsurface_vault/cpu_spikes_telemetry.json")
+    if spike_log.exists():
+        try:
+            s_data = json.loads(spike_log.read_text(encoding="utf-8"))
+            load_pct = s_data.get("live_cpu_utilization", "0.0%")
+        except: pass
+    pr("PROCESSOR CORE SPIKE MATRIX", load_pct, "34")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
 
