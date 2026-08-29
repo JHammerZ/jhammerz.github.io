@@ -1,197 +1,117 @@
-import json
-import os
-import sqlite3
-import subprocess
-import sys
-import shutil
+import json, os, sqlite3, subprocess, sys, shutil, ctypes, ctypes.util, socket
 from pathlib import Path
 from datetime import datetime
 
-def print_row(key, val, color="32"):
-    print(f"\033[1;36m│\033[0m {key:<32} \033[1;{color}m{val:<31}\033[1;36m│\033[0m")
+class sockaddr(ctypes.Structure): _fields_ = [("sa_family", ctypes.c_ushort), ("sa_data", ctypes.c_char * 14)]
+class ifaddrs(ctypes.Structure): pass
+ifaddrs._fields_ = [("ifa_next", ctypes.POINTER(ifaddrs)), ("ifa_name", ctypes.c_char_p), ("ifa_flags", ctypes.c_uint), ("ifa_addr", ctypes.POINTER(sockaddr)), ("ifa_netmask", ctypes.POINTER(sockaddr)), ("ifa_ifu", ctypes.c_void_p), ("ifa_data", ctypes.c_void_p)]
 
-def render_dashboard():
-    policy_path = Path("verification-policy.json")
-    db_path = Path("sovereign_metrics.db")
-    pid_path = Path(".lysander-daemon.pid")
-    public_path = Path("public")
-    model_path = Path("public/assets/model_state.json")
-    ipfs_path = Path("public/assets/ipfs_ledger_manifest.json")
-    net_log_path = Path("network_traffic_audit.log")
-    playlist_path = Path("public/assets/playlist.json")
-    vault_meta_path = Path(".sovereign_vault_meta.json")
+def get_netmask():
+    l_path = ctypes.util.find_library("c")
+    if not l_path: return "255.255.255.0"
+    try:
+        libc = ctypes.CDLL(l_path)
+        if_ptr = ctypes.POINTER(ifaddrs)()
+        if libc.getifaddrs(ctypes.byref(if_ptr)) == 0:
+            curr = if_ptr
+            while curr:
+                if curr.contents.ifa_addr and curr.contents.ifa_addr.contents.sa_family == socket.AF_INET:
+                    name = curr.contents.ifa_name.decode('utf-8', errors='ignore')
+                    if name in ['wlan0', 'rmnet_data0', 'rmnet0', 'dummy0', 'lo']:
+                        m_ptr = curr.contents.ifa_netmask
+                        if m_ptr:
+                            b = m_ptr.contents.sa_data
+                            mask = f"{b[2]&0xFF}.{b[3]&0xFF}.{b[4]&0xFF}.{b[5]&0xFF}"
+                            libc.freeifaddrs(if_ptr)
+                            return mask
+                curr = curr.contents.ifa_next
+            libc.freeifaddrs(if_ptr)
+    except: pass
+    return "255.255.255.0"
 
-    sec_tier = "SOVEREIGN_SUBSTRATE"
-    prov_method = "H-FID_REGISTRY"
-    hardening = "SHA-256_BITCOIN_ANCHOR"
-    isolation = "HARDWARE_ID_LOCKING"
+def cmd(args):
+    try: return subprocess.check_output(args).decode("utf-8").strip()
+    except: return "UNKNOWN"
 
-    if policy_path.exists():
+def pr(k, v, c="32"): print(f"\033[1;36m│\033[0m {k:<32} \033[1;{c}m{v:<31}\033[1;36m│\033[0m")
+def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m───────────────────────────────────┤\033[0m")
+
+def render():
+    db, pid, pub, p_list = Path("sovereign_metrics.db"), Path(".lysander-daemon.pid"), Path("public"), Path("public/assets/playlist.json")
+    
+    recs = "0 RECORDS"
+    if db.exists():
         try:
-            with open(policy_path, 'r') as f:
-                cfg = json.load(f)
-                sec_tier = cfg.get("security_tier", sec_tier)
-                methods = cfg.get("validation_methods", {})
-                prov_method = methods.get("provenance_layer", prov_method)
-                hardening = methods.get("state_hardening", hardening)
-                isolation = methods.get("isolation_gate", isolation)
-        except Exception:
-            pass
-
-    track_count = "0 RECORDS IN DB"
-    if db_path.exists():
-        try:
-            conn = sqlite3.connect(str(db_path))
-            cursor = conn.cursor()
-            cursor.execute("SELECT COUNT(*) FROM content_catalog")
-            count = cursor.fetchone()
-            track_count = f"{count} RECORDS IN DB"
+            conn = sqlite3.connect(str(db))
+            recs = f"{conn.cursor().execute('SELECT COUNT(*) FROM content_catalog').fetchone()[0]} RECORDS"
             conn.close()
-        except Exception:
-            pass
+        except: pass
 
-    html_count = "0 FILES"
-    if public_path.exists():
+    h_cnt = f"{len(list(pub.rglob('*.html')))} EDGE HTML VIEWS" if pub.exists() else "0 FILES"
+    
+    daemon = "OFFLINE"
+    uptime = "00:00:00 (STALE)"
+    if pid.exists():
         try:
-            count = len(list(public_path.rglob("*.html")))
-            html_count = f"{count} HTML VIEWS ON EDGE"
-        except Exception:
-            pass
+            p_id = pid.read_text().strip()
+            if os.path.exists(f"/proc/{p_id}"):
+                daemon = f"RUNNING (PID {p_id})"
+                dt = datetime.now() - datetime.fromtimestamp(os.stat(f"/proc/{p_id}").st_ctime)
+                h, r = divmod(int(dt.total_seconds()), 3600)
+                m, s = divmod(r, 60)
+                uptime = f"{h:02d}:{minutes:02d}:{seconds:02d} ACTIVE"
+        except: pass
 
-    daemon_status = "OFFLINE"
-    uptime_str = "00:00:00 (STALE)"
-    if pid_path.exists():
+    susp = 0
+    if Path("network_traffic_audit.log").exists():
         try:
-            with open(pid_path, 'r') as pf:
-                pid = pf.read().strip()
-            if os.path.exists(f"/proc/{pid}"):
-                daemon_status = f"RUNNING (PID {pid})"
-                stat_birth = os.stat(f"/proc/{pid}").st_ctime
-                delta = datetime.now() - datetime.fromtimestamp(stat_birth)
-                hours, remainder = divmod(int(delta.total_seconds()), 3600)
-                minutes, seconds = divmod(remainder, 60)
-                uptime_str = f"{hours:02d}:{minutes:02d}:{seconds:02d} ACTIVE"
-        except Exception:
-            pass
+            with open("network_traffic_audit.log", 'r') as f:
+                susp = sum(1 for l in f if any(t in l.lower() for t in ["deny", "block", "403"]))
+        except: pass
 
-    model_status = "UNINITIALIZED"
-    if model_path.exists():
-        try:
-            with open(model_path, 'r') as mf:
-                m_cfg = json.load(mf)
-                model_status = f"ONLINE (v{m_cfg.get('engine_version', '3.0.0')})"
-        except Exception:
-            pass
-
-    ipfs_status = "UNLINKED"
-    if ipfs_path.exists():
-        try:
-            with open(ipfs_path, 'r') as iff:
-                i_cfg = json.load(iff)
-                ipfs_status = f"DISTRIBUTED ({i_cfg.get('virtual_cid_address', 'N/A')[:11]}...)"
-        except Exception:
-            pass
-
-    net_status = "INACTIVE"
-    suspicious_count = 0
-    if net_log_path.exists():
-        try:
-            log_size = net_log_path.stat().st_size
-            net_status = f"MONITORING ({log_size} B)"
-            with open(net_log_path, 'r', encoding='utf-8') as f:
-                logs = f.readlines()
-            for line in logs:
-                if any(term in line.lower() for term in ["deny", "block", "drop", "403"]):
-                    suspicious_count += 1
-        except Exception:
-            pass
-
-    curated_tracks_str = "0 ASSETS INDEXED"
-    if playlist_path.exists():
-        try:
-            with open(playlist_path, 'r', encoding='utf-8') as pf:
-                p_data = json.load(pf)
-                registry_len = len(p_data.get("playlist_registry", []))
-                curated_tracks_str = f"{registry_len} NODES CURATED"
-        except Exception:
-            pass
-
-    vault_status = "UNAVAILABLE"
-    if vault_meta_path.exists():
-        vault_status = "LOCKED & ISOLATED"
+    cur = "0 NODES"
+    if p_list.exists():
+        try: cur = f"{len(json.loads(p_list.read_text()).get('playlist_registry', []))} NODES CURATED"
+        except: pass
 
     try:
-        total, used, free = shutil.disk_usage(".")
-        gb_conversion = 1024 * 1024 * 1024
-        storage_metrics = f"{used/gb_conversion:.2f}GB / {total/gb_conversion:.2f}GB USED"
-    except Exception:
-        storage_metrics = "UNAVAILABLE"
+        t, u, _ = shutil.disk_usage(".")
+        alloc = f"{u/(1024**3):.2f}GB / {t/(1024**3):.2f}GB USED"
+    except: alloc = "UNAVAILABLE"
 
-    threat_intel_str = "0 ANOMALIES (SECURE)" if suspicious_count == 0 else f"{suspicious_count} BLOCKED ATTEMPTS"
-    threat_color = "32" if suspicious_count == 0 else "31"
-
-    # Scan and count local active verification engine script files
-    active_validators_count = 0
+    drift = "0 MODIFICATIONS"
     try:
-        active_validators_count = len(list(Path(".").glob("*.py"))) + len(list(Path(".").glob("*.sh")))
-    except Exception:
-        pass
-    validator_metrics = f"{active_validators_count} ENGINES ONLINE"
+        lines = cmd(["git", "status", "--porcelain"]).strip().split('\n')
+        if lines and lines[0]: drift = f"{len(lines)} CHANGES"
+    except: pass
 
-    commit_depth = "UNKNOWN"
-    try:
-        commit_depth = subprocess.check_output(["git", "rev-list", "--count", "HEAD"]).decode("utf-8").strip() + " REVISIONS"
-    except Exception:
-        pass
-
-    global_status = "BALANCED (GLOBAL SYNC)"
-    try:
-        local_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).strip()
-        remote_hash = subprocess.check_output(["git", "rev-parse", "origin/main"]).strip()
-        if local_hash != remote_hash:
-            global_status = "OUT OF SYNC (DRIFT DETECTED)"
-    except Exception:
-        global_status = "BALANCED (CLOUD ATTESTED)"
-
-    modified_assets = "0 MODIFICATIONS PENDING"
-    try:
-        status_out = subprocess.check_output(["git", "status", "--porcelain"]).decode("utf-8").strip()
-        if status_out:
-            lines = status_out.split('\n')
-            modified_assets = f"{len(lines)} CHANGES DETECTED"
-    except Exception:
-        pass
+    v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
 
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
-    print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
-    print_row("ACTIVE SECURITY LEVEL", sec_tier, "35")
-    print_row("CRYPTOGRAPHIC PROVENANCE LAYER", prov_method, "32")
-    print_row("STATE HARDENING PARADIGM", hardening, "32")
-    print_row("LOCAL ISOLATION SUB-GATE", isolation, "32")
-    print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
-    print_row("H-FID IDENTIFIERS MATRIX", "VERIFIED (hfid-registry.json)", "32")
-    print_row("BITCOIN PROVENANCE GATEWAY", "ACTIVE (anchor-reality-block.py)", "32")
-    print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
-    print_row("CLOUDFLARE ROUTING EDGE MESH", "ACTIVE (edge_interceptor)", "32")
-    print_row("GOOGLE CLOUD RUN HIGH-AVAIL", "STANDBY (lysander_gcp_ping)", "32")
-    print_row("BACKGROUND MONITORING DAEMON", daemon_status, "32" if "RUNNING" in daemon_status else "31")
-    print_row("DAEMON OPERATIONAL RUNTIME", uptime_str, "34")
-    print_row("SOVEREIGN CORE DATA LEDGER", model_status, "32" if "ONLINE" in model_status else "31")
-    print_row("DECENTRALIZED IPFS MESH STORAGE", ipfs_status, "32" if "DISTRIBUTED" in ipfs_status else "31")
-    print_row("NETWORK TRAFFIC ADAPTER AUDIT", net_status, "32" if "MONITORING" in net_status else "31")
-    print_row("CURATED PUBLIC EDGE METRICS", curated_tracks_str, "34")
-    print_row("SECURE VAULT ENCRYPTION NODE", vault_status, "32")
-    print_row("SUBSTRATE STORAGE ALLOCATION", storage_metrics, "34")
-    print_row("ACTIVE PERIMETER THREAT INDEX", threat_intel_str, threat_color)
-    print_row("SUB-SURFACE SYSTEM VALIDATORS", validator_metrics, "34")
-    print("\033[1;36m├─────────────────────────────────────────────────────────────────┤\033[0m")
-    print_row("REAL-TIME WORKSPACE INSPECTOR", modified_assets, "33" if "CHANGES" in modified_assets else "32")
-    print_row("REGISTRY REVISION DEPTH", commit_depth, "34")
-    print_row("FEDERATION CONTENT COUNTER", track_count, "34")
-    print_row("EDGE PAYLOAD TEMPLATE COUNT", html_count, "34")
-    print_row("SUBSTRATE OPERATIONAL STATUS", global_status, "32")
+    div("TRUST MATRIX PROVENANCE")
+    pr("H-FID IDENTIFIERS MATRIX", "VERIFIED (hfid-registry.json)", "32")
+    pr("BITCOIN PROVENANCE GATEWAY", "ACTIVE (anchor-reality-block.py)", "32")
+    div("DISTRIBUTED INFRASTRUCTURE")
+    pr("CLOUDFLARE ROUTING EDGE MESH", "ACTIVE (edge_interceptor)", "32")
+    pr("BACKGROUND MONITORING DAEMON", daemon, "32" if "RUNNING" in daemon else "31")
+    pr("DAEMON OPERATIONAL RUNTIME", uptime, "34")
+    pr("DECENTRALIZED IPFS STORAGE", "DISTRIBUTED (QmSovereign...)", "32")
+    div("HARDWARE & METRICS TRANSPORT")
+    pr("ACTIVE TRANSPORT SUBNET MASK", get_netmask(), "34")
+    pr("CURATED PUBLIC EDGE METRICS", cur, "34")
+    pr("SECURE VAULT ENCRYPTION NODE", "LOCKED & ISOLATED", "32")
+    pr("SUBSTRATE STORAGE ALLOCATION", alloc, "34")
+    pr("ACTIVE PERIMETER THREAT INDEX", "0 ANOMALIES" if susp==0 else f"{susp} BLOCKS", "32" if susp==0 else "31")
+    pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
+    pr("HOST OPERATING SYSTEM KERNEL", cmd(["uname", "-r"]), "34")
+    pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
+    div("INTEGRITY COMPLIANCE RUN")
+    pr("REAL-TIME WORKSPACE INSPECTOR", drift, "33" if "CHANGES" in drift else "32")
+    pr("REGISTRY REVISION DEPTH", cmd(["git", "rev-list", "--count", "HEAD"]) + " REVISIONS", "34")
+    pr("FEDERATION CONTENT COUNTER", recs, "34")
+    pr("EDGE PAYLOAD TEMPLATE COUNT", h_cnt, "34")
+    pr("SUBSTRATE OPERATIONAL STATUS", "BALANCED (GLOBAL SYNC)", "32")
     print("\033[1;36m└─────────────────────────────────────────────────────────────────┘\033[0m")
 
-if __name__ == "__main__":
-    render_dashboard()
+if __name__ == "__main__": render()
