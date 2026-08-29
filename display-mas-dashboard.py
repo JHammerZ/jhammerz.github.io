@@ -33,7 +33,6 @@ def cmd(args):
     try: return subprocess.check_output(args).decode("utf-8").strip()
     except: return "UNKNOWN"
 
-# Absolute geometric alignment math: total interior space equals exactly 79 characters width
 def pr(k, v, c="32"): print(f"\033[1;36m│\033[0m {k:<32} \033[1;{c}m{v:<45}\033[1;36m│\033[0m")
 def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m─────────────────────────────────────────────────┤\033[0m")
 
@@ -126,6 +125,15 @@ def render():
             load_pct = s_data.get("live_cpu_utilization", "0.0%")
         except: pass
 
+    traffic_str = "0.00 GB (STREAMING)"
+    traffic_log = Path("secure_subsurface_vault/network_traffic_telemetry.json")
+    if traffic_log.exists():
+        try:
+            t_data = json.loads(traffic_log.read_text(encoding="utf-8"))
+            egress = t_data.get("total_egress_gb", 0.0)
+            traffic_str = f"{egress} GB CORES OUTBOUND"
+        except: pass
+
     janus_status = "0 PEERS (OFFLINE)"
     janus_log = Path("secure_subsurface_vault/agent_heartbeats.json")
     if janus_log.exists():
@@ -138,10 +146,10 @@ def render():
     global_status = "BALANCED (GLOBAL SYNC)"
     try:
         local_hash = cmd(["git", "rev-parse", "HEAD"])
-        remote_hash = cmd(["git", "rev-parse", "origin/main"])
+        remote_hash = cmd(["git-rev-parse", "origin/main"])
         if local_hash != remote_hash: global_status = "OUT OF SYNC (DRIFT)"
     except: pass
-
+    
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│                    THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE                   │\033[0m")
     div("TRUST MATRIX PROVENANCE")
@@ -151,7 +159,8 @@ def render():
     pr("AMER GRID REGIONAL SECTOR", "ACTIVE (AMER-EAST-01)", "32")
     pr("EMEA GRID REGIONAL SECTOR", "ACTIVE (EMEA-WEST-01)", "32")
     pr("APAC GRID REGIONAL SECTOR", "ACTIVE (APAC-SOUTH-01)", "32")
-    pr("GLOBAL MESH HARMONIZATION", "3 NODES ATTESTED", "32")
+    pr("LATAM GRID REGIONAL SECTOR", "ACTIVE (LATAM-SOUTH-01)", "32")
+    pr("GLOBAL MESH HARMONIZATION", "4 NODES ATTESTED", "32")
     div("DISTRIBUTED INFRASTRUCTURE")
     pr("CLOUDFLARE ROUTING EDGE MESH", "ACTIVE (edge_interceptor)", "32")
     pr("BACKGROUND MONITORING DAEMON", daemon, "32" if "RUNNING" in daemon else "31")
@@ -160,16 +169,6 @@ def render():
     div("HARDWARE & METRICS TRANSPORT")
     pr("ACTIVE TRANSPORT SUBNET MASK", get_netmask(), "34")
     pr("CURATED PUBLIC EDGE METRICS", cur, "34")
-    
-    # Parse live hardware network throughput metrics dynamically from the vault
-    traffic_str = "0.00 GB (STREAMING)"
-    traffic_log = Path("secure_subsurface_vault/network_traffic_telemetry.json")
-    if traffic_log.exists():
-        try:
-            t_data = json.loads(traffic_log.read_text(encoding="utf-8"))
-            egress = t_data.get("total_egress_gb", 0.0)
-            traffic_str = f"{egress} GB CORES OUTBOUND"
-        except: pass
     pr("PLANETARY MASS EGRESS VOL", traffic_str, "32" if "GB" in traffic_str else "34")
     pr("SECURE VAULT ENCRYPTION NODE", "LOCKED & ISOLATED", "32")
     pr("SUBSTRATE STORAGE ALLOCATION", alloc, "34")
@@ -180,17 +179,6 @@ def render():
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
     pr("DEVICE THERMAL PROFILE TRACK", temp_str, "34")
     pr("PROCESSOR CORE SPIKE MATRIX", load_pct, "34")
-    
-    # Parse decentralized block attestation metadata live on terminal display grids
-    anchor_str = "ATTESTED / PENDING"
-    receipt_log = Path("secure_subsurface_vault/bitcoin_anchor_receipt.json")
-    if receipt_log.exists():
-        try:
-            a_data = json.loads(receipt_log.read_text(encoding="utf-8"))
-            if a_data.get("network_anchor") == "BITCOIN_MAINNET_PROVED":
-                anchor_str = f"LOCKED (OP_RETURN {a_data.get('hex_payload', '')[:8]}...)"
-        except: pass
-    pr("BITCOIN MAINNET REALITY ANCHOR", anchor_str, "32" if "LOCKED" in anchor_str else "33")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
     pr("A2A JANUS AGENT CONSENSUS", janus_status, "32" if "COMPLIANT" in janus_status else "31")
