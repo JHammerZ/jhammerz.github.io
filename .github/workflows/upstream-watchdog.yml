@@ -7,7 +7,7 @@ on:
 # schedule:
     # Triggers every 3 hours natively for free to keep rate limits green
 # - cron: '42 */3 * * *'
-# workflow_dispatch:
+workflow_dispatch:
 
 jobs:
   execute-matrix:

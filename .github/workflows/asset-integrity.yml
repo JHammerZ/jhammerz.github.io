@@ -12,7 +12,7 @@ concurrency:
 # cancel-in-progress: true
   push:
     branches: [ main, master ]
-# workflow_dispatch:
+workflow_dispatch:
 
 jobs:
   execute-matrix:

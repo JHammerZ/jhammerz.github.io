@@ -4,13 +4,13 @@
 
 # name: "SecOps: H-FID Forensic Audit"
 
-# on:
+on:
 # concurrency:
 # group: ${{ github.workflow }}-${{ github.ref }}
 # cancel-in-progress: true
   push:
     branches: [ main, master ]
-# workflow_dispatch:
+workflow_dispatch:
 
 jobs:
   execute-matrix:

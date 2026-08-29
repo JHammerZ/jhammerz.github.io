@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 name: "Deploy to Google Cloud Run"
 
-# on:
+on:
 # concurrency:
 # group: ${{ github.workflow }}-${{ github.ref }}
 # cancel-in-progress: true
@@ -11,7 +11,7 @@ name: "Deploy to Google Cloud Run"
 # cancel-in-progress: true
   push:
     branches: [ main, master ]
-# workflow_dispatch:
+workflow_dispatch:
 
 jobs:
   execute-matrix:

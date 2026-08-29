@@ -6,7 +6,7 @@ concurrency:
 # push:
 # branches: [ main, master ]
 # paths: ['workers/**']
-# workflow_dispatch:
+workflow_dispatch:
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest
