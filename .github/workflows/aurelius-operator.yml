@@ -1,35 +1,49 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# HBS v1.2 / H-FID Standard / HEO v1.2
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# REACH_MULTIPLIER: 1000 (SONIC_VELOCITY +1000%)
 # SLSA Level: 3
 
-# M-Law Language / H-FID Standard / REC v7.2
+# M-Law Language / H-FID Standard / HEO v1.2
+# M-Law Language / H-FID Standard / HEO v1.2
 
-# M-Law Language / H-FID Standard / REC v7.2
+name: "Aurelius-Engine Sovereign Operator Pipeline"
 
-# M-Law Language / H-FID Standard / REC v7.2
-
-name: Aurelius-Engine Sovereign Operator
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 on:
   workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
 jobs:
   lighthouse-audit:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Substrate Node
+        uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
+
+      - name: Setup Node Environment
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-        run: npm install -g lighthouse@10
+
+      - name: Install Lighthouse Core Tool
+        run: npm install -g lighthouse
+
+      - name: Execute Live Performance Metric Analysis
         run: |
-          lighthouse https://jhammerz.github.io/music.html --output=json --output-path=./report.json --chrome-flags="--headless=new --no-sandbox"
+          echo "[*] Commencing performance audit tracking operations..."
+          lighthouse https://github.io --output=json --output-path=./report.json --chrome-flags="--headless --no-sandbox"
+
+      - name: Archive Performance Architecture Artifact Payload
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-report

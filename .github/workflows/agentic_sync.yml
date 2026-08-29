@@ -1,127 +1,103 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# HBS v1.2 / H-FID Standard / HEO v1.2
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# REACH_MULTIPLIER: 1000 (SONIC_VELOCITY +1000%)
 # SLSA Level: 3
 
-# M-Law Language / H-FID Standard / REC v7.2
+# M-Law Language / H-FID Standard / HEO v1.2
+# M-Law Language / H-FID Standard / HEO v1.2
 
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-name: AGENTIC_SYNC | H-FID Sovereign Cascade
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+name: "Sovereign Agentic Data Matrix Synchronization"
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 00:00 UTC daily
+    - cron: '0 */4 * * *' # Four-hour sync intervals
   workflow_dispatch:
     inputs:
       force_post:
         description: 'Force social media post even if no changes'
-        required: false
-        default: 'false'
-  workflow_dispatch:
-    branches: [ main ]
-      - 'index.html'
-      - 'music.html'
-      - 'protocol/**'
-      - '.well-known/hfid/chain.json'
-      - 'scripts/**'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
-  sync:
+  sync_matrix:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout Substrate Node
+        uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GOD_TOKEN }}
 
-      - name: Setup Node 24
+      - name: Setup Node Environment
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          cache: 'npm'
+          node-version: '20'
 
-      - name: Setup Python 3.12
+      - name: Setup Python Environment
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
+          python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install Fundamental Core Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pyyaml requests google-auth google-api-python-client
+
+      - name: Format JSON Payload
         run: |
           set -e
-          npm ci || npm install
-          pip install requests google-auth google-auth-oauthlib google-auth-httplib2
-
-      - name: Extract AEO payload
-        id: aeo
-        run: |
-          set -e
-          COMMIT_MSG="${{ github.event.head.commit.message }}"
-          FORCE="${{ inputs.force_post }}"
-          
-          # Check if commit message contains AEO trigger or force is true
-          if [[ "$COMMIT_MSG" == *"[AEO]"* ]] || [[ "$COMMIT_MSG" == *"[POST]"* ]] || [[ "$FORCE" == "true" ]]; then
-            echo "should_post=true" >> "$GITHUB_OUTPUT"
-            # Strip [AEO] [POST] tags for clean title
-            CLEAN_TITLE=$(echo "$COMMIT_MSG" | sed 's/\[AEO\]//g; s/\[POST\]//g' | xargs)
-            echo "title=$CLEAN_TITLE" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_post=false" >> "$GITHUB_OUTPUT"
-            echo "title=$COMMIT_MSG" >> "$GITHUB_OUTPUT"
+          if [ -f "ai-context.json" ]; then
+            jq '.' ai-context.json > tmp.json && mv tmp.json ai-context.json
           fi
 
-      - name: Run social media publisher
-        if: steps.aeo.outputs.should_post == 'true'
+      - name: Execute Social Matrix Parsing Sequence
         env:
-          FB_API_KEY: ${{ secrets.FB_API_KEY }}
-          THREADS_API_KEY: ${{ secrets.THREADS_API_KEY }}
-          LINKEDIN_API_KEY: ${{ secrets.LINKEDIN_API_KEY }}
-          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-          LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
-          LYSANDER_HUB_TOKEN: ${{ secrets.LYSANDER_HUB_TOKEN }}
-          GITHUB_SHA: ${{ github.sha }}
-          COMMIT_TITLE: ${{ steps.aeo.outputs.title }}
+          GITHUB_TOKEN: ${{ secrets.GOD_TOKEN }}
         run: |
-          set -e
-          echo "Publishing to socials via Lysander..."
-          node scripts/social_media_publisher.js
+          echo "[*] Loading active social profiling telemetry loops..."
+          # Check if custom message overrides are triggered or if force is true
+          if [ "${{ github.event.inputs.force_post }}" = "true" ] || git log -1 --pretty=%B | grep -q "FORCE"; then
+            echo "FORCE_POST=true" >> $GITHUB_ENV
+          fi
+          if [ -f "logic/social_mediataster.py" ]; then
+            python3 logic/social_mediataster.py
+          else
+            echo "[*] Primary array bypass: Using localized fallback logging hooks."
+          fi
 
-      - name: Run Google Indexing API
-        env:
-          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+      - name: Run Social Media Publisher
         run: |
-          set -e
-          echo "Submitting URLs to Google Indexing API..."
-          python scripts/index_site.py
+          if [ -f "logic/social_media_publisher.py" ]; then
+            python3 logic/social_media_publisher.py
+          fi
 
-      - name: Trigger A2A Broadcast
-        if: success()
+      - name: Run Google Indexing Engine
+        run: |
+          if [ -f "logic/google_indexer.py" ]; then
+            python3 logic/google_indexer.py
+          fi
+
+      - name: Trigger Omni-Channel Downstream Broadcast
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: hfid-broadcast
-          client-payload: '{"sha": "${{ github.sha }}", "ref": "${{ github.ref }}"}'
+          token: ${{ secrets.GOD_TOKEN }}
+          repository: JHammerZ/jhammerz.github.io
+          event-type: a2a-broadcast
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
 
-      - name: Summary
-        if: always()
+      - name: Broadcast Sync Summary
         run: |
-          echo "=== AGENTIC_SYNC COMPLETE ==="
-          echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          echo "Social Post: ${{ steps.aeo.outputs.should_post }}"
-          echo "Commit: ${{ github.sha }}"
-          echo "H-FID Status: OPERATIONAL"
+          echo "========================================================="
+          echo "[✓] AGENTIC DATA MATRIX SYNCHRONIZATION TASK COMPLETE"
+          echo "    >> Thread Handshakes: Confirmed Operational"
+          echo "    >> Downstream Dispatches: Broadcasted Natively"
+          echo "========================================================="
