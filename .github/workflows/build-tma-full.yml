@@ -9,15 +9,15 @@ on:
 # workflow_dispatch:
 
 jobs:
-# execute-matrix:
-# runs-on: ubuntu-latest
-# steps:
-# - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+  execute-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
 
-            - name: Verify Environment Configuration
+      - name: Verify Environment Configuration
         run: |
-          echo "Running verification track"
+          echo "Running verification track for: build-tma-full.yml"
           if [ -f "package.json" ]; then
             if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi

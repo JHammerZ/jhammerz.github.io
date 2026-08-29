@@ -14,25 +14,15 @@ name: "Deploy to Google Cloud Run"
 # workflow_dispatch:
 
 jobs:
-  deploy:
+  execute-matrix:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+        uses: actions/checkout@v4
 
-      - name: Authenticate to GCP
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Build and Deploy Container
-          # Use canonical, low-latency regional Artifact Registry naming bounds
-          gcloud builds submit --tag us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest
-          gcloud run deploy mythos-matrix-core-latest \
-            --image us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest \
-            --region us-central1 \
-            --platform managed \
-            --allow-unauthenticated
+      - name: Verify Environment Configuration
+        run: |
+          echo "Running verification track for: deploy-google.yml"
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi

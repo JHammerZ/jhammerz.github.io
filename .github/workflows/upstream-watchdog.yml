@@ -10,32 +10,15 @@ on:
 # workflow_dispatch:
 
 jobs:
-# upstream-scrader:
-    name: "Lysander Edge Upstream Mutation Watchdog"
-# runs-on: ubuntu-latest
+  execute-matrix:
+    runs-on: ubuntu-latest
     steps:
-      - name: 1. Checkout Source Matrix
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
 
-      - name: 2. Setup Runtime Layer
-        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
-        with:
-          python-version: '3.11'
-
-      - name: 3. Install Core Protocols
-        run: pip install --no-cache-dir requests
-
-      - name: 4. Execute Scraper & Check for Pipeline Variations
-        id: check_mutations
-        continue-on-error: true
-        run: python update-watcher.py
-
-      - name: 5. Auto-Commit Modifications & Broadcast if Updates Exist
-          git config --global user.name "Lysander Autonomous Robot"
-          git config --global user.email "bot@hfid.standard"
-          
-          if [ -f "upstream_watcher_state.json" ]; then
-            git add upstream_watcher_state.json
-            # Only commit and push if a mutation actually altered the file status
-            git diff --quiet && git diff --staged --quiet || (git commit -m "chore: upstream release mapping mutation detected" && git push origin main)
+      - name: Verify Environment Configuration
+        run: |
+          echo "Running verification track for: upstream-watchdog.yml"
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi

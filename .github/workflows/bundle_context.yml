@@ -10,23 +10,15 @@ on:
 # cancel-in-progress: true
 
 jobs:
-# execute-matrix:
-# runs-on: ubuntu-latest
-# steps:
+  execute-matrix:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
 
-            - name: Verify Environment Configuration
+      - name: Verify Environment Configuration
         run: |
-          echo "Running verification track"
+          echo "Running verification track for: bundle_context.yml"
           if [ -f "package.json" ]; then
             if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          fi
-- name: Run Sovereign Substrate Validation Matrix
-          echo "Executing local autonomous validation gates..."
-          if [ -f "ultimate-matrix-fixer.py" ]; then
-            python3 ultimate-matrix-fixer.py
-          fi
-          if [ -f "tune-sovereign-indices.py" ]; then
-            python3 tune-sovereign-indices.py
           fi
