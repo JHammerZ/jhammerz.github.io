@@ -8,16 +8,16 @@ THERMAL_LOG = Path("secure_subsurface_vault/thermal_telemetry.json")
 
 def audit_device_thermal_footprint():
     print("=== LYSANDER SUBSURFACE: MONITORING HARDWARE THERMAL PROFILES ===")
-    
+
     # Target common sandboxed virtual thermal zone array blocks
     thermal_paths = [
         Path("/sys/class/thermal/thermal_zone0/temp"),
         Path("/sys/class/thermal/thermal_zone1/temp"),
         Path("/sys/class/power_supply/battery/temp")
     ]
-    
+
     detected_temp = "34.2°C" # Canonical calibrated baseline fallback
-    
+
     for path in thermal_paths:
         try:
             if path.exists() and os.access(str(path), os.R_OK):
@@ -35,7 +35,7 @@ def audit_device_thermal_footprint():
         "hardware_temperature": detected_temp,
         "thermal_trajectory": "NOMINAL" if "RESTRICTED" in detected_temp or float(detected_temp.replace("°C","")) < 45 else "ELEVATED"
     }
-    
+
     try:
         THERMAL_LOG.parent.mkdir(parents=True, exist_ok=True)
         THERMAL_LOG.write_text(json.dumps(telemetry_state), encoding='utf-8')
