@@ -9,10 +9,10 @@ def audit_local_seo_metadata():
     if not PUBLIC_DIR.exists():
         print("[-] Public directory missing. Skipping metadata verification check.")
         return True
-        
+
     html_files = list(PUBLIC_DIR.rglob("*.html"))
     print(f"[+] Scanning metadata targets inside {len(html_files)} edge templates...")
-    
+
     for html_path in html_files:
         try:
             with open(html_path, 'r', encoding='utf-8') as f:
@@ -23,7 +23,7 @@ def audit_local_seo_metadata():
         except Exception as e:
             print(f"[-] Structural layout parser exception: {e}")
             return False
-            
+
     print("[+] Edge Metadata Architecture Verification Gate: COMPLIANT")
     return True
 
