@@ -1,6 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Sovereign Workflow Instance: validate-ld-json.yml
-name: "Verification Matrix: Validate Ld Json"
+name: "Sovereign Core: Validate Ld Json"
 
 on:
   push:
@@ -13,15 +13,10 @@ concurrency:
 
 jobs:
   execute-matrix:
-    env:
-      TIKTOK_API_KEY: ${{ secrets.TIKTOK_API_KEY }}
-      SPOTIFY_TOKEN: ${{ secrets.SPOTIFY_TOKEN }}
-      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
-
       - name: Initialize Custom Pipeline Core
         run: |
           echo "Running processing array block metrics trace for: validate-ld-json.yml"

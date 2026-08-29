@@ -13,15 +13,10 @@ concurrency:
 
 jobs:
   execute-matrix:
-    env:
-      TIKTOK_API_KEY: ${{ secrets.TIKTOK_API_KEY }}
-      SPOTIFY_TOKEN: ${{ secrets.SPOTIFY_TOKEN }}
-      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
-
       - name: Initialize Custom Pipeline Core
         run: |
           echo "Running processing array block metrics trace for: upstream-watchdog.yml"
