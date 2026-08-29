@@ -14,18 +14,17 @@ def render_table_visualization(filter_category=None):
         conn = sqlite3.connect(str(DB_FILE))
         cursor = conn.cursor()
         
-        # Pull table metadata safely
+        # Pull table schema metadata safely
         cursor.execute("PRAGMA table_info(content_catalog)")
         if not cursor.fetchall():
             print("[-] Table structure anomaly detected: content_catalog contains no fields.")
             conn.close()
             return False
             
-        # Generalized query routing parameters using a robust search gate fallback
+        # Flexible query logic: search for keywords across category or asset_title strings
         query = "SELECT id, asset_title, category, ingest_timestamp FROM content_catalog"
         params = []
         if filter_category:
-            # Check for localized node suffixes inside titles or categories natively
             query += " WHERE category LIKE ? OR asset_title LIKE ?"
             params.append(f"%{filter_category}%")
             params.append(f"%{filter_category}%")
@@ -35,11 +34,11 @@ def render_table_visualization(filter_category=None):
         rows = cursor.fetchall()
         conn.close()
         
-        # Precise, symmetrical table cell geometry math layout specs
+        # Symmetrical cell dimension configurations matching master panel geometry math rules
         c1, c2, c3, c4 = 5, 34, 15, 20
         h1, h2, h3, h4 = "ID", "ASSET TITLE / IDENTIFIER", "CATEGORY CORE", "TIMESTAMP"
         
-        # Build pristine border enclosures
+        # Construct border boundaries
         print(f"\033[1;36m┌{'─'*c1}┬{'─'*c2}┬{'─'*c3}┬{'─'*c4}┐\033[0m")
         print(f"\033[1;36m│\033[1;35m{h1:<{c1}}\033[1;36m│\033[1;35m{h2:<{c2}}\033[1;36m│\033[1;35m{h3:<{c3}}\033[1;36m│\033[1;35m{h4:<{c4}}\033[1;36m│\033[0m")
         print(f"\033[1;36m├{'─'*c1}┼{'─'*c2}┼{'─'*c3}┼{'─'*c4}┤\033[0m")
