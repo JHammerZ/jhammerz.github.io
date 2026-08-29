@@ -38,18 +38,18 @@ def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m─────�
 
 def render():
     db, pid, pub, p_list = Path("sovereign_metrics.db"), Path(".lysander-daemon.pid"), Path("public"), Path("public/assets/playlist.json")
-    outbox_dir = Path("secure_subsurface_vault/message_outbox")
-
+    outbox_dir, ingest_dir, lat_log = Path("secure_subsurface_vault/message_outbox"), Path("content_ingest"), Path("secure_subsurface_vault/latency_telemetry.json")
+    
     recs = "0 RECORDS"
     if db.exists():
         try:
             conn = sqlite3.connect(str(db))
-            recs = f"{conn.cursor().execute('SELECT COUNT(*) FROM content_catalog').fetchone()[0]} RECORDS"
+            recs = f"{conn.cursor().execute('SELECT COUNT(*) FROM content_catalog').fetchone()} RECORDS"
             conn.close()
         except: pass
 
-    h_cnt = f"{len(list(pub.rglob('*.html')))} EDGE HTML VIEWS" if pub.exists() else "0 FILES"
-
+ h_cnt = f"{len(list(pub.rglob('*.html')))} EDGE HTML VIEWS" if pub.exists() else "0 FILES"
+    
     daemon = "OFFLINE"
     uptime = "00:00:00 (STALE)"
     if pid.exists():
@@ -87,12 +87,27 @@ def render():
     except: pass
 
     v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
-
+    
     outbox_status = "0 PACKETS (IDLE)"
     if outbox_dir.exists():
         try:
             packets = len(list(outbox_dir.glob("*.asc")))
             outbox_status = f"{packets} PACKETS QUEUED" if packets > 0 else "0 PACKETS (IDLE)"
+        except: pass
+
+    ingest_status = "0 BATCHES PENDING"
+    if ingest_dir.exists():
+        try:
+            batches = len(list(ingest_dir.glob("*.json")))
+            ingest_status = f"{batches} BATCHES QUEUED" if batches > 0 else "0 BATCHES (IDLE)"
+        except: pass
+
+    # Read live latency telemetry data
+    latency_str = "0.000 ms (BENCHMARKING)"
+    if lat_log.exists():
+        try:
+            l_data = json.loads(lat_log.read_text(encoding='utf-8'))
+            latency_str = f"{l_data.get('core_processing_latency_ms', 0.0)} ms"
         except: pass
 
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
@@ -112,15 +127,17 @@ def render():
     pr("SUBSTRATE STORAGE ALLOCATION", alloc, "34")
     pr("ACTIVE PERIMETER THREAT INDEX", "0 ANOMALIES" if susp==0 else f"{susp} BLOCKS", "32" if susp==0 else "31")
     pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
+    pr("CORE PROCESSING LATENCY INDEX", latency_str, "34")
     pr("HOST OPERATING SYSTEM KERNEL", cmd(["uname", "-r"]), "34")
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
+    pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
     div("INTEGRITY COMPLIANCE RUN")
     pr("REAL-TIME WORKSPACE INSPECTOR", drift, "33" if "CHANGES" in drift else "32")
     pr("REGISTRY REVISION DEPTH", cmd(["git", "rev-list", "--count", "HEAD"]) + " REVISIONS", "34")
     pr("FEDERATION CONTENT COUNTER", recs, "34")
     pr("EDGE PAYLOAD TEMPLATE COUNT", h_cnt, "34")
-    pr("SUBSTRATE OPERATIONAL STATUS", "BALANCED (GLOBAL SYNC)", "32")
+    pr("SUBSTRATE OPERATIONAL STATUS", global_status, "32")
     print("\033[1;36m└─────────────────────────────────────────────────────────────────┘\033[0m")
 
 if __name__ == "__main__": render()
