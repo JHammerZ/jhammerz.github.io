@@ -1,30 +1,58 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Sovereign Workflow Instance: deploy-worker.yml
-name: "Deploy Matrix:  Worker"
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Automated Parallel 12-Worker Matrix Deployment Engine
 
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
+name: "Deploy: H-FID Lysander Engine Matrix"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'lysander-w4/**'
+      - 'lysander-w**/**'
+  workflow_dispatch:
+
 jobs:
-  execute-matrix:
-    env:
-      TIKTOK_API_KEY: ${{ secrets.TIKTOK_API_KEY }}
-      SPOTIFY_TOKEN: ${{ secrets.SPOTIFY_TOKEN }}
-      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+  deploy-matrix:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Secure, parallel tracking nodes for all 12 edge worker directories
+        worker: [
+          "lysander-w1", "lysander-w2", "lysander-w3", "lysander-w4",
+          "lysander-w5", "lysander-w6", "lysander-w7", "lysander-w8",
+          "lysander-w9", "lysander-w10", "lysander-w11", "lysander-w12"
+        ]
+      fail-fast: false
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+        with:
+          fetch-depth: 0
 
-      - name: Initialize Deployment Parameters
+      - name: Deploy Cluster Node to Cloudflare
+        # Check if the specific worker folder path exists before executing to prevent ghost build drops
         run: |
-          echo "Initializing edge deployment hooks for: deploy-worker.yml"
-          if [ -f "package.json" ]; then npm run build --if-present; fi
-      - name: Synchronize Cloudflare Worker Nodes
-        run: echo "Edge compilation synchronization completed for sovereign substrate nodes."
+          if [ -d "${{ matrix.worker }}" ]; then
+            echo "🚀 Compiling and publishing cluster node: ${{ matrix.worker }}"
+            npx wrangler deploy --config ${{ matrix.worker }}/wrangler.toml
+          else
+            echo "⚠️ Skip: Subdirectory ${{ matrix.worker }} not initialized in repo context yet."
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Seed Primary Persistence Database Node
+        run: |
+          if [ -d "lysander-w4" ] && [ -f "schema.sql" ]; then
+            echo "⚡ Injecting relational schema mappings into primary node..."
+            npx wrangler d1 execute lysander_db --config lysander-w4/wrangler.toml --file=schema.sql --remote
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

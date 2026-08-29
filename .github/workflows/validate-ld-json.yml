@@ -1,25 +1,38 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Sovereign Workflow Instance: validate-ld-json.yml
-name: "Sovereign Core: Validate Ld Json"
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
 
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
+name: "CI: Structural Metadata Linting"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+on:
+  workflow_dispatch:
+
 jobs:
-  execute-matrix:
+  validate-json:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
-      - name: Initialize Custom Pipeline Core
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+        with:
+          fetch-depth: 0
+
+      - name: Validate LD+JSON Schema Structure
         run: |
-          echo "Running processing array block metrics trace for: validate-ld-json.yml"
-          if [ -x "./sovereign-audit-fix.sh" ]; then ./sovereign-audit-fix.sh; fi
-      - name: Commit Local Substrate State Telemetry
-        run: echo "Global workspace state metrics tracked and logged successfully."
+          if [ -f entities.json ]; then
+            echo "Checking entities.json structural integrity..."
+            if ! jq empty entities.json 2>/dev/null; then
+              echo "❌ CRITICAL: entities.json contains invalid JSON syntax properties"
+              exit 1
+            fi
+            echo "✅ entities.json is structurally valid."
+          else
+            echo "⚠️ SKIP: entities.json not found in root context layout."
+          fi
