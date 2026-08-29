@@ -58,3 +58,4 @@ secure_subsurface_vault/
 .sovereign_vault_meta.json
 secure_subsurface_vault/message_outbox/
 secure_subsurface_vault/latency_telemetry.json
+secure_subsurface_vault/handshake_telemetry.json
