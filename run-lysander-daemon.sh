@@ -37,7 +37,7 @@ while true; do
     python3 track-network-traffic.py 2>/dev/null
     python3 secure_subsurface_vault/track-handshake-intervals.py 2>/dev/null
     python3 secure_subsurface_vault/track-agent-heartbeats.py 2>/dev/null
-    python3 secure_subsurface_vault/verify-backup-integrity.py 2>/dev/null
+    python3 verify-vault-integrity.py 2>/dev/null
     python3 wipe-secure-outbox.py 2>/dev/null
     
     # 4. Automated State Sync Upstream
@@ -45,5 +45,5 @@ while true; do
     git commit -m "sync: planetary pipeline telemetry snapshot refresh" --no-verify 2>/dev/null
     git push origin main 2>/dev/null
     
-    sleep 900 # Tighter iteration sweeps: 15-minute intervals for supreme resolution
+    sleep 900 # 15-minute high-resolution intervals
 done
