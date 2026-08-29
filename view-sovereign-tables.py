@@ -21,11 +21,13 @@ def render_table_visualization(filter_category=None):
             conn.close()
             return False
             
-        # Standardized query routing parameters
+        # Generalized query routing parameters using a robust search gate fallback
         query = "SELECT id, asset_title, category, ingest_timestamp FROM content_catalog"
         params = []
         if filter_category:
-            query += " WHERE category LIKE ?"
+            # Check for localized node suffixes inside titles or categories natively
+            query += " WHERE category LIKE ? OR asset_title LIKE ?"
+            params.append(f"%{filter_category}%")
             params.append(f"%{filter_category}%")
         query += " ORDER BY id ASC"
         
@@ -34,7 +36,6 @@ def render_table_visualization(filter_category=None):
         conn.close()
         
         # Precise, symmetrical table cell geometry math layout specs
-        # Interior columns are explicitly 5, 34, 15, and 20 spaces wide
         c1, c2, c3, c4 = 5, 34, 15, 20
         h1, h2, h3, h4 = "ID", "ASSET TITLE / IDENTIFIER", "CATEGORY CORE", "TIMESTAMP"
         
@@ -44,7 +45,6 @@ def render_table_visualization(filter_category=None):
         print(f"\033[1;36m├{'─'*c1}┼{'─'*c2}┼{'─'*c3}┼{'─'*c4}┤\033[0m")
         
         if not rows:
-            # Symmetrical text placement over exactly 77 interior space columns
             empty_msg = "NO OPERATIONAL DATA COMPLIANT WITH FILTER TARGET"
             print(f"\033[1;36m│\033[1;31m{empty_msg:^77}\033[1;36m│\033[0m")
         else:
