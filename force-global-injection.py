@@ -8,10 +8,10 @@ INGEST_DIR = Path("content_ingest")
 
 def drop_planetary_test_capsule():
     print("=== LYSANDER SUBSURFACE: GENERATING GLOBAL INJECTION HARNESS ===")
-    
+
     if not INGEST_DIR.exists():
         INGEST_DIR.mkdir(parents=True, exist_ok=True)
-        
+
     # Construct a valid, heavy multi-point planetary replication metadata capsule
     test_capsule = {
         "title": "Planetary Mesh Grid Validation Synchronizer",
@@ -19,9 +19,9 @@ def drop_planetary_test_capsule():
         "media_url": "https://github.io",
         "timestamp_epoch": int(time.time())
     }
-    
+
     target_file = INGEST_DIR / f"planetary_capsule_{int(time.time())}.json"
-    
+
     try:
         with open(target_file, "w", encoding="utf-8") as f:
             json.dump(test_capsule, f, indent=4)
