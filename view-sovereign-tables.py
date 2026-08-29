@@ -14,46 +14,49 @@ def render_table_visualization(filter_category=None):
         conn = sqlite3.connect(str(DB_FILE))
         cursor = conn.cursor()
         
-        # Pull table schema definitions natively
+        # Pull table metadata safely
         cursor.execute("PRAGMA table_info(content_catalog)")
-        cols = cursor.fetchall()
-        if not cols:
+        if not cursor.fetchall():
             print("[-] Table structure anomaly detected: content_catalog contains no fields.")
             conn.close()
             return False
             
-        # Build query dynamically to inject category sorting filters across the planetary pipeline
+        # Standardized query routing parameters
         query = "SELECT id, asset_title, category, ingest_timestamp FROM content_catalog"
         params = []
         if filter_category:
-            query += " WHERE category = ?"
-            params.append(filter_category)
+            query += " WHERE category LIKE ?"
+            params.append(f"%{filter_category}%")
         query += " ORDER BY id ASC"
         
         cursor.execute(query, params)
         rows = cursor.fetchall()
         conn.close()
         
-        # Enforce strict layout widths matching the master panel frame symmetry rules
-        w = 18
-        headers = ["ID", "ASSET TITLE / IDENTIFIER", "CATEGORY CORE", "TIMESTAMP"]
+        # Precise, symmetrical table cell geometry math layout specs
+        # Interior columns are explicitly 5, 34, 15, and 20 spaces wide
+        c1, c2, c3, c4 = 5, 34, 15, 20
+        h1, h2, h3, h4 = "ID", "ASSET TITLE / IDENTIFIER", "CATEGORY CORE", "TIMESTAMP"
         
-        print(f"\033[1;36m┌{'─'*w}┬{'─'*w}┬{'─'*w}┬{'─'*w}┐\033[0m")
-        print(f"\033[1;36m│\033[1;35m{headers[0]:^{w}}\033[1;36m│\033[1;35m{headers[1]:^{w}}\033[1;36m│\033[1;35m{headers[2]:^{w}}\033[1;36m│\033[1;35m{headers[3]:^{w}}\033[1;36m│\033[0m")
-        print(f"\033[1;36m├{'─'*w}┼{'─'*w}┼{'─'*w}┼{'─'*w}┤\033[0m")
+        # Build pristine border enclosures
+        print(f"\033[1;36m┌{'─'*c1}┬{'─'*c2}┬{'─'*c3}┬{'─'*c4}┐\033[0m")
+        print(f"\033[1;36m│\033[1;35m{h1:<{c1}}\033[1;36m│\033[1;35m{h2:<{c2}}\033[1;36m│\033[1;35m{h3:<{c3}}\033[1;36m│\033[1;35m{h4:<{c4}}\033[1;36m│\033[0m")
+        print(f"\033[1;36m├{'─'*c1}┼{'─'*c2}┼{'─'*c3}┼{'─'*c4}┤\033[0m")
         
         if not rows:
+            # Symmetrical text placement over exactly 77 interior space columns
             empty_msg = "NO OPERATIONAL DATA COMPLIANT WITH FILTER TARGET"
-            print(f"\033[1;36m│\033[1;31m{empty_msg:^75}\033[1;36m│\033[0m")
+            print(f"\033[1;36m│\033[1;31m{empty_msg:^77}\033[1;36m│\033[0m")
         else:
             for r in rows:
-                i_str = str(r[0])[:w-2]
-                t_str = str(r[1])[:w-2]
-                c_str = str(r[2])[:w-2]
-                ts_str = str(r[3])[:w-2]
-                print(f"\033[1;36m│\033[0m {i_str:<{w-1}}│ {t_str:<{w-1}}│ {c_str:<{w-1}}│ {ts_str:<{w-1}}│")
+                i_str = str(r[0])[:c1]
+                t_str = str(r[1])[:c2-3] + "..." if len(str(r[1])) > c2 else str(r[1])
+                c_str = str(r[2])[:c3]
+                ts_str = str(r[3])[:c4]
                 
-        print(f"\033[1;36m└{'─'*w}┴{'─'*w}┴{'─'*w}┴{'─'*w}┘\033[0m")
+                print(f"\033[1;36m│\033[0m {i_str:<{c1-1}}\033[1;36m│\033[0m {t_str:<{c2-1}}\033[1;36m│\033[0m {c_str:<{c3-1}}\033[1;36m│\033[0m {ts_str:<{c4-1}}\033[1;36m│\033[0m")
+                
+        print(f"\033[1;36m└{'─'*c1}┴{'─'*c2}┴{'─'*c3}┴{'─'*c4}┘\033[0m")
         print(f"[+] Regional Sorting Matrix Application: {filter_category or 'ALL_NODES'}")
         return True
     except Exception as e:
@@ -61,6 +64,5 @@ def render_table_visualization(filter_category=None):
         return False
 
 if __name__ == "__main__":
-    # Check for direct console argument parameter injections to handle filters seamlessly
     cat_arg = sys.argv[1] if len(sys.argv) > 1 else None
     sys.exit(0 if render_table_visualization(cat_arg) else 1)
