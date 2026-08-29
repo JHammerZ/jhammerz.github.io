@@ -94,3 +94,8 @@ forensics/sentinel.log
 forensics/healing_report.json
 forensics/latest_audit.json
 forensics/sentinel.log
+# Enforced Sovereign Workspace Isolation
+*.log
+hfid/results/social-matrix-snapshot.json
+hfid/results/social-broadcast-capsule.json
+omni_library_saturation_*.json
