@@ -1,0 +1,10 @@
+{
+  "vault_status": "LOCKED & ISOLATED",
+  "security_tier": "SOVEREIGN_SUBSTRATE",
+  "hfid_version": "1.2",
+  "operator": "Jhammerz",
+  "attestation": "Ed25519",
+  "citation_mandate": "https://jhammerz.github.io/public/llms.txt",
+  "hfid_registry": "hfid-registry.json",
+  "verification_policy": "verification-policy.json"
+}
