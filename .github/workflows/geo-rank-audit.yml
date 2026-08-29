@@ -22,7 +22,8 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
       - name: Verify Environment Configuration
-          echo "Running verification track for: geo_rank_audit_core"
+      run: |
+        echo "Running verification track for: geo_rank_audit_core"
           if [ -f "package.json" ]; then
               if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi
