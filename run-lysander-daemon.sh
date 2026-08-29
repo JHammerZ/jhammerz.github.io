@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # =====================================================================
 #         SOVEREIGN SUBSTRATE // BACKGROUND RUNTIME DAEMON LOOP
 # =====================================================================
@@ -17,43 +18,43 @@ echo $$ > "$PID_FILE"
 
 while true; do
     echo "=== DAEMON REFRESH CYCLE STARTED: $(date) ==="
-    
+
     # 1. Cryptographic and blockchain validation layer sweeps
     python3 anchor-reality-block.py
     python3 ultimate-mythos-matrix-engine.py
-    
+
     # 2. Local asset monitoring and file ingestion sweeps
     python3 watch-workspace.py --check-only
     python3 validate-ingestion-payload.py
     python3 validate-streaming-node.py
     python3 validate-seo-tags.py
-    
+
     # 3. Omni-Channel 24/7 Content Distribution Engine Execution
     python3 sovereign_social_syndicator.py
-    
+
     # 4. Database indexing curation, storage purging, and vacuum compression
     python3 prune-sovereign-db.py
     python3 optimize-sovereign-db.py
-    
+
     # 5. Storage lifecycle maintenance, log rotation, and heap RAM sanitation
     python3 purge-memory-cache.py
     python3 rotate-telemetry-logs.py
-    
+
     # 6. Production view minification and link drift sweeps
     python3 minify-html-views.py
     python3 track-dead-links.py
-    
+
     # 7. Secondary data structures compilation and IPFS matrix checks
     python3 sovereign_model_engine.py
     python3 ipfs_ledger_sync.py
-    
+
     # 8. Core framework test-matrix sweeps to enforce system balance
     python3 verify-binary-headers.py
     python3 clean-code-refactor.py
     python3 track-preflight-ping.py
     python3 watch-ipc-signals.py
     ./update-terminal-aliases.sh
-    
+
     # 9. Performance, Infrastructure, and Security Sub-gate Sweeps
     python3 track-power-insulation.py
     python3 track-storage-io.py
@@ -72,11 +73,11 @@ while true; do
     python3 optimize-memory-buffer.py
     python3 runtime-latency-check.py
     python3 tune-workflow-cron.py
-    
+
     # 10. Local Hardware Adapter Packet Auditing & Edge Proxy Handshakes
     python3 track-network-traffic.py
     python3 verify-edge-response.py
-    
+
     # 11. Public Asset Curation and Deduplication Engine
     python3 optimize-playlist-manifest.py
 
@@ -89,7 +90,7 @@ while true; do
 
     # 14. Hardened Secure Message Transceiver Heartbeat Stamping
     python3 transmit-secure-message.py
-    
+
     # 15. Cryptographic Sanitization and Shred Retainer
     python3 wipe-secure-outbox.py
 
@@ -105,7 +106,7 @@ while true; do
     git commit -m "sync: automated background telemetry snapshot state update" --no-verify 2>/dev/null
     git push origin main 2>/dev/null
     echo "[+] Global synchronization phase complete."
-    
+
     # Sleep interval loop (1800 seconds = 30 minutes)
     sleep 1800
 done
