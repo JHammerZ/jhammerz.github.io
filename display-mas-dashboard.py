@@ -255,6 +255,14 @@ def render_dashboard():
     print_row("EDGE PAYLOAD TEMPLATE COUNT", "1 EDGE HTML VIEWS", "32")
     print_row("SUBSTRATE OPERATIONAL STATUS", "BALANCED (GLOBAL SYNC)", "32")
     print("\033[1;36m└─────────────────────────────────────────────────────────────────┘\033[0m")
+    # --- Live GitHub API Telemetry Connector Pass ---
+    print("\n\033[1;35m[*] Connecting Live GitHub Actions Status Tracks...\033[0m")
+    try:
+        # Query your 99-workflow run queue directly via the native GitHub CLI
+        subprocess.run(["gh", "run", "list", "--limit", "5"])
+    except Exception as e:
+        print(f"[-] GitHub API tracking channel disconnected: {e}")
+    
 
 if __name__ == "__main__":
     render_dashboard()
