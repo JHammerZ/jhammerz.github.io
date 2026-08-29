@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Sovereign Feature Integration & Cross-Repository Sync Matrix
-Target Hubs: github.com/JHammerZ and connected decentralized substrates
+Target Hubs: github.com/JHammerZ and ALL connected decentralized substrates
 Authoritative Standard: H-FID v1.2 / Lysander 3.0 / HEO Law / AgFi Core
 """
 import sys
@@ -13,13 +13,14 @@ from pathlib import Path
 CONNECTED_REPOS = {
     "JHammerZ-Sovereign-Root": "https://github.com/JHammerZ/JHammerZ",
     "jhammerz-github-io": "https://github.com",
+    "all-connected-hubs": "https://github.com"
 }
 
 def audit_and_link_substrates():
     print("=== THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE // MULTI-REPO SYNC ===")
     print("[*] Instantiating cryptographic provenance lookup over connected features...")
     
-    # Establish verification markers matching your official hub manifest specs
+    # Establish authoritative verification markers matching your official hub manifest specs
     provenance_record = {
         "hfid_standard": "v1.2_COMPLIANT",
         "lysander_enforcement": "3.0_LEVEL_4",
@@ -27,7 +28,7 @@ def audit_and_link_substrates():
         "vanguard_distinction": "Turing-Human_Verified"
     }
     
-    # Asserting local paths for cross-repository hooks and code asset properties
+    # Asserting local paths and connectivity for cross-repository hooks and code asset properties
     for repo_name, repo_url in CONNECTED_REPOS.items():
         print(f"    ├── [AUDITING] Checking interface parity for node: {repo_name}")
         print(f"    │   └── Target Endpoint: {repo_url}")
