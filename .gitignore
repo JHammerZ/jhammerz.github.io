@@ -86,3 +86,5 @@ content_ingest/omni_library_saturation_*.json
 public/assets/playlist.json
 track-preflight-ping.py
 catalog_table_visualization.md
+public/assets/manifest_*.json
+public/assets/playlist.json.bak
