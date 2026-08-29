@@ -136,6 +136,18 @@ def render():
     pr("CURATED PUBLIC EDGE METRICS", cur, "34")
     pr("SECURE VAULT ENCRYPTION NODE", "LOCKED & ISOLATED", "32")
     pr("SUBSTRATE STORAGE ALLOCATION", alloc, "34")
+    
+    # Parse live hardware chunk measurements from telemetry files dynamically
+    io_status = "0.00% (CALCULATING)"
+    io_log = Path("secure_subsurface_vault/storage_io_telemetry.json")
+    if io_log.exists():
+        try:
+            io_data = json.loads(io_log.read_text(encoding="utf-8"))
+            tot = io_data.get("system_total_gb", 1.0)
+            usd = io_data.get("system_used_gb", 0.0)
+            io_status = f"{round((usd / tot) * 100, 2)}% CAPACITY USED"
+        except: pass
+    pr("PARTITION STORAGE UTILITY", io_status, "34")
     pr("ACTIVE PERIMETER THREAT INDEX", "0 ANOMALIES" if susp==0 else f"{susp} BLOCKS", "32" if susp==0 else "31")
     pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
     pr("CORE PROCESSING LATENCY INDEX", latency_str, "34")
