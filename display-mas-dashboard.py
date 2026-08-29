@@ -39,7 +39,7 @@ def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m─────�
 def render():
     db, pid, pub, p_list = Path("sovereign_metrics.db"), Path(".lysander-daemon.pid"), Path("public"), Path("public/assets/playlist.json")
     outbox_dir, ingest_dir, lat_log = Path("secure_subsurface_vault/message_outbox"), Path("content_ingest"), Path("secure_subsurface_vault/latency_telemetry.json")
-
+    
     recs = "0 RECORDS"
     if db.exists():
         try:
@@ -49,7 +49,7 @@ def render():
         except: pass
 
     h_cnt = f"{len(list(pub.rglob('*.html')))} EDGE HTML VIEWS" if pub.exists() else "0 FILES"
-
+    
     daemon = "OFFLINE"
     uptime = "00:00:00 (STALE)"
     if pid.exists():
@@ -58,7 +58,7 @@ def render():
             if os.path.exists(f"/proc/{p_id}"):
                 daemon = f"RUNNING (PID {p_id})"
                 dt = datetime.now() - datetime.fromtimestamp(os.stat(f"/proc/{p_id}").st_ctime)
-                h, r = divmod(int(dt.total_s()), 3600)
+                h, r = divmod(int(dt.total_seconds()), 3600)
                 m, s = divmod(r, 60)
                 uptime = f"{h:02d}:{m:02d}:{s:02d} ACTIVE"
         except: pass
@@ -80,8 +80,14 @@ def render():
         alloc = f"{u/(1024**3):.2f}GB / {t/(1024**3):.2f}GB USED"
     except: alloc = "UNAVAILABLE"
 
-    v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
+    drift = "0 MODIFICATIONS"
+    try:
+        lines = [l for l in cmd(["git", "status", "--porcelain"]).strip().split('\n') if l]
+        if lines: drift = f"{len(lines)} CHANGES"
+    except: pass
 
+    v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
+    
     outbox_status = "0 PACKETS (IDLE)"
     if outbox_dir.exists():
         try:
@@ -108,12 +114,6 @@ def render():
         local_hash = cmd(["git", "rev-parse", "HEAD"])
         remote_hash = cmd(["git", "rev-parse", "origin/main"])
         if local_hash != remote_hash: global_status = "OUT OF SYNC (DRIFT)"
-    except: pass
-
-    drift = "0 MODIFICATIONS"
-    try:
-        lines = [l for l in cmd(["git", "status", "--porcelain"]).strip().split('\n') if l]
-        if lines: drift = f"{len(lines)} CHANGES"
     except: pass
 
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
