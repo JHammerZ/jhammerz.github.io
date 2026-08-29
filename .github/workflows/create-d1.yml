@@ -1,11 +1,11 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Automated Edge Database Provisioning Matrix
 
-name: "Recovery: Provision Live D1 Database"
+# name: "Recovery: Provision Live D1 Database"
 
-on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
+# on:
+# concurrency:
+# group: ${{ github.workflow }}-${{ github.ref }}
  cancel-in-progress: true
   push:
     branches: [ main, master ]

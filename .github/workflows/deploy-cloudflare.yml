@@ -2,10 +2,10 @@
 #          LYSANDER NETWORK MATRIX // CLOUDFLARE PAGES EDGE INGRESS
 #          DESIGN DEPTH: LEVEL 4 PRODUCTION // INFINITE MEDIA PIPES
 # ==============================================================================
-name: "Cloudflare: Sovereign Content Edge Mesh"
+# name: "Cloudflare: Sovereign Content Edge Mesh"
 
-on:
-concurrency:
+# on:
+# concurrency:
  group: ${{ github.workflow }}-${{ github.ref }}
  cancel-in-progress: true
   push:

@@ -4,7 +4,7 @@
 # Sovereign Author: Joshua Hamilton
 # SLSA Level: 3
 
-name: "SecOps: H-FID LLM Ingestion Audit"
+# name: "SecOps: H-FID LLM Ingestion Audit"
 
 on:
 concurrency:

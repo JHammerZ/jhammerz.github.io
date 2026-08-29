@@ -2,10 +2,10 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 
-name: "SecOps: H-FID Geo Rank Audit"
+# name: "SecOps: H-FID Geo Rank Audit"
 
-on:
-concurrency:
+# on:
+# concurrency:
  group: ${{ github.workflow }}-${{ github.ref }}
  cancel-in-progress: true
   push:

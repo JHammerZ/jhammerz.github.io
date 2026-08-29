@@ -1,10 +1,10 @@
 name: "Perpetual Upstream Mutation Watchdog"
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  schedule:
+# concurrency:
+# group: ${{ github.workflow }}-${{ github.ref }}
+# cancel-in-progress: true
+# schedule:
     # Triggers every 3 hours natively for free to keep rate limits green
     - cron: '42 */3 * * *'
   workflow_dispatch:

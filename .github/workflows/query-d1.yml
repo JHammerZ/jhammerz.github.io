@@ -1,11 +1,11 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Automated Edge Database Validation Query Matrix
 
-name: "Validation: Query Live D1 Cluster"
+# name: "Validation: Query Live D1 Cluster"
 
-on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
+# on:
+# concurrency:
+# group: ${{ github.workflow }}-${{ github.ref }}
  cancel-in-progress: true
   push:
     branches: [ main, master ]

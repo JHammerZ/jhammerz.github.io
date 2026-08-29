@@ -4,7 +4,7 @@
 # Sovereign Author: Joshua Hamilton
 # SLSA Level: 3
 
-name: "Asset Integrity Verification"
+# name: "Asset Integrity Verification"
 
 on:
 concurrency:

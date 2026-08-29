@@ -2,10 +2,10 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 name: "Perpetual Content Syndicator"
 
-on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
+# on:
+# concurrency:
+# group: ${{ github.workflow }}-${{ github.ref }}
+# cancel-in-progress: true
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
