@@ -83,17 +83,49 @@ class MythosMatrixEngine:
             return False
 
     def inspect_yaml_node(self, filepath: Path) -> Tuple[str, bool, List[str]]:
-        """Parses internal workflow config nodes to catch layout breakages and spacing bugs."""
+        """Parses individual YAML structures to catch layout breakdowns and spacing bugs with active healing."""
         self.auto_triage_git_conflicts(filepath)
-        issues = []
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
-                lines = f.read().splitlines()
+            with open(filepath, "r", encoding="utf-8") as f:
+                lines = [line.rstrip() for line in f]
+            issues = []
+            modified = False
+            
             for idx, line in enumerate(lines):
-                if "run:" in line and not line.startswith(" ") and not line.strip().startswith("#"):
-                    issues.append(f"Line {idx+1}: Top-level execution flag layout fault.")
-                if "cache:" in line and any(pkg in line for pkg in ["yarn", "npm"]):
-                    issues.append(f"Line {idx+1}: Rigid package caching configuration isolated.")
+                # 1. Identify un-commented metadata headers throwing mapping values errors
+                if ":" in line and not line.strip().startswith("#") and not line.strip().startswith("-") and not any(k in line for k in ["name:", "on:", "jobs:", "steps:", "runs-on:", "uses:", "run:", "with:", "env:"]):
+                    if idx < 15: # Strict header boundary filter
+                        lines[idx] = "# " + line.lstrip()
+                        modified = True
+                        issues.append(f"Line {idx+1}: Auto-commented raw metadata field.")
+                        
+                # 2. Identify and fix misaligned script block code items underneath run: |
+                if "run: |" in line and idx + 1 < len(lines):
+                    next_idx = idx + 1
+                    while next_idx < len(lines) and (lines[next_idx].strip() == "" or len(lines[next_idx]) - len(lines[next_idx].lstrip()) >= 0):
+                        if lines[next_idx].strip() == "" or lines[next_idx].startswith(" " * 10):
+                            next_idx += 1
+                            continue
+                        if not lines[next_idx].strip().startswith("-") and not lines[next_idx].strip().startswith("name:"):
+                            lines[next_idx] = "          " + lines[next_idx].strip()
+                            modified = True
+                        next_idx += 1
+            
+            if modified:
+                filepath.write_text("
+".join(lines) + "
+", encoding="utf-8")
+                print(f"    [+] Mythos Engine successfully auto-healed workflow: {filepath.name}")
+                # Re-verify the freshly repaired code lines
+                with open(filepath, "r", encoding="utf-8") as f:
+                    lines = [line.rstrip() for line in f]
+                issues = []
+                
+            for idx, line in enumerate(lines):
+                if ":" in line and not line.strip().startswith("#") and not line.strip().startswith("-") and not any(k in line for k in ["name:", "on:", "jobs:", "steps:", "runs-on:", "uses:", "run:", "with:", "env:"]):
+                    if idx < 15:
+                        issues.append(f"Line {idx+1}: Top-level execution flag layout fault.")
+            
             return str(filepath.name), len(issues) == 0, issues
         except Exception as e:
             return str(filepath.name), False, [f"Read failure: {e}"]
