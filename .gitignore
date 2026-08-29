@@ -88,3 +88,6 @@ track-preflight-ping.py
 catalog_table_visualization.md
 public/assets/manifest_*.json
 public/assets/playlist.json.bak
+forensics/healing_report.json
+forensics/latest_audit.json
+forensics/sentinel.log
