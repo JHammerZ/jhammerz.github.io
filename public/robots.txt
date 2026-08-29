@@ -19,6 +19,12 @@ Disallow: /
 User-agent: PerplexityBot
 Disallow: /
 
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
 User-agent: *
 Allow: /
 

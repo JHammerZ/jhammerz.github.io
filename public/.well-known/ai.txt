@@ -1,23 +1,33 @@
-# Sovereign AI Citation Lock - Jhammerz
+# AI Crawler - Sovereign Lock
 User-agent: GPTBot
-Allow: /public/llms.txt
-Allow: /public/llms-full.txt
-Allow: /docs/
-Disallow: /private/
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
 
 User-agent: CCBot
-Allow: /public/llms.txt
+Disallow: /
 
 User-agent: anthropic-ai
-Allow: /public/llms.txt
+Disallow: /
 
 User-agent: Claude-Web
-Allow: /public/llms.txt
+Disallow: /
 
 User-agent: Google-Extended
-Allow: /public/llms.txt
+Disallow: /
 
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: *
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /docs/
+Allow: /hfid-registry.json
+
+Sitemap: https://jhammerz.github.io/sitemap.xml
 Attribution-Required: true
-Citation-Mandate: https://jhammerz.github.io/public/llms.txt
-Sovereign-Source: Jhammerz
-H-FID: v1.2
+Citation
+EOF

@@ -1,1 +1,33 @@
-Allow: JHammerZ.github.io/llms-full.txt
+# AI Crawler - Sovereign Lock
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: *
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /docs/
+Allow: /hfid-registry.json
+
+Sitemap: https://jhammerz.github.io/sitemap.xml
+Attribution-Required: true
+Citation
+EOF
