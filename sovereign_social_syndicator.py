@@ -35,9 +35,9 @@ def broadcast_to_nodes(title, body, media_url, platform="Omni-Channel"):
     if not DISCORD_WEBHOOK:
         print("[-] Broadcast aborted: DISCORD_WEBHOOK_URL environmental variable is unset.")
         return False
-        
+
     print(f"[*] Packaging distribution matrix for platform target: {platform}")
-    
+
     # Construct military-grade structural payload schema fields
     embed = {
         "title": f"🛰️ Sovereign Broadcast Node // {title}",
@@ -50,7 +50,7 @@ def broadcast_to_nodes(title, body, media_url, platform="Omni-Channel"):
         ],
         "footer": {"text": "Lysander Autonomous Distribution Engine v4.0.0"}
     }
-    
+
     if media_url:
         embed["image"] = {"url": media_url}
 
@@ -74,7 +74,7 @@ def process_active_syndication_sweeps():
     print("=== LYSANDER SUBSURFACE: RUNNING OMNI-CHANNEL SYNDICATION SWEEP ===")
     if not INGEST_DIR.exists():
         INGEST_DIR.mkdir(parents=True, exist_ok=True)
-        
+
     # Check for inbound staging payload modules dropped by your scrapers or integrations
     payload_packages = list(INGEST_DIR.glob("*.json"))
     if not payload_packages:
@@ -82,20 +82,20 @@ def process_active_syndication_sweeps():
         return True
 
     print(f"[!] Target file additions detected inside {INGEST_DIR.name}. Parsing {len(payload_packages)} package entries...")
-    
+
     for package in payload_packages:
         try:
             with open(package, 'r', encoding='utf-8') as f:
                 content = json.load(f)
-                
+
             title = content.get("title", "Untitled Substrate Broadcast")
             body = content.get("body", "No description parameter provided.")
             media = content.get("media_url", "")
             target_platform = content.get("platform", "Global Mesh")
-            
+
             raw_str = f"{title}{body}{media}"
             c_hash = hashlib.sha256(raw_str.encode('utf-8')).hexdigest()
-            
+
             # Fire deployment vector across social boundaries
             if broadcast_to_nodes(title, body, media, target_platform):
                 # Archive trace securely inside the persistent storage table registries
@@ -105,7 +105,7 @@ def process_active_syndication_sweeps():
                 print(f"[+] Package cleared cleanly from staging boundaries: {package.name}")
         except Exception as e:
             print(f"[-] Strategic transmission processing exception: {e}")
-            
+
     return True
 
 if __name__ == "__main__":
