@@ -10,11 +10,11 @@ export default {
     const url = new URL(request.url);
     const clientGeographicRegion = request.cf?.regionCode || "UNKNOWN";
     const clientCountry = request.cf?.country || "UNKNOWN";
-    
+
     // Extract Agent-to-Agent Janus validation signatures directly from transmission headers
     const janusAgentSignature = request.headers.get("X-Janus-Agent-Signature") || "UNSIGNED";
     const clientUserAgent = request.headers.get("User-Agent") || "UNKNOWN";
-    
+
     console.log(`[*] Intercepting global pipeline ingress request from: ${clientCountry}-${clientGeographicRegion}`);
     console.log(`[*] Validating incoming Janus token block signature tracking profile: ${janusAgentSignature.substring(0, 16)}...`);
 
@@ -53,12 +53,12 @@ export default {
     try {
       const response = await fetch(request);
       const modifiedResponse = new Response(response.body, response);
-      
+
       // Inject planetary validation signatures into response header blocks
       secureHeaders.forEach((value, key) => {
         modifiedResponse.headers.set(key, value);
       });
-      
+
       return modifiedResponse;
     } catch (err) {
       return new Response("Planetary Relay Pipeline Transport Interruption", { status: 502 });

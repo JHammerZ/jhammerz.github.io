@@ -10,11 +10,11 @@ def analyze_ingest_velocity():
     if not DB_FILE.exists():
         print("[-] Target metric ledger sovereign_metrics.db absent. Velocity check aborted.")
         return True
-        
+
     try:
         conn = sqlite3.connect(str(DB_FILE))
         cursor = conn.cursor()
-        
+
         # Query total record logs grouped by timestamps to map ingestion intervals
         cursor.execute(
             "SELECT substr(ingest_timestamp, 1, 16) as minute_block, COUNT(*) "
@@ -24,14 +24,14 @@ def analyze_ingest_velocity():
         )
         intervals = cursor.fetchall()
         conn.close()
-        
+
         print("[*] Tracking Multi-Point Ingest Burst Windows (Last 5 Cycles):")
         if not intervals:
             print("    [IDLE] Ingestion vectors nominal. Zero velocity spikes logged.")
         else:
             for block, count in intervals:
                 print(f"    ├── Spatial Slot: [{block}] ──> {count} Records Synchronized")
-                
+
         print("\n[+] Catalog Storage Interval Analysis: COMPLIANT")
         return True
     except Exception as e:

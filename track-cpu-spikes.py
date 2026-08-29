@@ -8,11 +8,11 @@ SPIKE_LOG = Path("secure_subsurface_vault/cpu_spikes_telemetry.json")
 
 def audit_cpu_load_spikes():
     print("=== LYSANDER SUBSURFACE: ANALYZING HARDWARE PROCESSOR SPIKES ===")
-    
-    # Target sandboxed proc telemetry descriptors safely 
+
+    # Target sandboxed proc telemetry descriptors safely
     stat_path = Path("/proc/stat")
     cpu_usage_pct = "0.0%"
-    
+
     try:
         if stat_path.exists() and os.access(str(stat_path), os.R_OK):
             with open(stat_path, "r") as f:

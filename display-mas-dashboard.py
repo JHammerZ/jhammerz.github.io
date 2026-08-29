@@ -168,7 +168,7 @@ def render():
             temp_str = t_data.get("hardware_temperature", "34.2°C")
         except: pass
     pr("DEVICE THERMAL PROFILE TRACK", temp_str, "34")
-    
+
     # Parse real-time processor utilization profiles from vault files dynamically
     load_pct = "0.0%"
     spike_log = Path("secure_subsurface_vault/cpu_spikes_telemetry.json")
