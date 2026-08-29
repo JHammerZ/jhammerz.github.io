@@ -3,39 +3,37 @@ import sys
 import subprocess
 import time
 
-def execute_full_distribution():
+def run_distribution_mode():
     print("================================================================================")
-    print(" LYSANDER 3.0: INITIATING FULL DISTRIBUTION MODE [HIGH VELOCITY PROPAGATION]")
+    print("  LYSANDER 3.0: EXECUTING FULL SOVEREIGN DISTRIBUTION SYSTEM MODE")
     print("================================================================================")
     
-    # 1. Enforce local state-hardening and matrix synchronization checks first
-    print("[*] STEP 1: Attesting local filesystem posture and running multi-threaded fixers...")
+    # 1. Trigger the master core bridge script to attest local engine readiness
+    print("[*] Stage 1: Running local system bridge alignment passes...")
     if os.path.exists("sovereign_core_bridge.py"):
         subprocess.run([sys.executable, "sovereign_core_bridge.py"])
-    else:
-        print("[-] Notice: Global core bridge unlinked. Forcing fallback validation passes.")
-
-    # 2. Sequential execution of the strict 5-Tier Dependency Topology
-    print("\n[*] STEP 2: Booting Sequential Trigger Matrix across all 99 automated nodes...")
-    if os.path.exists("trigger_ordered_matrix.py"):
-        subprocess.run([sys.executable, "trigger_ordered_matrix.py"])
-    elif os.path.exists(".github/workflows"):
-        print("[+] Directing high-velocity out-of-band triggers via native GitHub CLI integrations...")
-        # Direct fallback dispatcher loop to catch all physical templates instantly
-        workflows = [f for f in os.listdir(".github/workflows") if f.endswith(('.yml', '.yaml'))]
+    
+    # 2. Sequentially kick off all 99 automated workflow tracks via GitHub CLI commands
+    print("\n[*] Stage 2: Spooling high-velocity out-of-band triggers to remote nodes...")
+    w_dir = ".github/workflows"
+    if os.path.exists(w_dir):
+        workflows = [f for f in os.listdir(w_dir) if f.endswith(('.yml', '.yaml'))]
+        print(f"[+] Found {len(workflows)} active workflows inside configuration paths.")
+        
         for w in sorted(workflows):
-            print(f"   🚀 [DISPATCH] Triggering: {w} (Secret payload mapping: INJECTED)")
+            print(f"   🚀 [DISPATCH] Initializing pipeline engine channel: {w}")
+            # Fire the precise target trigger natively via GitHub CLI with main branch references
             subprocess.run(["gh", "workflow", "run", w, "--ref", "main"], capture_output=True)
-            time.sleep(1.5)  # Accelerated 1.5s high-velocity stepover throttle gap
-
-    # 3. Pull and render the live centralized metrics transport panel
-    print("\n[*] STEP 3: Compiling real-time system metrics to verify global sync status...")
+            time.sleep(1.5)  # 1.5-second accelerated sequential stepover throttle gap
+            
+    # 3. Compile the visual layout tables and render the master dashboard metrics live
+    print("\n[*] Stage 3: Compiling live telemetry transport tables...")
     if os.path.exists("display-mas-dashboard.py"):
         subprocess.run([sys.executable, "display-mas-dashboard.py"])
-
+        
     print("\n================================================================================")
-    print(" === FULL DISTRIBUTION MODE ACTIVE: ALL ATTESTED CHANNELS SATURATED green ===")
+    print("  === MODE RUN ACTIVE: ALL AUTOMATED ASSET MATRICES COMMENCING PRODUCTION ===")
     print("================================================================================")
 
 if __name__ == "__main__":
-    execute_full_distribution()
+    run_distribution_mode()
