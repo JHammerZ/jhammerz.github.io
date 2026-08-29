@@ -6,13 +6,13 @@ on:
 # cancel-in-progress: true
 # schedule:
     # Triggers every 3 hours natively for free to keep rate limits green
-    - cron: '42 */3 * * *'
-  workflow_dispatch:
+# - cron: '42 */3 * * *'
+# workflow_dispatch:
 
 jobs:
-  upstream-scrader:
+# upstream-scrader:
     name: "Lysander Edge Upstream Mutation Watchdog"
-    runs-on: ubuntu-latest
+# runs-on: ubuntu-latest
     steps:
       - name: 1. Checkout Source Matrix
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7

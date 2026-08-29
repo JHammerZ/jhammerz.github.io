@@ -11,8 +11,8 @@ name: Aurelius-Engine Sovereign Operator
 
 on:
 concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
+# group: ${{ github.workflow }}-${{ github.ref }}
+# cancel-in-progress: true
   push:
     branches: [ main, master ]
   workflow_dispatch:
