@@ -77,3 +77,4 @@ secure_subsurface_vault/power_telemetry.json
 secure_subsurface_vault/janus_gate_outbox/*
 secure_subsurface_vault/*.json
 daemon_runtime.log
+secure_subsurface_vault/bitcoin_anchor_receipt.json
