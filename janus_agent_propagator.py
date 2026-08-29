@@ -22,7 +22,7 @@ def initialize_janus_gossip_matrix():
 
 def sign_payload_capsule(data_dict):
     raw_payload = json.dumps(data_dict, sort_keys=True).encode('utf-8')
-    # Generate military-grade HMAC-SHA256 tracking authentication seals natively
+    # Generate cryptographic tracking authentication seals natively via internal keys
     signature = hmac.new(SECRET_SIGNING_KEY, raw_payload, hashlib.sha256).hexdigest()
     return raw_payload.decode('utf-8'), signature
 
