@@ -160,6 +160,17 @@ def render():
     div("HARDWARE & METRICS TRANSPORT")
     pr("ACTIVE TRANSPORT SUBNET MASK", get_netmask(), "34")
     pr("CURATED PUBLIC EDGE METRICS", cur, "34")
+    
+    # Parse live hardware network throughput metrics dynamically from the vault
+    traffic_str = "0.00 GB (STREAMING)"
+    traffic_log = Path("secure_subsurface_vault/network_traffic_telemetry.json")
+    if traffic_log.exists():
+        try:
+            t_data = json.loads(traffic_log.read_text(encoding="utf-8"))
+            egress = t_data.get("total_egress_gb", 0.0)
+            traffic_str = f"{egress} GB CORES OUTBOUND"
+        except: pass
+    pr("PLANETARY MASS EGRESS VOL", traffic_str, "32" if "GB" in traffic_str else "34")
     pr("SECURE VAULT ENCRYPTION NODE", "LOCKED & ISOLATED", "32")
     pr("SUBSTRATE STORAGE ALLOCATION", alloc, "34")
     pr("ACTIVE PERIMETER THREAT INDEX", "0 ANOMALIES" if susp==0 else f"{susp} BLOCKS", "32" if susp==0 else "31")
