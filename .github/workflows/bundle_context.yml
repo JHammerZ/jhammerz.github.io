@@ -16,13 +16,13 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Verify Environment Configuration
-          echo "Running structural verification track..."
+            - name: Verify Environment Configuration
+        run: |
+          echo "Running verification track"
           if [ -f "package.json" ]; then
-            npm install
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi
-
-      - name: Run Sovereign Substrate Validation Matrix
+- name: Run Sovereign Substrate Validation Matrix
           echo "Executing local autonomous validation gates..."
           if [ -f "ultimate-matrix-fixer.py" ]; then
             python3 ultimate-matrix-fixer.py

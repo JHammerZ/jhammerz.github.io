@@ -25,9 +25,9 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
 
-      - name: Verify Environment Configuration
-      run: |
-          echo "Running verification track for: streaming_audit_core"
+            - name: Verify Environment Configuration
+        run: |
+          echo "Running verification track"
           if [ -f "package.json" ]; then
             if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi
