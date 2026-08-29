@@ -117,7 +117,7 @@ def render():
     except: pass
 
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
-    print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
+    print("\033[1;36m│         THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE       │\033[0m")
     div("TRUST MATRIX PROVENANCE")
     pr("H-FID IDENTIFIERS MATRIX", "VERIFIED (hfid-registry.json)", "32")
     pr("BITCOIN PROVENANCE GATEWAY", "ACTIVE (anchor-reality-block.py)", "32")
