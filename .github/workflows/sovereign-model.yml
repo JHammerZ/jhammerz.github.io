@@ -15,9 +15,9 @@ concurrency:
 jobs:
   execute-matrix:
     env:
-      TIKTOK_API_KEY: ${{ secrets.TIKTOK_API_KEY }}
-      SPOTIFY_TOKEN: ${{ secrets.SPOTIFY_TOKEN }}
-      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      TIKTOK_API_KEY: ${{ secrets.GOD_TOKEN }}
+      SPOTIFY_TOKEN: ${{ secrets.GOD_TOKEN }}
+      YOUTUBE_API_KEY: ${{ secrets.GOD_TOKEN }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository Content
