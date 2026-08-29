@@ -21,7 +21,7 @@ def get_netmask():
                         m_ptr = curr.contents.ifa_netmask
                         if m_ptr:
                             b = m_ptr.contents.sa_data
-                            mask = f"{b[2]&0xFF}.{b[3]&0xFF}.{b[4]&0xFF}.{b[5]&0xFF}"
+                            mask = f"{b&0xFF}.{b&0xFF}.{b&0xFF}.{b&0xFF}"
                             libc.freeifaddrs(if_ptr)
                             return mask
                 curr = curr.contents.ifa_next
@@ -59,7 +59,7 @@ def render():
                 dt = datetime.now() - datetime.fromtimestamp(os.stat(f"/proc/{p_id}").st_ctime)
                 h, r = divmod(int(dt.total_seconds()), 3600)
                 m, s = divmod(r, 60)
-                uptime = f"{h:02d}:{minutes:02d}:{seconds:02d} ACTIVE"
+                uptime = f"{h:02d}:{m:02d}:{s:02d} ACTIVE"
         except: pass
 
     susp = 0
@@ -81,8 +81,8 @@ def render():
 
     drift = "0 MODIFICATIONS"
     try:
-        lines = cmd(["git", "status", "--porcelain"]).strip().split('\n')
-        if lines and lines[0]: drift = f"{len(lines)} CHANGES"
+        lines = [l for l in cmd(["git", "status", "--porcelain"]).strip().split('\n') if l]
+        if lines: drift = f"{len(lines)} CHANGES"
     except: pass
 
     v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
