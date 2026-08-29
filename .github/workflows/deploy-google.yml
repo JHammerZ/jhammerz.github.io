@@ -1,27 +1,54 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Sovereign Workflow Instance: deploy-google.yml
-name: "Deploy Matrix:  Google"
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+name: "Deploy to Google Cloud Run"
 
 on:
- workflow_dispatch:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+  concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
   push:
     branches: [ main, master ]
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  execute-matrix:
-    env:
-      TIKTOK_API_KEY: ${{ secrets.GOD_TOKEN }}
-      SPOTIFY_TOKEN: ${{ secrets.GOD_TOKEN }}
-      YOUTUBE_API_KEY: ${{ secrets.GOD_TOKEN }}
+  deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Pre-Install Core YAML Dependency
-      run: pip install pyyaml || pip3 install pyyaml
-    - name: Checkout Repository Content
-      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
       - name: Checkout Codebase
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Build and Deploy Container
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  # Use canonical, low-latency regional Artifact Registry naming bounds
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  gcloud builds submit --tag us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  gcloud run deploy mythos-matrix-core-latest \
+            --image us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest \
+            --region us-central1 \
+            --platform managed \
+            --allow-unauthenticated

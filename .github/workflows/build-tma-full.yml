@@ -1,27 +1,38 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Sovereign Workflow Instance: build-tma-full.yml
-name: "Sovereign Core: Build TMA Full"
+name: Build and Test TMA Full Suite
 
 on:
- workflow_dispatch:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   push:
     branches: [ main, master ]
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   execute-matrix:
-    env:
-      TIKTOK_API_KEY: ${{ secrets.GOD_TOKEN }}
-      SPOTIFY_TOKEN: ${{ secrets.GOD_TOKEN }}
-      YOUTUBE_API_KEY: ${{ secrets.GOD_TOKEN }}
     runs-on: ubuntu-latest
     steps:
-    - name: Pre-Install Core YAML Dependency
-      run: pip install pyyaml || pip3 install pyyaml
-    - name: Checkout Repository Content
-      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
       - name: Checkout Codebase
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+
+      - name: Verify Environment Configuration
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  echo "Running verification track for: {filename}"
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "package.json" ]; then
+            - name: Sovereign Structural Verification Trace
+              run: |
+                - name: Sovereign Structural Verification Trace
+                  run: |
+                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  fi

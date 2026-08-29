@@ -1,27 +1,43 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Sovereign Workflow Instance: deploy-cloudflare.yml
-name: "Deploy Matrix:  Cloudflare"
+# ==============================================================================
+#          LYSANDER NETWORK MATRIX // CLOUDFLARE PAGES EDGE INGRESS
+#          DESIGN DEPTH: LEVEL 4 PRODUCTION // INFINITE MEDIA PIPES
+# ==============================================================================
+name: "Cloudflare: Sovereign Content Edge Mesh"
 
 on:
- workflow_dispatch:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   push:
     branches: [ main, master ]
+    paths:
+      - 'public/**'
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  execute-matrix:
-    env:
-      TIKTOK_API_KEY: ${{ secrets.GOD_TOKEN }}
-      SPOTIFY_TOKEN: ${{ secrets.GOD_TOKEN }}
-      YOUTUBE_API_KEY: ${{ secrets.GOD_TOKEN }}
+  broadcast-cloudflare:
+    name: Cloudflare Anycast CDN Routing Deployment
     runs-on: ubuntu-latest
     steps:
-    - name: Pre-Install Core YAML Dependency
-      run: pip install pyyaml || pip3 install pyyaml
-    - name: Checkout Repository Content
-      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
-      - name: Checkout Codebase
+
+      - name: 1. Checkout JHammerZ Master Source Tree
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+
+      - name: 2. Broadcast Static Assets to Low-Latency Corridors
+        uses: cloudflare/wrangler-action@v3
+        with:
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  command: pages deploy public --project-name="jhammerz-media-hub"

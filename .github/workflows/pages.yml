@@ -1,28 +1,38 @@
-name: Deploy to GitHub Pages
+name: Deploy Site to Pages
 
 on:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   push:
-    branches: [main]
+    branches: [ main, master ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  execute-matrix:
     runs-on: ubuntu-latest
     steps:
-    - name: Pre-Install Core YAML Dependency
-      run: pip install pyyaml || pip3 install pyyaml
-    - name: Checkout Repository Content
-      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
-      - name: Checkout
+      - name: Checkout Codebase
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+
+      - name: Verify Environment Configuration
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  echo "Running verification track for: {filename}"
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "package.json" ]; then
+            - name: Sovereign Structural Verification Trace
+              run: |
+                - name: Sovereign Structural Verification Trace
+                  run: |
+                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  fi

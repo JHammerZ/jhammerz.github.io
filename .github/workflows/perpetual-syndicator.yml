@@ -1,27 +1,45 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Sovereign Workflow Instance: perpetual-syndicator.yml
-name: "Sovereign Core: Perpetual Syndicator"
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+name: "Perpetual Content Syndicator"
 
 on:
- workflow_dispatch:
-  push:
-    branches: [ main, master ]
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+  schedule:
+    - cron: '0 * * * *'
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  execute-matrix:
-    env:
-      TIKTOK_API_KEY: ${{ secrets.GOD_TOKEN }}
-      SPOTIFY_TOKEN: ${{ secrets.GOD_TOKEN }}
-      YOUTUBE_API_KEY: ${{ secrets.GOD_TOKEN }}
+  syndicate:
     runs-on: ubuntu-latest
     steps:
-    - name: Pre-Install Core YAML Dependency
-      run: pip install pyyaml || pip3 install pyyaml
-    - name: Checkout Repository Content
-      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
       - name: Checkout Codebase
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+
+      - name: Setup Python Runtime
+        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
+        with:
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  python-version: '3.11'
+
+      - name: Run Omni Broadcast Syndication
+        env:
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  pip install requests
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  python .github/scripts/social_syndicator.py

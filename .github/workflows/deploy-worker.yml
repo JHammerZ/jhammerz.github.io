@@ -1,37 +1,36 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Automated Parallel 12-Worker Matrix Deployment Engine
-
-name: "Deploy: H-FID Lysander Engine Matrix"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+name: Deploy Worker
 on:
- workflow_dispatch:
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
   push:
-    branches: [ main ]
-    paths:
-      - 'lysander-w4/**'
-      - 'lysander-w**/**'
+    branches: [ main, master ]
+    paths: ['workers/**']
   workflow_dispatch:
-
 jobs:
-  deploy-matrix:
+  deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Secure, parallel tracking nodes for all 12 edge worker directories
-        worker: [
-          "lysander-w1", "lysander-w2", "lysander-w3", "lysander-w4",
-          "lysander-w5", "lysander-w6", "lysander-w7", "lysander-w8",
-          "lysander-w9", "lysander-w10", "lysander-w11", "lysander-w12"
-        ]
-      fail-fast: false
     steps:
-    - name: Pre-Install Core YAML Dependency
-      run: pip install pyyaml || pip3 install pyyaml
-    - name: Checkout Repository Content
-      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
-      - name: Checkout Codebase
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+      - uses: actions/setup-node@60edb5dd545a1a42a3b5a1a6c3a2b2a2 # v4.0.2
+        with:
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  node-version: '24'
+      - name: Install
+        run: if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+      - name: Deploy
+        run: npx wrangler deploy
+        env:
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
