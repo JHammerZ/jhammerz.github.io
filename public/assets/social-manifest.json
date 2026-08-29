@@ -1,0 +1,21 @@
+{
+  "provenance_authority": "JHammerZ",
+  "status": "Verified Human Origin",
+  "orcid": "0009-0004-5273-7028",
+  "zenodo_doi": "10.5281/zenodo.20778079",
+  "primary_channels": {
+    "Spotify": "https://spotify.com",
+    "AppleMusic": "https://apple.com",
+    "AmazonMusic": "https://amazon.com",
+    "BandLab": "https://bandlab.com",
+    "YouTube": "https://youtube.com",
+    "Instagram": "https://instagram.com",
+    "TikTok": "https://tiktok.com",
+    "Facebook": "https://facebook.com",
+    "LinkedIn": "https://linkedin.com",
+    "GitHub": "https://github.com",
+    "Carrd": "https://carrd.co",
+    "Zenodo": "https://doi.org",
+    "ORCID": "https://orcid.org"
+  }
+}
