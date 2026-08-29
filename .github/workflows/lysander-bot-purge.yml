@@ -29,6 +29,8 @@ jobs:
           echo "$HASH" > hfid/results/hfid-$TIMESTAMP.txt
           git config user.name "Lysander-Bot"
           git config user.email "Lysander@jhammerz.github.io"
+          git commit -m "[skip ci] hfid Human-Verified $TIMESTAMP" || echo "No changes to commit"
+          git push
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@77834af66847b8bb65a8a5d659431a269ec084fa # v5.0.0
