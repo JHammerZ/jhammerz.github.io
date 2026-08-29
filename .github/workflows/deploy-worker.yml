@@ -30,30 +30,6 @@ jobs:
         ]
       fail-fast: false
     steps:
+    - name: Checkout Repository Content
+      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
       - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-        with:
-          fetch-depth: 0
-
-      - name: Deploy Cluster Node to Cloudflare
-        # Check if the specific worker folder path exists before executing to prevent ghost build drops
-        run: |
-          if [ -d "${{ matrix.worker }}" ]; then
-            echo "🚀 Compiling and publishing cluster node: ${{ matrix.worker }}"
-            npx wrangler deploy --config ${{ matrix.worker }}/wrangler.toml
-          else
-            echo "⚠️ Skip: Subdirectory ${{ matrix.worker }} not initialized in repo context yet."
-          fi
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-      - name: Seed Primary Persistence Database Node
-        run: |
-          if [ -d "lysander-w4" ] && [ -f "schema.sql" ]; then
-            echo "⚡ Injecting relational schema mappings into primary node..."
-            npx wrangler d1 execute lysander_db --config lysander-w4/wrangler.toml --file=schema.sql --remote
-          fi
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

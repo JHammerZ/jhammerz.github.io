@@ -20,12 +20,6 @@ jobs:
       YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout Repository Content
+      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
       - name: Checkout Codebase
-        uses: actions/checkout@v4
-
-      - name: Initialize Custom Pipeline Core
-        run: |
-          echo "Running processing array block metrics trace for: query-d1.yml"
-          if [ -x "./sovereign-audit-fix.sh" ]; then ./sovereign-audit-fix.sh; fi
-      - name: Commit Local Substrate State Telemetry
-        run: echo "Global workspace state metrics tracked and logged successfully."

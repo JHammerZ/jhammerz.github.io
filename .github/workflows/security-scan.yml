@@ -17,5 +17,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository Content
-      uses: actions/checkout@v4
-      # paste your actual security scan steps here
+      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756

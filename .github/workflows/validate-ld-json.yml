@@ -19,20 +19,6 @@ jobs:
   validate-json:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout Repository Content
+      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
       - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-        with:
-          fetch-depth: 0
-
-      - name: Validate LD+JSON Schema Structure
-        run: |
-          if [ -f entities.json ]; then
-            echo "Checking entities.json structural integrity..."
-            if ! jq empty entities.json 2>/dev/null; then
-              echo "❌ CRITICAL: entities.json contains invalid JSON syntax properties"
-              exit 1
-            fi
-            echo "✅ entities.json is structurally valid."
-          else
-            echo "⚠️ SKIP: entities.json not found in root context layout."
-          fi

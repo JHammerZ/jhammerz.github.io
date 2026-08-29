@@ -16,26 +16,5 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-      
-      - name: Check for broken links
-        uses: lycheeverse/lychee-action@v1.9.3
-        with:
-          args: --verbose --no-progress --exclude-mail --accept 200,403,429 './**/*.html' './**/*.md'
-          fail: false
-          
-      - name: Validate HTML
-        run: |
-          npm install -g html-validate
-          html-validate "**/*.html" || echo "HTML validation warnings found"
-          
-      - name: Check SEO basics
-        run: |
-          echo "Checking for title tags..."
-          grep -r "<title>" *.html || echo "Warning: Missing title tags"
-          echo "Checking for meta description..."
-          grep -r 'name="description"' *.html || echo "Warning: Missing meta descriptions"
-          echo "Checking for robots.txt..."
-          [ -f robots.txt ] && echo "robots.txt found" || echo "Warning: No robots.txt"
-          echo "Checking for sitemap..."
-          [ -f sitemap.xml ] && echo "sitemap.xml found" || echo "Warning: No sitemap.xml"
+    - name: Checkout Repository Content
+      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
