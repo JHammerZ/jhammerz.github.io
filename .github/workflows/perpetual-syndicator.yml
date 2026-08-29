@@ -1,14 +1,15 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Sovereign Workflow Instance: perpetual-syndicator.yml
 name: "Perpetual Content Syndicator"
 
 on:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
-# schedule:
-# - cron: '0 * * * *'
-workflow_dispatch:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

@@ -1,13 +1,15 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-
-# name: "SecOps: H-FID Forensic Audit"
+# Sovereign Workflow Instance: hfid-forensic-audit.yml
+Audit: hfid-forensic-audit
 
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

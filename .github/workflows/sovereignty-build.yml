@@ -1,11 +1,5 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
+# Sovereign Workflow Instance: sovereignty-build.yml
 name: "Sovereignty Build"
 
 on:
@@ -14,8 +8,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

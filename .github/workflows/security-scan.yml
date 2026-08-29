@@ -1,16 +1,15 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-
-# name: "Security: Static Substrate Scanner"
+# Sovereign Workflow Instance: security-scan.yml
+Audit: security-scan
 
 on:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
   push:
     branches: [ main, master ]
-workflow_dispatch:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

@@ -1,13 +1,15 @@
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Sovereign Workflow Instance: upstream-watchdog.yml
 name: "Perpetual Upstream Mutation Watchdog"
 
 on:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
-# schedule:
-    # Triggers every 3 hours natively for free to keep rate limits green
-# - cron: '42 */3 * * *'
-workflow_dispatch:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

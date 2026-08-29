@@ -1,12 +1,15 @@
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Sovereign Workflow Instance: build-tma-full.yml
 name: Build and Test TMA Full Suite
 
 on:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
-# push:
-# branches: [ main, master ]
-workflow_dispatch:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

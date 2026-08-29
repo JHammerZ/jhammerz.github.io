@@ -1,15 +1,15 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Automated Edge Database Provisioning Matrix
-
-# name: "Recovery: Provision Live D1 Database"
+# Sovereign Workflow Instance: create-d1.yml
+Audit: create-d1
 
 on:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
   push:
     branches: [ main, master ]
-workflow_dispatch:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

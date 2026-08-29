@@ -1,12 +1,15 @@
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Sovereign Workflow Instance: doi-bridge.yml
 name: "Automated Production Pipeline"
 
 on:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
-# push:
-# branches: [ main, master ]
-workflow_dispatch:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

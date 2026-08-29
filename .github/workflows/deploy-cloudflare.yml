@@ -1,18 +1,15 @@
-# ==============================================================================
-#          LYSANDER NETWORK MATRIX // CLOUDFLARE PAGES EDGE INGRESS
-#          DESIGN DEPTH: LEVEL 4 PRODUCTION // INFINITE MEDIA PIPES
-# ==============================================================================
-# name: "Cloudflare: Sovereign Content Edge Mesh"
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Sovereign Workflow Instance: deploy-cloudflare.yml
+Audit: deploy-cloudflare
 
 on:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
   push:
     branches: [ main, master ]
-# paths:
-      - 'public/**'
-workflow_dispatch:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

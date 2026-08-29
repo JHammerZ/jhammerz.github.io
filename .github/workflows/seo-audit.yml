@@ -1,18 +1,15 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# SLSA Level: 3
-
-# name: "SecOps: H-FID SEO Audit"
+# Sovereign Workflow Instance: seo-audit.yml
+Audit: seo-audit
 
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

@@ -1,10 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# SLSA Level: 3
-
-# name: "Asset Integrity Verification"
+# Sovereign Workflow Instance: asset-integrity.yml
+Audit: asset-integrity
 
 on:
   push:
@@ -12,8 +8,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

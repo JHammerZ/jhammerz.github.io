@@ -1,15 +1,15 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Automated Edge Database Validation Query Matrix
-
-# name: "Validation: Query Live D1 Cluster"
+# Sovereign Workflow Instance: query-d1.yml
+Audit: query-d1
 
 on:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
   push:
     branches: [ main, master ]
-workflow_dispatch:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

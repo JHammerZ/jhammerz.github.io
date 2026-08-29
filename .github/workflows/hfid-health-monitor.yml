@@ -1,21 +1,6 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-          # Replace variables in JSON
-          # 1. DNS Check
-          # 2. HTTPS + Status Code
-          # 3. SSL Cert Check
-          # 4. H-FID v1.2 Compliance Check
-          # 5. TTFB Performance
-          # 6. Deep check: sitemap + robots
-          # Write JSON summary
-              ### Failed Checks
-
-name: "Monitor: H-FID Health Check"
+# Sovereign Workflow Instance: hfid-health-monitor.yml
+Audit: hfid-health-monitor
 
 on:
   push:
@@ -23,8 +8,8 @@ on:
   workflow_dispatch:
 
 concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   execute-matrix:

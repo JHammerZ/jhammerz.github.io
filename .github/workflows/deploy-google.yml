@@ -1,14 +1,16 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Sovereign Workflow Instance: deploy-google.yml
 name: "Deploy to Google Cloud Run"
 
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
-# concurrency:
-# group: ${{ github.workflow }}-${{ github.ref }}
-# cancel-in-progress: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest
