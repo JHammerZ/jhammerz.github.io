@@ -80,12 +80,6 @@ def render():
         alloc = f"{u/(1024**3):.2f}GB / {t/(1024**3):.2f}GB USED"
     except: alloc = "UNAVAILABLE"
 
-    drift = "0 MODIFICATIONS"
-    try:
-        lines = [l for l in cmd(["git", "status", "--porcelain"]).strip().split('\n') if l]
-        if lines: drift = f"{len(lines)} CHANGES"
-    except: pass
-
     v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
     
     outbox_status = "0 PACKETS (IDLE)"
@@ -116,8 +110,14 @@ def render():
         if local_hash != remote_hash: global_status = "OUT OF SYNC (DRIFT)"
     except: pass
 
+    drift = "0 MODIFICATIONS"
+    try:
+        lines = [l for l in cmd(["git", "status", "--porcelain"]).strip().split('\n') if l]
+        if lines: drift = f"{len(lines)} CHANGES"
+    except: pass
+
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
-    print("\033[1;36m│         THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE       │\033[0m")
+    print("\033[1;36m│              THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE        │\033[0m")
     div("TRUST MATRIX PROVENANCE")
     pr("H-FID IDENTIFIERS MATRIX", "VERIFIED (hfid-registry.json)", "32")
     pr("BITCOIN PROVENANCE GATEWAY", "ACTIVE (anchor-reality-block.py)", "32")
