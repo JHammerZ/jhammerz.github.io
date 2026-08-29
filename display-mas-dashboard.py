@@ -169,6 +169,17 @@ def render():
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
     pr("DEVICE THERMAL PROFILE TRACK", temp_str, "34")
     pr("PROCESSOR CORE SPIKE MATRIX", load_pct, "34")
+    
+    # Parse decentralized block attestation metadata live on terminal display grids
+    anchor_str = "ATTESTED / PENDING"
+    receipt_log = Path("secure_subsurface_vault/bitcoin_anchor_receipt.json")
+    if receipt_log.exists():
+        try:
+            a_data = json.loads(receipt_log.read_text(encoding="utf-8"))
+            if a_data.get("network_anchor") == "BITCOIN_MAINNET_PROVED":
+                anchor_str = f"LOCKED (OP_RETURN {a_data.get('hex_payload', '')[:8]}...)"
+        except: pass
+    pr("BITCOIN MAINNET REALITY ANCHOR", anchor_str, "32" if "LOCKED" in anchor_str else "33")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
     pr("A2A JANUS AGENT CONSENSUS", janus_status, "32" if "COMPLIANT" in janus_status else "31")
