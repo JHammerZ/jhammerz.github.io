@@ -143,7 +143,7 @@ def render():
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
-    
+
     # Track decentralized Janus Agent consensus status live
     janus_status = "0 PEERS (OFFLINE)"
     janus_log = Path("secure_subsurface_vault/agent_heartbeats.json")
