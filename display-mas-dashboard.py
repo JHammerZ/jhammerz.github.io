@@ -33,9 +33,9 @@ def cmd(args):
     try: return subprocess.check_output(args).decode("utf-8").strip()
     except: return "UNKNOWN"
 
-# Expanded width alignment keys to contain high-density variable strings cleanly
+# Absolute geometric alignment math: total interior space equals exactly 79 characters width
 def pr(k, v, c="32"): print(f"\033[1;36m│\033[0m {k:<32} \033[1;{c}m{v:<45}\033[1;36m│\033[0m")
-def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m───────────────────────────────────────────────┤\033[0m")
+def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m─────────────────────────────────────────────────┤\033[0m")
 
 def render():
     db, pid, pub, p_list = Path("sovereign_metrics.db"), Path(".lysander-daemon.pid"), Path("public"), Path("public/assets/playlist.json")
@@ -141,7 +141,7 @@ def render():
         remote_hash = cmd(["git", "rev-parse", "origin/main"])
         if local_hash != remote_hash: global_status = "OUT OF SYNC (DRIFT)"
     except: pass
-    
+
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│                    THE SOVEREIGN GLOBAL DISTRIBUTION PIPELINE                   │\033[0m")
     div("TRUST MATRIX PROVENANCE")
