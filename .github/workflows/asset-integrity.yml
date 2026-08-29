@@ -25,7 +25,7 @@ jobs:
 
       - name: Verify Environment Configuration
       run: |
-        echo "Running verification track for: asset_integrity_mesh"
+          echo "Running verification track for: asset_integrity_mesh"
           if [ -f "package.json" ]; then
-              if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi

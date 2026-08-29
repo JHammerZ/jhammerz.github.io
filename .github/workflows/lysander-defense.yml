@@ -34,7 +34,7 @@ jobs:
 
       - name: Verify Environment Configuration
       run: |
-        echo "Running verification track for: {filename}"
+          echo "Running verification track for: {filename}"
           if [ -f "package.json" ]; then
             if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi

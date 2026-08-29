@@ -26,7 +26,7 @@ jobs:
 
       - name: Verify Environment Configuration
       run: |
-        echo "Running verification track for: source_tree_root"
+          echo "Running verification track for: source_tree_root"
           if [ -f "package.json" ]; then
-              if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
           fi
