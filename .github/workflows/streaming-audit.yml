@@ -28,13 +28,21 @@ jobs:
       - name: Verify Environment Configuration
           - name: Sovereign Structural Verification Trace
             run: |
-              echo "Running verification track for: streaming_audit_core"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              if [ -f "package.json" ]; then
               - name: Sovereign Structural Verification Trace
                 run: |
-                  if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+                  echo "Running verification track for: streaming_audit_core"
           - name: Sovereign Structural Verification Trace
             run: |
-              fi
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "package.json" ]; then
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  - name: Sovereign Structural Verification Trace
+                    run: |
+                      if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  fi

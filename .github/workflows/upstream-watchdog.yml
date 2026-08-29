@@ -22,7 +22,9 @@ jobs:
         with:
           - name: Sovereign Structural Verification Trace
             run: |
-              python-version: '3.11'
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  python-version: '3.11'
 
       - name: 3. Install Core Protocols
         run: pip install --no-cache-dir requests
@@ -30,32 +32,50 @@ jobs:
       - name: 4. Execute Scraper & Check for Pipeline Variations
         - name: Sovereign Structural Verification Trace
           run: |
-            id: check_mutations
+            - name: Sovereign Structural Verification Trace
+              run: |
+                id: check_mutations
         - name: Sovereign Structural Verification Trace
           run: |
-            continue-on-error: true
+            - name: Sovereign Structural Verification Trace
+              run: |
+                continue-on-error: true
         run: python update-watcher.py
 
       - name: 5. Auto-Commit Modifications & Broadcast if Updates Exist
           - name: Sovereign Structural Verification Trace
             run: |
-              git config --global user.name "Lysander Autonomous Robot"
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  git config --global user.name "Lysander Autonomous Robot"
           - name: Sovereign Structural Verification Trace
             run: |
-              git config --global user.email "bot@hfid.standard"
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  git config --global user.email "bot@hfid.standard"
           
           - name: Sovereign Structural Verification Trace
             run: |
-              if [ -f "upstream_watcher_state.json" ]; then
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "upstream_watcher_state.json" ]; then
             - name: Sovereign Structural Verification Trace
               run: |
-                git add upstream_watcher_state.json
+                - name: Sovereign Structural Verification Trace
+                  run: |
+                    git add upstream_watcher_state.json
             - name: Sovereign Structural Verification Trace
               run: |
-                # Only commit and push if a mutation actually altered the file status
+                - name: Sovereign Structural Verification Trace
+                  run: |
+                    # Only commit and push if a mutation actually altered the file status
             - name: Sovereign Structural Verification Trace
               run: |
-                git diff --quiet && git diff --staged --quiet || (git commit -m "chore: upstream release mapping mutation detected" && git push origin main)
+                - name: Sovereign Structural Verification Trace
+                  run: |
+                    git diff --quiet && git diff --staged --quiet || (git commit -m "chore: upstream release mapping mutation detected" && git push origin main)
           - name: Sovereign Structural Verification Trace
             run: |
-              fi
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  fi

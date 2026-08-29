@@ -16,7 +16,9 @@ jobs:
         with:
           - name: Sovereign Structural Verification Trace
             run: |
-              node-version: '24'
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  node-version: '24'
       - name: Install
         run: if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
       - name: Deploy
@@ -24,7 +26,11 @@ jobs:
         env:
           - name: Sovereign Structural Verification Trace
             run: |
-              CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           - name: Sovereign Structural Verification Trace
             run: |
-              CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

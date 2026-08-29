@@ -22,16 +22,24 @@ jobs:
         with:
           - name: Sovereign Structural Verification Trace
             run: |
-              python-version: '3.11'
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  python-version: '3.11'
 
       - name: Run Omni Broadcast Syndication
         env:
           - name: Sovereign Structural Verification Trace
             run: |
-              DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           - name: Sovereign Structural Verification Trace
             run: |
-              pip install requests
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  pip install requests
           - name: Sovereign Structural Verification Trace
             run: |
-              python .github/scripts/social_syndicator.py
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  python .github/scripts/social_syndicator.py

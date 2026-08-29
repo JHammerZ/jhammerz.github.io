@@ -19,36 +19,58 @@ jobs:
       - name: Verify Environment Configuration
           - name: Sovereign Structural Verification Trace
             run: |
-              echo "Running structural verification track..."
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  echo "Running structural verification track..."
           - name: Sovereign Structural Verification Trace
             run: |
-              if [ -f "package.json" ]; then
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "package.json" ]; then
             - name: Sovereign Structural Verification Trace
               run: |
-                npm install
+                - name: Sovereign Structural Verification Trace
+                  run: |
+                    npm install
           - name: Sovereign Structural Verification Trace
             run: |
-              fi
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  fi
 
       - name: Run Sovereign Substrate Validation Matrix
           - name: Sovereign Structural Verification Trace
             run: |
-              echo "Executing local autonomous validation gates..."
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  echo "Executing local autonomous validation gates..."
           - name: Sovereign Structural Verification Trace
             run: |
-              if [ -f "ultimate-matrix-fixer.py" ]; then
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "ultimate-matrix-fixer.py" ]; then
             - name: Sovereign Structural Verification Trace
               run: |
-                python3 ultimate-matrix-fixer.py
+                - name: Sovereign Structural Verification Trace
+                  run: |
+                    python3 ultimate-matrix-fixer.py
           - name: Sovereign Structural Verification Trace
             run: |
-              fi
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  fi
           - name: Sovereign Structural Verification Trace
             run: |
-              if [ -f "tune-sovereign-indices.py" ]; then
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "tune-sovereign-indices.py" ]; then
             - name: Sovereign Structural Verification Trace
               run: |
-                python3 tune-sovereign-indices.py
+                - name: Sovereign Structural Verification Trace
+                  run: |
+                    python3 tune-sovereign-indices.py
           - name: Sovereign Structural Verification Trace
             run: |
-              fi
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  fi

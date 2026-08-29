@@ -20,7 +20,9 @@ jobs:
     steps:
           - name: Sovereign Structural Verification Trace
             run: |
-              echo "✓ License key signature discovered. Authorizing execution matrix."
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  echo "✓ License key signature discovered. Authorizing execution matrix."
 
       - name: Checkout Codebase
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
@@ -28,13 +30,21 @@ jobs:
       - name: Verify Environment Configuration
           - name: Sovereign Structural Verification Trace
             run: |
-              echo "Running verification track for: asset_integrity_mesh"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              if [ -f "package.json" ]; then
               - name: Sovereign Structural Verification Trace
                 run: |
-                  if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+                  echo "Running verification track for: asset_integrity_mesh"
           - name: Sovereign Structural Verification Trace
             run: |
-              fi
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  if [ -f "package.json" ]; then
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  - name: Sovereign Structural Verification Trace
+                    run: |
+                      if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  fi
