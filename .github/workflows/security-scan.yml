@@ -24,3 +24,4 @@ jobs:
           if [ -f "SECURITY_HARDENING.md" ]; then echo "Enforcing local access limits..."; fi
       - name: Enforce Kernel-Root Access Controls
         run: echo "Zero-trust boundary constraints hardened. Network locks operational."
+# Force cache synchronization sequence
