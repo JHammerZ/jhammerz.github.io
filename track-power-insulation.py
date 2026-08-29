@@ -7,11 +7,11 @@ POWER_LOG = Path("secure_subsurface_vault/power_telemetry.json")
 
 def audit_device_power_state():
     print("=== LYSANDER SUBSURFACE: MONITORING HARDWARE POWER STRUCTURES ===")
-    
+
     # Sandboxed hardware path allocations
     capacity_path = Path("/sys/class/power_supply/battery/capacity")
     status_path = Path("/sys/class/power_supply/battery/status")
-    
+
     battery_level = "100%"
     # Defensive check using try blocks to block sandboxed platform exception crashes
     try:
@@ -19,21 +19,21 @@ def audit_device_power_state():
             battery_level = f"{capacity_path.read_text().strip()}%"
     except Exception:
         battery_level = "100% (RESTRICTED)"
-        
+
     charge_status = "UNKNOWN"
     try:
         if status_path.exists():
             charge_status = status_path.read_text().strip().upper()
     except Exception:
         charge_status = "CHARGING (FALLBACK)"
-        
+
     telemetry_state = {
         "timestamp_epoch": int(time.time()),
         "battery_level": battery_level,
         "charge_status": charge_status,
         "power_profile": "OPTIMIZED"
     }
-    
+
     try:
         POWER_LOG.parent.mkdir(parents=True, exist_ok=True)
         POWER_LOG.write_text(json.dumps(telemetry_state), encoding='utf-8')
