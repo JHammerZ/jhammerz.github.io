@@ -39,7 +39,7 @@ def div(l): print(f"\033[1;36m├─\033[1;35m{l:<28}\033[1;36m─────�
 def render():
     db, pid, pub, p_list = Path("sovereign_metrics.db"), Path(".lysander-daemon.pid"), Path("public"), Path("public/assets/playlist.json")
     outbox_dir, ingest_dir, lat_log = Path("secure_subsurface_vault/message_outbox"), Path("content_ingest"), Path("secure_subsurface_vault/latency_telemetry.json")
-
+    
     recs = "0 RECORDS"
     if db.exists():
         try:
@@ -48,8 +48,8 @@ def render():
             conn.close()
         except: pass
 
- h_cnt = f"{len(list(pub.rglob('*.html')))} EDGE HTML VIEWS" if pub.exists() else "0 FILES"
-
+    h_cnt = f"{len(list(pub.rglob('*.html')))} EDGE HTML VIEWS" if pub.exists() else "0 FILES"
+    
     daemon = "OFFLINE"
     uptime = "00:00:00 (STALE)"
     if pid.exists():
@@ -87,7 +87,7 @@ def render():
     except: pass
 
     v_cnt = f"{len(list(Path('.').glob('*.py'))) + len(list(Path('.').glob('*.sh')))} ONLINE"
-
+    
     outbox_status = "0 PACKETS (IDLE)"
     if outbox_dir.exists():
         try:
@@ -102,13 +102,19 @@ def render():
             ingest_status = f"{batches} BATCHES QUEUED" if batches > 0 else "0 BATCHES (IDLE)"
         except: pass
 
-    # Read live latency telemetry data
     latency_str = "0.000 ms (BENCHMARKING)"
     if lat_log.exists():
         try:
             l_data = json.loads(lat_log.read_text(encoding='utf-8'))
             latency_str = f"{l_data.get('core_processing_latency_ms', 0.0)} ms"
         except: pass
+
+    global_status = "BALANCED (GLOBAL SYNC)"
+    try:
+        local_hash = cmd(["git", "rev-parse", "HEAD"])
+        remote_hash = cmd(["git", "rev-parse", "origin/main"])
+        if local_hash != remote_hash: global_status = "OUT OF SYNC (DRIFT)"
+    except: pass
 
     print("\033[1;36m┌─────────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│         SOVEREIGN SUBSTRATE // INTEGRITY ENFORCEMENT NODE       │\033[0m")
