@@ -16,6 +16,7 @@
 
 name: H-FID Verify | Lysander 3.1 Bot Purge
 on:
+  workflow_dispatch:
 concurrency:
  group: ${{ github.workflow }}-${{ github.ref }}
  cancel-in-progress: true

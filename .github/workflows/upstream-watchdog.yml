@@ -3,6 +3,7 @@
 name: "Sovereign Core: Upstream Watchdog"
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main, master ]
   workflow_dispatch:
