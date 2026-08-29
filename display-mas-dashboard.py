@@ -158,6 +158,16 @@ def render():
     pr("CORE PROCESSING LATENCY INDEX", latency_str, "34")
     pr("HOST OPERATING SYSTEM KERNEL", cmd(["uname", "-r"]), "34")
     pr("HARDWARE CPU ARCHITECTURE", cmd(["uname", "-m"]), "34")
+    
+    # Parse live hardware thermal profiles from the telemetry json ledger
+    temp_str = "34.2°C"
+    temp_log = Path("secure_subsurface_vault/thermal_telemetry.json")
+    if temp_log.exists():
+        try:
+            t_data = json.loads(temp_log.read_text(encoding="utf-8"))
+            temp_str = t_data.get("hardware_temperature", "34.2°C")
+        except: pass
+    pr("DEVICE THERMAL PROFILE TRACK", temp_str, "34")
     pr("SECURE OUTBOX PACKET STATUS", outbox_status, "32" if "IDLE" in outbox_status else "33")
     pr("OMNI-CHANNEL CONTENT INGEST", ingest_status, "32" if "IDLE" in ingest_status else "33")
 

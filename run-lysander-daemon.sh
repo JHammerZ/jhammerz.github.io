@@ -74,6 +74,7 @@ while true; do
     
     # 10. Local Hardware Adapter Power Profiling & Insulation Audits
     python3 track-power-insulation.py
+    python3 track-thermal-profile.py
     
     # 11. Cross-Region Handshake Diagnostic Verification
     python3 secure_subsurface_vault/track-handshake-intervals.py
