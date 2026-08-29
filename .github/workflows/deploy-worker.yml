@@ -1,36 +1,42 @@
+
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
 name: Deploy Worker
-on:
 concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
-    paths: ['workers/**']
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
   workflow_dispatch:
+  workflow_dispatch:
+    branches: [ main ]
+      - 'wrangler.toml'
+      - 'worker.js'
+      - 'src/**'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    name: Deploy jhammerz-router
     steps:
-      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a1a42a3b5a1a6c3a2b2a2 # v4.0.2
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
         with:
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  node-version: '24'
-      - name: Install
-        run: if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-      - name: Deploy
-        run: npx wrangler deploy
-        env:
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

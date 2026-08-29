@@ -7,40 +7,42 @@
 # SLSA Level: 3
 
 name: "SEO: Indexation"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
+  workflow_dispatch:
+    branches: [ main ]
+      - 'docs/**'
+      - '**/*.md'
+      - '**/*.html'
+      - 'sitemap.xml'
+  schedule:
+    - cron: '0 6 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  execute-matrix:
+  index:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+      - name: Generate artifacts
+        run: |
+          mkdir -p .hfid/indexing
+          echo '{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}' > .hfid/indexing/index.json
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(seo): Indexation update [skip ci]"
+          file_pattern: .hfid/indexing/**
+          commit_user_name: JHammerZ-Sovereign-Engine
+          commit_user_email: engine@jhammerz.github.io

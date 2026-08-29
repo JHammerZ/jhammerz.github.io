@@ -1,50 +1,194 @@
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+
 # JHam Language / H-FID Standard / HBS v1.2
 #
 # First Commit: [February 12, 2026]
 
 name: "CD: H-FID Sovereign Distribution"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
   workflow_dispatch:
+    inputs:
+      targets:
+        description: 'Distribution targets'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - ipfs
+          - arweave
+          - zenodo
+          - mesh
+  workflow_dispatch:
+      - '.well-known/hfid/chain.json'
+      - '.well-known/hfid/manifest.json'
+      - '!**/*.ots' # Don't trigger on OTS proof commits
+  schedule:
+    - cron: '0 6 * * 1' # Weekly Monday 6am UTC heartbeat
+
+permissions:
+  contents: read
+  id-token: write # For SLSA attestation
 
 jobs:
-  execute-matrix:
+  distribute:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+        uses: actions/checkout@v4
 
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Distribution Tools
+        run: |
+          npm install -g ipfs-car@1 @web3-storage/w3cli@7 ardrive-cli@2
+          echo "Installed IPFS CAR + Web3.Storage + ArDrive CLI"
+
+      - name: Read H-FID Chain
+        id: hfid
+        run: |
+          set -e
+          CHAIN_FILE=".well-known/hfid/chain.json"
+          
+          if [! -f "$CHAIN_FILE" ]; then
+            echo "❌ CRITICAL: $CHAIN_FILE not found"
+            exit 1
+          fi
+          
+          if! jq empty "$CHAIN_FILE" 2>/dev/null; then
+            echo "❌ CRITICAL: $CHAIN_FILE is invalid JSON"
+            exit 1
+          fi
+          
+          CHAIN_LENGTH=$(jq 'length' "$CHAIN_FILE")
+          if [ "$CHAIN_LENGTH" -eq 0 ]; then
+            echo "⚠️ SKIP: H-FID chain is empty"
+            echo "chain_length=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          HFID=$(jq -r '.[-1].hash //.[-1].prev_hash // "unknown"' "$CHAIN_FILE" | cut -c1-12)
+          BTC=$(jq -r '.[-1].bitcoin // "unconfirmed"' "$CHAIN_FILE")
+          ZENODO=$(jq -r '.[-1].zenodo // "pending"' "$CHAIN_FILE")
+          TIMESTAMP=$(jq -r '.[-1].timestamp // "unknown"' "$CHAIN_FILE")
+          
+          echo "hfid=$HFID" >> $GITHUB_OUTPUT
+          echo "btc=$BTC" >> $GITHUB_OUTPUT
+          echo "zenodo=$ZENODO" >> $GITHUB_OUTPUT
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+          echo "chain_length=$CHAIN_LENGTH" >> $GITHUB_OUTPUT
+          
+          echo "✅ Latest H-FID: $HFID | BTC: $BTC | Zenodo: $ZENODO | Blocks: $CHAIN_LENGTH"
+
+      - name: Generate H-FID Distribution Manifest
+        if: steps.hfid.outputs.chain_length!= '0'
+        run: |
+          mkdir -p .hfid/distribution
+          cat > .hfid/distribution/manifest.json << EOF
+          {
+            "workflow": "distribute",
+            "sha": "${{ github.sha }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "sovereign_node": "jhammerz.github.io",
+            "latest_hfid": "${{ steps.hfid.outputs.hfid }}",
+            "btc_anchor": "${{ steps.hfid.outputs.btc }}",
+            "zenodo_doi": "${{ steps.hfid.outputs.zenodo }}",
+            "chain_length": ${{ steps.hfid.outputs.chain_length }},
+            "targets": "${{ github.event.inputs.targets || 'all' }}",
+            "slsa_level": 3,
+            "geo_rank": "ONE_OF_ONE",
+            "sync_velocity": "<100ms"
+          }
+          EOF
+
+      - name: Distribute to IPFS
+        if: steps.hfid.outputs.chain_length!= '0' && (github.event.inputs.targets == 'all' || github.event.inputs.targets == 'ipfs' || github.event.inputs.targets == '')
+        env:
+          WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
+        run: |
+          if [ -z "$WEB3_STORAGE_TOKEN" ]; then
+            echo "⚠️ SKIP: WEB3_STORAGE_TOKEN not set"
+            exit 0
+          fi
+          
+          # Create CAR of entire.well-known/hfid directory
+          npx ipfs-car pack.well-known/hfid --output hfid-chain.car
+          npx w3 put hfid-chain.car --name "hfid-chain-${{ steps.hfid.outputs.hfid }}"
+          echo "✅ IPFS: Chain distributed"
+
+      - name: Distribute to Arweave
+        if: steps.hfid.outputs.chain_length!= '0' && (github.event.inputs.targets == 'all' || github.event.inputs.targets == 'arweave' || github.event.inputs.targets == '')
+        env:
+          ARWEAVE_KEY: ${{ secrets.ARWEAVE_KEY }}
+        run: |
+          if [ -z "$ARWEAVE_KEY" ]; then
+            echo "⚠️ SKIP: ARWEAVE_KEY not set"
+            exit 0
+          fi
+          
+          echo "$ARWEAVE_KEY" > /tmp/arweave.json
+          ardrive upload-file --local-path.well-known/hfid/chain.json \
+            --parent-folder-id "${{ secrets.ARDRIVE_FOLDER_ID }}" \
+            --wallet-file /tmp/arweave.json
+          echo "✅ Arweave: Chain archived permanently"
+
+      - name: Broadcast to H-FID Mesh
+        if: steps.hfid.outputs.chain_length!= '0' && (github.event.inputs.targets == 'all' || github.event.inputs.targets == 'mesh' || github.event.inputs.targets == '')
+        run: |
+          if [! -f "hfid-mesh.json" ]; then
+            echo "⚠️ SKIP: hfid-mesh.json not found"
+            exit 0
+          fi
+          
+          jq -r '.mesh_nodes[]' hfid-mesh.json | while read NODE; do
+            echo "Broadcasting to sovereign node: $NODE"
+            curl -sfL -X POST "https://$NODE/api/hfid/distribute" \
+              -H "Content-Type: application/json" \
+              -d "{\"source\":\"jhammerz.github.io\",\"hfid\":\"${{ steps.hfid.outputs.hfid }}\",\"btc\":\"${{ steps.hfid.outputs.btc }}\",\"sha\":\"${{ github.sha }}\"}" \
+              || echo "⚠️ Node $NODE unreachable"
+          done
+          echo "✅ Mesh: Broadcast complete"
+
+      - name: Attest Distribution
+        if: steps.hfid.outputs.chain_length!= '0'
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: .hfid/distribution/manifest.json
+
+      - name: Upload Distribution Proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-distribution-${{ steps.hfid.outputs.hfid }}
+          path: .hfid/distribution/
+          retention-days: 3650
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## H-FID Sovereign Distribution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Latest HFID**: ${{ steps.hfid.outputs.hfid }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **BTC Anchor**: ${{ steps.hfid.outputs.btc }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Zenodo DOI**: ${{ steps.hfid.outputs.zenodo }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Chain Length**: ${{ steps.hfid.outputs.chain_length }} blocks" >> $GITHUB_STEP_SUMMARY
+          echo "- **Targets**: ${{ github.event.inputs.targets || 'all' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY

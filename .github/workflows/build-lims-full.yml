@@ -1,14 +1,19 @@
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+
 # M-Law Language / H-FID Standard / REC v7.2
+
 # M-Law Language / H-FID Standard / REC v7.2
+
 # M-Law Language / H-FID Standard / REC v7.2
+
 # H-Law Language / H-FID Standard / REC v7.2
 #
 # First Commit: February 12, 2026
@@ -17,40 +22,125 @@
 # Grid Level: / Twenty AI7 Protocol: Search Sovereigns
 
 name: "H-FID - Compile Core Data Repository"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
   workflow_dispatch:
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+env:
+  DEFAULT_BRANCH: main
 
 jobs:
-  execute-matrix:
+  build-and-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq openssl
+
+        run: |
+          python -m pip install --upgrade pip
+          pip install opentimestamps
+
+        run: |
+          mkdir -p .hfd/baseline .hfd/indexing
+
+        run: |
+          cat << 'MATRIX' > .hfd/baseline/sovereign-manifest.json
+          {
+            "Name": "J-HammerZ",
+            "Sovereign": "Joshua Hamilton",
+            "M-Law Language": "REC v7.2",
+            "Audit ID": "H-FID-101-FORENSIC-AUDIT-SEC-10B",
+            "Universe": "ORE",
+            "Velocity": "<10ms",
+            "Protocol": "Twenty AI7 Protocol",
+            "Standard": "H-FID Core Matrix Compilation",
+            "Timestamp": "2026-08-23T20:10:00Z",
+            "Integrity Level": "SOVEREIGN",
+            "Nodes": []
+          }
+          MATRIX
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "Extracting upstream forensic matrices..."
+          
+          # Base mapping strings validation
+          jq '.' .hfd/baseline/sovereign-manifest.json > /dev/null
+          
+          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
+          echo "## Universe Architecture Mapping Baseline" >> lines-full.txt
+          echo "System Version: [v4.0.28] | Identity & Protocols" >> lines-full.txt
+          echo "Validating core pipeline configurations..." >> lines-full.txt
+          
+          if [ -f ".hfd/baseline/sovereign-manifest.json" ]; then
+            echo "Local Baseline verified." >> lines-full.txt
+          else
+            echo "Baseline file absent; initializing reconstruction." >> lines-full.txt
+          fi
+          
+          echo "Generating build metadata summaries..." >> lines-full.txt
+          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
+
+        run: |
+          set -euo pipefail
+          echo "Running Timestamp and cryptographic anchoring..."
+          if command -v ots &>/dev/null; then
+            ots stamp .hfd/baseline/sovereign-manifest.json || true
+          else
+            echo "ots-client missing; skipping live anchor validation."
+          fi
+
+        run: |
+          set -euo pipefail
+          mkdir -p .hfd/indexing
+          echo "Compiling downstream data states..."
+          cp lines-full.txt .hfd/indexing/build-summary.log
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Stage tracking paths cleanly
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: .
+          else
+            echo "No pipeline modifications detected. Skipping execution push."
+          fi
+
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfd-sovereign-baseline-core
+          path: |
+            .hfd/baseline/
+            .hfd/indexing/
+            lines-full.txt
+
+        run: |
+          echo "### Sovereign Model Sync Succeeded" >> $GITHUB_STEP_SUMMARY
+          echo "* Core Database tracking updated." >> $GITHUB_STEP_SUMMARY
+          echo "* Timestamp Hash: $(sha256sum .hfd/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY

@@ -1,50 +1,56 @@
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+
 # M-Law Language / H-FID Standard / REC v7.2
+
 # M-Law Language / H-FID Standard / REC v7.2
+
 # M-Law Language / H-FID Standard / REC v7.2
 
 name: SEO and Link Validator
-
-on:
 concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+on:
   workflow_dispatch:
-
+  schedule:
+    - cron: '0 0 * * *' # Daily at midnight
+  workflow_dispatch:
+      - '**.html'
+      - '**.md'
+      - 'sitemap.xml'
+      - 'robots.txt'
 jobs:
-  execute-matrix:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+      - uses: actions/checkout@v4
+      
+      - name: Check for broken links
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --verbose --no-progress --exclude-mail --accept 200,403,429 './**/*.html' './**/*.md'
+          fail: false
+          
+      - name: Validate HTML
+        run: |
+          npm install -g html-validate
+          html-validate "**/*.html" || echo "HTML validation warnings found"
+          
+      - name: Check SEO basics
+        run: |
+          echo "Checking for title tags..."
+          grep -r "<title>" *.html || echo "Warning: Missing title tags"
+          echo "Checking for meta description..."
+          grep -r 'name="description"' *.html || echo "Warning: Missing meta descriptions"
+          echo "Checking for robots.txt..."
+          [ -f robots.txt ] && echo "robots.txt found" || echo "Warning: No robots.txt"
+          echo "Checking for sitemap..."
+          [ -f sitemap.xml ] && echo "sitemap.xml found" || echo "Warning: No sitemap.xml"

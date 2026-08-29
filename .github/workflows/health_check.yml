@@ -1,50 +1,232 @@
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+
 # JHam Language / H-FID Standard / HBS v1.2
 #
 # First Commit: [February 12, 2026]
 
 name: "Monitor: H-FID Health Check"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
+  schedule:
+    - cron: '*/10 * * * *'
   workflow_dispatch:
+    inputs:
+      deep_check:
+        description: 'Run deep H-FID compliance check'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write
+  issues: write
 
 jobs:
-  execute-matrix:
+  health:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+    - name: Checkout Repository
+      uses: actions/checkout@v4 # v4.1.1
+      
+    - name: Install Dependencies
+      run: |
+        pip install opentimestamps-client
+        sudo apt-get update && sudo apt-get install -y jq curl bc
+        
+    - name: Generate Health Manifest
+      id: manifest
+      run: |
+        set -e
+        mkdir -p .hfid/health
+        
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        DEEP="${{ github.event.inputs.deep_check || 'false' }}"
+        
+        cat > .hfid/health/manifest.json << EOF
+        {
+          "hfid_version": "v1.2",
+          "sovereign_author": "Joshua Hamilton",
+          "workflow": "health_check",
+          "timestamp": "$TIMESTAMP",
+          "sha": "${{ github.sha }}",
+          "run_id": "${{ github.run_id }}",
+          "deep_check": $DEEP,
+          "geo_rank": "ONE_OF_ONE",
+          "slsa_level": 3,
+          "protocol": "Twenty 47",
+          "reach_multiplier": "300%",
+          "sync_velocity": "<100ms"
+        }
+        EOF
+        
+        HASH=$(sha256sum.hfid/health/manifest.json | cut -d ' ' -f1)
+        echo "hash=$HASH" >> $GITHUB_OUTPUT
+        
+    - name: Attest Health Check Execution
+      uses: actions/attest-build-provenance@v1
+      with:
+        subject-path: .hfid/health/manifest.json
+        
+    - name: Sovereign Health Scan
+      id: scan
+      run: |
+        set -e
+        URL="https://jhammerz.github.io"
+        STATUS="UP"
+        CHECKS=0
+        FAILED=0
+        
+        echo "# H-FID HEALTH SCAN: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >.hfid/health/report.json
+        
+        # 1. DNS Check
+        CHECKS=$((CHECKS + 1))
+        if! nslookup jhammerz.github.io >/dev/null 2>&1; then
+          STATUS="DOWN"
+          FAILED=$((FAILED + 1))
+          echo "DNS: FAIL" >>.hfid/health/report.json
+        else
+          echo "DNS: PASS" >>.hfid/health/report.json
+        fi
+        
+        # 2. HTTPS + Status Code
+        CHECKS=$((CHECKS + 1))
+        CODE=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 10 $URL)
+        if [ "$CODE"!= "200" ]; then
+          STATUS="DEGRADED"
+          FAILED=$((FAILED + 1))
+          echo "HTTP: FAIL $CODE" >>.hfid/health/report.json
+        else
+          echo "HTTP: PASS 200" >>.hfid/health/report.json
+        fi
+        
+        # 3. SSL Cert Check
+        CHECKS=$((CHECKS + 1))
+        if! echo | openssl s_client -servername jhammerz.github.io -connect jhammerz.github.io:443 2>/dev/null | openssl x509 -noout -dates; then
+          STATUS="DEGRADED"
+          FAILED=$((FAILED + 1))
+          echo "SSL: FAIL" >>.hfid/health/report.json
+        else
+          echo "SSL: PASS" >>.hfid/health/report.json
+        fi
+        
+        # 4. H-FID v1.2 Compliance Check
+        CHECKS=$((CHECKS + 1))
+        BODY=$(curl -sL --max-time 10 $URL)
+        if! echo "$BODY" | grep -q "GEO_RANK: ONE_OF_ONE" || \
+          ! echo "$BODY" | grep -q "H-FID-100-FORENSIC-AUDIT" || \
+          ! echo "$BODY" | grep -q "REACH_MULTIPLIER: 300%"; then
+          STATUS="NON_COMPLIANT"
+          FAILED=$((FAILED + 1))
+          echo "H-FID: FAIL" >>.hfid/health/report.json
+        else
+          echo "H-FID: PASS v1.2" >>.hfid/health/report.json
+        fi
+        
+        # 5. TTFB Performance
+        CHECKS=$((CHECKS + 1))
+        TTFB_MS=$(curl -s -o /dev/null -w "%{time_starttransfer}" -L --max-time 10 $URL)
+        TTFB_MS=$(echo "$TTFB_MS * 1000" | bc | cut -d '.' -f1)
+        if [ "$TTFB_MS" -gt 100 ]; then
+          STATUS="DEGRADED"
+          FAILED=$((FAILED + 1))
+          echo "TTFB: FAIL ${TTFB_MS}ms" >>.hfid/health/report.json
+        else
+          echo "TTFB: PASS ${TTFB_MS}ms" >>.hfid/health/report.json
+        fi
+        
+        # 6. Deep check: sitemap + robots
+        if [ "${{ github.event.inputs.deep_check }}" = "true" ]; then
+          curl -sLf $URL/sitemap.xml >/dev/null || { STATUS="DEGRADED"; FAILED=$((FAILED + 1)); echo "SITEMAP: FAIL" >>.hfid/health/report.json; }
+          curl -sLf $URL/robots.txt >/dev/null || { STATUS="DEGRADED"; FAILED=$((FAILED + 1)); echo "ROBOTS: FAIL" >>.hfid/health/report.json; }
+        fi
+        
+        # Write JSON summary
+        cat > .hfid/health/status.json << EOF
+        {
+          "hfid_version": "v1.2",
+          "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+          "status": "$STATUS",
+          "checks_total": $CHECKS,
+          "checks_failed": $FAILED,
+          "ttfb_ms": $TTFB_MS,
+          "http_code": $CODE,
+          "sha": "${{ github.sha }}"
+        }
+        EOF
+        
+        echo "status=$STATUS" >> $GITHUB_OUTPUT
+        echo "failed=$FAILED" >> $GITHUB_OUTPUT
+        echo "ttfb=$TTFB_MS" >> $GITHUB_OUTPUT
+        echo "checks_total=$CHECKS" >> $GITHUB_OUTPUT
+        
+        [ "$STATUS" = "DOWN" ] && exit 1 || exit 0
+        
+    - name: Bitcoin Anchor Health Report
+      if: always()
+      run: |
+        cd .hfid/health
+        ots stamp manifest.json status.json report.json
+        sleep 3
+        ots upgrade manifest.json.ots || true
+        ots upgrade status.json.ots || true
+        ots upgrade report.json.ots || true
+        
+    - name: Create Incident Issue
+      if: failure() && steps.scan.outputs.status == 'DOWN'
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `🚨 H-FID Site Down - ${new Date().toISOString()}`,
+            body: `## H-FID v1.2 Health Incident | Twenty 47 Protocol
+            
+            **Status:** DOWN
+            **SHA:** ${{ github.sha }}
+            **Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            **SLSA:** Level 3 Attested
+            **Bitcoin Anchor:** See artifacts
+            
+            ### Failed Checks
+            See run logs for details.
+            
+            **GEO_RANK:** ONE_OF_ONE
+            **Protocol:** Twenty 47
+            `,
+            labels: ['incident', 'h-fid-v1.2', 'urgent']
+          })
+          
+    - name: Upload Health Evidence
+      if: always()
+      uses: actions/upload-artifact@v4 # v4.3.3
+      with:
+        name: hfid-health-${{ github.run_id }}
+        path: .hfid/health/
+        retention-days: 30
+        
+    - name: Summary
+      if: always()
+      run: |
+        echo "## 🔱 H-FID Health Monitor | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
+        echo "**Status:** ${{ steps.scan.outputs.status || 'UNKNOWN' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**TTFB:** ${{ steps.scan.outputs.ttfb }}ms" >> $GITHUB_STEP_SUMMARY
+        echo "**Failed Checks:** ${{ steps.scan.outputs.failed || '0' }} / ${{ steps.scan.outputs.checks_total || '0' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**SLSA:** Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+        echo "**GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+        echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
+        echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY

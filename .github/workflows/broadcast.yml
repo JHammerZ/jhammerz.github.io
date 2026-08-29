@@ -1,50 +1,203 @@
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+
 # JHam Language / H-FID Standard / HBS v1.2
 #
 # First Commit: [February 12, 2026]
 
 name: "CD: H-FID Sovereign Broadcast"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
   workflow_dispatch:
+    inputs:
+      targets:
+        description: 'Broadcast targets'
+        required: true
+        default: 'all'
+        type: choice
+        options: [all, social, azure, discord, telegram, x, linkedin, fb]
+      message:
+        description: 'Broadcast message override'
+        required: false
+        type: string
+  workflow_dispatch:
+      - 'broadcast.md' # ONLY trigger when you explicitly update broadcast content
+      - '!**/*.ots' # Ignore OTS proof commits
+      - '!.hfid/**' # Ignore our own workflow commits
+  schedule:
+    - cron: '0 12 * * 1' # Weekly Monday noon UTC - not daily
+
+permissions:
+  contents: read
+  id-token: write # For SLSA attestation
 
 jobs:
-  execute-matrix:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      payload: ${{ steps.payload.outputs.json }}
+      hash: ${{ steps.payload.outputs.hash }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generate Broadcast Payload
+        id: payload
+        run: |
+          set -e
+          mkdir -p .hfid/broadcast
+          
+          MSG="${{ github.event.inputs.message }}"
+          if [ -z "$MSG" ] && [ -f "broadcast.md" ]; then
+            MSG=$(head -1 broadcast.md)
+          fi
+          [ -z "$MSG" ] && MSG="H-FID v1.2 Sovereign Update: ${{ github.sha }}"
+          
+          cat > .hfid/broadcast/payload.json << EOF
+          {
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "sha": "${{ github.sha }}",
+            "run_id": "${{ github.run_id }}",
+            "message": "$MSG",
+            "geo_rank": "ONE_OF_ONE",
+            "reach_multiplier": "300%",
+            "sync_velocity": "<100ms",
+            "links": {
+              "hfid_chain": "https://jhammerz.github.io/.well-known/hfid/chain.json",
+              "proof": "https://jhammerz.github.io/proof.html",
+              "llms": "https://jhammerz.github.io/llms.txt"
+            }
+          }
+          EOF
+          
+          HASH=$(sha256sum.hfid/broadcast/payload.json | cut -d' ' -f1)
+          echo "json=$(cat.hfid/broadcast/payload.json | jq -c.)" >> $GITHUB_OUTPUT
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          
+      - name: Attest Broadcast Payload
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: .hfid/broadcast/payload.json
+
+  discord:
+    needs: prepare
+    if: github.event.inputs.targets == 'all' || github.event.inputs.targets == 'social' || github.event.inputs.targets == 'discord'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+      - uses: actions/checkout@v4
+      - name: Post to Discord
+        env:
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          PAYLOAD: ${{ needs.prepare.outputs.payload }}
+        run: |
+          [ -z "$WEBHOOK" ] && echo "⚠️ SKIP: Discord webhook not set" && exit 0
+          MSG=$(echo "$PAYLOAD" | jq -r '.message')
+          curl -X POST "$WEBHOOK" -H "Content-Type: application/json" \
+            -d "{\"content\": \"**H-FID v1.2 Broadcast**\n$MSG\n\nHash: ${{ needs.prepare.outputs.hash }}\"}
 
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+  telegram:
+    needs: prepare
+    if: github.event.inputs.targets == 'all' || github.event.inputs.targets == 'social' || github.event.inputs.targets == 'telegram'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to Telegram
+        env:
+          TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PAYLOAD: ${{ needs.prepare.outputs.payload }}
+        run: |
+          [ -z "$TOKEN" ] && echo "⚠️ SKIP: Telegram not configured" && exit 0
+          MSG=$(echo "$PAYLOAD" | jq -r '.message')
+          curl -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
+            -d "chat_id=$CHAT" \
+            -d "text=H-FID v1.2: $MSG%0A%0AHash: ${{ needs.prepare.outputs.hash }}"
+
+  x:
+    needs: prepare
+    if: github.event.inputs.targets == 'all' || github.event.inputs.targets == 'social' || github.event.inputs.targets == 'x'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install tweepy
+      - name: Post to X
+        env:
+          BEARER: ${{ secrets.X_BEARER_TOKEN }}
+          PAYLOAD: ${{ needs.prepare.outputs.payload }}
+        run: |
+          [ -z "$BEARER" ] && echo "⚠️ SKIP: X not configured" && exit 0
+          python -c "
+          import tweepy, os, json
+          p=json.loads(os.environ['PAYLOAD'])
+          client=tweepy.Client(bearer_token=os.environ['BEARER'])
+          client.create_tweet(text=f'H-FID v1.2: {p[\"message\"][:200]}\n\nHash: ${{ needs.prepare.outputs.hash }}\n#HFID #ONE_OF_ONE')
+          "
+
+  linkedin:
+    needs: prepare
+    if: github.event.inputs.targets == 'all' || github.event.inputs.targets == 'social' || github.event.inputs.targets == 'linkedin'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to LinkedIn
+        env:
+          TOKEN: ${{ secrets.LINKEDIN_TOKEN }}
+          ORG: ${{ secrets.LINKEDIN_ORG_ID }}
+          PAYLOAD: ${{ needs.prepare.outputs.payload }}
+        run: |
+          [ -z "$TOKEN" ] && echo "⚠️ SKIP: LinkedIn not configured" && exit 0
+          MSG=$(echo "$PAYLOAD" | jq -r '.message')
+          curl -X POST "https://api.linkedin.com/v2/ugcPosts" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"author\": \"urn:li:organization:$ORG\", \"lifecycleState\": \"PUBLISHED\", \"specificContent\": {\"com.linkedin.ugc.ShareContent\": {\"shareCommentary\": {\"text\": \"H-FID v1.2: $MSG\"}}}}"
+
+  azure:
+    needs: prepare
+    if: github.event.inputs.targets == 'all' || github.event.inputs.targets == 'azure'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload to Azure
+        env:
+          CONN: ${{ secrets.AZURE_CONNECTION_STRING }}
+        run: |
+          [ -z "$CONN" ] && echo "⚠️ SKIP: Azure not configured" && exit 0
+          pip install azure-storage-blob
+          python -c "
+          from azure.storage.blob import BlobServiceClient
+          import os
+          svc = BlobServiceClient.from_connection_string(os.environ['CONN'])
+          blob = svc.get_blob_client(container='hfid', blob='broadcast/${{ needs.prepare.outputs.hash }}.json')
+          blob.upload_blob('${{ needs.prepare.outputs.payload }}', overwrite=True)
+          "
+
+  summary:
+    needs: [prepare, discord, telegram, x, linkedin, azure]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload Broadcast Attestation
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-broadcast-${{ needs.prepare.outputs.hash }}
+          path: .hfid/broadcast/
+          retention-days: 3650
+          
+      - name: Summary
+        run: |
+          echo "## H-FID Sovereign Broadcast" >> $GITHUB_STEP_SUMMARY
+          echo "- **Hash**: ${{ needs.prepare.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Targets**: ${{ github.event.inputs.targets || 'all' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY

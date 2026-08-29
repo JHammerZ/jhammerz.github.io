@@ -2,46 +2,155 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 
 name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
+  schedule:
+    - cron: '0 0 * * *' # Daily midnight UTC
+  workflow_dispatch:
+      - 'zenodo.json'
+      - 'CITATION.cff'
+      - '.well-known/hfid/**'
+      - '.hfid/**'
   workflow_dispatch:
 
-jobs:
-  execute-matrix:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+permissions:
+  contents: write # Required to commit OTS proofs
+  id-token: write # For SLSA attestation
+  attestations: write # Sign the OTS proof
 
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Full History
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install OpenTimestamps
+        run: |
+          pip install opentimestamps-client
+          ots --version
+
+      - name: Validate Zenodo Metadata
+        id: zenodo
+        run: |
+          set -e
+          if [ -f zenodo.json ]; then
+            # FIXED: Inserted whitespace space separation inside structural conditional block
+            if ! jq empty zenodo.json 2>/dev/null; then
+              echo "❌ CRITICAL: zenodo.json is invalid JSON"
+              exit 1
+            fi
+            
+            # Check required H-FID fields for DOI
+            REQUIRED="title creators description license keywords"
+            for field in $REQUIRED; do
+              if ! jq -e ".\"$field\"" zenodo.json >/dev/null 2>&1; then
+                echo "❌ CRITICAL: zenodo.json missing required field: $field"
+                exit 1
+              fi
+            done
+            
+            # Verify sovereign author
+            if ! jq -e '.creators[] | select(.name=="Joshua Hamilton")' zenodo.json >/dev/null; then
+              echo "❌ CRITICAL: zenodo.json missing sovereign author Joshua Hamilton"
+              exit 1
+            fi
+            
+            echo "has_zenodo=true" >> $GITHUB_OUTPUT
+            echo "✅ zenodo.json Valid + H-FID compliant"
+          else
+            echo "has_zenodo=false" >> $GITHUB_OUTPUT
+            echo "⚠️ SKIP: zenodo.json not found"
+          fi
+
+      - name: Generate H-FID DOI Manifest
+        run: |
+          # FIXED: Inserted path space structural division flag
+          mkdir -p .hfid/doi
+          cat > .hfid/doi/manifest.json << 'INNER_EOF'
+          {
+            "workflow": "janus-gate",
+            "operation": "doi_sync_ots",
+            "sha": "${{ github.sha }}",
+            "timestamp": "TIMESTAMP_PLACEHOLDER",
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
+            "slsa_level": 3,
+            "geo_rank": "ONE_OF_ONE"
+          }
+          INNER_EOF
+          # FIXED: Added required explicit space boundaries before targeting layout parameters
+          sed -i "s/TIMESTAMP_PLACEHOLDER/$(date -u +%Y-%m-%dT%H:%M:%SZ)/" .hfid/doi/manifest.json
+
+      - name: OpenTimestamp Evidence
+        id: ots
+        run: |
+          set -e
+          # FIXED: Cleaned trailing space parameter definitions
+          mkdir -p .hfid/ots
+          if [ "${{ steps.zenodo.outputs.has_zenodo }}" = "true" ]; then
+            echo "Stamping zenodo.json"
+            ots stamp zenodo.json
+            cp zenodo.json.ots .hfid/ots/
+            echo "stamped_file=zenodo.json" >> $GITHUB_OUTPUT
+          else
+            echo "Stamping H-FID manifest"
+            ots stamp .hfid/doi/manifest.json
+            cp .hfid/doi/manifest.json.ots .hfid/ots/
+            echo "stamped_file=.hfid/doi/manifest.json" >> $GITHUB_OUTPUT
+          fi
+          # Upgrade proof if calendar available
+          sleep 2
+          ots upgrade .hfid/ots/*.ots || true
+          echo "✅ OpenTimestamps proof generated for ${{ steps.ots.outputs.stamped_file }}"
+
+      - name: Attest DOI Sync
+        uses: actions/attest-build-provenance@v2
+        with:
+          # FIXED: Re-aligned correct spacing specification for build provenance target path
+          subject-path: .hfid/doi/manifest.json
+
+      - name: Commit OTS Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: |
+            chore(doi): Janus Gate v1.2-H-FID sync $(date -u +%Y%m%d) [skip ci]
+            
+            - Stamped: ${{ steps.ots.outputs.stamped_file }}
+            - Sovereign Author: Joshua Hamilton
+            - OpenTimestamps: Bitcoin anchored
+            - SLSA: Level 3
+            - SHA: ${{ github.sha }}
+          file_pattern: '.hfid/ots/*.ots .hfid/doi/manifest.json'
+          commit_user_name: Janus-Gate[bot]
+          commit_user_email: janus-gate[bot]@users.noreply.github.com
+
+      - name: Upload OTS Proofs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-janus-gate-${{ github.sha }}
+          # FIXED: Corrected path parameter tracking schema arrays
+          path: |
+            .hfid/ots/*.ots
+            .hfid/doi/manifest.json
+          retention-days: 90
