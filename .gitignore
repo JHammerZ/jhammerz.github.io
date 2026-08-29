@@ -80,3 +80,4 @@ daemon_runtime.log
 secure_subsurface_vault/bitcoin_anchor_receipt.json
 secure_subsurface_vault/network_traffic_telemetry.json
 daemon_runtime.log
+catalog_table_visualization.md
