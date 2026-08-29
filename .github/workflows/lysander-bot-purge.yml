@@ -19,18 +19,19 @@ jobs:
       - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
         with:
           fetch-depth: 0
-          
+
       - name: Run Lysander Bot Purge
         run: |
           set -e
-          mkdir -p .hfid/results
+          mkdir -p hfid/results
           TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
-          HASH=$(echo "JHammerZ|HEO|Guitaraoke|$TIMESTAMP|Human-Verified" | sha256sum | awk '{print $1}')
-          echo "$HASH" > .hfid/results/hfid-$TIMESTAMP.txt
+          HASH=$(echo "Hammer2HEO[Guitaraoke]$TIMESTAMP[Human-Verified]" | sha256sum | awk '{print $1}')
+          echo "$HASH" > hfid/results/hfid-$TIMESTAMP.txt
           git config user.name "Lysander-Bot"
-          git config user.email "lysander@jhammerz.github.io"
+          git config user.email "Lysander@jhammerz.github.io"
+
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@778341af66847b665a588d6594391a269ec084fa # v5.0.0
+        uses: stefanzweifel/git-auto-commit-action@77834af66847b8bb65a8a5d659431a269ec084fa # v5.0.0
         with:
           commit_message: "chore: auto-update [skip ci]"
-          file_pattern: .
+          file_pattern: hfid/results/*
