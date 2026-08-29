@@ -209,6 +209,17 @@ def render():
             conn.close()
         except: pass
     pr("PLANETARY LEDGER DATA TX", tx_count, "32")
+    
+    # Parse real-time blockchain reality attestation headers dynamically
+    anchor_status = "PENDING ANCHOR"
+    receipt_log = Path("secure_subsurface_vault/bitcoin_anchor_receipt.json")
+    if receipt_log.exists():
+        try:
+            a_data = json.loads(receipt_log.read_text(encoding="utf-8"))
+            if a_data.get("network_anchor") == "BITCOIN_MAINNET_PROVED":
+                anchor_status = f"LOCKED (OP_RETURN {a_data.get('hex_payload', '')[:8]}...)"
+        except: pass
+    pr("BITCOIN MAINNET REALITY ANCHOR", anchor_status, "32" if "LOCKED" in anchor_status else "33")
     pr("SUB-SURFACE SYSTEM VALIDATORS", v_cnt, "34")
     pr("CORE PROCESSING LATENCY INDEX", latency_str, "34")
     
