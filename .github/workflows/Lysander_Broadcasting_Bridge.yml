@@ -5,6 +5,7 @@ on:
     workflows: ["*"]
     types:
       - completed
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,7 +14,6 @@ permissions:
 jobs:
   broadcast-telemetry:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - name: Checkout Substrate Context
         uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
@@ -21,8 +21,8 @@ jobs:
       - name: Route Live Metrics to Lysander Engine
         env:
           GITHUB_TOKEN: ${{ secrets.GOD_TOKEN }}
-          TRIGGERING_WORKFLOW: ${{ github.event.workflow_run.name }}
-          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          TRIGGERING_WORKFLOW: ${{ github.event.workflow_run.name || github.workflow }}
+          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'manual_invocation' }}
         run: |
           echo "[*] Ingress Event Captured from: $TRIGGERING_WORKFLOW"
           echo "[*] Handshake Status: $RUN_CONCLUSION"
