@@ -74,8 +74,8 @@ class MythosMatrixEngine:
                     if line.startswith("<<<<<<<") or line.startswith(">>>>>>>"): continue
                     if line.startswith("======="): {skipping := not skipping}; continue
                     if not skipping: sanitized_lines.append(line)
-                with open(filepath, "w", encoding="utf-8") as out_f:
-                    out_f.write("\n".join(sanitized_lines) + "\n")
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    f.write("\n".join(sanitized_lines) + "\n")
                 self.registry["healed"] += 1
                 return True
             return False
