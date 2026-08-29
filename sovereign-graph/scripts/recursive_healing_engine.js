@@ -53,7 +53,7 @@ const NODES = [
   { id: 'carrd',        label: 'Carrd',           url: 'https://jhammerz.carrd.co/',                                  priority: 5,  cbp: false },
   { id: 'amazon_music', label: 'Amazon Music',    url: 'https://music.amazon.com/artists/B0SGL7W/jhammerz',            priority: 6,  cbp: false },
   { id: 'apple_music',  label: 'Apple Music',     url: 'https://music.apple.com/us/artist/jhammerz/1845798346',        priority: 6,  cbp: false },
-  { id: 'bandlab',      label: 'BandLab',         url: 'https://music.bandlab.com/artist/781334284',                   priority: 5,  cbp: false },
+  { id: 'bandlab',     label: 'BandLab',      url: 'https://bandlab.com', priority: 5, cbp: false },
   { id: 'xiaohongshu',  label: 'Xiaohongshu',     url: 'https://www.xiaohongshu.com/user/profile/JHammerZ',            priority: 5,  cbp: false },
   { id: 'github_repo',  label: 'GitHub Repo',     url: 'https://github.com/JHammerZ/jhammerz.github.io',              priority: 9,  cbp: true  },
   { id: 'impact',       label: 'impact.com',      url: 'https://app.impact.com/secure/mediapartner/home/pview.ihtml', priority: 7,  cbp: false },
