@@ -257,6 +257,17 @@ def render():
     div("INTEGRITY COMPLIANCE RUN")
     pr("REAL-TIME WORKSPACE INSPECTOR", drift, "33" if "CHANGES" in drift else "32")
     pr("REGISTRY REVISION DEPTH", cmd(["git", "rev-list", "--count", "HEAD"]) + " REVISIONS", "34")
+    
+    # Parse real-time multi-repository sync status from the secure vault manifest
+    repo_sync_str = "DISCONNECTED"
+    manifest_log = Path("secure_subsurface_vault/cross_repo_sync_manifest.json")
+    if manifest_log.exists():
+        try:
+            m_data = json.loads(manifest_log.read_text(encoding="utf-8"))
+            if m_data.get("sync_status") == "MATRIX_CONNECTED_ALL_NODES":
+                repo_sync_str = "FULLY ALIGNED (OMNI-REPOS)"
+        except: pass
+    pr("OMNI-REPO INTEGRATION SINK", repo_sync_str, "32" if "FULLY" in repo_sync_str else "31")
     pr("FEDERATION CONTENT COUNTER", recs, "34")
     pr("EDGE PAYLOAD TEMPLATE COUNT", h_cnt, "34")
     pr("SUBSTRATE OPERATIONAL STATUS", global_status, "32")
