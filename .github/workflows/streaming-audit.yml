@@ -202,7 +202,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          file_pattern: .
+          file_pattern: ".hfid/streaming-audit/**"
             done
 
             echo "✅ COMMIT: Streaming audit logged"

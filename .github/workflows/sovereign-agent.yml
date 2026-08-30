@@ -152,7 +152,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          file_pattern: .
+          file_pattern: ".hfid/sovereign-agent/**"
             echo "✅ COMMIT: Sovereign state pushed" >>.hfid/agent/audit.log
           else
             echo "No state or file changes detected. Skipping commit." >>.hfid/agent/audit.log

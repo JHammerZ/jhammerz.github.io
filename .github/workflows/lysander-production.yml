@@ -105,7 +105,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "MANIFEST MUTATION [V4.0.28]: Production Baseline Lock Sync [skip ci]"
-          file_pattern: .hfid/baseline/sovereign-manifest.json .hfid/baseline/sovereign-manifest.json.ots
+          file_pattern: ".hfid/lysander-production/**"
           commit_user_name: JHammerZ-Sovereign-Engine
           commit_user_email: engine@jhammerz.github.io
           push_options: '--force-with-lease'

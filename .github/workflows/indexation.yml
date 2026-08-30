@@ -43,6 +43,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(seo): Indexation update [skip ci]"
-          file_pattern: .hfid/indexing/**
+          file_pattern: ".hfid/indexation/**"
           commit_user_name: JHammerZ-Sovereign-Engine
           commit_user_email: engine@jhammerz.github.io

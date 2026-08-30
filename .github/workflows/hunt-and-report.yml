@@ -118,7 +118,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          file_pattern: .
+          file_pattern: ".hfid/hunt-and-report/**"
 
       - name: Upload Hunt Artifacts
         if: always()

@@ -87,7 +87,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          file_pattern: .
+          file_pattern: ".hfid/validate-actions/**"
 
       - name: Attest Forensic Reset
         if: steps.stage.outputs.has_changes == 'true'
