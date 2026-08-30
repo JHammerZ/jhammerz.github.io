@@ -140,7 +140,6 @@ jobs:
             - OpenTimestamps: Bitcoin anchored
             - SLSA: Level 3
             - SHA: ${{ github.sha }}
-          file_pattern: ".hfid/janus-gate-doi/**"
           commit_user_name: Janus-Gate[bot]
           commit_user_email: janus-gate[bot]@users.noreply.github.com
 

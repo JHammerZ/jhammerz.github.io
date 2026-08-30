@@ -165,7 +165,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          file_pattern: ".hfid/hfid-claim-monitor/**"
 
       - name: Upload Legal Evidence
         if: always()

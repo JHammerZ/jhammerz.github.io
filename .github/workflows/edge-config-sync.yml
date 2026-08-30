@@ -100,7 +100,6 @@ jobs:
         with:
           commit_message: "MANIFEST MUTATION [V4.0.26]: Production Baseline Lock Sync"
           branch: main
-          file_pattern: ".hfid/edge-config-sync/**"
 
       - name: Upload Edge Attestation
         uses: actions/upload-artifact@v4

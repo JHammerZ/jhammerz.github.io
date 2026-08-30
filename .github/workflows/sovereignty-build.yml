@@ -40,6 +40,5 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(hfid): Sovereignty build [skip ci]"
-          file_pattern: ".hfid/sovereignty-build/**"
           commit_user_name: JHammerZ-Sovereign-Engine
           commit_user_email: engine@jhammerz.github.io

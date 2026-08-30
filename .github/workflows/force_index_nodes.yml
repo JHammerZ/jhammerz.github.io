@@ -161,7 +161,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          file_pattern: ".hfid/force_index_nodes/**"
           else
             echo "Index nodes attestation clean: nothing to commit."
           fi
