@@ -2,44 +2,29 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
 
 name: Sovereign Audit
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 on:
   push:
     branches: [main, master]
   workflow_dispatch:
-
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest
     steps:
-            - name: Checkout Codebase
+      - name: Checkout Codebase
         uses: actions/checkout@v4
-
-            - name: Verify Environment Configuration
+      - name: Verify Environment Configuration
         run: |
           echo "Running verification track for sovereign-audit..."
           echo "SHA: ${{ github.sha }}"
           ls -la
-
-            - name: Check Package Files
+      - name: Check Package Files
         run: |
-          if [ -f package.json ]; then
-            echo "package.json found"
-          else
-            echo "no package.json"
-          fi
-          if [ -f yarn.lock ]; then
-            echo "yarn.lock found"
-          else
-            echo "no yarn.lock"
-          fi
-
-            - name: Sovereign Audit Complete
+          if [ -f package.json ]; then echo "package.json found"; else echo "no package.json"; fi
+          if [ -f yarn.lock ]; then echo "yarn.lock found"; else echo "no yarn.lock"; fi
+      - name: Sovereign Audit Complete
         run: echo "Audit complete for ${{ github.ref }}"
