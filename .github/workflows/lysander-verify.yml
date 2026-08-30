@@ -122,7 +122,7 @@ jobs:
 
       - name: OpenTimestamp Blocklist
         run: |
-          ots stamp .hfid/lysander/blocklist.txt
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/blocklist.txt
           ots upgrade .hfid/lysander/blocklist.txt.ots || true
           echo "✅ Blocklist Bitcoin-anchored"
 

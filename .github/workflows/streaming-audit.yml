@@ -37,6 +37,6 @@ jobs:
                     mkdir -p .hfid/streaming/spotify
       - name: preserved-5
         run: |
-          ots stamp .hfid/streaming/manifest.json
-                    find.hfid/streaming -name "*.json" -exec ots stamp {} \;
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/streaming/manifest.json
+                    find.hfid/streaming -name "*.json" -exec mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp {} \;
                     echo "✅ Streaming data Bitcoin-anchored"

@@ -94,7 +94,7 @@ jobs:
           set -e
                     cd .hfid/index-nodes
                     rm -f manifest.json.ots
-                    ots stamp manifest.json || true
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp manifest.json || true
                     sleep 2
                     ots upgrade manifest.json.ots || echo "ots upgrade deferred - calendar not ready"
                     cd ../..

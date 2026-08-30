@@ -36,7 +36,7 @@ jobs:
                     cd .hfid/heo-bridge
                     # Remove stale .ots if exists to prevent Errno 17 File exists
                     rm -f payload.json.ots
-                    ots stamp payload.json || true
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp payload.json || true
                     sleep 2
                     ots upgrade payload.json.ots || echo "ots upgrade deferred - calendar not ready"
                     cd ../..

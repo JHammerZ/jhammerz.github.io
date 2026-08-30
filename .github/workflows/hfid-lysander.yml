@@ -72,9 +72,9 @@ jobs:
                     echo "**SHA**: ${{ github.sha }}" >> .hfid/lysander/forensic.log
       - name: preserved-4
         run: |
-          ots stamp .hfid/lysander/heartbeat.txt
-                    ots stamp .hfid/lysander/forensic.log
-                    ots stamp .hfid/lysander/blocklist.txt
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/heartbeat.txt
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/forensic.log
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/blocklist.txt
       - name: preserved-5
         run: |
           cat > .hfid/lysander/attestation.json << JSON

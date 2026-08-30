@@ -130,7 +130,7 @@ jobs:
 
       - name: Bitcoin-Anchor Draft
         run: |
-          ots stamp .hfid/lysander/manifest.json.hfid/lysander/draft.txt
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/manifest.json.hfid/lysander/draft.txt
           echo "✅ AI draft Bitcoin-anchored"
 
       - name: Create PR for Human Review

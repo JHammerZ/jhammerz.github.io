@@ -81,7 +81,7 @@ jobs:
 
       - name: OpenTimestamp Human Proof
         run: |
-          ots stamp .hfid/verification/human-proof.json
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/verification/human-proof.json
           echo "✅ Bitcoin-anchored human verification initiated"
 
       - name: Update H-FID Chain with Human Proof

@@ -39,7 +39,7 @@ jobs:
                     GIT_LOG=$(git log -1 --pretty=format:'{"commit":"%H","author":"%an","date":"%ai","message":"%s"}' | jq -c . 2>/dev/null || echo "{}")
       - name: preserved-4
         run: |
-          ots stamp "${{ steps.archive.outputs.archive_name }}.car.sha256" || true
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp "${{ steps.archive.outputs.archive_name }}.car.sha256" || true
                     sleep 1
                     ots upgrade "${{ steps.archive.outputs.archive_name }}.car.sha256.ots" || true
                     echo "OpenTimestamps proof generated"

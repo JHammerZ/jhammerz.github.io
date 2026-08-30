@@ -29,7 +29,7 @@ jobs:
                     mkdir -p .hfid/intel
       - name: preserved-3
         run: |
-          ots stamp .hfid/intel/${{ steps.intel.outputs.filename }}.hfid/intel/intel.md
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/intel/${{ steps.intel.outputs.filename }}.hfid/intel/intel.md
                     echo "✅ Intel ${{ steps.intel.outputs.uuid }} Bitcoin-anchored"
       - name: preserved-4
         run: |

@@ -43,8 +43,8 @@ jobs:
           set -e
                     cp llms-full.txt .hfid/llms/
                     cd .hfid/llms
-                    ots stamp manifest.json || true
-                    ots stamp llms-full.txt || true
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp manifest.json || true
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp llms-full.txt || true
                     cd ../..
       - name: preserved-5
         run: |

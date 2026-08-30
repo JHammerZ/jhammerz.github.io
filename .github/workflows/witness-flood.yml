@@ -118,8 +118,8 @@ jobs:
         cp "${{ github.event.inputs.content_file }}".hfid/broadcast/content.txt 2>/dev/null || echo "No content file" >.hfid/broadcast/content.txt
         
         cd. hfid/broadcast
-        ots stamp manifest.json
-        ots stamp content.txt
+        mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp manifest.json
+        mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp content.txt
         sleep 5
         ots upgrade manifest.json.ots || true
         ots upgrade content.txt.ots || true

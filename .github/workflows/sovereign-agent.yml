@@ -36,8 +36,8 @@ jobs:
                     echo "SHA: ${{ github.sha }}" >>.hfid/agent/audit.log
       - name: preserved-4
         run: |
-          ots stamp .hfid/agent/manifest.json.hfid/agent/audit.log
-                    [ -f .hfid/agent/output.log ] && ots stamp .hfid/agent/output.log
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/agent/manifest.json.hfid/agent/audit.log
+                    [ -f .hfid/agent/output.log ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/agent/output.log
                     echo "✅ Agent state Bitcoin-anchored" >>.hfid/agent/audit.log
       - name: preserved-5
         run: |

@@ -89,7 +89,7 @@ jobs:
             echo "Verifying local hash indexes against genesis targets..."
             sha256sum .hfid/baseline/sovereign-manifest.json
             rm -f .hfid/baseline/sovereign-manifest.json.ots
-            ots stamp .hfid/baseline/sovereign-manifest.json
+            mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/baseline/sovereign-manifest.json
           fi
 
         id: verify

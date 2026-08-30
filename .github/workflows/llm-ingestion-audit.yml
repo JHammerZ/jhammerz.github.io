@@ -179,10 +179,10 @@ jobs:
       - name: Bitcoin-Anchor Compliance Audit
         if: always()
         run: |
-          ots stamp.hfid/ingestion/manifest.json.hfid/ingestion/audit.log
-          [ -f llms.txt ] && ots stamp llms.txt
-          [ -f robots.txt ] && ots stamp robots.txt
-          [ -f CITATION.cff ] && ots stamp CITATION.cff
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp.hfid/ingestion/manifest.json.hfid/ingestion/audit.log
+          [ -f llms.txt ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp llms.txt
+          [ -f robots.txt ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp robots.txt
+          [ -f CITATION.cff ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp CITATION.cff
           echo "✅ Ingestion compliance Bitcoin-anchored" >>.hfid/ingestion/audit.log
 
       - name: Evaluate Compliance

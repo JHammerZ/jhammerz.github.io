@@ -150,9 +150,9 @@ jobs:
 
         if: steps.check.outputs.needed == 'true'
         run: |
-          ots stamp .hfid/omega/manifest.json.hfid/omega/repo-bundle.tar.gz
-          [ -f .hfid/omega/ipfs.cid ] && echo "$(cat.hfid/omega/ipfs.cid)" | ots stamp -
-          [ -f .hfid/omega/arweave.tx ] && echo "$(cat.hfid/omega/arweave.tx)" | ots stamp -
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/omega/manifest.json.hfid/omega/repo-bundle.tar.gz
+          [ -f .hfid/omega/ipfs.cid ] && echo "$(cat.hfid/omega/ipfs.cid)" | mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp -
+          [ -f .hfid/omega/arweave.tx ] && echo "$(cat.hfid/omega/arweave.tx)" | mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp -
           echo "✅ Omega broadcast Bitcoin-anchored" >>.hfid/omega/audit.log
 
         if: steps.check.outputs.needed == 'true'

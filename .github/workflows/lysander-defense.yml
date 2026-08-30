@@ -116,7 +116,7 @@ jobs:
           set -e
           cd .hfid/lysander
           rm -f manifest.json.ots threats.json.ots
-          ots stamp manifest.json threats.json || true
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp manifest.json threats.json || true
           sleep 1
           ots upgrade manifest.json.ots 2>/dev/null || echo "ots upgrade deferred - calendar block pending"
           cd ../..

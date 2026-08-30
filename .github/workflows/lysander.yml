@@ -158,7 +158,7 @@ jobs:
 
       - name: Bitcoin-Anchor Lysander Evidence
         run: |
-          ots stamp .hfid/lysander/blocklist.txt.hfid/lysander/heartbeat.txt.hfid/lysander/forensic.json
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/blocklist.txt.hfid/lysander/heartbeat.txt.hfid/lysander/forensic.json
           echo "✅ Lysander evidence Bitcoin-anchored"
 
       - name: Generate Lysander Attestation
