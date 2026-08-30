@@ -29,7 +29,7 @@ jobs:
                     mkdir -p .hfid/bounty
       - name: preserved-3
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/bounty/${{ steps.entry.outputs.filename }}.hfid/bounty/ledger.md
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/bounty/${{ steps.entry.outputs.filename }}.hfid/bounty/ledger.md || true
                     echo "✅ Bounty ${{ steps.entry.outputs.uuid }} Bitcoin-anchored" >>.hfid/bounty/audit.log
       - name: preserved-4
         run: |

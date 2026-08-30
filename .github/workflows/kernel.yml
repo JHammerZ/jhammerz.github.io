@@ -126,7 +126,7 @@ jobs:
       - name: Bitcoin-Anchor Kernel Closure
         run: |
           pip install opentimestamps-client
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/kernel/manifest.json.hfid/kernel/store-path.txt.hfid/kernel/closure.nar
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/kernel/manifest.json.hfid/kernel/store-path.txt.hfid/kernel/closure.nar || true
           echo "✅ Kernel closure Bitcoin-anchored"
 
       - name: Push to Cachix

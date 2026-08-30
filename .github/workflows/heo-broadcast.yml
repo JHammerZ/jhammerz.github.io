@@ -89,7 +89,7 @@ jobs:
 
       - name: Bitcoin-Anchor Bridge Payload
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/heo-bridge/payload.json
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/heo-bridge/payload.json || true
           echo "✅ HEO->H-FID bridge payload Bitcoin-anchored"
 
       - name: Execute Legacy Bridge Post

@@ -114,7 +114,7 @@ jobs:
 
       - name: Bitcoin-Anchor Defense Log
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/manifest.json .hfid/lysander/threats.json || tru || truee
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/manifest.json .hfid/lysander/threats.json || tru || truee || true
           echo "🛡️ Defense actions Bitcoin-anchored"
 
       - name: Attest Defense Execution

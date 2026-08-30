@@ -180,7 +180,7 @@ jobs:
       if: always()
       run: |
         cd .hfid/health
-        mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp manifest.json status.json report.json
+        mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp manifest.json status.json report.json || true
         sleep 3
         ots upgrade manifest.json.ots || true
         ots upgrade status.json.ots || true

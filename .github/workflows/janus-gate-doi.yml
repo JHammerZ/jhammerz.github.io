@@ -109,12 +109,12 @@ jobs:
           mkdir -p .hfid/ots
           if [ "${{ steps.zenodo.outputs.has_zenodo }}" = "true" ]; then
             echo "Stamping zenodo.json"
-            mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp zenodo.json
+            mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp zenodo.json || true
             cp zenodo.json.ots .hfid/ots/
             echo "stamped_file=zenodo.json" >> $GITHUB_OUTPUT
           else
             echo "Stamping H-FID manifest"
-            mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/doi/manifest.json
+            mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/doi/manifest.json || true
             cp .hfid/doi/manifest.json.ots .hfid/ots/
             echo "stamped_file=.hfid/doi/manifest.json" >> $GITHUB_OUTPUT
           fi

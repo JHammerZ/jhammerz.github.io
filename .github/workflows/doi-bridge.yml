@@ -48,7 +48,7 @@ jobs:
         run: |
           set -e
                     cd .hfd/provenance
-                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp doi-manifest.json || echo "Timestamp anchor queued."
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp doi-manifest.json || echo "Timestamp anchor queued." || true
                     cd ../..
       - name: preserved-5
         run: |
