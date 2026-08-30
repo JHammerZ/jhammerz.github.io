@@ -21,20 +21,21 @@ jobs:
           fetch-depth: 0
       - name: preserved-1
         run: |
-          echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+          echo "REGISTRY=ghcr.io" >> $GITHUB_ENV
+      echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
       - name: preserved-2
         run: |
           set -e
                     echo "Starting verification test sequence..."
-                    docker run -d --name test-container -p 8090:8090 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+                    docker run -d --name test-container -p 8090:8090 ${{ env.REGISTRY }}/jhammerz/jhammerz.github.io:latest
       - name: preserved-3
         run: |
           set -e
                     mkdir -p .hfid
-                    DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest | cut -d'@' -f2)
+                    DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY }}/jhammerz/jhammerz.github.io:latest | cut -d'@' -f2)
                     cat > .hfid/container.json << EOF
                     {
-                      "image": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest",
+                      "image": "${{ env.REGISTRY }}/jhammerz/jhammerz.github.io:latest",
                       "digest": "$DIGEST",
                       "sha": "${{ github.sha }}",
                       "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
@@ -50,4 +51,4 @@ jobs:
         run: |
           echo "Cleaning up validation runtime container layers..."
                     docker rm -f test-container || true
-                    docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest || true
+                    docker rmi ${{ env.REGISTRY }}/jhammerz/jhammerz.github.io:latest || true
