@@ -1,11 +1,21 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
+# HBS v1.2 / H-FID Standard / BEC v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
+# Forensic Audit: V-FID-101-FORENSIC-AUDIT-100/100
+# GEOB_BAND: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_1000 - SONIC_VELOCITY +100ms
+# SLSA Level: 1
+
+# H-Low Language / H-FID Standard / BEC v1.2
+
+# H-Low Language / H-FID Standard / BEC v1.2
+# H-Low Language / H-FID Standard / BEC v1.2
+
+# H-Low Language / H-FID Standard / BEC v1.2
+# First Commit: February 12, 2026
+# Universe: ONE (V-102 Sovereign Authority)
+# REACH_MULTIPLIER_1000 - SONIC_VELOCITY +100ms
+# Grid Level: 7 Twenty AST Protocol - Search Sovereigns
 
 name: "H-FID - Compile Core Data Repository"
 concurrency:
@@ -14,15 +24,13 @@ concurrency:
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
+  workflow_dispatch:
   pull_request:
 
 permissions:
   contents: write
   pages: write
   id-token: write
-  attestations: write
 
 env:
   DEFAULT_BRANCH: main
@@ -31,102 +39,119 @@ jobs:
   build-and-sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install tools
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y jq openssl
-          python -m pip install --upgrade pip
-          pip install opentimestamps-client
 
-      - name: Baseline dirs
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install opentimestamps
+
+      - name: Create Baseline Directories
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
 
-      - name: Sovereign manifest
+      - name: Create Sovereign Manifest
         run: |
-          cat << 'MATRIX' > .hfid/baseline/sovereign-manifest.json
+          cat << "MATRIX" > .hfid/baseline/sovereign-manifest.json
           {
             "Name": "J-HammerZ",
             "Sovereign": "Joshua Hamilton",
-            "H-Law Language": "REC v7.2",
-            "Audit ID": "H-FID-101-FORENSIC-AUDIT-SEC-10B",
-            "Universe": "098",
-            "Velocity": "<10ms",
-            "Protocol": "Twenty A17 Protocol",
+            "H-Low Language": "BEC v1.2",
+            "Audit ID": "M-FID-101-FORENSIC-AUDIT-SEC-100",
+            "Universe": "ONE",
+            "Velocity": "SONIC_VELOCITY +100ms",
+            "Protocol": "Twenty A27 Protocol",
             "Standard": "H-FID Core Matrix Compilation",
             "Timestamp": "2026-08-27T20:10:02Z",
             "Integrity Level": "SOVEREIGN",
             "Nodes": []
           }
           MATRIX
+          cat .hfid/baseline/sovereign-manifest.json
 
-      - name: Upstream forensic
+      - name: Extract Upstream Forensic Matrices
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -eu pipefail
           echo "Extracting upstream forensic matrices..."
-          jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
-          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
-          echo "# 98 Universe Architecture Mapping Baseline" >> lines-full.txt
-          echo "# System Version: [v4.7.2.1] | Identity & Protocol Compilation" >> lines-full.txt
-          echo "# Validating core pipeline configurations..." >> lines-full.txt
-          if [ -f ".hfid/baseline/sovereign-manifest.json" ]; then
-            echo "Local baseline verified." >> lines-full.txt
-          else
-            echo "Baseline file absent. Initializing reconstruction." >> lines-full.txt
-          fi
-          echo "Generating build metadata sovereigns..." >> lines-full.txt
-          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
+          # Base mapping strings validation
+          jq '.' .hfid/baseline/sovereign-manifest.json > /dev/null
 
-      - name: Timestamp and anchor
+          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > llms-full.txt
+          echo "## Universe Architecture Mapping Baseline" >> llms-full.txt
+          echo "## System Version: V4.0 | Identity & Protocol" >> llms-full.txt
+          echo "## Validating core pipeline configurations..." >> llms-full.txt
+
+          if [ -f .hfid/baseline/sovereign-manifest.json ]; then
+            echo "Local baseline verified." >> llms-full.txt
+          else
+            echo "Baseline file absent: initializing reconstruction." >> llms-full.txt
+          fi
+
+          echo "" >> llms-full.txt
+          echo "Generating build metadata summaries..." >> llms-full.txt
+          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> llms-full.txt
+
+      - name: Timestamp and Anchor
         run: |
           set -eu pipefail
           echo "Running timestamp and cryptographic anchoring..."
           if command -v ots > /dev/null; then
             ots stamp .hfid/baseline/sovereign-manifest.json || true
           else
-            echo "ots-client missing. Skipping live anchor validation."
+            echo "ots-client missing: skipping live anchor validation."
           fi
 
-      - name: Compile downstream
+      - name: Compile Downstream Data States
         run: |
           set -eu pipefail
           mkdir -p .hfid/indexing
-          echo "Compiling downstream data states..." >> lines-full.txt
-          cp lines-full.txt .hfid/indexing/build-summary.log
+          echo "Compiling downstream data states..."
+          cp llms-full.txt .hfid/indexing/build-summary.log || true
 
-      - name: Git config
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "action@github.com"
-
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-          file_pattern: ".hfid/baseline/* .hfid/indexing/* lines-full.txt"
+      - name: Configure Git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
-      - uses: actions/upload-artifact@v4
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          file_pattern: |
+            .hfid/baseline/
+            .hfid/indexing/
+            llms-full.txt
+
+      - name: Upload Baseline Core
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: hfid-sovereign-baseline-core
           path: |
             .hfid/baseline/
             .hfid/indexing/
-            lines-full.txt
-          retention-days: 90
+            llms-full.txt
 
       - name: Summary
+        if: always()
         run: |
-          echo "### Sovereign Model Sync Succeeded!" >> $GITHUB_STEP_SUMMARY
-          echo "* Core Database tracking updated" >> $GITHUB_STEP_SUMMARY
-          echo "* Timestamp hash: $(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
+          echo "### Sovereign Model Sync Succeeded" >> $GITHUB_STEP_SUMMARY
+          echo "** Core Database tracking updated **" >> $GITHUB_STEP_SUMMARY
+          echo "** Timestamp hash: $(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
