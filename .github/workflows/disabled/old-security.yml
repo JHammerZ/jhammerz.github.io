@@ -1,0 +1,9 @@
+name: old-security (disabled)
+
+on: workflow_dispatch
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aquasecurity/setup-trivy@v0.2.3
