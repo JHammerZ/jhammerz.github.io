@@ -94,7 +94,6 @@ forensics/sentinel.log
 forensics/healing_report.json
 forensics/latest_audit.json
 forensics/sentinel.log
-<<<<<<< HEAD
 # Enforced Sovereign Workspace Isolation
 *.log
 hfid/results/social-matrix-snapshot.json
@@ -109,3 +108,7 @@ wp-content/plugins/
 wp-content/themes/twenty*/
 jhammerz.github.io/
 c1f2c7f3 (sync: planetary pipeline telemetry snapshot refresh)
+wp-includes/
+wp-admin/
+wp-content/plugins/
+cc022c58 (ignore wp core bloat, keep .claims chain and uploads)
