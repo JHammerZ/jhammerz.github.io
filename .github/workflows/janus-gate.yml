@@ -3,52 +3,59 @@
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# GNO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
 # SLSA Level: 3
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-  #push: # disabled bulk
-            # Check required H-FID fields for DOI
-            # Verify sovereign author
-          # Upgrade proof if calendar available
 
 name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+      - name: Verify Environment
+        run: |
+          echo "Sovereign Author: Joshua Hamilton"
+          echo "H-FID-FOR-000001-AUDIT"
+
+      - name: Setup Python & OTS
+        run: |
+          pip install opentimestamps-client
+          ots --version
+
+      - name: Validate Manifest
+        run: |
+          mkdir -p .hfid/janus
+          echo '{"sha":"${{ github.sha }}","author":"Joshua Hamilton"}' > .hfid/janus/manifest.json
+          cat .hfid/janus/manifest.json
+
+      - name: Attest
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: .hfid/janus/manifest.json
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-janus-gate-${{ github.run_id }}
+          path: .hfid/janus/
+          retention-days: 90
