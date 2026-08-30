@@ -45,7 +45,6 @@ jobs:
         run: |
           set -e
           mkdir -p assets public
-          
           if [ ! -f "assets/favicon.svg" ] && [ ! -f "assets/logo.png" ]; then
             echo "⚠️ Source assets absent. Materializing diagnostic matrix placeholder..."
             cat > assets/favicon.svg << 'EOF'
@@ -76,16 +75,12 @@ EOF
         run: |
           set -e
           SRC="${{ steps.source_check.outputs.source_path }}"
-          
           echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
-          
           npx sharp -i "$SRC" -o public/favicon.png resize 32 32
           npx sharp -i "$SRC" -o public/apple-touch-icon.png resize 180 180
           npx sharp -i "$SRC" -o public/android-chrome-192x192.png resize 192 192
           npx sharp -i "$SRC" -o public/android-chrome-512x512.png resize 512 512
-          
           cp public/favicon.png public/apple-touch-icon.png ./ || true
-          
           cat > public/site.webmanifest << 'EOF'
           {
             "name": "jhammerz.github.io",
@@ -108,7 +103,6 @@ EOF
           mkdir -p .hfid/assets
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           LEDGER_FILE=".hfid/assets/favicon-manifest.json"
-          
           cat > "$LEDGER_FILE" << EOF
           {
             "workflow": "favicon_sync",
