@@ -54,7 +54,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v4 # v4.1.7
+      uses: actions/checkout@v4
 
     - name: Download broadcast receipt
       uses: actions/download-artifact@65a5d6ad1e5b6f3d0e1e2e4e8d5d5d5d # v4.1.7

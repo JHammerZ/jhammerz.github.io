@@ -47,7 +47,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4 # v4.1.7
+        uses: actions/checkout@v4
 
       - name: Setup Node.js 24
         uses: actions/setup-node@v4 # v4.0.3

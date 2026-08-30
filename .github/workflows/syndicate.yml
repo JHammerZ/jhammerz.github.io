@@ -47,7 +47,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4 # v4.1.7
+        uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v5
