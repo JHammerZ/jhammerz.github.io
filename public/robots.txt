@@ -1,31 +1,26 @@
+User-agent: *
+Allow: /
+
+# AI Crawlers explicitly allowed for GEO_RANK Visibility
 User-agent: GPTBot
-Disallow: /
+Allow: /
 
 User-agent: ChatGPT-User
-Disallow: /
+Allow: /
 
 User-agent: CCBot
-Disallow: /
+Allow: /
 
 User-agent: anthropic-ai
-Disallow: /
-
-User-agent: Claude-Web
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
+Allow: /
 
 User-agent: PerplexityBot
-Disallow: /
+Allow: /
 
-User-agent: Bytespider
-Disallow: /
+User-agent: ClaudeBot
+Allow: /
 
-User-agent: Diffbot
-Disallow: /
-
-User-agent: *
+User-agent: Google-Extended
 Allow: /
 
 Sitemap: https://jhammerz.github.io/sitemap.xml
