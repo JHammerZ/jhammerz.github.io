@@ -1,1 +1,2 @@
-/* /index.html 200
+# SPA routing handled by Worker + not_found_handling
+# No html rewrites here - handled in worker.js to avoid infinite loop [100324]
