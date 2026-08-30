@@ -6,3 +6,6 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = "./"
 not_found_handling = "none"
+
+[env.production]
+name = "jhammerz-github-io-production"
