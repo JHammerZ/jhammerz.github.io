@@ -1,56 +1,64 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
 
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-name: SEO and Link Validator
+name: "SEO and Link Validator"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *' # Daily at midnight
-  workflow_dispatch:
+    - cron: '0 0 * * *'
+  push:
+    branches: [main]
+    paths:
       - '**.html'
       - '**.md'
       - 'sitemap.xml'
       - 'robots.txt'
+
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
       - name: Check for broken links
         uses: lycheeverse/lychee-action@v1
         with:
-          args: --verbose --no-progress --exclude-mail --accept 200,403,429 './**/*.html' './**/*.md'
+          args: --verbose --no-progress --exclude-mail --accept 200,403,429 ./**/*.html ./**/*.md
           fail: false
-          
-      - name: Validate HTML
+
+      - name: Validate HTML Structure
         run: |
-          npm install -g html-validate
+          set -e
+          npm install -g html-validate || true
           html-validate "**/*.html" || echo "HTML validation warnings found"
-          
+
       - name: Check SEO basics
         run: |
+          set -e
           echo "Checking for title tags..."
-          grep -r "<title>" *.html || echo "Warning: Missing title tags"
+          grep -r "<title>" . --include="*.html" || echo "Warning: Missing title tags"
+          
           echo "Checking for meta description..."
-          grep -r 'name="description"' *.html || echo "Warning: Missing meta descriptions"
+          grep -r "name=\"description\"" . --include="*.html" || echo "Warning: Missing meta descriptions"
+          
           echo "Checking for robots.txt..."
-          [ -f robots.txt ] && echo "robots.txt found" || echo "Warning: No robots.txt"
+          if [ -f robots.txt ]; then 
+            echo "robots.txt found"
+          else 
+            echo "Warning: No robots.txt"
+          fi
+          
           echo "Checking for sitemap..."
-          [ -f sitemap.xml ] && echo "sitemap.xml found" || echo "Warning: No sitemap.xml"
+          if [ -f sitemap.xml ]; then 
+            echo "sitemap.xml found"
+          else 
+            echo "Warning: No sitemap.xml"
+          fi
