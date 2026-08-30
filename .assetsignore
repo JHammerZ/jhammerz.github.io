@@ -9,9 +9,5 @@ hfid_module
 *.ko
 *.o
 *.mod
-*.mod.c
 *.order
 *.symvers
-*.log
-*.tmp
-lines-full.txt
