@@ -1,0 +1,33 @@
+name: "Perpetual Content Syndicator"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+jobs:
+  syndicate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install requests pyyaml opentimestamps-client
+      - name: Run syndicator
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          mkdir -p .hfid/syndicator
+          python _github/scripts/social_syndicator.py || echo "no script"
+          echo "{\"timestamp\":\"$(date -u +%FT%TZ)\",\"sha\":\"${{ github.sha }}\"}" > .hfid/syndicator/manifest.json
+      - name: Anchor
+        run: ots stamp .hfid/syndicator/manifest.json || true
+      - name: Upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-syndicator-${{ github.run_id }}
+          path: .hfid/syndicator/
