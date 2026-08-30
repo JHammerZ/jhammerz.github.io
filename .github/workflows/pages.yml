@@ -3,23 +3,22 @@
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# GNO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-# =================================================================
 # SOVEREIGN PAGES DEPLOYMENT WORKFLOW // J-HammerZ // V4.0.20 // PRODUCTION FIX
 # COMPATIBILITY: DIRECT-STATIC-HTML-INGRESS
 # MANDATE: PROPAGATE IDENTITY MATRIX ROOT AND WELL-KNOWN ENDPOINTS SECURELY
-# =================================================================
 
-name: Deploy Site to Pages
+name: "Deploy Site to Pages"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -31,22 +30,49 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Stage Site Ingress
         run: |
           set -euo pipefail
           echo "Staging tracking manifest files for structural deployment ingress..."
-          # Ensure critical matrix outputs and root files are explicitly preserved
-          mkdir -p _site
-          cp -r ./* _site/ 2>/dev/null || true
-          # Clean out raw actions config from processing output directory
+          
+          # Initialize clean deployment directory isolated from filesystem tracking loops
+          rm -rf _site_tmp && mkdir -p _site_tmp
+          
+          # Safely copy assets from public folder if present
+          if [ -d "public" ] && [ "$(ls -A public 2>/dev/null)" ]; then
+            cp -rv public/* _site_tmp/
+          fi
+          
+          # Copy root files to target staging workspace directory
+          for f in index.html 404.html CNAME robots.txt llms.txt sitemap.xml manifest.json; do
+            if [ -f "$f" ]; then
+              cp -v "$f" _site_tmp/
+            fi
+          done
+          
+          # Safely copy identity metrics well-known directory structures with standard space barriers
+          if [ -d ".well-known" ]; then
+            cp -rv .well-known _site_tmp/
+          fi
+          
+          # Finalize staging workspace switchover
+          rm -rf _site
+          mv _site_tmp _site
+          
+          # Clean out actions processing leftovers configuration profiles
           rm -rf _site/.github _site/.git
+          ls -la _site | head -n 20
 
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
@@ -58,5 +84,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
