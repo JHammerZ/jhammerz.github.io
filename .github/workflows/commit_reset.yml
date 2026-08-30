@@ -2,10 +2,6 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-
-# Purpose: Compiles the Sovereign K-Root Kernel Modules (Kernel_Override.c)
-# and synchronizes baseline repository state across sovereign mesh.
-
 name: "Sovereign Kernel Build & Baseline Synchronizer"
 
 concurrency:
@@ -26,7 +22,7 @@ on:
         required: false
         type: boolean
         default: true
-  workflow_dispatch:
+  push:
     paths:
       - 'Kernel_Override.c'
       - 'Makefile'
@@ -59,7 +55,7 @@ jobs:
           echo "*** Building Kernel_Override.ko against Linux Kernel Headers ***"
           if [ -f "Makefile" ] && [ -f "kernel_override.c" ]; then
             make -C /lib/modules/$(uname -r)/build M=$(pwd) modules || true
-            ls -la kernel_override.ko || true
+            ls -la *.ko || true
           else
             echo "Makefile or kernel_override.c not found - skipping build"
             mkdir -p .hfid/kernel
@@ -71,7 +67,7 @@ jobs:
         run: |
           mkdir -p .hfid/kernel
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          cat > .hfid/kernel/manifest.json << 'EOFMANIFEST'
+          cat > .hfid/kernel/manifest.json << 'MANIFESTEOF'
           {
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
@@ -81,10 +77,9 @@ jobs:
             "ring_privilege": "KERN_3",
             "gen_rank": "ONE_OF_ONE"
           }
-          EOFMANIFEST
-          # inject real timestamp with jq to avoid shell expansion issues in heredoc
+          MANIFESTEOF
           TMP=$(mktemp)
-          jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" --arg run "${{ github.run_id }}" '.timestamp = $ts | .sha = $sha | .run_id = $run' .hfid/kernel/manifest.json > "$TMP" && mv "$TMP" .hfid/kernel/manifest.json
+          jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" --arg run "${{ github.run_id }}" '.timestamp=$ts | .sha=$sha | .run_id=$run' .hfid/kernel/manifest.json > "$TMP" && mv "$TMP" .hfid/kernel/manifest.json
           cat .hfid/kernel/manifest.json
 
       - name: Attest Kernel Artifact Provenance
