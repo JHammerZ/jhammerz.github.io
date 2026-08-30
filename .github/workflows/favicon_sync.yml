@@ -47,7 +47,6 @@ jobs:
           mkdir -p assets public
           if [ ! -f "assets/favicon.svg" ] && [ ! -f "assets/logo.png" ]; then
             echo "⚠️ Source assets absent. Materializing diagnostic matrix placeholder..."
-            # Write a perfectly minified XML/SVG structure with zero prefix whitespace using direct echo parameters
             echo '<svg xmlns="http://w3.org" viewBox="0 0 100 100" width="100" height="100"><circle cx="50" cy="50" r="48" fill="#1f2937" stroke="#3b82f6" stroke-width="4"/><text x="50" y="55" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="24" fill="#ffffff" font-weight="bold">H-FID</text></svg>' > assets/favicon.svg
           fi
 
@@ -72,11 +71,15 @@ jobs:
           set -e
           SRC="${{ steps.source_check.outputs.source_path }}"
           echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
-          npx sharp -i "$SRC" -o public/favicon.png resize 32 32
-          npx sharp -i "$SRC" -o public/apple-touch-icon.png resize 180 180
-          npx sharp -i "$SRC" -o public/android-chrome-192x192.png resize 192 192
-          npx sharp -i "$SRC" -o public/android-chrome-512x512.png resize 512 512
+          
+          # Fix sharp-cli positional syntax layout rules to prevent empty buffer injection crashes
+          npx sharp "$SRC" resize 32 32 --toFile public/favicon.png
+          npx sharp "$SRC" resize 180 180 --toFile public/apple-touch-icon.png
+          npx sharp "$SRC" resize 192 192 --toFile public/android-chrome-192x192.png
+          npx sharp "$SRC" resize 512 512 --toFile public/android-chrome-512x512.png
+          
           cp public/favicon.png public/apple-touch-icon.png ./ || true
+          
           cat > public/site.webmanifest << 'EOF'
           {
             "name": "jhammerz.github.io",
