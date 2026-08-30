@@ -39,14 +39,13 @@ jobs:
 
       - name: Install Image Dependencies
         run: |
-          npm install -g sharp-cli resvg-js || true
+          npm install -g sharp-cli || true
 
       - name: Fallback Resource Matrix Instantiation
         run: |
           set -e
           mkdir -p assets public
           
-          # If both source options are completely missing, dynamically build a recovery SVG source asset
           if [ ! -f "assets/favicon.svg" ] && [ ! -f "assets/logo.png" ]; then
             echo "⚠️ Source assets absent. Materializing diagnostic matrix placeholder..."
             cat > assets/favicon.svg << 'EOF'
@@ -58,8 +57,8 @@ jobs:
           fi
 
       - name: Validate Source Asset Architecture
-        id: source_check
-        run: |
+         id: source_check
+         run: |
           if [ -f "assets/favicon.svg" ]; then
             echo "source_type=svg" >> $GITHUB_OUTPUT
             echo "source_path=assets/favicon.svg" >> $GITHUB_OUTPUT
@@ -77,28 +76,17 @@ jobs:
         run: |
           set -e
           SRC="${{ steps.source_check.outputs.source_path }}"
-          TYPE="${{ steps.source_check.outputs.source_type }}"
           
           echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
           
-          if [ "$TYPE" = "svg" ]; then
-            # Render multi-layered modern asset matrices from scalable vectors
-            npx resvg-js "$SRC" public/favicon.png --width 32 --height 32 || npx sharp -i "$SRC" -o public/favicon.png resize 32 32
-            npx resvg-js "$SRC" public/apple-touch-icon.png --width 180 --height 180 || npx sharp -i "$SRC" -o public/apple-touch-icon.png resize 180 180
-            npx resvg-js "$SRC" public/android-chrome-192x192.png --width 192 --height 192 || npx sharp -i "$SRC" -o public/android-chrome-192x192.png resize 192 192
-            npx resvg-js "$SRC" public/android-chrome-512x512.png --width 512 --height 512 || npx sharp -i "$SRC" -o public/android-chrome-512x512.png resize 512 512
-          else
-            # Rescale high-density flat matrices safely down to targeting breakpoints
-            npx sharp -i "$SRC" -o public/favicon.png resize 32 32
-            npx sharp -i "$SRC" -o public/apple-touch-icon.png resize 180 180
-            npx sharp -i "$SRC" -o public/android-chrome-192x192.png resize 192 192
-            npx sharp -i "$SRC" -o public/android-chrome-512x512.png resize 512 512
-          fi
+          # Native sharp image matrix conversion processing array splits
+          npx sharp -i "$SRC" -o public/favicon.png resize 32 32
+          npx sharp -i "$SRC" -o public/apple-touch-icon.png resize 180 180
+          npx sharp -i "$SRC" -o public/android-chrome-192x192.png resize 192 192
+          npx sharp -i "$SRC" -o public/android-chrome-512x512.png resize 512 512
           
-          # Copy standard root-level raw files to preserve platform integrations
           cp public/favicon.png public/apple-touch-icon.png ./ || true
           
-          # Materialize webapp deployment manifest schemas
           cat > public/site.webmanifest << 'EOF'
           {
             "name": "jhammerz.github.io",
@@ -112,7 +100,7 @@ jobs:
             "display": "standalone"
           }
           EOF
-          echo "✅ Favicon deployment matrices compiled perfectly."
+          echo "✅ Favicon deployment matrices compiled perfectly via native processing tools."
 
       - name: Generate H-FID Asset Attestation Ledger
         id: ledger
@@ -150,7 +138,7 @@ jobs:
       - name: Commit Synchronized Assets
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: "chore: compile unified asset favicon matrices [skip ci]"
+          commit_message: "chore: compile unified asset favicon matrices via native sharp [skip ci]"
           file_pattern: "public/ favicon.png apple-touch-icon.png .hfid/assets/"
           add_options: "-A"
 
