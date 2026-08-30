@@ -5,14 +5,14 @@ concurrency:
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
-    paths-ignore: [ '.hfid/**', 'node_modules/**' ]
+    branches: [main]
+    paths-ignore: [".hfid/**", "node_modules/**"]
 permissions:
   contents: write
   attestations: write
   id-token: write
 jobs:
-  forensic-snapshot:
+  forensic-archive:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -33,55 +33,70 @@ jobs:
         run: |
           set -e
           TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
-          ARCHIVE_NAME="jhammerz-site-${TIMESTAMP}-${{ github.sha }}.tar"
+          BASE_NAME="jhammerz-site-${TIMESTAMP}-${{ github.sha }}"
+          TAR_FILE="${BASE_NAME}.tar"
+          CAR_FILE="${BASE_NAME}.car"
+          rm -rf /tmp/archive
           mkdir -p /tmp/archive
-          rsync -av --exclude='.git' --exclude='.github' --exclude='.hfid' --exclude='node_modules' ./ /tmp/archive/
-          npx ipfs-car pack /tmp/archive --output ${ARCHIVE_NAME}.car || tar -czf ${ARCHIVE_NAME}.car -C /tmp/archive .
-          sha256sum ${ARCHIVE_NAME}.car > ${ARCHIVE_NAME}.car.sha256
-          echo "archive_name=${ARCHIVE_NAME}.car" >> $GITHUB_OUTPUT
-          echo "archive_hash=$(sha256sum ${ARCHIVE_NAME}.car | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
-      - run: |
+          rsync -a --exclude='.git' --exclude='.hfid' --exclude='node_modules' ./ /tmp/archive/ || cp -r . /tmp/archive/
+          tar -cf "$TAR_FILE" -C /tmp/archive .
+          npx ipfs-car pack "$TAR_FILE" --output "$CAR_FILE" || cp "$TAR_FILE" "$CAR_FILE"
+          sha256sum "$CAR_FILE" > "${CAR_FILE}.sha256"
+          echo "archive_base=${BASE_NAME}" >> $GITHUB_OUTPUT
+          echo "tar_file=${TAR_FILE}" >> $GITHUB_OUTPUT
+          echo "car_file=${CAR_FILE}" >> $GITHUB_OUTPUT
+          ls -lh "$TAR_FILE" "$CAR_FILE"
+      - id: ledger
+        run: |
           set -e
           mkdir -p .hfid/ledger
-          TIMESTAMP2=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          FILE_SIZE=$(stat -c %s ${{ steps.archive.outputs.archive_name }}.car 2>/dev/null || wc -c < ${{ steps.archive.outputs.archive_name }}.car)
-          GIT_LOG=$(git log -1 --pretty=format:"{\"commit\":\"%H\",\"author\":\"%an\",\"date\":\"%ad\",\"message\":\"%s\"}" | jq -c . 2>/dev/null || echo "{}")
-          cat > .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json << EOF
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          BASE="${{ steps.archive.outputs.archive_base }}"
+          TAR="${{ steps.archive.outputs.tar_file }}"
+          CAR="${{ steps.archive.outputs.car_file }}"
+          FILE_SIZE=$(stat -c%s "$CAR" 2>/dev/null || wc -c < "$CAR")
+          GIT_LOG=$(git log -1 --pretty=format:'{"commit":"%H","author":"%an","date":"%ad","message":"%s"}' --date=iso 2>/dev/null || echo '{}')
+          cat > .hfid/ledger/${BASE}.json << EOF
           {
             "workflow": "forensic-ledger",
             "sha": "${{ github.sha }}",
-            "timestamp": "${TIMESTAMP2}",
-            "archive": "${{ steps.archive.outputs.archive_name }}.car",
-            "sha256": "${{ steps.archive.outputs.archive_hash }}",
-            "size_bytes": ${FILE_SIZE},
-            "git_log": ${GIT_LOG},
+            "timestamp": "$TIMESTAMP",
+            "archive": "$CAR",
+            "tar": "$TAR",
+            "archive_hash": "$(cat ${CAR}.sha256 | cut -d' ' -f1)",
+            "size_bytes": $FILE_SIZE,
+            "git_log": $GIT_LOG,
             "slsa_level": 3
           }
           EOF
+          cat .hfid/ledger/${BASE}.json
+          echo "ledger_file=.hfid/ledger/${BASE}.json" >> $GITHUB_OUTPUT
       - id: ots
         run: |
-          ots stamp ${{ steps.archive.outputs.archive_name }}.car.sha256 || true
+          ots stamp ${{ steps.archive.outputs.car_file }}.sha256 || true
           sleep 2
-          ots upgrade ${{ steps.archive.outputs.archive_name }}.car.sha256.ots || true
+          ots upgrade ${{ steps.archive.outputs.car_file }}.sha256.ots 2>/dev/null || true
       - uses: actions/attest-build-provenance@v3
         continue-on-error: true
         with:
-          subject-path: .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
+          subject-path: |
+            ${{ steps.archive.outputs.car_file }}
+            ${{ steps.ledger.outputs.ledger_file }}
       - uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: hfid-forensic-ledger-${{ steps.archive.outputs.archive_name }}
+          name: hfid-forensic-ledger-${{ steps.archive.outputs.archive_base }}
           path: |
-            ${{ steps.archive.outputs.archive_name }}.car
-            ${{ steps.archive.outputs.archive_name }}.car.sha256
-            ${{ steps.archive.outputs.archive_name }}.car.sha256.ots
-            .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
+            ${{ steps.archive.outputs.car_file }}
+            ${{ steps.archive.outputs.car_file }}.sha256
+            ${{ steps.archive.outputs.car_file }}.sha256.ots
+            ${{ steps.ledger.outputs.ledger_file }}
           retention-days: 365
       - run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           mkdir -p .hfid/ledger
-          cp .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json .hfid/ledger/latest.json || true
+          cp ${{ steps.ledger.outputs.ledger_file }} .hfid/ledger/latest.json || true
       - uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"

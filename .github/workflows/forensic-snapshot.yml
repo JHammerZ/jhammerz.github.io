@@ -1,7 +1,3 @@
-# HBS v1.2 / H-FID Standard
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# SLSA Level: 3
 name: forensic-snapshot
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,70 +16,37 @@ jobs:
   forensic-snapshot:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Full History
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - name: Setup Python
-        uses: actions/setup-python@v6
-      - name: Install OTS
-        run: pip install opentimestamps-client || true
+      - uses: actions/setup-python@v6
       - name: Generate Forensic Ledger
         id: ledger
         run: |
           set -e
           mkdir -p .hfid/ledger
-          TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
-          SHA_SHORT=$(echo "${{ github.sha }}" | cut -c1-12)
-          SITE_NAME="jhammerz-site-${TIMESTAMP}-${SHA_SHORT}"
-          TAR_FILE="${SITE_NAME}.tar"
-          CAR_FILE="${SITE_NAME}.car"
-          LEDGER_FILE=".hfid/ledger/${SITE_NAME}.json"
-          echo "Creating $TAR_FILE and $CAR_FILE"
-          tar --exclude='.git' --exclude='node_modules' --exclude='.hfid' -cf "$TAR_FILE" . 2>/dev/null || tar --exclude='.git' -cf "$TAR_FILE" .
-          cp "$TAR_FILE" "$CAR_FILE"
-          ls -lh "$TAR_FILE" "$CAR_FILE"
-          FILE_SIZE=$(wc -c < "$TAR_FILE")
-          cat > "$LEDGER_FILE" <<EOF
-          {
-            "workflow": "forensic-ledger",
-            "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "file_name": "$CAR_FILE",
-            "tar_name": "$TAR_FILE",
-            "file_size": $FILE_SIZE
-          }
-          EOF
-          cat "$LEDGER_FILE"
-          echo "car_file=$CAR_FILE" >> $GITHUB_OUTPUT
-          echo "tar_file=$TAR_FILE" >> $GITHUB_OUTPUT
-          echo "ledger_file=$LEDGER_FILE" >> $GITHUB_OUTPUT
-      - name: OTS Stamp
-        run: |
-          set +e
-          ots stamp ${{ steps.ledger.outputs.car_file }} || true
-          ots stamp ${{ steps.ledger.outputs.tar_file }} || true
-          ls -lh *.ots .hfid/ledger/ || true
-      - name: Attest
-        uses: actions/attest-build-provenance@v3
+          TS=$(date -u +%Y%m%d-%H%M%S)
+          SHORT=$(echo "${{ github.sha }}" | cut -c1-10)
+          BASE="jhammerz-site-${TS}-${SHORT}"
+          TAR="${BASE}.tar"
+          CAR="${BASE}.car"
+          echo "Creating $TAR and $CAR"
+          tar --exclude='.git' --exclude='node_modules' --exclude='.hfid' -cf "$TAR" . 2>/dev/null || tar --exclude='.git' -cf "$TAR" .
+          cp "$TAR" "$CAR"
+          ls -lh "$TAR" "$CAR"
+          echo "{\"sha\":\"${{ github.sha }}\",\"file\":\"$CAR\"}" > .hfid/ledger/${BASE}.json
+          echo "car_file=$CAR" >> $GITHUB_OUTPUT
+          echo "tar_file=$TAR" >> $GITHUB_OUTPUT
+          echo "ledger_file=.hfid/ledger/${BASE}.json" >> $GITHUB_OUTPUT
+      - uses: actions/attest-build-provenance@v3
         with:
           subject-path: |
             ${{ steps.ledger.outputs.car_file }}
             ${{ steps.ledger.outputs.tar_file }}
-            ${{ steps.ledger.outputs.ledger_file }}
-      - name: Upload Proofs
-        uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v5
         with:
           name: hfid-forensic-${{ github.sha }}
           path: |
             ${{ steps.ledger.outputs.car_file }}
             ${{ steps.ledger.outputs.tar_file }}
             .hfid/ledger/
-          if-no-files-found: error
-      - name: Commit Ledger
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: 'chore: forensic snapshot [skip ci]'
-          file_pattern: .hfid/ledger/
