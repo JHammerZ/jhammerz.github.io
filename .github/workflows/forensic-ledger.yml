@@ -1,131 +1,74 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-
 name: "Audit: H-FID Forensic Ledger to IPFS"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 on:
   workflow_dispatch:
-    paths-ignore:
-  schedule:
-  workflow_dispatch:
-
+  push:
+    branches: [ main ]
+    paths-ignore: [ '.hfid/**', 'node_modules/**' ]
 permissions:
   contents: write
   attestations: write
   id-token: write
-
 jobs:
-  forensic_snapshot:
+  forensic-snapshot:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
-
-        uses: actions/setup-python@v5
+          node-version: '20'
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
-        run: |
-          pip install opentimestamps-client
-          npm install -g ipfs-car@latest || true
-          echo "Forensic Tools installed successfully"
-
-        id: archive
+          python-version: '3.11'
+      - run: |
+          pip install opentimestamps-client || true
+          npm install -g ipfs-car || true
+      - id: archive
         run: |
           set -e
-          TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
-          ARCHIVE_NAME="jhammerz-site-${TIMESTAMP}-${{ github.sha }}"
-
-          # Create clean archive excluding git and working dirs
+          TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
+          ARCHIVE_NAME="jhammerz-site-${TIMESTAMP}-${{ github.sha }}.tar"
           mkdir -p /tmp/archive
           rsync -av --exclude='.git' --exclude='.github' --exclude='.hfid' --exclude='node_modules' ./ /tmp/archive/
-
-          # Create CAR file for IPFS
-          npx --yes ipfs-car pack /tmp/archive --output ${ARCHIVE_NAME}.car || tar -czf ${ARCHIVE_NAME}.car -C /tmp/archive .
-
-          # Generate SHA256
+          npx ipfs-car pack /tmp/archive --output ${ARCHIVE_NAME}.car || tar -czf ${ARCHIVE_NAME}.car -C /tmp/archive .
           sha256sum ${ARCHIVE_NAME}.car > ${ARCHIVE_NAME}.car.sha256
-
-          echo "archive_name=${ARCHIVE_NAME}" >> $GITHUB_OUTPUT
-          ARCHIVE_HASH=$(sha256sum ${ARCHIVE_NAME}.car | cut -d' ' -f1)
-          echo "archive_hash=${ARCHIVE_HASH}" >> $GITHUB_OUTPUT
-          echo "Site Archived: ${ARCHIVE_NAME}.car"
-
-        id: manifest
-        run: |
+          echo "archive_name=${ARCHIVE_NAME}.car" >> $GITHUB_OUTPUT
+          echo "archive_hash=$(sha256sum ${ARCHIVE_NAME}.car | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
+      - run: |
           set -e
           mkdir -p .hfid/ledger
-          
-          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          FILE_SIZE=$(stat -c%s "${{ steps.archive.outputs.archive_name }}.car" 2>/dev/null || wc -c < "${{ steps.archive.outputs.archive_name }}.car")
-          GIT_LOG=$(git log -1 --pretty=format:'{"commit":"%H","author":"%an","date":"%ai","message":"%s"}' | jq -c . 2>/dev/null || echo "{}")
-
+          TIMESTAMP2=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          FILE_SIZE=$(stat -c %s ${{ steps.archive.outputs.archive_name }}.car 2>/dev/null || wc -c < ${{ steps.archive.outputs.archive_name }}.car)
+          GIT_LOG=$(git log -1 --pretty=format:"{\"commit\":\"%H\",\"author\":\"%an\",\"date\":\"%ad\",\"message\":\"%s\"}" | jq -c . 2>/dev/null || echo "{}")
           cat > .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json << EOF
           {
             "workflow": "forensic-ledger",
-            "operation": "immutable_snapshot",
             "sha": "${{ github.sha }}",
-            "timestamp": "$TIMESTAMPTZ",
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
-            "archive": {
-              "name": "${{ steps.archive.outputs.archive_name }}.car",
-              "sha256": "${{ steps.archive.outputs.archive_hash }}",
-              "size_bytes": $FILE_SIZE
-            },
-            "git_log": $GIT_LOG,
-            "slsa_level": 3,
-            "geo_rank": "ONE_OF_ONE"
+            "timestamp": "${TIMESTAMP2}",
+            "archive": "${{ steps.archive.outputs.archive_name }}.car",
+            "sha256": "${{ steps.archive.outputs.archive_hash }}",
+            "size_bytes": ${FILE_SIZE},
+            "git_log": ${GIT_LOG},
+            "slsa_level": 3
           }
           EOF
-
-        id: ots
+      - id: ots
         run: |
-          ots stamp "${{ steps.archive.outputs.archive_name }}.car.sha256" || true
-          sleep 1
-          ots upgrade "${{ steps.archive.outputs.archive_name }}.car.sha256.ots" || true
-          echo "OpenTimestamps proof generated"
-
+          ots stamp ${{ steps.archive.outputs.archive_name }}.car.sha256 || true
+          sleep 2
+          ots upgrade ${{ steps.archive.outputs.archive_name }}.car.sha256.ots || true
+      - uses: actions/attest-build-provenance@v1
         continue-on-error: true
-        env:
-          WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
-        run: |
-          if [ -n "$WEB3_STORAGE_TOKEN" ]; then
-            npx --yes @web3-storage/w3cli put "${{ steps.archive.outputs.archive_name }}.car" --no-wrap || true
-            echo "Pinned to IPFS via Web3.Storage"
-          else
-            echo "WEB3_STORAGE_TOKEN secret not present, continuing..."
-          fi
-
-        continue-on-error: true
-        uses: actions/attest-build-provenance@v1
         with:
           subject-path: .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
-
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
           name: hfid-forensic-ledger-${{ steps.archive.outputs.archive_name }}
           path: |
@@ -134,15 +77,11 @@ jobs:
             ${{ steps.archive.outputs.archive_name }}.car.sha256.ots
             .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
           retention-days: 365
-
-        run: |
+      - run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
           mkdir -p .hfid/ledger
-          cp ".hfid/ledger/${{ steps.archive.outputs.archive_name }}.json" .hfid/ledger/latest.json
-
-        uses: stefanzweifel/git-auto-commit-action@v5
+          cp .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json .hfid/ledger/latest.json || true
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          fi
