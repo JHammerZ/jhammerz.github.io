@@ -7,46 +7,36 @@
 # SLSA Level: 3
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # M-Law Language / H-FID Standard / REC v7.2
-# M-Law Language / H-FID Standard / REC v7.2
-# M-Law Language / H-FID Standard / REC v7.2
-# M-Law Language / H-FID Standard / REC v7.2
 
 name: "H-FID - Compile Core Data Repository"
-
-on:
 concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   workflow_dispatch:
-
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest
     steps:
-
+      - name: Verify Commercial License Signature Gate
+        env:
+          LYSANDER_KEY: ${{ secrets.LYSANDER_LICENSE_KEY }}
+        run: |
+          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
+          if [ -z "$LYSANDER_KEY" ]; then
+            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
+            echo "This repository is locked under a proprietary Pay-For-Use EULA."
+            echo "Please purchase an active subscription key to re-enable execution tokens."
+            exit 1
+          fi
+          echo "License key signature discovered. Authorizing operational execution matrix."
       - name: Checkout Codebase
         uses: actions/checkout@v4
-
       - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: sovereign_model_data_repository"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  - name: Sovereign Structural Verification Trace
-                    run: |
-                      if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+        run: |
+          echo "Running verification track for: sovereign_model_data_repository"
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+          fi
