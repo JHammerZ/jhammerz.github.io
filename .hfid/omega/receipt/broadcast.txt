@@ -1,0 +1,5 @@
+H-FID Omega Broadcast Receipt
+Target: all
+SHA256: 87bdb39971832f7081396eb2abb19ecbef74346b36fa4b3cb992ec7e74adf1d6
+Verified: main / b2bad2d782926852eae8ab0b444b692d55b45625
+Timestamp: 2026-08-30T22:02:21Z
