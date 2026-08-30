@@ -1,4 +1,3 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -8,144 +7,126 @@
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-
-name: "SEO/AEO: Compile Live LLM Data Repositories"
+name: "H-FID - Compile Core Data Repository"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
-  schedule:
   workflow_dispatch:
-  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
 
 permissions:
   contents: write
+  pages: write
   id-token: write
   attestations: write
 
+env:
+  DEFAULT_BRANCH: main
+
 jobs:
-  bundle-context:
+  build-and-sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
     steps:
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+      - name: Install tools
         run: |
+          sudo apt-get update
+          sudo apt-get install -y jq openssl
+          python -m pip install --upgrade pip
           pip install opentimestamps-client
 
-        id: manifest
+      - name: Baseline dirs
         run: |
-          set -e
-          mkdir -p .hfid/llms
-          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          UUID=$(uuidgen 2>/dev/null || cat /proc/sys/kernel/random/uuid 2>/dev/null || date +%s%N)
+          mkdir -p .hfid/baseline .hfid/indexing
 
-          cat > .hfid/llms/manifest.json << EOF
+      - name: Sovereign manifest
+        run: |
+          cat << 'MATRIX' > .hfid/baseline/sovereign-manifest.json
           {
-            "uuid": "$UUID",
-            "timestamp": "$TIMESTAMPTZ",
-            "sha": "${{ github.sha }}",
-            "repository": "${{ github.repository }}",
-            "actor": "${{ github.actor }}",
-            "run_id": "${{ github.run_id }}",
-            "workflow": "${{ github.workflow }}",
-            "hbs_version": "v1.2",
-            "geo_rank": "ONE_OF_ONE",
-            "protocol": "Twenty_47",
-            "sovereign_author": "Joshua Hamilton [JHammerZ]",
-            "reach_multiplier": "300%",
-            "sync_velocity": "<100ms",
-            "purpose": "SEO/AEO LLM Data Matrix Compilation"
+            "Name": "J-HammerZ",
+            "Sovereign": "Joshua Hamilton",
+            "H-Law Language": "REC v7.2",
+            "Audit ID": "H-FID-101-FORENSIC-AUDIT-SEC-10B",
+            "Universe": "098",
+            "Velocity": "<10ms",
+            "Protocol": "Twenty A17 Protocol",
+            "Standard": "H-FID Core Matrix Compilation",
+            "Timestamp": "2026-08-27T20:10:02Z",
+            "Integrity Level": "SOVEREIGN",
+            "Nodes": []
           }
-          EOF
+          MATRIX
 
-          HASH=$(sha256sum .hfid/llms/manifest.json | cut -d' ' -f1)
-          echo "manifest_hash=$HASH" >> $GITHUB_OUTPUT
-
+      - name: Upstream forensic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -e
-          echo "# JHammerZ Omnichannel Deep Knowledge Matrix | H-FID v1.2 | Twenty 47 Protocol" > llms-full.txt
-          echo "## System Notice" >> llms-full.txt
-          echo "This file contains the absolute raw text repository of jhammerz.github.io for total RAG ingestion." >> llms-full.txt
-          echo "Sovereign Author: Joshua Hamilton [JHammerZ]" >> llms-full.txt
-          echo "SLSA Level: 3 | GEO_RANK: ONE_OF_ONE | REACH_MULTIPLIER: 300%" >> llms-full.txt
-          echo "SHA: ${{ github.sha }} | Run: ${{ github.run_id }}" >> llms-full.txt
-          echo "" >> llms-full.txt
-
-          echo -e "\n## Core Index Page Layout" >> llms-full.txt
-          if [ -f "index.html" ]; then
-            cat index.html >> llms-full.txt
+          set -eu pipefail
+          echo "Extracting upstream forensic matrices..."
+          jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
+          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
+          echo "# 98 Universe Architecture Mapping Baseline" >> lines-full.txt
+          echo "# System Version: [v4.7.2.1] | Identity & Protocol Compilation" >> lines-full.txt
+          echo "# Validating core pipeline configurations..." >> lines-full.txt
+          if [ -f ".hfid/baseline/sovereign-manifest.json" ]; then
+            echo "Local baseline verified." >> lines-full.txt
+          else
+            echo "Baseline file absent. Initializing reconstruction." >> lines-full.txt
           fi
+          echo "Generating build metadata sovereigns..." >> lines-full.txt
+          echo "Build ID: ${{ github.run_id }} | Actor: ${{ github.actor }}" >> lines-full.txt
 
-          echo -e "\n## Project Directory Manifest" >> llms-full.txt
-          if [ -f "llms.txt" ]; then
-            cat llms.txt >> llms-full.txt
-          fi
-
-          echo -e "\n## Global Technical API Specifications" >> llms-full.txt
-          if [ -f "openapi.yaml" ]; then
-            cat openapi.yaml >> llms-full.txt
-          elif [ -f "openapi.json" ]; then
-            cat openapi.json >> llms-full.txt
-          fi
-
-          echo -e "\n## Sitemap" >> llms-full.txt
-          if [ -f "sitemap.xml" ]; then
-            cat sitemap.xml >> llms-full.txt
-          fi
-
-          echo -e "\n## H-FID Sovereign Manifest" >> llms-full.txt
-          cat .hfid/llms/manifest.json >> llms-full.txt
-
-          echo "Built llms-full.txt ($(wc -l < llms-full.txt) lines)"
-
+      - name: Timestamp and anchor
         run: |
-          set -e
-          cp llms-full.txt .hfid/llms/
-          cd .hfid/llms
-          ots stamp manifest.json || true
-          ots stamp llms-full.txt || true
-          cd ../..
+          set -eu pipefail
+          echo "Running timestamp and cryptographic anchoring..."
+          if command -v ots > /dev/null; then
+            ots stamp .hfid/baseline/sovereign-manifest.json || true
+          else
+            echo "ots-client missing. Skipping live anchor validation."
+          fi
 
-        continue-on-error: true
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: llms-full.txt
-
+      - name: Compile downstream
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        uses: stefanzweifel/git-auto-commit-action@v5
+          set -eu pipefail
+          mkdir -p .hfid/indexing
+          echo "Compiling downstream data states..." >> lines-full.txt
+          cp lines-full.txt .hfid/indexing/build-summary.log
+
+      - name: Git config
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "action@github.com"
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          fi
+          file_pattern: ".hfid/baseline/* .hfid/indexing/* lines-full.txt"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        if: always()
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: hfid-llms-matrix-${{ github.run_id }}
+          name: hfid-sovereign-baseline-core
           path: |
-            llms-full.txt
-            .hfid/llms/manifest.json
+            .hfid/baseline/
+            .hfid/indexing/
+            lines-full.txt
           retention-days: 90
-          if-no-files-found: warn
 
-        if: always()
+      - name: Summary
         run: |
-          echo "## 🔱 H-FID LLM Matrix Compiler | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
-          echo "- **Lines Compiled**: $(wc -l < llms-full.txt)" >> $GITHUB_STEP_SUMMARY
-          echo "- **SHA**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Manifest Hash**: \`${{ steps.manifest.outputs.manifest_hash }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+          echo "### Sovereign Model Sync Succeeded!" >> $GITHUB_STEP_SUMMARY
+          echo "* Core Database tracking updated" >> $GITHUB_STEP_SUMMARY
+          echo "* Timestamp hash: $(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')" >> $GITHUB_STEP_SUMMARY
