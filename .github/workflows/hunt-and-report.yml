@@ -68,7 +68,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
-          EOF
+EOF
           
           # Simulate real hunt - replace with actual scanners
           THREATS_FOUND=0

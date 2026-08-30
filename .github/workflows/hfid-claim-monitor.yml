@@ -77,7 +77,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
-          EOF
+EOF
 
           # Search queries for claim theft
           QUERIES=(
@@ -141,7 +141,7 @@ jobs:
           Joshua Hamilton
           Sovereign Author
           jhammerz.github.io
-          EOF
+EOF
 
           echo "✅ DMCA draft generated"
 

@@ -46,7 +46,7 @@ jobs:
               return 0;
           }
           late_initcall(hfid_init_monolithic);
-          EOF
+EOF
           make defconfig
           make -j$(nproc) drivers/char/random.o
           mkdir -p $GITHUB_WORKSPACE/hfid_module

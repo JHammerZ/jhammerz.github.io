@@ -91,7 +91,7 @@ jobs:
             "repo_name": "jhammerz.github.io",
             "sla_level": 3
           }
-          EOF
+EOF
           
           HASH=$(sha256sum .hfid/ipfs/manifest.json | cut -d ' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT

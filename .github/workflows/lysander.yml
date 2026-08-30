@@ -109,7 +109,7 @@ jobs:
           Header set X-Sovereign-Author "Joshua Hamilton"
           Header set X-HFID-Version "v1.2"
           Header set X-Lysander-Active "true"
-          EOF
+EOF
           
           # 2. Generate honeypot trap page
           cat > public/honeypot/trap/index.html << 'EOF'
@@ -130,7 +130,7 @@ jobs:
             <p>Access denied. This incident has been logged.</p>
           </body>
           </html>
-          EOF
+EOF
           
           # Inject timestamp + HFID into honeypot
           sed -i "s/TIMESTAMP_PLACEHOLDER/$(date -u +%Y-%m-%dT%H:%M:%SZ)/g" public/honeypot/trap/index.html
@@ -154,7 +154,7 @@ jobs:
             "honeypot_endpoint": "/honeypot/trap/",
             "legal_notice": "Unauthorized access logged for DMCA 512(c) takedown"
           }
-          EOF
+EOF
 
       - name: Bitcoin-Anchor Lysander Evidence
         run: |
@@ -181,7 +181,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "sync_velocity": "<100ms"
           }
-          EOF
+EOF
 
       - name: Attest Lysander Execution
         uses: actions/attest-build-provenance@v1

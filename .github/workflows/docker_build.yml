@@ -41,7 +41,7 @@ jobs:
                       "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
                       "hfid_version": "v1.1"
                     }
-                    EOF
+EOF
       - name: preserved-4
         run: |
           set -e

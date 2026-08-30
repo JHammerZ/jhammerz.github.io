@@ -87,7 +87,7 @@ jobs:
             },
             "sovereign_author": "Joshua Hamilton"
           }
-          EOF
+EOF
 
       - name: Check for Existing Open Chaos Issue
         id: check_issue

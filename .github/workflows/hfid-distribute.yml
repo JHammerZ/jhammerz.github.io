@@ -134,7 +134,7 @@ jobs:
           [![BTC Verified](https://img.shields.io/badge/BTC-Verified-f7931a?logo=bitcoin&logoColor=white)]($BTC_URL)
           [![IPFS Mirrored](https://img.shields.io/badge/IPFS-Mirrored-0c5c2c?logo=ipfs&logoColor=white)]($IPFS_URL)
           [![DOI](https://img.shields.io/badge/DOI-${{ steps.hfid.outputs.zenodo }}-blue)]($ZENODO_URL)
-          EOF
+EOF
           echo "✅ Badges generated with real links"
 
       - name: Generate Distribution Attestation
@@ -158,7 +158,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "sync_velocity": "<100ms"
           }
-          EOF
+EOF
 
       - name: Attest Distribution
         uses: actions/attest-build-provenance@v1

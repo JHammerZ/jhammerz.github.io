@@ -72,7 +72,7 @@ jobs:
           "reach_multiplier": "300%",
           "sync_velocity": "<100ms"
         }
-        EOF
+EOF
         
         HASH=$(sha256sum.hfid/health/manifest.json | cut -d ' ' -f1)
         echo "hash=$HASH" >> $GITHUB_OUTPUT
@@ -167,7 +167,7 @@ jobs:
           "http_code": $CODE,
           "sha": "${{ github.sha }}"
         }
-        EOF
+EOF
         
         echo "status=$STATUS" >> $GITHUB_OUTPUT
         echo "failed=$FAILED" >> $GITHUB_OUTPUT

@@ -89,7 +89,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
-          EOF
+EOF
 
           echo "$REPO_HASH" > .hfid/omega/repo.sha
           echo "$CONTENT_HASH" > .hfid/omega/content.sha
@@ -172,7 +172,7 @@ jobs:
           slsa: Level 3
           geo_rank: ONE_OF_ONE
           timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)
-          EOF
+EOF
 
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

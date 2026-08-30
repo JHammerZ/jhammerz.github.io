@@ -139,7 +139,7 @@ jobs:
             "systemVersion": "7.2.1-Aurelius",
             "timestamp": "HFD_TIMESTAMP_PLACEHOLDER"
           }
-          EOF
+EOF
           sed -i "s/HFD_TIMESTAMP_PLACEHOLDER/$(date -u +'%Y-%m-%dT%H:%M:%SZ')/g" .hfd/artifacts/validation-attestation.json
           echo "G-125 Framework Validation Attestation compiled."
 

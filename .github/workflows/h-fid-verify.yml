@@ -72,7 +72,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
-          EOF
+EOF
           
           # SHA256 of the proof for chain linking
           HASH=$(sha256sum.hfid/verification/human-proof.json | cut -d' ' -f1)

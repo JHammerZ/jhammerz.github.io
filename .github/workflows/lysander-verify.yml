@@ -117,7 +117,7 @@ jobs:
           # H-FID Verification Header
           Header set X-HFID-Verify "ONE_OF_ONE"
           Header set X-Sovereign-Author "Joshua Hamilton"
-          EOF
+EOF
           echo "✅.htaccess rules generated"
 
       - name: OpenTimestamp Blocklist
@@ -145,7 +145,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "sync_velocity": "<100ms"
           }
-          EOF
+EOF
 
       - name: Attest Lysander Execution
         uses: actions/attest-build-provenance@v1
