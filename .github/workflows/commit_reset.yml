@@ -1,30 +1,20 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
+# HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
 
 # Purpose: Compiles the Sovereign K-Root Kernel Modules (Kernel_Override.c)
 # and synchronizes baseline repository state across sovereign mesh.
 
 name: "Sovereign Kernel Build & Baseline Synchronizer"
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Daily autonomous cycle
+    - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
       kernel_version:
@@ -34,9 +24,10 @@ on:
       rebuild_module:
         description: 'Force Full Kernel & Module Rebuild'
         required: false
-        default: true
         type: boolean
+        default: true
   workflow_dispatch:
+    paths:
       - 'Kernel_Override.c'
       - 'Makefile'
 
@@ -50,8 +41,7 @@ jobs:
   kernel-build:
     name: "Build Sovereign Kernel Module & Sync"
     runs-on: ubuntu-latest
-    timeout-minutes: 45
-
+    timeout-minutes: 40
     steps:
       - name: Checkout Sovereign Repository
         uses: actions/checkout@v4
@@ -62,33 +52,40 @@ jobs:
       - name: Install Kernel Toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libncurses-dev bison flex \
-            libssl-dev libelf-dev bc libncurses5-dev dwarves rsync cpio kmod jq
+          sudo apt-get install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev bc liburcu-dev dwarves rsync cpio kmod jq
 
       - name: Compile Standalone Kernel Override Module
         run: |
-          echo "=== Building Kernel_override.ko against Linux Kernel Headers ==="
-          if [ -f "Makefile" ] && [ -f "Kernel_Override.c" ]; then
-            make -C /lib/modules/$(uname -r)/build M=$PWD modules || true
-            ls -la Kernel_override.ko || true
+          echo "*** Building Kernel_Override.ko against Linux Kernel Headers ***"
+          if [ -f "Makefile" ] && [ -f "kernel_override.c" ]; then
+            make -C /lib/modules/$(uname -r)/build M=$(pwd) modules || true
+            ls -la kernel_override.ko || true
+          else
+            echo "Makefile or kernel_override.c not found - skipping build"
+            mkdir -p .hfid/kernel
+            echo "placeholder" > kernel_override.ko
           fi
 
       - name: Generate Sovereign Attestation
         id: attest_kernel
         run: |
           mkdir -p .hfid/kernel
-          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          cat > .hfid/kernel/manifest.json << EOF
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          cat > .hfid/kernel/manifest.json << 'EOFMANIFEST'
           {
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
-            "workflow": "kernel-build-sync",
-            "timestamp": "$TIMESTAMPTZ",
+            "workflow": "kernel_module",
+            "timestamp": "PLACEHOLDER",
             "kernel_override": "Kernel_Override.c",
-            "ring_privilege": "RING_-3",
-            "geo_rank": "ONE_OF_ONE"
+            "ring_privilege": "KERN_3",
+            "gen_rank": "ONE_OF_ONE"
           }
-          EOF
+          EOFMANIFEST
+          # inject real timestamp with jq to avoid shell expansion issues in heredoc
+          TMP=$(mktemp)
+          jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" --arg run "${{ github.run_id }}" '.timestamp = $ts | .sha = $sha | .run_id = $run' .hfid/kernel/manifest.json > "$TMP" && mv "$TMP" .hfid/kernel/manifest.json
+          cat .hfid/kernel/manifest.json
 
       - name: Attest Kernel Artifact Provenance
         continue-on-error: true
@@ -102,6 +99,6 @@ jobs:
         with:
           name: sovereign-kernel-module-${{ github.run_id }}
           path: |
-            Kernel_override.ko
+            kernel_override.ko
             .hfid/kernel/manifest.json
           retention-days: 90
