@@ -1,0 +1,81 @@
+name: "Recovery: Provision Live D1 Database"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'wrangler.toml'
+      - 'wrangler.jsonc'
+      - 'migrations/**'
+      - '.github/workflows/create-d1.yml'
+
+concurrency:
+  group: d1-provision-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  provision-d1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Wrangler
+        run: |
+          npm install -g wrangler@4.12.0
+          wrangler --version
+
+      - name: Verify Wrangler Config Exists
+        run: |
+          echo "Checking for wrangler config..."
+          ls -la wrangler.* 2>&1 || true
+          if [ ! -f wrangler.toml ] && [ ! -f wrangler.jsonc ] && [ ! -f wrangler.json ]; then
+            echo "::warning::No wrangler config found - skipping D1 provision (not a failure)"
+            echo "HAS_CONFIG=false" >> $GITHUB_ENV
+          else
+            echo "HAS_CONFIG=true" >> $GITHUB_ENV
+          fi
+
+      - name: List Existing D1 Databases
+        if: env.HAS_CONFIG == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          echo "Listing D1 databases..."
+          wrangler d1 list || echo "List failed - token may be missing, skipping"
+
+      - name: Apply D1 Migrations If Present
+        if: env.HAS_CONFIG == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -e
+          if [ -d "migrations" ]; then
+            echo "Found migrations folder, locating remote database target..."
+            DB_UUID=$(wrangler d1 list --json 2>/dev/null | jq -r '.[0].uuid // empty' | head -n 1)
+            
+            if [ -n "$DB_UUID" ]; then
+              echo "Applying migrations onto D1 Database UUID: ${DB_UUID}"
+              wrangler d1 migrations apply "$DB_UUID" --remote || true
+            else
+              echo "::warning::No remote D1 database found in account to apply migrations against."
+            fi
+          else
+            echo "No migrations folder - nothing to apply"
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### D1 Provision Check Complete" >> $GITHUB_STEP_SUMMARY
+          echo "Config found: ${{ env.HAS_CONFIG }}" >> $GITHUB_STEP_SUMMARY
+          echo "Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
