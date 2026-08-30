@@ -1,34 +1,32 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# Forensic Audit: H-FID-000001-000001-AUDIT 100/100
+# GNO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
 # SLSA Level: 3
 
-# M-Law Language / H-FID Standard / REC v7.2
+# H-Low Language / H-FID Standard / HBS v1.2
 
-# M-Law Language / H-FID Standard / REC v7.2
+# H-Low Language / H-FID Standard v1.2
 
-# M-Law Language / H-FID Standard / REC v7.2
+# H-Low Language / H-FID Standard / REC v7.2
 
-# M-Law Language / H-FID Standard / REC v7.2
-
-name: "Security: H-FID Lysander Defense / lysander"
+name: "Security: H-FID Lysander Defense / Lysander"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 */6 * * *' # Every 6 hours
-  workflow_dispatch:
-    branches: [main]
+  push:
+    branches: [ main ]
+    paths:
       - '.hfid/**'
       - '.github/workflows/hfid-lysander.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */8 * * *' # Every 8 hours
 
 permissions:
   contents: write
@@ -42,6 +40,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install OpenTimestamps
         run: pip install opentimestamps-client
@@ -51,21 +51,18 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/lysander
-          
-          # H-FID v1.2 Heartbeat
-          HASH=$(echo "JHammerZ|H-FID-v1.2|e35468ba0d92d95bbd0bc2c2d1effba75e370f7d|$(date -u +%Y-%m-%dT%H:%M:%SZ)|Lysander-Verified" | sha256sum | cut -d' ' -f1)
-          echo "$HASH" > .hfid/lysander/heartbeat.txt
-          
-          # Lysander Blocklist - malign AI scrapers
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          HEARTBEAT="JHammerZ-HFID-v1.0-${{ github.run_id }}-v1.0-${{ github.sha }}"
+          echo "$HEARTBEAT" > .hfid/lysander/heartbeat.txt
+          HASH=$(echo -n "$HEARTBEAT-$TIMESTAMP" | sha256sum | cut -d ' ' -f1)
+          echo "HASH: $HASH"
+          echo "$HASH" > .hfid/lysander/heartbeat.hash
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+
+          # Lysander Blacklist - malign AI scrapers
           BLOCKLIST=".hfid/lysander/blocklist.txt"
-          touch "$BLOCKLIST"
-          
-          AGENTS=(
-            "GPTBot" "ChatGPT-User" "CCBot" "anthropic-ai" "ClaudeBot"
-            "Bytespider" "cohere-ai" "Diffbot" "PerplexityBot"
-            "YandexBot" "semrushbot" "ahrefsbot" "mj12bot"
-          )
-          
+          touch "$BLOCKLIST" ".hfid/lysander/BLOCKLIST"
+          AGENTS=("ChatGPT-User" "CCBot" "anthropic-ai" "ClaudeBot" "Bytespider" "cohere-ai" "Diffbot" "PerplexityBot" "VandexBot" "semrushBot" "AhrefsBot" "MJ12bot")
           ADDED=0
           for AGENT in "${AGENTS[@]}"; do
             if ! grep -qx "$AGENT" "$BLOCKLIST"; then
@@ -73,52 +70,49 @@ jobs:
               ADDED=$((ADDED + 1))
             fi
           done
-          
           sort -u "$BLOCKLIST" -o "$BLOCKLIST"
           TOTAL=$(wc -l < "$BLOCKLIST")
-          
-          echo "added=$ADDED" >> $GITHUB_OUTPUT
           echo "total=$TOTAL" >> $GITHUB_OUTPUT
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "added=$ADDED" >> $GITHUB_OUTPUT
+          echo "Total Blocked: $TOTAL | New Added: $ADDED"
 
       - name: Generate Apache Deny Rules + Honeypot
         run: |
           mkdir -p .hfid/lysander
           echo "# Lysander Apache Deny Rules - Auto Generated $(date -u +%Y-%m-%d)" > .hfid/lysander/apache-deny.conf
           while IFS= read -r agent; do
-            echo "SetEnvIfNoCase User-Agent \"$agent\" lysander_block" >> .hfid/lysander/apache-deny.conf
+            [ -z "$agent" ] && continue
+            echo "BrowserMatchNoCase $agent lysander_block" >> .hfid/lysander/apache-deny.conf
           done < .hfid/lysander/blocklist.txt
           echo "Deny from env=lysander_block" >> .hfid/lysander/apache-deny.conf
-          
-          # Honeypot
-          echo "<!-- Lysander Honeypot: JHammerZ-H-FID-v1.2-$(date +%s) -->" > .hfid/lysander/honeypot.html
+
+          echo "<!-- Lysander Honeypot: JHammerZ-H-FID-v1.2 $(date) -->" > .hfid/lysander/honeypot.html
 
       - name: Generate Forensic Capture Log
         run: |
           echo "## Lysander Forensic Log" > .hfid/lysander/forensic.log
-          echo "**Timestamp**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> .hfid/lysander/forensic.log
-          echo "**Heartbeat**: $(cat .hfid/lysander/heartbeat.txt)" >> .hfid/lysander/forensic.log
-          echo "**Blocked Agents**: $(cat .hfid/lysander/blocklist.txt | wc -l)" >> .hfid/lysander/forensic.log
-          echo "**SHA**: ${{ github.sha }}" >> .hfid/lysander/forensic.log
+          echo "Timestamp: $(date -u)" >> .hfid/lysander/forensic.log
+          echo "Heartbeat: $(cat .hfid/lysander/heartbeat.txt)" >> .hfid/lysander/forensic.log
+          echo "Blocked Agents: $(wc -l < .hfid/lysander/blocklist.txt)" >> .hfid/lysander/forensic.log
 
       - name: Bitcoin-Anchor Lysander Evidence
         run: |
-          ots stamp .hfid/lysander/heartbeat.txt
-          ots stamp .hfid/lysander/forensic.log
-          ots stamp .hfid/lysander/blocklist.txt
+          ots stamp .hfid/lysander/heartbeat.txt || true
+          ots stamp .hfid/lysander/forensic.log || true
+          ots stamp .hfid/lysander/blocklist.txt || true
 
       - name: Generate Lysander Attestation
         run: |
           cat > .hfid/lysander/attestation.json << JSON
           {
             "sovereign_author": "Joshua Hamilton",
-            "protocol": "Lysander Defense v1.2",
+            "protocol": "Lysander Defense v2",
             "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "heartbeat_hash": "${{ steps.lysander.outputs.hash }}",
             "blocked_agents": ${{ steps.lysander.outputs.total }},
             "new_agents": ${{ steps.lysander.outputs.added }},
-            "hfid_cert": "H-FID-FOR-000001-AUDIT",
-            "geo_rank": "ONE_OF_ONE",
+            "hfid_cert": "H-FID-ONE-000001-AUDIT",
+            "gno_rank": "ONE_OF_ONE",
             "sha": "${{ github.sha }}"
           }
           JSON
@@ -131,12 +125,12 @@ jobs:
       - name: Commit Lysander Updates
         run: |
           git config user.name "H-FID Lysander Bot"
-          git config user.email "hfid@jhammerz.github.io"
-      - name: Commit Changes
+          git config user.email "lysander@jhammerz.github.io"
+
+      - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          fi
 
       - name: Upload Lysander Report
         uses: actions/upload-artifact@v4
@@ -147,7 +141,7 @@ jobs:
 
       - name: Summary
         run: |
-          echo "### Lysander Protocol Complete" >> $GITHUB_STEP_SUMMARY
+          echo "## H-FID Lysander Protocol Complete" >> $GITHUB_STEP_SUMMARY
           echo "**Heartbeat**: ${{ steps.lysander.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
           echo "**Total Blocked**: ${{ steps.lysander.outputs.total }} agents" >> $GITHUB_STEP_SUMMARY
           echo "**New Added**: ${{ steps.lysander.outputs.added }}" >> $GITHUB_STEP_SUMMARY
