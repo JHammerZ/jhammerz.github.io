@@ -35,6 +35,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
@@ -93,15 +94,25 @@ jobs:
         run: |
           ots stamp .hfid/omega/manifest.json .hfid/omega/repo-bundle.tar.gz || true
       - if: ${{ steps.check.outputs.needed == 'true' }}
+        name: Commit Ledger Only - with rebase
         run: |
-          git config user.name "Lysander-Omega"
-          git config user.email "omega@jhammerz.github.io"
+          set -e
+          git config --global user.name "Lysander-Omega"
+          git config --global user.email "omega@jhammerz.github.io"
           mkdir -p data .hfid/omega/receipt
           echo "${{ steps.manifest.outputs.content_hash }}" > data/last_omega_hash.txt
-      - uses: stefanzweifel/git-auto-commit-action@v6
-        if: ${{ steps.check.outputs.needed == 'true' }}
-        with:
-          commit_message: "chore: omega broadcast ${{ github.ref_name }} [skip ci]"
+          cat > .hfid/omega/receipt/broadcast.txt << EOF
+          H-FID Omega Broadcast Receipt
+          Target: ${{ github.event.inputs.target || 'all' }}
+          SHA256: ${{ steps.manifest.outputs.content_hash }}
+          Verified: ${{ github.ref_name }} / ${{ github.sha }}
+          Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          EOF
+          # Fix fetch-first race
+          git pull --rebase origin main || true
+          git add data/last_omega_hash.txt .hfid/omega/ || true
+          git diff --staged --quiet || git commit -m "chore: omega broadcast ${{ github.ref_name }} [skip ci]"
+          git push origin main || (git pull --rebase origin main && git push origin main)
       - if: always()
         uses: actions/upload-artifact@v5
         with:
