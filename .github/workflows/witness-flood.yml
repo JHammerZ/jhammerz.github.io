@@ -113,8 +113,8 @@ jobs:
           "reach_multiplier": "300%",
           "sync_velocity": "<100ms"
         }
-        EOF
         
+        EOF
         cp "${{ github.event.inputs.content_file }}".hfid/broadcast/content.txt 2>/dev/null || echo "No content file" >.hfid/broadcast/content.txt
         
         cd. hfid/broadcast
@@ -162,11 +162,12 @@ jobs:
         
         Bitcoin-anchored: {os.environ.get('GITHUB_SERVER_URL')}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         
-        #Twenty47Protocol #HFID #DigitalSovereignty #BuiltInOhio"""
+        #Twenty47Protocol #HFID #DigitalSovereignty #BuiltInOhio
         
         api.update_status(tweet[:280])
         print("Twitter post successful")
-EOF
+        
+        EOF
       continue-on-error: true
 
     - name: Post to Reddit
@@ -217,7 +218,8 @@ EOF
                 time.sleep(15)
             except Exception as e:
                 print(f"Failed r/{sub}: {e}")
-EOF
+        
+        EOF
       continue-on-error: true
 
     - name: Telegram Broadcast

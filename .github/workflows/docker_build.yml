@@ -22,7 +22,7 @@ jobs:
       - name: preserved-1
         run: |
           echo "REGISTRY=ghcr.io" >> $GITHUB_ENV
-      echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+          echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
       - name: preserved-2
         run: |
           set -e
