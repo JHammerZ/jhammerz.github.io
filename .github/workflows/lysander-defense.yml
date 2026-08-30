@@ -1,24 +1,9 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
 # M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# Home Language / H-FID Standard / HEO v1.2
+# Home Language / H-FID Standard / HEQ v1.2
 # First Commit: February 12, 2026
 # SLA Level: 3 - Twenty 47 Protocol: Active Defense
-
 name: "Security: H-FID Lysander Defense"
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -34,8 +19,9 @@ on:
         default: 'honeypot'
         type: choice
         options: [honeypot, block, analyze, purge]
-  workflow_dispatch:
+  push:
     branches: [ main ]
+    paths:
       - '.hfid/lysander/**'
       - '.github/workflows/lysander-defense.yml'
 
@@ -51,12 +37,11 @@ jobs:
     timeout-minutes: 10
     env:
       MODE: ${{ github.event.inputs.defense_mode || 'honeypot' }}
-
     steps:
       - name: Checkout Sovereign Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Setup Python Toolchain Environment
@@ -75,10 +60,8 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/lysander
-          
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          
           cat > .hfid/lysander/manifest.json << EOF_MANIFEST
           {
             "hfid_version": "v1.2",
@@ -93,10 +76,8 @@ jobs:
             "status": "ARMED_AND_ACTIVE"
           }
           EOF_MANIFEST
-          
           test -f .hfid/lysander/manifest.json
-          
-          HASH=$(sha256sum .hfid/lysander/manifest.json | cut -d' ' -f1)
+          HASH=$(sha256sum .hfid/lysander/manifest.json | cut -d ' ' -f1)
           echo "hash=${HASH}" >> $GITHUB_OUTPUT
           echo "manifest_path=.hfid/lysander/manifest.json" >> $GITHUB_OUTPUT
           echo "manifest_created=true" >> $GITHUB_OUTPUT
@@ -112,11 +93,10 @@ jobs:
           set -e
           echo "Running Lysander v1.2 in ${DEFENSE_MODE} mode"
           echo "Hash: ${{ steps.manifest.outputs.hash }}"
-          
           mkdir -p .hfid/lysander
           cat > .hfid/lysander/threats.json << 'EOF_THREATS'
           {
-            "status": "RING_-3_GUARD_ACTIVE",
+            "status": "RING_3_GUARD_ACTIVE",
             "blocked": [],
             "honeypots": [
               {
@@ -128,7 +108,6 @@ jobs:
             "last_scan": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           }
           EOF_THREATS
-          
           echo "threats_blocked=0" >> $GITHUB_OUTPUT
           echo "honeypots_deployed=1" >> $GITHUB_OUTPUT
 
@@ -159,10 +138,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          file_pattern: .
-          else
-            echo "Defense state clean: zero mutations required."
-          fi
+          file_pattern: ".hfid/lysander/**"
 
       - name: Upload Defense Evidence
         if: always()
@@ -175,10 +151,10 @@ jobs:
       - name: Summary
         if: always()
         run: |
-          echo "## 🛡️ H-FID Lysander Defense Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- **Mode**: \`${{ env.MODE }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Threats Blocked**: \`${{ steps.lysander.outputs.threats_blocked || '0' }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Honeypots**: \`${{ steps.lysander.outputs.honeypots_deployed || '1' }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Manifest SHA256**: \`${{ steps.manifest.outputs.hash || 'failed' }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA Level**: 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+          echo "## H-FID Lysander Defense Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Mode: ${{ env.MODE }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Threats Blocked: ${{ steps.lysander.outputs.threats_blocked || '0' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Honeypots: ${{ steps.lysander.outputs.honeypots_deployed || '1' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Manifest SHA256: ${{ steps.manifest.outputs.hash || 'failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- SLSA Level: 3 Attested" >> $GITHUB_STEP_SUMMARY
+          echo "- GEO RANK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
