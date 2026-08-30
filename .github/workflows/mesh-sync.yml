@@ -30,7 +30,7 @@ jobs:
                         "mesh_nodes": [],
                         "last_sync": null
                       }
-                    EOF
+EOF
                     fi
                     
                     # For now, hardcode your mesh. Replace with real nodes later.
@@ -54,7 +54,7 @@ jobs:
                       "geo_rank": "ONE_OF_ONE",
                       "slsa_level": 3
                     }
-                    EOF
+EOF
       - name: preserved-3
         run: |
           set -e

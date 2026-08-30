@@ -66,7 +66,7 @@ jobs:
                         "sovereign_author": "Joshua Hamilton",
                         "geo_rank": "ONE_OF_ONE"
                       }
-                      EOF
+EOF
                     fi
                     echo "✅ Favicon set generated"
       - name: preserved-4
@@ -88,7 +88,7 @@ jobs:
                       "slsa_level": 3,
                       "sync_velocity": "<100ms"
                     }
-                    EOF
+EOF
       - name: preserved-5
         run: |
           git config --local user.name 'github-actions[bot]'
