@@ -57,7 +57,7 @@ jobs:
 
       - name: Verify Wrangler Config
         run: |
-          if [ ! -f "wrangler.toml" ]; then
+          if [ ! -f "wrangler.toml" ] && [ ! -f "wrangler.jsonc" ]; then
             echo "❌ CRITICAL: wrangler.toml missing. Cannot deploy."
             exit 1
           fi
@@ -70,16 +70,16 @@ jobs:
           cat > .hfid/edge/deploy.json << 'EOF'
           {
             "workflow": "deploy",
-            "target": "cloudflare-workers",
+            "target": "cloudflare.workers",
             "sha": "PLACEHOLDER",
             "timestamp": "PLACEHOLDER",
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
             "forensic_audit": "H-FID-100-FORENSIC-AUDIT-100/100",
-            "sisa_level": 3
+            "slsa_level": 3
           }
           EOF
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           TMP=$(mktemp)
           jq --arg sha "${{ github.sha }}" --arg ts "$TIMESTAMP" '.sha=$sha | .timestamp=$ts' .hfid/edge/deploy.json > "$TMP" && mv "$TMP" .hfid/edge/deploy.json
           echo "Generated H-FID edge attestation"
