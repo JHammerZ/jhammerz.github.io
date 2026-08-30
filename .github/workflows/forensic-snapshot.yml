@@ -3,9 +3,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 2 * * *'
-  workflow_dispatch:
   push:
     branches: [main]
 permissions:
@@ -16,61 +16,62 @@ jobs:
   forensic-snapshot:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v6
+      - name: Setup Python
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Install OTS
         run: pip install opentimestamps-client
-      - name: Generate Forensic Ledger
+      - name: Generate Ledger
         id: ledger
         run: |
           set +e
           mkdir -p .hfid/ledger
           TS=$(date -u +%Y%m%d-%H%M%S)
-          SHORT=$(echo "${{ github.sha }}" | cut -c1-12)
+          SHORT=$(echo "${{ github.sha }}" | cut -c1-10)
           NAME="jhammerz-site-${TS}-${SHORT}"
           TAR="${NAME}.tar"
-          CAR="${NAME}.car"
+          JSON=".hfid/ledger/${NAME}.json"
           echo "Creating $TAR"
-          tar --exclude='.git' --exclude='node_modules' --exclude='.hfid' -cf "$TAR" . 2>/dev/null
-          cp "$TAR" "$CAR"
-          ls -lh "$TAR" "$CAR"
-          SIZE=$(stat -c%s "$CAR" 2>/dev/null || wc -c < "$CAR")
-          cat > .hfid/ledger/${NAME}.json << EOF
+          tar --exclude='.git' --exclude='node_modules' --exclude='.hfid' --exclude='.well-known' -cf "$TAR" .
+          ls -lh "$TAR"
+          SIZE=$(wc -c < "$TAR")
+          cat > "$JSON" << EOF
           {
-            "workflow": "forensic-ledger",
             "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "file": "$CAR",
-            "size": $SIZE
+            "file": "$TAR",
+            "size": $SIZE,
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           }
           EOF
-          echo "car_file=$CAR" >> $GITHUB_OUTPUT
+          cat "$JSON"
           echo "tar_file=$TAR" >> $GITHUB_OUTPUT
-          echo "ledger_file=.hfid/ledger/${NAME}.json" >> $GITHUB_OUTPUT
+          echo "ledger_file=$JSON" >> $GITHUB_OUTPUT
       - name: OTS Stamp
         run: |
           set +e
-          ots stamp ${{ steps.ledger.outputs.car_file }} || true
+          ots stamp ${{ steps.ledger.outputs.tar_file }} || true
+          ls -lh *.ots 2>/dev/null; ls -lh .hfid/ledger/
       - name: Attest
         uses: actions/attest-build-provenance@v3
         with:
-          subject-path: ${{ steps.ledger.outputs.car_file }}
+          subject-path: ${{ steps.ledger.outputs.tar_file }}
       - name: Upload Proofs
         uses: actions/upload-artifact@v5
         with:
           name: hfid-forensic-${{ github.sha }}
-          path: .hfid/ledger/
-          if-no-files-found: warn
+          path: |
+            ${{ steps.ledger.outputs.tar_file }}
+            ${{ steps.ledger.outputs.ledger_file }}
+          if-no-files-found: error
           retention-days: 90
       - name: Commit Ledger
-        if: always()
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: 'chore: forensic snapshot [skip ci]'
           file_pattern: .hfid/ledger/
-          skip_fetch: true
-          skip_checkout: true
+          add_options: '-A'
