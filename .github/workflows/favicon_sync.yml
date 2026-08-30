@@ -57,8 +57,8 @@ jobs:
           fi
 
       - name: Validate Source Asset Architecture
-         id: source_check
-         run: |
+        id: source_check
+        run: |
           if [ -f "assets/favicon.svg" ]; then
             echo "source_type=svg" >> $GITHUB_OUTPUT
             echo "source_path=assets/favicon.svg" >> $GITHUB_OUTPUT
@@ -79,7 +79,6 @@ jobs:
           
           echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
           
-          # Native sharp image matrix conversion processing array splits
           npx sharp -i "$SRC" -o public/favicon.png resize 32 32
           npx sharp -i "$SRC" -o public/apple-touch-icon.png resize 180 180
           npx sharp -i "$SRC" -o public/android-chrome-192x192.png resize 192 192
