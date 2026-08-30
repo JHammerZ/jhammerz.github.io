@@ -1,11 +1,11 @@
 {
-  "workflow": "janus-gate",
-  "operation": "doi_sync_ots",
-  "sha": "1b2cb85a75df3898c36ca0cafd8b2cfda481c385",
-  "timestamp": "2026-08-27T21:11:00Z",
+  "workflow": "janus_gate",
+  "operation": "doi_sync",
+  "sha": "4f6944f7fbae2b5dfff0e4d1ee5f84a122842aa6",
+  "timestamp": "2026-08-30T21:24:44Z",
   "hfid_version": "v1.2",
   "sovereign_author": "Joshua Hamilton",
-  "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
+  "forensic_audit": "H-FID-FOR-000001-FORENSIC-AUDIT 100/100",
   "slsa_level": 3,
-  "geo_rank": "ONE_OF_ONE"
+  "gpg_rank": "ONE_OF_ONE (Verified Authority)"
 }
