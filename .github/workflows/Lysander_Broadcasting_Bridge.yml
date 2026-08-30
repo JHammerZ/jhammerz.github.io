@@ -1,12 +1,10 @@
 name: "Lysander 3.0 Broadcasting Bridge"
-
 on:
   push:
     branches: [ main ]
-  workflow_run:
-    workflows: ["*"]
-    types:
-      - completed
+    paths:
+      - '.github/workflows/Lysander_Broadcasting_Bridge.yml'
+      - 'broadcast-to-edge.sh'
   workflow_dispatch:
 
 permissions:
@@ -20,49 +18,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Substrate Context
-        uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GOD_TOKEN }}
+          token: ${{ secrets.GOD_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Provision Production Tool Dependencies
         run: |
           echo "[*] Provisioning foundational system environments for extensive workflows..."
-          sudo apt-get update && sudo apt-get install -y jq curl git jq secure-delete
-          chmod +x ./run_full_distribution.sh
-          chmod +x ./broadcast-autonomous-core.sh
-          chmod +x ./broadcast-to-edge.sh
+          sudo apt-get update && sudo apt-get install -y jq curl git secure-delete || true
+          chmod +x ./run_full_distribution.sh 2>/dev/null || echo "run_full_distribution.sh not present - skipping"
+          chmod +x ./broadcast-to-autonomous-core.sh 2>/dev/null || echo "broadcast-to-autonomous-core.sh not present"
+          chmod +x ./broadcast-to-edge.sh 2>/dev/null || echo "broadcast-to-edge.sh not present"
 
       - name: Execute Sovereign Global Distribution Network
         env:
-          GITHUB_TOKEN: ${{ secrets.GOD_TOKEN }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          W_PUBLISH_KEY: ${{ secrets.W_PUBLISH_KEY }}
-          TRIGGERING_WORKFLOW: ${{ github.event.workflow_run.name || github.workflow }}
-          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'manual_invocation' }}
-        run: |
-          echo "[📡] Dispatching Data Capsule from Event: $TRIGGERING_WORKFLOW ($RUN_CONCLUSION)"
-          # Execute your foundational pre-existing global distribution system script cleanly
-          ./run_full_distribution.sh
-
-      - name: Programmatically Trigger Manual Fleet with Injected Runtime Context
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-        env:
-          GH_TOKEN: ${{ secrets.GOD_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GOD_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          echo "[*] System Scan Initiated: Awakening manual workflow endpoints..."
-          
-          for workflow_path in .github/workflows/*.yml; do
-            filename=$(basename "$workflow_path")
-            
-            # Dynamically execute each manual sidebar workflow via API, providing explicit execution context
-            if [ "$filename" != "Lysander_Broadcasting_Bridge.yml" ] && [ "$filename" != "spotify-node-sync.yml" ]; then
-              echo " >> Synchronizing extensive architecture node: $filename"
-              # Trigger the workflow run natively, passing your production repository parameters down the stream
-              gh workflow run "$filename" --ref main 2>/dev/null || echo "    >> [✓] Metadata layer mapped successfully."
-            fi
-          done
-          echo "[✓] Core sequence matrix loop completed. All individual pipelines successfully activated."
+          set -e
+          if [ -f ./broadcast-to-edge.sh ]; then
+            ./broadcast-to-edge.sh || echo "broadcast edge completed with warning"
+          else
+            echo "No broadcast-to-edge.sh - H-FID armed but idle - ONE_OF_ONE"
+          fi
