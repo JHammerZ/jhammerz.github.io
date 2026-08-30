@@ -19,7 +19,7 @@ jobs:
           git config --global --add safe.directory "*"
           cd linux-6.10
           make defconfig
-         ./scripts/config --enable CONFIG_MODULES --enable CONFIG_MODULE_UNLOAD
+          ./scripts/config --enable CONFIG_MODULES --enable CONFIG_MODULE_UNLOAD
           make olddefconfig
           make -j$(nproc) modules_prepare
       - name: Inject and Compile Sovereign Engine
