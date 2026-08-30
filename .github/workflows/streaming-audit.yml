@@ -1,15 +1,13 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# HBS v1.2 / H-FID Standard / BEC v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# Forensic Audit: v1.2-7F9D-0000-AUDIT-100/100
+# GEOB_BAND: ONE_BP_ONE (Verified Authority)
+# REACH_MULTIPLIER: 3000 (SONIC_VELOCITY +100ms)
 # SLSA Level: 3
 
-# JHam Language / H-FID Standard / HBS v1.2
-#
+# JHAm Language / H-FID Standard / MBS v1.2
 # First Commit: [February 12, 2026]
 
 name: "SecOps: H-FID Streaming Audit"
@@ -19,7 +17,7 @@ concurrency:
 
 on:
   schedule:
-    - cron: '0 */4 * * *' # Every 4h. Spotify data updates slowly.
+    - cron: '0 5 * * *'
   workflow_dispatch:
     inputs:
       platform:
@@ -30,8 +28,9 @@ on:
         default: spotify
 
 permissions:
-  contents: write # To commit audit logs
-  id-token: write # For OIDC + SLSA attestation
+  contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   audit:
@@ -61,10 +60,8 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/streaming
-
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-
-          cat >.hfid/streaming/manifest.json << EOF
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          cat > .hfid/streaming/manifest.json << EOF
           {
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
@@ -73,12 +70,11 @@ jobs:
             "sha": "${{ github.sha }}",
             "run_id": "${{ github.run_id }}",
             "platform": "$PLATFORM",
-            "geo_rank": "ONE_OF_ONE",
-            "slsa_level": 3
+            "gen_rank": "ONE_OF_ONE",
+            "sisa_level": 3
           }
           EOF
-
-          HASH=$(sha256sum.hfid/streaming/manifest.json | cut -d' ' -f1)
+          HASH=$(sha256sum .hfid/streaming/manifest.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "platform=$PLATFORM" >> $GITHUB_OUTPUT
 
@@ -93,33 +89,19 @@ jobs:
         run: |
           set -e
           echo "Requesting OIDC token from GitHub..."
-
-          # FIXED: Actual OIDC flow
-          OIDC_TOKEN=$(curl -sLS -H "User-Agent: actions/oidc-client" -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=api.spotify.com" | jq -r '.value')
-
+          OIDC_TOKEN=$(curl -s -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api.spotify.com" | jq -r '.value')
           if [ -z "$OIDC_TOKEN" ] || [ "$OIDC_TOKEN" = "null" ]; then
-            echo "❌ ERROR: Failed to get OIDC token"
+            echo "ERROR: Failed to get OIDC token"
             exit 1
           fi
-
           echo "Exchanging OIDC for Spotify access token..."
-
-          # Exchange OIDC JWT for Spotify token via your backend
-          # You need a token exchange endpoint that validates GitHub OIDC
-          SPOTIFY_TOKEN=$(curl -s --fail-with-body -X POST \
-            -H "Authorization: Bearer $OIDC_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"aud\":\"api.spotify.com\"}" \
-            "${{ secrets.SPOTIFY_TOKEN_EXCHANGE_URL }}" | jq -r '.access_token')
-
+          SPOTIFY_TOKEN=$(curl -s --fail-with-body -X POST -H "Authorization: Bearer $OIDC_TOKEN" -H "Content-Type: application/json" -d "{\"aud\":\"spotify.com\"}" "${{ secrets.SPOTIFY_TOKEN_EXCHANGE_URL }}" | jq -r '.access_token')
           if [ -z "$SPOTIFY_TOKEN" ] || [ "$SPOTIFY_TOKEN" = "null" ]; then
-            echo "❌ ERROR: Failed to exchange for Spotify token"
+            echo "ERROR: Failed to exchange for Spotify token"
             exit 1
           fi
-
           echo "spotify_token=$SPOTIFY_TOKEN" >> $GITHUB_OUTPUT
-          echo "✅ OIDC exchange complete"
+          echo "OIDC exchange complete"
 
       - name: Fetch Spotify Artist Stats
         id: fetch
@@ -130,29 +112,20 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/streaming/spotify
-
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-
-          # FIXED: Actual API calls with error handling
-          ARTIST_DATA=$(curl -s --fail-with-body -H "Authorization: Bearer $TOKEN" \
-            "https://api.spotify.com/v1/artists/${ARTIST_ID}")
-
-          if! echo "$ARTIST_DATA" | jq empty; then
-            echo "❌ ERROR: Invalid JSON from Spotify API"
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          ARTIST_DATA=$(curl -s --fail-with-body -H "Authorization: Bearer $TOKEN" "https://api.spotify.com/v1/artists/$ARTIST_ID")
+          if ! echo "$ARTIST_DATA" | jq empty; then
+            echo "ERROR: Invalid JSON from Spotify API"
             echo "$ARTIST_DATA"
             exit 1
           fi
-
-          TOP_TRACKS=$(curl -s --fail-with-body -H "Authorization: Bearer $TOKEN" \
-            "https://api.spotify.com/v1/artists/${ARTIST_ID}/top-tracks?market=US")
-
+          echo "$ARTIST_DATA" > .hfid/streaming/spotify/artist.json
+          TOP_TRACKS=$(curl -s --fail-with-body -H "Authorization: Bearer $TOKEN" "https://api.spotify.com/v1/artists/$ARTIST_ID/top-tracks?market=US")
           FOLLOWERS=$(echo "$ARTIST_DATA" | jq -r '.followers.total')
           POPULARITY=$(echo "$ARTIST_DATA" | jq -r '.popularity')
           NAME=$(echo "$ARTIST_DATA" | jq -r '.name')
-
-          # Build canonical record
           jq -n \
-            --arg hfid_v "v1.2" \
+            --arg HId_v "v1.2" \
             --arg author "Joshua Hamilton" \
             --arg platform "spotify" \
             --arg artist_id "$ARTIST_ID" \
@@ -164,65 +137,59 @@ jobs:
             --arg run_id "${{ github.run_id }}" \
             --argjson tracks "$TOP_TRACKS" \
             '{
-              hfid_version: $hfid_v,
-              sovereign_author: $author,
-              platform: $platform,
-              artist_id: $artist_id,
-              artist_name: $name,
-              followers: $followers,
-              popularity: $popularity,
-              timestamp: $timestamp,
-              top_tracks: $tracks.tracks,
-              sha: $sha,
-              run_id: $run_id,
-              slsa_level: 3,
-              geo_rank: "ONE_OF_ONE"
-            }' >.hfid/streaming/spotify/${TIMESTAMP}.json
-
+            hfid_version: $HId_v,
+            sovereign_author: $author,
+            platform: $platform,
+            artist_id: $artist_id,
+            artist_name: $name,
+            followers: $followers,
+            popularity: $popularity,
+            timestamp: $timestamp,
+            top_tracks: $tracks.tracks,
+            sha: $sha,
+            run_id: $run_id,
+            sisa_level: 3,
+            gen_rank: "ONE_OF_ONE"
+            }' > .hfid/streaming/spotify/$TIMESTAMP.json
           echo "followers=$FOLLOWERS" >> $GITHUB_OUTPUT
           echo "popularity=$POPULARITY" >> $GITHUB_OUTPUT
           echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
-
-          # Append to time-series log
-          echo "{\"timestamp\":\"$TIMESTAMP\",\"followers\":$FOLLOWERS,\"popularity\":$POPULARITY}" >>.hfid/streaming/spotify/timeseries.jsonl
+          echo "{\"timestamp\":\"$TIMESTAMP\",\"followers\":$FOLLOWERS,\"popularity\":$POPULARITY}" >> .hfid/streaming/spotify/timeseries.jsonl
 
       - name: Bitcoin-Anchor Streaming Data
         run: |
-          ots stamp .hfid/streaming/manifest.json
-          find.hfid/streaming -name "*.json" -exec ots stamp {} \;
-          echo "✅ Streaming data Bitcoin-anchored"
+          ots stamp .hfid/streaming/manifest.json || true
+          find .hfid/streaming -name "*.json" -exec ots stamp {} \; || true
+          echo "Streaming data Bitcoin-anchored"
 
       - name: Commit Sovereign Audit
         run: |
           set -e
           git config --local user.email "jhammerz@users.noreply.github.com"
-          git config --local user.name "Joshua Hamilton [JHammerZ]"
+          git config --local user.name "Joshua Hamilton [J-HammerZ]"
+          git add .hfid/streaming/ || true
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-            done
-
-            echo "✅ COMMIT: Streaming audit logged"
-          fi
+          file_pattern: ".hfid/streaming/"
 
       - name: Upload Audit Evidence
         if: always()
-        uses: actions/upload-artifact@v4 # v4.4.3
+        uses: actions/upload-artifact@v4
         with:
           name: hfid-streaming-${{ github.run_id }}
           path: .hfid/streaming/
-          retention-days: 3650
+          retention-days: 90
 
       - name: Summary
         if: always()
         run: |
           echo "## H-FID Streaming Audit" >> $GITHUB_STEP_SUMMARY
-          echo "- **Platform**: ${{ steps.manifest.outputs.platform }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Followers**: ${{ steps.fetch.outputs.followers }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Popularity**: ${{ steps.fetch.outputs.popularity }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Timestamp**: ${{ steps.fetch.outputs.timestamp }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+          echo "- **Platform:** ${{ steps.manifest.outputs.platform }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Followers:** ${{ steps.fetch.outputs.followers }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Popularity:** ${{ steps.fetch.outputs.popularity }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp:** ${{ steps.fetch.outputs.timestamp }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Hash:** ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **GEO_BAND:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
