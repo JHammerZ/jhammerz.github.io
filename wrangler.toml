@@ -5,10 +5,9 @@ compatibility_flags = ["nodejs_compat"]
 
 [assets]
 directory = "./"
-not_found_handling = "single-page-application"
-
-# NOTE: Build is handled in GitHub Action dummy step, not here
-# Removed: [build] command = "npm run build" - was trying to bundle dist/server.cjs (Express)
+not_found_handling = "none"
+# Don't upload H-FID, git, node_modules as assets
+exclude = [".hfid", ".git", "node_modules", "dist", ".github", "wrangler.toml", "worker.js"]
 
 [env.production]
 name = "jhammerz-github-io-production"
