@@ -37,35 +37,29 @@ jobs:
           set -e
           sudo apt-get update
           sudo apt-get install -y bc bison flex libelf-dev libssl-dev jq build-essential gcc-12
-          # Force compiler matching to eliminate x86 thunk mismatch bugs
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-
-      - name: Fetch Target Kernel Source Code Tree
-        run: |
-          set -e
-          echo "📥 Fetching specific target kernel release tree directly..."
-          git clone --depth 1 --branch v5.10 https://github.com /tmp/linux-src
 
       - name: Configure Clean Build Platform
         run: |
           set -e
-          cd /tmp/linux-src
-          make defconfig
-          # Generate tracking system modules and build parameters safely
-          make modules_prepare
+          if [ -d "linux-5.10" ]; then
+            cd linux-5.10
+            make defconfig
+            make modules_prepare
+          else
+            echo "⚠️ linux-5.10 source tree directory not found in workspace root"
+          fi
 
       - name: Inject and Compile Sovereign Kernel Module
         id: compile
         run: |
           set -e
-          # Safeguard linking sequence bugs by enabling tracking overrides
-          export KBUILD_MODPOST_WARN=1
-          
           echo "⚙️ Initiating native external module construction sequence..."
-          make -C /tmp/linux-src M=$GITHUB_WORKSPACE/hfid_module modules
+          # Pass warning override argument flag directly inside the loop to catch unexported tracking variables
+          make KBUILD_MODPOST_WARN=1 -C linux-5.10 M=$GITHUB_WORKSPACE/hfid_module modules
           
           if [ -f "$GITHUB_WORKSPACE/hfid_module/Kernel_Override.ko" ]; then
-            echo "✅ Module compiled cleanly."
+            echo "✅ Module compiled successfully."
             sha256sum "$GITHUB_WORKSPACE/hfid_module/Kernel_Override.ko" > "$GITHUB_WORKSPACE/hfid_module/Kernel_Override.ko.sha256"
           else
             echo "❌ Core kernel driver artifact creation failed."
