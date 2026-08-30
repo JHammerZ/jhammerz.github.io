@@ -117,7 +117,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "sync_velocity": "<100ms"
           }
-EOF
+          EOF
 
       - name: Distribute to IPFS
         if: steps.hfid.outputs.chain_length!= '0' && (github.event.inputs.targets == 'all' || github.event.inputs.targets == 'ipfs' || github.event.inputs.targets == '')

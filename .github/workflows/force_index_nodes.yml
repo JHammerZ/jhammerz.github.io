@@ -84,7 +84,7 @@ jobs:
                       "status": "INDEX_SYNCHRONIZED",
                       "protocol": "Twenty_47"
                     }
-JSONEOF
+                    JSONEOF
                     
                     INDEX_HASH=$(sha256sum .hfid/index-nodes/manifest.json | cut -d' ' -f1)
                     echo "index_hash=$INDEX_HASH" >> $GITHUB_OUTPUT

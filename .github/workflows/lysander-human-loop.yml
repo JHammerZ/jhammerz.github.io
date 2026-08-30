@@ -96,7 +96,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
-EOF
+          EOF
 
           HASH=$(sha256sum.hfid/lysander/manifest.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT

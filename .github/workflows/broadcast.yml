@@ -79,7 +79,7 @@ jobs:
               "llms": "https://jhammerz.github.io/llms.txt"
             }
           }
-EOF
+          EOF
           
           HASH=$(sha256sum.hfid/broadcast/payload.json | cut -d' ' -f1)
           echo "json=$(cat.hfid/broadcast/payload.json | jq -c.)" >> $GITHUB_OUTPUT

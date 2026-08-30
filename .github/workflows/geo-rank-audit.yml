@@ -136,7 +136,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "sync_velocity": "<100ms"
           }
-EOF
+          EOF
 
       - name: Check for Existing GEO_RANK Issue
         id: check_issue

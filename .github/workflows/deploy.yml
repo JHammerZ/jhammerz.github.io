@@ -48,5 +48,5 @@ jobs:
                       "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
                       "slsa_level": 3
                     }
-EOF
+                    EOF
                     echo "Generated H-FID edge attestation"

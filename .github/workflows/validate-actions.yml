@@ -77,7 +77,7 @@ jobs:
             "trigger": "${{ github.event_name }}",
             "actor": "${{ github.actor }}"
           }
-EOF
+          EOF
           echo "Generated forensic attestation at.hfid/forensic/reset.json"
 
       - name: Stage Changes

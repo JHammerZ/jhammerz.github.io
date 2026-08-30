@@ -71,7 +71,7 @@ jobs:
             "reach_multiplier": "300%",
             "sync_velocity": "<100ms"
           }
-EOF
+          EOF
 
           HASH=$(sha256sum.hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT

@@ -113,7 +113,7 @@ jobs:
           "reach_multiplier": "300%",
           "sync_velocity": "<100ms"
         }
-EOF
+        EOF
         
         cp "${{ github.event.inputs.content_file }}".hfid/broadcast/content.txt 2>/dev/null || echo "No content file" >.hfid/broadcast/content.txt
         
