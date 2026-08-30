@@ -1,4 +1,3 @@
-name: "\"SecOps: H-FID SEO Audit\""
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -205,9 +204,9 @@ jobs:
       - name: Bitcoin-Anchor SEO Audit
         if: always()
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp.hfid/seo/manifest.json.hfid/seo/audit.log || true
-          [ -f sitemap.xml ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp sitemap.xml || true
-          [ -f robots.txt ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp robots.txt || true
+          ots stamp.hfid/seo/manifest.json.hfid/seo/audit.log
+          [ -f sitemap.xml ] && ots stamp sitemap.xml
+          [ -f robots.txt ] && ots stamp robots.txt
           echo "✅ SEO audit Bitcoin-anchored" >>.hfid/seo/audit.log
 
       - name: Evaluate SEO Compliance
@@ -244,10 +243,19 @@ jobs:
               title: `🚨 H-FID SEO Violation - ${new Date().toISOString()}`,
               body: `## H-FID v1.2 SEO Failure
 
+              **Violations**: ${total}
+              **Broken Links**: ${{ steps.links.outputs.links_violations }}
+              **HTML/SEO**: ${{ steps.html.outputs.html_violations }}
+              **Sitemap/Robots**: ${{ steps.sitemap.outputs.sitemap_violations }}
+              **SHA**: ${{ github.sha }}
+              **Run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              **SLSA**: Level 3 Attested
+              **Bitcoin Anchor**: See artifacts
 
               ### Failed Checks
               See run logs and artifacts for.hfid/seo/audit.log
 
+              **GEO_RANK**: ONE_OF_ONE`,
               labels: ['seo', 'h-fid-v1.2', 'urgent', 'secops']
             })
 

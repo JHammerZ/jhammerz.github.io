@@ -1,4 +1,4 @@
-name: "\"Monitor: H-FID Health Check\""
+name: "Monitor: H-FID Health Check"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -174,7 +174,7 @@ jobs:
         if: always()
         run: |
           cd .hfid/health
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp manifest.json status.json report.json || true
+          ots stamp manifest.json status.json report.json
           sleep 3
           ots upgrade manifest.json.ots || true
           ots upgrade status.json.ots || true
@@ -191,10 +191,17 @@ jobs:
               title: `🚨 H-FID Site Down - ${new Date().toISOString()}`,
               body: `## 🚨 H-FID v1.2 Health Incident | Twenty 47 Protocol
               
+              **Status:** DOWN
+              **SHA:** ${{ github.sha }}
+              **Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              **SLSA:** Level 3 Attested
+              **Bitcoin Anchor:** See artifacts
               
               ### Failed Checks
               See run logs for details.
               
+              **GEO_RANK:** ONE_OF_ONE
+              **Protocol:** Twenty 47
               `,
               labels: ['incident', 'h-fid-v1.2', 'urgent']
             })

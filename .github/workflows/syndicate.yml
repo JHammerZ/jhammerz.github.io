@@ -170,7 +170,7 @@ jobs:
       - name: Bitcoin-Anchor Syndication
         if: steps.check.outputs.needed == 'true'
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/syndicate/manifest.json.hfid/syndicate/audit.log || true
+          ots stamp .hfid/syndicate/manifest.json.hfid/syndicate/audit.log
           echo "✅ Syndication Bitcoin-anchored"
 
       - name: Update State Storage

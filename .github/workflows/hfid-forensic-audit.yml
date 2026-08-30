@@ -87,7 +87,7 @@ jobs:
         if: always()
         run: |
           cd .hfid/audit
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp manifest.json report.md || true
+          ots stamp manifest.json report.md
           sleep 3
           ots upgrade manifest.json.ots || true
           ots upgrade report.md.ots || true

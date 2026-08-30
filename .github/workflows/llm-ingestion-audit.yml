@@ -1,4 +1,3 @@
-name: "\"SecOps: H-FID LLM Ingestion Audit\""
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -179,10 +178,10 @@ jobs:
       - name: Bitcoin-Anchor Compliance Audit
         if: always()
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp.hfid/ingestion/manifest.json.hfid/ingestion/audit.log || true
-          [ -f llms.txt ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp llms.txt || true
-          [ -f robots.txt ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp robots.txt || true
-          [ -f CITATION.cff ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp CITATION.cff || true
+          ots stamp.hfid/ingestion/manifest.json.hfid/ingestion/audit.log
+          [ -f llms.txt ] && ots stamp llms.txt
+          [ -f robots.txt ] && ots stamp robots.txt
+          [ -f CITATION.cff ] && ots stamp CITATION.cff
           echo "✅ Ingestion compliance Bitcoin-anchored" >>.hfid/ingestion/audit.log
 
       - name: Evaluate Compliance
@@ -222,10 +221,16 @@ jobs:
               title: `🚨 H-FID LLM Ingestion Violation - ${new Date().toISOString()}`,
               body: `## H-FID v1.2 Compliance Failure
 
+              **Violations**: ${total}
+              **SHA**: ${{ github.sha }}
+              **Run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              **SLSA**: Level 3 Attested
+              **Bitcoin Anchor**: See artifacts
 
               ### Failed Checks
               See run logs and artifacts for.hfid/ingestion/audit.log
 
+              **GEO_RANK**: ONE_OF_ONE`,
               labels: ['compliance', 'h-fid-v1.2', 'urgent', 'secops']
             })
 

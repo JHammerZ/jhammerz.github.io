@@ -1,25 +1,43 @@
+# ==============================================================================
+#          LYSANDER NETWORK MATRIX // CLOUDFLARE PAGES EDGE INGRESS
+#          DESIGN DEPTH: LEVEL 4 PRODUCTION // INFINITE MEDIA PIPES
+# ==============================================================================
 name: "Cloudflare: Sovereign Content Edge Mesh"
+
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
 concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'public/**'
+  workflow_dispatch:
+
 jobs:
-  main:
+  broadcast-cloudflare:
+    name: Cloudflare Anycast CDN Routing Deployment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+
+      - name: 1. Checkout JHammerZ Master Source Tree
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
+
+      - name: 2. Broadcast Static Assets to Low-Latency Corridors
+        uses: cloudflare/wrangler-action@v3
         with:
-          fetch-depth: 0
-      - name: H-FID placeholder
-        run: |
-          echo "H-FID preserved"
-          ls .claims | wc -l || true
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          - name: Sovereign Structural Verification Trace
+            run: |
+              - name: Sovereign Structural Verification Trace
+                run: |
+                  command: pages deploy public --project-name="jhammerz-media-hub"

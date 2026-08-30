@@ -101,7 +101,7 @@ jobs:
 
       - name: Bitcoin-Anchor Hunt Report
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp BOUNTY_LOG.md.hfid/hunt/manifest.json || true
+          ots stamp BOUNTY_LOG.md.hfid/hunt/manifest.json
           echo "✅ Hunt evidence Bitcoin-anchored"
 
       - name: Attest Hunt Execution

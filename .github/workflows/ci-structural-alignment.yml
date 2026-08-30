@@ -1,25 +1,24 @@
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Sovereign Workflow Instance: ci-structural-alignment.yml
 name: "CI: Structural Alignment"
+
 on:
+ workflow_dispatch:
   push:
-    branches: [main]
+    branches: [ main, master ]
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
+
 concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+
 jobs:
-  main:
+  execute-matrix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: H-FID placeholder
-        run: |
-          echo "H-FID preserved"
-          ls .claims | wc -l || true
+    - name: Pre-Install Core YAML Dependency
+      run: pip install pyyaml || pip3 install pyyaml
+    - name: Checkout Repository Content
+      uses: actions/checkout@1d93c7d14c30dbf1f5315d4ef83c162bc5a1d756
+      - name: Checkout Codebase
+      

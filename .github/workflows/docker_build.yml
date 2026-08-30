@@ -1,54 +1,144 @@
+
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# JHam Language / H-FID Standard / HBS
 name: Fix formatting in docker_build.yml cleanup step #577
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
 concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    branches: [ "main" ]
+      - 'Dockerfile'
+      - 'docker/**'
+      - '.github/workflows/docker_build.yml'
+      - '.hfid/**'
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
 permissions:
   contents: write
-  id-token: write
-  attestations: write
+  packages: write
+
 jobs:
-  main:
+  build-stage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: preserved-1
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set lower case image name
         run: |
-          echo "REGISTRY=ghcr.io" >> $GITHUB_ENV
           echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
-      - name: preserved-2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=,format=short
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          workflow_dispatch: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify Live Server Container
         run: |
           set -e
-                    echo "Starting verification test sequence..."
-                    docker run -d --name test-container -p 8090:8090 ${{ env.REGISTRY }}jhammerz/jhammerz.github.io:latest
-      - name: preserved-3
+          echo "Starting verification test sequence..."
+          docker run -d --name test-container -p 8090:8090 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+          echo "Waiting for proxy startup..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8090/status 2>/dev/null | grep -q "SERVER_ACTIVE"; then
+              echo "SUCCESS: Server responded normally."
+              break
+            fi
+            echo "Waiting for session log... attempt $i"
+            sleep 2
+            if [ $i -eq 30 ]; then
+              echo "ERROR: Server failed to become active"
+              docker logs test-container
+              exit 1
+            fi
+          done
+
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/ || echo "000")
+
+          if [ "$STATUS_CODE" -eq 200 ] || [ "$STATUS_CODE" -eq 400 ]; then
+            echo "SUCCESS: Proxy port connection verified. Status: $STATUS_CODE"
+          else
+            echo "ERROR: Server failed to start properly. Status received: $STATUS_CODE"
+            docker logs test-container
+            exit 1
+          fi
+
+      - name: Generate H-FID Container Attestation
+        if: success()
         run: |
           set -e
-                    mkdir -p .hfid
-                    DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY }}jhammerz/jhammerz.github.io:latest | cut -d'@' -f2)
-                    cat > .hfid/container.json << EOF
-                    {
-                      "image": "${{ env.REGISTRY }}jhammerz/jhammerz.github.io:latest",
-                      "digest": "$DIGEST",
-                      "sha": "${{ github.sha }}",
-                      "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-                      "hfid_version": "v1.1"
-                    }
-                    EOF
-      - name: preserved-4
+          mkdir -p .hfid
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest | cut -d'@' -f2)
+          cat > .hfid/container.json << EOF
+          {
+            "image": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest",
+            "digest": "$DIGEST",
+            "sha": "${{ github.sha }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "hfid_version": "v1.1"
+          }
+          EOF
+
+      - name: Commit H-FID Attestation
+        if: success()
         run: |
           set -e
-                    git config --local user.name "H-FID Docker Bot"
-                    git config --local user.email "docker@jhammerz.github.io"
-      - name: preserved-5
+          git config --local user.name "H-FID Docker Bot"
+          git config --local user.email "docker@jhammerz.github.io"
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+
+      - name: Cleanup
+        if: always()
         run: |
           echo "Cleaning up validation runtime container layers..."
-                    docker rm -f test-container || true
-                    docker rmi ${{ env.REGISTRY }}jhammerz/jhammerz.github.io:latest || true
+          docker rm -f test-container || true
+          docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest || true

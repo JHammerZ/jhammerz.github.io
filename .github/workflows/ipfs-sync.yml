@@ -144,7 +144,7 @@ jobs:
 
       - name: Bitcoin-Anchor IPFS CID
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/ipfs/manifest.json .hfid/ipfs/CID.txt || true
+          ots stamp .hfid/ipfs/manifest.json .hfid/ipfs/CID.txt
           echo "IPFS CID Bitcoin-anchored"
 
       - name: Upload IPFS Evidence

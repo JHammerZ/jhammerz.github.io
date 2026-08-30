@@ -162,7 +162,7 @@ jobs:
 
       - name: Bitcoin-Anchor Killswitch Audit
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/killswitch/manifest.json.hfid/killswitch/audit.log || true
+          ots stamp .hfid/killswitch/manifest.json.hfid/killswitch/audit.log
           echo "✅ Killswitch actions Bitcoin-anchored"
 
       - name: Upload Killswitch Evidence

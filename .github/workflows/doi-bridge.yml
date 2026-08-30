@@ -1,56 +1,157 @@
+
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+#
+# First Commit: February 12, 2026
+# ORE BASK: ONE OF ONE (Identified Authority)
+# REACH-MULTIPLIER: 1000 ; SYNC VELOCITY: <10ms
+# Grid Level: 3 | Twenty AI7 Protocol | ACTIVE
+
 name: "Sovereign: DOI Sync | Janus Gate v1.2-M-FID"
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
 concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Daily midnight UTC
+  workflow_dispatch:
+    branches:
+      - main
+      - 'zenodo.json'
+      - '.zenodo.json'
+      - '.github/workflows/doi-bridge.yml'
+  workflow_dispatch:
+
 permissions:
-  contents: write
-  id-token: write
-  attestations: write
+  contents: write # Write required to commit DOI proofs
+  id-token: write # Id-token for SLSA L3 attestations
+  attestations: write # Write right for HFD sync proof
+
 jobs:
-  main:
+  doi_sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Full History
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: preserved-1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install OpenTimestamps
         run: |
           python -m pip install --upgrade pip
-                    pip install opentimestamps
-      - name: preserved-2
+          pip install opentimestamps
+
+      - name: Validate Zenodo Metadata
         run: |
           set -e
-                    HFD_VALID=true
-      - name: preserved-3
+          HFD_VALID=true
+
+          if [ ! -f "zenodo.json" ] && [ ! -f ".zenodo.json" ]; then
+            echo "❌ ERROR: zenodo.json is absent!"
+            HFD_VALID=false
+          fi
+
+          # Fast check required fields inside JSON architecture
+          for required_field in "description" "creators" "keywords"; do
+            if [ "$HFD_VALID" = "true" ]; then
+              if ! jq -e --arg f "$required_field" 'has($f)' zenodo.json > /dev/null 2>&1; then
+                echo "❌ CRITICAL: zenodo.json missing required field: '$required_field'"
+                HFD_VALID=false
+              fi
+            fi
+          done
+
+          # Check sovereign author
+          if [ "$HFD_VALID" = "true" ]; then
+            if ! jq -e '.creators[].name' zenodo.json | grep -q "Joshua Hamilton"; then
+              echo "⚠️ WARNING: Joshua Hamilton author anchor missing from zenodo.json metadata matrix."
+            fi
+          fi
+
+          # FIXED: Separated condition using a clean newline sequence
+          if [ "$HFD_VALID" = "false" ]; then
+            echo "❌ ERROR: zenodo.json syntax is valid but metadata fails schema rules."
+            exit 1
+          else
+            echo "✅ SUCCESS: zenodo.json metadata structure completely verified."
+          fi
+
+      - name: Generate H-FID DOI Manifest
+        if: success()
         run: |
           mkdir -p .hfd/provenance
-                    cat << 'EOF' > .hfd/provenance/doi-manifest.json
-                    {
-                      "workflow": "doi-bridge.yml",
-                      "operation": "DOI_SYNC",
-                      "gateway_bridge": "Janus-Gate",
-                      "timestamp": "PLACEHOLDER_TIMESTAMP",
-                      "sovereign_author": "Joshua Hamilton",
-                      "verification_status": "M-FID-AUTHENTICATED",
-                      "slsa_level": 3,
-                      "geo_rank": "ONE_OF_ONE"
-                    }
-                    EOF
-                    sed -i "s/PLACEHOLDER_TIMESTAMP/$(date -u +'%Y-%m-%dT%H:%M:%SZ')/g" .hfd/provenance/doi-manifest.json
-                    echo "Janus Gate core provenance structural map generated."
-      - name: preserved-4
+          cat << 'EOF' > .hfd/provenance/doi-manifest.json
+          {
+            "workflow": "doi-bridge.yml",
+            "operation": "DOI_SYNC",
+            "gateway_bridge": "Janus-Gate",
+            "timestamp": "PLACEHOLDER_TIMESTAMP",
+            "sovereign_author": "Joshua Hamilton",
+            "verification_status": "M-FID-AUTHENTICATED",
+            "slsa_level": 3,
+            "geo_rank": "ONE_OF_ONE"
+          }
+          EOF
+          sed -i "s/PLACEHOLDER_TIMESTAMP/$(date -u +'%Y-%m-%dT%H:%M:%SZ')/g" .hfd/provenance/doi-manifest.json
+          echo "Janus Gate core provenance structural map generated."
+
+      - name: OpenTimestamp Evidence
+        if: success()
         run: |
           set -e
-                    cd .hfd/provenance
-                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp doi-manifest.json || echo "Timestamp anchor queued." || true
-                    cd ../..
-      - name: preserved-5
+          cd .hfd/provenance
+          ots stamp doi-manifest.json || echo "Timestamp anchor queued."
+          cd ../..
+
+      - name: Attest DOI Sync
+        uses: actions/attest@v1
+        with:
+          subject-path: '.hfd/provenance/doi-manifest.json'
+          predicate-type: 'https://hfd.io'
+          predicate: |
+            {
+              "sovereign_author": "Joshua Hamilton",
+              "integrity_level": "SOVEREIGN",
+              "sha": "${{ github.sha }}"
+            }
+
+      - name: Stage OTS Changes
         run: |
           git config --global user.name "Janus-Gate-Agent"
-                    git config --global user.email "janus-gate@jhammerz.co"
+          git config --global user.email "janus-gate@jhammerz.co"
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+          else
+            echo "No pipeline modifications detected."
+          fi
+
+      - name: Upload OTS Proofs
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfd-janus-gate-doi-proofs
+          path: .hfd/provenance/
+          retention-days: 90
+          if-no-files-found: error

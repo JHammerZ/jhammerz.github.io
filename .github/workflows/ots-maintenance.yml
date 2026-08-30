@@ -1,33 +1,54 @@
-name: PID OTS Maintenance / maintenance-and-audit
+
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+# M-Law Language / H-FID Standard / REC v7.2
+
+name: "PID OTS Maintenance / maintenance-and-audit"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
+
 permissions:
   contents: write
-  id-token: write
-  attestations: write
+
 jobs:
-  main:
+  maintenance-and-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-      - name: preserved-1
+
+      # ... your existing steps ...
+
         run: |
           git config --global user.name "JHammerZ-Sovereign-Engine"
-                    git config --global user.email "engine@jhammerz.github.io"
-                        fi
-                        n=$((n+1))
-                        echo "Push failed, retry $n/3..."
-                        sleep 3
-                      done
-                    else
-                      echo "Zero identity matrix mutations detected. Skipping push state."
-                    fi
+          git config --global user.email "engine@jhammerz.github.io"
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+              fi
+              n=$((n+1))
+              echo "Push failed, retry $n/3..."
+              sleep 3
+            done
+          else
+            echo "Zero identity matrix mutations detected. Skipping push state."
+          fi

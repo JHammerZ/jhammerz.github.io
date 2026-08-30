@@ -147,8 +147,8 @@ jobs:
 
       - name: Bitcoin-Anchor Claim Evidence
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp CLAIM_LOG.md.hfid/claims/manifest.json || true
-          [ -f .hfid/claims/dmca/DMCA_NOTICE_$(date -u +%Y%m%d).txt ] && mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp.hfid/claims/dmca/DMCA_NOTICE_$(date -u +%Y%m%d).txt || true
+          ots stamp CLAIM_LOG.md.hfid/claims/manifest.json
+          [ -f .hfid/claims/dmca/DMCA_NOTICE_$(date -u +%Y%m%d).txt ] && ots stamp.hfid/claims/dmca/DMCA_NOTICE_$(date -u +%Y%m%d).txt || true
           echo "✅ Claim evidence Bitcoin-anchored"
 
       - name: Attest Claim Monitor Execution

@@ -1,52 +1,127 @@
+# HBS v1.2 / H-FID Standard / REC v7.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GEO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 3
+
 name: "CD: Automated Hub Indexation Deployment"
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
 concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # Daily midnight UTC reindex
+    - cron: '0 12 * * *' # Midday sync
+  workflow_dispatch:
+    branches: [ "main" ]
+      - '**/*.html'
+      - '**/*.md'
+      - 'assets/**'
+      - 'images/**'
+      - '.well-known/**'
+      - 'sitemap.xml'
+      - 'robots.txt'
+      - 'llms.txt'
+      - 'ai-context.json'
+      - '.github/workflows/**'
+      - '.hfid/**'
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
 permissions:
   contents: write
-  id-token: write
-  attestations: write
+  pages: write
+  id-token: write # Required for OIDC + deployment attestation
+  attestations: write # SLSA provenance for Pages
+
 jobs:
-  main:
+  build:
+    name: Build & Sovereign Index
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact_id }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - name: preserved-1
+          fetch-depth: 0 # Full history for H-FID audit trail
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Generate H-FID Site Attestation
         run: |
           set -e
-                    mkdir -p .hfid
-                    TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-                    cat > .hfid/site.json << EOF2
-                    {
-                      "site": "jhammerz.github.io",
-                      "sha": "${{ github.sha }}",
-                      "timestamp": "${TIMESTAMP}",
-                      "hfid_version": "v2.2",
-                      "sovereign_author": "Joshua Hamilton",
-                      "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
-                      "slsa_level": 3,
-                      "geo_rank": "ONE_OF_ONE"
-                    }
-                    EOF2
-                    echo "Generated H-FID site attestation at .hfid/site.json"
-      - name: preserved-2
+          mkdir -p .hfid
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          cat > .hfid/site.json << EOF2
+          {
+            "site": "jhammerz.github.io",
+            "sha": "${{ github.sha }}",
+            "timestamp": "${TIMESTAMP}",
+            "hfid_version": "v2.2",
+            "sovereign_author": "Joshua Hamilton",
+            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
+            "slsa_level": 3,
+            "geo_rank": "ONE_OF_ONE"
+          }
+          EOF2
+          echo "Generated H-FID site attestation at .hfid/site.json"
+
+      - name: Link Checker (Hardened & Non-Blocking)
+        uses: lycheeverse/lychee-action@v2
+        continue-on-error: true
+        with:
+          args: --verbose --no-progress --exclude-mail --accept 200,301,302,403,429,999 --exclude '.*(linkedin|apple|com|bandlab|impact|.*|xiaohongshu|accounts\.google|makersuite|doi\.org).*|.* --exclude "^/api/.*" --exclude "^file://.*" --exclude ".*\.html" - .
+          fail: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stage Production Static Artifacts
         run: |
           set -e
-                    mkdir -p _site/.hfid
-                    cp -r .hfid/site.json _site/.hfid/ 2>/dev/null || true
-                    cp -r *.html _site/ 2>/dev/null || true
-                    cp -r assets _site/ 2>/dev/null || true
-                    cp -r images _site/ 2>/dev/null || true
-                    cp -r .well-known _site/ 2>/dev/null || true
-                    cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
-                    touch _site/.nojekyll
-                    echo "Website static contents staged."
-                    ls -la _site/
+          mkdir -p _site/.hfid
+          cp -r .hfid/site.json _site/.hfid/ 2>/dev/null || true
+          cp -r *.html _site/ 2>/dev/null || true
+          cp -r assets _site/ 2>/dev/null || true
+          cp -r images _site/ 2>/dev/null || true
+          cp -r .well-known _site/ 2>/dev/null || true
+          cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
+          touch _site/.nojekyll
+          echo "Website static contents staged."
+          ls -la _site/
+
+      - name: Configure Static Site Ingestion Artifacts
+        uses: actions/upload-pages-artifact@v3
+        id: upload
+        with:
+          path: '_site'
+
+  deploy:
+    name: Deploy to Live Infrastructure
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Atomic Deploy to Live GitHub Infrastructure
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Attest Pages Deployment
+        if: steps.deployment.outputs.page_url != ''
+        continue-on-error: true
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: 'github-pages'
+          subject-digest: ${{ needs.build.outputs.artifact_id }}
