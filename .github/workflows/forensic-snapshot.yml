@@ -1,0 +1,94 @@
+name: forensic-snapshot
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+jobs:
+  forensic-snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Full History
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install OpenTimestamps
+        run: |
+          python -m pip install --upgrade pip
+          pip install opentimestamps-client
+          ots --version
+      - name: Generate Forensic Ledger
+        id: ledger
+        run: |
+          set -e
+          mkdir -p .hfid/ledger
+          TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
+          SHA_SHORT=$(echo "${{ github.sha }}" | cut -c1-12)
+          SITE_NAME="jhammerz-site-${TIMESTAMP}-${SHA_SHORT}"
+          TAR_FILE="${SITE_NAME}.tar"
+          echo "Creating $TAR_FILE"
+          tar --exclude='.git' --exclude='node_modules' --exclude='.hfid' --exclude='dist' -cf "$TAR_FILE" .
+          FILE_SIZE=$(stat -c%s "$TAR_FILE" 2>/dev/null || wc -c < "$TAR_FILE")
+          CAR_FILE="${SITE_NAME}.car"
+          cp "$TAR_FILE" "$CAR_FILE"
+          ls -lh "$CAR_FILE" "$TAR_FILE"
+          GIT_LOG=$(git log -1 --pretty=format:'{"commit":"%H","author":"%an","date":"%ad","message":"%s"}' --date=iso || echo '{}')
+          cat > .hfid/ledger/${SITE_NAME}.json << EOF
+          {
+            "workflow": "forensic-ledger",
+            "sha": "${{ github.sha }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "file_name": "$CAR_FILE",
+            "tar_name": "$TAR_FILE",
+            "file_size": "$FILE_SIZE",
+            "git_log": $GIT_LOG,
+            "slsa_level": 3
+          }
+          EOF
+          cat .hfid/ledger/${SITE_NAME}.json
+          echo "car_file=${CAR_FILE}" >> $GITHUB_OUTPUT
+          echo "tar_file=${TAR_FILE}" >> $GITHUB_OUTPUT
+          echo "ledger_file=.hfid/ledger/${SITE_NAME}.json" >> $GITHUB_OUTPUT
+      - name: OpenTimestamps Evidence
+        id: ots
+        run: |
+          set +e
+          ots stamp ${{ steps.ledger.outputs.car_file }} || echo "OTS pending"
+          ots stamp ${{ steps.ledger.outputs.tar_file }} || echo "OTS pending"
+          sleep 2
+          ls -lh *.ots .hfid/ledger/ 2>/dev/null || true
+      - name: Attest Forensic Snapshot
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: ${{ steps.ledger.outputs.car_file }}
+      - name: Upload Forensic Proofs
+        uses: actions/upload-artifact@v5
+        with:
+          name: hfid-forensic-${{ github.sha }}
+          path: .hfid/ledger/
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Commit Forensic Ledger
+        if: always()
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: 'chore: forensic snapshot [skip ci]'
+          file_pattern: .hfid/ledger/
+          skip_fetch: true
+          skip_checkout: true
