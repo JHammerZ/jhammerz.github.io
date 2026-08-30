@@ -68,7 +68,7 @@ jobs:
                     mkdir -p .hfid/index-nodes
                     TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
                     
-                    cat > .hfid/index-nodes/manifest.json << JSONEOF
+                    cat > .hfid/index-nodes/manifest.json << 'JSONEOF'
                     {
                       "workflow": "FORCE_INDEX_NODES",
                       "operation": "GLOBAL_INDEX_AND_NODE_REFRESH",
@@ -84,7 +84,7 @@ jobs:
                       "status": "INDEX_SYNCHRONIZED",
                       "protocol": "Twenty_47"
                     }
-                    JSONEOF
+JSONEOF
                     
                     INDEX_HASH=$(sha256sum .hfid/index-nodes/manifest.json | cut -d' ' -f1)
                     echo "index_hash=$INDEX_HASH" >> $GITHUB_OUTPUT
