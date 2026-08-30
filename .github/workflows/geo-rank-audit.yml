@@ -1,3 +1,4 @@
+name: "\"Audit: AI Crawler & GEO_RANK Visibility\""
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -158,8 +159,6 @@ jobs:
           script: |
             const body = `## H-FID GEO_RANK ALERT: Visibility Degraded
             
-            **Timestamp**: ${new Date().toISOString()}
-            **Commit**: ${context.sha}
             
             ### Failed Checks
             - **llms.txt**: ${{ steps.llms.outputs.llms_accessible }}
@@ -171,12 +170,9 @@ jobs:
             - **Google**: ${{ steps.google.outputs.google_indexed }}
             - **Bing**: ${{ steps.bing.outputs.bing_indexed }}
             
-            **Impact**: GEO_RANK ONE_OF_ONE status at risk. AI crawlers may be blocked.
             
-            **H-FID Attestation**: See.hfid/geo-rank/audit.json
             
             ---
-            *Twenty 47 Protocol: Immediate remediation required*`;
             
             await github.rest.issues.create({
               owner: context.repo.owner,

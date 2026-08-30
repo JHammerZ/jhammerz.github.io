@@ -1,3 +1,4 @@
+name: "Chaos Verify | Self-Healing Stack"
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -110,20 +111,16 @@ jobs:
             const title = `ALERT: H-FID Stack Degraded - ${new Date().toISOString()}`;
             const body = `## Twenty 47 Protocol: Chaos Detected
             
-            **Timestamp**: ${new Date().toISOString()}
-            **Commit**: ${context.sha}
             
             ### Status
             - **GitHub Pages**: ${process.env.SITE_DOWN === 'true'? '❌ DOWN' : '✅ UP'}
             - **IPFS Gateway**: ${process.env.IPFS_DOWN === 'true'? '❌ DOWN' : '✅ UP'}
             - **OpenTimestamps**: ${process.env.OTS_DOWN === 'true'? '❌ DOWN' : '✅ UP'}
             
-            **H-FID Attestation**: See run logs for.hfid/chaos.json
             
             Lysander initiating self-heal sequence.
             
             ---
-            *Forensic Audit: H-FID-100-FORENSIC-AUDIT 100/100*`;
             
             await github.rest.issues.create({
               owner: context.repo.owner,

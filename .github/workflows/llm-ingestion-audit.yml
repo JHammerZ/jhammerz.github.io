@@ -1,3 +1,4 @@
+name: "\"SecOps: H-FID LLM Ingestion Audit\""
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -221,16 +222,10 @@ jobs:
               title: `🚨 H-FID LLM Ingestion Violation - ${new Date().toISOString()}`,
               body: `## H-FID v1.2 Compliance Failure
 
-              **Violations**: ${total}
-              **SHA**: ${{ github.sha }}
-              **Run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-              **SLSA**: Level 3 Attested
-              **Bitcoin Anchor**: See artifacts
 
               ### Failed Checks
               See run logs and artifacts for.hfid/ingestion/audit.log
 
-              **GEO_RANK**: ONE_OF_ONE`,
               labels: ['compliance', 'h-fid-v1.2', 'urgent', 'secops']
             })
 
