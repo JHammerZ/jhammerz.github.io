@@ -20,17 +20,11 @@ jobs:
         run: |
           echo "Running verification track for TMA Full Suite"
           echo "Ref: ${{ github.ref }}"
-          echo "SHA: ${{ github.sha }}"
           ls -la
 
       - name: Check Node Environment
         run: |
-          if [ -f "package.json" ]; then
-            echo "package.json found"
-            cat package.json
-          else
-            echo "No package.json - skipping node install"
-          fi
+          if [ -f "package.json" ]; then echo "package.json found"; else echo "No package.json"; fi
 
       - name: Install Dependencies
         run: |
@@ -41,19 +35,14 @@ jobs:
           elif [ -f "package.json" ]; then
             npm install
           else
-            echo "No lockfile - nothing to install"
+            echo "No deps to install"
           fi
 
-      - name: Build TMA Full Suite
+      - name: Build TMA
         run: |
-          if [ -f "package.json" ]; then
-            npm run build --if-present
-          else
-            echo "No build step"
-          fi
+          npm run build --if-present || echo "no build script"
 
       - name: Summary
         if: always()
         run: |
           echo "### TMA Full Suite Build Complete" >> $GITHUB_STEP_SUMMARY
-          echo "- **Run ID:** ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
