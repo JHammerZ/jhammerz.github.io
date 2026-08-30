@@ -33,7 +33,7 @@ jobs:
                       exit 1
                     fi
                     echo "📦 wrangler.toml present"
-                    npx wrangler --version
+                    npx npx wrangler --version
       - name: preserved-3
         run: |
           mkdir -p .hfid/edge

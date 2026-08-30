@@ -26,7 +26,7 @@ jobs:
                       exit 1
                     fi
                     echo "wrangler.toml present"
-                    wrangler --version
+                    npx npx wrangler --version
       - name: preserved-2
         run: |
           mkdir -p .hfid/edge
