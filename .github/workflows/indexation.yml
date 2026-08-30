@@ -2,9 +2,9 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
+# GNO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
+# SLSA Level: 1
 
 name: "SEO: Indexation"
 concurrency:
@@ -12,21 +12,22 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  workflow_dispatch:
+  push:
     branches: [ main ]
+    paths:
       - 'docs/**'
-      - '**/*.md'
-      - '**/*.html'
+      - '*.md'
+      - '*.html'
       - 'sitemap.xml'
-  schedule:
-    - cron: '0 6 * * *'
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
 
 permissions:
   contents: write
 
 jobs:
-  index:
+  index-on:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,14 +35,16 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate artifacts
+      - name: Generate Artifacts Ledger
         run: |
+          set -e
           mkdir -p .hfid/indexing
-          echo '{"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}' > .hfid/indexing/index.json
+          echo "{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .hfid/indexing/index.json
 
-      - name: Commit changes
+      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(seo): Indexation update [skip ci]"
-          commit_user_name: JHammerZ-Sovereign-Engine
-          commit_user_email: engine@jhammerz.github.io
+          commit_message: "chore: Indexation update [skip ci]"
+          commit_user_name: "JHammerZ-Sovereign-Engine"
+          commit_user_email: "engine@hammerz.github.io"
+          file_pattern: ".hfid/indexing/index.json"
