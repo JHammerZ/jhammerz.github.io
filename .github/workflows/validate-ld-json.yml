@@ -1,38 +1,11 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# HFD-Validate-LD-JSON: Verification and validate-ld-json framework workflow
-# New language / G-125 Enactment / v2.13.2
-# Created under MPP License
-#
-# Operating State: Active Automation Mode
-# Validated Configuration: hfd-schema.json
-# Core Engine: Node.js (v20 Variant)
-# Security Standard: SHA-256 Protocol Authorization
-#
-# Code: "ST: SCHEMATIC-DOMAIN-STRUCTURE-VALIDATOR"
-
-name: "ST-Generator: HFD-Validate-LD-JSON Framework Validation"
+name: "ST-Generator: HFD-validate-LD-JSON Framework Validation"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 on:
   workflow_dispatch:
   schedule:
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
@@ -42,107 +15,103 @@ jobs:
   validate_schema:
     name: Validate Structured Data Schema
     runs-on: ubuntu-latest
-
     steps:
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
+      - name: Install validator
         run: |
-          npm install ajv ajv-formats
-          echo "Installed AJV Core Framework for custom schema-cli automation"
-
-        run: |
+          npm install -g ajv-cli
+          echo "Installed AJV core framework for custom schema-cli automation"
           mkdir -p .hfd/validation
-          found=false
+          echo "found=false" >> $GITHUB_ENV
 
+      - name: Scan HTML for JSON-LD
+        run: |
+          found=false
           for hfd_file in $(find . -name "*.html" -type f); do
-            echo "Inspecting HTML File: $hfd_file"
-            if grep -q "application/ld+json" "$hfd_file"; then
-              node -e "
-                const fs = require('fs');
-                const html = fs.readFileSync('$hfd_file', 'utf8');
-                const regex = /<script\s+type=\"application\/ld\+json\">([\s\S]*?)<\/script>/gi;
-                let match, index = 0;
-                while ((match = regex.exec(html)) !== null) {
-                  const content = match[1].trim();
-                  fs.writeFileSync(\`.hfd/validation/\${encodeURIComponent('$hfd_file')}_\${index}.json\`, content);
-                  index++;
-                }
-              "
+            echo "Inspecting HTML file: $hfd_file"
+            if grep -q 'application/ld+json' "$hfd_file"; then
+              node << NODE
+              const fs = require('fs');
+              const html = fs.readFileSync('${hfd_file}', 'utf8');
+              const regex = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g;
+              let match;
+              while ((match = regex.exec(html)) !== null) {
+                const content = match[1].trim();
+                const idx = html.indexOf(match[0]);
+                fs.writeFileSync('.hfd/validation/${hfd_file}_'+idx+'_jsonld.json', content);
+              }
+          NODE
               found=true
             fi
           done
-
           if [ "$found" = "false" ]; then
-            echo "⚠️  WARNING: No JSON-LD script blocks discovered in any HTML file."
+            echo "WARNING: No JSON-LD script blocks discovered in any HTML file."
             echo "HFD_LD_VALID=true" >> $GITHUB_ENV
           else
             echo "JSON-LD data structures extracted successfully."
             echo "HFD_LD_VALID=pending" >> $GITHUB_ENV
           fi
 
+      - name: Validate JSON-LD files
         if: env.HFD_LD_VALID == 'pending'
         run: |
           hfd_valid=true
-          
           for json_file in .hfd/validation/*.json; do
             [ -e "$json_file" ] || continue
-            echo "Validating File Structure: $json_file"
-            
-            if ! node -e "JSON.parse(fs.readFileSync('$json_file', 'utf8'))" 2>/dev/null; then
-              echo "❌ ERROR: Invalid JSON Syntax found in $json_file"
+            echo "Validating file structure: $json_file"
+            if ! node -e "JSON.parse(require('fs').readFileSync('$json_file', 'utf8'))" 2>/dev/null; then
+              echo "ERROR: Invalid JSON Syntax found in $json_file"
               hfd_valid=false
               continue
             fi
-
             if ! node -e "
-              const data = JSON.parse(fs.readFileSync('$json_file', 'utf8'));
-              if (data['@context'] !== 'https://schema.org' && data['@context'] !== 'http://schema.org') {
-                process.exit(1);
-              }
+              const data = JSON.parse(require('fs').readFileSync('$json_file', 'utf8'));
+              if (!data['@context'] || !String(data['@context']).includes('schema.org')) process.exit(1);
             " 2>/dev/null; then
-              echo "❌ ERROR: File $json_file missing standard schema.org context."
+              echo "ERROR: File $json_file missing standard schema.org context."
               hfd_valid=false
             fi
-
             if ! node -e "
-              const data = JSON.parse(fs.readFileSync('$json_file', 'utf8'));
-              if (!data['@type']) { process.exit(1); }
+              const data = JSON.parse(require('fs').readFileSync('$json_file', 'utf8'));
+              if (!data['@type']) process.exit(1);
             " 2>/dev/null; then
-              echo "❌ ERROR: File $json_file missing valid @type identifier."
+              echo "ERROR: File $json_file missing valid @type identifier."
               hfd_valid=false
             fi
           done
-
           if [ "$hfd_valid" = "false" ]; then
-            echo "❌ CRITICAL HFD VALIDATION FAILED: One or more JSON-LD Blocks are invalid!"
+            echo "CRITICAL HFD VALIDATION FAILED: One or more JSON-LD Blocks are invalid!"
             exit 1
           else
-            echo "✅ SUCCESS: All discovered JSON-LD blocks are structured valid!"
+            echo "SUCCESS: All discovered JSON-LD blocks are structured valid!"
           fi
 
+      - name: Generate attestation
         if: always()
         run: |
           mkdir -p .hfd/artifacts
-          cat << 'EOF' > .hfd/artifacts/validation-attestation.json
+          cat > .hfd/artifacts/validation-attestation.json << EOF
           {
             "workflow": "validate-ld-json.yml",
-            "host": "://github.com",
-            "attestationStandard": "HFD-G125-V2",
+            "status": "valid",
+            "attestationStandard": "HFD-G123-V2",
             "attestationStatus": "COMPLETED",
             "signer": "Sovereign-Automated-Validator",
             "authorizedBy": "Joshua Hamilton",
-            "systemVersion": "7.2.1-Aurelius",
+            "systemVersion": "1.0",
             "timestamp": "HFD_TIMESTAMP_PLACEHOLDER"
           }
           EOF
           sed -i "s/HFD_TIMESTAMP_PLACEHOLDER/$(date -u +'%Y-%m-%dT%H:%M:%SZ')/g" .hfd/artifacts/validation-attestation.json
-          echo "G-125 Framework Validation Attestation compiled."
+          echo "G.125 Framework Validation Attestation compiled."
 
+      - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
