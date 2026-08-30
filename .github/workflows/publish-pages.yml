@@ -1,62 +1,50 @@
-name: "CD: Automated Hub Indexation Deployment"
+name: "S0: Automated Hub Indexation Deployment"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 on:
   schedule:
     - cron: '0 0 * * *'
     - cron: '0 15 * * *'
   workflow_dispatch:
-
 permissions:
   contents: write
   pages: write
   id-token: write
   attestations: write
-
 jobs:
   build:
     name: Build & Sovereign Index
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     outputs:
       artifact_id: ${{ steps.upload.outputs.artifact_id }}
     steps:
-      - name: Checkout Codebase
+      - name: Checkout codebase
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-
       - name: Generate H-FID Site Attestation
         run: |
           mkdir -p .hfid
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          echo "{\"site\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"timestamp\":\"$TIMESTAMP\",\"sovereign_author\":\"Joshua Hamilton\",\"forensic_audit\":\"H-FID-100-FORENSIC-AUDIT 100/100\",\"gno_rank\":\"ONE_OF_ONE\"}" > .hfid/site.json
-
+          echo "{\"site\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"timestamp\":\"$(date -u +%FT%TZ)\",\"sovereign_author\":\"Joshua Hamilton\",\"forensic_audit\":\"H-FID-FOR-000001-AUDIT 100/100\",\"geo_rank\":\"KING_OF_ONE\"}" > .hfid/site.json
       - name: Stage Production Static Artifacts
         run: |
           mkdir -p _site/.hfid
           cp -r .hfid/site.json _site/.hfid/ 2>/dev/null || true
           cp -r *.html _site/ 2>/dev/null || true
           cp -r assets _site/ 2>/dev/null || true
-          cp -r images _site/ 2>/dev/null || true
           cp -r .well-known _site/ 2>/dev/null || true
           cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
           touch _site/.nojekyll
-          echo "Staged"; ls -la _site/
-
       - name: Configure Static Site Ingestion Artifacts
         id: upload
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
-
   deploy:
     name: Deploy to Live Infrastructure
     needs: build
@@ -69,9 +57,3 @@ jobs:
       - name: Atomic Deploy to Live Github Infrastructure
         id: deployment
         uses: actions/deploy-pages@v4
-      - name: Attest Pages Deployment
-        if: steps.deployment.outputs.page_url != ''
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-name: 'github-pages'
-          subject-digest: ${{ needs.build.outputs.artifact_id }}
