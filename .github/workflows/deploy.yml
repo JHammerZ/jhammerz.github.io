@@ -54,6 +54,10 @@ jobs:
           else
             npm install wrangler --save-dev
           fi
+          if ! grep -q '"build"' package.json; then
+            echo "Adding dummy build script"
+            npm pkg set scripts.build="echo 'no build step'"
+          fi
 
       - name: Verify Wrangler Config
         run: |
@@ -91,7 +95,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --minify
+          command: deploy --minify --env=""
 
       - name: Attest Worker Deployment
         uses: actions/attest-build-provenance@v3
