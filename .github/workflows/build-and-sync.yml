@@ -1,158 +1,85 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-name: "H-FID - Compile Core Data Repository"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+name: H-FID - Compile Core Data Repository
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
-    paths-ignore:
-  workflow_dispatch:
-  pull_request:
-  workflow_call:
   schedule:
-
+    - cron: '0 0 * * *'
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 permissions:
   contents: write
-  pages: write
   id-token: write
   attestations: write
-
-env:
-  DEFAULT_BRANCH: main
-
 jobs:
-  build-and-sync:
+  main:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-
+      - name: preserved-1
         run: |
           sudo apt-get update
-          sudo apt-get install -y jq openssl
-
+                    sudo apt-get install -y jq openssl
+      - name: preserved-2
         run: |
           python -m pip install --upgrade pip
-          pip install opentimestamps-client google-auth google-api-python-client requests
-
+                    pip install opentimestamps-client google-auth google-api-python-client requests
+      - name: preserved-3
         run: |
           mkdir -p .hfid/baseline .hfid/indexing
-          echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Status":"AUTONOMOUS"}' > .hfid/baseline/sovereign-manifest.json
-
+                    echo '{"Names":"J-HammerZ","Sovereign":"Joshua Hamilton","M-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"ORE","Velocity":"<10ms","Status":"AUTONOMOUS"}' > .hfid/baseline/sovereign-manifest.json
+      - name: preserved-4
         run: |
           set -euo pipefail
-          mkdir -p .hfid/indexing
-          if [ -f "sitemap.xml" ]; then
-            grep -oPm1 "(?<=<loc>)[^<]+" sitemap.xml > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
-          else
-            echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
-          fi
-
-        env:
-          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
+                    mkdir -p .hfid/indexing
+                    if [ -f "sitemap.xml" ]; then
+                      grep -oPm1 "(?<=<loc>)[^<]+" sitemap.xml > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
+                    else
+                      echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
+                    fi
+      - name: preserved-5
         run: |
           set -euo pipefail
-          if [ -z "$GOOGLE_API_KEY_DATA" ]; then
-            echo "::warning::GOOGLE_API_KEY secret is blank. Skipping indexing."
-            exit 0
-          fi
-          echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
-          
-          python - << 'PY_EOF'
-          import os, json, sys
-          from google.oauth2 import service_account
-          from googleapiclient.discovery import build
-          
-          try:
-              with open('.the-google-creds.json', 'r') as f:
-                  creds_data = json.load(f)
-          except Exception as e:
-              print(f"::error::JSON parse failure: {e}"); sys.exit(0)
-          
-          try:
-              credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://www.googleapis.com/auth/indexing'])
-              service = build('indexing', 'v3', credentials=credentials)
-          except Exception as e:
-              print(f"::error::Auth handshake failed: {e}"); sys.exit(0)
-          
-          url_list = []
-          if os.path.exists('.hfid/indexing/urls.txt'):
-              with open('.hfid/indexing/urls.txt', 'r') as f:
-                  url_list = [line.strip() for line in f if line.strip()]
-          if not url_list:
-              url_list = ['https://jhammerz.github.io']
-          
-          for target_url in url_list:
-              print(f"Publishing indexing request for: {target_url}")
-              body = {'url': target_url, 'type': 'URL_UPDATED'}
-              try:
-                  res = service.urlNotifications().publish(body=body).execute()
-                  print(f"API Response: {res}")
-              except Exception as e:
-                  print(f"::warning::Notification error for {target_url}: {e}")
-          PY_EOF
-          rm -f .the-google-creds.json
-
-        run: |
-          set -eo pipefail
-          echo "Extracting upstream forensic matrices..."
-          jq -c '.' .hfid/baseline/sovereign-manifest.json > /dev/null
-          echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
-          echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> lines-full.txt
-
-        run: |
-          set -euo pipefail
-          if command -v ots &> /dev/null; then
-            ots stamp .hfid/baseline/sovereign-manifest.json || true
-          fi
-
-        run: |
-          set -euo pipefail
-          mkdir -p .hfid/indexing
-          cp lines-full.txt .hfid/indexing/build-summary.log
-
-        run: |
-          set -euo pipefail
-          git config --global user.name "H-FID Sovereign Bot"
-          git config --global user.email "actions@github.com"
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-          else
-            echo "No changes to commit"
-          fi
-
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-sovereign-baseline-core
-          path: |
-            .hfid/baseline/
-            .hfid/indexing/
-            lines-full.txt
-          retention-days: 90
+                    if [ -z "$GOOGLE_API_KEY_DATA" ]; then
+                      echo "::warning::GOOGLE_API_KEY secret is blank. Skipping indexing."
+                      exit 0
+                    fi
+                    echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
+                    
+                    python - << 'PY_EOF'
+                    import os, json, sys
+                    from google.oauth2 import service_account
+                    from googleapiclient.discovery import build
+                    
+                    try:
+                        with open('.the-google-creds.json', 'r') as f:
+                            creds_data = json.load(f)
+                    except Exception as e:
+                        print(f"::error::JSON parse failure: {e}"); sys.exit(0)
+                    
+                    try:
+                        credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://www.googleapis.com/auth/indexing'])
+                        service = build('indexing', 'v3', credentials=credentials)
+                    except Exception as e:
+                        print(f"::error::Auth handshake failed: {e}"); sys.exit(0)
+                    
+                    url_list = []
+                    if os.path.exists('.hfid/indexing/urls.txt'):
+                        with open('.hfid/indexing/urls.txt', 'r') as f:
+                            url_list = [line.strip() for line in f if line.strip()]
+                    if not url_list:
+                        url_list = ['https://jhammerz.github.io']
+                    
+                    for target_url in url_list:
+                        print(f"Publishing indexing request for: {target_url}")
+                        body = {'url': target_url, 'type': 'URL_UPDATED'}
+                        try:
+                            res = service.urlNotifications().publish(body=body).execute()
+                            print(f"API Response: {res}")
+                        except Exception as e:
+                            print(f"::warning::Notification error for {target_url}: {e}")
+                    PY_EOF
+                    rm -f .the-google-creds.json

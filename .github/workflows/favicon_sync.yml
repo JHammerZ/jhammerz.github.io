@@ -1,146 +1,95 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-
 name: "CD: Favicon Sovereign Sync"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
-    branches: [ main ]
-      - 'assets/favicon.svg'
-      - 'assets/logo.png'
-      - 'logic/favicon_logic.js'
-      - '!.github/workflows/**'
-      - '!.hfid/**'
-  workflow_dispatch:
-
+  schedule:
+    - cron: '0 0 * * *'
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 permissions:
-  contents: write # Required to commit generated favicons
-  id-token: write # For SLSA attestation
-
+  contents: write
+  id-token: write
+  attestations: write
 jobs:
-  sync-favicon:
+  main:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
         with:
-          node-version: '22'
-          cache: 'npm'
-
-      - name: Install Image Dependencies
+          fetch-depth: 0
+      - name: preserved-1
         run: |
           npm install -g sharp-cli@4 @resvg/resvg-js@2
-          echo "Installed Sharp + Resvg for favicon generation"
-
-      - name: Validate Source Asset
-        id: validate
+                    echo "Installed Sharp + Resvg for favicon generation"
+      - name: preserved-2
         run: |
           if [! -f "assets/favicon.svg" ] && [! -f "assets/logo.png" ]; then
-            echo "❌ CRITICAL: No source asset found. Need assets/favicon.svg or assets/logo.png"
-            exit 1
-          fi
-          echo "source_found=true" >> $GITHUB_OUTPUT
-          echo "✅ Source asset validated"
-
-      - name: Execute Favicon Logic
-        id: generate
+                      echo "❌ CRITICAL: No source asset found. Need assets/favicon.svg or assets/logo.png"
+                      exit 1
+                    fi
+                    echo "source_found=true" >> $GITHUB_OUTPUT
+                    echo "✅ Source asset validated"
+      - name: preserved-3
         run: |
           set -e
-          if [ -f "logic/favicon_logic.js" ]; then
-            node logic/favicon_logic.js
-          else
-            # Fallback: Generate standard favicon set from SVG/PNG
-            SOURCE="assets/favicon.svg"
-            [! -f "$SOURCE" ] && SOURCE="assets/logo.png"
-            
-            mkdir -p public
-            # Generate all required sizes for GEO_RANK + PWA
-            sharp -i "$SOURCE" -o public/favicon-16x16.png resize 16 16
-            sharp -i "$SOURCE" -o public/favicon-32x32.png resize 32 32
-            sharp -i "$SOURCE" -o public/apple-touch-icon.png resize 180 180
-            sharp -i "$SOURCE" -o public/android-chrome-192x192.png resize 192 192
-            sharp -i "$SOURCE" -o public/android-chrome-512x512.png resize 512 512
-            sharp -i "$SOURCE" -o public/favicon.ico --format ico
-            
-            # Update manifest.json with H-FID keys
-            cat > public/site.webmanifest << 'EOF'
-            {
-              "name": "JHammerZ - H-FID Sovereign",
-              "short_name": "JHammerZ",
-              "icons": [
-                {"src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png"},
-                {"src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png"}
-              ],
-              "theme_color": "#000000",
-              "background_color": "#000000",
-              "display": "standalone",
-              "hfid_version": "v1.2",
-              "sovereign_author": "Joshua Hamilton",
-              "geo_rank": "ONE_OF_ONE"
-            }
-            EOF
-          fi
-          echo "✅ Favicon set generated"
-
-      - name: Generate H-FID Asset Attestation
+                    if [ -f "logic/favicon_logic.js" ]; then
+                      node logic/favicon_logic.js
+                    else
+                      # Fallback: Generate standard favicon set from SVG/PNG
+                      SOURCE="assets/favicon.svg"
+                      [! -f "$SOURCE" ] && SOURCE="assets/logo.png"
+                      
+                      mkdir -p public
+                      # Generate all required sizes for GEO_RANK + PWA
+                      sharp -i "$SOURCE" -o public/favicon-16x16.png resize 16 16
+                      sharp -i "$SOURCE" -o public/favicon-32x32.png resize 32 32
+                      sharp -i "$SOURCE" -o public/apple-touch-icon.png resize 180 180
+                      sharp -i "$SOURCE" -o public/android-chrome-192x192.png resize 192 192
+                      sharp -i "$SOURCE" -o public/android-chrome-512x512.png resize 512 512
+                      sharp -i "$SOURCE" -o public/favicon.ico --format ico
+                      
+                      # Update manifest.json with H-FID keys
+                      cat > public/site.webmanifest << 'EOF'
+                      {
+                        "name": "JHammerZ - H-FID Sovereign",
+                        "short_name": "JHammerZ",
+                        "icons": [
+                          {"src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png"},
+                          {"src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png"}
+                        ],
+                        "theme_color": "#000000",
+                        "background_color": "#000000",
+                        "display": "standalone",
+                        "hfid_version": "v1.2",
+                        "sovereign_author": "Joshua Hamilton",
+                        "geo_rank": "ONE_OF_ONE"
+                      }
+                      EOF
+                    fi
+                    echo "✅ Favicon set generated"
+      - name: preserved-4
         run: |
           mkdir -p .hfid/assets
-          cat >.hfid/assets/favicon.json << EOF
-          {
-            "workflow": "favicon-sync",
-            "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
-            "assets": {
-              "favicon.ico": "$(sha256sum public/favicon.ico 2>/dev/null | cut -d' ' -f1 || echo 'missing')",
-              "apple-touch-icon.png": "$(sha256sum public/apple-touch-icon.png 2>/dev/null | cut -d' ' -f1 || echo 'missing')",
-              "site.webmanifest": "$(sha256sum public/site.webmanifest 2>/dev/null | cut -d' ' -f1 || echo 'missing')"
-            },
-            "slsa_level": 3,
-            "sync_velocity": "<100ms"
-          }
-          EOF
-
-      - name: Attest Favicon Build
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: .hfid/assets/favicon.json
-
-      - name: Stage Favicon Changes
-        id: stage
+                    cat >.hfid/assets/favicon.json << EOF
+                    {
+                      "workflow": "favicon-sync",
+                      "sha": "${{ github.sha }}",
+                      "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+                      "hfid_version": "v1.2",
+                      "sovereign_author": "Joshua Hamilton",
+                      "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
+                      "assets": {
+                        "favicon.ico": "$(sha256sum public/favicon.ico 2>/dev/null | cut -d' ' -f1 || echo 'missing')",
+                        "apple-touch-icon.png": "$(sha256sum public/apple-touch-icon.png 2>/dev/null | cut -d' ' -f1 || echo 'missing')",
+                        "site.webmanifest": "$(sha256sum public/site.webmanifest 2>/dev/null | cut -d' ' -f1 || echo 'missing')"
+                      },
+                      "slsa_level": 3,
+                      "sync_velocity": "<100ms"
+                    }
+                    EOF
+      - name: preserved-5
         run: |
           git config --local user.name 'github-actions[bot]'
-          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-          
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-
-      - name: Upload Asset Attestation
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-favicon-attestation
-          path: .hfid/assets/
-          retention-days: 90
+                    git config --local user.email 'github-actions[bot]@users.noreply.github.com'

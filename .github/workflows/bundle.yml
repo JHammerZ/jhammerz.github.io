@@ -1,94 +1,51 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
 name: Bundle Workflow | H-FID Asset Bundler
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
-    branches: [ main ]
-      - 'src/**'
-      - 'public/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.well-known/hfid/**'
   schedule:
-    - cron: '0 */6 * * *' # Every 6 hours
-  workflow_dispatch:
-
+    - cron: '0 0 * * *'
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 permissions:
   contents: write
-
+  id-token: write
+  attestations: write
 jobs:
-  build:
+  main:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
+      - name: preserved-1
         run: |
           set -e
-          npm ci
-
-      - name: Run bundle script
-        id: build
+                    npm ci
+      - name: preserved-2
         run: |
           set -e
-          if jq -e '.scripts.build' package.json >/dev/null; then
-            echo "Running npm build..."
-            npm run build
-            echo "built=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "No build script found in package.json. Skipping."
-            echo "built=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Generate H-FID asset manifest
-        if: steps.build.outputs.built == 'true'
+                    if jq -e '.scripts.build' package.json >/dev/null; then
+                      echo "Running npm build..."
+                      npm run build
+                      echo "built=true" >> "$GITHUB_OUTPUT"
+                    else
+                      echo "No build script found in package.json. Skipping."
+                      echo "built=false" >> "$GITHUB_OUTPUT"
+                    fi
+      - name: preserved-3
         run: |
           set -e
-          mkdir -p .hfid
-          echo "Generating asset manifest..."
-          find dist -type f -exec sha256sum {} \; >.hfid/assets.sha256
-          jq -n \
-            --arg sha "${{ github.sha }}" \
-            --arg time "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-            '{sha: $sha, built_at: $time, assets: "dist"}' >.hfid/bundle.json
-
-      - name: Commit changes
-        if: steps.build.outputs.built == 'true'
+                    mkdir -p .hfid
+                    echo "Generating asset manifest..."
+                    find dist -type f -exec sha256sum {} \; >.hfid/assets.sha256
+                    jq -n \
+                      --arg sha "${{ github.sha }}" \
+                      --arg time "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+                      '{sha: $sha, built_at: $time, assets: "dist"}' >.hfid/bundle.json
+      - name: preserved-4
         run: |
           set -e
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Only add dist/ and.hfid/, not everything
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update [skip ci]"
+                    git config --local user.name "github-actions[bot]"
+                    git config --local user.email "github-actions[bot]@users.noreply.github.com"

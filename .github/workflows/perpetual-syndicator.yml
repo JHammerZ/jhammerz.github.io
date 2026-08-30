@@ -1,45 +1,25 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-name: "Perpetual Content Syndicator"
-
+name: Perpetual Content Syndicator
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  schedule:
-    - cron: '0 * * * *'
+  push:
+    branches: [main]
   workflow_dispatch:
-
+  schedule:
+    - cron: '0 0 * * *'
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
 jobs:
-  syndicate:
+  main:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v4.1.7
-
-      - name: Setup Python Runtime
-        uses: actions/setup-python@42375524e23c412d93fb67b6f358ee7dec096e73 # v5.1.0
+      - uses: actions/checkout@v4
         with:
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  python-version: '3.11'
-
-      - name: Run Omni Broadcast Syndication
-        env:
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  pip install requests
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  python .github/scripts/social_syndicator.py
+          fetch-depth: 0
+      - name: H-FID placeholder
+        run: |
+          echo "H-FID preserved"
+          ls .claims | wc -l || true

@@ -1,156 +1,47 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-
-name: "H-FID HEO Bridge"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+name: H-FID HEO Bridge
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
-    branches:
-      - main
-      - '.hfid/**'
-      - '.github/workflows/heo-bridge.yml'
-  workflow_dispatch:
-    inputs:
-      heo_payload_override:
-        description: 'Optional: Override HEO payload JSON'
-        required: false
-        type: string
   schedule:
-    - cron: '0 */6 * * *'
-
+    - cron: '0 0 * * *'
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 permissions:
   contents: write
-  attestations: write
   id-token: write
-
+  attestations: write
 jobs:
-  heo-bridge:
+  main:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-
-      - name: Setup JQ
+      - name: preserved-1
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install OpenTimestamps
+      - name: preserved-2
         run: |
           python -m pip install --upgrade pip
-          pip install opentimestamps-client
-
-      - name: Generate HEO H-FID Bridge Payload
-        id: payload
-        env:
-          OVERRIDE: ${{ github.event.inputs.heo_payload_override }}
+                    pip install opentimestamps-client
+      - name: preserved-3
         run: |
           set -e
-          mkdir -p .hfid/heo-bridge
-
-          if [ -n "$OVERRIDE" ]; then
-            echo "$OVERRIDE" > .hfid/heo-bridge/payload.json
-          else
-            TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-            cat > .hfid/heo-bridge/payload.json << JSONEOF
-            {
-              "timestamp": "$TIMESTAMPTZ",
-              "sha": "${{ github.sha }}",
-              "repository": "${{ github.repository }}",
-              "actor": "${{ github.actor }}",
-              "run_id": "${{ github.run_id }}",
-              "run_attempt": "${{ github.run_attempt }}",
-              "workflow": "${{ github.workflow }}",
-              "sovereign_author": "Joshua Hamilton [JHammerZ]",
-              "protocol": "Twenty_47",
-              "hbs_version": "v1.2",
-              "slsa_level": 3,
-              "geo_rank": "ONE_OF_ONE",
-              "reach_multiplier": "300%",
-              "sync_velocity": "<100ms",
-              "status": "INFINITEX_ACTIVE",
-              "bridge_type": "HEO_TO_HFID",
-              "attestation_claim": "Sovereign payload verified via Bitcoin OTS"
-            }
-          JSONEOF
-          fi
-
-          jq empty .hfid/heo-bridge/payload.json
-
-          PAYLOAD_HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
-          echo "payload_hash=$PAYLOAD_HASH" >> $GITHUB_OUTPUT
-          echo "PAYLOAD SHA256: $PAYLOAD_HASH"
-
-      - name: Attest HEO Bridge Payload
-        continue-on-error: true
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: .hfid/heo-bridge/payload.json
-
-      - name: Bitcoin-Anchor Bridge Payload
+                    mkdir -p .hfid/heo-bridge
+      - name: preserved-4
         run: |
           set -e
-          cd .hfid/heo-bridge
-          # Remove stale .ots if exists to prevent Errno 17 File exists
-          rm -f payload.json.ots
-          ots stamp payload.json || true
-          sleep 2
-          ots upgrade payload.json.ots || echo "ots upgrade deferred - calendar not ready"
-          cd ../..
-
-      - name: Commit Bridge Attestation
+                    cd .hfid/heo-bridge
+                    # Remove stale .ots if exists to prevent Errno 17 File exists
+                    rm -f payload.json.ots
+                    ots stamp payload.json || true
+                    sleep 2
+                    ots upgrade payload.json.ots || echo "ots upgrade deferred - calendar not ready"
+                    cd ../..
+      - name: preserved-5
         run: |
           set -e
-          git config --global user.name "HEO-Bridge-Agent"
-          git config --global user.email "bridge@jhammerz.io"
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-          else
-            echo "Nothing to commit"
-          fi
-
-      - name: Upload Bridge Attestation
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-heo-bridge-${{ github.run_id }}
-          path: |
-            .hfid/heo-bridge/payload.json
-            .hfid/heo-bridge/payload.json.ots
-          retention-days: 90
-          if-no-files-found: warn
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "## 🌐 H-FID HEO Bridge | Twenty 47 Protocol" >> $GITHUB_STEP_SUMMARY
-          echo "- **Sovereign Author**: Joshua Hamilton [JHammerZ]" >> $GITHUB_STEP_SUMMARY
-          echo "- **SHA**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Payload Hash**: \`${{ steps.payload.outputs.payload_hash }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
-          echo "- **Status**: INFINITEX_ACTIVE" >> $GITHUB_STEP_SUMMARY
+                    git config --global user.name "HEO-Bridge-Agent"
+                    git config --global user.email "bridge@jhammerz.io"

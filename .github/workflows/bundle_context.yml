@@ -1,71 +1,28 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
 name: bundle_context
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
-    branches: [ main ]
-      - 'docs/**'
-      - '*.md'
-      - 'lines-full.txt'
-  workflow_dispatch:
-
+  schedule:
+    - cron: '0 0 * * *'
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 permissions:
   contents: write
-
+  id-token: write
+  attestations: write
 jobs:
-  bundle:
+  main:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-
-      - name: Generate lines-full.txt
+      - name: preserved-1
         run: |
           # your existing logic here
-          
-      - name: Update sitemap (optional)
-        run: |
-          # your existing logic here
-
-      - name: Commit and Push
+      - name: preserved-2
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-              fi
-              n=$((n+1))
-              echo "Push failed, retry $n/3..."
-              sleep 2
-            done
-            
-            if [ "$n" -ge 3 ]; then
-              echo "X Failed to push after 3 retries"
-              exit 1
-            fi
-          else
-            echo "Zero document changes detected."
-          fi
+                    git config --global user.email "github-actions[bot]@users.noreply.github.com"
