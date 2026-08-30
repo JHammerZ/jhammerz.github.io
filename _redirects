@@ -1,4 +1,2 @@
-/index.html / 301
-/music.html /music 301
-# SPA fallback - serve index without looping
-/* /index.html 200
+/ /index.html 200
+/music /music.html 200
