@@ -26,6 +26,7 @@ on:
 permissions:
   contents: write
   id-token: write
+  attestations: write
 jobs:
   broadcast:
     runs-on: ubuntu-latest
@@ -52,7 +53,6 @@ jobs:
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           REPO_HASH=$(git rev-parse HEAD)
           CONTENT_HASH=$(find . -type f -not -path "./.git/*" -not -path "./.hfid/*" -not -path "./node_modules/*" -exec sha256sum {} \; | sort | sha256sum | cut -d' ' -f1)
-          echo "Content hash $CONTENT_HASH"
           cat > .hfid/omega/manifest.json << EOF
           {
             "hfid_version": "v1.2",
@@ -72,7 +72,6 @@ jobs:
           echo "$REPO_HASH" > .hfid/omega/repo.sha
           echo "$CONTENT_HASH" > .hfid/omega/content.sha
           echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
-          cat .hfid/omega/manifest.json
       - uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/omega/manifest.json
@@ -99,13 +98,6 @@ jobs:
           git config user.email "omega@jhammerz.github.io"
           mkdir -p data .hfid/omega/receipt
           echo "${{ steps.manifest.outputs.content_hash }}" > data/last_omega_hash.txt
-          cat > .hfid/omega/receipt/broadcast.txt << EOF
-          H-FID Omega Broadcast Receipt
-          Target: ${{ github.event.inputs.target || 'all' }}
-          SHA256: ${{ steps.manifest.outputs.content_hash }}
-          Verified: ${{ github.ref_name }} / ${{ github.sha }}
-          Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          EOF
       - uses: stefanzweifel/git-auto-commit-action@v6
         if: ${{ steps.check.outputs.needed == 'true' }}
         with:
