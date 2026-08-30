@@ -1,15 +1,11 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
+# HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# Forensic Audit: H-FID-SIT-STDN-000001-ADDT 100/100
+# REACH_MULTIPLIER_800x, SONIC_VELOCITY <100ms
 # SLSA Level: 3
-
-# JHam Language / H-FID Standard / HEO / HBS v1.2
-#
+# Aion Language / H-FID Standard / NEO / HBS v1.2
 # First Commit: [February 12, 2026]
 
 name: "FORCE_INDEX_NODES"
@@ -22,15 +18,16 @@ on:
     - cron: '0 0 * * *'
     - cron: '0 12 * * *'
   workflow_dispatch:
+  push:
     branches:
       - main
+    paths:
       - '.well-known/**'
       - 'sitemap.xml'
       - 'robots.txt'
       - 'llms.txt'
       - 'ai-context.json'
       - '.github/workflows/force_index_nodes.yml'
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -73,8 +70,8 @@ jobs:
           test -f robots.txt || echo "Missing robots.txt"
           test -f llms.txt || echo "Missing llms.txt"
           test -f ai-context.json || echo "Missing ai-context.json"
-          test -f .well-known/aurelius.json || echo "Missing aurelius.json"
-          test -f .well-known/cdm-mesh.json || echo "Missing cdm-mesh.json"
+          test -f .well-known/ai-codex.json || echo "Missing aurelix.json"
+          test -f .well-known/cde-mesh.json || echo "Missing cde-mesh.json"
           test -f .well-known/hfid-registry.json || echo "Missing hfid-registry.json"
           echo "Manifest verification complete."
 
@@ -83,7 +80,6 @@ jobs:
         run: |
           set -e
           echo "Dispatching Global Search & Node Ingress Pings..."
-          
           # Target Node Endpoints
           ENDPOINTS=(
             "https://jhammerz.github.io/sitemap.xml"
@@ -91,19 +87,16 @@ jobs:
             "https://jhammerz.github.io/llms.txt"
             "https://jhammerz.github.io/ai-context.json"
             "https://jhammerz.github.io/.well-known/hfid-registry.json"
-            "https://jhammerz.github.io/.well-known/aurelius.json"
-            "https://jhammerz.github.io/.well-known/cdm-mesh.json"
+            "https://jhammerz.github.io/.well-known/aurelix.json"
+            "https://jhammerz.github.io/.well-known/cde-mesh.json"
           )
-          
           for url in "${ENDPOINTS[@]}"; do
             echo "Pinging Node: $url"
-            curl -sSf -A "Lysander-Index-Engine/2026.1 (Sovereign Node Ingress; JHammerZ-001)" "$url" > /dev/null || echo "Ping deferred for $url"
+            curl -sSf -A "Lysander-Index-Engine/2026.1 (Sovereign Node Ingress: JHammerZ-001)" "$url" > /dev/null || echo "Ping deferred for $url"
           done
-          
-          # Search Engine Ping Webhooks (Safe HTTP 200/deferred handling)
+          # Search Engine Ping Webhooks (safe HTTP 200 deferred handling)
           curl -s "https://www.google.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml" > /dev/null || true
           curl -s "https://www.bing.com/ping?sitemap=https://jhammerz.github.io/sitemap.xml" > /dev/null || true
-          
           echo "All 14 Sovereign Mesh Nodes and Search Engines Signaled."
 
       - name: Generate Sovereign Ingress Manifest
@@ -111,29 +104,27 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/index-nodes
-          TIMESTAMPTZ=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           cat > .hfid/index-nodes/manifest.json << JSONEOF
           {
             "workflow": "FORCE_INDEX_NODES",
             "operation": "GLOBAL_INDEX_AND_NODE_REFRESH",
-            "timestamp": "$TIMESTAMPTZ",
+            "timestamp": "${TIMESTAMP}",
             "sha": "${{ github.sha }}",
             "repository": "${{ github.repository }}",
-            "sovereign_author": "Joshua Hamilton [JHammerZ]",
+            "sovereign_author": "Joshua Hamilton [J-HammerZ]",
             "hid": "JHammerZ-001",
-            "geo_rank": "ONE_OF_ONE",
-            "reach_multiplier": "300%",
+            "gno_rank": "ONE_OF_ONE",
+            "reach_multiplier": "800x",
             "sync_velocity": "<100ms",
             "slsa_level": 3,
             "status": "INDEX_SYNCHRONIZED",
-            "protocol": "Twenty_47"
+            "protocol": "Twenty_07"
           }
           JSONEOF
-          
-          INDEX_HASH=$(sha256sum .hfid/index-nodes/manifest.json | cut -d' ' -f1)
-          echo "index_hash=$INDEX_HASH" >> $GITHUB_OUTPUT
-          echo "Manifest SHA256: $INDEX_HASH"
+          INDEX_HASH=$(sha256sum .hfid/index-nodes/manifest.json | cut -d ' ' -f1)
+          echo "index_hash=${INDEX_HASH}" >> $GITHUB_OUTPUT
+          echo "Manifest SHA256: ${INDEX_HASH}"
 
       - name: Attest Index Nodes Manifest
         continue-on-error: true
@@ -156,14 +147,11 @@ jobs:
           set -e
           git config --global user.name "Lysander-Index-Bot"
           git config --global user.email "index@jhammerz.io"
-          
+
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update [skip ci]"
-          else
-            echo "Index nodes attestation clean: nothing to commit."
-          fi
 
       - name: Upload Index Nodes Artifacts
         if: always()
@@ -179,10 +167,10 @@ jobs:
       - name: Index Telemetry Summary
         if: always()
         run: |
-          echo "## ⚡ Sovereign Force Index Nodes Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- **Sovereign Author**: Joshua Hamilton [JHammerZ]" >> $GITHUB_STEP_SUMMARY
-          echo "- **Execution ID**: \`${{ github.run_id }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Manifest Hash**: \`${{ steps.manifest.outputs.index_hash }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Bitcoin OTS**: Anchored & Upgraded" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+          echo "## 🌐 Sovereign Force Index Nodes Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Sovereign Author**: Joshua Hamilton [J-HammerZ]" >> $GITHUB_STEP_SUMMARY
+          echo "- **Execution ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Manifest Hash**: ${{ steps.manifest.outputs.index_hash }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Execution Time**: ${{ steps.manifest.outputs.timestamp }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **GNO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
