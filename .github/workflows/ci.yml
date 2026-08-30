@@ -1,37 +1,25 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
+# HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# H-FID Language / H-FID Standard / HDS v1.3
-#
-# First Commit: (February 12, 2010)
+# Forensic Audit: H-FID-100-FORENSIC-AUDIT-100/100
 
 name: 'CI: Cloudflare Workers Deploy'
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
-  workflow_dispatch:
-    branches: [ "main" ]
+  push:
+    branches: [ 'main' ]
+    paths:
       - 'wrangler.toml'
       - 'worker.js'
       - '.github/workflows/ci.yml'
       - 'src/**'
   pull_request:
-    branches: [ "main" ]
+    branches: [ 'main' ]
+    paths:
       - 'wrangler.toml'
       - 'worker.js'
       - 'src/**'
@@ -47,7 +35,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
@@ -58,7 +45,8 @@ jobs:
           node-version: '20'
 
       - name: Install Wrangler
-        run: npm install -g wrangler@4.12.0
+        run: |
+          npm install -g wrangler@4.12.0
 
       - name: Validate Wrangler Config
         run: |
@@ -71,7 +59,8 @@ jobs:
 
       - name: Dry Run Deploy on PR
         if: github.event_name == 'pull_request'
-        run: wrangler deploy --dry-run --outdir dist
+        run: |
+          wrangler deploy --dry-run --no-dist
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -79,23 +68,25 @@ jobs:
       - name: Generate H-FID Edge Attestation
         run: |
           mkdir -p .hfid/edge
-          cat > .hfid/edge/deploy.json << 'INNER_EOF'
+          cat > .hfid/edge/deploy.json << INNER_EOF
           {
             "workflow": "ci",
             "target": "cloudflare-workers",
             "sha": "${{ github.sha }}",
             "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
             "sovereign_author": "Joshua Hamilton",
-            "hfid_version": "v1.3",
-            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
-            "slsa_level": 3,
+            "hfid_version": "v1.2",
+            "forensic_audit": "H-FID-100-FORENSIC-AUDIT-100/100",
+            "sisa_level": "3",
             "event": "${{ github.event_name }}"
           }
           INNER_EOF
+          cat .hfid/edge/deploy.json
 
       - name: Publish to Cloudflare Workers
         if: github.event_name != 'pull_request'
-        run: wrangler deploy --minify
+        run: |
+          wrangler deploy --no-dist
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -109,15 +100,16 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## ✅ H-FID Edge Deploy Preview
-              
+              body: `✅ H-FID Edge Deploy Preview
+
               **Dry-run successful** for Cloudflare Workers
-              
-              **Commit:** \`${{ github.sha }}\`
+
+              **Commit:** ${{ github.sha }}
               **SLSA:** Level 3
-              **H-FID:** v1.3 Compliant
-              
-              Merge to \`main\` to deploy to production.`
+              **H-FID:** v1.3 compliant
+
+              Merge to 'main' to deploy to production.
+              `
             })
 
       - name: Upload Edge Attestation
