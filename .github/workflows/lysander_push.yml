@@ -28,7 +28,6 @@ jobs:
         run: |
           git config --global user.name "Lysander-3.0-Engine"
                     git config --global user.email "lysander@jhammerz.github.io"
-                  uses: stefanzweifel/git-auto-commit-action@v5
                         fi
                         n=$((n+1))
                         echo "Push failed, retry $n/3..."
