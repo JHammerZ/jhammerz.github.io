@@ -1,50 +1,57 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-
-name: "CD: H-FID Sovereign Daemon"
-
-on:
+name: Sovereign Kernel Forge
+on: [push, workflow_dispatch]
 concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
-
+  group: forge-kernel-lock
+  cancel-in-progress: true
 jobs:
-  execute-matrix:
+  forge:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Verify Environment Configuration
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  echo "Running verification track for: {filename}"
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  if [ -f "package.json" ]; then
-            - name: Sovereign Structural Verification Trace
-              run: |
-                - name: Sovereign Structural Verification Trace
-                  run: |
-                    if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  fi
+      - name: Install Toolchain Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev bc jq
+
+      - name: Fetch Kernel Source
+        run: |
+          wget -q https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.10.tar.xz
+          tar -xf linux-6.10.tar.xz
+          rm linux-6.10.tar.xz
+
+      - name: Inject Sovereignty Modifications
+        run: |
+          set -eux pipefail
+          mkdir -p linux-6.10/include
+          if [ -f "Kernel_Override.c" ]; then
+            cp Kernel_Override.c linux-6.10/
+          else
+            echo "// Sovereign System Entry Hook" > linux-6.10/Kernel_Override.c
+          fi
+
+      - name: Compile and Build Sovereign Kernel
+        run: |
+          set -eux pipefail
+          cd linux-6.10
+          COMMIT_SHA=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+          echo "#define SOVEREIGN_GIT_H" > include/git.h
+          echo "#define SOVEREIGN_GIT_SHA \"$COMMIT_SHA\"" >> include/git.h
+          echo "#define GIT_COMMIT_SHA \"$COMMIT_SHA\"" >> include/git.h
+          echo "#define GIT_BRANCH \"main\"" >> include/git.h
+          echo "#endif" >> include/git.h
+          cp include/git.h .git.h
+          make defconfig
+          scripts/config --enable CONFIG_MODULES || echo "CONFIG_MODULES=y" >> .config
+          make olddefconfig
+          make -j$(nproc) bzImage
+
+      - name: Archive and Upload Sovereign Artifact Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: hotmug-ALPHA-PRIME
+          path: linux-6.10/arch/x86/boot/bzImage
+          if-no-files-found: error
