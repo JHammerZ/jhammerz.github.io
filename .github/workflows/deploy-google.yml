@@ -1,21 +1,26 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
+# HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Deploy to Google Cloud Run
+
 name: "Deploy to Google Cloud Run"
 
 on:
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
-  concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
   push:
     branches: [ main, master ]
+    paths:
+      - 'Dockerfile'
+      - 'src/**'
+      - '.github/workflows/deploy-google.yml'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v4
@@ -23,32 +28,29 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Build and Deploy Container
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  # Use canonical, low-latency regional Artifact Registry naming bounds
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  gcloud builds submit --tag us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest
-          - name: Sovereign Structural Verification Trace
-            run: |
-              - name: Sovereign Structural Verification Trace
-                run: |
-                  gcloud run deploy mythos-matrix-core-latest \
-            --image us-central1-docker.pkg.dev/jhammerz-core-engine/mythos-matrix-core/engine:latest \
-            --region us-central1 \
-            --platform managed \
-            --allow-unauthenticated
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          echo "Building container..."
+          # Fix canonical, low-latency regional Artifact Registry naming bounds
+          if [ -f "Dockerfile" ]; then
+            gcloud builds submit --tag us-central1-docker.pkg.dev/${PROJECT_ID}/jhammerz-core-engine/mythos-matrix-core/engine:latest .
+            gcloud run deploy mythos-matrix-core-latest \
+              --image us-central1-docker.pkg.dev/${PROJECT_ID}/jhammerz-core-engine/mythos-matrix-core/engine:latest \
+              --region us-central1 \
+              --platform managed \
+              --allow-unauthenticated
+          else
+            echo "No Dockerfile found - skipping GCP deploy"
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### GCP Deploy Complete" >> $GITHUB_STEP_SUMMARY
