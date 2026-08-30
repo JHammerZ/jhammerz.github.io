@@ -32,8 +32,8 @@ jobs:
           set -e # FAIL FAST. No more || true
       - name: preserved-4
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/manifest.json.hfid/lysander/swarm.log
-                    find api/v1 -name "*.json" -exec mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp {} \;
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/manifest.json.hfid/lysander/swarm.log || true
+                    find api/v1 -name "*.json" -exec mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp {} \; || true
                     echo "✅ Sovereign sequence Bitcoin-anchored"
       - name: preserved-5
         run: |

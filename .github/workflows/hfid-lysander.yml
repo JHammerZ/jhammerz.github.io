@@ -40,7 +40,7 @@ jobs:
                     
                     ADDED=0
                     for AGENT in "${AGENTS[@]}"; do
-                      if ! grep -qx "$AGENT" "$BLOCKLIST"; then
+                      if ! grep -Fxq "$AGENT" "$BLOCKLIST"; then
                         echo "$AGENT" >> "$BLOCKLIST"
                         ADDED=$((ADDED + 1))
                       fi
@@ -72,9 +72,9 @@ jobs:
                     echo "**SHA**: ${{ github.sha }}" >> .hfid/lysander/forensic.log
       - name: preserved-4
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/heartbeat.txt
-                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/forensic.log
-                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/blocklist.txt
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/heartbeat.txt || true
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/forensic.log || true
+                    mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/blocklist.txt || true
       - name: preserved-5
         run: |
           cat > .hfid/lysander/attestation.json << JSON

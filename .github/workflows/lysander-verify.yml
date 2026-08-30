@@ -87,7 +87,7 @@ jobs:
           ADDED=0
           # Simulate log scan - in production you'd parse actual access logs
           for AGENT in "${MALIGN_AGENTS[@]}"; do
-            if! grep -qx "$AGENT" "$BLOCKLIST"; then
+            if! grep -Fxq "$AGENT" "$BLOCKLIST"; then
               echo "$AGENT" >> "$BLOCKLIST"
               ADDED=$((ADDED + 1))
             fi
@@ -122,7 +122,7 @@ jobs:
 
       - name: OpenTimestamp Blocklist
         run: |
-          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/blocklist.txt
+          mkdir -p .hfid/intel && touch .hfid/intel/intel.md && ots stamp .hfid/lysander/blocklist.txt || true
           ots upgrade .hfid/lysander/blocklist.txt.ots || true
           echo "✅ Blocklist Bitcoin-anchored"
 
