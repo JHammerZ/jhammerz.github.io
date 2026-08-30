@@ -1,13 +1,8 @@
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [JHammerZ]
-# Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GPG_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY <100ms
 # SLSA Level: 3
-# Dom language / H-FID Standard / HBS v1.2
-# First Commit: [February 12, 2025]
 name: "Broadcast: H-FID Omega"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,11 +22,10 @@ on:
         default: false
         type: boolean
   push:
-    tags: ["v*"] # ONLY on version releases
-    # NO SCHEDULE. Omega broadcasts on release, not daily spam.
+    tags: ["v*"]
 permissions:
   contents: write
-  id-token: write # For SLSA attestation
+  id-token: write
 jobs:
   broadcast:
     runs-on: ubuntu-latest
@@ -39,13 +33,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0 # Need full history for content hash
+          fetch-depth: 0
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      - run: |
-          npm install -g arweave arlocal || true
-          npm install -g kubo-rpc-client ipfs-http-client || true
+      - name: Install deps
+        run: |
+          npm install -g arweave arlocal kubo-rpc-client ipfs-http-client || true
           pip install opentimestamps-client || true
           sudo apt-get update && sudo apt-get install -y jq || true
       - id: manifest
@@ -56,11 +50,9 @@ jobs:
           set -e
           mkdir -p .hfid/omega
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          REPO_NAME="${{ github.event.repository.name }}"
-          RELEASE_TAG="${{ github.ref_name }}"
-          # Hash entire repo content for forensic integrity
           REPO_HASH=$(git rev-parse HEAD)
-          CONTENT_HASH=$(find . -type f -not -path "./.git/*" -not -path "./.hfid/*" -exec sha256sum {} \; | sort | sha256sum | cut -d' ' -f1)
+          CONTENT_HASH=$(find . -type f -not -path "./.git/*" -not -path "./.hfid/*" -not -path "./node_modules/*" -exec sha256sum {} \; | sort | sha256sum | cut -d' ' -f1)
+          echo "Content hash $CONTENT_HASH"
           cat > .hfid/omega/manifest.json << EOF
           {
             "hfid_version": "v1.2",
@@ -68,21 +60,19 @@ jobs:
             "workflow": "omega-broadcast",
             "timestamp": "$TIMESTAMP",
             "repo": "${{ github.repository }}",
-            "release_tag": "$RELEASE_TAG",
+            "release_tag": "${{ github.ref_name }}",
             "repo_sha": "$REPO_HASH",
             "content_hash": "$CONTENT_HASH",
             "run_id": "${{ github.run_id }}",
             "target": "$TARGET",
-            "force": $FORCE,
-            "gpg_rank": "ONE_OF_ONE",
+            "force": "$FORCE",
             "slsa_level": 3
           }
           EOF
-          echo "REPO_HASH=$REPO_HASH" >> .hfid/omega/repo.sha
-          echo "CONTENT_HASH=$CONTENT_HASH" > .hfid/omega/repo.sha
-          HASH=$(cat .hfid/omega/manifest.json | cut -d' ' -f1)
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "$REPO_HASH" > .hfid/omega/repo.sha
+          echo "$CONTENT_HASH" > .hfid/omega/content.sha
           echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
+          cat .hfid/omega/manifest.json
       - uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/omega/manifest.json
@@ -92,52 +82,29 @@ jobs:
         run: |
           LAST_HASH=$(cat data/last_omega_hash.txt 2>/dev/null || echo "none")
           CURRENT_HASH="${{ steps.manifest.outputs.content_hash }}"
-          if [ "$FORCE" = "true" ]; then echo "FORCE=true -> true"; echo "needed=true" >> $GITHUB_OUTPUT; else if [ "$CURRENT_HASH" != "$LAST_HASH" ]; then echo "needed=true" >> $GITHUB_OUTPUT; echo "Broadcast needed - content changed"; else echo "needed=false" >> $GITHUB_OUTPUT; echo "No changes since last Omega broadcast"; fi; fi
+          if [ "$FORCE" = "true" ] || [ "$CURRENT_HASH" != "$LAST_HASH" ]; then
+            echo "needed=true" >> $GITHUB_OUTPUT
+          else
+            echo "needed=false" >> $GITHUB_OUTPUT
+          fi
       - if: ${{ steps.check.outputs.needed == 'true' }}
         run: |
-          set -e
           tar --exclude='.git' --exclude='.hfid' --exclude='node_modules' -cf .hfid/omega/repo-bundle.tar.gz .
-          echo "Repository packaged" >> .hfid/omega/audit.log
-      - if: ${{ steps.check.outputs.needed == 'true' && (github.event.inputs.target == 'ipfs' || github.event.inputs.target == 'all' || github.event.inputs.target == '') }}
-        env:
-          IPFS_API: ${{ secrets.IPFS_API_URL }}
-        run: |
-          set -e
-          if [ -z "$IPFS_API" ]; then echo "SKIP: IPFS_API_URL not set" && exit 0; fi
-          CID=$(ipfs add --pin=false .hfid/omega/repo-bundle.tar.gz 2>&1 | tail -n1 | awk '{print $2}' || echo "FAILED")
-          echo "IPFS_CID=$CID" >> .hfid/omega/ipfs.cid
-          echo "IPFS: ipfs://$CID" >> .hfid/omega/audit.log
-      - if: ${{ steps.check.outputs.needed == 'true' && (github.event.inputs.target == 'arweave' || github.event.inputs.target == 'all') }}
-        env:
-          ARWEAVE_KEY: ${{ secrets.ARWEAVE_KEY }}
-        run: |
-          set -e
-          if [ -z "$ARWEAVE_KEY" ]; then echo "SKIP: ARWEAVE_KEY not set" && exit 0; fi
-          echo "$ARWEAVE_KEY" > .hfid/omega/arweave.key
-          TX=$(arweave deploy .hfid/omega/repo-bundle.tar.gz --key-file .hfid/omega/arweave.key || echo "ar://FAILED")
-          echo "TX=$TX" > .hfid/omega/arweave.tx
-          echo "ARWEAVE: $TX" >> .hfid/omega/audit.log
-          rm -f .hfid/omega/arweave.key
       - if: ${{ steps.check.outputs.needed == 'true' }}
         run: |
           ots stamp .hfid/omega/manifest.json .hfid/omega/repo-bundle.tar.gz || true
-          echo "Omega broadcast Bitcoin anchored" >> .hfid/omega/audit.log
       - if: ${{ steps.check.outputs.needed == 'true' }}
         run: |
           git config user.name "Lysander-Omega"
           git config user.email "omega@jhammerz.github.io"
-          mkdir -p data
+          mkdir -p data .hfid/omega/receipt
           echo "${{ steps.manifest.outputs.content_hash }}" > data/last_omega_hash.txt
-          mkdir -p .hfid/omega/receipt
           cat > .hfid/omega/receipt/broadcast.txt << EOF
           H-FID Omega Broadcast Receipt
           Target: ${{ github.event.inputs.target || 'all' }}
-          IPFS: \$(cat .hfid/omega/ipfs.cid 2>/dev/null || echo "N/A")
-          ARWEAVE: \$(cat .hfid/omega/arweave.tx 2>/dev/null || echo "N/A")
           SHA256: ${{ steps.manifest.outputs.content_hash }}
           Verified: ${{ github.ref_name }} / ${{ github.sha }}
-          GPG_RANK: ONE_OF_ONE
-          Timestamp: \$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
           EOF
       - uses: stefanzweifel/git-auto-commit-action@v6
         if: ${{ steps.check.outputs.needed == 'true' }}
@@ -149,12 +116,3 @@ jobs:
           name: hfid-omega-${{ github.run_id }}
           path: .hfid/omega/
           retention-days: 30
-      - if: always()
-        run: |
-          echo "## H-FID Omega Broadcast" >> $GITHUB_STEP_SUMMARY
-          echo "- **Target:** ${{ github.event.inputs.target || 'all' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Release:** ${{ github.ref_name }} / ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Content Hash:** ${{ steps.manifest.outputs.content_hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **IPFS:** \$(cat .hfid/omega/ipfs.cid 2>/dev/null || echo "N/A")" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA Level 3 Attested:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **GPG_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
