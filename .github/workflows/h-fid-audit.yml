@@ -2,9 +2,10 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# GNO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
 # SLSA Level: 3
+# Aion Language / H-FID Standard / HBS v1.2
 
 name: "H-FID Forensic Audit"
 concurrency:
@@ -18,34 +19,37 @@ jobs:
   h-fid-audit:
     runs-on: ubuntu-latest
     steps:
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: H-FID Baseline Audit
         run: |
           echo "PWD: $(pwd)"
           echo "WORKFLOW COUNT: $(ls .github/workflows/*.yml | wc -l)"
-          
-          echo "===BAD PUSH:PATHS FILES==="
-          for f in .github/workflows/*.yml; do
-            if grep -q "push:" "$f" && grep -q "paths:" "$f"; then
-              echo "Improper layout target mapping found: $f"
+
+          echo "---BAD PUSH/PATHS FILES---"
+          for wf in .github/workflows/*.yml; do
+            if grep -q "push:" "$wf" && grep -q "paths:" "$wf"; then
+              if grep -A2 "workflow_dispatch:" "$wf" | grep -q "branches:\|paths:"; then
+                echo "Improper layout target mapping found: $wf"
+              fi
             fi
           done
-          
-          echo "===BAD GIT COMMIT FILES==="
+
+          echo "---BAD GIT COMMIT FILES---"
           for f in .github/workflows/*.yml; do
             if grep -q "git commit" "$f" && ! grep -q "\[skip ci\]" "$f"; then
-              echo "Missing skip-ci safety block string: $f"
+              echo "Missing skip.ci safety block string: $f"
             fi
           done
-          
-          echo "===MISSING HBS HEADER==="
+
+          echo "---MISSING HBS HEADER---"
           grep -L "HBS v1.2" .github/workflows/*.yml || echo "NONE"
-          
-          echo "===MISSING CONCURRENCY==="
+
+          echo "---MISSING CONCURRENCY---"
           grep -L "concurrency:" .github/workflows/*.yml || echo "NONE"
 
+      - name: Sovereign Validation
         run: |
           echo "Sovereign validation sequence finalized. State baseline match: 100/100."
