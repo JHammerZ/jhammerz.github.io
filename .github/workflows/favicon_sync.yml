@@ -72,11 +72,11 @@ jobs:
           SRC="${{ steps.source_check.outputs.source_path }}"
           echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
           
-          # Use correct sharp-cli argument parameters: sharp <input> -o <output> resize <width> <height>
-          npx sharp "$SRC" -o public/favicon.png resize 32 32
-          npx sharp "$SRC" -o public/apple-touch-icon.png resize 180 180
-          npx sharp "$SRC" -o public/android-chrome-192x192.png resize 192 192
-          npx sharp "$SRC" -o public/android-chrome-512x512.png resize 512 512
+          # Force accurate standard sharp-cli syntax sequence: sharp resize <w> <h> --input <file> --output <dest>
+          npx sharp resize 32 32 --input "$SRC" --output public/favicon.png
+          npx sharp resize 180 180 --input "$SRC" --output public/apple-touch-icon.png
+          npx sharp resize 192 192 --input "$SRC" --output public/android-chrome-192x192.png
+          npx sharp resize 512 512 --input "$SRC" --output public/android-chrome-512x512.png
           
           cp public/favicon.png public/apple-touch-icon.png ./ || true
           
