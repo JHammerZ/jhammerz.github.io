@@ -18,12 +18,20 @@ name: Security Scan | Zero-Trust Sweep
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+permissions:
+  contents: read
+  security-events: write
+
 on:
   workflow_dispatch:
   workflow_dispatch:
   schedule:
 jobs:
   security-scan:
-    runs-on: ubuntu-latest
+    runs-permissions:
+  contents: read
+  security-events: write
+
+on: ubuntu-latest
     steps:
       # paste your actual security scan steps here
