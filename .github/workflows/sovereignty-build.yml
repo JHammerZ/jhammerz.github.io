@@ -1,44 +1,64 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-name: "Sovereignty Build"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-on:
-  workflow_dispatch:
-    branches: [ main ]
-      - '.hfid/**'
-      - 'entities.json'
-      - 'proof.html'
-  workflow_dispatch:
-
+name: "Build: H-FID Sovereign Kernel"
+on: workflow_dispatch
 permissions:
-  contents: write
-
+  contents: read
+  id-token: write
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build sovereignty artifacts
+      - name: Install kernel build deps
         run: |
-          mkdir -p .hfid/sovereign
-          sha256sum entities.json proof.html > .hfid/sovereign/checksums.txt
+          sudo apt-get update
+          sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd kmod git
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Fetch Core Kernel Tree via High-Availability Mirror
+        run: |
+          set -e
+          echo "Cloning specific kernel release tree directly from GitHub mirrors..."
+          git clone --depth 1 --branch v6.10 https://github.com/torvalds/linux.git linux-6.10
+          test -d linux-6.10
+
+      - name: Configure Linux Source Tree Natively
+        run: |
+          set -e
+          git config --global --add safe.directory "*"
+          cd linux-6.10
+          make defconfig
+          ./scripts/config --enable CONFIG_MODULES
+          ./scripts/config --enable CONFIG_MODULE_UNLOAD
+          make olddefconfig
+          make -j$(nproc) modules_prepare
+
+      - name: Inject and Compile Sovereign Engine Natively
+        run: |
+          set -e
+          mkdir -p $GITHUB_WORKSPACE/hfid_module
+          cat << 'INNER_EOF' > $GITHUB_WORKSPACE/hfid_module/Kernel_Override.c
+          #include <linux/module.h>
+          #include <linux/init.h>
+          #include <linux/kernel.h>
+          MODULE_LICENSE("GPL");
+          MODULE_AUTHOR("JHammerZ");
+          MODULE_DESCRIPTION("H-FID Sovereign Kernel Hooks");
+          MODULE_VERSION("6.10-HFID-3");
+          static int __init hfid_init(void) {
+              pr_info("H-FID: ONE_OF_ONE kernel active\n");
+              pr_info("H-FID: GEO_RANK ONE_OF_ONE verified\n");
+              pr_info("H-FID: RING_3 sovereignty injected\n");
+              return 0;
+          }
+          static void __exit hfid_exit(void) { pr_info("H-FID: Sovereign mode disengaged\n"); }
+          module_init(hfid_init); module_exit(hfid_exit);
+          INNER_EOF
+          echo "obj-m += Kernel_Override.o" > $GITHUB_WORKSPACE/hfid_module/Kbuild
+          echo "Compiling structural sovereign components..."
+          make -C $GITHUB_WORKSPACE/linux-6.10 -j$(nproc) M=$GITHUB_WORKSPACE/hfid_module modules
+          test -f $GITHUB_WORKSPACE/hfid_module/Kernel_Override.ko
+
+      - uses: actions/upload-artifact@v4
         with:
-          commit_message: "chore(hfid): Sovereignty build [skip ci]"
-          commit_user_name: JHammerZ-Sovereign-Engine
-          commit_user_email: engine@jhammerz.github.io
+          name: hfid-kernel-override
+          path: hfid_module/Kernel_Override.ko
