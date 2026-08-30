@@ -1,9 +1,7 @@
 name: "SEO: Force Search Engine Indexation"
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -13,25 +11,20 @@ on:
         description: 'Specific URL to index'
         required: false
         type: string
-
 permissions:
   contents: write
-
 jobs:
   force-index:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
           pip install google-auth google-api-python-client requests jq
-
       - name: Prep URLs
         run: |
           set -eu pipefail
@@ -41,42 +34,25 @@ jobs:
           else
             echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           fi
-
       - name: Index via Google
         env:
           GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           set -eu pipefail
-          if [ -z "${GOOGLE_API_KEY_DATA}" ]; then
-            echo "::error:: GOOGLE_API_KEY secret is blank or missing."
-            exit 1
-          fi
+          if [ -z "${GOOGLE_API_KEY_DATA}" ]; then echo "::error:: GOOGLE_API_KEY blank"; exit 1; fi
           echo "${GOOGLE_API_KEY_DATA}" > the-google-creds.json
           python << 'PY_EOF'
-          import json, sys, os
+          import json
           from pathlib import Path
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
-          try:
-              with open('the-google-creds.json','r') as f:
-                  creds_data=json.load(f)
-          except Exception as e:
-              print(f"::error:: JSON parse failure: {e}")
-              raise
-          try:
-              credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=["https://www.googleapis.com/auth/indexing"])
-              service = build('indexing','v3',credentials=credentials)
-          except Exception as e:
-              print(f"::error:: Auth handshake failed: {e}")
-              raise
-          url_list=[]
-          if Path.exists(Path('.hfid/indexing/urls.txt')):
-              with open('.hfid/indexing/urls.txt','r') as f:
-                  url_list=[line.strip() for line in f if line.strip()]
-          if not url_list:
-              url_list=["https://jhammerz.github.io"]
+          with open('the-google-creds.json','r') as f:
+              creds_data=json.load(f)
+          credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=["https://www.googleapis.com/auth/indexing"])
+          service = build('indexing','v3',credentials=credentials)
+          url_list=[line.strip() for line in open('.hfid/indexing/urls.txt') if line.strip()] if Path('.hfid/indexing/urls.txt').exists() else ["https://jhammerz.github.io"]
+          if not url_list: url_list=["https://jhammerz.github.io"]
           for target_url in url_list:
-              print(f"Publishing indexing request for: {target_url}")
               body={"url": target_url, "type": "URL_UPDATED"}
               try:
                   res = service.urlNotifications().publish(body=body).execute()
@@ -85,7 +61,5 @@ jobs:
                   print(f"Notification error for {target_url}: {e}")
           PY_EOF
           rm -f the-google-creds.json
-
       - name: Sync secondary pipelines
-        run: |
-          echo "Syncing indexation maps to alternative search engine pipelines..."
+        run: echo "Syncing indexation maps..."
