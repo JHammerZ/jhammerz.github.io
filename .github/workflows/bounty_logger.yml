@@ -44,7 +44,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run Logging Script
         run: |
           chmod +x scripts/log_finding.sh
@@ -54,7 +54,7 @@ jobs:
           git config --global user.name 'Sovereign-Bot'
           git config --global user.email 'bot@jhammerz.io'
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 

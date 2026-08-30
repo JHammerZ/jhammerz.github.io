@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -50,7 +50,7 @@ jobs:
           make -j$(nproc) bzImage
 
       - name: Archive and Upload Sovereign Artifact Binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hotmug-ALPHA-PRIME
           path: linux-6.10/arch/x86/boot/bzImage

@@ -10,8 +10,8 @@ jobs:
   syndicate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - name: Install deps
@@ -27,7 +27,7 @@ jobs:
         run: ots stamp .hfid/syndicator/manifest.json || true
       - name: Upload
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-syndicator-${{ github.run_id }}
           path: .hfid/syndicator/

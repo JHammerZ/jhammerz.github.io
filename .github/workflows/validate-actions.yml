@@ -42,7 +42,7 @@ jobs:
           df -h
 
       - name: Checkout Vault
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -84,12 +84,12 @@ jobs:
         id: stage
         run: |
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 
       - name: Attest Forensic Reset
         if: steps.stage.outputs.has_changes == 'true'
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/forensic/reset.json

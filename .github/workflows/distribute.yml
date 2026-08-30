@@ -40,10 +40,10 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -101,13 +101,13 @@ jobs:
           echo "$ARWEAVE_KEY" > /tmp/arweave.json
 
       - name: Attest Distribution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/distribution/manifest.json
 
       - name: Upload Distribution Proof
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-distribution-${{ steps.hfid.outputs.hfid }}
           path: .hfid/distribution/

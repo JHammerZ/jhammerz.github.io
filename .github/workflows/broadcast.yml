@@ -49,7 +49,7 @@ jobs:
       payload: ${{ steps.payload.outputs.json }}
       hash: ${{ steps.payload.outputs.hash }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Generate Broadcast Payload
         id: payload
@@ -89,7 +89,7 @@ jobs:
           echo "hash=${HASH}" >> $GITHUB_OUTPUT
 
       - name: Attest Broadcast Payload
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/broadcast/payload.json
 
@@ -98,7 +98,7 @@ jobs:
     if: ${{ github.event.inputs.targets == 'all' || github.event.inputs.targets == 'social' || github.event.inputs.targets == 'discord' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Post to Discord
         env:
           WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
@@ -132,7 +132,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: hfid-broadcast-${{ needs.prepare.outputs.hash }}
           path: .hfid/broadcast/

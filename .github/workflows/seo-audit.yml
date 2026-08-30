@@ -41,15 +41,15 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: 'pip'
@@ -80,7 +80,7 @@ jobs:
           cat .hfid/seo/manifest.json
 
       - name: Attest SEO Audit
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/seo/manifest.json
 
@@ -208,7 +208,7 @@ jobs:
 
       - name: Upload Audit Evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-seo-audit-${{ github.run_id }}
           path: .hfid/seo/

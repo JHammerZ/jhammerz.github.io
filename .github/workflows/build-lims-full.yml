@@ -43,11 +43,11 @@ jobs:
   build-and-sync:
     runs-on: ubuntu-latest
     steps:
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -124,14 +124,14 @@ jobs:
           git config --global user.email "actions@github.com"
           
           # Stage tracking paths cleanly
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
           else
             echo "No pipeline modifications detected. Skipping execution push."
           fi
 
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfd-sovereign-baseline-core
           path: |

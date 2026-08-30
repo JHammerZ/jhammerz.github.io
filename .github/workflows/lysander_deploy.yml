@@ -42,10 +42,10 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js 24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '24'
           cache: 'npm'
@@ -83,7 +83,7 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
       - name: Attest Sovereign Execution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/lysander/manifest.json
 
@@ -168,13 +168,13 @@ jobs:
 
       - name: Commit Changes
         if: ${{ github.event.inputs.dry_run == 'false' }}
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 
       - name: Upload Evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-lysander-${{ github.run_id }}
           path: .hfid/lysander/

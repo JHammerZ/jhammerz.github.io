@@ -40,18 +40,18 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Sovereign Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js & Python Environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
 
       - name: Setup Python Tools
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -128,7 +128,7 @@ jobs:
 
       - name: Attest Index Nodes Manifest
         continue-on-error: true
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/index-nodes/manifest.json
 
@@ -149,13 +149,13 @@ jobs:
           git config --global user.email "index@jhammerz.io"
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 
       - name: Upload Index Nodes Artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-force-index-nodes-${{ github.run_id }}
           path: |

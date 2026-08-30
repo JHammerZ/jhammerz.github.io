@@ -37,13 +37,13 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -86,7 +86,7 @@ jobs:
           cat .hfid/archive/manifest.json
 
       - name: Attest Archive Run
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/archive/manifest.json
 
@@ -206,7 +206,7 @@ jobs:
 
       - name: Commit Changes
         if: steps.detect.outputs.new_post == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update archive [skip ci]"
           file_pattern: ".hfid/archive/*"

@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Request Short-Lived Access Token
         run: |

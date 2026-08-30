@@ -42,7 +42,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v4
@@ -80,7 +80,7 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
       - name: Attest Kernel Build
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/kernel/manifest.json
 
@@ -118,7 +118,7 @@ jobs:
 
       - name: Upload Kernel Artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-kernel-${{ github.sha }}
           path: .hfid/kernel/

@@ -24,7 +24,7 @@ jobs:
       artifact_id: ${{ steps.upload.outputs.artifact_id }}
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -71,7 +71,7 @@ jobs:
         uses: actions/deploy-pages@v4
       - name: Attest Pages Deployment
         if: steps.deployment.outputs.page_url != ''
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-name: 'github-pages'
           subject-digest: ${{ needs.build.outputs.artifact_id }}

@@ -30,7 +30,7 @@ jobs:
   index-on:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
           echo "{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .hfid/indexing/index.json
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: Indexation update [skip ci]"
           commit_user_name: "JHammerZ-Sovereign-Engine"

@@ -76,7 +76,7 @@ jobs:
           echo "path=.hfid/geo-rank/audit.json" >> $GITHUB_OUTPUT
 
       - name: SLSA Provenance Attestation
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: ${{ steps.gen.outputs.path }}
 

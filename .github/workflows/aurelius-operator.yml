@@ -28,10 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Substrate Node
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node Environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '18'
 
@@ -44,7 +44,7 @@ jobs:
           lighthouse https://github.io --output=json --output-path=./report.json --chrome-flags="--headless --no-sandbox"
 
       - name: Archive Performance Architecture Artifact Payload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lighthouse-report
           path: report.json

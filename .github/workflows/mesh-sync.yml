@@ -42,10 +42,10 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -114,7 +114,7 @@ jobs:
           fi
 
       - name: Attest Mesh Sync
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/mesh/manifest.json
 
@@ -124,14 +124,14 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: mesh sync [skip ci]"
           file_pattern: "hfid-mesh.json .hfid/mesh/*"
 
       - name: Upload Mesh Attestation
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-mesh-attestation
           path: .hfid/mesh/

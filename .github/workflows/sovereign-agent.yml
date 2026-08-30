@@ -46,20 +46,20 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node Environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: 'agent/package-lock.json'
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -100,7 +100,7 @@ jobs:
           echo "task=$TASK" >> $GITHUB_OUTPUT
 
       - name: Attest Agent Execution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/agent/manifest.json
 
@@ -144,14 +144,14 @@ jobs:
           git config --local user.name "Joshua Hamilton [J-HammerZ]"
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update agent registry logs [skip ci]"
           file_pattern: ".hfid/agent/*"
 
       - name: Upload Agent Evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-agent-${{ github.run_id }}
           path: .hfid/agent/

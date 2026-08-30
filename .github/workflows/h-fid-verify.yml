@@ -40,7 +40,7 @@ jobs:
     if: github.event.inputs.oath == 'true' # Enforce human oath
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install OpenTimestamps
         run: pip install opentimestamps-client
@@ -100,7 +100,7 @@ jobs:
           echo "✅ H-FID chain updated with human verification block"
 
       - name: Attest Human Verification
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/verification/human-proof.json
 
@@ -110,13 +110,13 @@ jobs:
           git config user.email "jhammerz@users.noreply.github.com"
           
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 
       - name: Upload Verification Artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-human-proof-${{ steps.proof.outputs.hash }}
           path: .hfid/verification/

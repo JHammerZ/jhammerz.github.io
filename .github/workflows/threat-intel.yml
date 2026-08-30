@@ -59,13 +59,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -181,7 +181,7 @@ jobs:
           EOF
 
       - name: Attest Intel Object
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/intel/${{ steps.intel.outputs.filename }}
 
@@ -197,7 +197,7 @@ jobs:
           git config --local user.name "Joshua Hamilton [JHammerZ]"
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 
@@ -211,7 +211,7 @@ jobs:
 
       - name: Upload Intel Evidence
         if: always()
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v5.4.3
         with:
           name: hfid-intel-${{ steps.intel.outputs.uuid }}
           path: .hfid/intel/

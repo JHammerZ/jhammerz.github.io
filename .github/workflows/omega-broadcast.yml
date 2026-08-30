@@ -42,11 +42,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Need full history for content hash
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -94,7 +94,7 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
 
-      - uses: actions/attest-build-provenance@v1
+      - uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/omega/manifest.json
 
@@ -163,13 +163,13 @@ jobs:
           Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
           EOF
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         if: ${{ steps.check.outputs.needed == 'true' }}
         with:
           commit_message: "chore: omega broadcast ${{ github.ref_name }} [skip ci]"
 
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-omega-${{ github.run_id }}
           path: .hfid/omega/

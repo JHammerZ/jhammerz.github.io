@@ -40,7 +40,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -122,7 +122,7 @@ jobs:
           mv .hfid/indexing/sitemap.tmp.json .hfid/indexing/sitemap.json
 
       - name: Attest Sitemap Build
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/indexing/sitemap.json
 
@@ -136,7 +136,7 @@ jobs:
           fi
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
           branch: main
@@ -167,7 +167,7 @@ jobs:
 
       - name: Upload Index Attestation
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-sitemap-indexnow
           path: .hfid/indexing/

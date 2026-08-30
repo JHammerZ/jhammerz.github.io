@@ -47,10 +47,10 @@ jobs:
       pr_number: ${{ steps.pr.outputs.pull-request-number }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4 # Pin SHA
+        uses: actions/setup-node@v5 # Pin SHA
         with:
           node-version: 22
           cache: 'npm'
@@ -101,7 +101,7 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
 
       - name: Attest Draft Generation
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/lysander/manifest.json
 
@@ -189,7 +189,7 @@ jobs:
 
       - name: Upload Draft Evidence
         if: always()
-        uses: actions/upload-artifact@v4 # Pin SHA
+        uses: actions/upload-artifact@v5 # Pin SHA
         with:
           name: hfid-lysander-${{ github.run_id }}
           path: .hfid/lysander/

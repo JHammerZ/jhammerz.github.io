@@ -34,7 +34,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -169,7 +169,7 @@ jobs:
           EOF
 
       - name: Attest Distribution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/distribution/lysander.json
 
@@ -180,14 +180,14 @@ jobs:
           git add .well-known/hfid/chain.json badges/hfid.md .hfid/distribution/lysander.json || true
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update distribution [skip ci]"
           file_pattern: ".well-known/hfid/chain.json badges/hfid.md .hfid/distribution/lysander.json"
 
       - name: Upload Distribution Proof
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-lysander-${{ steps.hfid.outputs.hfid }}
           path: |

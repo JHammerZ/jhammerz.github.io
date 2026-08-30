@@ -39,7 +39,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -105,7 +105,7 @@ jobs:
           echo "✅ Hunt evidence Bitcoin-anchored"
 
       - name: Attest Hunt Execution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/hunt/manifest.json
 
@@ -115,13 +115,13 @@ jobs:
           git config user.email "hunter@users.noreply.github.com"
           
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 
       - name: Upload Hunt Artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-hunt-${{ github.run_id }}
           path: .hfid/hunt/

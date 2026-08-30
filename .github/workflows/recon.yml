@@ -51,7 +51,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Go
         uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.0.2
@@ -104,7 +104,7 @@ jobs:
           echo "severity=$SEVERITY" >> $GITHUB_OUTPUT
 
       - name: Attest Recon Execution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/recon/manifest.json
 
@@ -170,7 +170,7 @@ jobs:
 
       - name: Upload Recon Evidence
         if: always()
-        uses: actions/upload-artifact@v4 # v4.4.3
+        uses: actions/upload-artifact@v5 # v4.4.3
         with:
           name: hfid-recon-${{ github.run_id }}
           path: .hfid/recon/

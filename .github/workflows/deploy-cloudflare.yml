@@ -33,7 +33,7 @@ jobs:
       deployments: write
     steps:
       - name: 1. Checkout JHammerZ Master Source Tree
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 2. Broadcast Static Assets to Low-Latency Corridors
         uses: cloudflare/wrangler-action@v3

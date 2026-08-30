@@ -40,7 +40,7 @@ jobs:
     
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       
     - name: Install Dependencies
       run: |
@@ -77,7 +77,7 @@ jobs:
         echo "hash=$HASH" >> $GITHUB_OUTPUT
         
     - name: Attest Health Check Execution
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v3
       with:
         subject-path: .hfid/health/manifest.json
         
@@ -213,7 +213,7 @@ jobs:
           
     - name: Upload Health Evidence
       if: always()
-      uses: actions/upload-artifact@v4 # v4.3.3
+      uses: actions/upload-artifact@v5 # v4.3.3
       with:
         name: hfid-health-${{ github.run_id }}
         path: .hfid/health/

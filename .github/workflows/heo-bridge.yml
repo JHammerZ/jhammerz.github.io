@@ -23,12 +23,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
       - run: sudo apt-get update && sudo apt-get install -y jq
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - run: |
@@ -58,7 +58,7 @@ jobs:
           fi
           PAYLOAD_HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d ' ' -f1)
           echo "payload_hash=${PAYLOAD_HASH}" >> $GITHUB_OUTPUT
-      - uses: actions/attest-build-provenance@v1
+      - uses: actions/attest-build-provenance@v3
         continue-on-error: true
         with:
           subject-path: .hfid/heo-bridge/payload.json
@@ -73,10 +73,10 @@ jobs:
       - run: |
           git config --global user.name "HEO-Bridge-Agent"
           git config --global user.email "bridge@jhammerz.io"
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: hfid-heo-bridge-${{ github.run_id }}

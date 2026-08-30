@@ -39,13 +39,13 @@ jobs:
       MODE: ${{ github.event.inputs.defense_mode || 'honeypot' }}
     steps:
       - name: Checkout Sovereign Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Setup Python Toolchain Environment
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -124,7 +124,7 @@ jobs:
 
       - name: Attest Defense Execution
         continue-on-error: true
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: ${{ steps.manifest.outputs.manifest_path }}
 
@@ -135,13 +135,13 @@ jobs:
           git config --global user.email "defense@jhammerz.io"
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 
       - name: Upload Defense Evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-lysander-${{ github.run_id }}
           path: .hfid/lysander/

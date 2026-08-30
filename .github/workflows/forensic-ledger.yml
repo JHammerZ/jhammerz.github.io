@@ -16,14 +16,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '20'
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - run: |
@@ -63,11 +63,11 @@ jobs:
           ots stamp ${{ steps.archive.outputs.archive_name }}.car.sha256 || true
           sleep 2
           ots upgrade ${{ steps.archive.outputs.archive_name }}.car.sha256.ots || true
-      - uses: actions/attest-build-provenance@v1
+      - uses: actions/attest-build-provenance@v3
         continue-on-error: true
         with:
           subject-path: .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: hfid-forensic-ledger-${{ steps.archive.outputs.archive_name }}
@@ -82,6 +82,6 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           mkdir -p .hfid/ledger
           cp .hfid/ledger/${{ steps.archive.outputs.archive_name }}.json .hfid/ledger/latest.json || true
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"

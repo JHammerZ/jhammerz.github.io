@@ -45,7 +45,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Generate HEO->H-FID Bridge Payload
         id: payload
@@ -80,7 +80,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Attest HEO Bridge Payload
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/heo-bridge/payload.json
 
@@ -108,7 +108,7 @@ jobs:
 
       - name: Upload Bridge Attestation
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-heo-bridge-${{ steps.payload.outputs.hash }}
           path: .hfid/heo-bridge/

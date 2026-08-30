@@ -54,7 +54,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Download broadcast receipt
       uses: actions/download-artifact@65a5d6ad1e5b6f3d0e1e2e4e8d5d5d5d # v4.1.7
@@ -64,7 +64,7 @@ jobs:
       continue-on-error: true
 
     - name: Setup Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.11'
         cache: 'pip'
@@ -256,12 +256,12 @@ jobs:
         echo "URL: ${{ steps.hfid.outputs.proof_url }}" >> $GITHUB_STEP_SUMMARY
 
     - name: Generate SLSA Provenance
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v3
       with:
         subject-path: '.hfid/broadcast/*'
 
     - name: Upload Broadcast Evidence
-      uses: actions/upload-artifact@v4 # v4.3.3
+      uses: actions/upload-artifact@v5 # v4.3.3
       if: always()
       with:
         name: hfid-broadcast-evidence-${{ steps.hfid.outputs.uuid }}

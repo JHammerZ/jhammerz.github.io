@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 1. Checkout Source Matrix
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 2. Setup Runtime Layer
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 

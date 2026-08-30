@@ -48,7 +48,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Dependencies
         run: |
@@ -152,7 +152,7 @@ jobs:
           echo "✅ Claim evidence Bitcoin-anchored"
 
       - name: Attest Claim Monitor Execution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/claims/manifest.json
 
@@ -162,13 +162,13 @@ jobs:
           git config user.email "legal@users.noreply.github.com"
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
 
       - name: Upload Legal Evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-claim-evidence-${{ github.run_id }}
           path: .hfid/claims/

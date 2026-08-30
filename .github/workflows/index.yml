@@ -43,10 +43,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -94,7 +94,7 @@ jobs:
           echo "hash=${HASH}" >> $GITHUB_OUTPUT
 
       - name: Attest Indexing Request
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/indexing/manifest.json
 
@@ -208,7 +208,7 @@ jobs:
 
       - name: Upload Indexing Evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-indexing-${{ github.run_id }}
           path: .hfid/indexing/

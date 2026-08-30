@@ -47,7 +47,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Dependencies
         run: |
@@ -90,7 +90,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Attest Killswitch Execution
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/killswitch/manifest.json
 
@@ -167,7 +167,7 @@ jobs:
 
       - name: Upload Killswitch Evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-killswitch-${{ github.run_id }}
           path: .hfid/killswitch/

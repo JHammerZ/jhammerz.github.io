@@ -40,7 +40,7 @@ jobs:
     timeout-minutes: 40
     steps:
       - name: Checkout Sovereign Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -84,13 +84,13 @@ jobs:
 
       - name: Attest Kernel Artifact Provenance
         continue-on-error: true
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/kernel/manifest.json
 
       - name: Upload Kernel Artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: sovereign-kernel-module-${{ github.run_id }}
           path: |

@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install kernel build deps
         run: |
@@ -58,7 +58,7 @@ jobs:
           make -C $GITHUB_WORKSPACE/linux-6.10 -j$(nproc) M=$GITHUB_WORKSPACE/hfid_module modules
           test -f $GITHUB_WORKSPACE/hfid_module/Kernel_Override.ko
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: hfid-kernel-override
           path: hfid_module/Kernel_Override.ko

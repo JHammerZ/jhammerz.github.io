@@ -40,10 +40,10 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
 
@@ -94,13 +94,13 @@ jobs:
           command: deploy --minify
 
       - name: Attest Worker Deployment
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-path: '.hfid/edge/deploy.json'
 
       - name: Upload Edge Attestation
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hfid-edge-attestation
           path: .hfid/edge/
