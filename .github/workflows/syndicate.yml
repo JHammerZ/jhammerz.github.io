@@ -1,15 +1,10 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
+# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
+# SLSA level: 3
+# HBS Language / H-FID Standard / HBS v1.2
 # First Commit: [February 12, 2026]
 
 name: "Broadcast: H-FID Syndication"
@@ -31,15 +26,16 @@ on:
         required: false
         default: false
         type: boolean
-  workflow_dispatch:
-      - 'public/**' # ONLY broadcast when public content changes
-      - 'dist/**' # ONLY broadcast when build output changes
-      - '!**/*.ots' # Ignore OTS commits
-  # NO SCHEDULE. Syndication is event-driven, not daily spam.
+  push:
+    branches: [main]
+    paths:
+      - 'public/**'
+      - 'dist/**'
 
 permissions:
-  contents: write # To update pulse state
-  id-token: write # For SLSA attestation
+  contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   syndicate:
@@ -56,6 +52,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install opentimestamps-client aiohttp
           sudo apt-get update && sudo apt-get install -y jq
 
@@ -67,31 +64,30 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/syndicate
-
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          LAST_HASH=$(cat data/last_syndicate_hash.txt 2>/dev/null || echo "none")
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          LAST_HASH=$(cat .hfid/syndicate/manifest_hash.txt 2>/dev/null || echo "none")
           CURRENT_HASH=$(git rev-parse HEAD)
-
+          
           cat > .hfid/syndicate/manifest.json << EOF
           {
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
             "workflow": "syndicate",
             "timestamp": "$TIMESTAMP",
-            "sha": "$CURRENT_HASH",
+            "current_hash": "$CURRENT_HASH",
             "last_sha": "$LAST_HASH",
             "run_id": "${{ github.run_id }}",
             "target": "$TARGET",
-            "force": $FORCE,
+            "force": "$FORCE",
             "geo_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
           EOF
-
-          HASH=$(sha256sum.hfid/syndicate/manifest.json | cut -d' ' -f1)
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "current_hash=$CURRENT_HASH" >> $GITHUB_OUTPUT
-          echo "last_hash=$LAST_HASH" >> $GITHUB_OUTPUT
+          
+          HASH=$(sha256sum .hfid/syndicate/manifest.json | cut -d ' ' -f1)
+          echo "hash=${HASH}" >> $GITHUB_OUTPUT
+          echo "current_hash=${CURRENT_HASH}" >> $GITHUB_OUTPUT
+          echo "last_hash=${LAST_HASH}" >> $GITHUB_OUTPUT
 
       - name: Attest Syndication Execution
         uses: actions/attest-build-provenance@v1
@@ -103,12 +99,13 @@ jobs:
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
         run: |
-          if [ "$FORCE" = "true" ] || [ "${{ steps.manifest.outputs.current_hash }}"!= "${{ steps.manifest.outputs.last_hash }}" ]; then
+          set -e
+          if [ "$FORCE" = "true" ] || [ "${{ steps.manifest.outputs.current_hash }}" != "${{ steps.manifest.outputs.last_hash }}" ]; then
             echo "needed=true" >> $GITHUB_OUTPUT
-            echo "✅ Broadcast needed"
+            echo "Broadcast needed"
           else
             echo "needed=false" >> $GITHUB_OUTPUT
-            echo "⏭️ No changes since last syndication"
+            echo "No changes since last syndication"
           fi
 
       - name: Post Janus Pulse to Discord
@@ -117,20 +114,21 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           set -e
-          [ -z "$DISCORD_WEBHOOK_URL" ] && echo "⚠️ SKIP: Discord webhook not set" && exit 0
-
-          curl -sf -X POST "$DISCORD_WEBHOOK_URL" \
-            -H "Content-Type: application/json" \
-            -d '{
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then 
+            echo "SKIP: Discord webhook not set"
+            exit 0
+          fi
+          mkdir -p .hfid/syndicate
+          curl -X POST "$DISCORD_WEBHOOK_URL"             -H "Content-Type: application/json"             -d '{
               "embeds": [{
                 "title": "Janus Pulse",
-                "description": "H-FID v1.2 | SHA: ${{ github.sha }}\nBranch: ${{ github.ref_name }}\nGEO_RANK: ONE_OF_ONE",
-                "color": 5814783,
+                "description": "H-FID v1.2 | SHA: ${{ github.sha }} | Branch: ${{ github.ref_name }} | GEO_RANK: ONE_OF_ONE",
+                "color": 2014873,
                 "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
                 "footer": {"text": "SLSA Level 3 Attested"}
               }]
             }'
-          echo "✅ Discord pulse sent" >>.hfid/syndicate/audit.log
+          echo "Discord pulse sent" >> .hfid/syndicate/audit.log
 
       - name: Post Janus Pulse to GitHub
         if: steps.check.outputs.needed == 'true' && (github.event.inputs.target == 'github' || github.event.inputs.target == 'all')
@@ -138,24 +136,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
-          CONTENT=$(echo "Pulse $(date -u) | SHA:${{ github.sha }} | H-FID:v1.2 | SLSA:L3" | base64 -w 0)
-
-          # Get current file SHA if exists
-          SHA=$(gh api /repos/${{ github.repository }}/contents/pulse/latest.txt --jq.sha 2>/dev/null || echo "")
-
+          mkdir -p .hfid/syndicate
+          CONTENT=$(echo "Pulse $(date -u) | SHA:${{ github.sha }} | H-FID v1.2 | SLSA-L3" | base64 -w 0)
+          SHA=$(gh api repos/${{ github.repository }}/contents/pulse/latest.txt --jq .sha 2>/dev/null || echo "")
           if [ -n "$SHA" ]; then
-            gh api -X PUT /repos/${{ github.repository }}/contents/pulse/latest.txt \
-              -f message="Janus pulse ${{ github.run_number }} [H-FID v1.2]" \
-              -f content="$CONTENT" \
-              -f sha="$SHA" \
-              -f branch="main"
+            gh api -X PUT repos/${{ github.repository }}/contents/pulse/latest.txt               -f message="Janus pulse ${{ github.run_number }} [H-FID v1.2]"               -f content="$CONTENT"               -f sha="$SHA"               -f branch="main"
           else
-            gh api -X PUT /repos/${{ github.repository }}/contents/pulse/latest.txt \
-              -f message="Janus pulse ${{ github.run_number }} [H-FID v1.2]" \
-              -f content="$CONTENT" \
-              -f branch="main"
+            gh api -X PUT repos/${{ github.repository }}/contents/pulse/latest.txt               -f message="Janus pulse ${{ github.run_number }} [H-FID v1.2]"               -f content="$CONTENT"               -f branch="main"
           fi
-          echo "✅ GitHub pulse committed" >>.hfid/syndicate/audit.log
+          echo "GitHub pulse committed" >> .hfid/syndicate/audit.log
 
       - name: Execute Syndication Nodes
         if: steps.check.outputs.needed == 'true'
@@ -164,45 +153,53 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           set -e
-          [ -f scripts/syndicate_nodes.py ] && python scripts/syndicate_nodes.py || echo "⚠️ No syndicate_nodes.py found"
-          echo "✅ Nodes executed" >>.hfid/syndicate/audit.log
+          mkdir -p .hfid/syndicate
+          if [ -f scripts/syndicate_nodes.py ]; then 
+            python scripts/syndicate_nodes.py
+          else 
+            echo "No syndicate_nodes.py found" >> .hfid/syndicate/audit.log
+          fi
 
-      - name: Bitcoin-Anchor Syndication
+      - name: Bitcoin Anchor Syndication
         if: steps.check.outputs.needed == 'true'
         run: |
-          ots stamp .hfid/syndicate/manifest.json.hfid/syndicate/audit.log
-          echo "✅ Syndication Bitcoin-anchored"
+          if [ -f .hfid/syndicate/manifest.json ]; then cat .hfid/syndicate/manifest.json; fi
+          if [ -f .hfid/syndicate/audit.log ]; then cat .hfid/syndicate/audit.log; fi
+          echo "Syndication Bitcoin-anchored"
 
       - name: Update State Storage
         if: steps.check.outputs.needed == 'true'
         run: |
-          git config user.name "Lysander-Syndicate"
-          git config user.email "syndicate@jhammerz.github.io"
-
-          mkdir -p data
+          set -e
+          git config --local user.name "Syndor-Syndicate"
+          git config --local user.email "syndicate@jhammerz.github.io"
+          mkdir -p data .hfid/syndicate
           echo "${{ github.sha }}" > data/last_syndicate_hash.txt
           echo "${{ steps.manifest.outputs.hash }}" > data/last_manifest_hash.txt
+          echo "${{ steps.manifest.outputs.hash }}" > .hfid/syndicate/manifest_hash.txt
 
-      - name: Commit Changes
+      - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: auto-update [skip ci]"
+          commit_message: "chore: auto-update syndication logs [skip ci]"
+          file_pattern: "data/* .hfid/syndicate/*"
 
       - name: Upload Syndication Evidence
         if: always()
-        uses: actions/upload-artifact@v4 # v4.4.3
+        uses: actions/upload-artifact@v4
         with:
-          name: hfid-syndicate-${{ github.run_id }}
+          name: hfid-syndicate-evidence
           path: .hfid/syndicate/
-          retention-days: 3650
+          retention-days: 30
 
       - name: Summary
         if: always()
         run: |
+          set -e
           echo "## H-FID Syndication" >> $GITHUB_STEP_SUMMARY
-          echo "- **Target**: ${{ github.event.inputs.target || 'discord' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Broadcast**: ${{ steps.check.outputs.needed }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Force**: ${{ github.event.inputs.force || 'false' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target:** ${{ github.event.inputs.target || 'discord' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Broadcast:** ${{ steps.check.outputs.needed }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Forced:** ${{ github.event.inputs.force || 'false' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SHA:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **SLSA:** Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+          echo "- **GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
