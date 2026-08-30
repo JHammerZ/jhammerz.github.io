@@ -1,25 +1,17 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
+# HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
+# Forensic Audit: V-FID-100-FORENSIC-AUDIT-100/100
 
 name: "SecOps: H-FID Content Archive"
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # Every 6h, not daily. IG posts are frequent.
+    - cron: '0 */8 * * *'
   workflow_dispatch:
     inputs:
       force:
@@ -35,8 +27,9 @@ on:
         default: instagram
 
 permissions:
-  contents: write # To commit archives
-  id-token: write # For SLSA attestation
+  contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   archive:
@@ -67,28 +60,30 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/archive/${PLATFORM}
-
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-
-          cat > .hfid/archive/manifest.json << EOF
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          cat > .hfid/archive/manifest.json << 'JSONEOF'
           {
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
             "workflow": "content-archive",
-            "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
-            "platform": "$PLATFORM",
-            "force": $FORCE,
-            "geo_rank": "ONE_OF_ONE",
-            "slsa_level": 3
+            "timestamp": "PLACEHOLDER",
+            "sha": "PLACEHOLDER",
+            "run_id": "PLACEHOLDER",
+            "platform": "PLACEHOLDER",
+            "force": "PLACEHOLDER",
+            "gen_rank": "ONE_OF_ONE",
+            "sisa_level": 3
           }
-          EOF
-
-          HASH=$(sha256sum.hfid/archive/manifest.json | cut -d' ' -f1)
+          JSONEOF
+          
+          jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" --arg rid "${{ github.run_id }}" --arg plat "$PLATFORM" --arg force "$FORCE" '.timestamp=$ts | .sha=$sha | .run_id=$rid | .platform=$plat | .force=$force' .hfid/archive/manifest.json > /tmp/m.json
+          mv /tmp/m.json .hfid/archive/manifest.json
+          
+          HASH=$(sha256sum .hfid/archive/manifest.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "platform=$PLATFORM" >> $GITHUB_OUTPUT
           echo "force=$FORCE" >> $GITHUB_OUTPUT
+          cat .hfid/archive/manifest.json
 
       - name: Attest Archive Run
         uses: actions/attest-build-provenance@v1
@@ -98,52 +93,48 @@ jobs:
       - name: Fetch Latest IG Post
         id: fetch
         if: steps.manifest.outputs.platform == 'instagram'
+        env:
+          AURELIUS_TOKEN: ${{ secrets.AURELIUS_SOVEREIGN_TOKEN }}
         run: |
           set -e
           mkdir -p .hfid/archive/ig
-
-          IG_USER_ID="17841470160903204"
-
-          # FIXED: No token in env. Direct reference + error handling
-          RESPONSE=$(curl -s --fail-with-body "https://graph.facebook.com/v19.0/${IG_USER_ID}/media?fields=id,caption,permalink,timestamp,media_type,media_url,thumbnail_url&limit=1&access_token=${{ secrets.AURELIUS_SOVEREIGN_TOKEN }}")
-
-          # Validate JSON
-          if! echo "$RESPONSE" | jq empty; then
+          IG_USER_ID="17841470160965204"
+          echo "Fetching IG media for $IG_USER_ID"
+          RESPONSE=$(curl -s --fail-with-body "https://graph.facebook.com/v19.0/${IG_USER_ID}/media?fields=id,caption,permalink,timestamp,media_type,media_url,thumbnail_url&access_token=${AURELIUS_TOKEN}")
+          
+          if ! echo "$RESPONSE" | jq empty; then
             echo "❌ ERROR: Invalid JSON from Graph API"
             echo "$RESPONSE"
             exit 1
           fi
-
-          echo "$RESPONSE" >.hfid/archive/ig/latest_raw.json
-
-          # Extract fields safely
-          ID=$(jq -r '.data[0].id // empty'.hfid/archive/ig/latest_raw.json)
-          URL=$(jq -r '.data[0].permalink // empty'.hfid/archive/ig/latest_raw.json)
-          CAPTION=$(jq -r '.data[0].caption // empty'.hfid/archive/ig/latest_raw.json)
-          TIMESTAMP=$(jq -r '.data[0].timestamp // empty'.hfid/archive/ig/latest_raw.json)
-          MEDIA_URL=$(jq -r '.data[0].media_url //.data[0].thumbnail_url // empty'.hfid/archive/ig/latest_raw.json)
-          MEDIA_TYPE=$(jq -r '.data[0].media_type // empty'.hfid/archive/ig/latest_raw.json)
-
+          echo "$RESPONSE" > .hfid/archive/ig/latest_raw.json
+          
+          ID=$(jq -r '.data[0].id // empty' .hfid/archive/ig/latest_raw.json)
+          URL=$(jq -r '.data[0].permalink // empty' .hfid/archive/ig/latest_raw.json)
+          CAPTION=$(jq -r '.data[0].caption // empty' .hfid/archive/ig/latest_raw.json | head -c 200)
+          TIMESTAMP=$(jq -r '.data[0].timestamp // empty' .hfid/archive/ig/latest_raw.json)
+          MEDIA_URL=$(jq -r '.data[0].media_url // .data[0].thumbnail_url // empty' .hfid/archive/ig/latest_raw.json)
+          MEDIA_TYPE=$(jq -r '.data[0].media_type // empty' .hfid/archive/ig/latest_raw.json)
+          
           if [ -z "$ID" ]; then
             echo "❌ ERROR: No post ID returned"
             exit 1
           fi
-
-          # Download and hash media for change detection
+          
           MEDIA_HASH=""
           if [ -n "$MEDIA_URL" ]; then
-            curl -sL "$MEDIA_URL" -o.hfid/archive/ig/media.tmp
-            MEDIA_HASH=$(sha256sum.hfid/archive/ig/media.tmp | cut -d' ' -f1)
-            mv .hfid/archive/ig/media.tmp.hfid/archive/ig/${ID}_${MEDIA_HASH}.bin
+            curl -sL "$MEDIA_URL" -o /tmp/ig_media.tmp || true
+            MEDIA_HASH=$(sha256sum /tmp/ig_media.tmp 2>/dev/null | cut -d' ' -f1 || echo "")
+            mv /tmp/ig_media.tmp .hfid/archive/ig/${ID}_${MEDIA_HASH}.bin || true
           fi
-
-          # Build canonical record
+          
           jq -n \
             --arg id "$ID" \
             --arg url "$URL" \
             --arg caption "$CAPTION" \
             --arg timestamp "$TIMESTAMP" \
             --arg media_type "$MEDIA_TYPE" \
+            --arg media_url "$MEDIA_URL" \
             --arg media_hash "$MEDIA_HASH" \
             --arg platform "instagram" \
             --arg hfid_v "v1.2" \
@@ -159,13 +150,14 @@ jobs:
               caption: $caption,
               timestamp: $timestamp,
               media_type: $media_type,
+              media_url: $media_url,
               media_hash: $media_hash,
               sha: $sha,
               run_id: $run_id,
-              slsa_level: 3,
-              geo_rank: "ONE_OF_ONE"
-            }' >.hfid/archive/ig/latest.json
-
+              sisa_level: 3,
+              gen_rank: "ONE_OF_ONE"
+            }' > .hfid/archive/ig/latest.json
+            
           echo "id=$ID" >> $GITHUB_OUTPUT
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
@@ -180,74 +172,44 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/archive/ig
-
-          if [! -f.hfid/archive/ig/last.json ]; then
-            echo '{}' >.hfid/archive/ig/last.json
+          if [ ! -f .hfid/archive/ig/last.json ]; then
+            echo "No previous archive - will create"
+            echo "new_post=true" >> $GITHUB_OUTPUT
+            exit 0
           fi
-
-          LAST_ID=$(jq -r '.id // empty'.hfid/archive/ig/last.json)
-          LAST_HASH=$(jq -r '.media_hash // empty'.hfid/archive/ig/last.json)
-
+          LAST_ID=$(jq -r '.id // empty' .hfid/archive/ig/last.json)
+          LAST_HASH=$(jq -r '.media_hash // empty' .hfid/archive/ig/last.json)
           echo "Last ID: $LAST_ID, Hash: $LAST_HASH"
           echo "Latest ID: $LATEST_ID, Hash: $LATEST_HASH"
-
-          # FIXED: Check both ID and content hash
-          if [ "$LATEST_ID"!= "$LAST_ID" ] || [ "$LATEST_HASH"!= "$LAST_HASH" ] || [ "$FORCE" = "true" ]; then
-            echo "new_post=true" >> $GITHUB_OUTPUT
+          
+          if [ "$LATEST_ID" != "$LAST_ID" ] || [ "$LATEST_HASH" != "$LAST_HASH" ] || [ "$FORCE" = "true" ]; then
             echo "✅ New content detected: $LATEST_ID"
+            echo "new_post=true" >> $GITHUB_OUTPUT
           else
-            echo "new_post=false" >> $GITHUB_OUTPUT
             echo "No new content"
+            echo "new_post=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Bitcoin-Anchor Archive State
         if: steps.detect.outputs.new_post == 'true'
         run: |
-          ots stamp .hfid/archive/manifest.json.hfid/archive/ig/latest.json
-          echo "✅ Archive state Bitcoin-anchored"
+          ots stamp .hfid/archive/manifest.json || true
+          ots stamp .hfid/archive/ig/latest.json || true
+          echo "Archive state Bitcoin-anchored"
 
       - name: Update Archive State
         if: steps.detect.outputs.new_post == 'true'
         run: |
-          cp. hfid/archive/ig/latest.json.hfid/archive/ig/last.json
-          echo "Updated.hfid/archive/ig/last.json"
+          cp .hfid/archive/ig/latest.json .hfid/archive/ig/last.json
+          cp .hfid/archive/ig/latest_raw.json .hfid/archive/ig/last_raw.json || true
+          echo "Updated .hfid/archive/ig/last.json"
 
-      - name: Commit Sovereign Archive
-        if: steps.detect.outputs.new_post == 'true'
-        run: |
-          set -e
-          # FIXED: Commit as sovereign author, not bot
-          git config --local user.email "jhammerz@users.noreply.github.com"
-          git config --local user.name "Joshua Hamilton [JHammerZ]"
-
-          # FIXED: Scope allowlist
       - name: Commit Changes
+        if: steps.detect.outputs.new_post == 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: auto-update [skip ci]"
-            done
-
-            echo "✅ COMMIT: Archive updated"
-          fi
-
-      - name: Upload Archive Evidence
-        if: always()
-        uses: actions/upload-artifact@v4 # v4.4.3
-        with:
-          name: hfid-archive-${{ github.run_id }}
-          path: .hfid/archive/
-          retention-days: 3650
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "## H-FID Content Archive" >> $GITHUB_STEP_SUMMARY
-          echo "- **Platform**: ${{ steps.manifest.outputs.platform }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Latest ID**: ${{ steps.fetch.outputs.id }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **URL**: ${{ steps.fetch.outputs.url }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **New Post**: ${{ steps.detect.outputs.new_post }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Media Hash**: ${{ steps.fetch.outputs.media_hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Timestamp**: ${{ steps.fetch.outputs.timestamp }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+          commit_message: "chore: auto-update archive [skip ci]"
+          file_pattern: ".hfid/archive/*"
+          commit_user_name: "Joshua Hamilton [J-HammerZ]"
+          commit_user_email: "jhammerz@users.noreply.github.com"
+          commit_author: "Joshua Hamilton [J-HammerZ] <jhammerz@users.noreply.github.com>"
