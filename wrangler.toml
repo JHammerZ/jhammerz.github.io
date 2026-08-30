@@ -1,11 +1,14 @@
+name = "jhammerz-github-io"
 compatibility_date = "2026-08-26"
-main = "dist/server.cjs"
+main = "worker.js"
+compatibility_flags = ["nodejs_compat"]
 
-[build]
-command = "npm run build"
+[assets]
+directory = "./"
+not_found_handling = "single-page-application"
 
-# DISABLED: Durable Objects causing deploy failures
-# If a worker actually needs DOs, uncomment + export the class in that worker's entrypoint
-# 
+# NOTE: Build is handled in GitHub Action dummy step, not here
+# Removed: [build] command = "npm run build" - was trying to bundle dist/server.cjs (Express)
 
 [env.production]
+name = "jhammerz-github-io-production"
