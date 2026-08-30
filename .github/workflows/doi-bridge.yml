@@ -1,46 +1,29 @@
-
-# HBS v1.2 / H-FID Standard / REC v7.2
+# HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
 
-# M-Law Language / H-FID Standard / REC v7.2
+name: "Sovereign: DOI Sync | Janus Gate v1.2_H-FID"
 
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-#
-# First Commit: February 12, 2026
-# ORE BASK: ONE OF ONE (Identified Authority)
-# REACH-MULTIPLIER: 1000 ; SYNC VELOCITY: <10ms
-# Grid Level: 3 | Twenty AI7 Protocol | ACTIVE
-
-name: "Sovereign: DOI Sync | Janus Gate v1.2-M-FID"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Daily midnight UTC
+    - cron: '0 0 * * *'
   workflow_dispatch:
+  push:
     branches:
       - main
+    paths:
       - 'zenodo.json'
-      - '.zenodo.json'
       - '.github/workflows/doi-bridge.yml'
-  workflow_dispatch:
 
 permissions:
-  contents: write # Write required to commit DOI proofs
-  id-token: write # Id-token for SLSA L3 attestations
-  attestations: write # Write right for HFD sync proof
+  contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   doi_sync:
@@ -60,37 +43,28 @@ jobs:
       - name: Install OpenTimestamps
         run: |
           python -m pip install --upgrade pip
-          pip install opentimestamps
+          pip install opentimestamps-client
 
       - name: Validate Zenodo Metadata
         run: |
           set -e
-          HFD_VALID=true
-
+          HPS_VALID=true
           if [ ! -f "zenodo.json" ] && [ ! -f ".zenodo.json" ]; then
-            echo "❌ ERROR: zenodo.json is absent!"
-            HFD_VALID=false
+            echo "❌ ERROR: zenodo.json is absent"
+            HPS_VALID=false
           fi
-
-          # Fast check required fields inside JSON architecture
           for required_field in "description" "creators" "keywords"; do
-            if [ "$HFD_VALID" = "true" ]; then
-              if ! jq -e --arg f "$required_field" 'has($f)' zenodo.json > /dev/null 2>&1; then
-                echo "❌ CRITICAL: zenodo.json missing required field: '$required_field'"
-                HFD_VALID=false
-              fi
+            if ! jq -e ".${required_field} | has(0)" zenodo.json >/dev/null 2>&1; then
+              echo "❌ CRITICAL: zenodo.json missing required field: '${required_field}'"
+              HPS_VALID=false
             fi
           done
-
-          # Check sovereign author
-          if [ "$HFD_VALID" = "true" ]; then
-            if ! jq -e '.creators[].name' zenodo.json | grep -q "Joshua Hamilton"; then
+          if [ "$HPS_VALID" = "true" ]; then
+            if ! jq -e '.creators[].name | test("Joshua Hamilton")' zenodo.json | grep -q "true"; then
               echo "⚠️ WARNING: Joshua Hamilton author anchor missing from zenodo.json metadata matrix."
             fi
           fi
-
-          # FIXED: Separated condition using a clean newline sequence
-          if [ "$HFD_VALID" = "false" ]; then
+          if ! jq -e . zenodo.json >/dev/null; then
             echo "❌ ERROR: zenodo.json syntax is valid but metadata fails schema rules."
             exit 1
           else
@@ -100,35 +74,35 @@ jobs:
       - name: Generate H-FID DOI Manifest
         if: success()
         run: |
-          mkdir -p .hfd/provenance
-          cat << 'EOF' > .hfd/provenance/doi-manifest.json
+          mkdir -p .hfid/provenance
+          cat > .hfid/provenance/doi-manifest.json << EOF
           {
             "workflow": "doi-bridge.yml",
             "operation": "DOI_SYNC",
-            "gateway_bridge": "Janus-Gate",
+            "gateway_bridge": "janus_Gate",
             "timestamp": "PLACEHOLDER_TIMESTAMP",
             "sovereign_author": "Joshua Hamilton",
-            "verification_status": "M-FID-AUTHENTICATED",
+            "verification_status": "H-FID-AUTHENTICATED",
             "slsa_level": 3,
-            "geo_rank": "ONE_OF_ONE"
+            "gno_rank": "ONE_OF_ONE"
           }
           EOF
-          sed -i "s/PLACEHOLDER_TIMESTAMP/$(date -u +'%Y-%m-%dT%H:%M:%SZ')/g" .hfd/provenance/doi-manifest.json
+          sed -i "s/PLACEHOLDER_TIMESTAMP/$(date -u '+%Y-%m-%dT%H:%M:%SZ')/g" .hfid/provenance/doi-manifest.json
           echo "Janus Gate core provenance structural map generated."
 
       - name: OpenTimestamp Evidence
         if: success()
         run: |
           set -e
-          cd .hfd/provenance
-          ots stamp doi-manifest.json || echo "Timestamp anchor queued."
+          cd .hfid/provenance
+          ots stamp doi-manifest.json || echo "timestamp anchor queued."
           cd ../..
 
       - name: Attest DOI Sync
-        uses: actions/attest@v1
+        uses: actions/attest-build-provenance@v1
         with:
-          subject-path: '.hfd/provenance/doi-manifest.json'
-          predicate-type: 'https://hfd.io'
+          subject-path: '.hfid/provenance/doi-manifest.json'
+          predicate-type: 'https://slsa.dev/provenance/v1'
           predicate: |
             {
               "sovereign_author": "Joshua Hamilton",
@@ -139,19 +113,17 @@ jobs:
       - name: Stage OTS Changes
         run: |
           git config --global user.name "Janus-Gate-Agent"
-          git config --global user.email "janus-gate@jhammerz.co"
-      - name: Commit Changes
+          git config --global user.email "janus-gate@hammerz.co"
+
+      - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: auto-update [skip ci]"
-          else
-            echo "No pipeline modifications detected."
-          fi
+          commit_message: 'chore: auto-update [skip ci]'
 
       - name: Upload OTS Proofs
         uses: actions/upload-artifact@v4
         with:
-          name: hfd-janus-gate-doi-proofs
-          path: .hfd/provenance/
+          name: hfid-janus-gate-doi-proofs
+          path: .hfid/provenance/
           retention-days: 90
           if-no-files-found: error
