@@ -1,16 +1,11 @@
-
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
+# GNO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
+# SLSA Level: 1
 
 name: "CD: H-FID Sovereign Mesh Sync"
 concurrency:
@@ -19,7 +14,7 @@ concurrency:
 
 on:
   schedule:
-    - cron: '0 6 * * 1' # Weekly Monday 6am UTC
+    - cron: '0 6 * * 1'
   workflow_dispatch:
     inputs:
       target_node:
@@ -37,8 +32,9 @@ on:
           - bidirectional
 
 permissions:
-  contents: write # To update mesh-manifest.json
-  id-token: write # For SLSA attestation
+  contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   mesh-sync:
@@ -56,7 +52,8 @@ jobs:
       - name: Load H-FID Mesh Config
         id: mesh
         run: |
-          if [! -f "hfid-mesh.json" ]; then
+          set -e
+          if [ ! -f hfid-mesh.json ]; then
             echo "Creating default mesh config"
             cat > hfid-mesh.json << 'EOF'
             {
@@ -67,65 +64,53 @@ jobs:
             }
           EOF
           fi
-          
-          # For now, hardcode your mesh. Replace with real nodes later.
-          jq '.mesh_nodes = ["example-hfid-node.github.io"]' hfid-mesh.json > tmp.json && mv tmp.json hfid-mesh.json
-          
-          echo "mesh_config<<EOF" >> $GITHUB_OUTPUT
-          cat hfid-mesh.json >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "mesh_config=$(cat hfid-mesh.json | jq -c .)" >> $GITHUB_OUTPUT
 
       - name: Generate H-FID Mesh Attestation
         run: |
+          set -e
           mkdir -p .hfid/mesh
-          cat >.hfid/mesh/manifest.json << EOF
+          cat > .hfid/mesh/manifest.json << EOF
           {
             "workflow": "mesh-sync",
             "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
             "sovereign_node": "jhammerz.github.io",
             "mode": "${{ github.event.inputs.mode || 'outbound' }}",
-            "geo_rank": "ONE_OF_ONE",
+            "gno_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
           EOF
 
       - name: Outbound Mesh Ping
-        if: github.event.inputs.mode!= 'inbound'
+        if: ${{ github.event.inputs.mode != 'inbound' }}
         run: |
           set -e
           MESH_NODES=$(jq -r '.mesh_nodes[]' hfid-mesh.json)
-          
           for NODE in $MESH_NODES; do
             echo "Pinging sovereign node: $NODE"
-            
-            # Check if node is H-FID compliant
-            H_FID_CHECK=$(curl -sfL "https://$NODE/.well-known/hfid/manifest.json" || echo "null")
-            
-            if [ "$H_FID_CHECK"!= "null" ]; then
+            H_FID_CHECK=$(curl -sL "https://$NODE/.well-known/hfid/manifest.json" || echo "null")
+            if [ "$H_FID_CHECK" != "null" ]; then
               AUTHOR=$(echo "$H_FID_CHECK" | jq -r '.sovereign_author // "unknown"')
               VERSION=$(echo "$H_FID_CHECK" | jq -r '.hfid_version // "unknown"')
-              echo "✅ Node $NODE: H-FID $VERSION | Author: $AUTHOR"
-              
-              # Ping their mesh endpoint to register citation
-              curl -sfL -X POST "https://$NODE/api/hfid/mesh/ping" \
+              echo "Node $NODE: H-FID $VERSION Author: $AUTHOR"
+              curl -sL -X POST "https://$NODE/api/hfid/mesh/ping" \
                 -H "Content-Type: application/json" \
-                -d "{\"source\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"geo_rank\":\"ONE_OF_ONE\"}" \
-                || echo "⚠️ Node $NODE has no mesh API"
+                -d "{\"source\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"gno_rank\":\"ONE_OF_ONE\"}" || echo "Node $NODE has no mesh API"
             else
-              echo "❌ Node $NODE: Not H-FID compliant"
+              echo "Node $NODE: Not H-FID compliant"
             fi
           done
 
       - name: Update Mesh Manifest
         run: |
-          jq --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" '.last_sync = $ts' hfid-mesh.json > tmp.json && mv tmp.json hfid-mesh.json
-          
-          # Add self to ai-context.json for inbound discovery
-          if [ -f "ai-context.json" ]; then
-            jq '.mesh_nodes = ["jhammerz.github.io"]' ai-context.json > tmp.json && mv tmp.json ai-context.json
+          set -e
+          jq --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" '.last_sync = $ts' hfid-mesh.json > tmp.json
+          mv tmp.json hfid-mesh.json
+          if [ -f ".well-known/hfid/manifest.json" ]; then
+            cat .well-known/hfid/manifest.json
           fi
 
       - name: Attest Mesh Sync
@@ -135,14 +120,14 @@ jobs:
 
       - name: Commit Mesh Updates
         run: |
-          git config --local user.name 'github-actions[bot]'
-          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-          
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: auto-update [skip ci]"
-          fi
+          commit_message: "chore: mesh sync [skip ci]"
+          file_pattern: "hfid-mesh.json .hfid/mesh/*"
 
       - name: Upload Mesh Attestation
         if: always()
