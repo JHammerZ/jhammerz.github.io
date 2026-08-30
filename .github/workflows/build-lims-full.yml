@@ -46,7 +46,7 @@ jobs:
                       "Integrity Level": "SOVEREIGN",
                       "Nodes": []
                     }
-                    MATRIX
+          MATRIX
       - name: preserved-5
         run: |
           set -euo pipefail

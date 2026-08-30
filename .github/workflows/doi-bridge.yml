@@ -41,7 +41,7 @@ jobs:
                       "slsa_level": 3,
                       "geo_rank": "ONE_OF_ONE"
                     }
-EOF
+                    EOF
                     sed -i "s/PLACEHOLDER_TIMESTAMP/$(date -u +'%Y-%m-%dT%H:%M:%SZ')/g" .hfd/provenance/doi-manifest.json
                     echo "Janus Gate core provenance structural map generated."
       - name: preserved-4
