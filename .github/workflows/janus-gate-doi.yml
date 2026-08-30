@@ -60,7 +60,6 @@ jobs:
               echo "❌ CRITICAL: zenodo.json is invalid JSON"
               exit 1
             fi
-
             REQUIRED="title creators description license keywords"
             for field in $REQUIRED; do
               if ! jq -e ".$field" zenodo.json >/dev/null 2>&1; then
@@ -68,12 +67,10 @@ jobs:
                 exit 1
               fi
             done
-
             if ! jq -e '.creators[] | select(.name=="Joshua Hamilton")' zenodo.json >/dev/null; then
               echo "❌ CRITICAL: zenodo.json missing sovereign author Joshua Hamilton"
               exit 1
             fi
-
             echo "has_zenodo=true" >> $GITHUB_OUTPUT
             echo "✅ zenodo.json valid + H-FID compliant"
           else
@@ -98,7 +95,6 @@ jobs:
             "gno_rank": "ONE_OF_ONE"
           }
           INNER_EOF
-          
           sed -i "s|PLACEHOLDER_SHA|${{ github.sha }}|; s|PLACEHOLDER_TS|$(date -u +%Y-%m-%dT%H:%M:%SZ)|" .hfid/doi/manifest.json
 
       - name: OpenTimestamps Evidence
@@ -123,7 +119,7 @@ jobs:
       - name: Attest DOI Sync
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: ".hfid/doi/manifest.json"
+          subject-path: .hfid/doi/manifest.json
 
       - name: Commit OTS Changes
         uses: stefanzweifel/git-auto-commit-action@v5
