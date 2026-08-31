@@ -99,7 +99,6 @@ EOF
           subject-path: .hfid/baseline/sovereign-manifest.json
           github-token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
-      # Fix: Fully pure bash git-auto-commit-action replacement context sequence
       - name: Execute State Synchronization
         run: |
           set -e
@@ -110,11 +109,11 @@ EOF
           git add .hfid/baseline/ .hfid/indexing/ lines-full.txt
           
           if ! git diff --staged --quiet; then
-            echo "🚀 Staging tracked paths cleanly... committing ledger state adjustments."
+            echo "🚀 Committing ledger state adjustments..."
             git commit -m "chore: auto-update [skip ci]"
             git push origin main || (git pull --rebase origin main && git push origin main)
           else
-            echo "No pipeline modifications detected. Skipping execution push."
+            echo "No pipeline modifications detected. Skipping push."
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
