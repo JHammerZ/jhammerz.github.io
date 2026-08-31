@@ -58,8 +58,7 @@ jobs:
             MSG_INPUT="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
           fi
 
-          # Fix: Swapped from unquoted unspaced << EOF to a single-quoted 'EOF' literal token string format
-          # This forces bash to read the internal JSON body block exactly as-is without evaluating braces
+          # Fix: Clear redirection spacing token boundaries completely on line 63 to isolate variables cleanly
           cat > .hfid/heo-bridge/payload.json << 'EOF'
 {
   "hfid_version": "v1.2",
@@ -90,12 +89,12 @@ EOF
              .hfid/heo-bridge/payload.json > "$TMP_JSON"
           mv "$TMP_JSON" .hfid/heo-bridge/payload.json
 
-          # Fix: Standard POSIX space parameters used for all extraction commands
+          # Standard POSIX space parameters used for all extraction commands
           cat .hfid/heo-bridge/payload.json
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           
-          # Fix: Solved 'jq: Unknown option -c.' error by placing a space before the trailing dot parameter
+          # Pass minified ledger context block safely back to the output pipeline streams
           echo "json<<EOF" >> $GITHUB_OUTPUT
           cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
