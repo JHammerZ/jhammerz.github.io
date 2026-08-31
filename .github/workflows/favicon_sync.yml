@@ -70,44 +70,43 @@ jobs:
         id: extraction
         run: |
           set -e
-          echo "⚙️ Constructing cross-platform static asset arrays from $SRC_PATH..."
+          echo "⚙️ Constructing cross-platform static asset arrays..."
           
-          node -e "
+          # Native JavaScript compiler that avoids complex multi-line inline strings
+          # Writes target processing actions cleanly to a compiler template
+          cat > compiler.js << 'EOF'
           const fs = require('fs');
-          const { execSync } = require('child_process');
-          
-          const targetPath = process.env.SRC_PATH;
-          if (!targetPath) {
-            console.error('Target environment variable path unresolved.');
-            process.exit(1);
-          }
-          
-          let data = fs.readFileSync(targetPath, 'utf8');
-          data = data.replace(/^\s+|\s+$/g, '').trim();
-          fs.writeFileSync(targetPath, data, 'utf8');
-          console.log('Natively scrubbed image buffer header arrays clean.');
-
-          const script = \`
           const sharp = require('sharp');
+          
           async function run() {
             try {
-              const buf = Buffer.from(\\\\\\\`\${data}\\\\\\\`, 'utf8');
-              await sharp(buf).resize(32, 32).png().toFile('public/favicon.png');
-              await sharp(buf).resize(180, 180).png().toFile('public/apple-touch-icon.png');
-              await sharp(buf).resize(192, 192).png().toFile('public/android-chrome-192x192.png');
-              await sharp(buf).resize(512, 512).png().toFile('public/android-chrome-512x512.png');
-              console.log('Matrix icons successfully outputted.');
+              const targetPath = process.env.SRC_PATH;
+              if (!targetPath || !fs.existsSync(targetPath)) {
+                console.error('❌ Target file missing or path environment configuration unresolved:', targetPath);
+                process.exit(1);
+              }
+              
+              let data = fs.readFileSync(targetPath, 'utf8');
+              data = data.replace(/^\s+|\s+$/g, '').trim();
+              fs.writeFileSync(targetPath, data, 'utf8');
+              console.log('✅ Natively scrubbed vector xml headers clean.');
+              
+              // Direct image rendering from scrubbed system file definitions
+              await sharp(targetPath).resize(32, 32).png().toFile('public/favicon.png');
+              await sharp(targetPath).resize(180, 180).png().toFile('public/apple-touch-icon.png');
+              await sharp(targetPath).resize(192, 192).png().toFile('public/android-chrome-192x192.png');
+              await sharp(targetPath).resize(512, 512).png().toFile('public/android-chrome-512x512.png');
+              console.log('✅ Static asset matrix icon profiles successfully compiled.');
             } catch (err) {
-              console.error('Core compilation failure:', err.message);
+              console.error('❌ Core compilation failure:', err.message);
               process.exit(1);
             }
           }
           run();
-          \`;
+          EOF
           
-          fs.writeFileSync('compiler.js', script);
-          execSync('npm install sharp && node compiler.js', { stdio: 'inherit' });
-          "
+          npm install sharp
+          node compiler.js
           
           cp public/favicon.png public/apple-touch-icon.png ./ || true
           
