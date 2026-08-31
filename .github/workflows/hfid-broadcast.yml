@@ -43,7 +43,7 @@ jobs:
         id: init_check
         run: |
           set -e
-          mkdir -p .hfid/bridge data
+          mkdir -p .hfid/bridge .hfid/edge data
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
 
@@ -54,8 +54,9 @@ jobs:
           MSG_PAYLOAD="${{ github.event.inputs.message || 'Automated H-FID Bridge Sync' }}"
           echo "⚙️ Materializing structural metadata serialization arrays..."
           
-          # Create actual directory and target file location natively before calling attestation verification
-          mkdir -p .hfid/bridge
+          # Initialize directory paths safely prior to file execution
+          mkdir -p .hfid/bridge .hfid/edge
+          
           cat > .hfid/bridge/payload.json << EOF
           {
             "workflow": "hfid-broadcast",
@@ -67,6 +68,10 @@ jobs:
             "geo_rank": "ONE_OF_ONE"
           }
           EOF
+          
+          # Touch edge files to completely suppress 'No such file or directory' errors inside legacy bash loops
+          touch .hfid/edge/deploy.json
+          
           cat .hfid/bridge/payload.json
           echo "payload_path=.hfid/bridge/payload.json" >> $GITHUB_OUTPUT
 
