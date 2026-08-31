@@ -46,7 +46,6 @@ jobs:
 
       - name: Install Distribution Tools
         run: |
-          # Fix: Update package names to their correct npm scopes and drop invalid version configurations
           npm install -g ipfs-car @web3-storage/w3cli @ardrive/ardrive-cli || true
 
       - name: Read H-FID Chain
@@ -84,15 +83,18 @@ jobs:
           cat .hfid/distribution/manifest.json
           echo "manifest_path=.hfid/distribution/manifest.json" >> $GITHUB_OUTPUT
 
+      # Fix: Add an absolute empty-string fallback checker array to force execution on branch pushes
+      # Steps now run if target is explicitly 'ipfs', 'all', OR empty (default push state)
       - name: Distribute to IPFS
-        if: github.event.inputs.target == 'ipfs' || github.event.inputs.target == 'all'
+        if: github.event.inputs.target == 'ipfs' || github.event.inputs.target == 'all' || github.event.inputs.target == ''
         run: |
           echo "🚀 Simulating decentralized storage broadcast layers..."
           mkdir -p .hfid/distribution
           echo "IPFS broadcast initialized at $(date)" >> .hfid/distribution/audit.log
 
+      # Fix: Add an absolute empty-string fallback checker array to force execution on branch pushes
       - name: Distribute to Arweave
-        if: github.event.inputs.target == 'arweave' || github.event.inputs.target == 'all'
+        if: github.event.inputs.target == 'arweave' || github.event.inputs.target == 'all' || github.event.inputs.target == ''
         run: |
           echo "🚀 Simulating permanent storage serialization arrays..."
           mkdir -p .hfid/distribution
