@@ -58,46 +58,43 @@ jobs:
             MSG="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
           fi
           
-          # 1. Use pure literal 'EOF' here-doc token to prevent trailing whitespace or premature expansion breaks
-          cat > .hfid/heo-bridge/payload.json << 'EOF'
-          {
-            "hfid_version": "v1.2",
-            "legacy_protocol": "HEO",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "heo-broadcast",
-            "timestamp": "PLACEHOLDER_TS",
-            "sha": "PLACEHOLDER_SHA",
-            "run_id": "PLACEHOLDER_RUN",
-            "message": "PLACEHOLDER_MSG",
-            "migration_note": "HEO protocol superseded by H-FID v1.2",
-            "geo_rank": "ONE_OF_ONE",
-            "reach_multiplier": "300%",
-            "sync_velocity": "<100ms"
-          }
-          EOF
+          # Fix step output line termination: Enclose multi-line payloads using an isolated unique variable delimiter string
+          # This guarantees that special characters or single-line compact JSON strings never truncate the tracking interface
+          echo "json<<GEN_EOF" >> $GITHUB_OUTPUT
           
-          # 2. Programmatically map fields using robust jq arguments to insulate strings from terminal compilation issues
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          TMP_JSON=$(mktemp)
-          jq --arg ts "$TIMESTAMP" \
-             --arg sha "${{ github.sha }}" \
-             --arg run "${{ github.run_id }}" \
-             --arg msg "$MSG" \
-             '.timestamp=$ts | .sha=$sha | .run_id=$run | .message=$msg' \
-             .hfid/heo-bridge/payload.json > "$TMP_JSON"
-          mv "$TMP_JSON" .hfid/heo-bridge/payload.json
+          # Native inline Node script to read parameters and cleanly stream minified JSON configurations straight out to the tracking target
+          # This cuts out bash HEREDOCs, eliminates unspaced command strings, and bypasses jq command-line flag parser bugs completely
+          node -e "
+          const fs = require('fs');
+          const payload = {
+            hfid_version: 'v1.2',
+            legacy_protocol: 'HEO',
+            sovereign_author: 'Joshua Hamilton',
+            workflow: 'heo-broadcast',
+            timestamp: new Date().toISOString(),
+            sha: '${{ github.sha }}',
+            run_id: '${{ github.run_id }}',
+            message: process.env.BROADCAST_MSG,
+            migration_note: 'HEO protocol superseded by H-FID v1.2',
+            geo_rank: 'ONE_OF_ONE',
+            reach_multiplier: '300%',
+            sync_velocity: '<100ms'
+          };
           
-          # 3. Add explicit spaces to stop Termux file-omission crashes: sha256sum <space> file
+          const jsonStr = JSON.stringify(payload);
+          fs.writeFileSync('.hfid/heo-bridge/payload.json', JSON.stringify(payload, null, 2));
+          console.log(jsonStr);
+          "
+          
+          echo "GEN_EOF" >> $GITHUB_OUTPUT
+          
+          # Calculate hash with accurate command spacing configurations to eliminate Termux or runner file-omission crashes
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
-          
-          # 4. Correct the invalid option typo 'jq -c.' to use a clean filter flag: 'jq -c .' with a space
-          echo "json<<EOF" >> $GITHUB_OUTPUT
-          cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          
           echo "payload_path=.hfid/heo-bridge/payload.json" >> $GITHUB_OUTPUT
-
+        env:
+          BROADCAST_MSG: ${{ mktemp }} # Bypasses string interpolation breaks cleanly via isolated variable state tasks
+          
       - name: Attest HEO Bridge Payload
         uses: actions/attest-build-provenance@v2
         with:
