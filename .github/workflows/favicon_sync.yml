@@ -51,8 +51,8 @@ jobs:
           fi
 
       - name: Validate Source Asset Architecture
-         id: source_check
-         run: |
+        id: source_check
+        run: |
           if [ -f "assets/favicon.svg" ]; then
             echo "source_type=svg" >> $GITHUB_OUTPUT
             echo "source_path=assets/favicon.svg" >> $GITHUB_OUTPUT
