@@ -83,22 +83,49 @@ jobs:
           cat .hfid/distribution/manifest.json
           echo "manifest_path=.hfid/distribution/manifest.json" >> $GITHUB_OUTPUT
 
-      # Fix: Add an absolute empty-string fallback checker array to force execution on branch pushes
-      # Steps now run if target is explicitly 'ipfs', 'all', OR empty (default push state)
       - name: Distribute to IPFS
         if: github.event.inputs.target == 'ipfs' || github.event.inputs.target == 'all' || github.event.inputs.target == ''
+        env:
+          W3_SPACE: ${{ secrets.W3_SPACE }}
+          W3_PRINCIPAL: ${{ secrets.W3_PRINCIPAL }}
         run: |
-          echo "🚀 Simulating decentralized storage broadcast layers..."
+          set -e
           mkdir -p .hfid/distribution
-          echo "IPFS broadcast initialized at $(date)" >> .hfid/distribution/audit.log
+          echo "📦 Packaging H-FID asset distribution array into Content Archive (CAR)..."
+          npx ipfs-car pack .hfid/distribution/manifest.json --output .hfid/distribution/payload.car
+          
+          if [ -n "$W3_SPACE" ] && [ -n "$W3_PRINCIPAL" ]; then
+            echo "🚀 Initiating direct upstream broadcast to IPFS storage network via w3cli..."
+            # Authenticate context and push out the verified archive
+            echo "$W3_PRINCIPAL" | w3 key import || true
+            w3 space use "$W3_SPACE" || true
+            CID=$(w3 up .hfid/distribution/payload.car | tail -n1 | awk '{print $2}')
+            echo "ipfs_cid=$CID" >> $GITHUB_ENV
+            echo "IPFS_BROADCAST_SUCCESS: ipfs://$CID" >> .hfid/distribution/audit.log
+          else
+            echo "⚠️ W3_SPACE/W3_PRINCIPAL secrets missing. Saving target payload asset locally."
+            echo "IPFS_LOCAL_STAGED: true" >> .hfid/distribution/audit.log
+          fi
 
-      # Fix: Add an absolute empty-string fallback checker array to force execution on branch pushes
       - name: Distribute to Arweave
         if: github.event.inputs.target == 'arweave' || github.event.inputs.target == 'all' || github.event.inputs.target == ''
+        env:
+          ARWEAVE_WALLET: ${{ secrets.ARWEAVE_WALLET_KEY }}
         run: |
-          echo "🚀 Simulating permanent storage serialization arrays..."
+          set -e
           mkdir -p .hfid/distribution
-          echo "Arweave broadcast initialized at $(date)" >> .hfid/distribution/audit.log
+          
+          if [ -n "$ARWEAVE_WALLET" ]; then
+            echo "🚀 Executing structural content serialization into decentralized Arweave permaweb..."
+            echo "$ARWEAVE_WALLET" > wallet.json
+            TX_ID=$(ardrive upload-file --wallet wallet.json --file .hfid/distribution/manifest.json | grep "Transaction ID" | awk '{print $3}')
+            rm -f wallet.json
+            echo "arweave_tx=$TX_ID" >> $GITHUB_ENV
+            echo "ARWEAVE_BROADCAST_SUCCESS: ar://$TX_ID" >> .hfid/distribution/audit.log
+          else
+            echo "⚠️ ARWEAVE_WALLET_KEY secret missing. Falling back to local state serialization logs."
+            echo "ARWEAVE_LOCAL_STAGED: true" >> .hfid/distribution/audit.log
+          fi
 
       - name: Attest Distribution
         uses: actions/attest-build-provenance@v2
