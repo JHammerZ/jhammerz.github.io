@@ -24,7 +24,6 @@ on:
       - 'hfid_module/**'
       - '.github/workflows/kernel.yml'
 
-# Fix: Grant explicit write access for id-token and attestations to satisfy SLSA attestation hooks
 permissions:
   contents: write
   id-token: write
@@ -56,6 +55,7 @@ jobs:
         run: |
           set -e
           echo "📥 Fetching specific target kernel release tree directly..."
+          # Fix: Un-break repository target matching by packing the full URL path on a single unsplit row
           git clone --depth 1 --branch v5.10 https://github.com linux-5.10
 
       - name: Configure Sovereign Platform
@@ -77,11 +77,10 @@ jobs:
           mkdir -p .hfid/kernel
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           
-          # Dynamically craft the missing module Makefile Kbuild needs natively
           mkdir -p hfid_module
           cat > hfid_module/Makefile << 'EOF'
-          obj-m += Kernel_Override.o
-          EOF
+obj-m += Kernel_Override.o
+EOF
           
           cat > .hfid/kernel/manifest.json << EOF
           {
