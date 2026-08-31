@@ -58,17 +58,18 @@ jobs:
             MSG_INPUT="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
           fi
 
-          # Removed all placeholders. Hardcoded direct live authority data records cleanly.
-          cat > .hfid/heo-bridge/payload.json << EOF
+          # Fix: Swapped from unquoted unspaced << EOF to a single-quoted 'EOF' literal token string format
+          # This forces bash to read the internal JSON body block exactly as-is without evaluating braces
+          cat > .hfid/heo-bridge/payload.json << 'EOF'
 {
   "hfid_version": "v1.2",
   "legacy_protocol": "HEO",
   "sovereign_author": "Joshua Hamilton",
   "workflow": "heo-broadcast",
-  "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-  "sha": "${{ github.sha }}",
-  "run_id": "${{ github.run_id }}",
-  "message": "$MSG_INPUT",
+  "timestamp": "PLACEHOLDER_TS",
+  "sha": "PLACEHOLDER_SHA",
+  "run_id": "PLACEHOLDER_RUN",
+  "message": "PLACEHOLDER_MSG",
   "migration_note": "HEO protocol superseded by H-FID v1.2",
   "geo_rank": "ONE_OF_ONE",
   "gpg_rank": "ONE_OF_ONE",
@@ -78,12 +79,23 @@ jobs:
 }
 EOF
 
-          # Verify structural properties and generate absolute file parameters
+          # Programmatically patch placeholders with pure jq filters to securely append live parameters
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          TMP_JSON=$(mktemp)
+          jq --arg ts "$TIMESTAMP" \
+             --arg sha "${{ github.sha }}" \
+             --arg run "${{ github.run_id }}" \
+             --arg msg "$MSG_INPUT" \
+             '.timestamp=$ts | .sha=$sha | .run_id=$run | .message=$msg' \
+             .hfid/heo-bridge/payload.json > "$TMP_JSON"
+          mv "$TMP_JSON" .hfid/heo-bridge/payload.json
+
+          # Fix: Standard POSIX space parameters used for all extraction commands
           cat .hfid/heo-bridge/payload.json
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           
-          # Pass minified ledger context block safely back to the output pipeline streams
+          # Fix: Solved 'jq: Unknown option -c.' error by placing a space before the trailing dot parameter
           echo "json<<EOF" >> $GITHUB_OUTPUT
           cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
