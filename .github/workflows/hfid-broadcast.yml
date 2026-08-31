@@ -4,7 +4,7 @@
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
 # SLSA Level: 3
 
-name: "Broadcast: H-FID Matrix Bridge"
+name: "CD: H-FID HEO Bridge"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -31,6 +31,7 @@ permissions:
 
 jobs:
   hfid_bridge:
+    name: hfid-bridge
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase Tree
@@ -50,10 +51,11 @@ jobs:
         id: payload_gen
         run: |
           set -e
-          # Clean execution block tracking variables safely inside the run matrix block step
           MSG_PAYLOAD="${{ github.event.inputs.message || 'Automated H-FID Bridge Sync' }}"
           echo "⚙️ Materializing structural metadata serialization arrays..."
           
+          # Create actual directory and target file location natively before calling attestation verification
+          mkdir -p .hfid/bridge
           cat > .hfid/bridge/payload.json << EOF
           {
             "workflow": "hfid-broadcast",
@@ -69,9 +71,9 @@ jobs:
           echo "payload_path=.hfid/bridge/payload.json" >> $GITHUB_OUTPUT
 
       - name: Attest Broadcast Artifact Provenance
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v2
         with:
-          subject-path: ${{ steps.payload_gen.outputs.payload_path }}
+          subject-path: .hfid/bridge/payload.json
 
       - name: Execute Remote Pipeline Synchronization
         run: |
@@ -80,7 +82,6 @@ jobs:
           git config --global user.name "Lysander-Bridge"
           git config --global user.email "omega@jhammerz.github.io"
           
-          # Fix fetch-first edge routing contentions
           git pull --rebase origin main || true
           git add .hfid/bridge/
           git diff --staged --quiet || git commit -m "chore: sync hfid payload ledger state parameters [skip ci]"
