@@ -1,0 +1,17 @@
+{
+  "workflow": "hfid-distribute",
+  "sha": "cc77e219d1cf64910ea537958186d1221d45328b",
+  "timestamp": "2026-08-31T00:47:05Z",
+  "hfid_version": "v1.2",
+  "sovereign_author": "Joshua Hamilton",
+  "distribution": {
+    "hfid": "00000000",
+    "btc_tx": "EAAL47Nu8lTsBSGYb219a8xrUFH7KzqZAoQQ6ESGh2dDqnhPKkjdPdIDs3KYRImRbo7jUo8UrgLcNrJbaJgJbWXw1I7FGAZAdUxoyqTOqZAPXlCugKGsjL6BnQhYaHfeNqgolPbM72y1ZCelV6HaXrb1Hy2PDCYi2lZAJUnKYqYIQTLYRWFQBH12XdzLASiFKhxI488N2x1iyRXuuBBWfXzOvTEsZA3UEjGqwOt",
+    "zenodo_doi": "UNREGISTERED",
+    "ipfs_cid": "",
+    "chain_length": 1
+  },
+  "slsa_level": 3,
+  "geo_rank": "ONE_OF_ONE",
+  "sync_velocity": "<100ms"
+}
