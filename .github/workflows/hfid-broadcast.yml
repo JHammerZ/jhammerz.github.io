@@ -49,53 +49,55 @@ jobs:
         id: payload_gen
         run: |
           set -e
+          mkdir -p .hfid/heo-bridge
           
-          # Complete abstraction layer using a safe native Node module execution block.
-          # Bypasses bash here-documents, entirely skips jq CLI syntax flags, and structures the multiline output parameters natively.
-          node -e "
-          const fs = require('fs');
-          const crypto = require('crypto');
+          # 1. Pure bash declaration using standard workspace variables without internal command expansions
+          MSG_INPUT="${{ github.event.inputs.message }}"
+          if [ -z "$MSG_INPUT" ]; then
+            MSG_INPUT="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
+          fi
+
+          # 2. Write direct static template definitions on disk
+          cat > .hfid/heo-bridge/payload.json << 'EOF'
+{
+  "hfid_version": "v1.2",
+  "legacy_protocol": "HEO",
+  "sovereign_author": "Joshua Hamilton",
+  "workflow": "heo-broadcast",
+  "timestamp": "PLACEHOLDER_TS",
+  "sha": "PLACEHOLDER_SHA",
+  "run_id": "PLACEHOLDER_RUN",
+  "message": "PLACEHOLDER_MSG",
+  "migration_note": "HEO protocol superseded by H-FID v1.2",
+  "geo_rank": "ONE_OF_ONE",
+  "reach_multiplier": "300%",
+  "sync_velocity": "<100ms"
+}
+EOF
+
+          # 3. Patch fields using robust jq options to isolate spaces and prevent delimiter errors
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          TMP_JSON=$(mktemp)
           
-          const payload = {
-            hfid_version: 'v1.2',
-            legacy_protocol: 'HEO',
-            sovereign_author: 'Joshua Hamilton',
-            workflow: 'heo-broadcast',
-            timestamp: new Date().toISOString(),
-            sha: process.env.GH_SHA,
-            run_id: process.env.GH_RUN_ID,
-            message: process.env.INPUT_MSG || 'Automated H-FID Bridge Sync',
-            migration_note: 'HEO protocol superseded by H-FID v1.2',
-            geo_rank: 'ONE_OF_ONE',
-            reach_multiplier: '300%',
-            sync_velocity: '<100ms'
-          };
+          # Fix: Using standard jq filtering arguments paired with proper spaces
+          jq --arg ts "$TIMESTAMP" \
+             --arg sha "${{ github.sha }}" \
+             --arg run "${{ github.run_id }}" \
+             --arg msg "$MSG_INPUT" \
+             '.timestamp=$ts | .sha=$sha | .run_id=$run | .message=$msg' \
+             .hfid/heo-bridge/payload.json > "$TMP_JSON"
+          mv "$TMP_JSON" .hfid/heo-bridge/payload.json
+
+          # Fix: Pure space separator isolating command flags from path parameters
+          HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
           
-          const outputData = JSON.stringify(payload, null, 2);
-          const minifiedData = JSON.stringify(payload);
+          # Fix: Solved 'jq: Unknown option -c.' by placing an isolated whitespace space configuration before the target dot parameter
+          echo "json<<EOF" >> $GITHUB_OUTPUT
+          cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           
-          // 1. Create directory and materialize files on disk
-          fs.mkdirSync('.hfid/heo-bridge', { recursive: true });
-          fs.writeFileSync('.hfid/heo-bridge/payload.json', outputData, 'utf8');
-          
-          // 2. Generate file cryptographic hash metrics safely in memory
-          const fileHash = crypto.createHash('sha256').update(outputData).digest('hex');
-          
-          // 3. Programmatically compile multi-line output maps to prevent 'Matching delimiter not found EOF' errors completely
-          const outputBuffer = [];
-          outputBuffer.push('hash=' + fileHash);
-          outputBuffer.push('payload_path=.hfid/heo-bridge/payload.json');
-          outputBuffer.push('json<<GEN_EOF');
-          outputBuffer.push(minifiedData);
-          outputBuffer.push('GEN_EOF');
-          
-          fs.appendFileSync(process.env.GITHUB_OUTPUT, outputBuffer.join('\n') + '\n', 'utf8');
-          console.log('✅ Manifest and multi-line output streams compiled successfully.');
-          "
-        env:
-          GH_SHA: ${{ github.sha }}
-          GH_RUN_ID: ${{ github.run_id }}
-          INPUT_MSG: ${{ github.event.inputs.message }}
+          echo "payload_path=.hfid/heo-bridge/payload.json" >> $GITHUB_OUTPUT
 
       - name: Attest HEO Bridge Payload
         uses: actions/attest-build-provenance@v2
