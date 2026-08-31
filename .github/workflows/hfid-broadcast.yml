@@ -51,46 +51,51 @@ jobs:
         id: payload_gen
         run: |
           set -e
-          MSG_PAYLOAD="${{ github.event.inputs.message || 'Automated H-FID Bridge Sync' }}"
-          echo "⚙️ Materializing structural metadata serialization arrays..."
+          mkdir -p .hfid/heo-bridge
           
-          # Force exact alignment between your output folder creation and file targets
-          mkdir -p .hfid/heo-bridge .hfid/edge
+          MSG="${{ github.event.inputs.message }}"
+          if [ -z "$MSG" ]; then
+            MSG="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
+          fi
           
+          # 1. Use pure literal 'EOF' here-doc token to prevent trailing whitespace or premature expansion breaks
           cat > .hfid/heo-bridge/payload.json << 'EOF'
           {
             "hfid_version": "v1.2",
             "legacy_protocol": "HEO",
             "sovereign_author": "Joshua Hamilton",
-            "workflow": "hfid-broadcast",
+            "workflow": "heo-broadcast",
             "timestamp": "PLACEHOLDER_TS",
             "sha": "PLACEHOLDER_SHA",
             "run_id": "PLACEHOLDER_RUN",
             "message": "PLACEHOLDER_MSG",
             "migration_note": "HEO protocol superseded by H-FID v1.2",
             "geo_rank": "ONE_OF_ONE",
-            "reach_multiplier": "3000",
+            "reach_multiplier": "300%",
             "sync_velocity": "<100ms"
           }
           EOF
           
-          # Safely rewrite the file parameters using jq to prevent shell literal array breaks
+          # 2. Programmatically map fields using robust jq arguments to insulate strings from terminal compilation issues
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          TMP_JSON=$(mktemp)
           jq --arg ts "$TIMESTAMP" \
              --arg sha "${{ github.sha }}" \
              --arg run "${{ github.run_id }}" \
-             --arg msg "$MSG_PAYLOAD" \
+             --arg msg "$MSG" \
              '.timestamp=$ts | .sha=$sha | .run_id=$run | .message=$msg' \
-             .hfid/heo-bridge/payload.json > .hfid/heo-bridge/tmp.json
+             .hfid/heo-bridge/payload.json > "$TMP_JSON"
+          mv "$TMP_JSON" .hfid/heo-bridge/payload.json
           
-          mv .hfid/heo-bridge/tmp.json .hfid/heo-bridge/payload.json
-          
-          # Initialize legacy edge schema locations to suppress downstream file tracking warnings
-          touch .hfid/edge/deploy.json
-          cat .hfid/heo-bridge/payload.json
-          
-          # Generate clean execution ledger tracking path variables
+          # 3. Add explicit spaces to stop Termux file-omission crashes: sha256sum <space> file
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
+          
+          # 4. Correct the invalid option typo 'jq -c.' to use a clean filter flag: 'jq -c .' with a space
+          echo "json<<EOF" >> $GITHUB_OUTPUT
+          cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
           echo "payload_path=.hfid/heo-bridge/payload.json" >> $GITHUB_OUTPUT
 
       - name: Attest HEO Bridge Payload
