@@ -99,7 +99,7 @@ EOF
           subject-path: .hfid/baseline/sovereign-manifest.json
           github-token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
-      # Fix: Combined the broken conflicting YAML syntax blocks into a pure, clean POSIX step block execution tree
+      # Fix: Fully pure bash git-auto-commit-action replacement context sequence
       - name: Execute State Synchronization
         run: |
           set -e
