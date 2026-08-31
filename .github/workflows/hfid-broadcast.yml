@@ -54,19 +54,19 @@ jobs:
           MSG_PAYLOAD="${{ github.event.inputs.message || 'Automated H-FID Bridge Sync' }}"
           echo "⚙️ Materializing structural metadata serialization arrays..."
           
-          # Use the exact file directory layout path (.hfid/heo-bridge) expected by your downstream tasks
+          # Force exact alignment between your output folder creation and file targets
           mkdir -p .hfid/heo-bridge .hfid/edge
           
-          cat > .hfid/heo-bridge/payload.json << EOF
+          cat > .hfid/heo-bridge/payload.json << 'EOF'
           {
             "hfid_version": "v1.2",
             "legacy_protocol": "HEO",
             "sovereign_author": "Joshua Hamilton",
             "workflow": "hfid-broadcast",
-            "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
-            "message": "$MSG_PAYLOAD",
+            "timestamp": "PLACEHOLDER_TS",
+            "sha": "PLACEHOLDER_SHA",
+            "run_id": "PLACEHOLDER_RUN",
+            "message": "PLACEHOLDER_MSG",
             "migration_note": "HEO protocol superseded by H-FID v1.2",
             "geo_rank": "ONE_OF_ONE",
             "reach_multiplier": "3000",
@@ -74,10 +74,21 @@ jobs:
           }
           EOF
           
+          # Safely rewrite the file parameters using jq to prevent shell literal array breaks
+          jq --arg ts "$TIMESTAMP" \
+             --arg sha "${{ github.sha }}" \
+             --arg run "${{ github.run_id }}" \
+             --arg msg "$MSG_PAYLOAD" \
+             '.timestamp=$ts | .sha=$sha | .run_id=$run | .message=$msg' \
+             .hfid/heo-bridge/payload.json > .hfid/heo-bridge/tmp.json
+          
+          mv .hfid/heo-bridge/tmp.json .hfid/heo-bridge/payload.json
+          
+          # Initialize legacy edge schema locations to suppress downstream file tracking warnings
           touch .hfid/edge/deploy.json
           cat .hfid/heo-bridge/payload.json
           
-          # Fix step output formatting by generating a clean SHA of the real file
+          # Generate clean execution ledger tracking path variables
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "payload_path=.hfid/heo-bridge/payload.json" >> $GITHUB_OUTPUT
