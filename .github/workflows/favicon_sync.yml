@@ -39,7 +39,7 @@ jobs:
 
       - name: Install Image Dependencies
         run: |
-          npm install -g sharp-cli || true
+          npm install sharp-cli -g || true
 
       - name: Fallback Resource Matrix Instantiation
         run: |
@@ -47,7 +47,6 @@ jobs:
           mkdir -p assets public
           if [ ! -f "assets/favicon.svg" ] && [ ! -f "assets/logo.png" ]; then
             echo "⚠️ Source assets absent. Materializing diagnostic matrix placeholder..."
-            # Strip out any possible hidden control characters or spaces from the generated file root
             echo '<svg xmlns="http://w3.org" viewBox="0 0 100 100" width="100" height="100"><circle cx="50" cy="50" r="48" fill="#1f2937" stroke="#3b82f6" stroke-width="4"/><text x="50" y="55" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="24" fill="#ffffff" font-weight="bold">H-FID</text></svg>' > assets/favicon.svg
           fi
 
@@ -73,21 +72,46 @@ jobs:
           SRC="${{ steps.source_check.outputs.source_path }}"
           echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
           
-          # Strip any unparsed leading formatting bugs from the input variable path using inline node script
+          # Use an atomic inline Node script to read, sanitise, and natively compile the vector formats
+          # This completely bypasses sharp-cli global/local syntax quirks by invoking the sharp API directly.
           node -e "
           const fs = require('fs');
-          let data = fs.readFileSync('$SRC', 'utf8');
-          if ('$SRC'.endsWith('.svg')) {
-            data = data.trim();
-            fs.writeFileSync('$SRC', data, 'utf8');
-          }
-          "
+          const { execSync } = require('child_process');
           
-          # Use standard sharp-cli global parameter configuration directly matching upstream package specifications
-          sharp --input "$SRC" --output public/favicon.png resize 32 32
-          sharp --input "$SRC" --output public/apple-touch-icon.png resize 180 180
-          sharp --input "$SRC" --output public/android-chrome-192x192.png resize 192 192
-          sharp --input "$SRC" --output public/android-chrome-512x512.png resize 512 512
+          // Clean input text
+          let rawData = fs.readFileSync('$SRC', 'utf8');
+          let cleanData = rawData.replace(/^\s+|\s+$/g, '').trim();
+          fs.writeFileSync('$SRC', cleanData, 'utf8');
+          console.log('Sanitised file content buffer.');
+
+          // Verify file presence
+          if (!fs.existsSync('$SRC') || fs.statSync('$SRC').size === 0) {
+            console.error('File missing or empty!');
+            process.exit(1);
+          }
+
+          // Build a minimalist native node template script to run compilation smoothly
+          const script = \`
+          const sharp = require('sharp');
+          async function run() {
+            try {
+              await sharp('$SRC').resize(32, 32).png().toFile('public/favicon.png');
+              await sharp('$SRC').resize(180, 180).png().toFile('public/apple-touch-icon.png');
+              await sharp('$SRC').resize(192, 192).png().toFile('public/android-chrome-192x192.png');
+              await sharp('$SRC').resize(512, 512).png().toFile('public/android-chrome-512x512.png');
+              console.log('Matrix generation successful.');
+            } catch(e) {
+              console.error(e);
+              process.exit(1);
+            }
+          }
+          run();
+          \`;
+          
+          fs.writeFileSync('compiler.js', script);
+          // Run the execution script using local node-modules layer
+          execSync('npm install sharp && node compiler.js', { stdio: 'inherit' });
+          "
           
           cp public/favicon.png public/apple-touch-icon.png ./ || true
           
