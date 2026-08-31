@@ -27,6 +27,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  attestations: write
 
 env:
   DEFAULT_BRANCH: main
@@ -38,7 +39,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -82,13 +83,14 @@ jobs:
         run: |
           set -e
           echo "📥 Extracting upstream static ledger state records..."
-          # Real core ledger serialization operations map directly into local file assets
           cp .hfid/llms/sovereign-manifest.json .hfid/indexing/latest-state.json || true
 
       - name: Attest Core Code Structure Ledgers
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: .hfid/llms/sovereign-manifest.json
+          # Fix: Authenticate API requests with your fine-grained PAT to authorize structural attestation persistence loops
+          github-token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Execute Remote State Synchronization
         run: |
