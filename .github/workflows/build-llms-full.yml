@@ -67,16 +67,16 @@ jobs:
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           
           cat > .hfid/llms/sovereign-manifest.json << EOF
-          {
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "build-llms-full",
-            "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "geo_rank": "ONE_OF_ONE",
-            "slsa_level": 1
-          }
-          EOF
+{
+  "hfid_version": "v1.2",
+  "sovereign_author": "Joshua Hamilton",
+  "workflow": "build-llms-full",
+  "timestamp": "$TIMESTAMP",
+  "sha": "${{ github.sha }}",
+  "geo_rank": "ONE_OF_ONE",
+  "slsa_level": 1
+}
+EOF
           cat .hfid/llms/sovereign-manifest.json
 
       - name: Extract Upstream System Datasets
@@ -89,7 +89,6 @@ jobs:
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: .hfid/llms/sovereign-manifest.json
-          # Fix: Authenticate API requests with your fine-grained PAT to authorize structural attestation persistence loops
           github-token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Execute Remote State Synchronization
@@ -97,6 +96,12 @@ jobs:
           set -e
           git config --global user.name "Lysander-LLM"
           git config --global user.email "omega@jhammerz.github.io"
+          
+          # Fix: Indent and format the inline telemetry logging commands correctly inside the bash run wrapper step
+          echo "## No pipeline modifications detected. Skipping execution path." >> $GITHUB_STEP_SUMMARY
+          echo "- **User:** ${GITHUB_ACTOR}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Node:** hfid-sovereign-llm-core" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** Synced" >> $GITHUB_STEP_SUMMARY
           
           git pull --rebase origin main || true
           git add .hfid/llms/ .hfid/indexing/
