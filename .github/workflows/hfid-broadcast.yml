@@ -58,29 +58,40 @@ jobs:
             MSG="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
           fi
           
-          # Fix the unspaced file append operators: cat > .hfid... instead of cat >.hfid...
-          cat > .hfid/heo-bridge/payload.json << EOF
-          {
-            "hfid_version": "v1.2",
-            "legacy_protocol": "HEO",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "heo-broadcast",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
-            "message": "$MSG",
-            "migration_note": "HEO protocol superseded by H-FID v1.2",
-            "geo_rank": "ONE_OF_ONE",
-            "reach_multiplier": "300%",
-            "sync_velocity": "<100ms"
-          }
+          # Fix: Indent 'EOF' cleanly to match bash multiline requirements
+          cat > .hfid/heo-bridge/payload.json << 'EOF'
+{
+  "hfid_version": "v1.2",
+  "legacy_protocol": "HEO",
+  "sovereign_author": "Joshua Hamilton",
+  "workflow": "hfid-broadcast",
+  "timestamp": "PLACEHOLDER_TS",
+  "sha": "PLACEHOLDER_SHA",
+  "run_id": "PLACEHOLDER_RUN",
+  "message": "PLACEHOLDER_MSG",
+  "migration_note": "HEO protocol superseded by H-FID v1.2",
+  "geo_rank": "ONE_OF_ONE",
+  "reach_multiplier": "300%",
+  "sync_velocity": "<100ms"
+}
 EOF
 
-          # Fix missing spaces to stop 'No such file or directory' errors: sha256sum <space> file
+          # Inject variables directly via safe jq argument parameters to completely avoid bash formatting drops
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          TMP_JSON=$(mktemp)
+          jq --arg ts "$TIMESTAMP" \
+             --arg sha "${{ github.sha }}" \
+             --arg run "${{ github.run_id }}" \
+             --arg msg "$MSG" \
+             '.timestamp=$ts | .sha=$sha | .run_id=$run | .message=$msg' \
+             .hfid/heo-bridge/payload.json > "$TMP_JSON"
+          mv "$TMP_JSON" .hfid/heo-bridge/payload.json
+
+          # Fix missing whitespace operators: sha256sum <space> file
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           
-          # Fix multiline tracking block termination and fix 'jq -c.' typo to use 'jq -c .' with a space
+          # Fix the 'jq -c.' typo by placing a space before the trailing dot parameter: 'jq -c .'
           echo "json<<EOF" >> $GITHUB_OUTPUT
           cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
