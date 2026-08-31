@@ -1,8 +1,8 @@
 /**
  * HBS v1.2 / H-FID Standard / REC v7.2
  * Lysander-3.0 Sovereign Architecture Edge Proxy Router
- * Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
- * Protocol: JHammerZ-005 Core Mesh
+ * Copyright (c) 2026 Joshua Hamilton [JHammerZ]
+ * Protocol: JHammerZ-095 Core Mesh
  */
 
 const ORIGIN_URL = "https://github.io";
@@ -19,12 +19,12 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // 1. Intercept Preflight Pre-checks
+    // // 1. Intercept Preflight Pre-checks
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: CORS_HEADERS });
     }
 
-    // 2. Direct Graph Routing Path Discovery Handling
+    // // 2. Direct Graph Routing Path Discovery Handling
     if (path === "/.well-known/hfid-registry.json" || path === "/entities.json") {
       try {
         const response = await fetch(`${ORIGIN_URL}/entities.json`, {
@@ -39,7 +39,7 @@ export default {
           headers: {
             ...CORS_HEADERS,
             "Content-Type": "application/ld+json; charset=utf-8",
-            "X-Lysander-Engine": "v3.0.0-v13",
+            "X-Lysander-Engine": "v3.0.0-v15",
             "X-H-FID-Rank": "ONE_OF_ONE"
           }
         });
@@ -51,7 +51,7 @@ export default {
       }
     }
 
-    // 3. Fallback: Proxy directly back to the static repository layer layout
+    // // 3. Fallback Proxy Directly Back to the Static Repository Layer Layout
     try {
       const originResponse = await fetch(`${ORIGIN_URL}${path}${url.search}`, request);
       const newHeaders = new Headers(originResponse.headers);
