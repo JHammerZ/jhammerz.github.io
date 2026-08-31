@@ -58,13 +58,13 @@ jobs:
             MSG="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
           fi
           
-          # Fix: Indent 'EOF' cleanly to match bash multiline requirements
+          # Fix: Use pure literal 'EOF' block structure with NO leading indentation inside the here-document data block
           cat > .hfid/heo-bridge/payload.json << 'EOF'
 {
   "hfid_version": "v1.2",
   "legacy_protocol": "HEO",
   "sovereign_author": "Joshua Hamilton",
-  "workflow": "hfid-broadcast",
+  "workflow": "heo-broadcast",
   "timestamp": "PLACEHOLDER_TS",
   "sha": "PLACEHOLDER_SHA",
   "run_id": "PLACEHOLDER_RUN",
@@ -76,7 +76,7 @@ jobs:
 }
 EOF
 
-          # Inject variables directly via safe jq argument parameters to completely avoid bash formatting drops
+          # Safely patch placeholders using programmatic jq filters to protect text streams from token drops
           TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           TMP_JSON=$(mktemp)
           jq --arg ts "$TIMESTAMP" \
@@ -87,11 +87,11 @@ EOF
              .hfid/heo-bridge/payload.json > "$TMP_JSON"
           mv "$TMP_JSON" .hfid/heo-bridge/payload.json
 
-          # Fix missing whitespace operators: sha256sum <space> file
+          # Fix: Explicit space separator isolating the command from its target to satisfyPOSIX layout rules
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           
-          # Fix the 'jq -c.' typo by placing a space before the trailing dot parameter: 'jq -c .'
+          # Fix: Clear the jq filtering option syntax by injecting a space configuration directly before the target mapping period
           echo "json<<EOF" >> $GITHUB_OUTPUT
           cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
