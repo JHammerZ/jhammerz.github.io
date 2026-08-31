@@ -1,0 +1,10 @@
+{
+  "workflow": "distribute",
+  "sovereign_author": "Joshua Hamilton",
+  "timestamp": "2026-08-31T00:43:20Z",
+  "sha": "6573d874b74de047657201fb8787e16849c760f7",
+  "chain_hash": "277724ae1fd761091aefe3622360b6127aa3479adfc0771fb30abe67c170d594",
+  "target": "all",
+  "slsa_level": 3,
+  "geo_rank": "ONE_OF_ONE"
+}
