@@ -67,12 +67,11 @@ jobs:
           fi
 
       - name: Execute Favicon Logic Extraction
+        id: extraction
         run: |
           set -e
-          SRC="${{ steps.source_check.outputs.source_path }}"
-          echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
+          echo "⚙️ Constructing cross-platform static asset arrays from $SRC_PATH..."
           
-          # Native JavaScript compiler using pure environment variable resolution to bypass positional arrays parameter loss
           node -e "
           const fs = require('fs');
           const { execSync } = require('child_process');
@@ -109,8 +108,6 @@ jobs:
           fs.writeFileSync('compiler.js', script);
           execSync('npm install sharp && node compiler.js', { stdio: 'inherit' });
           "
-        env:
-          SRC_PATH: ${{ steps.source_check.outputs.source_path }}
           
           cp public/favicon.png public/apple-touch-icon.png ./ || true
           
@@ -128,6 +125,8 @@ jobs:
           }
           EOF
           echo "✅ Favicon deployment matrices compiled perfectly via native processing tools."
+        env:
+          SRC_PATH: ${{ steps.source_check.outputs.source_path }}
 
       - name: Generate H-FID Asset Attestation Ledger
         id: ledger
