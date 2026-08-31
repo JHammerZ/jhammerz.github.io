@@ -58,48 +58,48 @@ jobs:
             MSG_INPUT="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
           fi
 
-          # Fix: Indent the document body and the termination token, and use <<- to automatically strip leading tabs
-          cat > .hfid/heo-bridge/payload.json <<- 'EOF'
-          {
-            "hfid_version": "v1.2",
-            "legacy_protocol": "HEO",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "heo-broadcast",
-            "timestamp": "PLACEHOLDER_TS",
-            "sha": "PLACEHOLDER_SHA",
-            "run_id": "PLACEHOLDER_RUN",
-            "message": "PLACEHOLDER_MSG",
-            "migration_note": "HEO protocol superseded by H-FID v1.2",
-            "geo_rank": "ONE_OF_ONE",
-            "gpg_rank": "ONE_OF_ONE",
-            "reach_multiplier": "300%",
-            "sync_velocity": "<100ms",
-            "slsa_level": 3
-          }
-          EOF
+          # Fix: Completely removed all bash here-documents (<< EOF) to kill the space/tab syntax loop permanently.
+          # Instead, we pass the data parameters safely through an isolated environment block, and format via inline Node scripts.
+          node -e "
+          const fs = require('fs');
+          
+          const payload = {
+            hfid_version: 'v1.2',
+            legacy_protocol: 'HEO',
+            sovereign_author: 'Joshua Hamilton',
+            workflow: 'heo-broadcast',
+            timestamp: new Date().toISOString(),
+            sha: process.env.GH_SHA,
+            run_id: process.env.GH_RUN_ID,
+            message: process.env.MSG_PAYLOAD,
+            migration_note: 'HEO protocol superseded by H-FID v1.2',
+            geo_rank: 'ONE_OF_ONE',
+            gpg_rank: 'ONE_OF_ONE',
+            reach_multiplier: '300%',
+            sync_velocity: '<100ms',
+            slsa_level: 3
+          };
 
-          # Programmatically patch placeholders with pure jq filters to securely append live parameters
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          TMP_JSON=$(mktemp)
-          jq --arg ts "$TIMESTAMP" \
-             --arg sha "${{ github.sha }}" \
-             --arg run "${{ github.run_id }}" \
-             --arg msg "$MSG_INPUT" \
-             '.timestamp=$ts | .sha=$sha | .run_id=$run | .message=$msg' \
-             .hfid/heo-bridge/payload.json > "$TMP_JSON"
-          mv "$TMP_JSON" .hfid/heo-bridge/payload.json
-
-          # Standard POSIX space parameters used for all extraction commands
+          // Materialize a perfectly formatted, pretty-printed JSON document directly to local storage
+          fs.writeFileSync('.hfid/heo-bridge/payload.json', JSON.stringify(payload, null, 2), 'utf8');
+          console.log('✅ Manifest array successfully generated via native node layer.');
+          "
+          
+          # Clean execution parameters calculation with accurate command spacing configurations
           cat .hfid/heo-bridge/payload.json
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           
-          # Pass minified ledger context block safely back to the output pipeline streams
-          echo "json<<EOF" >> $GITHUB_OUTPUT
+          # Pass minified ledger context block safely back to the output pipeline streams using an isolated unique delimiter
+          echo "json<<GEN_EOF" >> $GITHUB_OUTPUT
           cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "GEN_EOF" >> $GITHUB_OUTPUT
           
           echo "payload_path=.hfid/heo-bridge/payload.json" >> $GITHUB_OUTPUT
+        env:
+          GH_SHA: ${{ github.sha }}
+          GH_RUN_ID: ${{ github.run_id }}
+          MSG_PAYLOAD: ${{ github.event.inputs.message || 'H-FID Matrix Broadcast System Initialization' }}
 
       - name: Attest HEO Bridge Payload
         uses: actions/attest-build-provenance@v2
