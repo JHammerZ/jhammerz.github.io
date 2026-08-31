@@ -43,42 +43,49 @@ jobs:
         id: init_check
         run: |
           set -e
-          mkdir -p .hfid/bridge .hfid/edge data
+          mkdir -p .hfid/heo-bridge .hfid/edge data
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
 
-      - name: Compile Sovereign Broadcast Payload
+      - name: Generate HEO H-FID Bridge Payload
         id: payload_gen
         run: |
           set -e
           MSG_PAYLOAD="${{ github.event.inputs.message || 'Automated H-FID Bridge Sync' }}"
           echo "⚙️ Materializing structural metadata serialization arrays..."
           
-          # Initialize directory paths safely prior to file execution
-          mkdir -p .hfid/bridge .hfid/edge
+          # Use the exact file directory layout path (.hfid/heo-bridge) expected by your downstream tasks
+          mkdir -p .hfid/heo-bridge .hfid/edge
           
-          cat > .hfid/bridge/payload.json << EOF
+          cat > .hfid/heo-bridge/payload.json << EOF
           {
-            "workflow": "hfid-broadcast",
+            "hfid_version": "v1.2",
+            "legacy_protocol": "HEO",
             "sovereign_author": "Joshua Hamilton",
+            "workflow": "hfid-broadcast",
             "timestamp": "$TIMESTAMP",
             "sha": "${{ github.sha }}",
+            "run_id": "${{ github.run_id }}",
             "message": "$MSG_PAYLOAD",
-            "slsa_level": 3,
-            "geo_rank": "ONE_OF_ONE"
+            "migration_note": "HEO protocol superseded by H-FID v1.2",
+            "geo_rank": "ONE_OF_ONE",
+            "reach_multiplier": "3000",
+            "sync_velocity": "<100ms"
           }
           EOF
           
-          # Touch edge files to completely suppress 'No such file or directory' errors inside legacy bash loops
           touch .hfid/edge/deploy.json
+          cat .hfid/heo-bridge/payload.json
           
-          cat .hfid/bridge/payload.json
-          echo "payload_path=.hfid/bridge/payload.json" >> $GITHUB_OUTPUT
+          # Fix step output formatting by generating a clean SHA of the real file
+          HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "payload_path=.hfid/heo-bridge/payload.json" >> $GITHUB_OUTPUT
 
-      - name: Attest Broadcast Artifact Provenance
+      - name: Attest HEO Bridge Payload
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: .hfid/bridge/payload.json
+          subject-path: .hfid/heo-bridge/payload.json
 
       - name: Execute Remote Pipeline Synchronization
         run: |
@@ -88,7 +95,7 @@ jobs:
           git config --global user.email "omega@jhammerz.github.io"
           
           git pull --rebase origin main || true
-          git add .hfid/bridge/
+          git add .hfid/heo-bridge/
           git diff --staged --quiet || git commit -m "chore: sync hfid payload ledger state parameters [skip ci]"
           git push origin main || (git pull --rebase origin main && git push origin main)
 
@@ -97,5 +104,5 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: hfid-bridge-payloads-${{ github.sha }}
-          path: .hfid/bridge/
+          path: .hfid/heo-bridge/
           retention-days: 14
