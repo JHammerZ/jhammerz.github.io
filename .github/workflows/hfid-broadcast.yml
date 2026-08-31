@@ -50,11 +50,8 @@ jobs:
         run: |
           set -e
           
-          # Initialize target multi-line tracking block container safely
-          echo "json<<GEN_EOF" >> $GITHUB_OUTPUT
-          
-          # Complete abstraction layer: Execute file compilation via isolated node variables.
-          # Bypasses bash here-documents, eliminates 'jq -c.' flag crashes, and forces exact path generation.
+          # Complete abstraction layer using a safe native Node module execution block.
+          # Bypasses bash here-documents, entirely skips jq CLI syntax flags, and structures the multiline output parameters natively.
           node -e "
           const fs = require('fs');
           const crypto = require('crypto');
@@ -77,19 +74,24 @@ jobs:
           const outputData = JSON.stringify(payload, null, 2);
           const minifiedData = JSON.stringify(payload);
           
-          // Write pristine system files directly onto disk tree
+          // 1. Create directory and materialize files on disk
+          fs.mkdirSync('.hfid/heo-bridge', { recursive: true });
           fs.writeFileSync('.hfid/heo-bridge/payload.json', outputData, 'utf8');
           
-          // Stream raw string token configurations smoothly back to output pipeline
-          console.log(minifiedData);
-          
-          // Generate file hash metrics safely inside memory layers
+          // 2. Generate file cryptographic hash metrics safely in memory
           const fileHash = crypto.createHash('sha256').update(outputData).digest('hex');
-          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'hash=' + fileHash + '\n', 'utf8');
-          "
           
-          echo "GEN_EOF" >> $GITHUB_OUTPUT
-          echo "payload_path=.hfid/heo-bridge/payload.json" >> $GITHUB_OUTPUT
+          // 3. Programmatically compile multi-line output maps to prevent 'Matching delimiter not found EOF' errors completely
+          const outputBuffer = [];
+          outputBuffer.push('hash=' + fileHash);
+          outputBuffer.push('payload_path=.hfid/heo-bridge/payload.json');
+          outputBuffer.push('json<<GEN_EOF');
+          outputBuffer.push(minifiedData);
+          outputBuffer.push('GEN_EOF');
+          
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, outputBuffer.join('\n') + '\n', 'utf8');
+          console.log('✅ Manifest and multi-line output streams compiled successfully.');
+          "
         env:
           GH_SHA: ${{ github.sha }}
           GH_RUN_ID: ${{ github.run_id }}
