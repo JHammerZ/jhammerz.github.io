@@ -31,7 +31,7 @@ permissions:
 
 jobs:
   hfid_kernel:
-    name: hfid-kernel
+    name: hfid-bridge
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -55,7 +55,6 @@ jobs:
         run: |
           set -e
           echo "📥 Fetching specific target kernel release tree directly..."
-          # Fix: Un-break repository target matching by packing the full URL path on a single unsplit row
           git clone --depth 1 --branch v5.10 https://github.com linux-5.10
 
       - name: Configure Sovereign Platform
@@ -74,25 +73,35 @@ jobs:
         id: manifest_gen
         run: |
           set -e
-          mkdir -p .hfid/kernel
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          mkdir -p .hfid/kernel hfid_module
           
-          mkdir -p hfid_module
+          # Fix: Indent multiline inline file writes safely to keep the YAML syntax block intact
           cat > hfid_module/Makefile << 'EOF'
 obj-m += Kernel_Override.o
 EOF
-          
-          cat > .hfid/kernel/manifest.json << EOF
-          {
-            "workflow": "kernel-build",
-            "sovereign_author": "Joshua Hamilton",
-            "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "target": "${{ github.event.inputs.target || 'kernel' }}",
-            "slsa_level": 3,
-            "geo_rank": "ONE_OF_ONE"
-          }
-          EOF
+
+          cat > .hfid/kernel/manifest.json << 'EOF'
+{
+  "workflow": "kernel-build",
+  "sovereign_author": "Joshua Hamilton",
+  "timestamp": "PLACEHOLDER_TS",
+  "sha": "PLACEHOLDER_SHA",
+  "target": "PLACEHOLDER_TGT",
+  "slsa_level": 3,
+  "geo_rank": "ONE_OF_ONE"
+}
+EOF
+
+          # Programmatically patch placeholders with pure jq filters to shield text blocks from bash drops
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          TMP_JSON=$(mktemp)
+          jq --arg ts "$TIMESTAMP" \
+             --arg sha "${{ github.sha }}" \
+             --arg tgt "${{ github.event.inputs.target || 'kernel' }}" \
+             '.timestamp=$ts | .sha=$sha | .target=$tgt' \
+             .hfid/kernel/manifest.json > "$TMP_JSON"
+          mv "$TMP_JSON" .hfid/kernel/manifest.json
+
           cat .hfid/kernel/manifest.json
           echo "manifest_path=.hfid/kernel/manifest.json" >> $GITHUB_OUTPUT
 
