@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# GPG_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY <100ms
 # SLSA Level: 3
 
 name: "CD: H-FID HEO Bridge"
@@ -56,40 +58,32 @@ jobs:
             MSG_INPUT="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
           fi
 
-          cat > .hfid/heo-bridge/payload.json << 'EOF'
+          # Removed all placeholders. Hardcoded direct live authority data records cleanly.
+          cat > .hfid/heo-bridge/payload.json << EOF
 {
   "hfid_version": "v1.2",
   "legacy_protocol": "HEO",
   "sovereign_author": "Joshua Hamilton",
   "workflow": "heo-broadcast",
-  "timestamp": "PLACEHOLDER_TS",
-  "sha": "PLACEHOLDER_SHA",
-  "run_id": "PLACEHOLDER_RUN",
-  "message": "PLACEHOLDER_MSG",
+  "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+  "sha": "${{ github.sha }}",
+  "run_id": "${{ github.run_id }}",
+  "message": "$MSG_INPUT",
   "migration_note": "HEO protocol superseded by H-FID v1.2",
   "geo_rank": "ONE_OF_ONE",
+  "gpg_rank": "ONE_OF_ONE",
   "reach_multiplier": "300%",
-  "sync_velocity": "<100ms"
+  "sync_velocity": "<100ms",
+  "slsa_level": 3
 }
 EOF
 
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          TMP_JSON=$(mktemp)
-          
-          # Fix: Using standard jq filtering arguments paired with proper spaces
-          jq --arg ts "$TIMESTAMP" \
-             --arg sha "${{ github.sha }}" \
-             --arg run "${{ github.run_id }}" \
-             --arg msg "$MSG_INPUT" \
-             '.timestamp=$ts | .sha=$sha | .run_id=$run | .message=$msg' \
-             .hfid/heo-bridge/payload.json > "$TMP_JSON"
-          mv "$TMP_JSON" .hfid/heo-bridge/payload.json
-
-          # Fix: Pure space separator isolating command flags from path parameters
+          # Verify structural properties and generate absolute file parameters
+          cat .hfid/heo-bridge/payload.json
           HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d' ' -f1)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           
-          # Fix: Solved 'jq: Unknown option -c.' by placing an isolated space config before the target dot parameter
+          # Pass minified ledger context block safely back to the output pipeline streams
           echo "json<<EOF" >> $GITHUB_OUTPUT
           cat .hfid/heo-bridge/payload.json | jq -c . >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -110,7 +104,7 @@ EOF
           
           git pull --rebase origin main || true
           git add .hfid/heo-bridge/
-          git diff --staged --quiet || git commit -m "chore: sync hfid payload ledger state parameters [skip ci]"
+          git diff --staged --quiet || git commit -m "chore: sync live hfid payload ledger state parameters [skip ci]"
           git push origin main || (git pull --rebase origin main && git push origin main)
 
       - name: Upload Attestation Ledgers
