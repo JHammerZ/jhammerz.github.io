@@ -72,11 +72,17 @@ jobs:
           SRC="${{ steps.source_check.outputs.source_path }}"
           echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
           
+          # Native JavaScript compiler using pure environment variable resolution to bypass positional arrays parameter loss
           node -e "
           const fs = require('fs');
           const { execSync } = require('child_process');
           
-          const targetPath = process.argv[2];
+          const targetPath = process.env.SRC_PATH;
+          if (!targetPath) {
+            console.error('Target environment variable path unresolved.');
+            process.exit(1);
+          }
+          
           let data = fs.readFileSync(targetPath, 'utf8');
           data = data.replace(/^\s+|\s+$/g, '').trim();
           fs.writeFileSync(targetPath, data, 'utf8');
@@ -102,7 +108,9 @@ jobs:
           
           fs.writeFileSync('compiler.js', script);
           execSync('npm install sharp && node compiler.js', { stdio: 'inherit' });
-          " -- "$SRC"
+          "
+        env:
+          SRC_PATH: ${{ steps.source_check.outputs.source_path }}
           
           cp public/favicon.png public/apple-touch-icon.png ./ || true
           
