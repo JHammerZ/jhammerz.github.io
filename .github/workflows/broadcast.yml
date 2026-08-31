@@ -78,7 +78,7 @@ jobs:
             "proof": "https://github.io",
             "llms": "https://github.io"
           }
-          EOF
+
           
           # Inject message and timestamp safely via jq to prevent shell expansion breaks
           jq --arg msg "$MSG" --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" '.message = $msg | .timestamp = $ts' .hfid/broadcast/payload.json > .hfid/broadcast/payload.tmp.json
