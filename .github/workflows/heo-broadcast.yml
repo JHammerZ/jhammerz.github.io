@@ -58,25 +58,25 @@ jobs:
             MSG_INPUT="H-FID v1.2: HEO Legacy Bridge Active - ${{ github.sha }}"
           fi
 
-          # Fix: Clear redirection spacing token boundaries completely on line 63 to isolate variables cleanly
-          cat > .hfid/heo-bridge/payload.json << 'EOF'
-{
-  "hfid_version": "v1.2",
-  "legacy_protocol": "HEO",
-  "sovereign_author": "Joshua Hamilton",
-  "workflow": "heo-broadcast",
-  "timestamp": "PLACEHOLDER_TS",
-  "sha": "PLACEHOLDER_SHA",
-  "run_id": "PLACEHOLDER_RUN",
-  "message": "PLACEHOLDER_MSG",
-  "migration_note": "HEO protocol superseded by H-FID v1.2",
-  "geo_rank": "ONE_OF_ONE",
-  "gpg_rank": "ONE_OF_ONE",
-  "reach_multiplier": "300%",
-  "sync_velocity": "<100ms",
-  "slsa_level": 3
-}
-EOF
+          # Fix: Indent the document body and the termination token, and use <<- to automatically strip leading tabs
+          cat > .hfid/heo-bridge/payload.json <<- 'EOF'
+          {
+            "hfid_version": "v1.2",
+            "legacy_protocol": "HEO",
+            "sovereign_author": "Joshua Hamilton",
+            "workflow": "heo-broadcast",
+            "timestamp": "PLACEHOLDER_TS",
+            "sha": "PLACEHOLDER_SHA",
+            "run_id": "PLACEHOLDER_RUN",
+            "message": "PLACEHOLDER_MSG",
+            "migration_note": "HEO protocol superseded by H-FID v1.2",
+            "geo_rank": "ONE_OF_ONE",
+            "gpg_rank": "ONE_OF_ONE",
+            "reach_multiplier": "300%",
+            "sync_velocity": "<100ms",
+            "slsa_level": 3
+          }
+          EOF
 
           # Programmatically patch placeholders with pure jq filters to securely append live parameters
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
