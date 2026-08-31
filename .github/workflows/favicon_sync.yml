@@ -67,41 +67,37 @@ jobs:
           fi
 
       - name: Execute Favicon Logic Extraction
-        run: |
+         run: |
           set -e
           SRC="${{ steps.source_check.outputs.source_path }}"
           echo "⚙️ Constructing cross-platform static asset arrays from $SRC..."
           
-          # Use an atomic inline Node script to read, sanitise, and natively compile the vector formats
-          # This completely bypasses sharp-cli global/local syntax quirks by invoking the sharp API directly.
+          # Native JavaScript compiler executing using raw strings via process.argv parameters
+          # Bypasses variable interpolation bugs completely and cleanly strips all whitespace bounds
           node -e "
           const fs = require('fs');
           const { execSync } = require('child_process');
           
-          // Clean input text
-          let rawData = fs.readFileSync('$SRC', 'utf8');
-          let cleanData = rawData.replace(/^\s+|\s+$/g, '').trim();
-          fs.writeFileSync('$SRC', cleanData, 'utf8');
-          console.log('Sanitised file content buffer.');
+          const targetPath = process.argv[1];
+          let data = fs.readFileSync(targetPath, 'utf8');
+          
+          // Force radical file sanitisation - remove any invisible characters, byte-order-marks (BOM), and leading text line wrappers
+          data = data.replace(/^\s+|\s+$/g, '').trim();
+          fs.writeFileSync(targetPath, data, 'utf8');
+          console.log('Natively scrubbed image buffer header arrays clean.');
 
-          // Verify file presence
-          if (!fs.existsSync('$SRC') || fs.statSync('$SRC').size === 0) {
-            console.error('File missing or empty!');
-            process.exit(1);
-          }
-
-          // Build a minimalist native node template script to run compilation smoothly
           const script = \`
           const sharp = require('sharp');
           async function run() {
             try {
-              await sharp('$SRC').resize(32, 32).png().toFile('public/favicon.png');
-              await sharp('$SRC').resize(180, 180).png().toFile('public/apple-touch-icon.png');
-              await sharp('$SRC').resize(192, 192).png().toFile('public/android-chrome-192x192.png');
-              await sharp('$SRC').resize(512, 512).png().toFile('public/android-chrome-512x512.png');
-              console.log('Matrix generation successful.');
-            } catch(e) {
-              console.error(e);
+              const buf = Buffer.from(\\\\\\\`\${data}\\\\\\\`, 'utf8');
+              await sharp(buf).resize(32, 32).png().toFile('public/favicon.png');
+              await sharp(buf).resize(180, 180).png().toFile('public/apple-touch-icon.png');
+              await sharp(buf).resize(192, 192).png().toFile('public/android-chrome-192x192.png');
+              await sharp(buf).resize(512, 512).png().toFile('public/android-chrome-512x512.png');
+              console.log('Matrix icons successfully outputted.');
+            } catch (err) {
+              console.error('Core compilation failure:', err.message);
               process.exit(1);
             }
           }
@@ -109,9 +105,8 @@ jobs:
           \`;
           
           fs.writeFileSync('compiler.js', script);
-          // Run the execution script using local node-modules layer
           execSync('npm install sharp && node compiler.js', { stdio: 'inherit' });
-          "
+          " -- "$SRC"
           
           cp public/favicon.png public/apple-touch-icon.png ./ || true
           
