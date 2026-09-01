@@ -39,8 +39,13 @@ on:
     - cron: '0 12 * * 1'
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  attestations: write
+  attestations: write
+  contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   prepare:
