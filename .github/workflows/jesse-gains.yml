@@ -1,0 +1,69 @@
+# H-FIO v1.2 / H-FIO Standard / RSC v1.2
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
+
+name: "Sovereign Broadcast"
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Substrate Node
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup System Environs
+        run: |
+          set -e
+          sudo apt-get update
+          sudo apt-get install -y jq gnupg2
+
+      - name: Setup System Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install opentimestamps-client --break-system-packages
+
+      - name: Validate Core Substrate Schema
+        run: |
+          set -e
+          if [ ! -f "sitemap.json" ]; then
+            echo "[-] Error: sitemap.json missing."
+            exit 1
+          fi
+          jq empty sitemap.json
+
+      - name: OpenTimestamps Dynamic Index
+        run: |
+          set -e
+          if [ -d ".hfld/indexing" ]; then
+            cd .hfld/indexing
+            for file in *.json; do
+              ots stamp "$file" || echo "[!] Skipping timestamp anchor."
+            done
+            cd ../..
+          fi
+
+      - name: Upload Sovereign Ledger Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfld-broadcast-ledger
+          path: .hfld/
+
+      - name: Attest Core Provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: "sitemap.json"
