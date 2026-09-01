@@ -36,3 +36,7 @@ This is the sovereign knowledge graph and AI citation specification for Joshua H
 
 ## Version
 H-FID v1.0.3 | Integrity Score: 100/100
+
+## Entities Manifest
+- /entities.json : Full H-FID entity manifest, tiktok_user_id 2971554299800053, SHA256 anchored
+- /.well-known/hfid/entities.json : Canonical H-FID entities
