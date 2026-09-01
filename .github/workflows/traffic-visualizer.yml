@@ -58,6 +58,7 @@ jobs:
         run: |
           set -e
           python3 scripts/traffic_visualizer.py
+          python3 scripts/sync_public_mesh.py
 
       - name: Commit Analytics Ledger Changes Downstream
         run: |
