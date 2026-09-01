@@ -70,7 +70,6 @@ jobs:
           
           echo "[*] Testing API Token permissions matrix against Cloudflare Edge..."
           
-          # Use a standard verification endpoint that confirms access without triggering payload errors
           RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X GET \
             "https://cloudflare.com" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
