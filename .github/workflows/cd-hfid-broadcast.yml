@@ -15,9 +15,6 @@ on:
         description: 'Broadcast message override'
         required: false
         type: string
-  workflow_run:
-    workflows: ["*"]
-    types: [completed]
   push:
     branches: [main]
     paths:
@@ -42,11 +39,11 @@ jobs:
         id: payload
         run: |
           set -e
-          mkdir -p.hfid/broadcast
+          mkdir -p .hfid/broadcast
           MSG="${{ github.event.inputs.message }}"
           if [ -z "$MSG" ] && [ -f "broadcast.md" ]; then MSG=$(head -n 1 broadcast.md); fi
           if [ -z "$MSG" ]; then MSG="H-FID v1.2 Sovereign Update: ${{ github.sha }}"; fi
-          cat >.hfid/broadcast/payload.json << EOJ
+          cat > .hfid/broadcast/payload.json << EOJ
           {
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
@@ -62,15 +59,15 @@ jobs:
             "llms": "https://jhammerz.github.io"
           }
           EOJ
-          jq --arg msg "$MSG" --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" '.message = $msg |.timestamp = $ts'.hfid/broadcast/payload.json >.hfid/broadcast/payload.tmp.json
-          mv.hfid/broadcast/payload.tmp.json.hfid/broadcast/payload.json
-          HASH=$(sha256sum.hfid/broadcast/payload.json | cut -d ' ' -f1)
-          echo "json=$(cat.hfid/broadcast/payload.json | jq -c '.')" >> $GITHUB_OUTPUT
+          jq --arg msg "$MSG" --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" '.message = $msg | .timestamp = $ts' .hfid/broadcast/payload.json > .hfid/broadcast/payload.tmp.json
+          mv .hfid/broadcast/payload.tmp.json .hfid/broadcast/payload.json
+          HASH=$(sha256sum .hfid/broadcast/payload.json | cut -d ' ' -f1)
+          echo "json=$(cat .hfid/broadcast/payload.json | jq -c '.')" >> $GITHUB_OUTPUT
           echo "hash=${HASH}" >> $GITHUB_OUTPUT
       - name: Attest Broadcast Payload
         uses: actions/attest-build-provenance@v3
         with:
-          subject-path:.hfid/broadcast/payload.json
+          subject-path: .hfid/broadcast/payload.json
   discord:
     needs: prepare
     if: ${{ github.event.inputs.targets == 'all' || github.event.inputs.targets == 'social' || github.event.inputs.targets == 'discord' }}
@@ -109,7 +106,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         with:
           name: hfid-broadcast-${{ needs.prepare.outputs.hash }}
-          path:.hfid/broadcast/
+          path: .hfid/broadcast/
           retention-days: 30
       - name: Summary
         run: |
