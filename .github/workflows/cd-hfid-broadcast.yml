@@ -28,8 +28,10 @@ permissions:
   id-token: write
   attestations: write
   attestations: write
+  attestations: write
   contents: write
   id-token: write
+  attestations: write
   attestations: write
   attestations: write
 jobs:
