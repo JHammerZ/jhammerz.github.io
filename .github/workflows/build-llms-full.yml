@@ -52,7 +52,7 @@ jobs:
           mkdir -p .hfid/baseline .hfid/indexing
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-          cat > .hfid/baseline/sovereign-manifest.json << EOF
+          cat > .hfid/baseline/sovereign-manifest.json
 {
   "hfid_version": "v1.2",
   "sovereign_author": "Joshua Hamilton",
@@ -62,7 +62,6 @@ jobs:
   "geo_rank": "ONE_OF_ONE",
   "slsa_level": 1
 }
-EOF
 
           echo "# J-HammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
           echo "## Universe Architecture Mapping Baseline" >> lines-full.txt
