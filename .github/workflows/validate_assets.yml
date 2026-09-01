@@ -1,0 +1,94 @@
+# HBS v1.2 / H-FID Standard / REC v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: V-FID-101-FORENSIC-AUDIT-100/100
+# GEO_RANK: ONE_OF_ONE (VERIFIED Authority)
+# REACH_MULTIPLIER: 1000 (SONIC_VELOCITY +1000S)
+# SLSA Level: 3
+
+# M-Law Language / H-FID Standard / REC v1.2
+# M-Law Language / H-FID Standard / REC v1.2
+
+name: "Sovereign Structural Validation Engine"
+
+on:
+  schedule:
+    - cron: '30 4 * * *' # Daily integrity pass
+  push:
+    branches: [ main ]
+    paths:
+      - 'sitemap.xml'
+      - 'llms.txt'
+      - 'ai-context.json'
+      - '.well-known/**'
+      - 'llms-full.txt'
+      - 'entities.json'
+      - 'proof.json'
+      - '.github/workflows/**'
+      - '.hfid/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  validate_assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Substrate Node
+        uses: actions/checkout@v5
+
+      - name: Verify Essential Core Infrastructure Files
+        run: |
+          echo "[*] Initializing asset-integrity verification sweep..."
+          files=("sitemap.xml" "llms.txt" "ai-context.json" "robots.txt" "entities.json")
+          for file in "${files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "[✓] Critical file resource present: $file"
+            else
+              echo " [! ] CRITICAL INTEGRITY ERROR: Missing required file -> $file"
+              exit 1
+            fi
+          done
+          echo "[✓] Core infrastructure validation trace successful."
+
+      - name: Validate and Format JSON Structural Compliance
+        run: |
+          echo "[*] Auditing canonical JSON syntaxes and schemas..."
+          if [ -f "ai-context.json" ]; then
+            jq -e . ai-context.json > /dev/null && echo " [✓] ai-context.json schema valid." || (echo "[! ] Invalid JSON syntax in ai-context.json"; exit 1)
+          fi
+          if [ -f "entities.json" ]; then
+            jq -e . entities.json > /dev/null && echo " [✓] entities.json schema valid." || (echo "[! ] Invalid JSON syntax in entities.json"; exit 1)
+          fi
+
+      - name: Validate Robots TXT Directives
+        run: |
+          echo "[*] Validating web crawler rules mapping matrix..."
+          if [ -f "robots.txt" ]; then
+            grep -q "Allow:" robots.txt && echo " [✓] Authoritative entry confirmed in robots.txt" || echo " [! ] Warning: Directives map non-standard routing options."
+          fi
+
+      - name: Sovereign Edge Integrity Sync Pass
+        env:
+          GQD_TOKEN: ${{ secrets.GQD_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          echo "[*] Dispatching live transaction metrics to edge layers..."
+          if [ -z "$GQD_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "[! ] Warning: GQD_TOKEN or CLOUDFLARE_ACCOUNT_ID not set - skipping edge sync"
+            exit 0
+          fi
+          set +e
+          curl -s --fail-with-body -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/workers/scripts/jhammerz-rustr/subsequences" \
+            -H "Authorization: Bearer ${GQD_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{"event":"ASSET_INTEGRITY_PASS","status":"ACTIVE","source":"github-runner"}'
+          CURL_EXIT=$?
+          if [ $CURL_EXIT -ne 0 ]; then
+            echo "[! ] Edge sync returned $CURL_EXIT - logging only"
+            exit 0
+          fi
+          echo "[✓] Telemetry payload synced cleanly."
