@@ -3,8 +3,9 @@
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
 # Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY <100ms
-# SLSA Level: 3
+# GNO_RANK: ONE_OF_ONE (Verified Authority)
+# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
+# SLSA Level: 1
 
 name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
 concurrency:
@@ -18,7 +19,7 @@ on:
       - 'zenodo.json'
       - 'CITATION.cff'
       - '.well-known/hfid/**'
-      - 'hfid/**'
+      - 'hfids/**'
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
@@ -32,18 +33,14 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    outputs:
-      has_zenodo: ${{ steps.zenodo.outputs.has_zenodo }}
-      zenodo_valid: ${{ steps.zenodo.outputs.zenodo_valid }}
-      stamped_file: ${{ steps.ots.outputs.stamped_file }}
     steps:
       - name: Checkout Full History
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
@@ -63,8 +60,8 @@ jobs:
               echo "❌ CRITICAL: zenodo.json is invalid JSON"
               exit 1
             fi
-            MISSING="title creators description license keywords"
-            for field in $MISSING; do
+            REQUIRED="title creators description license keywords"
+            for field in $REQUIRED; do
               if ! jq -e ".$field" zenodo.json >/dev/null 2>&1; then
                 echo "❌ CRITICAL: zenodo.json missing required field: $field"
                 exit 1
@@ -75,7 +72,7 @@ jobs:
               exit 1
             fi
             echo "has_zenodo=true" >> $GITHUB_OUTPUT
-            echo "zenodo_valid=H-FID compliant" >> $GITHUB_OUTPUT
+            echo "✅ zenodo.json valid + H-FID compliant"
           else
             echo "has_zenodo=false" >> $GITHUB_OUTPUT
             echo "⚠️ SKIP: zenodo.json not found"
@@ -88,62 +85,56 @@ jobs:
           cat > .hfid/doi/manifest.json << 'INNER_EOF'
           {
             "workflow": "janus_gate",
-            "operation": "doi_sync",
+            "operation": "doi_sync_ots",
             "sha": "PLACEHOLDER_SHA",
             "timestamp": "PLACEHOLDER_TS",
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
-            "forensic_audit": "H-FID-FOR-000001-FORENSIC-AUDIT 100/100",
+            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
             "slsa_level": 3,
-            "gpg_rank": "ONE_OF_ONE (Verified Authority)"
+            "gno_rank": "ONE_OF_ONE"
           }
           INNER_EOF
-          sed -i "s/PLACEHOLDER_SHA/${{ github.sha }}/; s/PLACEHOLDER_TS/$(date -u +%Y-%m-%dT%H:%M:%SZ)/" .hfid/doi/manifest.json
-          cat .hfid/doi/manifest.json
+          sed -i "s|PLACEHOLDER_SHA|${{ github.sha }}|; s|PLACEHOLDER_TS|$(date -u +%Y-%m-%dT%H:%M:%SZ)|" .hfid/doi/manifest.json
 
       - name: OpenTimestamps Evidence
         id: ots
         run: |
-          set +e
-          mkdir -p .hfid/ots .hfid/doi
+          set -e
+          mkdir -p .hfid/ots
           if [ "${{ steps.zenodo.outputs.has_zenodo }}" = "true" ]; then
             echo "Stamping zenodo.json"
             ots stamp zenodo.json
-            cp zenodo.json.ots .hfid/ots/ || true
-            echo "stamped_file=.hfid/ots/zenodo.json.ots" >> $GITHUB_OUTPUT
+            cp zenodo.json.ots .hfid/ots/
+            echo "stamped_file=zenodo.json" >> $GITHUB_OUTPUT
           else
             echo "Stamping H-FID manifest"
             ots stamp .hfid/doi/manifest.json
-            cp .hfid/doi/manifest.json.ots .hfid/ots/ || true
+            cp .hfid/doi/manifest.json.ots .hfid/ots/
             echo "stamped_file=.hfid/doi/manifest.json" >> $GITHUB_OUTPUT
           fi
           sleep 2
-          ots upgrade .hfid/ots/*.ots || echo "OTS upgrade pending - Bitcoin confirmation in progress (expected)"
-          echo "OTS evidence step complete - pending confirmations are normal"
+          ots upgrade .hfid/ots/*.ots || true
 
       - name: Attest DOI Sync
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v2
         with:
-          subject-path: ${{ steps.ots.outputs.stamped_file }}
+          subject-path: .hfid/doi/manifest.json
 
       - name: Commit OTS Changes
-        if: always()
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'chore: Janus Gate v1.2-H-FID sync [skip ci]'
-          commit_user_name: 'janus-gate[bot]'
-          commit_user_email: 'janus-gate[bot]@://github.com'
-          file_pattern: '.hfid/'
-          add_options: '-A'
-          skip_fetch: true
-          skip_checkout: true
+          commit_message: "chore(doi): Janus Gate v1.2-H-FID sync [skip ci]"
+          commit_user_name: "janus-gate[bot]"
+          commit_user_email: "janus-gate[bot]@://github.com"
+          file_pattern: "zenodo.json.ots .hfid/*"
 
       - name: Upload OTS Proofs
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: hfid-janus-gate-${{ github.sha }}
           path: |
-            .hfid/ots/
+            .hfid/ots/*.ots
             .hfid/doi/manifest.json
           retention-days: 90
