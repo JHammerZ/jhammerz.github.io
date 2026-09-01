@@ -1,11 +1,10 @@
 {
-  "workflow": "forensic-ledger",
-  "sha": "8f4bcb1917b4c2d6159bc782bcb1930fd98c25bf",
-  "timestamp": "2026-09-01T16:06:28Z",
-  "archive": "jhammerz-site-20260901-160627-8f4bcb1917b4c2d6159bc782bcb1930fd98c25bf.car",
-  "tar": "jhammerz-site-20260901-160627-8f4bcb1917b4c2d6159bc782bcb1930fd98c25bf.tar",
-  "archive_hash": "4579a945ea02b4df01a2ba184a1c2743503c869a320505abf56b96d2f9de617b",
-  "size_bytes": 40093341,
-  "git_log": "8f4bcb1917b4c2d6159bc782bcb1930fd98c25bf",
-  "slsa_level": 3
+  "status": "AUTONOMOUS",
+  "hfid_version": "v1.3",
+  "sovereign_author": "Joshua Hamilton",
+  "geo_rank": "ONE_OF_ONE",
+  "timestamp": "2026-09-01T16:22:00.868Z",
+  "network_velocity": "<10ms",
+  "verification_chain": "https://jhammerz.github.io/.well-known/hfid/chain.json",
+  "hub": "https://jhammerz.github.io"
 }

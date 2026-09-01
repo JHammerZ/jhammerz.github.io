@@ -1,4 +1,26 @@
-export interface Env {
+# or
+nano functions/_middleware.ts
+# or wherever that verification_chain is built
+
+# Replace the bad line with:
+# const allowOrigin = request.headers.get("Origin")
+# and
+# const verification_chain = "https://jhammerz.github.io/.well-known/hfid/chain.json"
+# NOT dynamic from origin
+
+# 3. Now deploy LYSANDER specifically - not root
+cd ~/jhammerz.github.io/lysander-v13
+cat wrangler.toml
+# must say name = "lysander-v13"
+npx wrangler deploy
+
+# 4. Now deploy ROOT after fix
+cd ~/jhammerz.github.io
+npx wrangler deploy --env production
+
+# 5. Test both
+curl -s -D - -H "Origin: https://jhammerz.github.io" https://lysander-v13.jhammerzofficial.workers.dev/health -o /dev/null | grep -i access-control
+curl -s -D - -H "Origin: https://jhammerz.github.io" https://jhammerz-github-io-production.jhammerzofficial.workers.dev/health -o /dev/null | grep -i access-control 2>&1 || curl -s -D - https://jhammerz.github.io/.well-known/hfid/chain.json -o /dev/null | head -5export interface Env {
   AGENT_STATE_LEDGER: KVNamespace;
 }
 const MESH_CHANNELS = [
