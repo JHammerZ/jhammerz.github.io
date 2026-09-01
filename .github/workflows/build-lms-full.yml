@@ -44,7 +44,7 @@ jobs:
           set -euo pipefail
           mkdir -p .hfid/baseline .hfid/indexing
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          cat > .hfid/baseline/sovereign-manifest.json << 'INNER_EOF'
+          cat > .hfid/baseline/sovereign-manifest.json << EOF
           {
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
@@ -54,8 +54,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
-
-          sed -i "s/\$TIMESTAMP/$TIMESTAMP/" .hfid/baseline/sovereign-manifest.json
+EOF
           echo "JHammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
           echo "Multi-source Archival" >> lines-full.txt
           echo "System Version: [v4.0.28] | Identity & Protocols" >> lines-full.txt
