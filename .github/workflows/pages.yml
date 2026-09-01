@@ -2,14 +2,6 @@
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GNO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# SOVEREIGN PAGES DEPLOYMENT WORKFLOW // J-HammerZ // V4.0.20 // PRODUCTION FIX
-# COMPATIBILITY: DIRECT-STATIC-HTML-INGRESS
-# MANDATE: PROPAGATE IDENTITY MATRIX ROOT AND WELL-KNOWN ENDPOINTS SECURELY
 
 name: "Deploy Site to Pages"
 concurrency:
@@ -31,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -44,31 +36,33 @@ jobs:
           set -euo pipefail
           echo "Staging tracking manifest files for structural deployment ingress..."
           
-          # Initialize clean deployment directory isolated from filesystem tracking loops
+          # Initialize clean staging space
           rm -rf _site_tmp && mkdir -p _site_tmp
           
-          # Safely copy assets from public folder if present
-          if [ -d "public" ] && [ "$(ls -A public 2>/dev/null)" ]; then
-            cp -rv public/* _site_tmp/
+          # 1. Copy public content AND hidden files inside public/ recursively
+          if [ -d "public" ]; then
+            # Using dot-shorthand matching tells the shell to include hidden files natively
+            cp -rv public/. _site_tmp/
           fi
           
-          # Copy root files to target staging workspace directory
-          for f in index.html 404.html CNAME robots.txt llms.txt sitemap.xml manifest.json; do
+          # 2. Explicitly copy root well-known structures if present at root
+          if [ -d ".well-known" ]; then
+            mkdir -p _site_tmp/.well-known
+            cp -rv .well-known/. _site_tmp/.well-known/
+          fi
+          
+          # 3. Explicitly sweep root core files
+          for f in index.html 404.html CNAME robots.txt llms.txt sitemap.xml manifest.json entities.json; do
             if [ -f "$f" ]; then
               cp -v "$f" _site_tmp/
             fi
           done
           
-          # Safely copy identity metrics well-known directory structures with standard space barriers
-          if [ -d ".well-known" ]; then
-            cp -rv .well-known _site_tmp/
-          fi
-          
-          # Finalize staging workspace switchover
+          # Finalize deployment directory swap
           rm -rf _site
           mv _site_tmp _site
           
-          # Clean out actions processing leftovers configuration profiles
+          # Strip system leftovers
           rm -rf _site/.github _site/.git
           ls -la _site | head -n 20
 
