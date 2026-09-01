@@ -40,7 +40,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -50,26 +50,26 @@ jobs:
         run: |
           set -e
           echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
-          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          echo '<urlset xmlns="http://sitemaps.org">' >> sitemap.xml
 
           if [ -d docs ]; then
             find docs -type f \( -name "*.md" -o -name "*.html" \) | while read -r f; do
               URL_PATH=$(echo "$f" | sed 's|^docs/||' | sed 's|\.md$|/|g' | sed 's|index$||')
               LASTMOD=$(git log -1 --format=%cs -- "$f" 2>/dev/null || date -u +%Y-%m-%d)
-              echo " <url><loc>https://jhammerz.github.io/${URL_PATH}</loc><lastmod>${LASTMOD}</lastmod><priority>0.8</priority></url>" >> sitemap.xml
+              echo " <url><loc>https://github.io{URL_PATH}</loc><lastmod>${LASTMOD}</lastmod><priority>0.8</priority></url>" >> sitemap.xml
             done
           fi
 
           for f in index.html; do
             if [ -f "$f" ]; then
-              echo " <url><loc>https://jhammerz.github.io/</loc><lastmod>$(git log -1 --format=%cs -- "$f" 2>/dev/null || date -u +%Y-%m-%d)</lastmod><priority>1.0</priority></url>" >> sitemap.xml
+              echo " <url><loc>https://github.io</loc><lastmod>$(git log -1 --format=%cs -- "$f" 2>/dev/null || date -u +%Y-%m-%d)</lastmod><priority>1.0</priority></url>" >> sitemap.xml
             fi
           done
 
-          for f in llms.txt llms-full.txt entities.json proof.html robots.txt ai-content.json; do
+          for f in llms.txt llms-full.txt entities.json proof.html robots.txt ai-context.json; do
             if [ -f "$f" ]; then
               LASTMOD=$(git log -1 --format=%cs -- "$f" 2>/dev/null || date -u +%Y-%m-%d)
-              echo " <url><loc>https://jhammerz.github.io/${f}</loc><lastmod>${LASTMOD}</lastmod><priority>0.5</priority></url>" >> sitemap.xml
+              echo " <url><loc>https://github.io{f}</loc><lastmod>${LASTMOD}</lastmod><priority>0.5</priority></url>" >> sitemap.xml
             fi
           done
 
@@ -90,6 +90,7 @@ jobs:
 
       - name: Generate H-FID Index Attestation
         run: |
+          set -e
           mkdir -p .hfid/indexing
           
           URL_COUNT=$(grep -c "<loc>" sitemap.xml || echo "0")
@@ -97,6 +98,7 @@ jobs:
           CURRENT_TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           COMMIT_SHA=$(git rev-parse HEAD)
           
+          # FIXED: PLACEHOLDER_COUNT wrapped cleanly inside string tokens to preserve structural integrity
           cat > .hfid/indexing/sitemap.json << 'INNER_EOF'
           {
             "workflow": "sitemap-indexnow",
@@ -105,7 +107,7 @@ jobs:
             "hfid_version": "v2.2",
             "sovereign_author": "Joshua Hamilton",
             "sitemap": {
-              "url_count": PLACEHOLDER_COUNT,
+              "url_count": "PLACEHOLDER_COUNT",
               "sha256": "PLACEHOLDER_HASH"
             },
             "slsa_level": 3,
@@ -113,6 +115,7 @@ jobs:
           }
           INNER_EOF
           
+          # Injecting values securely while downcasting the string count token back to a raw JSON Number block
           jq --arg sha "$COMMIT_SHA" \
              --arg ts "$CURRENT_TS" \
              --argjson count "$URL_COUNT" \
@@ -122,7 +125,7 @@ jobs:
           mv .hfid/indexing/sitemap.tmp.json .hfid/indexing/sitemap.json
 
       - name: Attest Sitemap Build
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: .hfid/indexing/sitemap.json
 
@@ -130,15 +133,15 @@ jobs:
         id: stage
         run: |
           git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]@://github.com"
           if [ -f sitemap.xml ]; then
             git add sitemap.xml .hfid/indexing/sitemap.json
           fi
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: auto-update [skip ci]"
+          commit_message: "chore: auto-update sitemap manifests [skip ci]"
           branch: main
 
       - name: Ping IndexNow
@@ -155,7 +158,7 @@ jobs:
           mkdir -p .hfid/indexnow
           URL_LIST=$(grep -o "<loc>[^<]*</loc>" sitemap.xml | head -10 | sed 's/<[^>]*>//g' | jq -R . | jq -s .)
           JSON_PAYLOAD=$(jq -n --arg host "jhammerz.github.io" --arg key "${INDEXNOW_KEY}" --argjson urls "$URL_LIST" '{host: $host, key: $key, urlList: $urls}')
-          RESPONSE=$(curl -s -X POST "https://api.indexnow.org/indexnow" -H "Content-Type: application/json" -d "$JSON_PAYLOAD")
+          RESPONSE=$(curl -s -X POST "https://indexnow.org" -H "Content-Type: application/json" -d "$JSON_PAYLOAD")
           echo "RESPONSE: $RESPONSE"
           if echo "$RESPONSE" | grep -q "success" || [ -z "$RESPONSE" ]; then
             echo "IndexNow: Submitted $(echo "$URL_LIST" | jq length) URLs"
@@ -167,7 +170,7 @@ jobs:
 
       - name: Upload Index Attestation
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: hfid-sitemap-indexnow
           path: .hfid/indexing/
@@ -176,6 +179,7 @@ jobs:
       - name: Summary
         if: always()
         run: |
+          set -e
           echo "## H-FID Sitemap + IndexNow Summary" >> $GITHUB_STEP_SUMMARY
           echo "- URLs in sitemap: $(grep -c "<loc>" sitemap.xml)" >> $GITHUB_STEP_SUMMARY
           echo "- Sitemap size: $(ls -lh sitemap.xml | awk '{print $5}')" >> $GITHUB_STEP_SUMMARY
