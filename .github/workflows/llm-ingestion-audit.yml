@@ -29,19 +29,12 @@ on:
   schedule:
     - cron: '0 0 * * 1' # Weekly Monday, not daily
 
-    permissions:
-      contents: write
-      id-token: write
-      attestations: write
-      issues: write
- contents: read
- id-token: write
- attestations: write
- issues: write
-  contents: read
-  id-token: write # For SLSA attestation
-  issues: write # To create compliance incidents
-
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+  issues: write
+  security-events: write
 jobs:
   audit:
     runs-on: ubuntu-latest
