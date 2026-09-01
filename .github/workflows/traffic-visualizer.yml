@@ -1,0 +1,73 @@
+# HBS v1.2 / H-FID Standard / REC v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
+
+name: "Analytics: Compile Mesh Net Traffic Summary"
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/traffic_visualizer.py'
+  schedule:
+    - cron: '0 12 * * *' # Auto-compile daily summary tracking logs
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  visualize_analytics:
+    name: execute-traffic-compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Substrate Node Core
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Run Integrity Scan on Code Logic
+        run: |
+          set -e
+          python3 -m py_compile scripts/traffic_visualizer.py
+          echo "[✓] Python validation compiler test clean."
+
+      - name: Compile Traffic Visualizer Record
+        run: |
+          set -e
+          mkdir -p .hfid/indexing
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          echo '{' > .hfid/indexing/visualizer-manifest.json
+          echo '  "workflow": "traffic-summary-compilation",' >> .hfid/indexing/visualizer-manifest.json
+          echo '  "status": "TELEMETRY_LOG_ACTIVE",' >> .hfid/indexing/visualizer-manifest.json
+          echo '  "timestamp": "PENDING",' >> .hfid/indexing/visualizer-manifest.json
+          echo '  "sha": "PENDING"' >> .hfid/indexing/visualizer-manifest.json
+          echo '}' >> .hfid/indexing/visualizer-manifest.json
+
+          TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" '.timestamp=$ts | .sha=$sha' .hfid/indexing/visualizer-manifest.json)
+          echo "$TMP_JSON" > .hfid/indexing/visualizer-manifest.json
+
+      - name: Seal Ingestion Provenance Stamps
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: .hfid/indexing/visualizer-manifest.json
+
+      - name: Run Traffic Matrix Compilation
+        run: |
+          set -e
+          python3 scripts/traffic_visualizer.py
+
+      - name: Commit Analytics Ledger Changes Downstream
+        run: |
+          set -e
+          git config --global user.name "Janus-Visualizer"
+          git config --global user.email "visualizer@jhammerz.github.io"
+          git add scripts/traffic_visualizer.py .hfid/indexing/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update autonomous traffic visualization matrices [skip ci]"
+            git push origin main || (git pull --rebase origin main && git push origin main)
+          else
+            echo "Telemetry summary log configurations match active baseline."
+          fi
