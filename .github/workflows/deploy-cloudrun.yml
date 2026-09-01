@@ -22,19 +22,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Substrate Node
+      - name: Checkout Codebase Substrate
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Authenticate to Google Cloud
-        id: auth
+      - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+          credentials_json: ${{ secrets.G_SERVICE_ACCOUNT_KEY_JSON }}
 
       - name: Deploy to Cloud Run Instance Node
-        id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: "jhammerz-node"
