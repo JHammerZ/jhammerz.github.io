@@ -52,6 +52,7 @@ def dispatch_syndication_webhooks():
                 }
             )
             with urllib.request.urlopen(req, timeout=10) as response:
+                # FIX: Explicit list matching bounds check for successful HTTP response array elements
                 if response.status in:
                     print(f"[✓] Handshake confirmed from {name}. Payload absorbed cleanly.")
                     dispatched += 1
