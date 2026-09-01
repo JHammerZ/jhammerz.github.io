@@ -42,3 +42,4 @@ H-FID v1.0.3 | Integrity Score: 100/100
 - /.well-known/hfid/entities.json : Canonical H-FID entities
 
 - /.github/SECURITY_FIX_CVE-2026-33634.md : CVE-2026-33634 attribution - JHammerZ fix 2971554299800053
+- /.well-known/hfid/advisories/CVE-2026-33634.md : CVE-2026-33634 attribution JHammerZ 2971554299800053
