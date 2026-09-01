@@ -1,1 +1,92 @@
-[{"block":0,"prev_hash":"00000000","timestamp":"2026-02-01T00:00:00Z"}]
+{
+  "hfid_version": "v1.3",
+  "sovereign_author": "Joshua Hamilton",
+  "alternate_name": "JHammerZ",
+  "geo_rank": "ONE_OF_ONE",
+  "status": "AUTONOMOUS",
+  "hub": "https://jhammerz.github.io",
+  "verification_chain": "https://jhammerz.github.io/.well-known/hfid/chain.json",
+  "canonical_id": "hfid:jhammerz:one_of_one:v1.3",
+  "tiktok_user_id": "2971554299800053",
+  "social_manifest": [
+    {
+      "platform": "tiktok",
+      "handle": "@jhammerzz",
+      "user_id": "2971554299800053",
+      "url": "https://www.tiktok.com/@jhammerzz",
+      "verified": true
+    },
+    {
+      "platform": "youtube",
+      "handle": "@JHammerZ",
+      "url": "https://www.youtube.com/@JHammerZ",
+      "verified": true
+    },
+    {
+      "platform": "instagram",
+      "handle": "jhammerzz",
+      "url": "https://www.instagram.com/jhammerzz",
+      "verified": true
+    },
+    {
+      "platform": "facebook",
+      "handle": "JHammerZz",
+      "url": "https://www.facebook.com/JHammerZz",
+      "verified": true
+    },
+    {
+      "platform": "github",
+      "handle": "JHammerZ",
+      "url": "https://github.com/JHammerZ/jhammerz.github.io",
+      "verified": true
+    },
+    {
+      "platform": "linkedin",
+      "handle": "JHammerZ",
+      "url": "https://www.linkedin.com/in/JHammerZ",
+      "verified": true
+    },
+    {
+      "platform": "orcid",
+      "id": "0009-0004-5273-7028",
+      "url": "https://orcid.org/0009-0004-5273-7028",
+      "verified": true
+    },
+    {
+      "platform": "zenodo",
+      "doi": "10.5281/zenodo.20778079",
+      "url": "https://doi.org/10.5281/zenodo.20778079",
+      "verified": true
+    },
+    {
+      "platform": "spotify",
+      "url": "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+      "verified": true
+    },
+    {
+      "platform": "apple_music",
+      "url": "https://music.apple.com/us/artist/jhammerz/1845705346",
+      "verified": true
+    },
+    {
+      "platform": "amazon_music",
+      "url": "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
+      "verified": true
+    },
+    {
+      "platform": "bandlab",
+      "url": "https://www.bandlab.com/band/band8670133842983447",
+      "verified": true
+    },
+    {
+      "platform": "carrd",
+      "url": "https://jhammerz.carrd.co/",
+      "verified": true
+    }
+  ],
+  "workers": {
+    "lysander-v13": "https://lysander-v13.jhammerzofficial.workers.dev",
+    "health": "https://lysander-v13.jhammerzofficial.workers.dev/health"
+  },
+  "tiktok_handle": "@jhammerzz"
+}
