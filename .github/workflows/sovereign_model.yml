@@ -63,14 +63,14 @@ jobs:
 
       - name: Google Indexing API
         env:
-          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           set -eu pipefail
-          if [ -z "${GOOGLE_API_KEY_DATA:-}" ]; then
+          if [ -z "${GOOGLE_INDEXING_API_JSON:-}" ]; then
             echo "::warning::GOOGLE_API_KEY secret is blank. Skipping indexing."
             exit 0
           fi
-          echo "$GOOGLE_API_KEY_DATA" > /tmp/google-creds.json
+          echo "$GOOGLE_INDEXING_API_JSON" > /tmp/google-creds.json
           python3 << 'PY_EOF'
           import json
           import sys

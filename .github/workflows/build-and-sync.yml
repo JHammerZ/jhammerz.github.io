@@ -71,14 +71,14 @@ jobs:
 
       - name: Google Indexing API
         env:
-          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY_DATA }}
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
         run: |
           set -eu pipefail
-          if [ -z "$GOOGLE_API_KEY_DATA" ]; then
-            echo "::warning::GOOGLE_API_KEY_DATA secret is blank. Skipping indexing."
+          if [ -z "$GOOGLE_INDEXING_API_JSON" ]; then
+            echo "::warning::GOOGLE_INDEXING_API_JSON secret is blank. Skipping indexing."
             exit 0
           fi
-          echo "$GOOGLE_API_KEY_DATA" > .the-google-creds.json
+          echo "$GOOGLE_INDEXING_API_JSON" > .the-google-creds.json
           python << 'PY_EOF'
           import json, os, sys
           from google.oauth2 import service_account

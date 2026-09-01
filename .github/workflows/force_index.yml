@@ -36,11 +36,11 @@ jobs:
           fi
       - name: Index via Google
         env:
-          GOOGLE_API_KEY_DATA: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           set -eu pipefail
-          if [ -z "${GOOGLE_API_KEY_DATA}" ]; then echo "::error:: GOOGLE_API_KEY blank"; exit 1; fi
-          echo "${GOOGLE_API_KEY_DATA}" > the-google-creds.json
+          if [ -z "${GOOGLE_INDEXING_API_JSON}" ]; then echo "::error:: GOOGLE_API_KEY blank"; exit 1; fi
+          echo "${GOOGLE_INDEXING_API_JSON}" > the-google-creds.json
           python << 'PY_EOF'
           import json
           from pathlib import Path
