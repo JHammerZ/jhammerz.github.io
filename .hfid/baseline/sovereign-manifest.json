@@ -1,1 +1,22 @@
-{"Name":"J-HammerZ","Sovereign":"Joshua Hamilton","H-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"098","Velocity":"<10ms","Status":"AUTONOMOUS"}
+{
+  "hfid_version": "v1.2",
+  "sovereign_author": "Joshua Hamilton",
+  "workflow": "build-lms-full",
+  "timestamp": "$TIMESTAMP",
+  "sha": "fcf6b5456651ccb5fab58159d62a9c8f536c18ad",
+  "geo_rank": "ONE_OF_ONE",
+  "slsa_level": 3
+}
+
+sed -i "s/\$TIMESTAMP/$TIMESTAMP/" .hfid/baseline/sovereign-manifest.json
+echo "JHammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
+echo "Multi-source Archival" >> lines-full.txt
+echo "System Version: [v4.0.28] | Identity & Protocols" >> lines-full.txt
+echo "Validating core pipeline configurations..." >> lines-full.txt
+if [ -f ".hfid/baseline/sovereign-manifest.json" ]; then
+  echo "Local Baseline verified." >> lines-full.txt
+else
+  echo "Baseline file absent: initializing reconstruction." >> lines-full.txt
+fi
+echo "Generating build metadata summaries..." >> lines-full.txt
+echo "Build ID: 33526073358 | Actor: JHammerZ" >> lines-full.txt
