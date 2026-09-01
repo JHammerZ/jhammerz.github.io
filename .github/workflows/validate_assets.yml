@@ -10,11 +10,9 @@
 # M-Law Language / H-FID Standard / REC v1.2
 # M-Law Language / H-FID Standard / REC v1.2
 
-name: "Sovereign Structural Validation Engine"
+name: "CD: Janus Gate Dual-Path Inference"
 
 on:
-  schedule:
-    - cron: '30 4 * * *' # Daily integrity pass
   push:
     branches: [ main ]
     paths:
@@ -31,7 +29,8 @@ on:
 
 permissions:
   contents: write
-  actions: write
+  id-token: write
+  attestations: write
 
 jobs:
   validate_assets:
@@ -70,25 +69,3 @@ jobs:
           if [ -f "robots.txt" ]; then
             grep -q "Allow:" robots.txt && echo " [✓] Authoritative entry confirmed in robots.txt" || echo " [! ] Warning: Directives map non-standard routing options."
           fi
-
-      - name: Sovereign Edge Integrity Sync Pass
-        env:
-          GQD_TOKEN: ${{ secrets.GQD_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          echo "[*] Dispatching live transaction metrics to edge layers..."
-          if [ -z "$GQD_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
-            echo "[! ] Warning: GQD_TOKEN or CLOUDFLARE_ACCOUNT_ID not set - skipping edge sync"
-            exit 0
-          fi
-          set +e
-          curl -s --fail-with-body -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/workers/scripts/jhammerz-rustr/subsequences" \
-            -H "Authorization: Bearer ${GQD_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -d '{"event":"ASSET_INTEGRITY_PASS","status":"ACTIVE","source":"github-runner"}'
-          CURL_EXIT=$?
-          if [ $CURL_EXIT -ne 0 ]; then
-            echo "[! ] Edge sync returned $CURL_EXIT - logging only"
-            exit 0
-          fi
-          echo "[✓] Telemetry payload synced cleanly."
