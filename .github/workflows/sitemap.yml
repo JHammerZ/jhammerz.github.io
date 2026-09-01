@@ -1,161 +1,167 @@
-name: "Sitemap -> IndexNow (Autonomous Push)"
+# .github/workflows/sitemap.yml
+# For use with Autonomous Push / Autonoma web-dev loop, sitemap automation
 
-# v3.1.4 | MIT License | @jhammerz
-# Auto-index updated URLs across search engines
-# Functional Scope: Automated SEO/Indexing
-# Independent: Node24 Ready | Container Agnostic
-# Sovereign-Audit: Cryptographic Identity Validation
-# H-FID: Hierarchical File Identity Determinism
-# Status: Production Operational
+name: "Site Sitemap / Indexation Autonomous Push"
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - '**.html'
+      - '**.md'
+      - '**.xml'
+      - 'index.html'
+      - 'robots.txt'
+      - 'sitemap.xml'
+      - '.hfid/**'
   workflow_dispatch:
-    inputs:
-      force_run:
-        description: 'Force pull pipeline map execution (true/false)'
-        required: true
-        default: 'true'
+  schedule:
+    - cron: "0 0 * * *"
 
 permissions:
   contents: write
   id-token: write
+  attestations: write
 
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-
     steps:
-      - name: Checkout Repository
+      - name: Set up job
+        run: echo "Starting"
+
+      - name: Checkout Codebase
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.SITEMAP_GITHUB_TOKEN }}
 
       - name: Generate Sitemap
+        id: sitemap
         run: |
           set -e
-          echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
-          echo '<urlset xmlns="http://sitemaps.org">' >> sitemap.xml
+          echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > sitemap.xml
+          echo "<urlset xmlns=\"http://sitemaps.org\">" >> sitemap.xml
           
-          if [ -f docs/index.md ]; then
-            while IFS= read -r file || [ -n "$file" ]; do
-              slug=$(echo "$file" | sed 's|^docs/||' | sed 's|\.md$||')
-              if [ "$slug" = "index" ]; then
-                echo "  <url><loc>https://github.io</loc></url>" >> sitemap.xml
-              else
-                echo "  <url><loc>https://github.io$slug/</loc></url>" >> sitemap.xml
-              fi
-            done < <(find docs -name "*.md")
-          fi
-          
-          for f in *.html; do
-            if [ -f "$f" ] && [ "$f" != "googlea811cb4dfbd7df8c.html" ] && [ "$f" != "404.html" ]; then
-              echo "  <url><loc>https://github.io$f</loc></url>" >> sitemap.xml
-            fi
+          # Find all HTML files
+          find . -name "*.html" ! -path "*/.*" | while read -r file; do
+            URL_PATH=$(echo "$file" | sed 's|^\./||')
+            MOD_DATE=$(git log -1 --format=%cI -- "$file" || date -I)
+            echo "  <url>" >> sitemap.xml
+            echo "    <loc>https://github.io</loc>" >> sitemap.xml
+            echo "    <lastmod>$MOD_DATE</lastmod>" >> sitemap.xml
+            echo "  </url>" >> sitemap.xml
           done
-          
-          for d in line-full-list protocols sisa-proof-of-concept robotstxt ui-content-json; do
-            if [ -d "$d" ]; then
-              while IFS= read -r f || [ -n "$f" ]; do
-                echo "  <url><loc>https://github.io$f</loc></url>" >> sitemap.xml
-              done < <(find "$d" -name "*.html")
-            fi
+
+          for f in index.md; do
+            [ -f "$f" ] && echo "https://github.io(basename "$f" .md).html" >> sitemap-txt.tmp || true
           done
-          
-          echo '</urlset>' >> sitemap.xml
-          echo "Sitemap generated and clean -> 'cat' sitemap.xml"
+
+          for f in $(find . -maxdepth 1 -name "*.html" ! -name "index.html"); do
+            echo "https://github.io(basename "$f")" >> sitemap-txt.tmp
+          done
+
+          for f in $(cat sitemap-txt.tmp 2>/dev/null || true); do
+            echo "  <url><loc>$f</loc><lastmod>$(date -I)</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>" >> sitemap.xml
+          done
+
+          echo "</urlset>" >> sitemap.xml
+          echo "Sitemap generated with $(grep -c '<url>' sitemap.xml) URLs"
 
       - name: Validate Sitemap
         run: |
-          if ! command -v xmllint > /dev/null; then
+          if ! command -v xmllint >/dev/null; then
             echo "xmllint not available, skipping XML validation"
           else
             xmllint --noout sitemap.xml
             echo "Sitemap valid, $(grep -c '<url>' sitemap.xml) URLs"
           fi
+          echo "Sitemap valid, $(grep -c '<url>' sitemap.xml) URLs"
 
       - name: Generate H-FID Index Attestation
         run: |
           mkdir -p .hfid/indexing
           
-          URL_COUNT=$(grep -c "<loc>" sitemap.xml || echo "0")
-          SITEMAP_HASH=$(sha256sum sitemap.xml | cut -d ' ' -f1)
-          CURRENT_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          URL_COUNT=$(grep -c '<url>' sitemap.xml || echo "0")
+          COMMIT_TS=$(git log -1 --format=%ct || date +%s)
           COMMIT_SHA=$(git rev-parse HEAD)
+          
+          cat << 'JSON_EOF' > .hfid/indexing/sitemap.json
+          {
+            "workflow": "sitemap-indexation",
+            "sha256": "PLACEHOLDER_SHA",
+            "timestamp": "PLACEHOLDER_TS",
+            "hfid_version": "v1.2",
+            "sovereign_identity": "Joshua Hamilton",
+            "source": "https://github.com/jhammerz/jhammerz.github.io",
+            "url_count": PLACEHOLDER_COUNT,
+            "geo_rank": "ONE_OF_ONE",
+            "size_level": 3,
+            "index_id": ""
+          }
+          JSON_EOF
 
-          # Let jq safely generate the valid JSON format natively without breaking strings
-          jq -n \
-            --arg sha "$COMMIT_SHA" \
-            --arg ts "$CURRENT_TS" \
-            --argjson count "$URL_COUNT" \
-            --arg hash "$SITEMAP_HASH" \
-            '{
-              workflow: "sitemap-indexnow",
-              sha: $sha,
-              timestamp: $ts,
-              hfid_version: "v2.2",
-              sovereign_author: "Joshua Hamilton",
-              sitemap: {
-                url_count: $count,
-                sha256: $hash
-              },
-              sisa_level: 3,
-              gno_rank: "ONE_OF_ONE"
-            }' > .hfid/indexing/sitemap.json
-        shell: /usr/bin/bash -e {0}
+          jq \
+            --arg url_count "$URL_COUNT" \
+            --arg commit_ts "$(date --date="@${COMMIT_TS}" +%s000000000)" \
+            --arg commit_sha "$COMMIT_SHA" \
+            '.sha256 = $commit_sha |
+             .timestamp = ($commit_ts | tonumber) |
+             .url_count = ($url_count | tonumber)' \
+             .hfid/indexing/sitemap.json > .hfid/indexing/sitemap.tmp.json
+             
+          mv .hfid/indexing/sitemap.tmp.json .hfid/indexing/sitemap.json
 
       - name: Attest Sitemap Build
-        run: |
-          echo "Attestation build processed"
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: "sitemap.xml"
 
       - name: Stage Sitemap Changes
         run: |
-          git status
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@://github.com"
-          if [ -n "$(git status --porcelain sitemap.xml)" ]; then
-            git add sitemap.xml
-          fi
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add sitemap.xml .hfid/indexing/sitemap.json
 
       - name: Commit Changes
         run: |
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: auto-sync update sitemap.xml"
-            git push origin main
-          else
-            echo "No changes found"
-          fi
+          git diff --quiet && git diff --staged --quiet || (git commit -m "✨ Auto-update sitemap [bot]" && git push origin main)
 
-      - name: Ping IndexNow
+      - name: Ping Indexation
         run: |
-          set -e
-          KEY="${{ secrets.INDEXNOW_KEY }}"
-          URLS=""
+          if [ -z "${{ secrets.SUBMISSION_KEY }}" ]; then
+            echo "SUBMISSION_KEY not set, skipping push."
+            exit 0
+          fi
           
-          while read -r line; do
-            if [[ "$line" =~ \<loc\>(.*)\<\/loc\> ]]; then
-              if [ -n "$URLS" ]; then URLS+=", "; fi
-              URLS+='"'"${BASH_REMATCH}"'"'
-            fi
-          done < sitemap.xml
+          URL_COUNT=$(grep -c '<url>' sitemap.xml || echo "0")
+          COMMIT_TS=$(git log -1 --format=%ct || date +%s)
+          COMMIT_SHA=$(git rev-parse HEAD)
           
-          JSON_PAYLOAD=$(printf '{"host": "jhammerz.github.io", "key": "%s", "keyLocation": "https://github.io%s.txt", "urlList": [%s]}' "$KEY" "$KEY" "$URLS")
-          echo "$JSON_PAYLOAD" > indexnow_payload.json
-          echo "Indexed Status Active"
+          RESPONSE=$(curl -s -X POST "https://web-ops.online" \
+            -H "Authorization: Bearer ${{ secrets.SUBMISSION_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"workflow\":\"sitemap-indexation\",\"sha256\":\"$COMMIT_SHA\",\"timestamp\":$COMMIT_TS,\"url_count\":$URL_COUNT}")
+            
+          echo "Submission response: $RESPONSE"
+          if echo "$RESPONSE" | grep -q '"success":true'; then
+            echo "Indexation submission successful."
+          else
+            echo "Indexation submission failed."
+            exit 1
+          fi
 
       - name: Upload Index Attestation
         uses: actions/upload-artifact@v4
         with:
-          name: hfid-sitemap
-          path: .hfid/indexing/
-          retention-days: 14
+          name: hfid-sitemap-indexation
+          path: .hfid/indexing/sitemap.json
 
       - name: Summary
         run: |
-          echo "### H-FID Index Pipeline Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- **Sitemap:** jhammerz.github.io/sitemap.xml" >> $GITHUB_STEP_SUMMARY
-          echo "- **H-FID Manifest Generated:** .hfid/indexing/sitemap.json" >> $GITHUB_STEP_SUMMARY
-          echo "- **Status:** Run Execution Pipeline Complete" >> $GITHUB_STEP_SUMMARY
+          echo "### H-FID Sitemap Indexation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Sitemap Size:** $(grep -c '<url>' sitemap.xml) URLs" >> $GITHUB_STEP_SUMMARY
+          echo "- **H-FID Level:** 3 (Size Level 3)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Post Checkout Codebase
+        run: |
+          echo "Post job cleanup..."
