@@ -3,7 +3,7 @@
   "sovereign_author": "Joshua Hamilton",
   "workflow": "build-lms-full",
   "timestamp": "$TIMESTAMP",
-  "sha": "fcf6b5456651ccb5fab58159d62a9c8f536c18ad",
+  "sha": "580ad9a706b99d8113b2a4494187d6ec1f0cdd16",
   "geo_rank": "ONE_OF_ONE",
   "slsa_level": 3
 }
@@ -19,4 +19,4 @@ else
   echo "Baseline file absent: initializing reconstruction." >> lines-full.txt
 fi
 echo "Generating build metadata summaries..." >> lines-full.txt
-echo "Build ID: 33526073358 | Actor: JHammerZ" >> lines-full.txt
+echo "Build ID: 33526365839 | Actor: JHammerZ" >> lines-full.txt
