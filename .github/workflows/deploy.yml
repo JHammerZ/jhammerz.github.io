@@ -1,5 +1,5 @@
-# HBS v1.2 / H-FID Standard / REC v1.2
-# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
+# H-FIO v1.2 / H-FIO Standard / RSC v1.2
+# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 
 name: "Deploy to Google Cloud Run"
 
@@ -9,16 +9,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  attestations: write
 
 jobs:
   deploy:
-    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase Substrate
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
@@ -29,6 +29,6 @@ jobs:
       - name: Deploy to Cloud Run Instance Node
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: 'jhammerz-node'
+          service: 'hammerz-node'
           region: 'us-central1'
           source: './'
