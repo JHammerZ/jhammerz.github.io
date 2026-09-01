@@ -31,7 +31,6 @@ jobs:
       - name: Generate Sitemap
         run: |
           echo "[*] Mapping target file nodes..."
-          # Standard auto-generation logic goes here if active
           touch sitemap.xml
 
       - name: Validate Sitemap
@@ -46,7 +45,6 @@ jobs:
           mkdir -p .hfid/indexing .hfid/baseline
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           
-          # Initialize baseline safely
           cat > .hfid/indexing/sitemap-manifest.json << 'MANIFEST_EOF'
           {
             "workflow": "sitemap-indexflow",
@@ -57,7 +55,6 @@ jobs:
           }
 MANIFEST_EOF
 
-          # FIX: Strictly passing arguments via --arg to avoid raw numeric literal injection leaks
           TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" '.timestamp=$ts | .sha=$sha' .hfid/indexing/sitemap-manifest.json)
           echo "$TMP_JSON" > .hfid/indexing/sitemap-manifest.json
           cat .hfid/indexing/sitemap-manifest.json
