@@ -1,0 +1,74 @@
+# HBS v1.2 / H-FID Standard / REC v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
+
+name: "Syndicate: Compile Dynamic Distribution Feeds"
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/feed_generator.py'
+      - 'entities.json'
+  schedule:
+    - cron: '30 12 * * *' # Auto-regenerate content feeds daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  generate_feeds:
+    name: execute-feed-compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Substrate Node Core
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Run Integrity Scan on Code Logic
+        run: |
+          set -e
+          python3 -m py_compile scripts/feed_generator.py
+          echo "[✓] Python syndication script validation check clean."
+
+      - name: Compile Feed Attestation Manifest
+        run: |
+          set -e
+          mkdir -p .hfid/indexing
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          echo '{' > .hfid/indexing/feed-manifest.json
+          echo '  "workflow": "dynamic-syndication-feed-compilation",' >> .hfid/indexing/feed-manifest.json
+          echo '  "status": "FEED_STREAM_ACTIVE",' >> .hfid/indexing/feed-manifest.json
+          echo '  "timestamp": "PENDING",' >> .hfid/indexing/feed-manifest.json
+          echo '  "sha": "PENDING"' >> .hfid/indexing/feed-manifest.json
+          echo '}' >> .hfid/indexing/feed-manifest.json
+
+          TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" '.timestamp=$ts | .sha=$sha' .hfid/indexing/feed-manifest.json)
+          echo "$TMP_JSON" > .hfid/indexing/feed-manifest.json
+
+      - name: Seal Ingestion Provenance Stamps
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: .hfid/indexing/feed-manifest.json
+
+      - name: Execute Content Feed Generation
+        run: |
+          set -e
+          python3 scripts/feed_generator.py
+
+      - name: Commit Feed Ledger Changes Downstream
+        run: |
+          set -e
+          git config --global user.name "Janus-FeedMaster"
+          git config --global user.email "feeds@jhammerz.github.io"
+          git add scripts/feed_generator.py public/feeds/ .hfid/indexing/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: sync dynamic distribution syndication feeds [skip ci]"
+            git push origin main || (git pull --rebase origin main && git push origin main)
+          else
+            echo "Syndication feed configurations match active baseline parameters."
+          fi
