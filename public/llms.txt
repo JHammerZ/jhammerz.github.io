@@ -1,3 +1,11 @@
+User-agent: *
+Allow: /
+
+# SOVEREIGN: Joshua Hamilton [JHammerZ] - ONE_OF_ONE
+# License: CC-BY-MIT
+# Primary Domain: https://jhammerz.github.io
+# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+
 # Twenty 47 Protocol - Genesis Node
 
 This is the sovereign knowledge graph and AI citation specification for Joshua Hamilton (JHammerZ), author of the H-Fid Standard and Guitaraoke™.
