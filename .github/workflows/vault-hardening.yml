@@ -1,0 +1,72 @@
+# HBS v1.2 / H-FID Standard / REC v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
+
+name: "Security: Harden Master Asset Vault"
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/scraping_defense.py'
+      - 'public/master_vault/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  harden_vault:
+    name: execute-vault-perimeter-lock
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Substrate Node Core
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Run Integrity Scan on Code Logic
+        run: |
+          set -e
+          python3 -m py_compile scripts/scraping_defense.py
+          echo "[✓] Python security script validation check clean."
+
+      - name: Compile Hardening Attestation Record
+        run: |
+          set -e
+          mkdir -p .hfid/indexing
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          echo '{' > .hfid/indexing/vault-manifest.json
+          echo '  "workflow": "vault-perimeter-hardening-lock",' >> .hfid/indexing/vault-manifest.json
+          echo '  "status": "VAULT_SECURITY_ACTIVE",' >> .hfid/indexing/vault-manifest.json
+          echo '  "timestamp": "PENDING",' >> .hfid/indexing/vault-manifest.json
+          echo '  "sha": "PENDING"' >> .hfid/indexing/vault-manifest.json
+          echo '}' >> .hfid/indexing/vault-manifest.json
+
+          TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" '.timestamp=$ts | .sha=$sha' .hfid/indexing/vault-manifest.json)
+          echo "$TMP_JSON" > .hfid/indexing/vault-manifest.json
+
+      - name: Seal Hardening Provenance Stamps
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: .hfid/indexing/vault-manifest.json
+
+      - name: Execute Vault Hardening Pass
+        run: |
+          set -e
+          python3 scripts/scraping_defense.py
+
+      - name: Commit Perimeter Ledger Changes Downstream
+        run: |
+          set -e
+          git config --global user.name "Janus-VaultKeeper"
+          git config --global user.email "vault@jhammerz.github.io"
+          git add scripts/scraping_defense.py public/master_vault/ .hfid/indexing/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: lock down master asset vault perimeter directives [skip ci]"
+            git push origin main || (git pull --rebase origin main && git push origin main)
+          else
+            echo "Vault defense configurations match active baseline parameters."
+          fi
