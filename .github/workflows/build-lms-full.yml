@@ -54,7 +54,7 @@ jobs:
             "geo_rank": "ONE_OF_ONE",
             "slsa_level": 3
           }
-INNER_EOF
+
           sed -i "s/\$TIMESTAMP/$TIMESTAMP/" .hfid/baseline/sovereign-manifest.json
           echo "JHammerZ Multi-Tier Deep Mapping Stack" > lines-full.txt
           echo "Multi-source Archival" >> lines-full.txt
