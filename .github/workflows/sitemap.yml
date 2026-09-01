@@ -1,6 +1,6 @@
 name: "Sitemap -> IndexNow (Autonomous Push)"
 
-# v3.1.3 | MIT License | @jhammerz
+# v3.1.4 | MIT License | @jhammerz
 # Auto-index updated URLs across search engines
 # Functional Scope: Automated SEO/Indexing
 # Independent: Node24 Ready | Container Agnostic
@@ -86,31 +86,25 @@ jobs:
           CURRENT_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           COMMIT_SHA=$(git rev-parse HEAD)
 
-          cat << 'INNER_EOF' > .hfid/indexing/sitemap.json
-          {
-            "workflow": "sitemap-indexnow",
-            "sha": "PLACEHOLDER_SHA",
-            "timestamp": "PLACEHOLDER_TS",
-            "hfid_version": "v2.2",
-            "sovereign_author": "Joshua Hamilton",
-            "sitemap": {
-              "url_count": "PLACEHOLDER_COUNT",
-              "sha256": "PLACEHOLDER_HASH"
-            },
-            "sisa_level": 3,
-            "gno_rank": "ONE_OF_ONE"
-          }
-          INNER_EOF
-
-          jq \
+          # Let jq safely generate the valid JSON format natively without breaking strings
+          jq -n \
             --arg sha "$COMMIT_SHA" \
             --arg ts "$CURRENT_TS" \
             --argjson count "$URL_COUNT" \
             --arg hash "$SITEMAP_HASH" \
-            '.sha=$sha | .timestamp=$ts | .sitemap.url_count=$count | .sitemap.sha256=$hash' \
-            .hfid/indexing/sitemap.json > .hfid/indexing/sitemap.tmp.json
-
-          mv .hfid/indexing/sitemap.tmp.json .hfid/indexing/sitemap.json
+            '{
+              workflow: "sitemap-indexnow",
+              sha: $sha,
+              timestamp: $ts,
+              hfid_version: "v2.2",
+              sovereign_author: "Joshua Hamilton",
+              sitemap: {
+                url_count: $count,
+                sha256: $hash
+              },
+              sisa_level: 3,
+              gno_rank: "ONE_OF_ONE"
+            }' > .hfid/indexing/sitemap.json
         shell: /usr/bin/bash -e {0}
 
       - name: Attest Sitemap Build
