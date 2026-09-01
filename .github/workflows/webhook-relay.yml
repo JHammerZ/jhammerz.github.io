@@ -1,0 +1,77 @@
+# HBS v1.2 / H-FID Standard / REC v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
+
+name: "Syndicate: Autonomous Webhook Relay Relay"
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'entities.json'
+      - '.well-known/hfid/**'
+      - 'scripts/webhook_relay.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  relay_broadcast:
+    name: execute-webhook-payload
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase Node Substrate
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Run Integrity Scan on Script Logic
+        run: |
+          set -e
+          python3 -m py_compile scripts/webhook_relay.py
+          echo "[✓] Python execution engine syntax verified."
+
+      - name: Compile Relay Attestation Manifest
+        run: |
+          set -e
+          mkdir -p .hfid/indexing
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          echo '{' > .hfid/indexing/relay-manifest.json
+          echo '  "workflow": "autonomous-webhook-relay-broadcast",' >> .hfid/indexing/relay-manifest.json
+          echo '  "status": "RELAY_TRANSMISSION_ACTIVE",' >> .hfid/indexing/relay-manifest.json
+          echo '  "timestamp": "PENDING",' >> .hfid/indexing/relay-manifest.json
+          echo '  "sha": "PENDING"' >> .hfid/indexing/relay-manifest.json
+          echo '}' >> .hfid/indexing/relay-manifest.json
+
+          TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" '.timestamp=$ts | .sha=$sha' .hfid/indexing/relay-manifest.json)
+          echo "$TMP_JSON" > .hfid/indexing/relay-manifest.json
+
+      - name: Seal Ingestion Provenance Stamps
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: .hfid/indexing/relay-manifest.json
+
+      - name: Dispatch Live Multi-Platform Webhook Relays
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GLOBAL_MESH_RELAY_URL: ${{ secrets.GLOBAL_MESH_RELAY_URL }}
+        run: |
+          set -e
+          python3 scripts/webhook_relay.py
+
+      - name: Commit Relay Ledger Changes Downstream
+        run: |
+          set -e
+          git config --global user.name "Janus-Relay"
+          git config --global user.email "relay@jhammerz.github.io"
+          git add scripts/webhook_relay.py .hfid/indexing/relay-manifest.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: deploy autonomous AAD webhook relay matrix [skip ci]"
+            git push origin main || (git pull --rebase origin main && git push origin main)
+          else
+            echo "Relay logging files already fully tracked and synchronized."
+          fi
