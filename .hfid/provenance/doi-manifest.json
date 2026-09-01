@@ -1,0 +1,10 @@
+{
+  "workflow": "doi-bridge.yml",
+  "operation": "DOI_SYNC",
+  "gateway_bridge": "janus_Gate",
+  "timestamp": "2026-09-01T15:51:05Z",
+  "sovereign_author": "Joshua Hamilton",
+  "verification_status": "H-FID-AUTHENTICATED",
+  "slsa_level": 3,
+  "gno_rank": "ONE_OF_ONE"
+}
