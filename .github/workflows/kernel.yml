@@ -79,7 +79,6 @@ jobs:
             "slsa_level": 3,
             "geo_rank": "ONE_OF_ONE"
           }
-MANIFEST_EOF
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" --arg tgt "${{ github.event.inputs.target || 'kernel' }}" '.timestamp=$ts | .sha=$sha | .target=$tgt' .hfid/kernel/manifest.json)
           echo "$TMP_JSON" > .hfid/kernel/manifest.json
