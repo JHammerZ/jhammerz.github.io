@@ -84,3 +84,4 @@ jobs:
             # Prevent silent failures while guarding against unbundled code payload drops
             exit 0
           fi
+# H-FID Operational Validation Lock: 2026-09-01
