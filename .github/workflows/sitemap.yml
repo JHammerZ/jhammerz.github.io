@@ -144,7 +144,7 @@ jobs:
           while read -r line; do
             if [[ "$line" =~ \<loc\>(.*)\<\/loc\> ]]; then
               if [ -n "$URLS" ]; then URLS+=", "; fi
-              URLS+='"'"${BASH_REMATCH[1]}"'"'
+              URLS+='"'"${BASH_REMATCH}"'"'
             fi
           done < sitemap.xml
           
