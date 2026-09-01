@@ -1,0 +1,8 @@
+name = "lysander-v13"
+main = "src/index.ts"
+compatibility_date = "2024-09-01"
+
+[vars]
+SOVEREIGN_AUTHOR = "Joshua Hamilton"
+HFID_VERSION = "v1.3"
+GNO_RANK = "ONE_OF_ONE"
