@@ -35,7 +35,7 @@ cat << 'JSON' > socials-manifest.json
     "github": "https://github.com",
     "carrd": "https://carrd.co",
     "zenodo_doi": "https://doi.org",
-    "orcid": "https://orcid.org"
+    "orcid": "https://orcid.org/0009-0004-5273-7028"
   }
 }
 JSON
