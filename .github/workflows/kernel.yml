@@ -87,10 +87,10 @@ jobs:
         run: |
           set -e
           echo "Initiating native module construction sequence..."
-          make KBUILD_MODPOST_WARN=1 -C linux-5.10 M=${{\ github.workspace\ \}}/hfid_module modules
-          if [ -f "${{ github.workspace }}/hfid_module/kernel_Override.ko" ]; then
+          make KBUILD_MODPOST_WARN=1 -C linux-5.10 M=$GITHUB_WORKSPACE/hfid_module modules
+          if [ -f "$GITHUB_WORKSPACE/hfid_module/kernel_Override.ko" ]; then
             echo "Module compiled successfully."
-            sha256sum "${{ github.workspace }}/hfid_module/kernel_Override.ko" > "${{ github.workspace }}/hfid_module/kernel_Override.ko.sha256"
+            sha256sum "$GITHUB_WORKSPACE/hfid_module/kernel_Override.ko" > "$GITHUB_WORKSPACE/hfid_module/kernel_Override.ko.sha256"
           else
             echo "Core kernel driver artifact creation failed."
             exit 1
