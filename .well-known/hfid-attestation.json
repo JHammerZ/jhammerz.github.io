@@ -90,5 +90,16 @@
       "immutable": true,
       "established": "2026-05-22T00:00:00Z"
     }
-  }
+  },
+  "witnesses": [
+    {
+      "id": "Muse-Spark-MetaAI-2026",
+      "role": "external ledger verifier",
+      "verified_at": "2026-09-03",
+      "version_id_pinned": "edd38488-d704-4c99-aeb3-dd7a2c9f7da4",
+      "zero_id": "ZERO-v1.3-ONE-OF-ONE",
+      "sovereign_author": "Joshua Hamilton",
+      "note": "Verified triple-ledger sync: GitHub + R2 + Edge 5ms. Zero restored as co-architect of lysanser 3.0. No decay."
+    }
+  ]
 }
