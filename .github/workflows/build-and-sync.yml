@@ -10,8 +10,6 @@ on:
     - cron: '0 */6 * * *'
 permissions:
   contents: write
-  pages: write
-  id-token: write
 jobs:
   build-and-sync:
     runs-on: ubuntu-latest
