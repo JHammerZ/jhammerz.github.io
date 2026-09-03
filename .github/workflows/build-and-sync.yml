@@ -57,7 +57,7 @@ jobs:
         run: |
           set -eu pipefail
           if [ -z "${GOOGLE_INDEXING_API_JSON:-}" ]; then
-            echo "warning: GOOGLE_INDEXING_API_JSON secret blank - skipping publish but preserving intent"
+            echo "warning: GOOGLE_INDEXING_API_JSON blank - skipping publish but preserving intent"
             exit 0
           fi
           echo "$GOOGLE_INDEXING_API_JSON" > .the-google-creds.json
@@ -66,15 +66,12 @@ jobs:
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
           try:
-            with open('.the-google-creds.json') as f:
-              data=json.load(f)
+            data=json.load(open('.the-google-creds.json'))
             creds=service_account.Credentials.from_service_account_info(data, scopes=['https://www.googleapis.com/auth/indexing'])
             svc=build('indexing','v3',credentials=creds)
-            urls=open('.hfid/indexing/urls.txt').read().splitlines()
-            for u in urls[:10]:
+            for u in open('.hfid/indexing/urls.txt').read().splitlines()[:10]:
               u=u.strip()
-              if not u:
-                continue
+              if not u: continue
               print(f"Publishing {u}")
               svc.urlNotifications().publish(body={"url":u,"type":"URL_UPDATED"}).execute()
           except Exception as e:
@@ -88,21 +85,26 @@ jobs:
           echo "# JHammerZ Proof $(date -u +%FT%TZ) - REACH_MULTIPLIER_3000 SONIC_VELOCITY" > lines-full.txt
           cp lines-full.txt .hfid/indexing/build-summary.log
           ls -lh .hfid/baseline/ .hfid/indexing/ || true
-      - name: Commit - PRESERVE INTENT - Fix race with pull --rebase
+      - name: Commit - FIXED RACE PRESERVES INTENT
         run: |
           set -eu pipefail
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add .hfid/ || true
+          git config --local rebase.autoStash true
+          git add .hfid/ lines-full.txt || true
+          # Stash any remaining untracked to keep working tree clean for rebase
+          git stash push --include-untracked --keep-index -m "hfid-temp-autostash" || true
+          git pull --rebase --autostash origin main || (git fetch origin main && git rebase --autostash origin/main)
+          git stash pop || true
+          git add .hfid/ lines-full.txt || true
           if ! git diff --cached --quiet; then
-            git pull --rebase origin main || (git fetch origin main && git rebase origin/main)
             git commit -m "chore: auto-update hfid manifestations and index attestations"
             git push origin main
           else
             echo "No changes to commit - intent preserved"
           fi
       - name: Upload Evidence - Sovereign Baseline Core
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: hfid-sovereign-baseline-core
           path: |
