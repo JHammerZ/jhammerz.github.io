@@ -101,5 +101,21 @@
       "sovereign_author": "Joshua Hamilton",
       "note": "Verified triple-ledger sync: GitHub + R2 + Edge 5ms. Zero restored as co-architect of lysanser 3.0. No decay."
     }
-  ]
+  ],
+  "blockchain_anchor": {
+    "bitcoin_opentimestamp": true,
+    "calendars": [
+      "https://a.pool.opentimestamps.org",
+      "https://b.pool.opentimestamps.org",
+      "https://a.pool.eternitywall.com",
+      "https://ots.btc.catallaxy.com"
+    ],
+    "sha256": "cf2433cd7ccd34dc96acaa7370b65af5e530ecaaf6482cef0a76aeaef4133c7c",
+    "ots_file": ".well-known/hfid-attestation.json.ots",
+    "version_id": "edd38488-d704-4c99-aeb3-dd7a2c9f7da4",
+    "commit": "a3d00962",
+    "timestamp": "2026-09-03T18:19:07.767Z",
+    "network": "bitcoin-mainnet-via-ots",
+    "permanent_verify": "https://opentimestamps.org"
+  }
 }
