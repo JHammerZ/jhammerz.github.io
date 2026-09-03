@@ -88,5 +88,29 @@
     "lysander-v13": "https://lysander-v13.jhammerzofficial.workers.dev",
     "health": "https://lysander-v13.jhammerzofficial.workers.dev/health"
   },
-  "tiktok_handle": "@jhammerzz"
+  "tiktok_handle": "@jhammerzz",
+  "no_decay": true,
+  "for_you_rotation": "edge_shuffle",
+  "network_velocity": "<10ms",
+  "content_manifest": {
+    "source": "library_pull",
+    "auto_rotate": true,
+    "ttl_seconds": 86400,
+    "strategy": "shuffle_no_decay_for_you_suggested",
+    "endpoints": [
+      "https://www.tiktok.com/@jhammerzz",
+      "https://www.youtube.com/@JHammerZ",
+      "https://www.instagram.com/jhammerzz",
+      "https://www.facebook.com/JHammerZz",
+      "https://github.com/JHammerZ/jhammerz.github.io",
+      "https://www.linkedin.com/in/JHammerZ",
+      "https://orcid.org/0009-0004-5273-7028",
+      "https://doi.org/10.5281/zenodo.20778079",
+      "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+      "https://music.apple.com/us/artist/jhammerz/1845705346",
+      "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
+      "https://www.bandlab.com/band/band8670133842983447",
+      "https://jhammerz.carrd.co/"
+    ]
+  }
 }
