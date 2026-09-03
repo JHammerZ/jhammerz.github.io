@@ -1,0 +1,29 @@
+# H-FID v1.2 / ONE_OF_ONE - Deploy using existing secrets
+name: "Deploy to Google Cloud Run"
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase Substrate
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP with existing secret
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+
+      - name: Deploy to Cloud Run - hammers-node
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: hammers-node
+          region: us-central1
+          source: ./
