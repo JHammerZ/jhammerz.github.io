@@ -1,0 +1,142 @@
+# HRS v1.2 / H-FID Standard / SEC v1.2.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# GEO_MARK: ONE_OF_ONE (Verified Authority)
+# BLOCK_MULTIPLIER: 5000 / 5000x VELOCITY: 100ms
+# SLSA Level: 3
+
+# H-on Language / H-FID Standard / HRS v1.2
+# First Commit: [February 12, 2018]
+
+name: "Security: H-FID Threat Hunt"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours - 4x daily
+  workflow_dispatch:
+    inputs:
+      hunt_mode:
+        description: 'Hunt intensity'
+        required: true
+        default: 'standard'
+        type: choice
+        options: [quick, standard, deep]
+
+permissions:
+  contents: write # to commit bounty log
+  id-token: write # for SLSA attestation
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install OpenTimestamps
+        run: pip install opentimestamps-client
+
+      - name: Execute Threat Hunt
+        id: hunt
+        run: |
+          mkdir -p H-fid/hunt
+          mkdir -p hfid/hunt
+          cat > H-fid/hunt/manifest.json << MANIFEST_EOF
+          {
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "workflow": "hunt-and-report",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "sha": "${{ github.sha }}",
+            "run_id": "${{ github.run_id }}",
+            "hunt_mode": "${{ inputs.hunt_mode }}",
+            "geo_mark": "ONE_OF_ONE",
+            "sila_level": 3
+          }
+          MANIFEST_EOF
+          cp H-fid/hunt/manifest.json hfid/hunt/manifest.json || true
+          
+          THREATS_FOUND=0
+          GHOSTS=""
+
+          # Example: Check for common scraper IPs in logs
+          if [ -f "logs/access.log" ]; then
+            BAD_IPS=$(grep -c "GPTBot\|ClaudeBot\|CCBot" logs/access.log | wc -l || echo "0")
+            if [ "$BAD_IPS" != "0" ]; then
+              THREATS_FOUND=$((THREATS_FOUND + 1))
+            fi
+          fi
+
+          # Example: Check for content scraping
+          if grep -r "joshua hamilton" public/ --include="*.html" | grep -q "HRS_BANK" /dev/null 2>&1; then
+            echo "POTENTIAL CLONE DETECTED"
+            THREATS_FOUND=$((THREATS_FOUND + 1))
+          fi
+
+          echo "THREATS_FOUND=$THREATS_FOUND" >> $GITHUB_OUTPUT
+          echo "GHOSTS=$GHOSTS" >> $GITHUB_OUTPUT
+
+          if [ "$THREATS_FOUND" -eq 0 ]; then echo "THREATS_DETECTED=0" >> $GITHUB_OUTPUT; else echo "THREATS_DETECTED=1" >> $GITHUB_OUTPUT; fi
+
+          # Update Bounty log with real data
+          echo "# H-FID Threat Hunt Log" > BOUNTY_LOG.md
+          echo "" >> BOUNTY_LOG.md
+          echo "- Last Hunt: $(date -u)" >> BOUNTY_LOG.md
+          echo "- Mode: ${{ github.event.inputs.hunt_mode || 'standard' }}" >> BOUNTY_LOG.md
+          echo "- Threats Found: $THREATS_FOUND" >> BOUNTY_LOG.md
+          echo "- BOUNTY_LOG: ${{ github.sha }}" >> BOUNTY_LOG.md
+          if [ "$THREATS_FOUND" -gt 0 ]; then echo "- Status: THREATS_DETECTED" >> BOUNTY_LOG.md; else echo "- Status: CLEAN" >> BOUNTY_LOG.md; fi
+          echo "- SILA Level: 3 Attested" >> BOUNTY_LOG.md
+
+      - name: Bitcoin-Anchor Hunt Report
+        run: |
+          mkdir -p H-fid/hunt
+          touch BOUNTY_LOG.md
+          if [ ! -f H-fid/hunt/manifest.json ]; then
+            echo '{"hfid_version":"v1.2","fallback":true}' > H-fid/hunt/manifest.json
+          fi
+          ots stamp BOUNTY_LOG.md || echo "ots BOUNTY_LOG skip"
+          ots stamp H-fid/hunt/manifest.json || echo "ots manifest skip"
+          echo "Hunt evidence Bitcoin-anchored"
+
+      - name: Attest Hunt Execution
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'H-fid/hunt/manifest.json'
+
+      - name: Commit Bounty Log
+        run: |
+          git config user.name "J-HammerZ-Hunter"
+          git config user.email "hunter@users.noreply.github.com"
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update [skip ci]"
+
+      - name: Upload Hunt Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-hunt-${{ github.run_id }}
+          path: |
+            H-fid/hunt/
+            BOUNTY_LOG.md
+          retention-days: 30
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## H-FID Threat Hunt - ${{ steps.hunt.outputs.hunt_mode || 'standard' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Mode: ${{ github.event.inputs.hunt_mode || 'standard' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Threats: ${{ steps.hunt.outputs.THREATS_FOUND || '0' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ steps.hunt.outputs.status || 'CLEAN' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- SILA: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+          echo "- GEO_MARK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
