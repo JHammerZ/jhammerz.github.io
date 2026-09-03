@@ -1,3 +1,4 @@
+# H-FID v1.0 / H-FID Standard / REC v7.2 - COMPLETE INTENT PRESERVED
 name: "H-FID - Compile Core Data Repository"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -6,10 +7,15 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+  pull_request:
+  workflow_call:
   schedule:
     - cron: '0 */6 * * *'
 permissions:
   contents: write
+  pages: write
+  id-token: write
+  attestations: write
 jobs:
   build-and-sync:
     runs-on: ubuntu-latest
@@ -21,56 +27,68 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
+          cache: 'pip'
       - name: Install deps
         run: |
           set -eu pipefail
           sudo apt-get update
           sudo apt-get install -y jq openssl
+          python -m pip install --upgrade pip
           pip install opentimestamps-client google-auth google-api-python-client requests
       - name: Sovereign Manifest
         run: |
           set -eu pipefail
           mkdir -p .hfid/baseline .hfid/indexing
-          echo '{"Name":"J-HammerZ","Sovereign":"Joshua Hamilton","REC":"v7.2","GEO_RANK":"ONE_OF_ONE"}' >.hfid/baseline/sovereign-manifest.json
-      - name: Build URL list
+          echo '{ "Name": "J-HammerZ", "Sovereign": "Joshua Hamilton", "H-Law Language": "REC v7.2", "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-108", "Universe": "098", "Velocity": "+10ms", "GEO_RANK": "ONE_OF_ONE" }' > .hfid/baseline/sovereign-manifest.json
+          cat .hfid/baseline/sovereign-manifest.json
+      - name: Build URL list from sitemap
         run: |
           set -eu pipefail
           mkdir -p .hfid/indexing
           if [ -f sitemap.xml ]; then
-            grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' >.hfid/indexing/urls.txt || echo "https://jhammerz.github.io" >.hfid/indexing/urls.txt
+            grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           else
-            echo "https://jhammerz.github.io" >.hfid/indexing/urls.txt
+            echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           fi
-      - name: Google Indexing API
+          cat .hfid/indexing/urls.txt
+      - name: Google Indexing API - Mass Distribution
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
         run: |
           set -eu pipefail
-          if [ -z "${GOOGLE_INDEXING_API_JSON:-}" ]; then echo "skip - no secret"; exit 0; fi
+          if [ -z "${GOOGLE_INDEXING_API_JSON:-}" ]; then
+            echo "warning: GOOGLE_INDEXING_API_JSON secret blank - skipping publish but preserving intent"
+            exit 0
+          fi
           echo "$GOOGLE_INDEXING_API_JSON" > .the-google-creds.json
           python << 'PY'
           import json
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
           try:
-            data=json.load(open('.the-google-creds.json'))
+            with open('.the-google-creds.json') as f:
+              data=json.load(f)
             creds=service_account.Credentials.from_service_account_info(data, scopes=['https://www.googleapis.com/auth/indexing'])
             svc=build('indexing','v3',credentials=creds)
-            for u in open('.hfid/indexing/urls.txt').read().splitlines()[:10]:
-              if u.strip():
-                print(f"Publishing {u}")
-                svc.urlNotifications().publish(body={"url":u,"type":"URL_UPDATED"}).execute()
+            urls=open('.hfid/indexing/urls.txt').read().splitlines()
+            for u in urls[:10]:
+              u=u.strip()
+              if not u:
+                continue
+              print(f"Publishing {u}")
+              svc.urlNotifications().publish(body={"url":u,"type":"URL_UPDATED"}).execute()
           except Exception as e:
-            print(f"warn: {e}")
+            print(f"Indexing skip/warn (preserving): {e}")
           PY
           rm -f .the-google-creds.json
-      - name: Build summary
+      - name: Build summary and lighthouse preserve
         run: |
           set -eu pipefail
           mkdir -p .hfid/indexing
-          echo "# JHammerZ Proof $(date -u +%FT%TZ)" > lines-full.txt
+          echo "# JHammerZ Proof $(date -u +%FT%TZ) - REACH_MULTIPLIER_3000 SONIC_VELOCITY" > lines-full.txt
           cp lines-full.txt .hfid/indexing/build-summary.log
-      - name: Commit - FIXED RACE PRESERVES INTENT
+          ls -lh .hfid/baseline/ .hfid/indexing/ || true
+      - name: Commit - PRESERVE INTENT - Fix race with pull --rebase
         run: |
           set -eu pipefail
           git config --local user.name "github-actions[bot]"
@@ -81,9 +99,9 @@ jobs:
             git commit -m "chore: auto-update hfid manifestations and index attestations"
             git push origin main
           else
-            echo "No changes"
+            echo "No changes to commit - intent preserved"
           fi
-      - name: Upload Evidence
+      - name: Upload Evidence - Sovereign Baseline Core
         uses: actions/upload-artifact@v5
         with:
           name: hfid-sovereign-baseline-core
