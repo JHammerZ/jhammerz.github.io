@@ -1,8 +1,8 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
+## H-FID v1.0 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
+# Sovereign Author: H-FID-000001-AUDIT 100/100
+# Forensic Audit: H-FID-000001-AUDIT 100/100
 # GEO_RANK: ONE_OF_ONE (Verified Authority)
 # REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
 # SLSA Level: 3
@@ -12,7 +12,7 @@
 name: "H-FID - Compile Core Data Repository"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:
@@ -49,6 +49,7 @@ jobs:
 
       - name: Install deps
         run: |
+          set -eu pipefail
           sudo apt-get update
           sudo apt-get install -y jq openssl
           python -m pip install --upgrade pip
@@ -56,17 +57,18 @@ jobs:
 
       - name: Sovereign Manifest
         run: |
+          set -eu pipefail
           mkdir -p .hfid/baseline .hfid/indexing
-          echo '{"Name":"J-HammerZ","Sovereign":"Joshua Hamilton","H-Law Language":"REC v7.2","Audit ID":"H-FID-101-FORENSIC-AUDIT SEC-10B","Universe":"098","Velocity":"<10ms","Status":"AUTONOMOUS"}' > .hfid/baseline/sovereign-manifest.json
+          echo '{ "Name": "J-HammerZ", "Sovereign": "Joshua Hamilton", "H-Law Language": "REC v7.2", "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-108", "Universe": "098", "Velocity": "+10ms", "GEO_RANK": "ONE_OF_ONE" }' > .hfid/baseline/sovereign-manifest.json
 
       - name: Build URL list
         run: |
           set -eu pipefail
           mkdir -p .hfid/indexing
-          if [ -f "sitemap.xml" ]; then
-            grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' > .hfid/indexing/urls.txt || echo "https://github.io" > .hfid/indexing/urls.txt
+          if [ -f sitemap.xml ]; then
+            grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           else
-            echo "https://github.io" > .hfid/indexing/urls.txt
+            echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
           fi
 
       - name: Google Indexing API
@@ -75,86 +77,106 @@ jobs:
         run: |
           set -eu pipefail
           if [ -z "$GOOGLE_INDEXING_API_JSON" ]; then
-            echo "::warning::GOOGLE_INDEXING_API_JSON secret is blank. Skipping indexing."
+            echo "warning: GOOGLE_INDEXING_API_JSON secret is missing, skipping execution"
             exit 0
           fi
-          echo "$GOOGLE_INDEXING_API_JSON" > .the-google-creds.json
-          python << 'PY_EOF'
-          import json, os, sys
+
+          echo "$GOOGLE_INDEXING_API_JSON" > service_account.json
+
+          python - << 'EOF_PY'
+          import os
+          import json
+          import requests
           from google.oauth2 import service_account
-          from googleapiclient.discovery import build
+          from google.auth.transport.requests import Request
+
+          SCOPES = ['https://googleapis.com']
+          URLS_FILE = '.hfid/indexing/urls.txt'
+
+          if not os.path.exists(URLS_FILE):
+              print(f"Error: {URLS_FILE} not found.")
+              exit(1)
+
+          with open(URLS_FILE, 'r') as f:
+              urls = [line.strip() for line in f if line.strip()]
+
+          if not urls:
+              print("No URLs found to sync.")
+              exit(0)
 
           try:
-            with open('.the-google-creds.json', 'r') as f:
-              creds_data = json.load(f)
+              creds = service_account.Credentials.from_service_account_file(
+                  'service_account.json', scopes=SCOPES
+              )
+              creds.refresh(Request())
           except Exception as e:
-            print(f"error::JSON parse failure: {e}"); sys.exit(0)
+              print(f"Error loading service account credentials: {e}")
+              exit(1)
 
-          try:
-            credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=['https://googleapis.com'])
-            service = build('indexing', 'v3', credentials=credentials)
-          except Exception as e:
-            print(f"error::Auth handshake failed: {e}"); sys.exit(0)
+          endpoint = "https://googleapis.com"
+          headers = {
+              'Authorization': f'Bearer {creds.token}',
+              'Content-Type': 'application/json'
+          }
 
-          url_list = []
-          if os.path.exists('.hfid/indexing/urls.txt'):
-            with open('.hfid/indexing/urls.txt', 'r') as f:
-              url_list = [line.strip() for line in f if line.strip()]
+          for url in urls:
+              payload = {
+                  "url": url,
+                  "type": "URL_UPDATED"
+              }
+              try:
+                  response = requests.post(endpoint, json=payload, headers=headers)
+                  if response.status_code == 200:
+                      print(f"Successfully notified Google Indexing API for: {url}")
+                  else:
+                      print(f"Failed for {url}: {response.status_code} - {response.text}")
+              except Exception as e:
+                  print(f"Error sending request for {url}: {e}")
+          EOF_PY
 
-          if not url_list:
-            url_list = ['https://github.io']
+          rm -f service_account.json
 
-          for target_url in url_list:
-            print(f"Publishing indexing request for: {target_url}")
-            body = {"url": target_url, "type": "URL_UPDATED"}
-            try:
-              res = service.urlNotifications().publish(body=body).execute()
-              print(f"API Response: {res}")
-            except Exception as e:
-              print(f"warning::Notification error for {target_url}: {e}")
-          PY_EOF
-          rm -f .the-google-creds.json
-
-      - name: Extract upstream forensic matrices
+      - name: OpenTimestamps Certification
         run: |
           set -eu pipefail
-          echo "Extracting upstream forensic matrices..."
-          jq -c '.hfid.baseline' .hfid/baseline/sovereign-manifest.json > /dev/null || true
-          echo "# JhammerZ Method Proof" > lines-full.txt
-          echo "Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> lines-full.txt
+          ots stamp .hfid/baseline/sovereign-manifest.json .hfid/indexing/urls.txt || echo "OTS stamp failed, proceeding anyway"
 
-      - name: OTS Stamp
+      - name: Build H-FID Index Attestation
         run: |
           set -eu pipefail
-          if command -v ots > /dev/null; then
-            ots stamp .hfid/baseline/sovereign-manifest.json || true
+          URL_COUNT=$(wc -l < .hfid/indexing/urls.txt | tr -d '[:space:]' || echo "0")
+          SITEMAP_HASH=$(sha256sum sitemap.xml 2>/dev/null | cut -d ' ' -f1 || echo "0")
+          CURRENT_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          COMMIT_SHA=$(git rev-parse HEAD)
+
+          jq -n \
+            --arg sha "$COMMIT_SHA" \
+            --arg ts "$CURRENT_TS" \
+            --argjson count "$URL_COUNT" \
+            --arg hash "$SITEMAP_HASH" \
+            '{
+              workflow: "build-and-sync",
+              sha: $sha,
+              timestamp: $ts,
+              hfid_version: "v2.2",
+              sovereign_author: "Joshua Hamilton",
+              sitemap: {
+                url_count: $count,
+                sha256: $hash
+              },
+              sisa_level: 3,
+              gno_rank: "ONE_OF_ONE"
+            }' > .hfid/indexing/sitemap.json
+
+      - name: Commit and Push Changes
+        run: |
+          set -eu pipefail
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@://github.com"
+          git add .hfid/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: auto-update hfid manifestations and index attestations"
+            git push origin main
+          else
+            echo "No pipeline modifications detected. Clean tree."
           fi
-
-      - name: Build summary log
-        run: |
-          set -eu pipefail
-          mkdir -p .hfid/indexing
-          cp lines-full.txt .hfid/indexing/build-summary.log
-
-      - name: Commit configuration
-        run: |
-          set -eu pipefail
-          git config --global user.name "H-FID Sovereign Bot"
-          git config --global user.email "action@github.com"
-
-      - uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-          file_pattern: ".hfid/baseline/* .hfid/indexing/* lines-full.txt"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Evidence
-        uses: actions/upload-artifact@v5
-        with:
-          name: hfid-sovereign-baseline-core
-          path: |
-            .hfid/baseline/
-            .hfid/indexing/
-            lines-full.txt
-          retention-days: 90
