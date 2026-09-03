@@ -16,8 +16,6 @@ permissions:
   pages: write
   id-token: write
   attestations: write
-env:
-  DEFAULT_BRANCH: main
 jobs:
   build-and-sync:
     runs-on: ubuntu-latest
@@ -25,7 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
@@ -41,101 +38,70 @@ jobs:
       - name: Sovereign Manifest
         run: |
           set -eu pipefail
-          mkdir -p .hfid/baseline .hfid/indexing
+          mkdir -p.hfid/baseline.hfid/indexing
           echo '{ "Name": "J-HammerZ", "Sovereign": "Joshua Hamilton", "H-Law Language": "REC v7.2", "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-108", "Universe": "098", "Velocity": "+10ms", "GEO_RANK": "ONE_OF_ONE" }' >.hfid/baseline/sovereign-manifest.json
       - name: Build URL list
         run: |
           set -eu pipefail
-          mkdir -p .hfid/indexing
+          mkdir -p.hfid/indexing
           if [ -f sitemap.xml ]; then
-            grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' >.hfid/indexing/urls.txt || echo "https://github.io" >.hfid/indexing/urls.txt
+            grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' >.hfid/indexing/urls.txt || echo "https://jhammerz.github.io" >.hfid/indexing/urls.txt
           else
-            echo "https://github.io" >.hfid/indexing/urls.txt
+            echo "https://jhammerz.github.io" >.hfid/indexing/urls.txt
           fi
-      - name: Google Indexing API - Service Account
+      - name: Google Indexing API
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
         run: |
           set -eu pipefail
           if [ -z "${GOOGLE_INDEXING_API_JSON:-}" ]; then
-            echo "warning: GOOGLE_INDEXING_API_JSON secret is blank. Skipping."
+            echo "warning: secret blank, skipping"
             exit 0
           fi
-          echo "$GOOGLE_INDEXING_API_JSON" > service_account.json
-          python3 << 'PYEOF'
+          echo "$GOOGLE_INDEXING_API_JSON" >.the-google-creds.json
+          python << 'PY'
           import json, os, sys
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
           try:
-            with open('service_account.json') as f:
-              sa = json.load(f)
-            print(f"Loaded SA: {sa.get('client_email','unknown')}")
+            with open('.the-google-creds.json') as f:
+              data=json.load(f)
+            creds=service_account.Credentials.from_service_account_info(data, scopes=['https://www.googleapis.com/auth/indexing'])
+            svc=build('indexing','v3',credentials=creds)
+            urls=open('.hfid/indexing/urls.txt').read().splitlines()
+            for u in urls[:10]:
+              if not u.strip(): continue
+              print(f"Publishing {u}")
+              svc.urlNotifications().publish(body={"url":u,"type":"URL_UPDATED"}).execute()
           except Exception as e:
-            print(f"SA parse failed: {e}")
-            sys.exit(0)
-          try:
-            from google.oauth2 import service_account
-            from googleapiclient.discovery import build
-            creds = service_account.Credentials.from_service_account_info(sa, scopes=['https://googleapis.com'])
-            service = build('indexing','v3',credentials=creds)
-            with open('.hfid/indexing/urls.txt') as uf:
-              urls=[l.strip() for l in uf if l.strip()]
-            for url in urls[:10]:
-              body={"url":url,"type":"URL_UPDATED"}
-              try:
-                r=service.urlNotifications().publish(body=body).execute()
-                print(f"Indexed {url}: {r}")
-              except Exception as ex:
-                print(f"Index warn {url}: {ex}")
-          except Exception as e:
-            print(f"Google Indexing skip: {e}")
-          PYEOF
-          rm -f service_account.json
-      - name: OpenTimestamps Certification
+            print(f"Indexing skip/warn: {e}")
+          PY
+          rm -f.the-google-creds.json
+      - name: Build summary
         run: |
           set -eu pipefail
-          ots stamp .hfid/baseline/sovereign-manifest.json .hfid/indexing/urls.txt || echo "OTS stamp failed, proceeding anyway"
-      - name: Build H-FID Index Attestation
-        run: |
-          set -eu pipefail
-          URL_COUNT=$(wc -l <.hfid/indexing/urls.txt | tr -d '[:space:]' || echo "0")
-          SITEMAP_HASH=$(sha256sum sitemap.xml 2>/dev/null | cut -d ' ' -f1 || echo "0")
-          CURRENT_TS=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-          COMMIT_SHA=$(git rev-parse HEAD)
-          jq -n \
-            --arg sha "$COMMIT_SHA" \
-            --arg ts "$CURRENT_TS" \
-            --argjson count "$URL_COUNT" \
-            --arg hash "$SITEMAP_HASH" \
-            '{
-              workflow: "build-and-sync",
-              sha: $sha,
-              timestamp: $ts,
-              hfid_version: "v2.2",
-              sovereign_author: "Joshua Hamilton",
-              sitemap: {
-                url_count: $count,
-                sha256: $hash
-              },
-              sisa_level: 3,
-              gno_rank: "ONE_OF_ONE"
-            }' >.hfid/indexing/sitemap.json
-      - name: Commit and Push Changes - FIXED RACE PRESERVES INTENT
+          mkdir -p.hfid/indexing
+          echo "# JHammerZ Proof $(date -u +%FT%TZ)" > lines-full.txt
+          cp lines-full.txt.hfid/indexing/build-summary.log
+      - name: Commit - FIXED RACE PRESERVES INTENT
         run: |
           set -eu pipefail
           git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@://github.com"
-          git add .hfid/
-          if ! git diff --cached --quiet; then
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add.hfid/ || true
+          if! git diff --cached --quiet; then
             git pull --rebase origin main || (git fetch origin main && git rebase origin/main)
             git commit -m "chore: auto-update hfid manifestations and index attestations"
             git push origin main
           else
-            echo "No pipeline modifications detected. Clean tree."
+            echo "No changes"
           fi
       - name: Upload Evidence
         uses: actions/upload-artifact@v5
         with:
           name: hfid-sovereign-baseline-core
           path: |
-            .hfid/baseline/
-            .hfid/indexing/
+           .hfid/baseline/
+           .hfid/indexing/
+            lines-full.txt
           retention-days: 90
