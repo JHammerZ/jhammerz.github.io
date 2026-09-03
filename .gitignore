@@ -114,3 +114,5 @@ wp-content/plugins/
 cc022c58 (ignore wp core bloat, keep .claims chain and uploads)
 CNAME
 public/CNAME
+*.bak
+*.good
