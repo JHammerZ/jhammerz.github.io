@@ -1,1 +1,9 @@
-{}
+{
+  "type": "commonjs",
+  "dependencies": {
+    "@ardrive/turbo-sdk": "^1.42.0",
+    "@irys/sdk": "^0.2.11",
+    "@storacha/client": "^2.1.4",
+    "ethers": "^5.8.0"
+  }
+}
