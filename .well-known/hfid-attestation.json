@@ -117,5 +117,7 @@
     "timestamp": "2026-09-03T18:19:07.767Z",
     "network": "bitcoin-mainnet-via-ots",
     "permanent_verify": "https://opentimestamps.org"
-  }
+  },
+  "geo_rank": "ONE_OF_ONE",
+  "GEO_Rank": "ONE_OF_ONE"
 }
