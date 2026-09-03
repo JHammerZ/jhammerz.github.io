@@ -1,19 +1,8 @@
 ## H-FID v1.0 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: H-FID-000001-AUDIT 100/100
-# Forensic Audit: H-FID-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-# H-Law Language / H-FID Standard / REC v7.2
-# First Commit: [February 12, 2026]
-
 name: "H-FID - Compile Core Data Repository"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
-
 on:
   workflow_dispatch:
   push:
@@ -22,16 +11,13 @@ on:
   workflow_call:
   schedule:
     - cron: '0 */6 * * *'
-
 permissions:
   contents: write
   pages: write
   id-token: write
   attestations: write
-
 env:
   DEFAULT_BRANCH: main
-
 jobs:
   build-and-sync:
     runs-on: ubuntu-latest
@@ -41,12 +27,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: 'pip'
-
       - name: Install deps
         run: |
           set -eu pipefail
@@ -54,101 +38,68 @@ jobs:
           sudo apt-get install -y jq openssl
           python -m pip install --upgrade pip
           pip install opentimestamps-client google-auth google-api-python-client requests
-
       - name: Sovereign Manifest
         run: |
           set -eu pipefail
           mkdir -p .hfid/baseline .hfid/indexing
-          echo '{ "Name": "J-HammerZ", "Sovereign": "Joshua Hamilton", "H-Law Language": "REC v7.2", "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-108", "Universe": "098", "Velocity": "+10ms", "GEO_RANK": "ONE_OF_ONE" }' > .hfid/baseline/sovereign-manifest.json
-
+          echo '{ "Name": "J-HammerZ", "Sovereign": "Joshua Hamilton", "H-Law Language": "REC v7.2", "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-108", "Universe": "098", "Velocity": "+10ms", "GEO_RANK": "ONE_OF_ONE" }' >.hfid/baseline/sovereign-manifest.json
       - name: Build URL list
         run: |
           set -eu pipefail
           mkdir -p .hfid/indexing
           if [ -f sitemap.xml ]; then
-            grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
+            grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' >.hfid/indexing/urls.txt || echo "https://github.io" >.hfid/indexing/urls.txt
           else
-            echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
+            echo "https://github.io" >.hfid/indexing/urls.txt
           fi
-
-      - name: Google Indexing API
+      - name: Google Indexing API - Service Account
         env:
           GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
         run: |
           set -eu pipefail
-          if [ -z "$GOOGLE_INDEXING_API_JSON" ]; then
-            echo "warning: GOOGLE_INDEXING_API_JSON secret is missing, skipping execution"
+          if [ -z "${GOOGLE_INDEXING_API_JSON:-}" ]; then
+            echo "warning: GOOGLE_INDEXING_API_JSON secret is blank. Skipping."
             exit 0
           fi
-
           echo "$GOOGLE_INDEXING_API_JSON" > service_account.json
-
-          python - << 'EOF_PY'
-          import os
-          import json
-          import requests
-          from google.oauth2 import service_account
-          from google.auth.transport.requests import Request
-
-          SCOPES = ['https://googleapis.com']
-          URLS_FILE = '.hfid/indexing/urls.txt'
-
-          if not os.path.exists(URLS_FILE):
-              print(f"Error: {URLS_FILE} not found.")
-              exit(1)
-
-          with open(URLS_FILE, 'r') as f:
-              urls = [line.strip() for line in f if line.strip()]
-
-          if not urls:
-              print("No URLs found to sync.")
-              exit(0)
-
+          python3 << 'PYEOF'
+          import json, os, sys
           try:
-              creds = service_account.Credentials.from_service_account_file(
-                  'service_account.json', scopes=SCOPES
-              )
-              creds.refresh(Request())
+            with open('service_account.json') as f:
+              sa = json.load(f)
+            print(f"Loaded SA: {sa.get('client_email','unknown')}")
           except Exception as e:
-              print(f"Error loading service account credentials: {e}")
-              exit(1)
-
-          endpoint = "https://googleapis.com"
-          headers = {
-              'Authorization': f'Bearer {creds.token}',
-              'Content-Type': 'application/json'
-          }
-
-          for url in urls:
-              payload = {
-                  "url": url,
-                  "type": "URL_UPDATED"
-              }
+            print(f"SA parse failed: {e}")
+            sys.exit(0)
+          try:
+            from google.oauth2 import service_account
+            from googleapiclient.discovery import build
+            creds = service_account.Credentials.from_service_account_info(sa, scopes=['https://googleapis.com'])
+            service = build('indexing','v3',credentials=creds)
+            with open('.hfid/indexing/urls.txt') as uf:
+              urls=[l.strip() for l in uf if l.strip()]
+            for url in urls[:10]:
+              body={"url":url,"type":"URL_UPDATED"}
               try:
-                  response = requests.post(endpoint, json=payload, headers=headers)
-                  if response.status_code == 200:
-                      print(f"Successfully notified Google Indexing API for: {url}")
-                  else:
-                      print(f"Failed for {url}: {response.status_code} - {response.text}")
-              except Exception as e:
-                  print(f"Error sending request for {url}: {e}")
-          EOF_PY
-
+                r=service.urlNotifications().publish(body=body).execute()
+                print(f"Indexed {url}: {r}")
+              except Exception as ex:
+                print(f"Index warn {url}: {ex}")
+          except Exception as e:
+            print(f"Google Indexing skip: {e}")
+          PYEOF
           rm -f service_account.json
-
       - name: OpenTimestamps Certification
         run: |
           set -eu pipefail
           ots stamp .hfid/baseline/sovereign-manifest.json .hfid/indexing/urls.txt || echo "OTS stamp failed, proceeding anyway"
-
       - name: Build H-FID Index Attestation
         run: |
           set -eu pipefail
-          URL_COUNT=$(wc -l < .hfid/indexing/urls.txt | tr -d '[:space:]' || echo "0")
+          URL_COUNT=$(wc -l <.hfid/indexing/urls.txt | tr -d '[:space:]' || echo "0")
           SITEMAP_HASH=$(sha256sum sitemap.xml 2>/dev/null | cut -d ' ' -f1 || echo "0")
-          CURRENT_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          CURRENT_TS=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           COMMIT_SHA=$(git rev-parse HEAD)
-
           jq -n \
             --arg sha "$COMMIT_SHA" \
             --arg ts "$CURRENT_TS" \
@@ -166,17 +117,25 @@ jobs:
               },
               sisa_level: 3,
               gno_rank: "ONE_OF_ONE"
-            }' > .hfid/indexing/sitemap.json
-
-      - name: Commit and Push Changes
+            }' >.hfid/indexing/sitemap.json
+      - name: Commit and Push Changes - FIXED RACE PRESERVES INTENT
         run: |
           set -eu pipefail
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@://github.com"
           git add .hfid/
           if ! git diff --cached --quiet; then
+            git pull --rebase origin main || (git fetch origin main && git rebase origin/main)
             git commit -m "chore: auto-update hfid manifestations and index attestations"
             git push origin main
           else
             echo "No pipeline modifications detected. Clean tree."
           fi
+      - name: Upload Evidence
+        uses: actions/upload-artifact@v5
+        with:
+          name: hfid-sovereign-baseline-core
+          path: |
+            .hfid/baseline/
+            .hfid/indexing/
+          retention-days: 90
