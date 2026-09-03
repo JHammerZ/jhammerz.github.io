@@ -1,7 +1,6 @@
 {
   "nodes_healthy": false,
   "failed_checks": [
-    "core_endpoint",
     "sync_bridge"
   ]
 }
