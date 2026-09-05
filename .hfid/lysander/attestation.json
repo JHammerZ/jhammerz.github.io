@@ -1,11 +1,11 @@
 {
   "sovereign_author": "Joshua Hamilton",
   "protocol": "Lysander Defense v2",
-  "timestamp": "2026-09-04T18:37:51Z",
-  "heartbeat_hash": "a97aff3c56097e469283f740ae4e059711de5a19a9d0d627eecdd4795a513068",
+  "timestamp": "2026-09-05T01:39:27Z",
+  "heartbeat_hash": "dc82910caee1bd862532c199b6c9d78f3bf18793961952401153550975004219",
   "blocked_agents": 12,
   "new_agents": 0,
   "hfid_cert": "H-FID-ONE-000001-AUDIT",
   "gno_rank": "ONE_OF_ONE",
-  "sha": "7747cbd4b9bc680172b0ad374771af8d2be89dc0"
+  "sha": "4f48f62352c1cc5af903adabccbbdf19a76a8bf8"
 }
