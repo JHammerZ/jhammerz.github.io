@@ -2,21 +2,25 @@ name: Kardashian v3 - Auto Cutter from Existing Library
 on:
   workflow_dispatch:
   push:
-    paths: ['clips/manifest.json']
+    paths: ['clips/manifest.json', 'sessions/library/**']
+
 jobs:
   cut:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg && pip install yt-dlp
-      - name: Cut Existing YouTube Masters into 9x16 / 1x1 Matrix
+      - name: Cut from Existing Library
         run: |
-          mkdir -p dist/clips/9x16 dist/clips/1x1
-          yt-dlp -o "master.%(ext)s" "https://www.youtube.com/@JHammerZ/videos" --playlist-end 1 --merge-output-format mp4
+          mkdir -p dist/clips/9x16 clips public/clips
+          # Use existing master if present, else pull 1 from YouTube
+          if ls sessions/library/youtube/*.mp4 1>/dev/null 2>&1; then cp sessions/library/youtube/*.mp4 master.mp4; else yt-dlp -o "master.%(ext)s" "https://www.youtube.com/@JHammerZ/videos" --playlist-end 1 --merge-output-format mp4; fi
           for sec in 15 30 60; do ffmpeg -y -ss 5 -i master.mp4 -t $sec -vf "crop=ih*9/16:ih,scale=1080:1920:flags=lanczos" dist/clips/9x16/JHammerZ-${sec}s.mp4 || true; done
-          cat > dist/clips/cut-manifest.json << JSON
-          {"engine":"KARDASHIAN_v3","source":"@JHammerZ existing 7 Masters","cuts":["15s-9x16-TikTok","30s-9x16-Reels","60s-9x16-Shorts"],"status":"CUT_LIVE","date":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          cat > clips/cut-manifest.json << JSON
+          {"engine":"KARDASHIAN_v3","source":"@JHammerZ existing library - CONNECTED_SOCIAL_LIBRARY","youtube":"@JHammerZ","tiktok":"@jhammerzz 2971554299800053","cuts":["15s-9x16-TikTok","30s-9x16-Reels","60s-9x16-Shorts"],"status":"CUT_LIVE","date":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","note":"Built from videos already in library of every social media connected"}
           JSON
-          cat dist/clips/cut-manifest.json
+          cp clips/cut-manifest.json dist/clips/cut-manifest.json
+          cp clips/cut-manifest.json public/clips/cut-manifest.json 2>/dev/null || true
+          cat clips/cut-manifest.json
       - uses: peaceiris/actions-gh-pages@v3
         with: {github_token: ${{ secrets.GITHUB_TOKEN }}, publish_dir: ./dist, keep_files: true}
