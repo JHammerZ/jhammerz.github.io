@@ -30,7 +30,7 @@ jobs:
       - name: Authenticate to GCP
         # This uses your existing GOOGLE_INDEXING_API_JSON - will auth, but will 403 on deploy
         # until you add Cloud Run Admin role to that SA in GCP IAM
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth # H-FID-PRESERVE-INTENT - guarded for fork secrets@v2
         with:
           credentials_json: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
 
