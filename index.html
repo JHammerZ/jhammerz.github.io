@@ -508,7 +508,7 @@
   
 
 <div id="sovereign-player" style="margin:20px 0;min-height:352px">
-<iframe title="JHammerZ Spotify Player" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe title="JHammerZ Spotify Player" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" fetchpriority="low"></iframe>
 </div>
 </main>
   
@@ -635,7 +635,7 @@
     });
   }
   </script>
-<script>(function(){function setEdge(t){var el=document.getElementById('telemetry-status');if(el)el.textContent='EDGE: '+t;}function connect(){fetch('./.well-known/hfid/manifest.json',{cache:'no-store'}).then(function(r){setEdge(r.ok?'AUTONOMOUS':'AUTONOMOUS')}).catch(function(){setEdge('AUTONOMOUS')});}window.addEventListener('load',connect);setTimeout(connect,800);})();</script></body>
+<script>(function(){function setEdge(t){var el=document.getElementById('telemetry-status');if(el)el.textContent='EDGE: '+t;}function connect(){setTimeout(()=>fetch('./.well-known/hfid/manifest.json',{cache:'no-store'}).then(function(r){setEdge(r.ok?'AUTONOMOUS':'AUTONOMOUS')}).catch(function(){setEdge('AUTONOMOUS')});}window.addEventListener('load',connect);setTimeout(connect,800);})();</script></body>
 </html>
 <!-- HBS rebuild 2026-08-29 -->
 <!-- HBS rebuild 2026-08-29 -->
