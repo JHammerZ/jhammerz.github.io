@@ -1,0 +1,60 @@
+{
+  "hfid_version": "v1.3",
+  "canonical_id": "hfid:jhammerz:one_of_one:v1.3",
+  "timestamp_utc": "2026-09-03T16:50:05.440256Z",
+  "hub_id": "JHammerZ-001",
+  "sovereign_author": "Joshua Hamilton",
+  "gho_rank": "ONE_OF_ONE",
+  "git": {
+    "head_commit": "c9d5ab3842c52d6a86ded67fc75ddbbf15109cb0",
+    "registry_sha256": "2428f70fd4ba7da1250f9fbc9783f28452ec6f4294672b2f22412c232665aa83",
+    "last_20_commits": [
+      "c9d5ab38 chore: bust cache for v1.3 no_decay library_pull",
+      "d4cc42e6 chore: auto-update [skip ci]",
+      "850be434 chore: auto-update syndication logs [skip ci]",
+      "00c97462 feat: hfid v1.3 ONE OF ONE - merge no_decay + content_manifest auto-rotate 13 nodes for For You/Suggested",
+      "7998c11e chore: sync dynamic distribution syndication feeds [skip ci]",
+      "7af0a486 chore: auto-update [skip ci]",
+      "6dd8bbb0 chore: update autonomous traffic visualization matrices [skip ci]",
+      "387c9b0c chore: auto-update [skip ci]",
+      "5079b4ae chore: ignore CNAME [skip ci]",
+      "b439df0f Merge branch 'main' of https://github.com/JHammerZ/jhammerz.github.io",
+      "03e7982b chore: ignore CNAME to prevent eu.org redirect loop",
+      "9c165649 Merge branch 'main' of https://github.com/JHammerZ/jhammerz.github.io",
+      "f669beba chore: auto-update [skip ci]",
+      "a4302100 chore: auto-update [skip ci]",
+      "33cb6287 Delete CNAME",
+      "a7688dd3 fix: remove CNAME jhammerz.eu.org causing NXDOMAIN redirect - keep github.io",
+      "cc28ab94 chore: auto-update [skip ci]",
+      "20719c3c chore: auto-update [skip ci]",
+      "e92aefc1 chore: auto-update [skip ci]",
+      "19ef0fa4 Merge branch 'main' of https://github.com/JHammerZ/jhammerz.github.io",
+      ""
+    ],
+    "previous_tags": [
+      "v3.1.0",
+      "v3.0-lysander-extracted",
+      "v1.3.0",
+      "v1.1.0-H-FID",
+      "v1.0.6",
+      "v1.0.4",
+      "v1.0.3-hfid",
+      "v1.0.3-forensic-verified-agentic",
+      "v1.0.3-doi",
+      "v1.0.3"
+    ],
+    "branch": "main"
+  },
+  "ledgers": {
+    "github_pages": "https://jhammerz.github.io/.well-known/hfid-registry.json",
+    "edge_worker": "https://lysander-v13.jhammerzofficial.workers.dev/.well-known/hfid-registry.json",
+    "edge_version_id": "d0606046-c45d-42ef-b9e3-119f839e2963"
+  },
+  "previous_work_attested": {
+    "social_manifest_count": 13,
+    "no_decay": true,
+    "for_you_rotation": "edge_shuffle",
+    "content_manifest_source": "library_pull",
+    "note": "This timestamp attests that v1.3 build includes all prior 13 nodes + no_decay + auto-rotate work"
+  }
+}

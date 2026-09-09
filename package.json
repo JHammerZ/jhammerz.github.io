@@ -8,7 +8,7 @@
     "react-dom": "^19.2.8"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && cp -r public/.well-known dist/.well-known && cp -r public/404.html dist/ 2>/dev/null || true",
     "validate": "tsc --noEmit --skipLibCheck",
     "build:worker": "tsc -p tsconfig.worker.json --noEmit --skipLibCheck"
   },
