@@ -51,3 +51,7 @@ jhammerz.github.io/
 dist/.well-known/hfid/*.ots
 dist/.well-known/hfid/*.sha256
 dist/.well-known/hfid/*.sha256.ots
+lysander-tarpit/
+clips/
+node_modules/
+dist/
