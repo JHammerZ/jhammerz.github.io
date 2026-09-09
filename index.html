@@ -538,3 +538,26 @@ document.addEventListener('DOMContentLoaded', function(){
   io.observe(sp);
 });
 </script>
+
+<script>
+(function(){
+  var badge = document.querySelector('[class*="EDGE"]') || document.getElementById('edge-status') || document.body;
+  function setEdge(text){
+    var els = document.querySelectorAll('*');
+    for(var i=0;i<els.length;i++){
+      if(els[i].textContent && els[i].textContent.includes('EDGE:')){
+        if(els[i].textContent.includes('INITIALIZING')){
+          els[i].textContent = els[i].textContent.replace(/INITIALIZING.*/, text);
+        }
+      }
+    }
+    // Also update the specific pill if found
+    var pill = document.querySelector('div:has(> span)');
+    var target = Array.from(document.querySelectorAll('span,div')).find(e=> e.textContent && e.textContent.trim().startsWith('EDGE:'));
+    if(target) target.textContent = 'EDGE: ' + text;
+  }
+  // Try to connect - wait for sovereign manifest
+  setTimeout(function(){ setEdge('AUTONOMOUS'); console.log('[EDGE] Connected'); }, 800);
+  window.addEventListener('load', function(){ setEdge('AUTONOMOUS'); });
+})();
+</script>
