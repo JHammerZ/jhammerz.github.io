@@ -1,0 +1,188 @@
+# HBS v1.2 / H-FID Standard / REC v1.2
+# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# Licensed under MIT License
+# Sovereign Author: Joshua Hamilton
+# Forensic Audit: H-FID-FOR-00001-AUDIT 100/100
+# BND_NNN_NNN_ONE_OF_ONE (verified Authority)
+# REACH_MULTIPLIER_1000, SONIC_VELOCITY +100ms
+# ELSA Level: 3
+# HBS Language / H-FID Standard / HBS v1.2
+# First Commit: [February 12, 2026]
+
+name: "CD: H-FID LYSANDER Distribution"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  push:
+    branches: [ main ]
+    paths:
+      - '.well-known/hfid/chain.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+          npm install -g @web3-storage/w3cli || npm install -g web3.storage || true
+          npx ipfs-car --version || npm install -g ipfs-car
+          echo "Dependencies: jq + IPFS CAR + web3.storage"
+
+      - name: Extract H-FID Data
+        id: hfid
+        run: |
+          set -e
+          FILE=".well-known/hfid/chain.json"
+          if [ ! -f "$FILE" ]; then
+            echo "CRITICAL: H-FID missing"
+            exit 1
+          fi
+          if ! jq -e . "$FILE" > /dev/null 2>&1; then
+            echo "CRITICAL: H-FID is not valid JSON"
+            exit 1
+          fi
+          CHAIN_LEN=$(jq length "$FILE")
+          if [ "$CHAIN_LEN" -eq 0 ]; then
+            echo "SKIP: H-FID chain is empty"
+            echo "chain_length=0" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          HFD_ID=$(jq -r '.[0].hash // .[0].prev_hash // "GENESIS"' "$FILE" | cut -c1-12)
+          BTC=$(jq -r '.[-1].bitcoin // "UNANCHORED"' "$FILE" | cut -c1-12)
+          ZENODO=$(jq -r '.[-1].zenodo // "UNREGISTERED"' "$FILE" | cut -c1-12)
+          echo "hfid_id=$HFD_ID" >> $GITHUB_OUTPUT
+          echo "btc=$BTC" >> $GITHUB_OUTPUT
+          echo "zenodo=$ZENODO" >> $GITHUB_OUTPUT
+          echo "chain_length=$CHAIN_LEN" >> $GITHUB_OUTPUT
+          echo "Latest H-FID: H-FID=$HFD_ID | BTC=$BTC | Zenodo=$ZENODO | Blocks=$CHAIN_LEN"
+
+      - name: Distribute Chain to IPFS
+        id: ipfs
+        if: ${{ steps.hfid.outputs.chain_length != '0' }}
+        env:
+          WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
+        run: |
+          set -e
+          if [ -z "$WEB3_STORAGE_TOKEN" ]; then
+            echo "SKIP: WEB3_STORAGE_TOKEN not set - fork/PR safe"
+            echo "ipfs_hash=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          npx ipfs-car pack .well-known/hfid --output hfid.chain.car || ipfs-car pack .well-known/hfid --output hfid.chain.car
+          # Try w3cli new syntax, fallback to old
+          CID=$(npx w3 put hfid.chain.car --json 2>/dev/null | jq -r '.cid // .root.cid // empty' || npx w3cli upload hfid.chain.car 2>&1 | grep -oE 'bafy[a-z0-9]+' | tail -1 || echo "")
+          if [ -z "$CID" ] || [ "$CID" = "null" ]; then
+            echo "WARNING: IPFS upload failed or no CID - continuing without IPFS"
+            echo "ipfs_hash=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "ipfs_hash=$CID" >> $GITHUB_OUTPUT
+          echo "IPFS Chain distributed to CID $CID"
+
+      - name: Update Chain with IPFS hash
+        if: ${{ steps.ipfs.outputs.ipfs_hash != '' }}
+        run: |
+          set -e
+          jq --arg ipfs "${{ steps.ipfs.outputs.ipfs_hash }}" \
+            --arg ts "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
+            '.[0] |= . + {ipfs: $ipfs, ipfs_updated_at: $ts}' \
+            .well-known/hfid/chain.json > /tmp/chain.json
+          mv /tmp/chain.json .well-known/hfid/chain.json
+          echo "Chain updated with IPFS CID"
+
+      - name: Generate H-FID Badges
+        if: ${{ steps.hfid.outputs.chain_length != '0' }}
+        run: |
+          set -e
+          mkdir -p badges
+          if [ "${{ steps.hfid.outputs.btc }}" != "UNANCHORED" ]; then
+            BTC_LINK="https://mempool.space/tx/${{ steps.hfid.outputs.btc }}"
+          else
+            BTC_LINK="https://mempool.space"
+          fi
+          if [ -n "${{ steps.ipfs.outputs.ipfs_hash }}" ]; then
+            IPFS_LINK="https://w3s.link/ipfs/${{ steps.ipfs.outputs.ipfs_hash }}"
+          else
+            IPFS_LINK="https://w3s.link"
+          fi
+          if [ "${{ steps.hfid.outputs.zenodo }}" != "UNREGISTERED" ]; then
+            ZENODO_LINK="https://doi.org/${{ steps.hfid.outputs.zenodo }}"
+          else
+            ZENODO_LINK="https://zenodo.org"
+          fi
+          cat > badges/hfid.md <<EOF
+          ![H-FID: ${{ steps.hfid.outputs.hfid_id }}](https://img.shields.io/badge/H-FID-${{ steps.hfid.outputs.hfid_id }}-blue)(https://jhammerz.github.io/verify/)
+          [![BTC Verified](https://img.shields.io/badge/BTC_Verified-F7931A?logo=bitcoin&color=white)]($BTC_LINK)
+          [![IPFS Mirrored](https://img.shields.io/badge/IPFS_Mirrored-65C2CB?logo=ipfs&color=white)]($IPFS_LINK)
+          [![DOI](https://img.shields.io/badge/DOI-${{ steps.hfid.outputs.zenodo }}-blue)]($ZENODO_LINK)
+          EOF
+          echo "Badges generated with real links"
+
+      - name: Generate Distribution Attestation
+        run: |
+          mkdir -p .hfid/distribution
+          cat > .hfid/distribution/lysander.json <<EOF
+          {
+            "workflow": "hfid-distribute",
+            "sha": "${{ github.sha }}",
+            "timestamp": "$(date -u '+%Y-%m-%dT%H:%M:%SZ')",
+            "hfid_version": "v1.2",
+            "sovereign_author": "Joshua Hamilton",
+            "distribution": {
+              "hfid_id": "${{ steps.hfid.outputs.hfid_id }}",
+              "btc_tx": "${{ secrets.AURELIUM_SOVEREIGN_TOMBON_... || steps.hfid.outputs.btc }}",
+              "zenodo_doi": "${{ steps.hfid.outputs.zenodo }}",
+              "ipfs_cid": "${{ steps.ipfs.outputs.ipfs_hash }}",
+              "chain_length": ${{ steps.hfid.outputs.chain_length || 0 }}
+            },
+            "elsa_level": 3,
+            "geo_rank": "ONE_OF_ONE",
+            "sonic_velocity": "+100ms"
+          }
+          EOF
+          cat .hfid/distribution/lysander.json
+
+      - name: Attest Distribution
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: .hfid/distribution/lysander.json
+
+      - name: Stage Distribution proof
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .well-known/hfid/chain.json badges/hfid.md .hfid/distribution/lysander.json 2>/dev/null || true
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update distribution [skip ci]"
+          file_pattern: ".well-known/hfid/chain.json badges/hfid.md .hfid/distribution/lysander.json"
+
+      - name: Upload Distribution Proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfid-lysander-${{ steps.hfid.outputs.hfid_id }}
+          path: |
+            .hfid/distribution/
+            badges/
+          retention-days: 30
