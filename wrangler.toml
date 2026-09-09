@@ -25,3 +25,11 @@ HFID_VERSION = "v1.3"
 SOVEREIGN_ATTESTATION = "UID 0 ATTAINED - Human attained UID 0 on sovereign hardware - 17-repo brain matrix - SUPERLUMINAL LIVE - 2026"
 UID0_STATUS = "ATTAINED-INDEXED"
 ATTESTATION_HASH = "17620710"
+
+
+[[kv_namespaces]]
+binding = "SOCIAL_LIBRARY_PROD"
+id = "b4d003003c64aa55ae001a6700c6fb4"
+
+[triggers]
+crons = ["0 */6 * * *"]

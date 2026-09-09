@@ -7,3 +7,11 @@ ENVIRONMENT_STATUS = "OPERATIONAL_SINGULARITY"
 HFID_IDENTITY_TAG = "JHammerZ-001"
 
 # Automatically route all matching incoming directory vectors across the edge cache
+
+
+[[kv_namespaces]]
+binding = "SOCIAL_LIBRARY_PROD"
+id = "b4d003003c64aa55ae001a6700c6fb4"
+
+[triggers]
+crons = ["0 */6 * * *"]
