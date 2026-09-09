@@ -1,0 +1,27 @@
+name: evergreen-15-source
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: |
+          head -n 5 .hfid/indexing/urls.txt > /tmp/old.txt
+          tail -n +6 .hfid/indexing/urls.txt > /tmp/new.txt
+          cat /tmp/new.txt /tmp/old.txt > .hfid/indexing/urls.txt
+          echo "{\"last_rotation\":\"$(date -u +%FT%TZ)\",\"sources\":15,\"total_urls\":$(wc -l <.hfid/indexing/urls.txt),\"tip\":\"95d5ebb9 LIVE\",\"distribution\":\"indefinite FYP\"}" > .hfid/syndicate/manifest.json
+          date +%s > .hfid/syndicate/remifest_hash.txt
+          date +%s > .hfid/indexing/build-summary.log
+      - run: |
+          git config user.name "aurelius-main"
+          git config user.email "aurelius@jhammerz.github.io"
+          git add -A
+          git commit -m "evergreen: rotate 5/ $(wc -l <.hfid/indexing/urls.txt) - indefinite FYP - 15-source" || exit 0
+          git push
