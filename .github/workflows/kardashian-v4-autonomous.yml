@@ -8,13 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
+      - name: Build clips + static
+        run: |
           mkdir -p dist/clips public/clips
-          cp clips/*.json dist/clips/ || true
-          cp clips/*.json public/clips/ || true
-          cp.nojekyll dist/ || true
-          cp.nojekyll public/ || true
-          cat dist/clips/manifest.json
-          cat dist/clips/cut-manifest.json
-      - uses: peaceiris/actions-gh-pages@v3
-        with: {github_token: ${{ secrets.GITHUB_TOKEN }}, publish_dir:./dist, keep_files: true}
+          cp clips/*.* dist/clips/ 2>/dev/null || true
+          cp clips/*.json public/clips/ 2>/dev/null || true
+          cp .nojekyll dist/ 2>/dev/null || true
+          cp .nojekyll public/ 2>/dev/null || true
+          cat dist/clips/manifest.json 2>/dev/null || echo "no manifest yet"
+          cat dist/cut-manifest.json 2>/dev/null || true
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: true

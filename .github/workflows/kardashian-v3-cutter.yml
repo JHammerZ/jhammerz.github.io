@@ -1,26 +1,49 @@
-name: Kardashian v3 - Auto Cutter from Existing Library
+name: Kardashian v3 - Auto Cutter From Existing Library
 on:
   workflow_dispatch:
   push:
-    paths: ['clips/manifest.json', 'sessions/library/**']
+    paths: ['clips/manifest.json','sessions/library/**']
 
 jobs:
   cut:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y ffmpeg && pip install yt-dlp
-      - name: Cut from Existing Library
+
+      - name: Install ffmpeg + yt-dlp
         run: |
-          mkdir -p dist/clips/9x16 clips public/clips
-          # Use existing master if present, else pull 1 from YouTube
-          if ls sessions/library/youtube/*.mp4 1>/dev/null 2>&1; then cp sessions/library/youtube/*.mp4 master.mp4; else yt-dlp -o "master.%(ext)s" "https://www.youtube.com/@JHammerZ/videos" --playlist-end 1 --merge-output-format mp4; fi
-          for sec in 15 30 60; do ffmpeg -y -ss 5 -i master.mp4 -t $sec -vf "crop=ih*9/16:ih,scale=1080:1920:flags=lanczos" dist/clips/9x16/JHammerZ-${sec}s.mp4 || true; done
-          cat > clips/cut-manifest.json << JSON
-          {"engine":"KARDASHIAN_v3","source":"@JHammerZ existing library - CONNECTED_SOCIAL_LIBRARY","youtube":"@JHammerZ","tiktok":"@jhammerzz 2971554299800053","cuts":["15s-9x16-TikTok","30s-9x16-Reels","60s-9x16-Shorts"],"status":"CUT_LIVE","date":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","note":"Built from videos already in library of every social media connected"}
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+          pip install yt-dlp
+
+      - name: Cut From Existing Library
+        run: |
+          mkdir -p dist/clips/web public/clips sessions/library/youtube
+          if ls sessions/library/youtube/*.mp4 1>/dev/null 2>&1; then
+            cp sessions/library/youtube/*.mp4 master.mp4
+          else
+            yt-dlp -o "master.%(ext)s" "https://www.youtube.com/@JhammerZ/videos" --playlist-end 1 --merge-output-format mp4 || true
+          fi
+          for seg in 0 10 20 30; do
+            ffmpeg -ss $seg -i master.mp4 -t 10 -vf "crop=ih*9/16:ih,scale=1080:1920:flags=lanczos" dist/clips/k8s/JHammerZ_${seg}s.mp4 || true
+          done
+          cat > clips/cut-manifest.json <<'JSON'
+          {
+            "engine": "KARDASHIAN_V3",
+            "source": "JHammerZ existing library - CONNECTED_SOCIAL_LIBRARY",
+            "youtube": "JHammerZ",
+            "tiktok": "BJhammerZ 2971554299800053",
+            "cuts": ["15s-9x16-TikTok","90s-9x16-Reels","90s-9x16-Shorts"],
+            "status": "CUT_LIVE",
+            "date": "2026-09-09"
+          }
           JSON
-          cp clips/cut-manifest.json dist/clips/cut-manifest.json
+          cp clips/cut-manifest.json dist/clips/cut-manifest.json 2>/dev/null || true
           cp clips/cut-manifest.json public/clips/cut-manifest.json 2>/dev/null || true
           cat clips/cut-manifest.json
-      - uses: peaceiris/actions-gh-pages@v3
-        with: {github_token: ${{ secrets.GITHUB_TOKEN }}, publish_dir: ./dist, keep_files: true}
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: true

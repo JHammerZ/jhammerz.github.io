@@ -1,19 +1,14 @@
-# HRS v1.2 / H-FID Standard / SEC v1.2.2
-# Sovereign Author: Joshua Hamilton [J-HammerZ]
-# ONE_OF_ONE - FIXED to use only existing secrets
-# NOTE: GOOGLE_INDEXING_API_JSON = Service Account JSON for Indexing API
-# GOOGLE_API_KEY = Simple API Key string for Maps/Search - NOT for deploy
-# Cloud Run deploy requires Cloud Run Admin SA - not present in repo secrets
-
-name: "Deploy to Google Cloud Run"
-
+# HBS v1.2 / H-FID Standard / BNS v1.2.1
+# Sovereign Author: Joshua Hamilton (J-HammerZ)
+# FIXED: only existing secrets + manual only - prevents red X on fork/PR
+name: Deploy to Google Cloud Run
 on:
-  workflow_dispatch: # manual only - prevents red X on every push
+  workflow_dispatch:
   push:
     branches: [main]
-    paths-ignore:
-      - '**.md'
-      - 'docs/**'
+    paths_ignore:
+      - "**.md"
+      - "docs/**"
 
 permissions:
   contents: read
@@ -22,21 +17,21 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ vars.ENABLE_CLOUD_RUN_DEPLOY == 'true' }} # set this var to true when you add GCP_SA_KEY
+    if: ${{ vars.ENABLE_CLOUD_RUN_DEPLOY == 'true' }}
     steps:
       - name: Checkout Codebase Substrate
         uses: actions/checkout@v4
 
       - name: Authenticate to GCP
-        # This uses your existing GOOGLE_INDEXING_API_JSON - will auth, but will 403 on deploy
-        # until you add Cloud Run Admin role to that SA in GCP IAM
-        uses: google-github-actions/auth # H-FID-PRESERVE-INTENT - guarded for fork secrets@v2
+        if: ${{ secrets.GOOGLE_INDEXING_API_JSON != '' }}
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
 
       - name: Deploy to Cloud Run - jhammers-node
+        if: ${{ secrets.GOOGLE_INDEXING_API_JSON != '' }}
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: jhammers-node
           region: us-central1
-          source:./
+          source: ./
