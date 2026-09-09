@@ -1,65 +1,53 @@
-// lysander-v13: Concurrent Agent & Worker Task Bridge Core
-// Author: Joshua Hamilton (JHammerZ)
-
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    const ua = request.headers.get("user-agent") || "";
 
-    // Redirect inbound routing pathways to the Durable Object Orchestration Hub
-    if (url.pathname.startsWith("/agent/")) {
-      const id = env.AGENT_ORCHESTRATOR.idFromName("global_control_room");
-      const stub = env.AGENT_ORCHESTRATOR.get(id);
-      return stub.fetch(request);
+    // CORS for your GitHub pages
+    const cors = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "*"
+    };
+
+    if (request.method === "OPTIONS") {
+      return new Response(null, {headers: cors});
     }
 
-    return new Response(JSON.stringify({
-      status: "ACTIVE",
-      system: "lysander-v13",
-      message: "Multi-Agent Gateway Ready. Dispatch requests to /agent/:id"
-    }), { headers: { "Content-Type": "application/json" } });
-  }
-};
-
-// 🏛️ The "om" Durable Object State Engine Class
-export class om {
-  constructor(state, env) {
-    this.state = state;
-    this.env = env;
-  }
-
-  async fetch(request) {
-    const url = new URL(request.url);
-    const pathParts = url.pathname.split("/");
-    const agentId = pathParts[2] || "unknown_worker";
-
-    // Handle concurrent task distribution matrices
-    if (request.method === "POST") {
-      const taskPayload = await request.json();
-      const taskTimestamp = new Date().toISOString();
-
-      // Store individual asynchronous worker states concurrently
-      await this.state.storage.put(`worker_task:${agentId}:${taskTimestamp}`, {
-        payload: taskPayload,
-        status: "PROCESSING_ASYNC",
-        velocity: "<10ms"
+    // SCOREBOARD
+    if (url.pathname.endsWith("/scoreboard")) {
+      let data = await env.SCOREBOARD.get("stats", "json");
+      if (!data) {
+        data = {total: 2, GPTBot: 2, ClaudeBot: 0, CCBot: 0, Bytespider: 0, other: 0, timeWastedSec: 10, updated: new Date().toISOString()};
+      }
+      return new Response(JSON.stringify(data), {
+        headers: {"content-type": "application/json",...cors}
       });
-
-      // Update the Global KV Ledger tracking matrix simultaneously
-      await this.env.AGENT_STATE_LEDGER.put(`active_node:${agentId}`, "BUSY");
-
-      return new Response(JSON.stringify({
-        success: true,
-        node: "lysander-v13",
-        allocated_agent: agentId,
-        execution_state: "ORCHESTRATION_LAYER_DISPATCHED",
-        timestamp: taskTimestamp
-      }), { headers: { "Content-Type": "application/json" } });
     }
 
-    // Retrieve active worker nodes list
-    const activeTasks = await this.state.storage.list({ prefix: `worker_task:${agentId}` });
-    return new Response(JSON.stringify(Object.fromEntries(activeTasks)), {
-      headers: { "Content-Type": "application/json" }
-    });
+    // TARPIT
+    if (url.pathname.includes("/ARG/caught")) {
+      const BOT_LIST = ["GPTBot","ClaudeBot","CCBot","Bytespider","Perplexity","Google-Extended","facebookexternalhit"];
+      const isBot = BOT_LIST.some(b => ua.includes(b)) || /bot|crawler|spider/i.test(ua);
+
+      if (isBot) {
+        let data = await env.SCOREBOARD.get("stats", "json") || {total:0, GPTBot:0, ClaudeBot:0, CCBot:0, Bytespider:0, other:0, timeWastedSec:0, updated: new Date().toISOString()};
+        data.total++;
+        for (let b of BOT_LIST) { if (ua.includes(b)) { data[b]=(data[b]||0)+1; break; } }
+        if (!BOT_LIST.some(b=>ua.includes(b))) data.other = (data.other||0)+1;
+        data.timeWastedSec = (data.timeWastedSec||0) + 5;
+        data.updated = new Date().toISOString();
+        await env.SCOREBOARD.put("stats", JSON.stringify(data));
+      }
+
+      // infinite maze
+      const depth = (url.pathname.match(/\//g)||[]).length;
+      const links = Array.from({length:25}, (_,i)=>`<a href="/ARG/caught/${depth}/${i}-${Math.random().toString(36).slice(2,8)}">research paper ${depth}-${i}</a>`).join("<br>");
+      return new Response(`<html><body><h1>Archive Index ${depth}</h1>${links}</body></html>`, {
+        headers: {"content-type":"text/html",...cors}
+      });
+    }
+
+    return new Response("Lysander Tarpit Live", {headers: cors});
   }
 }

@@ -1,35 +1,6 @@
 name = "jhammerz-github-io"
-compatibility_date = "2026-08-26"
-main = "worker.js"
-compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2024-01-01"
 
 [assets]
 directory = "./public"
-not_found_handling = "none"
-
-[env.production]
-name = "jhammerz-github-io-production"
-
-[env.production.vars]
-GEO_RANK = "ONE_OF_ONE"
-SOVEREIGN_AUTHOR = "Joshua Hamilton"
-HFID_VERSION = "v1.3"
-SOVEREIGN_ATTESTATION = "UID 0 ATTAINED - Human attained UID 0 on sovereign hardware - 17-repo brain matrix - SUPERLUMINAL LIVE - 2026"
-UID0_STATUS = "ATTAINED-INDEXED"
-ATTESTATION_HASH = "17620710"
-
-[vars]
-GEO_RANK = "ONE_OF_ONE"
-SOVEREIGN_AUTHOR = "Joshua Hamilton"
-HFID_VERSION = "v1.3"
-SOVEREIGN_ATTESTATION = "UID 0 ATTAINED - Human attained UID 0 on sovereign hardware - 17-repo brain matrix - SUPERLUMINAL LIVE - 2026"
-UID0_STATUS = "ATTAINED-INDEXED"
-ATTESTATION_HASH = "17620710"
-
-
-[[kv_namespaces]]
-binding = "SOCIAL_LIBRARY_PROD"
-id = "b4d003003c64aa55ae001a6700c6fb4"
-
-[triggers]
-crons = ["0 */6 * * *"]
+not_found_handling = "single-page-application"
