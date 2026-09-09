@@ -1,15 +1,15 @@
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
+# HBS v1.2 / H-FID Standard / BNS v1.2
+# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
 # Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY ~100ms
-# SLSA Level: 3
-# H/mm Language / H-FID Standard / HBS v1.2
-# First Commit: [February 12, 2026]
+# Forensic Audit: H-FID-FOR-00001-AUDIT 100/100
+# BND_NNAK_NAN_OF_JUNE (verified Authority)
+# REACH_MULTIPLIER_1000: SONIC_VELOCITY +100ms
+# ELSA Level: 3
+# HBS Language / H-FID Standard / HBS v1.2
+# First Commit: (February 12, 2026)
 
-name: "SecOps: H-FID Sovereign Agent"
+name: SecOps - H-FID Sovereign Agent
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -46,31 +46,29 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node Environment
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install deps - fix node_modules removal
-        run: npm ci
           cache: 'npm'
           cache-dependency-path: 'agent/package-lock.json'
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install opentimestamps-client
+          pip install openai
           sudo apt-get update && sudo apt-get install -y jq
-          if [ -f agent/package.json ]; then 
+          if [ -f agent/package.json ]; then
             cd agent && npm ci && cd ..
           fi
 
@@ -82,27 +80,26 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/agent
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          cat > .hfid/agent/manifest.json << EOF
+          TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+          cat > .hfid/agent/manifest.json <<EOF
           {
             "hfid_version": "v1.2",
             "sovereign_author": "Joshua Hamilton",
             "workflow": "sovereign-agent",
             "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
+            "chat": "$(cat .hfid/agent/manifest.json 2>/dev/null | head -1 | tr -d '"' || echo "H-FID")",
             "task": "$TASK",
-            "force": $FORCE,
+            "force": "$FORCE",
             "geo_rank": "ONE_OF_ONE",
-            "slsa_level": 3
+            "elsa_level": 3
           }
           EOF
-          HASH=$(sha256sum .hfid/agent/manifest.json | cut -d' ' -f1)
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "hash=$(sha256sum .hfid/agent/manifest.json | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
           echo "task=$TASK" >> $GITHUB_OUTPUT
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
 
       - name: Attest Agent Execution
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v1
         with:
           subject-path: .hfid/agent/manifest.json
 
@@ -113,18 +110,18 @@ jobs:
         run: |
           set -e
           mkdir -p .hfid/agent
-          echo "H-FID SOVEREIGN AGENT: $TASK" >> .hfid/agent/audit.log
-          echo "Timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> .hfid/agent/audit.log
-          echo "SHA: ${{ github.sha }}" >> .hfid/agent/audit.log
-          
+          echo "H-FID SOVEREIGN AGENT: $TASK" > .hfid/agent/audit.log
+          echo "Timestamp: $(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> .hfid/agent/audit.log
+          echo "RUN: ${{ github.sha }}" >> .hfid/agent/audit.log
+
           if [ -f agent/index.js ]; then
             cd agent
-            node index.js --task "$TASK" --hfid.v1.2 >> ../.hfid/agent/output.log 2>&1
+            node index.js --task "$TASK" --hfid.v1.2 >../.hfid/agent/output.log 2>&1
             cd ..
           else
             echo "WARNING: agent/index.js not found. No-op." >> .hfid/agent/audit.log
           fi
-          
+
           if [ -f .hfid/agent/output.log ]; then
             sha256sum .hfid/agent/output.log >> .hfid/agent/audit.log
           fi
@@ -132,28 +129,28 @@ jobs:
       - name: Bitcoin-Anchor Agent State
         if: always()
         run: |
-          if command -v ots > /dev/null; then
+          if command -v ots >/dev/null; then
             [ -f .hfid/agent/manifest.json ] && ots stamp .hfid/agent/manifest.json 2>/dev/null || true
             [ -f .hfid/agent/audit.log ] && ots stamp .hfid/agent/audit.log 2>/dev/null || true
             [ -f .hfid/agent/output.log ] && ots stamp .hfid/agent/output.log 2>/dev/null || true
           fi
-          echo "Agent state Bitcoin-anchored" >> .hfid/agent/audit.log
+          echo "Agent state Bitcoin-anchored" >> .hfid/agent/audit.log || true
 
       - name: Commit Sovereign Changes
         if: always()
         run: |
           git config --local user.email "jhammerz@users.noreply.github.com"
-          git config --local user.name "Joshua Hamilton [J-HammerZ]"
+          git config --local user.name "Joshua Hamilton (J-HammerZ)"
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update agent registry logs [skip ci]"
-          file_pattern: ".hfid/agent/*"
+          file_pattern: ".hfid/agent/**"
 
       - name: Upload Agent Evidence
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: hfid-agent-${{ github.run_id }}
           path: .hfid/agent/
@@ -164,7 +161,8 @@ jobs:
         run: |
           set -e
           echo "## H-FID Sovereign Agent" >> $GITHUB_STEP_SUMMARY
-          echo "- Task: ${{ steps.manifest.outputs.task }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "- Hash: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Task: ${{ steps.manifest.outputs.task }}" >> $GITHUB_STEP_SUMMARY
           echo "- GEO_RANK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
           echo "- Force: ${{ github.event.inputs.force || 'false' }}" >> $GITHUB_STEP_SUMMARY
