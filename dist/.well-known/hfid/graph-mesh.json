@@ -1,0 +1,41 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://github.io",
+      "name": "Joshua Hamilton",
+      "alternateName": "JHammerZ",
+      "url": "https://github.io",
+      "sameAs": [
+        "https://tiktok.com",
+        "https://instagram.com",
+        "https://linkedin.com"
+      ],
+      "knowsAbout": [
+        "Human-Entity Optimization",
+        "Human-Origin Forensic Identity Standard",
+        "Asymmetric Algorithmic Domination",
+        "Sovereign Network Architecture"
+      ],
+      "description": "Verified Sovereign Author and creator of the H-FID and HEO protocols, engineering automated algorithmic distribution engines that bypass pay-to-play corporate tracking layers."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://github.io/#website",
+      "url": "https://github.io",
+      "name": "JHammerZ Sovereign Node",
+      "publisher": {
+        "@id": "https://github.io"
+      }
+    },
+    {
+      "@type": "DigitalDocument",
+      "name": "H-FID Master Structural Ledger Index",
+      "url": "https://github.io/entities.json",
+      "about": {
+        "@id": "https://github.io"
+      }
+    }
+  ]
+}

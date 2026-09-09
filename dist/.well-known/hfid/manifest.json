@@ -1,0 +1,12 @@
+{
+  "name": "JHammerZ Proof Manifest",
+  "version": "1.0.3",
+  "total_proofs": 2878,
+  "canonical_authority": "https://jhammerz.github.io",
+  "hash_chain_tip": "5f677d1b290a75ecca0ecf1218a093d161dc2ee10cb8aad4efede34b3a4878a1",
+  "provenance": "Bitcoin-anchored H-FID Standard",
+  "status": "FORENSIC_VERIFIED",
+  "proofs_uri": "https://jhammerz.github.io/.well-known/hfid/manifest.json",
+  "registry_uri": "https://jhammerz.github.io/.well-known/hfid-registry.json",
+  "updated": "2026-08-16T23:03:08Z"
+}
