@@ -357,8 +357,10 @@
     <section class="music-player" id="player-section">
       <h2 id="player-heading">🎵 Featured Tracks & Discography</h2>
 <div id="sovereign-player" style="margin-top:16px">
-<iframe title="JHammerZ Spotify Player - Featured Tracks & Discography"  title="JHammerZ Spotify Player - Featured Tracks & Discography"  title="JHammerZ Spotify Player - Featured Tracks & Discography"  style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="420" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
+<iframe title="JHammerZ Spotify Player" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="420" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
 </div>
+
+
 
 
 </div>
@@ -518,22 +520,21 @@
 
 
 
+
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  var sp = document.getElementById('sovereign-player');
-  if (!sp || !(sp instanceof Element)) return;
-  if (!('IntersectionObserver' in window)) return;
-  var io = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting && !sp.dataset.loaded) {
-        sp.dataset.loaded = "1";
-        var l = document.createElement('link');
-        l.rel = 'preconnect';
-        l.href = 'https://open.spotify.com';
-        document.head.appendChild(l);
+document.addEventListener('DOMContentLoaded', function(){
+  var sp=document.getElementById('sovereign-player');
+  if(!sp||!(sp instanceof Element))return;
+  if(!('IntersectionObserver' in window))return;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting&&!sp.dataset.loaded){
+        sp.dataset.loaded="1";
+        var l=document.createElement('link');l.rel='preconnect';l.href='https://open.spotify.com';document.head.appendChild(l);
       }
     });
-  }, { rootMargin: '200px' });
+  },{rootMargin:'200px'});
   io.observe(sp);
 });
 </script>
