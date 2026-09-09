@@ -1,13 +1,1 @@
-{
-  "hfid_version": "v1.2",
-  "sovereign_author": "Joshua Hamilton",
-  "workflow": "syndicate",
-  "timestamp": "2026-09-09T12:12:02Z",
-  "current_hash": "9a16c0eb9d7351baa01571f646a0d6c64b5f735a",
-  "last_sha": "962332f24c96930318c80fd50ebe65467d94b83a",
-  "run_id": "34349583924",
-  "target": "discord",
-  "force": "false",
-  "geo_rank": "ONE_OF_ONE",
-  "slsa_level": 3
-}
+{"last_rotation":"2026-09-09T17:26:09Z","sources":15,"total_urls":14,"tip":"95d5ebb9 LIVE","distribution":"indefinite FYP"}
