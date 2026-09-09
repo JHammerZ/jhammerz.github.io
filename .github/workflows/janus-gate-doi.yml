@@ -104,7 +104,7 @@ jobs:
           mkdir -p .hfid/ots
           if [ "${{ steps.zenodo.outputs.has_zenodo }}" = "true" ]; then
             echo "Stamping zenodo.json"
-            ots stamp zenodo.json
+            rm -f zenodo.json.ots 2>/dev/null && ots stamp zenodo.json
             cp zenodo.json.ots .hfid/ots/
             echo "stamped_file=zenodo.json" >> $GITHUB_OUTPUT
           else

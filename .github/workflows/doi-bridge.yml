@@ -72,7 +72,7 @@ jobs:
         run: |
           set -e
           # Pre-clean existing timestamp files to eliminate filesystem [Errno 17] collisions
-          rm -f doi-manifest.json.ots .hfid/provenance/doi-manifest.json.ots 2>/dev/null || true
+          rm -f zenodo.json.ots doi-manifest.json.ots .hfid/provenance/* 2>/dev/null || true
           
           # Initialize clean cryptographic timestamp creation via the python client
           ots stamp doi-manifest.json
