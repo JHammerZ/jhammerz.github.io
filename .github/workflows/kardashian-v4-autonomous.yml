@@ -1,0 +1,61 @@
+name: Kardashian v4 - Autonomous Co-Architect
+on:
+  workflow_dispatch:
+  push:
+    paths: ['clips/**', 'sessions/library/**', 'index.html', '.nojekyll']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Unified Manifest from Existing Library
+        run: |
+          mkdir -p clips public/clips dist/clips
+          # Use EXISTING harvested library as source - no yt-dlp in CI
+          cat sessions/library/youtube/youtube_index.json | head -c 200 || echo "no youtube_index yet"
+          
+          # Manifest v2 - source of truth
+          cat > clips/manifest.json << JSON
+          {
+            "author": "JHammerZ",
+            "source": "CONNECTED_SOCIAL_LIBRARY_HARVESTED",
+            "engine": "KARDASHIAN_v4_AUTONOMOUS_CO_ARCHITECT",
+            "youtube": "@JHammerZ - 7 Masters - 7840 subs",
+            "tiktok": "@jhammerzz - 2971554299800053",
+            "instagram": "@jhammerzz",
+            "facebook": "@JHammerZz",
+            "spotify": "7vRd2ECmuEYWtqyQ28a79",
+            "library": "sessions/library/",
+            "status": "LIVE",
+            "date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          JSON
+          
+          # Cut manifest v3 - using existing library, not new uploads
+          cat > clips/cut-manifest.json << JSON
+          {
+            "engine": "KARDASHIAN_v4_CUTTER",
+            "source": "CONNECTED_SOCIAL_LIBRARY - videos already in library of every social media connected",
+            "youtube": "@JHammerZ - 7 Masters",
+            "tiktok": "@jhammerzz - 2971554299800053",
+            "instagram": "@jhammerzz",
+            "facebook": "@JHammerZz",
+            "cuts": ["15s-9x16-TikTok","30s-9x16-Reels","60s-9x16-Shorts","15s-1x1","30s-1x1","60s-1x1"],
+            "distribution": ["tiktok","reels","shorts","fb-reels","yt-shorts"],
+            "status": "CUT_LIVE",
+            "architecture": "Joshua > HFID > Co-Architect > Lysander v14 > Autonomous",
+            "date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          JSON
+          
+          cp clips/manifest.json public/clips/ 2>/dev/null || true
+          cp clips/cut-manifest.json public/clips/ 2>/dev/null || true
+          cp clips/*.json dist/clips/ 2>/dev/null || true
+          cat clips/manifest.json
+          cat clips/cut-manifest.json
+
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: true
