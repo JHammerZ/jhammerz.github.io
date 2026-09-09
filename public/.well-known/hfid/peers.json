@@ -1,4 +1,5 @@
 {
   "peers": [],
-  "note": "peers.json restored after typo cleanup"
+  "note": "peers.json restored after typo cleanup - a7d9 lineage preserved",
+  "tip": "a7d9->95d5ebb9 LIVE"
 }
