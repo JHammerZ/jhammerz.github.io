@@ -1,14 +1,12 @@
 {
   "author": "JHammerZ",
-  "engine": "KARDASHIAN_v4_AUTONOMOUS_CO_ARCHITECT",
-  "source": "CONNECTED_SOCIAL_LIBRARY_HARVESTED",
-  "youtube": "@JHammerZ - 7 Masters - 7840 subs - 4.4M Likes",
+  "source": "CONNECTED_SOCIAL_LIBRARY",
+  "youtube": "@JHammerZ",
   "tiktok": "@jhammerzz - 2971554299800053",
   "instagram": "@jhammerzz",
   "facebook": "@JHammerZz",
   "spotify": "7vRd2ECmuEYWtqyQ28a79",
-  "library_path": "sessions/library/",
-  "youtube_index": "sessions/library/youtube/youtube_index.json",
-  "status": "LIVE",
-  "architecture": "Joshua > HFID > Co-Architect > Lysander v14"
+  "engine": "KARDASHIAN_DISTRIBUTION_v2",
+  "status": "LIVE_LIBRARY_MODE",
+  "last_harvest": "2026-09-09T15:29:54Z"
 }
