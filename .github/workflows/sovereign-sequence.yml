@@ -15,13 +15,11 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
       - name: Generate Sovereign Manifest
         run: npm run build
       - name: Bitcoin-Anchor Swarm Output
         run: |
           python -m pip install --upgrade --break-system-packages opentimestamps-client
-          python -m pip show opentimestamps-client
-          ~/.local/bin/ots --version || ots --version || python -m opentimestamps.client --help
+          ots --version
           echo "Sovereign sequence Bitcoin-anchored"
-          ls -l dist/.well-known/hfid/ || echo "no hfid yet"
