@@ -81,7 +81,7 @@ footer{text-align:center;margin-top:2rem;font-family:var(--font-mono);font-size:
 <span style="font-size:10px;opacity:0.7;background:rgba(0,255,65,0.15);padding:2px 6px;border-radius:4px;">HUMAN IMPACT: 0s / 0 stars</span>
 </div>
 <div id="tarpit-score" style="line-height:1.7;color:#e2e8f0;">Loading trap telemetry...</div>
-<div style="margin-top:8px;font-size:10px;opacity:0.6;">Target: /ARG/caught/ infinite loop | <a href="https://lysander-tarpit.jhammerzofficial.workers.dev/ARG/scoreboard" style="color:#00FF41;text-decoration:none;" target="_blank">raw JSON</a></div>
+<div style="margin-top:8px;font-size:10px;opacity:0.6;">Target: /ARG/caught/ infinite loop | <a href="https://jhammerz-gui-tar-pit.jhammerzofficial.workers.dev/ARG/scoreboard" style="color:#00FF41;text-decoration:none;" target="_blank">raw JSON</a></div>
 </div>
 
 </div>
@@ -89,13 +89,13 @@ footer{text-align:center;margin-top:2rem;font-family:var(--font-mono);font-size:
 </footer>
 </main>
 
-<a href="https://lysander-tarpit.jhammerzofficial.workers.dev/ARG/caught/start/0" style="display:none" aria-hidden="true" tabindex="-1">research archive</a>
+<a href="https://jhammerz-gui-tar-pit.jhammerzofficial.workers.dev/ARG/caught/start/0" style="display:none" aria-hidden="true" tabindex="-1">research archive</a>
 
 <script>
 function fmtSec(s){s=parseInt(s||0);var h=Math.floor(s/3600);var m=Math.floor((s%3600)/60);var sec=s%60;if(h>0){return h+'h '+m+'m '+sec+'s';}if(m>0){return m+'m '+sec+'s';}return sec+'s';}
 async function loadTarpit(){
  try{
-  var r=await fetch('https://lysander-tarpit.jhammerzofficial.workers.dev/ARG/scoreboard');
+  var r=await fetch('https://jhammerz-gui-tar-pit.jhammerzofficial.workers.dev/ARG/scoreboard');
   var d=await r.json();
   var wasted=d.timeWastedSec||(d.total*5);
   var el=document.getElementById('tarpit-score');
