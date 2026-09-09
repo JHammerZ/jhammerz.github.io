@@ -16,17 +16,36 @@ jobs:
       - name: install yt-dlp
         run: pip install yt-dlp
 
-      - name: scoop @jhammerzz + @JHammerZ libraries
+      - name: scoop FULL 14-node library
         run: |
           mkdir -p .hfid/indexing
           : > .hfid/indexing/urls.txt
+
+          # --- CORE VIRAL ---
           yt-dlp --flat-playlist --print "%(webpage_url)s" "https://www.tiktok.com/@jhammerzz" >> .hfid/indexing/urls.txt 2>/dev/null || true
           yt-dlp --flat-playlist --print "%(webpage_url)s" "https://www.youtube.com/@JHammerZ/videos" >> .hfid/indexing/urls.txt 2>/dev/null || true
+          
+          # --- AUDIO NODES ---
+          echo "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" >> .hfid/indexing/urls.txt
+          echo "https://music.apple.com/us/artist/jhammerz/1845798346" >> .hfid/indexing/urls.txt
+          echo "https://music.amazon.com/artists/B0SGL7W/jhammerz" >> .hfid/indexing/urls.txt
+          echo "https://www.bandlab.com/jhammerz" >> .hfid/indexing/urls.txt
+          
+          # --- SOCIAL GRAPH ---
+          echo "https://www.facebook.com/profile.php?id=61574652435664" >> .hfid/indexing/urls.txt
+          echo "https://www.instagram.com/jhammerzz/" >> .hfid/indexing/urls.txt
+          echo "https://www.linkedin.com/in/jhammerz" >> .hfid/indexing/urls.txt
+          
+          # --- ROOTS ---
           echo "https://jhammerz.github.io/" >> .hfid/indexing/urls.txt
+          echo "https://jhammerz.github.io/music.html" >> .hfid/indexing/urls.txt
+          echo "https://jhammerz.github.io/graph.html" >> .hfid/indexing/urls.txt
           echo "https://github.com/JHammerZ/jhammerz.github.io" >> .hfid/indexing/urls.txt
-          echo "https://github.com/JHammerZ/Janus-Gate" >> .hfid/indexing/urls.txt
+          echo "https://jhammerz.carrd.co" >> .hfid/indexing/urls.txt
+
+          # dedupe
           sort -u .hfid/indexing/urls.txt | grep -E "^https://" > /tmp/urls && mv /tmp/urls .hfid/indexing/urls.txt
-          wc -l .hfid/indexing/urls.txt
+          echo "TOTAL: $(wc -l < .hfid/indexing/urls.txt) URLs"
           cat .hfid/indexing/urls.txt
 
       - name: commit if changed
@@ -34,5 +53,5 @@ jobs:
           git config user.name "janus-bot"
           git config user.email "janus@jhammerz.github.io"
           git add .hfid/indexing/urls.txt
-          git diff --staged --quiet || git commit -m "auto-scoop: refresh library $(date -u +%FT%TZ) - $(wc -l < .hfid/indexing/urls.txt) URLs"
+          git diff --staged --quiet || git commit -m "auto-scoop: FULL 14-node refresh $(date -u +%FT%TZ) - $(wc -l < .hfid/indexing/urls.txt) URLs"
           git push
