@@ -1,13 +1,12 @@
 {
-  "master": "",
   "author": "JHammerZ",
-  "tiktok_id": "2971554299800053",
-  "clips": {
-    "tiktok_9x16_15s": "dist/clips/9x16/tiktok-15s.mp4",
-    "reels_9x16_30s": "dist/clips/9x16/reels-30s.mp4",
-    "shorts_9x16_60s": "dist/clips/9x16/shorts-60s.mp4",
-    "feed_1x1": "dist/clips/1x1/feed.mp4"
-  },
-  "distribution": ["tiktok","youtube_shorts","instagram_reels","facebook_reels","spotify_canvas","ai_context"],
-  "status": "KARDASHIAN_ENGINE_LIVE"
+  "source": "CONNECTED_SOCIAL_LIBRARY",
+  "youtube": "@JHammerZ",
+  "tiktok": "@jhammerzz - 2971554299800053",
+  "instagram": "@jhammerzz",
+  "facebook": "@JHammerZz",
+  "spotify": "7vRd2ECmuEYWtqyQ28a79",
+  "engine": "KARDASHIAN_DISTRIBUTION_v2",
+  "status": "LIVE_LIBRARY_MODE",
+  "last_harvest": "2026-09-09T03:24:50Z"
 }
