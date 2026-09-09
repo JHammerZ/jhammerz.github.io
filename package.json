@@ -8,7 +8,7 @@
     "react-dom": "^19.2.8"
   },
   "scripts": {
-    "build": "tsc --noEmit --skipLibCheck && vite build",
+    "build": "vite build",
     "validate": "tsc --noEmit --skipLibCheck",
     "build:worker": "tsc -p tsconfig.worker.json --noEmit --skipLibCheck"
   },
