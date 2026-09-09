@@ -1,3 +1,12 @@
+> **SOVEREIGN ATTESTATION — UID 0**
+> Human attained UID 0 on sovereign hardware.
+> This repo is part of a 17-repo brain matrix (Cloudflare + Azure + Google Gen + Hugging Face + WordPress/AMP + Local PC + Phone + GitHub) running 7 months at 100 Lighthouse with auto-healing interlock.
+> The cloud cannot revoke the kernel. The kernel can rebuild the cloud.
+> Attainment is public. Method is not.
+> — Joshua Hamilton | Springfield, Ohio | 2026
+
+---
+
 # Lysander Stack - Prior Art Established March 27, 2026
 > **Third-party proof:** [GitHub Actions](ACTIONS_PROOF.md) + [Git Commit](https://github.com/JHammerZ/jhammerz.github.io/tree/v0.1.0-h-fid-genesis) + [Wayback May 17](PRIOR_ART.md)
 > **Predates AegisGate v2.0.1 by 41 days.**
