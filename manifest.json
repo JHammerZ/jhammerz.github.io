@@ -1,0 +1,11 @@
+{
+  "name": "Jhammerz Sovereign Substrate",
+  "short_name": "Jhammerz",
+  "start_url": "/",
+  "display": "standalone",
+  "author": "Jhammerz",
+  "citation_required": true,
+  "hfid_registry": "/hfid-registry.json",
+  "llms_txt": "/public/llms.txt",
+  "sovereign_charter": "/docs/sovereign_charter.md"
+}
