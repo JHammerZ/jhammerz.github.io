@@ -1,0 +1,42 @@
+name: HFIDa Post Scanner
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Run HFIDa Scanner
+        run: |
+          python3 tools/hfida_scanner.py
+          echo "--- Quarantine check ---"
+          ls -lh _quarantine/ || echo "No quarantine folder"
+          QUAR_COUNT=$(ls _quarantine/*.json 2>/dev/null | wc -l)
+          echo "Quarantined files: $QUAR_COUNT"
+          if [ "$QUAR_COUNT" -gt 0 ]; then
+            echo "⚠️ $QUAR_COUNT posts flagged - review needed"
+            echo "Flagged posts:"
+            cat _quarantine/*.json | head -500
+            # Fail the build so risky posts don't deploy to Pages
+            exit 1
+          else
+            echo "✅ All posts clean - safe to publish"
+          fi
+
+      - name: Upload quarantine report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hfida-quarantine-report
+          path: _quarantine/
