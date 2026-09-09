@@ -1,0 +1,13 @@
+{
+  "engine": "KARDASHIAN_v4_CUTTER",
+  "source": "CONNECTED_SOCIAL_LIBRARY - videos already in library of every social media connected",
+  "youtube": "@JHammerZ - 7 Masters",
+  "tiktok": "@jhammerzz - 2971554299800053",
+  "instagram": "@jhammerzz",
+  "facebook": "@JHammerZz",
+  "cuts": ["15s-9x16-TikTok","30s-9x16-Reels","60s-9x16-Shorts","15s-1x1","30s-1x1","60s-1x1"],
+  "distribution": ["tiktok","reels","shorts","fb-reels","yt-shorts"],
+  "status": "CUT_LIVE",
+  "architecture": "Joshua > HFID > Co-Architect > Lysander v14 > Autonomous",
+  "date": "2026-09-09T03:37:24Z"
+}

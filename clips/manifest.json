@@ -1,12 +1,13 @@
 {
   "author": "JHammerZ",
-  "source": "CONNECTED_SOCIAL_LIBRARY",
-  "youtube": "@JHammerZ",
+  "source": "CONNECTED_SOCIAL_LIBRARY_HARVESTED",
+  "engine": "KARDASHIAN_v4_AUTONOMOUS_CO_ARCHITECT",
+  "youtube": "@JHammerZ - 7 Masters - 7840 subs",
   "tiktok": "@jhammerzz - 2971554299800053",
   "instagram": "@jhammerzz",
   "facebook": "@JHammerZz",
   "spotify": "7vRd2ECmuEYWtqyQ28a79",
-  "engine": "KARDASHIAN_DISTRIBUTION_v2",
-  "status": "LIVE_LIBRARY_MODE",
-  "last_harvest": "2026-09-09T03:24:50Z"
+  "library": "sessions/library/",
+  "status": "LIVE",
+  "date": "2026-09-09T03:37:24Z"
 }
