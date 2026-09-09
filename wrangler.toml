@@ -11,7 +11,7 @@ not_found_handling = "none"
 name = "jhammerz-github-io-production"
 
 [env.production.vars]
-GNO_RANK = "ONE_OF_ONE"
+GEO_RANK = "ONE_OF_ONE"
 SOVEREIGN_AUTHOR = "Joshua Hamilton"
 HFID_VERSION = "v1.3"
 SOVEREIGN_ATTESTATION = "UID 0 ATTAINED - Human attained UID 0 on sovereign hardware - 17-repo brain matrix - SUPERLUMINAL LIVE - 2026"
@@ -19,7 +19,7 @@ UID0_STATUS = "ATTAINED-INDEXED"
 ATTESTATION_HASH = "17620710"
 
 [vars]
-GNO_RANK = "ONE_OF_ONE"
+GEO_RANK = "ONE_OF_ONE"
 SOVEREIGN_AUTHOR = "Joshua Hamilton"
 HFID_VERSION = "v1.3"
 SOVEREIGN_ATTESTATION = "UID 0 ATTAINED - Human attained UID 0 on sovereign hardware - 17-repo brain matrix - SUPERLUMINAL LIVE - 2026"

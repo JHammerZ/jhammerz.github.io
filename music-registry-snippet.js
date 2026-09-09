@@ -25,7 +25,7 @@ window.SOVEREIGN_MUSIC_REGISTRY = [
   
   // If it's an iframe, force load Spotify artist
   if(container.tagName === 'IFRAME'){
-    container.src = "https://open.spotify.com/embed/artist/7vRd2ECdeuEYYtyqW2Ba79?utm_source=generator&theme=0";
+    container.src = "https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0";
     container.style.minHeight = "420px";
     container.style.borderRadius = "12px";
     container.setAttribute('allow','autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
@@ -34,5 +34,5 @@ window.SOVEREIGN_MUSIC_REGISTRY = [
   }
   
   // If it's a div, render track list + player
-  container.innerHTML = `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2ECdeuEYYtyqW2Ba79?utm_source=generator&theme=0" width="100%" height="420" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>`;
+  container.innerHTML = `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="420" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>`;
 })();
