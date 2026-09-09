@@ -10,16 +10,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
-      - name: Generate Sovereign Manifest
+      - name: Build
         run: npm run build
-      - name: Bitcoin-Anchor Swarm Output
+      - name: Bitcoin-Anchor
         run: |
-          python -m pip install --upgrade --break-system-packages opentimestamps-client
+          python -m pip install --upgrade opentimestamps-client --break-system-packages
           ots --version
-          echo "Sovereign sequence Bitcoin-anchored"
