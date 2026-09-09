@@ -356,12 +356,7 @@
     <!-- Music Player Embed -->
     <section class="music-player" id="player-section">
       <h2 id="player-heading">🎵 Featured Tracks & Discography</h2>
-<div id="sovereign-player" style="margin-top:16px">
-<iframe title="JHammerZ Spotify Player" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="420" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
-</div>
 
-
-</div>
 
 
 
@@ -510,7 +505,18 @@
 © 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.0.3</p>
       <p id="footer-sub" style="margin-top: 0.25rem; font-size: 0.7rem; color: var(--accent);">Lysander-3.0 Sovereign Architecture</p>
     </footer>
-  </main>
+  <div id="sovereign-player" style="margin:20px 0;min-height:352px;content-visibility:auto;contain-intrinsic-size:0 352px"><iframe title="JHammerZ Spotify Player" style="border-radius:12px" data-src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" fetchpriority="low"></iframe></div><script>(function(){
+function loadPlayer(){
+ var f=document.querySelector('#sovereign-player iframe');
+ if(f && !f.src){ f.src=f.getAttribute('data-src'); console.log('[PLAYER] Embed view counted'); }
+}
+if('requestIdleCallback' in window){
+ requestIdleCallback(loadPlayer,{timeout:2500});
+} else {
+ setTimeout(loadPlayer, 2200);
+}
+})();</script>
+</main>
   
   <script>
   // Deferred execution: wait until full window load and idle before probing telemetry
