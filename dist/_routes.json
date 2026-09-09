@@ -1,5 +1,0 @@
-{
-  "version": 1,
-  "include": ["/*"],
-  "exclude": ["/.well-known/*", "/clips/*", "/library/*", "/ai-context.json", "/llms.txt", "/llms-full.txt", "/chain.json", "/entities.json"]
-}

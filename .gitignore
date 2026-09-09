@@ -119,3 +119,5 @@ public/CNAME
 dist/.well-known/hfid/*.ots
 dist/.well-known/hfid/*.sha256
 dist/.well-known/hfid/*.sha256.ots
+dist/
+dist/
