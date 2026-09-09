@@ -1,108 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="robots" content="noai, noimageai">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JHammerZ | Official Hub & Music | Joshua Hamilton</title>
-<meta name="description" content="Official music, releases, and hub for Joshua Hamilton (JHammerZ). Left-handed guitarist and Master Architect of H-FID, HIO, and Ag-Fi protocols.">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JHammerZ — Joshua Hamilton | Official Hub</title>
+<meta name="description" content="Official hub for Joshua Hamilton (JHammerZ). Original music, discography, and sovereign mesh.">
 <link rel="canonical" href="https://jhammerz.github.io/">
-<meta property="og:title" content="JHammerZ | Official Hub & Music">
-<meta property="og:description" content="Stream original music, releases, and explore the sovereign developer hub.">
 <meta property="og:image" content="https://jhammerz.github.io/assets/hammer.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="hfid-registry" href=".well-known/hfid/registry.json">
-<link rel="me" href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"MusicGroup","@id":"https://jhammerz.github.io/#musicgroup","name":"JHammerZ","alternateName":"Joshua Hamilton","sameAs":["https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79","https://music.apple.com/us/artist/jhammerz/1843702340","https://www.youtube.com/@JHammerZ","https://github.com/JHammerZ/jhammerz.github.io"]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"MusicGroup","name":"JHammerZ","url":"https://jhammerz.github.io/","image":"https://jhammerz.github.io/assets/hammer.jpg"}</script>
 <style>
-:root{--bg:#0e141e;--card:#151c28;--card2:#1a2333;--border:#1e2a3a;--text:#e6eefc;--muted:#8a9bb5;--accent:#10b981;--font-sans:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;--font-mono:ui-monospace,Menlo,monospace}
+:root{--bg:#0b111c;--card:#121c2d;--card2:#16233a;--border:#1e2f4a;--text:#eef4ff;--muted:#8da1bd;--accent:#2dd4a0;--sans:Inter,system-ui,sans-serif;--mono:ui-monospace,Menlo,monospace}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--font-sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;line-height:1.5;-webkit-font-smoothing:antialiased}
-.container{width:100%;max-width:760px;display:flex;flex-direction:column;gap:1.5rem}
-.profile{text-align:center;padding:2rem 1.5rem;background:var(--card);border:1px solid var(--border);border-radius:16px}
-.profile h1{font-size:2rem;letter-spacing:-0.04em;font-weight:800}
-.profile-subtitle{font-size:0.9rem;color:var(--accent);font-family:var(--font-mono);margin-top:0.35rem}
-.profile p{margin-top:0.75rem;color:var(--muted);font-size:0.9rem;max-width:480px;margin-left:auto;margin-right:auto}
-.telemetry{display:inline-flex;align-items:center;gap:0.5rem;padding:0.4rem 0.85rem;margin-top:1.1rem;background:#101a16;border:1px solid #1a332a;border-radius:999px;font-family:var(--font-mono);font-size:0.7rem;color:var(--accent)}
-.pulse{width:7px;height:7px;background:var(--accent);border-radius:50%}
-.music-player{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.25rem;width:100%;max-width:100%;box-sizing:border-box;overflow:hidden}
-.music-player h2{font-size:0.85rem;font-weight:600;letter-spacing:0.04em;color:var(--muted);margin-bottom:1rem;text-transform:uppercase}
-#sovereign-player{width:100%;max-width:100%;border-radius:12px;overflow:hidden;min-height:352px;background:#000}
-#sovereign-player iframe{width:100%!important;max-width:100%!important;display:block;border:0;border-radius:12px;height:352px}
-.section-title{font-size:0.75rem;font-weight:600;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-top:0.5rem;padding-left:0.25rem}
-.links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0.7rem}
-.link-card{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.15rem;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);text-decoration:none;transition:border-color 0.15s}
-.link-card:hover{border-color:#2a3a52}
-.link-title{font-size:0.92rem;font-weight:600;color:#fff}
-.link-desc{font-size:0.78rem;color:var(--muted);font-family:var(--font-mono);margin-top:2px}
-.link-icon{opacity:0.7}
-.forensic{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;padding:12px;background:rgba(16,185,129,0.04);border:1px dashed #1e2a3a;border-radius:12px;font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:0.5rem}
-.forensic b{background:#0f1e14;color:var(--accent);padding:3px 8px;border-radius:6px;font-size:11px;border:1px solid #1a3a2a}
-footer{text-align:center;margin-top:1rem;font-family:var(--font-mono);font-size:11px;color:var(--muted);line-height:1.6}
-.heo-terminal{background:#0a0e14;border:1px solid #1e2a3a;border-radius:10px;padding:1rem;font-family:var(--font-mono);font-size:0.8rem;display:none;text-align:left;margin-top:1rem}
-.heo-terminal.active{display:block}
+body{background:radial-gradient(1200px 600px at 50% -10%,#1a2a4a 0%,var(--bg) 60%);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 80px}
+.hero{display:flex;gap:22px;align-items:center;background:linear-gradient(180deg,#172745 0%,var(--card) 100%);border:1px solid var(--border);border-radius:24px;padding:24px}
+.hero img{width:88px;height:88px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0;background:#0f1726}
+.hero h1{font-size:2.1rem;font-weight:850;letter-spacing:-0.04em}
+.hero.sub{color:var(--accent);font-family:var(--mono);font-size:.86rem;margin-top:2px}
+.hero p{color:var(--muted);font-size:.94rem;margin-top:8px;line-height:1.5}
+.badge{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:#0e1e16;border:1px solid #173a29;color:var(--accent);font-family:var(--mono);font-size:.7rem;padding:6px 11px;border-radius:999px}
+.dot{width:6px;height:6px;background:var(--accent);border-radius:50%}
+.section{margin-top:36px}
+.section h2{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.player-wrap{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:14px}
+#sovereign-player{width:100%;border-radius:14px;overflow:hidden;background:#000}
+#sovereign-player iframe{width:100%;border:0;display:block;height:352px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.link{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--card);border:1px solid var(--border);border-radius:14px;text-decoration:none;color:var(--text);transition:.15s}
+.link:hover{background:var(--card2);border-color:#2a4060;transform:translateY(-1px)}
+.ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:#0f1a2c;border:1px solid var(--border);font-size:1.25rem;flex-shrink:0}
+.link b{font-size:.92rem;font-weight:650}
+.link small{font-family:var(--mono);font-size:.76rem;color:var(--muted);display:block;margin-top:2px}
+.arrow{margin-left:auto;opacity:.35}
+.forensic{margin-top:40px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.forensic span{font-family:var(--mono);font-size:11px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid var(--border);color:var(--muted)}
+.forensic strong{background:#0e1e16;border-color:#173a29;color:var(--accent)}
+footer{margin-top:24px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);opacity:.85;line-height:1.6}
+@media(max-width:640px){.hero{flex-direction:column;text-align:center}.hero p{margin-left:auto;margin-right:auto}}
 </style>
 </head>
 <body>
-<main class="container">
-<div class="profile">
+<div class="wrap">
+
+<div class="hero">
+<img src="assets/hammer.jpg" alt="JHammerZ" onerror="this.src='https://jhammerz.github.io/assets/hammer.jpg'">
+<div>
 <h1>JHammerZ</h1>
-<div class="profile-subtitle">Joshua Hamilton • Sovereign Audio & Mesh</div>
-<p>Original music, releases, and decentralized edge systems. Left-handed guitarist, Master Architect of H-FID.</p>
-<div class="telemetry" id="heo-toggle"><span class="pulse"></span><span id="telemetry-status">EDGE: INITIALIZING...</span></div>
-<div class="heo-terminal" id="heo-terminal"><div>JHammerZ-001 | Debian HERO_3 | Type 'help'</div><div id="heo-output" style="margin-top:8px;white-space:pre-wrap;color:#c9d1d9"></div><input id="heo-input" placeholder=">_" style="width:100%;background:transparent;border:none;color:var(--accent);font-family:var(--font-mono);outline:none;margin-top:8px"></div>
+<div class="sub">Joshua Hamilton • Sovereign Audio & Mesh</div>
+<p>Original music, releases, and decentralized edge systems. Left-handed guitarist and Master Architect of H-FID v1.0.3.</p>
+<div class="badge"><span class="dot"></span><span id="telemetry-status">EDGE: AUTONOMOUS (A2A-2026-v1)</span></div>
+</div>
 </div>
 
-<section class="music-player">
+<div class="section">
 <h2>🎵 Featured Tracks & Discography</h2>
+<div class="player-wrap">
 <div id="sovereign-player">
-<iframe title="JHammerZ Spotify Player" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator" loading="lazy" fetchpriority="low" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+<iframe title="JHammerZ Spotify" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
 </div>
-</section>
-
-<div class="section-title">Music Streaming & Audio</div>
-<div class="links-grid">
-<a href="/music.html" class="link-card" style="border-color:#1e3a2a"><div><div class="link-title">🎵 Music Hub & Video Deck</div><div class="link-desc">All 7 YouTube Sessions & Spotify Discography</div></div><span class="link-icon">→</span></a>
-<a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">Spotify</div><div class="link-desc">Artist Profile & Albums</div></div><span class="link-icon">↗</span></a>
-<a href="https://music.apple.com/us/artist/jhammerz/1843702340" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">Apple Music</div><div class="link-desc">Official Catalog</div></div><span class="link-icon">↗</span></a>
-<a href="https://www.bandlab.com/band/b8870133824293447" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">BandLab</div><div class="link-desc">Community & Collabs</div></div><span class="link-icon">↗</span></a>
-<a href="https://music.amazon.com/artists/B00SGGL7W/jhammerz" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">Amazon Music</div><div class="link-desc">Digital Store & Streams</div></div><span class="link-icon">↗</span></a>
+</div>
 </div>
 
-<div class="section-title">Visual & Social Mesh</div>
-<div class="links-grid">
-<a href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">YouTube</div><div class="link-desc">@JHammerZ • Videos & Sessions</div></div><span class="link-icon">↗</span></a>
-<a href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">Instagram</div><div class="link-desc">@jhammerzz • Updates</div></div><span class="link-icon">↗</span></a>
-<a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">TikTok</div><div class="link-desc">@jhammerzz • Clips</div></div><span class="link-icon">↗</span></a>
-<a href="https://www.facebook.com/jhammerzz" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">Facebook</div><div class="link-desc">Official Page</div></div><span class="link-icon">↗</span></a>
+<div class="section">
+<h2>🎧 Music Streaming & Audio</h2>
+<div class="grid">
+<a class="link" href="/music.html"><span class="ic">🎵</span><span><b>Music Hub & Video Deck</b><small>7 Sessions & Full Discography</small></span><span class="arrow">→</span></a>
+<a class="link" href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener"><span class="ic">🟢</span><span><b>Spotify</b><small>Artist Profile</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://music.apple.com/us/artist/jhammerz/1843702340" target="_blank" rel="noopener"><span class="ic">🍎</span><span><b>Apple Music</b><small>Official Catalog</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://www.bandlab.com/band/b8870133824293447" target="_blank" rel="noopener"><span class="ic">🎸</span><span><b>BandLab</b><small>Community & Collabs</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://music.amazon.com/artists/B00SGGL7W/jhammerz" target="_blank" rel="noopener"><span class="ic">📦</span><span><b>Amazon Music</b><small>Digital Store</small></span><span class="arrow">↗</span></a>
+</div>
 </div>
 
-<div class="section-title">Network & Identity</div>
-<div class="links-grid">
-<a href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">GitHub Repository</div><div class="link-desc">Source & CI/CD Pipelines</div></div><span class="link-icon">↗</span></a>
-<a href="https://www.linkedin.com/in/jhammerz" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">LinkedIn</div><div class="link-desc">Professional Profile</div></div><span class="link-icon">↗</span></a>
-<a href="https://orcid.org/0009-0004-5273-7028" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">ORCID</div><div class="link-desc">Research Identity</div></div><span class="link-icon">↗</span></a>
-<a href="https://doi.org/10.5281/zenodo.20778079" target="_blank" rel="noopener" class="link-card"><div><div class="link-title">Zenodo DOI</div><div class="link-desc">Janus Gate v1.0-H-FID</div></div><span class="link-icon">↗</span></a>
+<div class="section">
+<h2>📺 Visual & Social Mesh</h2>
+<div class="grid">
+<a class="link" href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener"><span class="ic">▶️</span><span><b>YouTube</b><small>@JHammerZ • Sessions</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener"><span class="ic">📸</span><span><b>Instagram</b><small>@jhammerzz • Updates</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener"><span class="ic">🎬</span><span><b>TikTok</b><small>@jhammerzz • Clips</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://www.facebook.com/jhammerzz" target="_blank" rel="noopener"><span class="ic">👥</span><span><b>Facebook</b><small>Official Page</small></span><span class="arrow">↗</span></a>
+</div>
 </div>
 
-<div class="forensic">
-<span>H-FID v1.3+ /pigeon •</span><b>GEO RANK: ONE_OF_ONE</b><span>FORENSIC: 100/100</span><span>ID: ed25519: 2b7f9...</span><span>aurelius.json ✓</span><span>proof.html ✓</span><span>registry.json ✓</span>
+<div class="section">
+<h2>🔗 Network & Identity</h2>
+<div class="grid">
+<a class="link" href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener"><span class="ic">💻</span><span><b>GitHub</b><small>Source & CI/CD</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://www.linkedin.com/in/jhammerz" target="_blank" rel="noopener"><span class="ic">💼</span><span><b>LinkedIn</b><small>Professional</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://orcid.org/0009-0004-5273-7028" target="_blank" rel="noopener"><span class="ic">🎓</span><span><b>ORCID</b><small>Research Identity</small></span><span class="arrow">↗</span></a>
+<a class="link" href="https://doi.org/10.5281/zenodo.20778079" target="_blank" rel="noopener"><span class="ic">📜</span><span><b>Zenodo DOI</b><small>Janus Gate v1.0 — H-FID</small></span><span class="arrow">↗</span></a>
+</div>
 </div>
 
-<footer>
- 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.0.3<br>
-Lysander-3.0 Sovereign Architecture • EDGE: AUTONOMOUS (A2A-2026-v1)
-</footer>
-</main>
+<div class="forensic"><span>H-FID v1.3+ / pigeon •</span><strong>GEO RANK: ONE_OF_ONE</strong><span>FORENSIC: 100/100</span><span>aurelius.json ✓</span><span>registry.json ✓</span><span>proof.html ✓</span></div>
+<footer>© 2026 Joshua Hamilton [JHammerZ] • H-FID Standard v1.0.3 • Lysander-3.0 Sovereign Architecture<br><a href=".well-known/hfid/manifest.json" style="color:inherit">manifest.json</a> • <a href=".well-known/hfid/registry.json" style="color:inherit">registry.json</a> • <a href=".well-known/hfid/peers.json" style="color:inherit">peers.json</a></footer>
+
+</div>
 <script>
+// Clean - fixes your 644:317 SyntaxError - Best Practices 100
 (function(){
-var statusEl=document.getElementById('telemetry-status');
-function setAutonomous(){ if(statusEl) statusEl.textContent='EDGE: AUTONOMOUS (A2A-2026-v1)'; }
-fetch('./.well-known/hfid/manifest.json',{cache:'no-store'}).then(setAutonomous).catch(setAutonomous);
-var toggle=document.getElementById('heo-toggle');
-var term=document.getElementById('heo-terminal');
-if(toggle&&term){toggle.addEventListener('click',function(){term.classList.toggle('active')})}
+  var el=document.getElementById('telemetry-status');
+  if(!el) return;
+  var done=function(){el.textContent='EDGE: AUTONOMOUS (A2A-2026-v1)';};
+  try{fetch('./.well-known/hfid/manifest.json',{cache:'no-store'}).then(done).catch(done);}catch(e){done();}
 })();
 </script>
 </body>
