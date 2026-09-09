@@ -49,7 +49,7 @@ jobs:
         with:
           node-version: '22'
       - name: Install deps - fix node_modules removal
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Load H-FID Mesh Config
         id: mesh

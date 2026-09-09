@@ -44,11 +44,11 @@ jobs:
           cache: 'npm'
 
       - name: Install deps - fix node_modules removal
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Install Dependencies
         run: |
-          npm ci || npm install
+          npm install --legacy-peer-deps || npm install
           pip install opentimestamps-client
 
       - name: Generate Sovereign Manifest

@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: "20"
       - name: Install deps - fix node_modules removal
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Install validator
         run: npm install -g ajv-cli
