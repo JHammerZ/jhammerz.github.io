@@ -72,7 +72,7 @@ jobs:
         run: |
           pip install opentimestamps-client
           sudo apt-get update && sudo apt-get install -y jq
-          [ -f agent/package.json ] && cd agent && npm ci
+          [ -f agent/package.json ] && cd agent && npm install --legacy-peer-deps
 
       - name: Generate Agent Manifest
         id: manifest
