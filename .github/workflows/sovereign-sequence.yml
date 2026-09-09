@@ -9,13 +9,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
-      - name: Install deps
-        run: rm -rf node_modules && npm ci || npm install
-      - name: Generate Manifest
-        run: npm run build || npx astro build
-      - name: Bitcoin-Anchor
+          node-version: 20
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm install
+      - name: Generate Sovereign Manifest
+        run: npm run build
+      - name: Bitcoin-Anchor Swarm Output
         run: |
           python -m pip install --upgrade opentimestamps-client
           ots --version
           echo "Sovereign sequence Bitcoin-anchored"
+          ls -l dist/.well-known/hfid/ || true
