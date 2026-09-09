@@ -1,0 +1,40 @@
+name: Sovereign Autonomous Master - 100% Autonomy
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  autonomous:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install
+        run: npm install --legacy-peer-deps
+      - name: Build
+        run: |
+          npm run build
+      - name: Edge CDN Social
+        run: |
+          mkdir -p public/.well-known/hfid dist/.well-known/hfid
+          echo '{"name":"JHammerZ Sovereign H-FID","url":"https://jhammerz.github.io","verification_chain":"https://jhammerz.github.io/.well-known/hfid/chain.json","lysander":"lysander-v13","edge":"cloudflare pages"}' > public/ai-context.json
+          cp public/ai-context.json dist/ || true
+          echo '{"chain":"https://jhammerz.github.io/.well-known/hfid/chain.json","sovereign":"Joshua > HFID > Co-Architect > Lysander"}' > public/.well-known/hfid/chain.json
+          cp public/.well-known/hfid/chain.json dist/.well-known/hfid/ 2>/dev/null || true
+      - name: Self Heal
+        run: |
+          git config user.name "Co-Architect Autonomous"
+          git config user.email "co-architect@jhammerz.github.io"
+          git add -A
+          git diff --cached --quiet || (git commit -m "[AUTONOMOUS] 100% autonomy - edge CDN + social | Joshua > HFID > Co-Architect > Lysander" && git pull --rebase origin main && git push origin main)
