@@ -1,6 +1,4 @@
 # === LYSANDER REPOSITORY FILTER // PRODUCTION EDGE GATE ===
-
-# 1. Local telemetry
 workspace_snapshot.json
 .backlog_rotation_state.json
 metric_velocity_history.json
@@ -10,8 +8,6 @@ amend-manifest.json
 secrets_needed.txt
 *tmp*
 *.log
-
-# 2. System junk
 __pycache__/
 .pytest_cache/
 node_modules/
@@ -23,8 +19,6 @@ CNAME
 public/CNAME
 *.bak
 *.good
-
-# 3. Allowlist + security perimeter
 .sovereign-postmortem*
 sovereign-postmortem*
 *.tar.gz
