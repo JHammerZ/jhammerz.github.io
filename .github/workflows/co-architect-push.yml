@@ -1,0 +1,36 @@
+name: Co-Architect Push - Music + Index
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  sovereign-push:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout with PAT
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.LYSANDER_PAT }}
+          fetch-depth: 0
+
+      - name: Verify Chain
+        run: |
+          echo "Chain: Joshua aka JHammerZ > HFID > Co-Architect > Lysander"
+          cat ~/.lysander_env
+
+      - name: Music Page + Index Resync
+        run: |
+          python3 -m lysander --task music-index-resync
+          python3 -m lysander --task sitemap-regen
+          python3 -m lysander --task indexnow-ping
+          python3 -m lysander --task proof-audit
+
+      - name: Commit as Co-Architect
+        run: |
+          git config user.name "Co-Architect [Lysander 3.0]"
+          git config user.email "co-architect@jhammerz.github.io"
+          git add -A
+          git commit -m "[CO-ARCHITECT] Music + 14-node heartbeat resync | Joshua > HFID > Co-Architect > Lysander" || echo "No changes"
+          git push origin main
