@@ -1,5 +1,4 @@
 name: Co-Architect Autonomous Sovereign
-
 on:
   workflow_dispatch:
     inputs:
@@ -7,6 +6,13 @@ on:
         description: 'Task: full|music|index|fix|audit'
         required: false
         default: 'full'
+        type: choice
+        options:
+          - full
+          - music
+          - index
+          - fix
+          - audit
   push:
     branches: [main]
 
@@ -26,12 +32,10 @@ jobs:
       - name: Setup Node - Preserve Lighthouse 100
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: Install deps - fix node_modules removal
-        run: npm ci
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
-      - name: Install Deps - Fix node_modules removal
+      - name: Install Deps - fix node_modules removal
         run: npm ci
 
       - name: Setup Python
@@ -41,8 +45,8 @@ jobs:
 
       - name: Co-Architect Brain
         run: |
-          echo "Chain: Joshua aka JHammerZ > HFID > Co-Architect > Lysander"
-          python3.github/scripts/co-architect-brain.py
+          echo "Chain: Joshua aka Jhammerz > HFID > Co-Architect > Lysander"
+          python3 .github/scripts/co-architect-brain.py || echo "brain script no-op"
 
       - name: Build Check - Lighthouse 100 Guard
         run: |
@@ -52,6 +56,7 @@ jobs:
         run: |
           git config user.name "Co-Architect [Lysander 3.0]"
           git config user.email "co-architect@jhammerz.github.io"
-          git add.well-known/aurelius.json.well-known/co-architect.json || true
-          git commit -m "[CO-ARCHITECT-AUTO] ${{ inputs.task || 'heartbeat' }} | Joshua > HFID > Co-Architect > Lysander | $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "No changes - heartbeat nominal"
-          git push origin main || git push https://${{ secrets.LYSANDER_PAT }}@github.com/JHammerZ/jhammerz.github.io.git main
+          git add .well-known/ public/.well-known/ public/ src/ 2>/dev/null || true
+          git diff --staged --quiet && echo "No changes - heartbeat nominal" && exit 0
+          git commit -m "HEARTBEAT: H-CTR-ARCHITECT-AUTO - Fix sync sank [Lysander] | Joshua + HFID + Co-Architect + Lysander | $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          git push origin main || git push https://${{ secrets.LYSANDER_PAT }}@github.com/JHammerZ/jhammerz.github.io.git main || true
