@@ -62,7 +62,6 @@ jobs:
             exit 0
           fi
           echo "Would sync to $NAMESPACE"
-          # wrangler kv key put --binding="$NAMESPACE" --remote...
 
       - name: Attestation
         run: |
