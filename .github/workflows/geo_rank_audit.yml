@@ -27,7 +27,7 @@ jobs:
         run: |
           FILE=public/ai-context.json
           [ -f $FILE ] || FILE=ai-context.json
-          jq -e '.sovereign_author' $FILE
+          jq -r '.sovereign_author' $FILE
           echo "✅ ai-context.json valid + sovereign author verified: $(jq -r .sovereign_author $FILE)"
 
       - name: Check robots.txt AI Crawler Rules
