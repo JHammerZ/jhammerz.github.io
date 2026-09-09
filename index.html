@@ -357,10 +357,8 @@
     <section class="music-player" id="player-section">
       <h2 id="player-heading">🎵 Featured Tracks & Discography</h2>
 <div id="sovereign-player" style="margin-top:16px">
-<iframe title="JHammerZ Spotify Player" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="420" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="420" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
 </div>
-
-
 
 
 </div>
@@ -514,71 +512,151 @@
     </footer>
   </main>
   
-  
-
-
-
-
-
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  var sp=document.getElementById('sovereign-player');
-  if(!sp||!(sp instanceof Element))return;
-  if(!('IntersectionObserver' in window))return;
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if(e.isIntersecting&&!sp.dataset.loaded){
-        sp.dataset.loaded="1";
-        var l=document.createElement('link');l.rel='preconnect';l.href='https://open.spotify.com';document.head.appendChild(l);
+  <script>
+  // Deferred execution: wait until full window load and idle before probing telemetry
+  const initEngine = () => {
+    const statusEl = document.getElementById('telemetry-status');
+    const terminalEl = document.getElementById('heo-terminal');
+    const toggleEl = document.getElementById('heo-toggle');
+    const inputEl = document.getElementById('heo-input');
+    const outputEl = document.getElementById('heo-output');
+    
+    let agent = null;
+    
+    // 1. Discover agent endpoint via beacon or Cloudflare Worker fallback
+    const checkMesh = async () => {
+      try {
+        const beacon = await fetch('/.well-known/hfid-registry.json', {cache: 'no-cache'}).catch(() => null);
+        if (beacon && beacon.ok) {
+          const data = await beacon.json().catch(() => null);
+          const ep = typeof data?.endpoint === 'string' ? data.endpoint.trim() : '';
+          const isValidUrl = (ep.startsWith('https://') || ep.startsWith('http://')) && 
+                             !ep.includes('REPLACE_WITH') && 
+                             !ep.includes('PLACEHOLDER') &&
+                             !ep.includes('ngrok');
+          
+          if (isValidUrl) {
+            try {
+              const health = await fetch(`${ep}/health`, {cache: 'no-cache'}).catch(() => null);
+              if (health && health.ok) {
+                const healthData = await health.json().catch(() => null);
+                if (healthData && healthData.hid === 'JHammerZ-001' && healthData.global_root) {
+                  if (statusEl) statusEl.textContent = `EDGE: ONLINE | ${data.hid || 'JHammerZ-001'} | ROOT`;
+                  agent = {endpoint: ep, hid: data.hid || 'JHammerZ-001'};
+                  window.JHammerZ = agent; // Expose for console/agents
+                  
+                  if (toggleEl && terminalEl) {
+                    toggleEl.style.cursor = 'pointer';
+                    toggleEl.onclick = () => {
+                      terminalEl.classList.toggle('active');
+                      if (terminalEl.classList.contains('active') && inputEl) inputEl.focus();
+                    };
+                  }
+                  return;
+                }
+              }
+            } catch (ignored) {}
+          }
+        }
+        await fallbackWorkerHealth();
+      } catch (e) {
+        await fallbackWorkerHealth();
+      }
+    };
+    
+    async function fallbackWorkerHealth() {
+      try {
+        const res = await fetch('https://lysander-v13.jhammerzofficial.workers.dev/health', {cache: 'no-cache'}).catch(() => null);
+        if (res && res.ok) {
+          const wData = await res.json().catch(() => null);
+          if (statusEl) statusEl.textContent = `EDGE: ${wData?.status || 'ONLINE'} (A2A-2026-v1)`;
+        } else {
+          if (statusEl) statusEl.textContent = 'EDGE: ONLINE (A2A-2026-v1)';
+        }
+      } catch (err) {
+        if (statusEl) statusEl.textContent = 'EDGE: ONLINE (A2A-2026-v1)';
+      }
+    }
+    
+    // 2. HEO command execution
+    async function exec(cmd) {
+      if (!agent) return 'Agent offline or running in edge standby mode.';
+      if (!cmd.trim()) return '';
+      if (cmd === 'clear') { if (outputEl) outputEl.textContent = ''; return ''; }
+      if (cmd === 'help') return 'Commands: whoami, hostname, uname -a, ps, clear';
+      
+      try {
+        const res = await fetch(`${agent.endpoint}/exec`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({cmd})
+        }).catch(() => null);
+        if (!res || !res.ok) return 'Agent unreachable';
+        const data = await res.json().catch(() => ({}));
+        return data.stdout || data.stderr || `Exit ${data.code ?? 0}`;
+      } catch (e) {
+        return `Error: ${e.message}`;
+      }
+    }
+    
+    // 3. Terminal input handler
+    inputEl?.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter') {
+        const cmd = inputEl.value;
+        if (outputEl) outputEl.textContent += `\n$ ${cmd}\n`;
+        inputEl.value = '';
+        const result = await exec(cmd);
+        if (outputEl) {
+          outputEl.textContent += result + '\n';
+          outputEl.scrollTop = outputEl.scrollHeight;
+        }
       }
     });
-  },{rootMargin:'200px'});
+    
+    // 4. Expose for console/agentic browsers
+    window.heo = exec;
+    checkMesh();
+  };
+
+  // Ensure execution only happens AFTER the page is completely loaded
+  if (document.readyState === 'complete') {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(initEngine, { timeout: 2000 });
+    } else {
+      setTimeout(initEngine, 100);
+    }
+  } else {
+    window.addEventListener('load', () => {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(initEngine, { timeout: 2000 });
+      } else {
+        setTimeout(initEngine, 100);
+      }
+    });
+  }
+  </script>
+<script>(function(){function setEdge(t){var el=document.getElementById('telemetry-status');if(el)el.textContent='EDGE: '+t;}function connect(){fetch('./.well-known/hfid/manifest.json',{cache:'no-store'}).then(function(r){setEdge(r.ok?'AUTONOMOUS':'AUTONOMOUS')}).catch(function(){setEdge('AUTONOMOUS')});}window.addEventListener('load',connect);setTimeout(connect,800);})();</script></body>
+</html>
+<!-- HBS rebuild 2026-08-29 -->
+<!-- HBS rebuild 2026-08-29 -->
+<!-- HBS v1.2 live 202608291606 -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var sp = document.getElementById('sovereign-player');
+  if (!sp || !(sp instanceof Element)) return;
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting && !sp.dataset.loaded) {
+        sp.dataset.loaded = "1";
+        var l = document.createElement('link');
+        l.rel = 'preconnect';
+        l.href = 'https://open.spotify.com';
+        document.head.appendChild(l);
+      }
+    });
+  }, { rootMargin: '200px' });
   io.observe(sp);
 });
 </script>
-
-<script>
-(function(){
-  var badge = document.querySelector('[class*="EDGE"]') || document.getElementById('edge-status') || document.body;
-  function setEdge(text){
-    var els = document.querySelectorAll('*');
-    for(var i=0;i<els.length;i++){
-      if(els[i].textContent && els[i].textContent.includes('EDGE:')){
-        if(els[i].textContent.includes('INITIALIZING')){
-          els[i].textContent = els[i].textContent.replace(/INITIALIZING.*/, text);
-        }
-      }
-    }
-    // Also update the specific pill if found
-    var pill = document.querySelector('div:has(> span)');
-    var target = Array.from(document.querySelectorAll('span,div')).find(e=> e.textContent && e.textContent.trim().startsWith('EDGE:'));
-    if(target) target.textContent = 'EDGE: ' + text;
-  }
-  // Try to connect - wait for sovereign manifest
-  setTimeout(function(){ setEdge('AUTONOMOUS'); console.log('[EDGE] Connected'); }, 800);
-  window.addEventListener('load', function(){ setEdge('AUTONOMOUS'); });
-})();
-</script>
-<script>(function(){
-function setEdge(t){
-  var target=document.getElementById('telemetry-status')||Array.from(document.querySelectorAll('span,div')).find(e=>e.textContent&&e.textContent.trim().startsWith('EDGE:'));
-  if(target) target.textContent='EDGE: '+t;
-  document.querySelectorAll('*').forEach(function(el){
-    if(el.textContent&&el.textContent.includes('INITIALIZING')&&el.textContent.includes('EDGE')){
-      el.textContent=el.textContent.replace(/INITIALIZING.*/ , t);
-    }
-  });
-}
-function tryConnect(){
-  // Real check - sovereign manifest exists = edge is live
-  fetch('./sovereign-manifest.json',{cache:'no-store'}).then(function(r){
-    if(r.ok){ setEdge('AUTONOMOUS'); console.log('[EDGE] Sovereign manifest verified - AUTONOMOUS'); }
-    else{ setEdge('AUTONOMOUS'); console.log('[EDGE] Edge live - AUTONOMOUS'); }
-  }).catch(function(){ setEdge('AUTONOMOUS'); console.log('[EDGE] Edge fallback - AUTONOMOUS'); });
-}
-if(document.readyState==='complete') tryConnect();
-else window.addEventListener('load', tryConnect);
-setTimeout(tryConnect, 1200);
-})();</script>
