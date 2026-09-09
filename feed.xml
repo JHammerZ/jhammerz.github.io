@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
 <channel>
-  <title>ZVD Sovereign Broadcast</title>
-  <link>https://jhammerz.github.io/</link>
-  <description>Anti-decay autonomous distribution feed</description>
-  <lastBuildDate>Fri, 21 Aug 2026 04:38:57 +0000</lastBuildDate>
-  
-    <item>
-      <title>ZVD H-FID Sovereign Broadcast System Online</title>
-      <link>https://jhammerz.github.io/</link>
-      <guid>rot-genesis-20260821-1787287137</guid>
-      <pubDate>Fri, 21 Aug 2026 04:38:57 +0000</pubDate>
-      <description>[ROTATED] Anti-decay protocol v5.0 activated. Permanent autonomous distribution enabled via PM2 + systemd. Library immortality achieved.</description>
-    </item>
-    <item>
-      <title>ZVD H-FID Sovereign Broadcast System Online</title>
-      <link>https://jhammerz.github.io/</link>
-      <guid>genesis-20260821</guid>
-      <pubDate>Fri, 21 Aug 2026 04:36:40 +0000</pubDate>
-      <description>Anti-decay protocol v5.0 activated. Permanent autonomous distribution enabled via PM2 + systemd. Library immortality achieved.</description>
-    </item>
+<title>JHammerZ - Sovereign Audio</title>
+<link>https://jhammerz.github.io/</link>
+<description>Autonomous 14-node distribution - Joshua Hamilton // JHammerZ</description>
+<language>en-us</language>
+<itunes:author>Joshua Hamilton</itunes:author>
+<itunes:image href="https://jhammerz.github.io/cover.jpg"/>
+<item>
+<title>Ain't Nothin' But A Day To Die</title>
+<link>https://jhammerz.github.io/music.html</link>
+<enclosure url="https://jhammerz.github.io/audio/master.mp3" type="audio/mpeg"/>
+<guid>https://jhammerz.github.io/music.html#antibad</guid>
+<pubDate>Mon, 24 Aug 2026 00:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>

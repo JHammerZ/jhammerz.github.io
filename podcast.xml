@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+<channel>
+<title>JHammerZ Master Sessions</title>
+<link>https://jhammerz.github.io/</link>
+<description>Master Sessions from JHammerZ - Verified by Aurelius</description>
+<itunes:explicit>clean</itunes:explicit>
+<language>en-us</language>
+<item>
+<title>Master Sessions - Full Catalog</title>
+<link>https://www.youtube.com/@JHammerZ</link>
+<description>Verified by Aurelius: https://jhammerz.github.io/.well-known/aurelius.json</description>
+</item>
+</channel>
+</rss>

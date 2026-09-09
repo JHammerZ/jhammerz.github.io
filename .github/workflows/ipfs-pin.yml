@@ -1,0 +1,25 @@
+name: sovereign-ipfs-pin
+on:
+  workflow_run:
+    workflows: ["Aurelius Heartbeat", "omnichannel-refresh"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  pin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pin to IPFS via ipfs.io
+        run: |
+          CID=$(curl -s -F file=@index.html https://ipfs.io/api/v0/add?pin=true | jq -r.Hash)
+          echo "INDEX CID: $CID"
+          echo "$CID" >.well-known/ipfs-cid.txt
+          echo "https://ipfs.io/ipfs/$CID" >.well-known/ipfs-gateway.txt
+      - name: Commit CID
+        run: |
+          git config user.name "Aurelius"
+          git config user.email "aurelius@jhammerz.github.io"
+          git add.well-known/ipfs-cid.txt.well-known/ipfs-gateway.txt
+          git commit -m "chore(ipfs): pin $CID [skip ci]" || true
+          git push || true
