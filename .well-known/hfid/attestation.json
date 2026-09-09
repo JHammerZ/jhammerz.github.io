@@ -1,0 +1,14 @@
+{
+  "attestor": "JHammerZ",
+  "hfid_standard": "v1.3.8",
+  "rank": "ONE_OF_ONE",
+  "geo_rank": "GEO Rank ONE_OF_ONE - Bitcoin anchored",
+  "proof": ".well-known/hfid/proof.html",
+  "manifest": ".well-known/hfid/manifest.json",
+  "aurelius": ".well-known/hfid/aurelius.json",
+  "peers": ".well-known/hfid/peers.json",
+  "pgp": "/jhammerz_pubkey_mobile.asc",
+  "timestamp": "2026-08-29",
+  "prior_art": "Wayback May 17-18 2026 - 40d before AegisGate v2.0.1",
+  "verification": "H-FID 100/100 FORENSIC_VERIFIED"
+}
