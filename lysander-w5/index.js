@@ -1,37 +1,81 @@
-export class W4Room {
-  constructor(state, env) {
-    this.storage = state.storage;
-    this.sql = state.storage.sql;
-    this.sql.exec(`CREATE TABLE IF NOT EXISTS messages
-      (id INTEGER PRIMARY KEY, user TEXT, msg TEXT, ts INTEGER)`);
-  }
-
-  async fetch(request) {
-    const [client, server] = Object.values(new WebSocketPair());
-    server.accept();
-
-    server.addEventListener("message", async (evt) => {
-      this.sql.exec(`INSERT INTO messages (user,msg,ts) VALUES (?,?,?)`,
-        "anon", evt.data, Date.now());
-      server.send(`ACK: ${evt.data}`);
-    });
-
-    const rows = this.sql.exec(`SELECT * FROM messages ORDER BY ts DESC LIMIT 50`).toArray();
-    server.send(JSON.stringify({history: rows}));
-
-    return new Response(null, { status: 101, webSocket: client });
-  }
-}
+var REDIRECT_MAP = {
+  "/site": "https://jhammerz.github.io",
+  "/tiktok": "https://www.tiktok.com/@jhammerzz",
+  "/linkedin": "https://www.linkedin.com/in/JHammerZ",
+  "/youtube": "https://www.youtube.com/JHammerZ",
+  "/yt": "https://www.youtube.com/JHammerZ",
+  "/ig": "https://www.instagram.com/jhammerzz",
+  "/fb": "https://facebook.com/profile.php?id=61574652435664",
+  "/carrd": "https://jhammerz.carrd.co",
+  "/amazon-music": "https://music.amazon.com/artists/B0SGL7W/jhammerz",
+  "/apple-music": "https://music.apple.com/us/artist/jhammerz/1845798346",
+  "/bandlab": "https://music.bandlab.com/artist/781334284",
+  "/xhs": "https://www.xiaohongshu.com/user/profile/JHammerZ",
+  "/github": "https://github.com/JHammerZ/jhammerz.github.io",
+  "/impact": "https://app.impact.com/secure/mediapartner/home/pview.ihtml#/",
+  "/spotify": "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79"
+};
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    if (url.pathname.startsWith("/ws/")) {
-      const name = url.pathname.split("/")[3] || "global";
-      const id = env.W4_ROOM.idFromName(name);
-      const stub = env.W4_ROOM.get(id);
-      return stub.fetch(request);
+    const pathname = url.pathname;
+    const path = pathname.length > 1 && pathname.endsWith("/")? pathname.slice(0, -1) : pathname;
+
+    if (path === '/health') {
+      return new Response(JSON.stringify({
+        status: "ONLINE",
+        hid: "JHammerZ-001",
+        global_root: true,
+        protocol: "A2A-2026-v1",
+        geo_rank: env.GEO_RANK || "ONE_OF_ONE",
+        slsa_level: 3,
+        colo: "ATL",
+        timestamp: new Date().toISOString(),
+        version: "1.3.4",
+        kv_binding: "HEO_CACHE",
+        interceptor: "ACTIVE"
+      }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
-    return new Response("Lysander W4 9.0/10");
+
+    if (path === '/set' && request.method === 'POST') {
+      const { key, value } = await request.json();
+      await env.SOCIAL_LIBRARY_PROD.put(key, value);
+      return new Response(JSON.stringify({ ok: true, key, value }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (path === '/get' && request.method === 'GET') {
+      const key = url.searchParams.get('key');
+      const value = await env.SOCIAL_LIBRARY_PROD.get(key);
+      return new Response(JSON.stringify({ key, value }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (path === "/all" || path === "/distribute") {
+      const all = Object.entries(REDIRECT_MAP).map(([k,v])=>({shortcut:k,url:v}));
+      ctx.waitUntil(Promise.allSettled(all.map(s=>fetch(s.url,{method:"HEAD"}).catch(()=>{}))));
+      return new Response(JSON.stringify({count: all.length, socials: all, timestamp: new Date().toISOString()}, null, 2), {headers: {"Content-Type":"application/json","Access-Control-Allow-Origin":"*"}});
+    }
+
+    if (REDIRECT_MAP[path]) {
+      return Response.redirect(REDIRECT_MAP[path], 302);
+    }
+
+    if (path === "/" || path === "") {
+      return Response.redirect(REDIRECT_MAP["/site"], 302);
+    }
+
+    return new Response(
+      `404: Path "${pathname}" not found.\n\nCore: /health, /set, /get\nShortcuts:\n${Object.keys(REDIRECT_MAP).sort().join("\n")}`,
+      {
+        status: 404,
+        headers: { "Content-Type": "text/plain", "X-Debug-Path": pathname }
+      }
+    );
   }
-}
+};
