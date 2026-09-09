@@ -4,10 +4,17 @@
     "@ardrive/turbo-sdk": "^1.42.0",
     "@irys/sdk": "^0.2.11",
     "@storacha/client": "^2.1.4",
-    "ethers": "^5.8.0"
+    "ethers": "^5.8.0",
+    "react-dom": "^19.2.8"
   },
   "scripts": {
-    "build": "tsc --noEmit || echo 'Type check - preserving intent - no build required for H-FID registry files'",
-    "validate": "tsc --noEmit --skipLibCheck"
+    "build": "tsc --noEmit --skipLibCheck && vite build",
+    "validate": "tsc --noEmit --skipLibCheck",
+    "build:worker": "tsc -p tsconfig.worker.json --noEmit --skipLibCheck"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260908.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7"
   }
 }
