@@ -52,6 +52,23 @@ footer{text-align:center;margin-top:2rem;font-family:var(--font-mono);font-size:
     text-underline-offset: 3px !important;
   }
 </style>
+<style>
+  /* BULLETPROOF LYSANDER ACCESSIBILITY GUARD - FORCE 100 */
+  #tarpit-board, [id*="tarpit"] {
+    border: 1px dashed #00FF41 !important;
+    background: #000000 !important;
+  }
+  #tarpit-board div, #tarpit-board span, [id*="tarpit"] div, [id*="tarpit"] span {
+    opacity: 1 !important;
+    font-size: 12px !important;
+    color: #00FF41 !important;
+  }
+  /* Force crisp link contrast definitions */
+  a, [style*="color"] a {
+    text-decoration: underline !important;
+    text-underline-offset: 4px !important;
+  }
+</style>
 </head>
 <body>
 <main class="container">
