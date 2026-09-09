@@ -1,0 +1,11 @@
+-----BEGIN SOVEREIGN HFID PUBLIC KEY BLOCK-----
+Version: H-FID 1.0.3 Multi-Sig Decentralized Identity
+Identifier: JHAMMERZ-001 (Genesis Node)
+Authority: Joshua Hamilton (JHammerZ)
+Fingerprint: 5f677d1b290a75ecca0ecf1218a093d161dc2ee10cb8aad4efede34b3a4878a1
+Federated: 2026-08-16T23:03:08Z
+Quorum: 2 of 2 Verified
+
+mQGNBF+19J8BDADo6gHk0A4X6wK...SOVEREIGN_ROOT_KEY_SIGNATURE_2026...
+=HFID
+-----END SOVEREIGN HFID PUBLIC KEY BLOCK-----
