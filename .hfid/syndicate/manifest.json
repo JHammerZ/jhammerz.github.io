@@ -1,1 +1,13 @@
-{"last_rotation":"2026-09-09T20:12:03Z","sources":15,"total_urls":14,"tip":"95d5ebb9 LIVE","distribution":"indefinite FYP"}
+{
+  "hfid_version": "v1.2",
+  "sovereign_author": "Joshua Hamilton",
+  "workflow": "syndicate",
+  "timestamp": "2026-09-09T20:42:04Z",
+  "current_hash": "329681c99054f039df748e0b11aa5ccc85fb36ad",
+  "last_sha": "9a16c0eb9d7351baa01571f646a0d6c64b5f735a",
+  "run_id": "34402563240",
+  "target": "discord",
+  "force": "false",
+  "geo_rank": "ONE_OF_ONE",
+  "slsa_level": 3
+}
