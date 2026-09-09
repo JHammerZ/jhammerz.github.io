@@ -1,14 +1,11 @@
 name: "CD: H-FID LYSANDER Distribution"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 on:
-  schedule:
-    - cron: '0 6 * * *'
   push:
     branches: [main]
     paths: ['.well-known/hfid/chain.json']
   workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'
 
 permissions:
   contents: write
@@ -24,26 +21,27 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          echo "Skipping w3cli - package does not exist"
+          echo "Deps OK - w3cli removed, it 404s"
 
       - name: Extract H-FID Data
         id: hfid
         run: |
           set -e
           FILE=".well-known/hfid/chain.json"
-          ls -la .well-known/hfid/ || true
-          TYPE=$(jq -r 'type' "$FILE")
-          echo "chain.json type: $TYPE"
+          echo "File exists?"
+          ls -l $FILE
+          TYPE=$(jq -r 'type' $FILE)
+          echo "chain.json type = $TYPE"
           if [ "$TYPE" = "array" ]; then
-            CHAIN_LEN=$(jq 'length' "$FILE")
-            HFD_ID=$(jq -r '.[0].hash // "GENESIS"' "$FILE" | cut -c1-12)
+            LEN=$(jq 'length' $FILE)
+            ID=$(jq -r '..hash // "GENESIS"' $FILE | cut -c1-12)
           else
-            CHAIN_LEN=$(jq '.chain // .blocks // [.] | length' "$FILE")
-            HFD_ID=$(jq -r '.hash // .hfid_id // .chain[0].hash // "GENESIS"' "$FILE" | cut -c1-12)
+            LEN=$(jq '.chain // .blocks // [.] | length' $FILE)
+            ID=$(jq -r '.hash // .hfid_id // .chain[0].hash // "GENESIS"' $FILE | cut -c1-12)
           fi
-          echo "hfid_id=$HFD_ID" >> $GITHUB_OUTPUT
-          echo "chain_length=$CHAIN_LEN" >> $GITHUB_OUTPUT
-          echo "Latest H-FID: H-FID=$HFD_ID Blocks=$CHAIN_LEN"
+          echo "hfid_id=$ID" >> $GITHUB_OUTPUT
+          echo "chain_length=$LEN" >> $GITHUB_OUTPUT
+          echo "OK: H-FID=$ID Blocks=$LEN"
 
       - name: Generate Distribution Attestation
         run: |
@@ -56,7 +54,6 @@ jobs:
           subject-path: .hfid/distribution/lysander.json
 
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: hfid-lysander-${{ steps.hfid.outputs.hfid_id }}
           path: .hfid/distribution/
