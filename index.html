@@ -19,11 +19,11 @@
 <link rel="me" href="https://github.com/JHammerZ/jhammerz.github.io">
 <meta name="facebook-domain-verification" content="grtpgdgzqem0dd4b7p6gs8uzw2xrt5d">
 <style>
-:root{--bg:#0a0a0a;--card-bg:rgba(16,24,32,0.85);--text:#e2e8f0;--text-dim:#94a3b8;--accent:#00FF41;--accent-glow:rgba(0,255,65,0.25);--border:#1e293b;--font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"Cascadia Code",monospace}
+:root{--bg:#060111;--card-bg:rgba(16,24,32,0.85);--text:#e2e8f0;--text-dim:#94a3b8;--accent:#00FF41;--border:#1e293b;--font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--font-mono:"Cascadia Code",monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--font-sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;line-height:1.5}
 .container{width:100%;max-width:800px;display:flex;flex-direction:column;gap:1.5rem}
-.profile{text-align:center;padding:1.5rem 1rem;background:var(--card-bg);border:1px solid var(--border);border-radius:16px}
+.profile{text-align:center;padding:1.5rem 1rem;background:var(--card-bg);border:1px solid var(--border);border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.5)}
 .profile h1{font-size:1.65rem;color:#fff}
 .profile .subtitle{font-size:.95rem;color:var(--accent);font-family:var(--font-mono);margin-top:.25rem}
 .profile p{margin-top:.75rem;color:var(--text-dim);font-size:.9rem}
@@ -35,7 +35,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);min-hei
 .section-title{font-size:.85rem;font-family:var(--font-mono);color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-top:.5rem;padding-left:.25rem}
 .links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.75rem}
 .link-card{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;color:var(--text);text-decoration:none;font-weight:500;transition:all .2s}
-.link-card:hover{border-color:var(--accent);transform:translateY(-2px);background:rgba(0,255,65,0.08)}
+.link-card:hover{border-color:var(--accent);transform:translateY(-2px);background:rgba(0,255,65,0.08);box-shadow:0 4px 12px rgba(0,255,65,0.25)}
 .link-info{display:flex;flex-direction:column}
 .link-title{font-size:1rem;color:#fff}
 .link-desc{font-size:.8rem;color:var(--text-dim);font-family:var(--font-mono)}
@@ -54,7 +54,7 @@ footer{text-align:center;margin-top:2rem;font-family:var(--font-mono);font-size:
 
 <section class="music-player">
 <h2>🎧 Featured Tracks & Discography</h2>
-<iframe title="JHammerZ Spotify" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="420" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe title="JHammerZ Spotify" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator&theme=0" width="100%" height="420" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 </section>
 
 <div class="section-title">MUSIC STREAMING & AUDIO</div>
@@ -91,13 +91,13 @@ footer{text-align:center;margin-top:2rem;font-family:var(--font-mono);font-size:
 <span style="background:rgba(255,255,255,0.1);padding:3px 8px;border-radius:4px;">©2026</span>
 <span style="background:rgba(255,255,255,0.1);padding:3px 8px;border-radius:4px;">#02519: 2B79...</span>
 </div>
-<div id="tarpit-board" style="margin:10px 0;border:1px dashed rgba(0,255,65,0.4);border-radius:8px;padding:10px;background:rgba(0,0,0,0.4);">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+<div id="tarpit-board" style="margin:10px 0;border:1px dashed rgba(0,255,65,0.5);border-radius:8px;padding:12px;background:rgba(0,0,0,0.5);">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
 <span style="color:#00FF41;font-weight:700;">🕳️ LYSANDER TARPIT // LIVE</span>
-<span style="font-size:10px;opacity:0.7;">lysander-v13.jhammerzofficial.workers.dev</span>
+<span style="font-size:10px;opacity:0.7;background:rgba(0,255,65,0.15);padding:2px 6px;border-radius:4px;">HUMAN IMPACT: 0s / 0 stars</span>
 </div>
-<div id="tarpit-score" style="line-height:1.6;">Loading telemetry...</div>
-<div style="margin-top:6px;font-size:10px;opacity:0.6;">Target: /ARG/caught/ infinite loop | <a href="https://lysander-v13.jhammerzofficial.workers.dev/ARG/scoreboard" style="color:#00FF41;text-decoration:none;" target="_blank">raw JSON →</a></div>
+<div id="tarpit-score" style="line-height:1.7;">Loading trap telemetry...</div>
+<div style="margin-top:8px;font-size:10px;opacity:0.6;">Target: /ARG/caught/ infinite loop | Bots waste time, humans lose nothing | <a href="https://lysander-v13.jhammerzofficial.workers.dev/ARG/scoreboard" style="color:#00FF41;text-decoration:none;" target="_blank">raw JSON →</a></div>
 </div>
 <div style="display:flex;flex-wrap:wrap;gap:8px;">
 <a href=".well-known/hfid.json" style="color:#00FF41;text-decoration:none;">aurelius.json</a> • <a href=".well-known/hfid/proof.html" style="color:#00FF41;text-decoration:none;">proof.html</a> • <a href=".well-known/cannon.json" style="color:#00FF41;text-decoration:none;">cannon.json</a> • <a href=".well-known/hfid/attestation.json" style="color:#00FF41;text-decoration:none;">attestation.json</a> • <a href=".well-known/hfid/peers.json" style="color:#00FF41;text-decoration:none;">peers.json</a>
@@ -107,16 +107,18 @@ footer{text-align:center;margin-top:2rem;font-family:var(--font-mono);font-size:
 <p style="margin-top:0.25rem;font-size:0.7rem;color:var(--accent);">Lysander-3.0 Sovereign Architecture</p>
 </footer>
 </main>
-<a href="https://lysander-v13.jhammerzofficial.workers.dev/ARG/caught/index" style="display:none" aria-hidden="true">research archive index</a>
+<a href="https://lysander-v13.jhammerzofficial.workers.dev/ARG/caught/index" style="display:none;visibility:hidden" aria-hidden="true" tabindex="-1">research archive index</a>
 <script>
+function fmt(s){ s=parseInt(s||0); let h=Math.floor(s/3600); let m=Math.floor((s%3600)/60); let sec=s%60; if(h>0) return `${h}h ${m}m ${sec}s`; if(m>0) return `${m}m ${sec}s`; return `${sec}s`; }
 async function loadTarpit(){
  try{
   const r=await fetch('https://lysander-v13.jhammerzofficial.workers.dev/ARG/scoreboard');
   const d=await r.json();
-  document.getElementById('tarpit-score').innerHTML=`Total Trapped: <b style="color:#00FF41">${d.total}</b> | GPTBot: ${d.GPTBot} | ClaudeBot: ${d.ClaudeBot} | CCBot: ${d.CCBot} | Bytespider: ${d.Bytespider} | Other: ${d.other}<br><span style="opacity:0.6;font-size:10px;">Updated: ${new Date(d.updated).toLocaleString()}</span>`;
+  const wasted = d.timeWastedSec || (d.total*5);
+  document.getElementById('tarpit-score').innerHTML=`Total Trapped: <b style="color:#00FF41">${d.total}</b> | ⏱️ CPU Wasted: <b style="color:#ffff00">${fmt(wasted)}</b><br>GPTBot: ${d.GPTBot||0} | Claude: ${d.ClaudeBot||0} | CCBot: ${d.CCBot||0} | Bytespider: ${d.Bytespider||0} | Other: ${d.other||0}<br><span style="color:#00FF41">✓ Real users: 0s lost | 0 stars given | 100% clean</span><br><span style="opacity:0.5;font-size:10px">Updated: ${new Date(d.updated).toLocaleString()}</span>`;
  }catch(e){ document.getElementById('tarpit-score').innerHTML='Telemetry offline'; }
 }
-loadTarpit(); setInterval(loadTarpit,30000);
+loadTarpit(); setInterval(loadTarpit,15000);
 </script>
 </body>
 </html>
