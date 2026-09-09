@@ -24,50 +24,26 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          echo "Skipping w3cli - deprecated"
+          echo "Skipping w3cli - package does not exist"
 
       - name: Extract H-FID Data
         id: hfid
         run: |
           set -e
           FILE=".well-known/hfid/chain.json"
-          if [ ! -f "$FILE" ]; then
-            echo "CRITICAL: H-FID missing"
-            exit 1
-          fi
-          if ! jq -e . "$FILE" > /dev/null; then
-            echo "CRITICAL: invalid JSON"
-            exit 1
-          fi
+          ls -la .well-known/hfid/ || true
           TYPE=$(jq -r 'type' "$FILE")
           echo "chain.json type: $TYPE"
           if [ "$TYPE" = "array" ]; then
             CHAIN_LEN=$(jq 'length' "$FILE")
             HFD_ID=$(jq -r '.[0].hash // "GENESIS"' "$FILE" | cut -c1-12)
-            BTC=$(jq -r '.[-1].bitcoin // "UNANCHORED"' "$FILE" | cut -c1-12)
-            ZENODO=$(jq -r '.[-1].zenodo // "UNREGISTERED"' "$FILE" | cut -c1-12)
           else
             CHAIN_LEN=$(jq '.chain // .blocks // [.] | length' "$FILE")
             HFD_ID=$(jq -r '.hash // .hfid_id // .chain[0].hash // "GENESIS"' "$FILE" | cut -c1-12)
-            BTC=$(jq -r '.bitcoin // .chain[-1].bitcoin // "UNANCHORED"' "$FILE" | cut -c1-12)
-            ZENODO=$(jq -r '.zenodo // "UNREGISTERED"' "$FILE" | cut -c1-12)
           fi
           echo "hfid_id=$HFD_ID" >> $GITHUB_OUTPUT
-          echo "btc=$BTC" >> $GITHUB_OUTPUT
-          echo "zenodo=$ZENODO" >> $GITHUB_OUTPUT
           echo "chain_length=$CHAIN_LEN" >> $GITHUB_OUTPUT
-          echo "Latest H-FID: H-FID=$HFD_ID | BTC=$BTC | Zenodo=$ZENODO | Blocks=$CHAIN_LEN"
-
-      - name: Distribute Chain to IPFS
-        id: ipfs
-        run: |
-          echo "IPFS skipped - deprecated"
-          echo "ipfs_hash=" >> $GITHUB_OUTPUT
-
-      - name: Generate H-FID Badges
-        run: |
-          mkdir -p badges
-          echo "![H-FID: ${{ steps.hfid.outputs.hfid_id }}]" > badges/hfid.md
+          echo "Latest H-FID: H-FID=$HFD_ID Blocks=$CHAIN_LEN"
 
       - name: Generate Distribution Attestation
         run: |
@@ -79,15 +55,8 @@ jobs:
         with:
           subject-path: .hfid/distribution/lysander.json
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update distribution [skip ci]"
-          file_pattern: ".well-known/hfid/chain.json badges/hfid.md .hfid/distribution/lysander.json"
-
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: hfid-lysander-${{ steps.hfid.outputs.hfid_id }}
-          path: |
-            .hfid/distribution/
-            badges/
+          path: .hfid/distribution/
