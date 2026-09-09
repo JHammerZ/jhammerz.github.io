@@ -2,14 +2,12 @@ name: "CD: H-FID LYSANDER Distribution"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 on:
   schedule:
     - cron: '0 6 * * *'
   push:
-    branches: [ main ]
-    paths:
-      - '.well-known/hfid/chain.json'
+    branches: [main]
+    paths: ['.well-known/hfid/chain.json']
   workflow_dispatch:
 
 permissions:
@@ -20,20 +18,13 @@ permissions:
 jobs:
   distribute:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install Dependencies
         run: |
-          set -e
           sudo apt-get update && sudo apt-get install -y jq
-          # New packages - never fail the job if 404
-          npm install -g ipfs-car 2>&1 || true
-          npm install -g @web3-storage/w3 2>&1 || true
-          echo "Deps OK"
+          echo "Skipping w3cli - deprecated"
 
       - name: Extract H-FID Data
         id: hfid
@@ -44,28 +35,23 @@ jobs:
             echo "CRITICAL: H-FID missing"
             exit 1
           fi
-          if ! jq -e . "$FILE" > /dev/null 2>&1; then
+          if ! jq -e . "$FILE" > /dev/null; then
             echo "CRITICAL: invalid JSON"
             exit 1
           fi
-
-          # Handle BOTH formats: array OR object with .chain
-          if jq -e 'type == "array"' "$FILE" > /dev/null; then
+          TYPE=$(jq -r 'type' "$FILE")
+          echo "chain.json type: $TYPE"
+          if [ "$TYPE" = "array" ]; then
             CHAIN_LEN=$(jq 'length' "$FILE")
-            HFD_ID=$(jq -r '..hash // ..prev_hash // "GENESIS"' "$FILE" | cut -c1-12)
+            HFD_ID=$(jq -r '.[0].hash // "GENESIS"' "$FILE" | cut -c1-12)
             BTC=$(jq -r '.[-1].bitcoin // "UNANCHORED"' "$FILE" | cut -c1-12)
             ZENODO=$(jq -r '.[-1].zenodo // "UNREGISTERED"' "$FILE" | cut -c1-12)
           else
-            # Object format - get length from .chain or .blocks or count as 1
-            CHAIN_LEN=$(jq '.chain // .blocks // [] | length' "$FILE")
-            if [ "$CHAIN_LEN" = "0" ]; then
-              CHAIN_LEN=1
-            fi
-            HFD_ID=$(jq -r '.hash // .hfid_id // .chain.hash // "GENESIS"' "$FILE" | cut -c1-12)
+            CHAIN_LEN=$(jq '.chain // .blocks // [.] | length' "$FILE")
+            HFD_ID=$(jq -r '.hash // .hfid_id // .chain[0].hash // "GENESIS"' "$FILE" | cut -c1-12)
             BTC=$(jq -r '.bitcoin // .chain[-1].bitcoin // "UNANCHORED"' "$FILE" | cut -c1-12)
             ZENODO=$(jq -r '.zenodo // "UNREGISTERED"' "$FILE" | cut -c1-12)
           fi
-
           echo "hfid_id=$HFD_ID" >> $GITHUB_OUTPUT
           echo "btc=$BTC" >> $GITHUB_OUTPUT
           echo "zenodo=$ZENODO" >> $GITHUB_OUTPUT
@@ -74,55 +60,34 @@ jobs:
 
       - name: Distribute Chain to IPFS
         id: ipfs
-        if: ${{ steps.hfid.outputs.chain_length != '0' }}
-        env:
-          WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
         run: |
-          if [ -z "$WEB3_STORAGE_TOKEN" ]; then
-            echo "SKIP: no token - fork safe"
-            echo "ipfs_hash=" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          echo "IPFS upload skipped - token present but w3 deprecated - OK"
+          echo "IPFS skipped - deprecated"
           echo "ipfs_hash=" >> $GITHUB_OUTPUT
 
       - name: Generate H-FID Badges
-        if: ${{ steps.hfid.outputs.chain_length != '0' }}
         run: |
           mkdir -p badges
-          echo "![H-FID: ${{ steps.hfid.outputs.hfid_id }}](https://img.shields.io/badge/H-FID-${{ steps.hfid.outputs.hfid_id }}-blue)" > badges/hfid.md
-          echo "Badges OK"
+          echo "![H-FID: ${{ steps.hfid.outputs.hfid_id }}]" > badges/hfid.md
 
       - name: Generate Distribution Attestation
         run: |
           mkdir -p .hfid/distribution
-          cat > .hfid/distribution/lysander.json <<EOF
-          {
-            "workflow": "hfid-distribute",
-            "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u '+%Y-%m-%dT%H:%M:%SZ')",
-            "hfid_id": "${{ steps.hfid.outputs.hfid_id }}",
-            "chain_length": ${{ steps.hfid.outputs.chain_length || 0 }}
-          }
-          EOF
+          echo "{\"sha\":\"${{ github.sha }}\",\"hfid\":\"${{ steps.hfid.outputs.hfid_id }}\"}" > .hfid/distribution/lysander.json
           cat .hfid/distribution/lysander.json
 
       - uses: actions/attest-build-provenance@v1
         with:
           subject-path: .hfid/distribution/lysander.json
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-update distribution [skip ci]"
           file_pattern: ".well-known/hfid/chain.json badges/hfid.md .hfid/distribution/lysander.json"
 
-      - name: Upload Proof
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
           name: hfid-lysander-${{ steps.hfid.outputs.hfid_id }}
           path: |
             .hfid/distribution/
             badges/
-          retention-days: 30
