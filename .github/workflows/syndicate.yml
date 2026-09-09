@@ -174,7 +174,7 @@ jobs:
           git pull --rebase origin main || true
           git add data/ .hfid/syndicate/ || true
           git diff --staged --quiet || git commit -m "chore: auto-update syndication logs [skip ci]"
-          git push origin main || (git pull --rebase origin main && git push origin main)
+          git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
       - name: Upload Syndication Evidence
         if: always()
         uses: actions/upload-artifact@v5

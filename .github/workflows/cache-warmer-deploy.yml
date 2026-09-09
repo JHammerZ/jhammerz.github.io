@@ -61,7 +61,7 @@ jobs:
           git add assets/js/cache-warmer.js .hfid/indexing/warmer-manifest.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: commit AAD cache matrix deployment metrics [skip ci]"
-            git push origin main || (git pull --rebase origin main && git push origin main)
+            git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "Edge distribution networks are already operating at zero-latency peak temperature."
           fi

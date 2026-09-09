@@ -66,7 +66,7 @@ jobs:
           git add scripts/scraping_defense.py public/master_vault/ .hfid/indexing/
           if ! git diff --staged --quiet; then
             git commit -m "chore: lock down master asset vault perimeter directives [skip ci]"
-            git push origin main || (git pull --rebase origin main && git push origin main)
+            git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "Vault defense configurations match active baseline parameters."
           fi

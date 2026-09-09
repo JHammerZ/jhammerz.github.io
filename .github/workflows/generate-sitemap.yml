@@ -74,7 +74,7 @@ jobs:
           git config --global user.email "seo-gate@jhammerz.github.io"
           if ! git diff --staged --quiet; then
             git commit -m "chore: autonomous sitemap alignment and tracking [skip ci]"
-            git push origin main || (git pull --rebase origin main && git push origin main)
+            git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "No changes staged for sitemap infrastructure."
           fi

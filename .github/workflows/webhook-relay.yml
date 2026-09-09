@@ -71,7 +71,7 @@ jobs:
           git add scripts/webhook_relay.py .hfid/indexing/relay-manifest.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: deploy autonomous AAD webhook relay matrix [skip ci]"
-            git push origin main || (git pull --rebase origin main && git push origin main)
+            git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "Relay logging files already fully tracked and synchronized."
           fi

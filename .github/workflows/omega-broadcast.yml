@@ -114,7 +114,7 @@ jobs:
           git pull --rebase origin main || true
           git add data/last_omega_hash.txt .hfid/omega/ || true
           git diff --staged --quiet || git commit -m "chore: omega broadcast ${{ github.ref_name }} [skip ci]"
-          git push origin main || (git pull --rebase origin main && git push origin main)
+          git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
       - if: always()
         uses: actions/upload-artifact@v5
         with:

@@ -33,4 +33,4 @@ jobs:
           git config user.email "co-architect@jhammerz.github.io"
           git add -A
           git commit -m "[CO-ARCHITECT] Music + 14-node heartbeat resync | Joshua > HFID > Co-Architect > Lysander" || echo "No changes"
-          git push origin main
+          git pull --rebase origin main && git push origin main

@@ -42,4 +42,4 @@ jobs:
             git add upstream_watcher_state.json
           fi
           # Only commit and push if a mutation actually altered the file status
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: upstream release mapping mutation detected" && git push origin main)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: upstream release mapping mutation detected" && git pull --rebase origin main && git push origin main)

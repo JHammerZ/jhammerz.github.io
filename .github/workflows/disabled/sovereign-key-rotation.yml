@@ -47,4 +47,4 @@ jobs:
           git config --global user.email "janus@lysander.dev"
           git add .env
           git diff-index --quiet HEAD || git commit -m "fix(security): rotate sovereign key"
-          git push origin main
+          git pull --rebase origin main && git push origin main

@@ -61,7 +61,7 @@ jobs:
           git add assets/js/crawler-router.js .hfid/indexing/crawler-manifest.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: deploy AAD crawler response router matrices [skip ci]"
-            git push origin main || (git pull --rebase origin main && git push origin main)
+            git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "Ecosystem crawler ingestion filters are already fully calibrated."
           fi

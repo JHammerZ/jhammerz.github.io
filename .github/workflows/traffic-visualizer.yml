@@ -68,7 +68,7 @@ jobs:
           git add scripts/traffic_visualizer.py .hfid/indexing/
           if ! git diff --staged --quiet; then
             git commit -m "chore: update autonomous traffic visualization matrices [skip ci]"
-            git push origin main || (git pull --rebase origin main && git push origin main)
+            git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "Telemetry summary log configurations match active baseline."
           fi

@@ -59,4 +59,4 @@ jobs:
           git add .well-known/ public/.well-known/ public/ src/ 2>/dev/null || true
           git diff --staged --quiet && echo "No changes - heartbeat nominal" && exit 0
           git commit -m "HEARTBEAT: H-CTR-ARCHITECT-AUTO - Fix sync sank [Lysander] | Joshua + HFID + Co-Architect + Lysander | $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-          git push origin main || git push https://${{ secrets.LYSANDER_PAT }}@github.com/JHammerZ/jhammerz.github.io.git main || true
+          git pull --rebase origin main && git push origin main || git push https://${{ secrets.LYSANDER_PAT }}@github.com/JHammerZ/jhammerz.github.io.git main || true

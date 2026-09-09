@@ -110,7 +110,7 @@ jobs:
           if ! git diff --staged --quiet; then
             echo "🚀 Committing ledger state adjustments..."
             git commit -m "chore: auto-update [skip ci]"
-            git push origin main || (git pull --rebase origin main && git push origin main)
+            git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "No pipeline modifications detected. Skipping push."
           fi

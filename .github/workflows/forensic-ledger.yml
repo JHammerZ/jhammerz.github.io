@@ -99,4 +99,4 @@ jobs:
           cp ${{ steps.ledger.outputs.ledger_file }} .hfid/ledger/latest.json || true
           git add .hfid/ledger/
           git diff --staged --quiet || git commit -m "chore: auto-update [skip ci]"
-          git push origin main || (git pull --rebase origin main && git push origin main)
+          git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)

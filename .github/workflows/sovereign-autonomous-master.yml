@@ -37,4 +37,4 @@ jobs:
           git config user.name "Co-Architect Autonomous"
           git config user.email "co-architect@jhammerz.github.io"
           git add -A
-          git diff --cached --quiet || (git commit -m "[AUTONOMOUS] 100% autonomy - edge CDN + social | Joshua > HFID > Co-Architect > Lysander" && git pull --rebase origin main && git push origin main)
+          git diff --cached --quiet || (git commit -m "[AUTONOMOUS] 100% autonomy - edge CDN + social | Joshua > HFID > Co-Architect > Lysander" && git pull --rebase origin main && git pull --rebase origin main && git push origin main)

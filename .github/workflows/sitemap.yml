@@ -124,7 +124,7 @@ jobs:
 
       - name: Commit Changes
         run: |
-          git diff --quiet && git diff --staged --quiet || (git commit -m "✨ Auto-update sitemap [bot]" && git push origin main)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "✨ Auto-update sitemap [bot]" && git pull --rebase origin main && git push origin main)
 
       - name: Ping Indexation
         run: |

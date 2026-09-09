@@ -116,7 +116,7 @@ jobs:
           git pull --rebase origin main || true
           git add .hfid/heo-bridge/
           git diff --staged --quiet || git commit -m "chore: sync live hfid payload ledger state parameters [skip ci]"
-          git push origin main || (git pull --rebase origin main && git push origin main)
+          git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
 
       - name: Upload Attestation Ledgers
         if: always()
