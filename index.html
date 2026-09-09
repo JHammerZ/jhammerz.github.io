@@ -6,29 +6,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JHammerZ | Official Hub & Music | Joshua Hamilton | JHammerZ</title>
-<meta name="description" content="Official music, releases, and hub for Joshua Hamilton (JHammerZ). Left-handed guitarist and Master Architect of H-FID, HIO, and Ag-Fi protocols.">
-<meta name="keywords" content="JHammerZ, Joshua Hamilton, Colonel No, Acoustic, Folk, Alternative, H-FID, HIO, Ag-Fi, Sovereign Mesh, Music Group">
+<meta name="description" content="Official music, releases, and hub for Joshua Hamilton (JHammerZ). Left-handed guitarist and Master Architect of H-FID, HEO, and Ag-FI protocols.">
+<meta name="keywords" content="JHammerZ, Joshua Hamilton, Colonel No, Acoustic, Folk, Alternative, H-FID, HEO, Ag-FI, Sovereign Mesh, Music Group">
 <meta name="author" content="Joshua Hamilton (JHammerZ)">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="canonical" href="https://jhammerz.github.io/">
+<!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jhammerz.github.io/">
 <meta property="og:title" content="JHammerZ | Official Hub & Music">
 <meta property="og:description" content="Stream original music, releases, and explore the sovereign developer hub.">
 <meta property="og:image" content="https://jhammerz.github.io/assets/hammer.jpg">
 <meta property="og:site_name" content="JHammerZ Sovereign Hub">
+<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://jhammerz.github.io/">
 <meta name="twitter:title" content="JHammerZ | Official Music & Hub">
 <meta name="twitter:description" content="Official music, releases, and explore the sovereign developer hub.">
 <meta name="twitter:image" content="https://jhammerz.github.io/assets/hammer.jpg">
 <meta name="twitter:creator" content="@JHammerZ">
+<!-- H-FID / HIO Discovery & Agent Manifests -->
 <link rel="hfid-registry" href=".well-known/hfid/registry.json">
 <link rel="security" href=".well-known/security.txt">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMS Context Map">
-<link rel="alternate" type="application/ld+json" href=".well-known/aurelius.json" title="Aurelius Living Manifest">
+<link rel="alternate" type="text/plain" href="/.well-known/context" title="Agent Schema Context">
+<link rel="alternate" type="application/json" href=".well-known/aurelius.json" title="Aurelius Living Manifest">
 <link rel="alternate" type="application/json" href=".well-known/canon.json" title="Sovereign Cannon Manifest">
 <link rel="alternate" type="application/json" href=".well-known/cdn-mesh.json" title="CDN Routing Mesh">
+<!-- Identity Graph -->
 <link rel="me" href="https://tiktok.com/@jhammerzz">
 <link rel="me" href="https://youtube.com/@JHammerZ">
 <link rel="me" href="https://github.com/JHammerZ/jhammerz.github.io">
@@ -37,9 +42,11 @@
 <link rel="me" href="https://www.linkedin.com/in/jhammerz">
 <link rel="me" href="https://www.instagram.com/jhammerzz">
 <link rel="me" href="https://www.facebook.com/jhammerzz">
+<!-- Verification -->
 <meta name="facebook-domain-verification" content="p7gxg9g4zae8d49pgead0u8rted">
 <meta name="google-site-verification" content="D-5Ffb2r3QxQw0N3fM8aT0u6v7a9b0c1d2e3f4g5h6i7j8k9l0">
 <meta name="msvalidate.01" content="4BD65EBE-A4D9-4F67-AE6F-2B9Fa8Ca0E8B">
+<!-- JSON-LD: Verified Human + H-FID + Authoritative Links -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -48,10 +55,14 @@
       "@type": "MusicGroup",
       "@id": "https://jhammerz.github.io/#musicgroup",
       "name": "JHammerZ",
-      "alternateName": "Joshua Hamilton",
+      "alternateName": ["Joshua Hamilton", "Colonel No"],
       "genre": ["Acoustic", "Folk", "Alternative", "Experimental"],
-      "description": "Left-handed guitarist, Master Architect of H-FID v1.0.3, HIO, Ag-Fi. Verified Human Origin.",
-      "identifier": {"@type": "PropertyValue","name": "HID","value": "JHammerZ-001"},
+      "description": "Left-handed guitarist, Master Architect of H-FID v1.0.3, HIO, Ag-FI. Verified Human Origin.",
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "HID",
+        "value": "JHammerZ-001"
+      },
       "sameAs": [
         "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
         "https://music.apple.com/us/artist/jhammerz/1843702340",
@@ -87,86 +98,544 @@
 }
 </script>
 <style>
-:root{--bg:#0a0d12;--card:#111827;--card2:#151f32;--border:#1e2a3e;--text:#eef4ff;--muted:#8da2c0;--sans:Inter,system-ui,sans-serif;--mono:ui-monospace,Menlo,monospace}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased}
-.wrap{max-width:760px;margin:0 auto;padding:0 20px 80px}
-.hero{padding:48px 0 24px;text-align:center}
-.hero img{width:112px;height:112px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 16px;border:1px solid var(--border);background:var(--card)}
-.hero h1{font-size:2.5rem;font-weight:800;letter-spacing:-0.05em}
-.hero.sub{color:#5ee9b5;font-family:var(--mono);font-size:0.85rem;margin-top:6px}
-.hero p{color:var(--muted);font-size:0.96rem;margin-top:10px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.5}
-.player{margin-top:28px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:12px;overflow:hidden}
-#sovereign-player{width:100%;border-radius:12px;overflow:hidden;background:#000}
-#sovereign-player iframe{width:100%!important;height:352px;border:0;display:block;border-radius:12px}
-.section{margin-top:32px}
-.section h2{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#6b7e9a;font-weight:700;margin-bottom:12px}
-.links{display:flex;flex-direction:column;gap:8px}
-.link{display:flex;align-items:center;gap:14px;padding:13px 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);transition:.15s}
-.link:hover{background:var(--card2);border-color:#253550;transform:translateY(-1px)}
-.link.icon{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;background:#0d1526;border:1px solid var(--border);flex-shrink:0;padding:5px}
-.link.icon img{width:18px;height:18px;object-fit:contain;display:block}
-.link b{font-weight:600;font-size:0.94rem}
-.link small{display:block;color:var(--muted);font-size:0.8rem;font-family:var(--mono);margin-top:2px}
-.link.arrow{margin-left:auto;color:#4a5e7a;font-size:0.85rem}
-.forensic{margin-top:40px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.forensic span{font-family:var(--mono);font-size:10.5px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid var(--border);color:var(--muted)}
-.forensic strong{background:#0f1e18;border-color:#173a29;color:#5ee9b5}
-footer{margin-top:28px;text-align:center;font-family:var(--mono);font-size:11px;color:#5a6c88;line-height:1.6}
-footer a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+:root{
+  --bg: #0a0d12;
+  --card-bg: #121826;
+  --text: #eef4ff;
+  --text-dim: #8da1bd;
+  --accent: #00ff88;
+  --accent-glow: rgba(0, 255, 136, 0.15);
+  --border: #1e2f4a;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Cascadia Code", "Source Code Pro", Menlo, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  line-height: 1.5;
+}
+.container{
+  width: 100%;
+  max-width: 840px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+.profile{
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+.profile h1{
+  font-size: 1.85rem;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+.profile.subtitle{
+  font-size: 0.95rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  margin-top: 0.25rem;
+}
+.profile p{
+  margin-top: 0.75rem;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+.telemetry{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  margin-top: 1rem;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+.telemetry:hover{
+  background: rgba(0, 255, 136, 0.15);
+  border-color: #00ff88;
+}
+.pulse{
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse{
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+.music-player{
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 432px;
+}
+.music-player h2{
+  font-size: 1rem;
+  font-family: var(--font-mono);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.section-title{
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.5rem;
+  padding-left: 0.25rem;
+}
+.links-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+.link-card{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.link-card:hover{
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: rgba(0, 255, 136, 0.06);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.link-info{
+  display: flex;
+  flex-direction: column;
+}
+.link-title{
+  font-size: 1rem;
+  color: #fff;
+}
+.link-desc{
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+.link-icon{
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: #0e1528;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px;
+}
+.link-icon img{
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
+footer{
+  text-align: center;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+.heo-terminal{
+  background: #000;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  display: none;
+  text-align: left;
+  margin-top: 1rem;
+}
+.heo-terminal.active{ display: block; }
+.heo-input{
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  outline: none;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+.heo-output{
+  color: var(--text);
+  white-space: pre-wrap;
+  margin-top: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+</style>
+<style>
+/* Dynamic Visual Card Tags */
+meta property="og:site_name" content="JHammerZ Sovereign Hub"
+meta property="og:image" content="https://j.github.io..."
+meta name="twitter:card" content="summary_large_image"
+/* Accelerated Performance Layout Matrix */
+</style>
+<style>
+.video-deck-card{ transform: translate3d(0,0,0); will-change: transform; backface-visibility: hidden; }
+body { background-color: #0a0d12!important; color: #eef4ff!important; }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div id="root"></div>
+<main class="container" id="main-container">
+<!-- Profile Header -->
+<header class="profile" id="profile-header">
+<div class="profile-title">
+<div id="subtitle" class="subtitle">Joshua Hamilton • Sovereign Audio & Mesh</div>
+<div id="profile-desc">Original music, releases, and decentralized edge systems. Left-handed guitarist and Master Architect of H-FID.</div>
+<div class="telemetry" id="heo-toggle">
+<div class="pulse"></div>
+<span id="telemetry-status">EDGE: INITIALIZING...</span>
+</div>
+<!-- H-EO Terminal -->
+<div class="heo-terminal" id="heo-terminal">
+<div id="heo-001">JHammerZ-001 | Debian RING_3 | Type "help"</div>
+<input class="heo-input" id="heo-input" placeholder=">_" autocomplete="off">
+<div class="heo-output" id="heo-output"></div>
+</div>
+</div>
+</header>
 
-<div class="hero">
-<img src="assets/hammer.jpg" alt="JHammerZ" onerror="this.src='https://jhammerz.github.io/assets/hammer.jpg'">
-<h1>JHammerZ</h1>
-<div class="sub">Joshua Hamilton • Sovereign Audio & Mesh</div>
-<p>Original music, releases, and decentralized edge systems. Left-handed guitarist and Master Architect of H-FID.</p>
+<!-- Music Player Embed -->
+<section class="music-player" id="player-section">
+<h2 id="player-heading">🎵 Featured Tracks & Discography</h2>
+<div id="sovereign-player" style="margin: 2px; min-height: 352px">
+<iframe title="JHammerZ Spotify Player" style="border-radius:12px" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+<script>(function(){function setEdge(){var el=document.getElementById('telemetry-status');if(el){el.textContent='EDGE: '+ (navigator.onLine?'ONLINE':'OFFLINE')+' (A2A-2026-v1)';}} function connect(){setTimeout(()=>{fetch('./.well-known/hfid/manifest.json',{cache:'no-store'}).then(r=>{setEdge();}).catch(()=>{var e=document.getElementById('telemetry-status');if(e){e.textContent='EDGE: AUTONOMOUS';}});},800);} if('requestIdleCallback' in window){requestIdleCallback(setEdge,{timeout:3000});}else{setTimeout(setEdge,2200);} setTimeout(connect,2500);})();</script>
+</section>
+
+<!-- Music Streaming Endpoints -->
+<div class="section-title" id="music-title">Music Streaming & Audio</div>
+<div class="links-grid" id="music-grid">
+<a id="link-music-hub" href="https://jhammerz.github.io/music.html" class="link-card" style="border-color: var(--accent); background: rgba(0, 255, 136, 0.08);">
+<span class="link-info">
+<span class="link-title">🎵 Music Hub & Video Deck</span>
+<span class="link-desc">All 7 YouTube Sessions & Spotify Discography</span>
+</span>
+<span class="link-icon">→</span>
+</a>
+
+<a id="link-spotify" href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">Spotify</span>
+<span class="link-desc">Artist Profile & Albums</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/spotify/1DB954" alt="Spotify" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-apple" href="https://music.apple.com/us/artist/jhammerz/1843702340" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">Apple Music</span>
+<span class="link-desc">Official Catalog</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/applemusic/white" alt="Apple Music" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-bandlab" href="https://www.bandlab.com/band/b8870133824293447" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">BandLab</span>
+<span class="link-desc">Community & Collabs</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/bandlab/white" alt="BandLab" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-amazon" href="https://music.amazon.com/artists/B00SGGL7W/jhammerz" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">Amazon Music</span>
+<span class="link-desc">Digital Store & Streams</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/amazonmusic/white" alt="Amazon Music" crossorigin="anonymous" loading="lazy"></span>
+</a>
 </div>
 
-<div class="player">
-<div id="sovereign-player">
-<iframe title="JHammerZ Spotify Player" src="https://open.spotify.com/embed/artist/7vRd2EDcwuEYWtyqW28a79?utm_source=generator" width="100%" height="352" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-</div>
+<!-- Social & Video Channels -->
+<div class="section-title" id="social-title">Visual & Social Mesh</div>
+<div class="links-grid" id="social-grid">
+<a id="link-youtube" href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">YouTube</span>
+<span class="link-desc">@JHammerZ • Videos & Sessions</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-instagram" href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">Instagram</span>
+<span class="link-desc">@jhammerzz • Updates</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/instagram/white" alt="Instagram" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-tiktok" href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">TikTok</span>
+<span class="link-desc">@jhammerzz • Clips</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/tiktok/white" alt="TikTok" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-facebook" href="https://www.facebook.com/jhammerzz" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">Facebook</span>
+<span class="link-desc">Official Page</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/facebook/white" alt="Facebook" crossorigin="anonymous" loading="lazy"></span>
+</a>
 </div>
 
-<div class="section">
-<h2>Music Streaming & Audio</h2>
-<div class="links">
-<a href="/music.html" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/youtube/white" alt=""></span><span><b>Music Hub & Video Deck</b><small>All 7 YouTube Sessions & Spotify Discography</small></span><span class="arrow">→</span></a>
-<a href="https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79" target="_blank" rel="noopener" class="link"><span class="icon" style="background:#1DB95422"><img src="https://cdn.simpleicons.org/spotify/1DB954" alt="Spotify"></span><span><b>Spotify</b><small>Artist Profile & Albums</small></span><span class="arrow">↗</span></a>
-<a href="https://music.apple.com/us/artist/jhammerz/1843702340" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/applemusic/white" alt="Apple"></span><span><b>Apple Music</b><small>Official Catalog</small></span><span class="arrow">↗</span></a>
-<a href="https://www.bandlab.com/band/b8870133824293447" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/bandlab/white" alt="BandLab"></span><span><b>BandLab</b><small>Community & Collabs</small></span><span class="arrow">↗</span></a>
-<a href="https://music.amazon.com/artists/B00SGGL7W/jhammerz" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/amazonmusic/white" alt="Amazon"></span><span><b>Amazon Music</b><small>Digital Store & Streams</small></span><span class="arrow">↗</span></a>
-</div>
+<!-- Developer & Hub Infrastructure -->
+<div class="section-title" id="network-title">Network & Identity</div>
+<div class="links-grid" id="network-grid">
+<a id="link-github" href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">GitHub Repository</span>
+<span class="link-desc">Source & CI/CD Pipelines</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/github/white" alt="GitHub" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-linkedin" href="https://www.linkedin.com/in/jhammerz" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">LinkedIn</span>
+<span class="link-desc">Professional Profile</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/linkedin/0A66C2" alt="LinkedIn" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-orcid" href="https://orcid.org/0009-0004-5273-7028" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">ORCID</span>
+<span class="link-desc">Research Identity</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/orcid/A6CE39" alt="ORCID" crossorigin="anonymous" loading="lazy"></span>
+</a>
+
+<a id="link-zenodo" href="https://doi.org/10.5281/zenodo.20778079" target="_blank" rel="noopener" class="link-card">
+<span class="link-info">
+<span class="link-title">Zenodo DOI</span>
+<span class="link-desc">Janus Gate v1.0-H-FID</span>
+</span>
+<span class="link-icon"><img src="https://cdn.simpleicons.org/zenodo/1682D4" alt="Zenodo" crossorigin="anonymous" loading="lazy"></span>
+</a>
 </div>
 
-<div class="section">
-<h2>Visual & Social Mesh</h2>
-<div class="links">
-<a href="https://www.youtube.com/@JHammerZ" target="_blank" rel="noopener" class="link"><span class="icon" style="background:#FF000022"><img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube"></span><span><b>YouTube</b><small>@JHammerZ • Videos & Sessions</small></span><span class="arrow">↗</span></a>
-<a href="https://www.instagram.com/jhammerzz" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/instagram/white" alt="IG"></span><span><b>Instagram</b><small>@jhammerzz • Updates</small></span><span class="arrow">↗</span></a>
-<a href="https://www.tiktok.com/@jhammerzz" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/tiktok/white" alt="TikTok"></span><span><b>TikTok</b><small>@jhammerzz • Clips</small></span><span class="arrow">↗</span></a>
-<a href="https://www.facebook.com/jhammerzz" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/facebook/white" alt="FB"></span><span><b>Facebook</b><small>Official Page</small></span><span class="arrow">↗</span></a>
+<!-- Footer -->
+<footer id="main-footer" role="contentinfo">
+<div id="footer-copy">
+<div style="margin:24px 0 10px 0;border:1px solid #00ff44;border-radius:12px;padding:10px;background:rgb(0,255,0,0.05);font-family:monospace;font-size:12px">
+<span>H-FID v1.3+ / pigeon •</span>
+<span style="display:inline-block;background:rgba(0,255,68,0.12);color:#00ff44;padding:3px 8px;border-radius:4px;font-weight:700;font-size:11px">
+GEO RANK: ONE_OF_ONE</span>
+<span style="display:inline-block;background:rgba(255,255,255,0.1);padding:3px 8px;border-radius:4px">FORENSIC: 100/100</span>
+<span style="display:inline-block;background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px">EDGE: AUTONOMOUS (A2A-2026-v1)</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:10px">
+<a href=".well-known/aurelius.json" style="color:#00FF41;text-decoration:none">aurelius.json ✓</a> •
+<a href=".well-known/hfid/registry.json" style="color:#00FF41;text-decoration:none">registry.json ✓</a> •
+<a href=".well-known/hfid/attestation.json" style="color:#00FF41;text-decoration:none">attestation.json ✓</a> •
+<a href=".well-known/hfid/peers.json" style="color:#00FF41;text-decoration:none">peers.json ✓</a>
 </div>
 </div>
+<p>© 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.0.3</p>
+<p id="footer-sub" style="margin-top:0.25rem;font-size:0.7rem;color:var(--accent)">Lysander-3.0 Sovereign Architecture</p>
+</footer>
 
-<div class="section">
-<h2>Network & Identity</h2>
-<div class="links">
-<a href="https://github.com/JHammerZ/jhammerz.github.io" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/github/white" alt="GitHub"></span><span><b>GitHub Repository</b><small>Source & CI/CD Pipelines</small></span><span class="arrow">↗</span></a>
-<a href="https://www.linkedin.com/in/jhammerz" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/linkedin/0A66C2" alt="LinkedIn"></span><span><b>LinkedIn</b><small>Professional Profile</small></span><span class="arrow">↗</span></a>
-<a href="https://orcid.org/0009-0004-5273-7028" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/orcid/white" alt="ORCID"></span><span><b>ORCID</b><small>Research Identity</small></span><span class="arrow">↗</span></a>
-<a href="https://doi.org/10.5281/zenodo.20778079" target="_blank" rel="noopener" class="link"><span class="icon"><img src="https://cdn.simpleicons.org/zenodo/white" alt="Zenodo"></span><span><b>Zenodo DOI</b><small>Janus Gate v1.0-H-FID</small></span><span class="arrow">↗</span></a>
-</div>
-</div>
+</main>
 
-<div class="forensic"><span>H-FID v1.3+ / pigeon •</span><strong>GEO RANK: ONE_OF_ONE</strong><span>FORENSIC: 100/100</span><span>EDGE: AUTONOMOUS (A2A-2026-v1)</span><span>aurelius.json ✓</span><span>registry.json ✓</span></div>
+<script>
+// Deferred execution: wait until full window load and idle before probing telemetry
+const initEngine = () => {
+const statusEl = document.getElementById('telemetry-status');
+const terminalEl = document.getElementById('heo-terminal');
+const toggleEl = document.getElementById('heo-toggle');
+const inputEl = document.getElementById('heo-input');
+const outputEl = document.getElementById('heo-output');
 
-<footer>© 2026 Joshua Hamilton [JHammerZ]. H-FID Standard v1.0.3<br>Lysander-3.0 Sovereign Architecture</footer>
+let agent = null;
 
-</div>
+// 1. Discover agent endpoint via beacon or Cloudflare Worker fallback
+const checkMesh = async () => {
+try {
+const beacon = await fetch('.well-known/hfid-registry.json', {cache: 'no-cache'}).catch(()=> null);
+if (beacon && beacon.ok){
+const data = await beacon.json().catch(()=> null);
+if (data && data.endpoint && String(data.endpoint).trim()!== ''){
+const ep = String(data.endpoint).trim();
+const isValidUrl = (ep.startsWith('https://')) &&!ep.startsWith('http://') &&!ep.includes('REPLACE_WITH') &&!ep.includes('PLACEHOLDER') &&!ep.includes('example') &&!ep.includes('graph');
+if (isValidUrl){
+try {
+const health = await fetch(`${ep}/health`, {cache: 'no-cache'}).catch(()=> null);
+if (health && health.ok){
+const healthData = await health.json().catch(()=> null);
+if (healthData && healthData.hid && healthData.hid === 'JHammerZ-001' && healthData.global_root){
+agent = {endpoint: ep, hid: data.hid || 'JHammerZ-001'};
+window.heo = { endpoint: ep, hid: data.hid || 'JHammerZ-001', agent: agent }; // Expose for console/agents
+if (toggleEl) toggleEl.style.cursor = 'pointer';
+if (toggleEl) toggleEl.onclick = () => {
+terminalEl.classList.toggle('active');
+if (terminalEl.classList.contains('active') && inputEl) inputEl.focus();
+};
+return;
+}
+} catch (ignored) {}
+}
+}
+await fallbackWorkerHealth();
+} catch (e){
+await fallbackWorkerHealth();
+}
+};
+
+async function fallbackWorkerHealth(){
+try {
+const res = await fetch('https://lysander-v3.jhammerzofficial.workers.dev/health', {cache: 'no-cache'}).catch(()=> null);
+if (res && res.ok){
+const wData = await res.json().catch(()=> null);
+if (statusEl) statusEl.textContent = 'EDGE: '+ (wData.status || 'ONLINE')+' (A2A-2026-v1)';
+} else {
+if (statusEl) statusEl.textContent = 'EDGE: ONLINE (A2A-2026-v1)';
+}
+} catch (err){
+if (statusEl) statusEl.textContent = 'EDGE: ONLINE (A2A-2026-v1)';
+}
+}
+
+// 2. HEO command execution
+async function exec(cmd){
+if (!agent) return 'Agent offline or running in edge standby node.';
+if (cmd.trim()) return '';
+if (cmd === 'clear') { if (outputEl) outputEl.textContent = ''; return ''; }
+if (cmd === 'help') return 'Commands: whoami, hostname, uname -a, ps, clear';
+try {
+const res = await fetch(`${agent.endpoint}/exec`, {
+method: 'POST',
+headers: {'Content-Type': 'application/json'},
+body: JSON.stringify({cmd})
+}).catch(()=> null);
+if (!res ||!res.ok) return 'Agent unreachable.';
+const data = await res.json().catch(()=> ({}) );
+return data.stdout || data.stderr || 'Exit ('+data.code+' '+ (0) +')';
+} catch (e){
+return 'Error: '+ (e.message);
+}
+}
+
+// 3. Terminal input handler
+if (inputEl) inputEl.addEventListener('keydown', async (e) => {
+if (e.key === 'Enter'){
+const cmd = inputEl.value;
+if (outputEl) outputEl.textContent += '\n$ '+cmd+'\n';
+inputEl.value = '';
+const result = await exec(cmd);
+if (outputEl) {
+outputEl.textContent += result + '\n';
+outputEl.scrollTop = outputEl.scrollHeight;
+}
+}
+});
+
+// 4. Expose for console/agentic browsers
+window.heo = { exec: exec, checkMesh: checkMesh };
+
+// Ensure execution only happens AFTER the page is completely loaded
+if (document.readyState === 'complete'){
+if ('requestIdleCallback' in window){
+window.requestIdleCallback(initEngine, { timeout: 2000 });
+} else {
+setTimeout(initEngine, 100);
+}
+} else {
+window.addEventListener('load', () => {
+if ('requestIdleCallback' in window){
+window.requestIdleCallback(initEngine, { timeout: 2000 });
+} else {
+setTimeout(initEngine, 100);
+}
+});
+}
+};
+
+if (document.readyState === 'complete'){
+if ('requestIdleCallback' in window){
+window.requestIdleCallback(initEngine, { timeout: 2000 });
+} else {
+setTimeout(initEngine, 100);
+}
+} else {
+window.addEventListener('load', () => {
+if ('requestIdleCallback' in window){
+window.requestIdleCallback(initEngine, { timeout: 2000 });
+} else {
+setTimeout(initEngine, 100);
+}
+});
+}
+</script>
+
+<!-- HBS rebuild 2026-08-29 -->
+<!-- HBS rebuild 2026-08-29 -->
+<!-- HBS v1.3 Live 202602082300 -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+var sp = document.getElementById('sovereign-player');
+if (sp && 'IntersectionObserver' in window){
+var io = new IntersectionObserver(function(entries){
+entries.forEach(function(entry){
+if (entry.isIntersecting &&!sp.dataset.loaded){
+sp.dataset.loaded = '1';
+var l = document.createElement('link');
+l.rel = 'preconnect';
+l.href = 'https://open.spotify.com';
+document.head.appendChild(l);
+}
+});
+}, { rootMargin: '200px' });
+io.observe(sp);
+}
+});
+</script>
+
 </body>
 </html>
