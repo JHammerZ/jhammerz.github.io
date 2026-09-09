@@ -91,7 +91,7 @@ jobs:
           echo "Janus Gate core provenance structural map generated."
 
       - name: OpenTimestamp Evidence
-        if: success()
+        Run: rm -f doi-manifest.json.ots .hfid/provenance/doi-manifest.json.ots 2>/dev/null || true
         run: |
           set -e
           cd .hfid/provenance
