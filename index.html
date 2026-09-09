@@ -1,34 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JHammerZ | Principal Architect</title>
-<meta name="robots" content="index, follow">
-<script>
-// LYSANDER v14 CO-ARCHITECT FIX - Whitelist Kardashian Engine
-window.onload = function() {
-  var pth = window.location.pathname.toLowerCase();
-  // NEVER intercept engine assets
-  if (pth.startsWith("/.well-known") || pth.startsWith("/.github") || 
-      pth.startsWith("/clips/") || pth.startsWith("/library/") || pth.startsWith("/sessions/") ||
-      pth.endsWith("/entities.json") || pth.endsWith("/chain.json") || 
-      pth.endsWith("/llms.txt") || pth.endsWith("/llms-full.txt") ||
-      pth.endsWith("/ai-context.json") || pth.endsWith(".md") || pth.endsWith(".json") ||
-      pth.includes("manifest") || pth.includes("sitemap")) {
-    return; // Allow real file to load
-  }
-  console.log("[LYSANDER v14] Unknown route: " + pth + " - returning home");
-  setTimeout(function() {
-    // Only intercept truly unknown SPA routes, not missing assets
-    if (!pth.includes(".") && pth !== "/") {
-      window.location.replace("/");
-    }
-  }, 1000);
-};
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JHammerZ | Principal Architect - HED Sciences</title>
+<link rel="canonical" href="https://jhammerz.github.io/">
+<script>/* LYSANDER v14 CO-ARCHITECT - FIXED WHITELIST */
+(function(){
+ var p=location.pathname.toLowerCase();
+ var allow=['/.well-known','/clips/','/library/','/sessions/','/public/','.json','.txt','.xml','manifest','sitemap','llms','ai-context','entities','chain','cve-2026'];
+ for(var i=0;i<allow.length;i++){if(p.includes(allow[i])) return;}
+ if(p!=='/' &&!p.includes('.') && p.length>1){console.log('[LYSANDER v14] SPA route '+p); setTimeout(function(){if(location.pathname.toLowerCase()===p) location.replace('/');},800);}
+})();
 </script>
-</head>
-<body>
-<div id="app">JHammerZ Matrix - Loading...</div>
-</body>
-</html>
+</head><body><div id="root">JHammerZ Sovereign Matrix - LIVE</div></body></html>
