@@ -1,0 +1,18 @@
+name: "[DEPRECATED] -> hfid-lysander-distribution"
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pointer
+        run: |
+          echo "DEPRECATED: This file is an alias."
+          echo "Canonical workflow is .github/workflows/hfid-lysander-distribution.yml"
