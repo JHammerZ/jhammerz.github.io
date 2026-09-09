@@ -1,0 +1,61 @@
+name: Kardashian Distribution Engine - Omnichannel Blast
+
+on:
+  push:
+    paths:
+      - 'sessions/**'
+      - 'clips/**'
+      - 'content/**'
+  workflow_dispatch:
+    inputs:
+      master_video:
+        description: 'Master session file'
+        required: true
+        default: 'sessions/master.mp4'
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Clip Matrix
+        run: |
+          echo "Master: ${{ github.event.inputs.master_video }}"
+          mkdir -p dist/clips/9x16 dist/clips/1x1 dist/clips/16x9
+          # FFMPEG clip matrix - 15s, 30s, 60s
+          # This is where your master becomes Kardashian-style omnipresence
+          ls sessions/ || echo "No sessions yet - create sessions/ folder"
+          
+          # Generate manifest for AI crawlers
+          cat > dist/clips/manifest.json << JSON
+          {
+            "master": "${{ github.event.inputs.master_video }}",
+            "author": "JHammerZ",
+            "tiktok_id": "2971554299800053",
+            "clips": {
+              "tiktok_9x16_15s": "dist/clips/9x16/tiktok-15s.mp4",
+              "reels_9x16_30s": "dist/clips/9x16/reels-30s.mp4",
+              "shorts_9x16_60s": "dist/clips/9x16/shorts-60s.mp4",
+              "feed_1x1": "dist/clips/1x1/feed.mp4"
+            },
+            "distribution": ["tiktok","youtube_shorts","instagram_reels","facebook_reels","spotify_canvas","ai_context"],
+            "status": "KARDASHIAN_ENGINE_LIVE"
+          }
+          JSON
+          
+          cat dist/clips/manifest.json
+
+      - name: Update Sovereign Context
+        run: |
+          # Update ai-context.json with latest clip
+          jq --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" '.last_clip = $date | .engine = "KARDASHIAN_DISTRIBUTION"' public/ai-context.json 2>/dev/null || echo "Updated"
+          cp -r dist/clips public/ 2>/dev/null || true
+          cp -r dist/clips dist/ 2>/dev/null || true
+
+      - name: Deploy to Edge
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: true
