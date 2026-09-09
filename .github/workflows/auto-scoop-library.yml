@@ -1,0 +1,38 @@
+name: auto-scoop-library
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  scoop:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: install yt-dlp
+        run: pip install yt-dlp
+
+      - name: scoop @jhammerzz + @JHammerZ libraries
+        run: |
+          mkdir -p .hfid/indexing
+          : > .hfid/indexing/urls.txt
+          yt-dlp --flat-playlist --print "%(webpage_url)s" "https://www.tiktok.com/@jhammerzz" >> .hfid/indexing/urls.txt 2>/dev/null || true
+          yt-dlp --flat-playlist --print "%(webpage_url)s" "https://www.youtube.com/@JHammerZ/videos" >> .hfid/indexing/urls.txt 2>/dev/null || true
+          echo "https://jhammerz.github.io/" >> .hfid/indexing/urls.txt
+          echo "https://github.com/JHammerZ/jhammerz.github.io" >> .hfid/indexing/urls.txt
+          echo "https://github.com/JHammerZ/Janus-Gate" >> .hfid/indexing/urls.txt
+          sort -u .hfid/indexing/urls.txt | grep -E "^https://" > /tmp/urls && mv /tmp/urls .hfid/indexing/urls.txt
+          wc -l .hfid/indexing/urls.txt
+          cat .hfid/indexing/urls.txt
+
+      - name: commit if changed
+        run: |
+          git config user.name "janus-bot"
+          git config user.email "janus@jhammerz.github.io"
+          git add .hfid/indexing/urls.txt
+          git diff --staged --quiet || git commit -m "auto-scoop: refresh library $(date -u +%FT%TZ) - $(wc -l < .hfid/indexing/urls.txt) URLs"
+          git push
