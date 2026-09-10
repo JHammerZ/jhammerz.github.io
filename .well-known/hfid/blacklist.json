@@ -1,0 +1,21 @@
+{
+  "blacklist": [
+    "lysander.app",
+    "haijahr.com",
+    "www.lysander.app",
+    "www.haijahr.com"
+  ],
+  "names": [
+    "haijahr",
+    "lysander.app"
+  ],
+  "reason": "malware shell - forced download - open redirect hijack - all contacts/links dead",
+  "evidence": "lysander.app redirects to haijahr.com/#services, forces file downloads, non-functional",
+  "reported": "2026-05-13",
+  "action": "BLOCK 451 + REPORT Safe Browsing + registrar abuse",
+  "hfid": "JHammerZ-001",
+  "status": "SUPERLUMINAL LIVE",
+  "geo_rank": "ONE_OF_ONE",
+  "root": "C681E51CFBD77202",
+  "tarpit_action": "shred + cpu_waste + log"
+}
