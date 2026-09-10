@@ -1,8 +1,3 @@
-https://jhammerz.github.io/sovereign_charter.md
-https://jhammerz.github.io/lysander-3.md
-https://jhammerz.github.io/new-concept.md
-https://jhammerz.github.io/hfid.md
-https://jhammerz.github.io/prior-art.md
 https://jhammerz.github.io/heo.md
 https://jhammerz.github.io/guitaraoke-protocol.md
 https://jhammerz.github.io/aurelius.md
@@ -12,3 +7,8 @@ https://jhammerz.github.io/llms-full.txt
 https://jhammerz.github.io/entities.json
 https://jhammerz.github.io/proof.html
 https://jhammerz.github.io/robots.txt
+https://jhammerz.github.io/sovereign_charter.md
+https://jhammerz.github.io/lysander-3.md
+https://jhammerz.github.io/new-concept.md
+https://jhammerz.github.io/hfid.md
+https://jhammerz.github.io/prior-art.md
