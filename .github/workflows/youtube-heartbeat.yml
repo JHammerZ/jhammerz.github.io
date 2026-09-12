@@ -1,0 +1,20 @@
+name: YouTube Heartbeat - Phase 6
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '45 * * * *'
+permissions:
+  contents: write
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          date -u > .well-known/hfid/youtube_beat.txt
+          cat .well-known/hfid/broadcast_ledger.json | tail -c 200 >> .well-known/hfid/youtube_beat.txt || true
+          git config user.name "JHammerZ-JanusBot"
+          git config user.email "janus@jhammerz.network"
+          git add .well-known/hfid/youtube_beat.txt
+          git commit -m "[skip cf] sys: youtube heartbeat $(date -u)" || true
+          git push || true
