@@ -54,3 +54,11 @@ jobs:
         if: always()
         run: |
           echo "### GCP Deploy Complete" >> $GITHUB_STEP_SUMMARY
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

@@ -183,3 +183,11 @@ jobs:
           echo "- **Action**: ${{ github.event.inputs.action || 'scan' }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
           echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

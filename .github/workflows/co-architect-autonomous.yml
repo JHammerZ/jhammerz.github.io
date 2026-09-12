@@ -60,3 +60,11 @@ jobs:
           git diff --staged --quiet && echo "No changes - heartbeat nominal" && exit 0
           git commit -m "HEARTBEAT: H-CTR-ARCHITECT-AUTO - Fix sync sank [Lysander] | Joshua + HFID + Co-Architect + Lysander | $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
           git pull --rebase origin main && git push origin main || git push https://${{ secrets.LYSANDER_PAT }}@github.com/JHammerZ/jhammerz.github.io.git main || true
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

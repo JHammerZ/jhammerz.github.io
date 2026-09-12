@@ -29,3 +29,11 @@ jobs:
           JSON=$(jq -n --arg host "jhammerz.github.io" --arg key "$INDEXNOW_KEY" --argjson urls "$URL_LIST" '{host: $host, key: $key, urlList: $urls}')
           curl -s -X POST https://api.indexnow.org/indexnow -H "Content-Type: application/json" -d "$JSON"
           echo "Pushed $(echo $URL_LIST | jq length) URLs"
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

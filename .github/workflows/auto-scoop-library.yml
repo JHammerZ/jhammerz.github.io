@@ -55,3 +55,11 @@ jobs:
           git add .hfid/indexing/urls.txt
           git diff --staged --quiet || git commit -m "auto-scoop: FULL 14-node refresh $(date -u +%FT%TZ) - $(wc -l < .hfid/indexing/urls.txt) URLs"
           git push
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

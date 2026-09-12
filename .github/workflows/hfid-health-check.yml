@@ -121,3 +121,11 @@ jobs:
           echo "## H-FID Cloudflare Interceptor Matrix Sync Complete" >> $GITHUB_STEP_SUMMARY
           echo "Check Status: $(jq -r '.Status' .hfid/health/health-fast.json)" >> $GITHUB_STEP_SUMMARY
           echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

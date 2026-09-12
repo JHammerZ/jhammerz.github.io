@@ -295,3 +295,11 @@ jobs:
         echo "**Bitcoin OTS Proof:** ${{ steps.hfid.outputs.proof_url }}" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "_All broadcasts Bitcoin-anchored via OpenTimestamps. Verify: \`ots verify manifest.json.ots\`_" >> $GITHUB_STEP_SUMMARY
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

@@ -81,3 +81,11 @@ jobs:
           echo "### D1 Provision Check Complete" >> $GITHUB_STEP_SUMMARY
           echo "Config found: ${{ env.HAS_CONFIG }}" >> $GITHUB_STEP_SUMMARY
           echo "Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

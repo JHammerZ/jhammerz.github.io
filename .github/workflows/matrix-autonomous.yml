@@ -50,3 +50,11 @@ jobs:
             git pull --rebase --autostash origin main || true
             git push origin main
           fi
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

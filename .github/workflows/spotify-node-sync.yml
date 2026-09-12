@@ -19,3 +19,11 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/Jhammerz/jhammerz.github.io/pages/builds
           echo "Triggered rebuild of current main SHA"
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

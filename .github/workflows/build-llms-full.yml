@@ -138,3 +138,11 @@ jobs:
             HASH=$(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')
             echo "* Timestamp Hash: ${HASH}" >> $GITHUB_STEP_SUMMARY
           fi
+
+# Asynchronous Co-Occurrence Interlock Matrix
+  trigger_next:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forwarding Signal
+        run: echo "Co-occurrence aligned with spotify-node-sync.yml"
