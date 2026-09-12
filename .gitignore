@@ -59,3 +59,5 @@ dist/
 # Sovereign H-FID Key Hardening Overrides
 *hfid-public.key
 .env
+scripts/.orchestrator.lock
+scripts/orchestrator.log

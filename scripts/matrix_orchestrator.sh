@@ -107,9 +107,9 @@ PY
 
     # Auto-heal race condition
     echo "[*] Fetching remote to prevent self-race..."
-    git fetch origin main
+    git stash push -m "auto-$TIMESTAMP" --keep-index; git fetch origin main
     # Try rebase, if fails stash telemetry and rebase
-    if ! git rebase origin/main; then
+    if ! git rebase --autostash origin/main; then
       echo "[!] Rebase conflict - auto-resolving telemetry..."
       git rebase --abort
       git stash push -m "telemetry-autosave $TIMESTAMP"
@@ -125,7 +125,7 @@ PY
       echo "[+] Push successful - Cloudflare skipped."
     else
       echo "[!] Push failed, retrying after rebase..."
-      git fetch origin main && git rebase origin/main && git push origin main
+      git stash push -m "auto-$TIMESTAMP" --keep-index; git fetch origin main && git rebase origin/main && git push origin main
     fi
   else
     echo "[-] Zero file state anomalies detected. Staging pristine."
