@@ -56,6 +56,14 @@ print("[+] Successfully rolled over dynamic multi-agent telemetry counters.")
     python3 scripts/traffic_visualizer.py
     
     
+    
+    # 5. Rotate asymmetric cryptographic identity signatures
+    echo "[*] Rotating sovereign H-FID validation seals..."
+    python3 scripts/identity_anchor.py
+
+    # 6. Re-verify audio binary protection layers
+    echo "[*] Auditing and hardening audio waveform protection loops..."
+    python3 scripts/waveform_poisoner.py
     # 5. Optimize storage limits via automated log rotation
     echo "[*] Auditing local log files for storage optimization..."
     python3 scripts/log_rotator.py
