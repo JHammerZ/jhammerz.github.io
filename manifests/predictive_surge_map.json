@@ -1,0 +1,16 @@
+{
+  "surge_metrics": {
+    "engine_mode": "AGGRESSIVE_PRE_CACHING",
+    "velocity_threshold": "MAX"
+  },
+  "demographic_saturation": {
+    "US-CA-GENZ": {
+      "pre_cache_weight": 0.95,
+      "replication_multiplier": 4
+    },
+    "GB-LND-ALTERNATIVE": {
+      "pre_cache_weight": 0.9,
+      "replication_multiplier": 3
+    }
+  }
+}
