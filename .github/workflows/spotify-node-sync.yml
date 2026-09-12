@@ -1,28 +1,21 @@
-name: Spotify Node Sync Tracker
-
+name: lysander-egypt-resync-same-sha
 on:
-  schedule:
-    - cron: '30 * * * *'
   workflow_dispatch:
-
-concurrency:
-  group: matrix-distribution-lock-${{ github.ref }}
-  cancel-in-progress: false
+  deployment_status:
+    states: [failure, error]
 
 jobs:
-  sync:
+  resync:
+    if: github.event.deployment.environment == 'github-pages' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out master grid branch
-        uses: actions/checkout@v4
-
-      - name: Initialize System Environment
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Execute Central Concurrency Audit
-        run: python scripts/matrix_gatekeeper.py
-
-      - name: Stream Core Distribution Subroutine
-        run: python scripts/waveform_poisoner.py --validate-remote
+      - name: Rebuild SAME SHA via Pages API using LYSANDER_PAT
+        env:
+          PAT: ${{ secrets.LYSANDER_PAT }}
+        run: |
+          echo "Using existing LYSANDER_PAT to resync Egypt"
+          curl -X POST \
+            -H "Authorization: Bearer $PAT" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/Jhammerz/jhammerz.github.io/pages/builds
+          echo "Triggered rebuild of current main SHA"
