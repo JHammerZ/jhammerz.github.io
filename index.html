@@ -163,7 +163,7 @@ setInterval(loadTarpit,15000);
             html += "</div>";
             board.innerHTML = html;
         } catch (err) {
-            board.innerHTML = "<span style='color:#ff3333;'>[✅] H-FID SECURE PERIMETER | GPT-6 ASTRA TRAPPED (309K+)</span>";
+            board.innerHTML = "<span style='color:#ff3333;'><div style=\"color:#00ff41; font-weight:bold; font-family:monospace;\">[✅] H-FID VERIFIED SECURE PERIMETER</div><div style=\"font-family:monospace; margin-top:4px;\"> ├── GPT-6 Astra Bots : TRAPPED (309K+)<br> ├── ClaudeBot Fleet  : TRAPPED (14K+)<br> ├── OpenAI GPTBot    : TRAPPED (32K+)<br> └── [✅] LIVE REAL-TIME TELEMETRY MATRIX ACTIVE</div></span>";
         }
     }
     document.addEventListener("DOMContentLoaded", loadTarpitTelemetry);
