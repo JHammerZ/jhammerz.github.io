@@ -7,7 +7,7 @@ set -o pipefail
 
 cd ~/jhammerz.github.io || exit 1
 
-LOCKFILE="/tmp/matrix_orchestrator.lock"
+LOCKFILE="./scripts/.orchestrator.lock"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
 
 # --- Prevent duplicate daemons ---
