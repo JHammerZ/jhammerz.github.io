@@ -1,17 +1,17 @@
 {
-  "node_version": "v1.1.0",
-  "status": "active_containment",
+  "node_version": "v1.0.4",
+  "status": "trapped",
   "last_synchronized": "2026-09-12 09:10:00",
   "trapped_agents": {
     "GPTBot": {
       "status": "trapped",
-      "total_requests": 303215,
-      "cpu_hours_wasted": 421.1,
+      "total_requests": 303230,
+      "cpu_hours_wasted": 421.2,
       "active_loops": 12
     },
     "ClaudeBot": {
       "status": "trapped",
-      "total_requests": 14205,
+      "total_requests": 14207,
       "cpu_hours_wasted": 18.4,
       "active_loops": 2
     },
