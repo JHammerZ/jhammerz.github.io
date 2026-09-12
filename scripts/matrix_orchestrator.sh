@@ -34,8 +34,8 @@ while true; do
         git commit -m "sys: automated matrix telemetry synchronization ($TIMESTAMP)"
         
         # 5. Ship the forensic payload to the edge mirrors
-        echo "[*] Pushing data vectors live via gpush..."
-        gpush
+        echo "[*] Pushing data vectors live via git push origin main..."
+        git push origin main
     else
         echo "[-] Zero file state anomalies detected. Staging pristine."
     fi
