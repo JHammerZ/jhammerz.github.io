@@ -1,8 +1,3 @@
-https://music.amazon.com/artists/B0SGL7W/jhammerz
-https://music.apple.com/us/artist/jhammerz/1845798346
-https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79
-https://www.bandlab.com/jhammerz
-https://www.facebook.com/profile.php?id=61574652435664
 https://www.instagram.com/jhammerzz/
 https://www.linkedin.com/in/jhammerz
 https://www.tiktok.com/@jhammerzz/video/7423891702202567979
@@ -150,3 +145,8 @@ https://jhammerz.carrd.co
 https://jhammerz.github.io/
 https://jhammerz.github.io/graph.html
 https://jhammerz.github.io/music.html
+https://music.amazon.com/artists/B0SGL7W/jhammerz
+https://music.apple.com/us/artist/jhammerz/1845798346
+https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79
+https://www.bandlab.com/jhammerz
+https://www.facebook.com/profile.php?id=61574652435664
