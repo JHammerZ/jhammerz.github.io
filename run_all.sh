@@ -20,6 +20,9 @@ python3 scripts/surge_engine.py
 # 5. Trigger Universal Saturation Suite (Phase 22)
 python3 scripts/sovereign_suite.py
 
+# 6. Map Decentralized P2P Substrate Telemetry (Phase 24)
+python3 scripts/p2p_telemetry.py
+
 echo "======================================================="
 echo " [💎] MAXIMUM SYNDICATION SUITE ONLINE AND ACTIVE"
 echo "======================================================="
