@@ -94,6 +94,18 @@ PY
 
   # --- STEALTH PUSH BLOCK ---
   echo "[#] 9. Staging + Stealth Push [skip ci][skip cf]"
+  # --- OFFLINE CHECK ---
+  if ! ping -c 1 github.com > /dev/null 2>&1; then
+    echo "[OFFLINE] No internet - local-only mode, vault sealed."
+    sleep 3600; continue
+  fi
+  LAST_PUSH=$(git log -1 --format=%ct origin/main 2>/dev/null || echo 0)
+  NOW=$(date +%s)
+  DIFF=$((NOW-LAST_PUSH))
+  if [ $DIFF -lt 600 ]; then
+    echo "[GHOST] GitHub pushed ${DIFF}s ago - yielding to avoid race."
+    sleep 3600; continue
+  fi
   git add -A
 
   if ! git diff-index --quiet HEAD --; then
