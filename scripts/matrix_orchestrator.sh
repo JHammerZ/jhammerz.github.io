@@ -71,13 +71,18 @@ print("[+] Successfully rolled over dynamic multi-agent telemetry counters.")
     echo "[*] Auditing perimeter for unmapped threats..."
     python3 scripts/threat_notifier.py
     
-    # 6. Aggregate and push all newly written telemetry strings and logs
+    # 7. Generate procedural neural narrative commit message
+    echo "[*] Invoking Neural Cortex narrative generator..."
+    python3 scripts/neural_cortex.py
+    NEURAL_MSG=$(cat scripts/neural_commit_msg.txt 2>/dev/null || echo "sys: automated matrix telemetry synchronization ($TIMESTAMP)")
+
+    # 8. Aggregate and push all newly written telemetry strings and logs
     echo "[*] Staging dynamic substrate modifications..."
     git add -A
     
     if ! git diff-index --quiet HEAD --; then
         echo "[+] Modifications detected. Hardening repository head..."
-        git commit -m "sys: automated matrix telemetry synchronization ($TIMESTAMP)"
+        git commit -m "$NEURAL_MSG"
         echo "[*] Pushing data vectors live via native git pipeline..."
         git push origin main
     else
