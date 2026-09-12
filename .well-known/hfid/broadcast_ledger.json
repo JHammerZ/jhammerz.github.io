@@ -17,5 +17,24 @@
       "janus-gate"
     ],
     "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-12T18:57:24.669116+00:00",
+    "phase": "5-broadcast",
+    "trapped": 325997,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "a37080226dcf0394",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
   }
 ]
