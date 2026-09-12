@@ -1,10 +1,12 @@
-name: Sovereign Matrix Autonomous - Phase 4 Syndicate
+name: Sovereign Matrix Autonomous - Phase 5 Broadcast
 on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 concurrency:
   group: matrix-autonomous
   cancel-in-progress: false
@@ -19,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Run Sovereign Modules + Phase 4
+      - name: Sovereign Mesh Phase 4+5
         run: |
           pip install opentimestamps-client -q || true
           python3 scripts/scraping_defense.py || true
@@ -30,18 +32,20 @@ jobs:
           python3 scripts/threat_notifier.py || true
           python3 scripts/neural_cortex.py || true
           python3 scripts/mesh_syndicate.py || true
+          python3 scripts/janus_mesh_broadcaster.py || true
           python3 scripts/hfida_scanner.py || true
           mkdir -p .well-known/hfid
           date -u > .well-known/hfid/last_beat.txt
-          echo "BEAT $(date -u) :: $(cat .hfid/syndicator/manifest.json | head -c 80)" >> LIVING_MANIFEST.md || true
+          echo "BEAT $(date -u) :: PHASE5 $(cat .hfid/syndicator/manifest.json | head -c 60)" >> LIVING_MANIFEST.md
           ots stamp .hfid/syndicator/manifest.json || true
-      - name: Stealth Push [skip cf]
+          ots stamp .well-known/hfid/broadcast_ledger.json || true
+      - name: Stealth Push Phase5 [skip cf]
         run: |
           git config user.name "JHammerZ-JanusBot"
           git config user.email "janus@jhammerz.network"
           git add -A
           if ! git diff-index --quiet HEAD --; then
-            MSG=$(cat scripts/neural_commit_msg.txt 2>/dev/null || echo "sys: phase4 syndicate $(date -u)")
+            MSG=$(cat scripts/neural_commit_msg.txt 2>/dev/null || echo "sys: phase5 broadcast $(date -u)")
             git commit -m "[skip cf] $MSG"
             git pull --rebase --autostash origin main || true
             git push origin main
