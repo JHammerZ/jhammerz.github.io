@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-09-12T14:01:12.638016Z",
+  "total_trapped": 326008,
+  "agents": [
+    "GPTBot",
+    "ClaudeBot",
+    "CCBot"
+  ],
+  "phase": "4-syndicate",
+  "demon_pid": 16782,
+  "hybrid": "GHOST yield active"
+}
