@@ -41,6 +41,10 @@ print("[+] Successfully rolled over dynamic multi-agent telemetry counters.")
     echo "[*] Syncing Traffic Metrics Matrix..."
     python3 scripts/traffic_visualizer.py
     
+    # 3. Scan for unclassified rogue scraping vectors
+    echo "[*] Auditing perimeter for unmapped threats..."
+    python3 scripts/threat_notifier.py
+    
     # 4. Aggregate all newly written telemetry strings and logs
     echo "[*] Staging dynamic substrate modifications..."
     git add -A
