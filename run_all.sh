@@ -8,19 +8,22 @@ echo "======================================================="
 # 1. Sync repository data nodes cleanly past heartbeats
 ./hfid_sync.sh
 
-# 2. Unlock Atomic Throughput Thread Locks (Phase 23)
+# 2. Run Activated HFID Asset Registry Scanner (Formally Dead Code)
+python3 scripts/hfid_dynamic_scanner.py
+
+# 3. Unlock Atomic Throughput Thread Locks (Phase 23)
 python3 scripts/atomic_shuffler.py
 
-# 3. Compile High-Speed RAM Matrices (Phase 20)
+# 4. Compile High-Speed RAM Matrices (Phase 20)
 python3 scripts/edge_accelerator.py
 
-# 4. Fire Predictive Surge Pre-Caching Engines (Phase 21)
+# 5. Fire Predictive Surge Pre-Caching Engines (Phase 21)
 python3 scripts/surge_engine.py
 
-# 5. Trigger Universal Saturation Suite (Phase 22)
+# 6. Trigger Universal Saturation Suite (Phase 22)
 python3 scripts/sovereign_suite.py
 
-# 6. Map Decentralized P2P Substrate Telemetry (Phase 24)
+# 7. Map Decentralized P2P Substrate Telemetry (Phase 24)
 python3 scripts/p2p_telemetry.py
 
 echo "======================================================="
