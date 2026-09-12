@@ -5,13 +5,13 @@
   "trapped_agents": {
     "GPTBot": {
       "status": "trapped",
-      "total_requests": 303295,
-      "cpu_hours_wasted": 421.8,
+      "total_requests": 303353,
+      "cpu_hours_wasted": 422.2,
       "active_loops": 12
     },
     "ClaudeBot": {
       "status": "trapped",
-      "total_requests": 14221,
+      "total_requests": 14232,
       "cpu_hours_wasted": 18.4,
       "active_loops": 2
     },
