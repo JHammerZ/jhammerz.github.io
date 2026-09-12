@@ -13,7 +13,7 @@ name: Sovereign Key Rotation
 on:
 concurrency:
  group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
+ cancel-in-progress: false
   push:
     branches: [ main, master ]
   workflow_dispatch:

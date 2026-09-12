@@ -10,7 +10,7 @@
 name: Handle Workflow | H-FID Asset Bundler
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:

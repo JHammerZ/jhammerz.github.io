@@ -16,7 +16,7 @@
 name: "Security: H-FID Lysander Defense / Lysander"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   push:

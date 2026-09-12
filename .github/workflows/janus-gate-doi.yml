@@ -10,7 +10,7 @@
 name: "Audit: DOI Sync | Janus Gate v1.2-H-FID"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   push:

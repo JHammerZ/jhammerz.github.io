@@ -9,7 +9,7 @@
 name: "Broadcast: H-FID Syndication Ledger"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:

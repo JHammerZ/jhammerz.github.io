@@ -14,7 +14,7 @@ name: "Aurelius-Engine Sovereign Operator Pipeline"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:

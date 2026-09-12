@@ -6,7 +6,7 @@
 name: "Broadcast: H-FID Omega"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 on:
   workflow_dispatch:
     inputs:

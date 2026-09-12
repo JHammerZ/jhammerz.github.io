@@ -1,7 +1,7 @@
 name: "Audit: H-FID-100 Forensic Certification"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 on:
   workflow_dispatch:
   schedule:

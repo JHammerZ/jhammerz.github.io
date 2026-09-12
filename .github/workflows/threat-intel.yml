@@ -12,7 +12,7 @@
 name: "SecOps: H-FID Threat Intel Logger"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 on:
   workflow_dispatch:
     inputs:

@@ -1,7 +1,7 @@
 name: KV Sync Cloudflare KV & Edge Config
 concurrency:
   group: edge-sync-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   repository_dispatch:

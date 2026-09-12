@@ -20,7 +20,7 @@
 name: "Admin: H-FID Lysander Quota Purge"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:

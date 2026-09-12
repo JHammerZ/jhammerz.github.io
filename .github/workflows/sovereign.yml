@@ -2,7 +2,7 @@ name: Sovereign Kernel Forge
 on: [push, workflow_dispatch]
 concurrency:
   group: forge-kernel-lock
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   forge:
     runs-on: ubuntu-latest

@@ -7,7 +7,7 @@ name: "SecOps: H-FID Content Archive"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   schedule:

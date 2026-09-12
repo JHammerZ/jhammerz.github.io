@@ -1,7 +1,7 @@
 name: "S0: Automated Hub Indexation Deployment"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 on:
   schedule:
     - cron: '0 0 * * *'
