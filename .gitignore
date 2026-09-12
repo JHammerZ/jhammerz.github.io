@@ -55,3 +55,7 @@ lysander-tarpit/
 clips/
 node_modules/
 dist/
+
+# Sovereign H-FID Key Hardening Overrides
+*hfid-public.key
+.env
