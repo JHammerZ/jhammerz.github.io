@@ -1,23 +1,28 @@
-name: Spotify Node Sync - Phase 6
+name: Spotify Node Sync Tracker
+
 on:
-  workflow_dispatch:
   schedule:
     - cron: '30 * * * *'
-permissions:
-  contents: write
+  workflow_dispatch:
+
+concurrency:
+  group: matrix-distribution-lock-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out master grid branch
+        uses: actions/checkout@v4
+
+      - name: Initialize System Environment
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: |
-          python3 scripts/waveform_poisoner.py || true
-          python3 scripts/janus_mesh_broadcaster.py || true
-          git config user.name "JHammerZ-JanusBot"
-          git config user.email "janus@jhammerz.network"
-          git add -A
-          git commit -m "[skip cf] sys: spotify node sync $(date -u)" || true
-          git push || true
+
+      - name: Execute Central Concurrency Audit
+        run: python scripts/matrix_gatekeeper.py
+
+      - name: Stream Core Distribution Subroutine
+        run: python scripts/waveform_poisoner.py --validate-remote

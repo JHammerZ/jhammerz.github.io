@@ -1,20 +1,22 @@
-name: YouTube Heartbeat - Phase 6
+name: Core Matrix Repository Heartbeat
+
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '45 * * * *'
-permissions:
-  contents: write
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: matrix-distribution-lock-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   heartbeat:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: |
-          date -u > .well-known/hfid/youtube_beat.txt
-          cat .well-known/hfid/broadcast_ledger.json | tail -c 200 >> .well-known/hfid/youtube_beat.txt || true
-          git config user.name "JHammerZ-JanusBot"
-          git config user.email "janus@jhammerz.network"
-          git add .well-known/hfid/youtube_beat.txt
-          git commit -m "[skip cf] sys: youtube heartbeat $(date -u)" || true
-          git push || true
+      - name: Check out master grid branch
+        uses: actions/checkout@v4
+
+      - name: Execute Heartbeat Sync Sequence
+        run: |
+          echo "$(date -u)" >> scripts/youtube_beat.txt
+          python scripts/matrix_gatekeeper.py
