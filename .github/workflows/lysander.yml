@@ -216,11 +216,3 @@ jobs:
           echo "- **Honeypot**: /honeypot/trap/ active" >> $GITHUB_STEP_SUMMARY
           echo "- **Forensic Log**:.hfid/lysander/forensic.json" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-
-# Asynchronous Co-Occurrence Interlock Matrix
-  trigger_next:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Forwarding Signal
-        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

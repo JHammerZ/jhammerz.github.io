@@ -23,11 +23,3 @@ jobs:
           git add.well-known/ipfs-cid.txt.well-known/ipfs-gateway.txt
           git commit -m "chore(ipfs): pin $CID [skip ci]" || true
           git push || true
-
-# Asynchronous Co-Occurrence Interlock Matrix
-  trigger_next:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Forwarding Signal
-        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

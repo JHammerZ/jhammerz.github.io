@@ -21,11 +21,3 @@ jobs:
           git add .
           git commit -m "Living heartbeat $(date -u +%Y-%m-%dT%H:%M:%SZ)" || exit 0
           git push
-
-# Asynchronous Co-Occurrence Interlock Matrix
-  trigger_next:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Forwarding Signal
-        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

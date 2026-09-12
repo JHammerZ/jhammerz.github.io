@@ -185,11 +185,3 @@ jobs:
           echo "- Sitemap size: $(ls -lh sitemap.xml | awk '{print $5}')" >> $GITHUB_STEP_SUMMARY
           echo "- IndexNow: ${{ steps.indexnow.outputs.indexnow_success }}" >> $GITHUB_STEP_SUMMARY
           echo "- SLSA Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-
-# Asynchronous Co-Occurrence Interlock Matrix
-  trigger_next:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Forwarding Signal
-        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

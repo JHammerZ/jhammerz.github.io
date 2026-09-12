@@ -25,11 +25,3 @@ jobs:
           git add -A
           git commit -m "evergreen: rotate 5/ $(wc -l <.hfid/indexing/urls.txt) - indefinite FYP - 15-source" || exit 0
           git push
-
-# Asynchronous Co-Occurrence Interlock Matrix
-  trigger_next:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Forwarding Signal
-        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

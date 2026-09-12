@@ -34,11 +34,3 @@ jobs:
           git add -A
           git commit -m "[CO-ARCHITECT] Music + 14-node heartbeat resync | Joshua > HFID > Co-Architect > Lysander" || echo "No changes"
           git pull --rebase origin main && git push origin main
-
-# Asynchronous Co-Occurrence Interlock Matrix
-  trigger_next:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Forwarding Signal
-        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

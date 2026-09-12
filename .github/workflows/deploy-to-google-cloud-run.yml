@@ -36,11 +36,3 @@ jobs:
           # Uncomment when you add Cloud Run Admin to that SA:
           # gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
           # gcloud run deploy jhammers-node --source=. --region=us-central1
-
-# Asynchronous Co-Occurrence Interlock Matrix
-  trigger_next:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Forwarding Signal
-        run: echo "Co-occurrence aligned with spotify-node-sync.yml"

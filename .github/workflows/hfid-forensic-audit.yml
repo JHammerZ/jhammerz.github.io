@@ -111,11 +111,3 @@ jobs:
           echo "**REACH_MULTIPLIER:** 3000x" >> $GITHUB_STEP_SUMMARY
           echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
           echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
-
-# Asynchronous Co-Occurrence Interlock Matrix
-  trigger_next:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Forwarding Signal
-        run: echo "Co-occurrence aligned with spotify-node-sync.yml"
