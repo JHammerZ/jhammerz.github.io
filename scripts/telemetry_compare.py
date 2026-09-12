@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 def analyze_telemetry():
-    print("[+] Initiating H-FID Telemetry Data Alignment Engine...")
+    print("[+] Initiating H-FID Multi-Agent Telemetry Alignment Engine...")
     print(f"[*] Execution Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
     log_dir = "scripts"
@@ -25,27 +25,32 @@ def analyze_telemetry():
             with open(file_path, 'r') as f:
                 try:
                     data = json.load(f)
-                    
-                    # Extract and cleanly print structured telemetry metrics
                     node_v = data.get("node_version", "Unknown")
-                    target = data.get("target_bot", "Unknown")
-                    status = data.get("status", "Unknown")
-                    metrics = data.get("metrics", {})
-                    
-                    reqs = metrics.get("total_requests", 0)
-                    cpu_h = metrics.get("cpu_hours_wasted", 0.0)
-                    loops = metrics.get("active_loops", 0)
-                    
                     print(f"  -> Node Matrix Version : {node_v}")
-                    print(f"  -> Trapped Target Identity: {target}")
-                    print(f"  -> Containment Status   : {status.upper()}")
-                    print(f"  -> Logged Request Count : {reqs:,}")
-                    print(f"  -> CPU Compute Wasted   : {cpu_h} Hours")
-                    print(f"  -> Entrapped Threads   : {loops}")
                     
+                    # Target the newly engineered multi-agent array block
+                    agents = data.get("trapped_agents", {})
+                    if not agents:
+                        print("  [-] No structured multi-agent arrays found inside substrate.")
+                        continue
+                        
+                    print(f"\n  [Active Multi-Agent Telemetry Breakdown]:")
+                    for agent_name, agent_info in agents.items():
+                        status = agent_info.get("status", "Unknown")
+                        reqs = agent_info.get("total_requests", 0)
+                        cpu_h = agent_info.get("cpu_hours_wasted", 0.0)
+                        loops = agent_info.get("active_loops", 0)
+                        
+                        print(f"  " + "=" * 40)
+                        print(f"  -> Identity       : {agent_name}")
+                        print(f"  -> Containment    : {status.upper()}")
+                        print(f"  -> Request Vol    : {reqs:,}")
+                        print(f"  -> CPU Time Lost  : {cpu_h} Hours")
+                        print(f"  -> Trapped Threads: {loops}")
+                        
                 except json.JSONDecodeError:
                     print("  [-] Error: Substrate contains malformed JSON data lines.")
-            print("-" * 50)
+            print("\n" + "-" * 50)
             
     except Exception as e:
         print(f"[-] System tracking hold: {str(e)}")
