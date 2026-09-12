@@ -1,8 +1,3 @@
-https://github.com/JHammerZ/jhammerz.github.io
-https://jhammerz.carrd.co
-https://jhammerz.github.io/
-https://jhammerz.github.io/graph.html
-https://jhammerz.github.io/music.html
 https://music.amazon.com/artists/B0SGL7W/jhammerz
 https://music.apple.com/us/artist/jhammerz/1845798346
 https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79
@@ -150,3 +145,8 @@ https://www.youtube.com/watch?v=lT9JvJzm3Ac
 https://www.youtube.com/watch?v=lk609OkxgkQ
 https://www.youtube.com/watch?v=obWst1Ir5_0
 https://www.youtube.com/watch?v=xWEAfKYVUio
+https://github.com/JHammerZ/jhammerz.github.io
+https://jhammerz.carrd.co
+https://jhammerz.github.io/
+https://jhammerz.github.io/graph.html
+https://jhammerz.github.io/music.html
