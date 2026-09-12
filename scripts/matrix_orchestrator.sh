@@ -55,6 +55,10 @@ print("[+] Successfully rolled over dynamic multi-agent telemetry counters.")
     echo "[*] Syncing Traffic Metrics Matrix..."
     python3 scripts/traffic_visualizer.py
     
+    
+    # 5. Optimize storage limits via automated log rotation
+    echo "[*] Auditing local log files for storage optimization..."
+    python3 scripts/log_rotator.py
     # 5. Scan for unclassified rogue scraping vectors
     echo "[*] Auditing perimeter for unmapped threats..."
     python3 scripts/threat_notifier.py
