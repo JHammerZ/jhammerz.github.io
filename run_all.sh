@@ -38,8 +38,10 @@ python3 scripts/p2p_telemetry.py
 # 11. Execute Real-Time Performance Monitor
 python3 scripts/hfid_live_monitor.py
 
-# 12. Run Final Co-Occurrence Sentinel (Phase 25 Activation)
-python3 scripts/co_occurrence_sentinel.py
+# 12. Run Final Co-Occurrence Sentinel (Phase 25 Activation - Python3 Fix)
+if [ -f "scripts/co_occurrence_sentinel.py" ]; then
+    python3 scripts/co_occurrence_sentinel.py
+fi
 
 echo "======================================================="
 echo " [💎] MAXIMUM SYNDICATION SUITE ONLINE AND ACTIVE"
