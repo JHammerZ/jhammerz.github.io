@@ -1,1 +1,3 @@
-index.html merge=ours
+scripts/traffic_snapshot.json merge=ours
+.hfid/ledger/latest.json merge=ours
+well-known/hfid/broadcast_ledger.json merge=ours
