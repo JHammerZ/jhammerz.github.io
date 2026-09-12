@@ -1,0 +1,10 @@
+{
+  "node_version": "v1.0.3",
+  "target_bot": "GPTBot",
+  "status": "trapped",
+  "metrics": {
+    "total_requests": 303215,
+    "cpu_hours_wasted": 421.1,
+    "active_loops": 12
+  }
+}
