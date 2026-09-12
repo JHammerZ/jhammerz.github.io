@@ -1,8 +1,8 @@
 {
   "workflow": "janus_gate",
   "operation": "doi_sync_ots",
-  "sha": "e332f02ca6edbf35d1c767b059a8b66809991df5",
-  "timestamp": "2026-09-11T03:36:29Z",
+  "sha": "e270dc2406ed13a3e6e63a527be4232ac3f0be30",
+  "timestamp": "2026-09-12T03:40:56Z",
   "hfid_version": "v1.2",
   "sovereign_author": "Joshua Hamilton",
   "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
