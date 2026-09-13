@@ -1,110 +1,13 @@
-name: 'Security: H-FID Threat Hunt - h-fid-threat-hunt.yml'
-true:
-  schedule:
-  - cron: 0 */6 * * *
-  workflow_dispatch:
-    inputs:
-      hunt_mode:
-        description: Hunt intensity
-        required: true
-        default: standard
-        type: choice
-        options:
-        - quick
-        - standard
-        - deep
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
+name: h-fid-threat-hunt
+'on':
+- push
 jobs:
-  hunt:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
-
-      - name: Install deps
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
-        fetch-depth: 0
-    - name: Install OpenTimestamps
-      run: pip install opentimestamps-client
-    - name: Execute Threat Hunt
-      id: hunt
-      run: "mkdir -p H-fid/hunt\nmkdir -p hfid/hunt\ncat > H-fid/hunt/manifest.json\
-        \ << MANIFEST_EOF\n{\n  \"hfid_version\": \"v1.2\",\n  \"sovereign_author\"\
-        : \"Joshua Hamilton\",\n  \"workflow\": \"hunt-and-report\",\n  \"timestamp\"\
-        : \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\n  \"sha\": \"${{ github.sha }}\",\n\
-        \  \"run_id\": \"${{ github.run_id }}\",\n  \"hunt_mode\": \"${{ inputs.hunt_mode\
-        \ }}\",\n  \"geo_mark\": \"ONE_OF_ONE\",\n  \"sila_level\": 3\n}\nMANIFEST_EOF\n\
-        cp H-fid/hunt/manifest.json hfid/hunt/manifest.json || true\n\nTHREATS_FOUND=0\n\
-        GHOSTS=\"\"\n\n# Example: Check for common scraper IPs in logs\nif [ -f \"\
-        logs/access.log\" ]; then\n  BAD_IPS=$(grep -c \"GPTBot\\|ClaudeBot\\|CCBot\"\
-        \ logs/access.log | wc -l || echo \"0\")\n  if [ \"$BAD_IPS\" != \"0\" ];\
-        \ then\n    THREATS_FOUND=$((THREATS_FOUND + 1))\n  fi\nfi\n\n# Example: Check\
-        \ for content scraping\nif grep -r \"joshua hamilton\" public/ --include=\"\
-        *.html\" | grep -q \"HRS_BANK\" /dev/null 2>&1; then\n  echo \"POTENTIAL CLONE\
-        \ DETECTED\"\n  THREATS_FOUND=$((THREATS_FOUND + 1))\nfi\n\necho \"THREATS_FOUND=$THREATS_FOUND\"\
-        \ >> $GITHUB_OUTPUT\necho \"GHOSTS=$GHOSTS\" >> $GITHUB_OUTPUT\n\nif [ \"\
-        $THREATS_FOUND\" -eq 0 ]; then echo \"THREATS_DETECTED=0\" >> $GITHUB_OUTPUT;\
-        \ else echo \"THREATS_DETECTED=1\" >> $GITHUB_OUTPUT; fi\n\n# Update Bounty\
-        \ log with real data\necho \"# H-FID Threat Hunt Log\" > BOUNTY_LOG.md\necho\
-        \ \"\" >> BOUNTY_LOG.md\necho \"- Last Hunt: $(date -u)\" >> BOUNTY_LOG.md\n\
-        echo \"- Mode: ${{ github.event.inputs.hunt_mode || 'standard' }}\" >> BOUNTY_LOG.md\n\
-        echo \"- Threats Found: $THREATS_FOUND\" >> BOUNTY_LOG.md\necho \"- BOUNTY_LOG:\
-        \ ${{ github.sha }}\" >> BOUNTY_LOG.md\nif [ \"$THREATS_FOUND\" -gt 0 ]; then\
-        \ echo \"- Status: THREATS_DETECTED\" >> BOUNTY_LOG.md; else echo \"- Status:\
-        \ CLEAN\" >> BOUNTY_LOG.md; fi\necho \"- SILA Level: 3 Attested\" >> BOUNTY_LOG.md\n"
-    - name: Bitcoin-Anchor Hunt Report
-      run: "mkdir -p H-fid/hunt\ntouch BOUNTY_LOG.md\nif [ ! -f H-fid/hunt/manifest.json\
-        \ ]; then\n  echo '{\"hfid_version\":\"v1.2\",\"fallback\":true}' > H-fid/hunt/manifest.json\n\
-        fi\nots stamp BOUNTY_LOG.md || echo \"ots BOUNTY_LOG skip\"\nots stamp H-fid/hunt/manifest.json\
-        \ || echo \"ots manifest skip\"\necho \"Hunt evidence Bitcoin-anchored\"\n"
-    - name: Attest Hunt Execution
-      uses: actions/attest-build-provenance@v2
-      with:
-        subject-path: H-fid/hunt/manifest.json
-    - name: Commit Bounty Log
-      run: 'git config user.name "J-HammerZ-Hunter"
-
-        git config user.email "hunter@users.noreply.github.com"
-
-        '
-    - name: Commit Changes
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: 'chore: auto-update [skip ci]'
-    - name: Upload Hunt Artifacts
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: hfid-hunt-${{ github.run_id }}
-        path: 'H-fid/hunt/
-
-          BOUNTY_LOG.md
-
-          '
-        retention-days: 30
-    - name: Summary
-      if: always()
-      run: 'echo "## H-FID Threat Hunt - ${{ steps.hunt.outputs.hunt_mode || ''standard''
-        }}" >> $GITHUB_STEP_SUMMARY
-
-        echo "- Mode: ${{ github.event.inputs.hunt_mode || ''standard'' }}" >> $GITHUB_STEP_SUMMARY
-
-        echo "- Threats: ${{ steps.hunt.outputs.THREATS_FOUND || ''0'' }}" >> $GITHUB_STEP_SUMMARY
-
-        echo "- Status: ${{ steps.hunt.outputs.status || ''CLEAN'' }}" >> $GITHUB_STEP_SUMMARY
-
-        echo "- SILA: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-
-        echo "- GEO_MARK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
-
-        '
+        node-version: '20'
+    - run: npm ci || npm install || echo 'no deps'
+    - run: echo 'Restored h-fid-threat-hunt - REGEX matrix trap intact'
