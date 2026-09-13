@@ -1,0 +1,22 @@
+name: lysander-egypt-resync-same-sha
+on:
+  deployment_status:
+    states: [failure, error]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: egypt-resync
+  cancel-in-progress: true
+jobs:
+  resync:
+    if: contains(github.event.deployment_status.environment, 'github-pages') && (github.event.deployment_status.state == 'failure' || github.event.deployment_status.state == 'error')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "Pages failed, waiting 90s to avoid thundering herd"
+          sleep 90
+          git pull --rebase origin main
+          git commit --allow-empty -m "chore: egypt resync after pages failure [skip ci]" || true
+          git push
