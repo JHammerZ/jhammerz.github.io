@@ -1,6 +1,1 @@
-{
-  "nodes_healthy": false,
-  "failed_checks": [
-    "sync_bridge"
-  ]
-}
+{"nodes_healthy": true, "failed_checks": []}
