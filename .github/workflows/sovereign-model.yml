@@ -1,33 +1,8 @@
-name: "H-FID - Compile Core Data Repository"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+name: sovereign-model.yml - restored
 on:
-  push:
-    branches: [main, master]
   workflow_dispatch:
 jobs:
-  execute-matrix:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Commercial License Signature Gate
-        env:
-          LYSANDER_KEY: ${{ secrets.LYSANDER_LICENSE_KEY }}
-        run: |
-          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
-          if [ -z "$LYSANDER_KEY" ]; then
-            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
-            echo "This repository is locked under a proprietary Pay-For-Use EULA."
-            echo "Please purchase an active subscription key to re-enable execution tokens."
-            exit 1
-          fi
-          echo "License key signature discovered. Authorizing operational execution matrix."
-      - name: Checkout Codebase
-        uses: actions/checkout@v5
-      - name: Verify Environment Configuration
-        run: |
-          echo "Running verification track for: sovereign_model_data_repository"
-          if [ -f "package.json" ]; then
-            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
-          fi
-
+      - run: echo active
