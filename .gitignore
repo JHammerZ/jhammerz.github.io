@@ -65,3 +65,9 @@ scripts/orchestrator.log
 scripts/traffic_snapshot.json
 tmp/
 orchestrator-audit-report.json
+.lysander*
+*.log
+.god_token
+.lysander_pat
+.god_token
+.lysander*
