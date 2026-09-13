@@ -12,8 +12,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
       - name: Build clips + static
         run: |
           mkdir -p dist/clips public/clips

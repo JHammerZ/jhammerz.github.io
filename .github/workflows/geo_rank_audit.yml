@@ -26,8 +26,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
 
       - name: Validate ai-context.json
         run: |

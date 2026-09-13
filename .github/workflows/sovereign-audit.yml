@@ -27,8 +27,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
       - name: Verify Environment Configuration
         run: |
           echo "Running verification track for sovereign-audit..."

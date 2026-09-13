@@ -33,8 +33,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
 
       - name: Set lower case image name
         run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV

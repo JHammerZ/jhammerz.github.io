@@ -15,8 +15,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
         with:
           token: ${{ secrets.LYSANDER_PAT }}
           fetch-depth: 0

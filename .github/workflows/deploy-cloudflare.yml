@@ -44,8 +44,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
 
       - name: 2. Broadcast Static Assets to Low-Latency Corridors
         uses: cloudflare/wrangler-action@v3

@@ -16,8 +16,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
       - name: Pointer
         run: |
           echo "DEPRECATED: This file is an alias."

@@ -21,8 +21,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
     - name: Backoff and resync same SHA
       run: 'echo "Pages deployment failed, waiting 90s to avoid loop"
 
