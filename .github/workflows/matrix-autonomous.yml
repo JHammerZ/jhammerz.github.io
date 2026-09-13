@@ -46,7 +46,7 @@ jobs:
           git add -A
           if ! git diff-index --quiet HEAD --; then
             MSG=$(cat scripts/neural_commit_msg.txt 2>/dev/null || echo "sys: phase5 broadcast $(date -u)")
-            git commit -m "[skip cf] $MSG"
+            git commit -m "[skip ci] [skip cf] $MSG"
             git pull --rebase --autostash origin main || true
             git push origin main
           fi

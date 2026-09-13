@@ -23,5 +23,5 @@ jobs:
           git config user.name "aurelius-main"
           git config user.email "aurelius@jhammerz.github.io"
           git add -A
-          git commit -m "evergreen: rotate 5/ $(wc -l <.hfid/indexing/urls.txt) - indefinite FYP - 15-source" || exit 0
+          git commit -m "[skip ci] evergreen: rotate 5/ $(wc -l <.hfid/indexing/urls.txt) - indefinite FYP - 15-source" || exit 0
           git push

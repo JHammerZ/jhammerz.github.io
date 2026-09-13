@@ -53,5 +53,5 @@ jobs:
           git config user.name "janus-bot"
           git config user.email "janus@jhammerz.github.io"
           git add .hfid/indexing/urls.txt
-          git diff --staged --quiet || git commit -m "auto-scoop: FULL 14-node refresh $(date -u +%FT%TZ) - $(wc -l < .hfid/indexing/urls.txt) URLs"
+          git diff --staged --quiet || git commit -m "[skip ci] auto-scoop: FULL 14-node refresh $(date -u +%FT%TZ) - $(wc -l < .hfid/indexing/urls.txt) URLs"
           git push

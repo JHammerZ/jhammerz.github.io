@@ -92,7 +92,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No new timestamp adjustments to commit."
           else
-            git commit -m "chore(provenance): update open-timestamp proof signatures [skip ci]"
+            git commit -m "[skip ci] chore(provenance): update open-timestamp proof signatures [skip ci]"
             git pull --rebase origin main
             git pull --rebase origin main && git push origin main
           </m>

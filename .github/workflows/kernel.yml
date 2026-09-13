@@ -107,7 +107,7 @@ jobs:
           git pull --rebase origin main || true
           git add .hfid/kernel/ hfid_module/
           if ! git diff --staged --quiet; then
-            git commit -m "chore: update sovereign kernel build state [skip ci]"
+            git commit -m "[skip ci] chore: update sovereign kernel build state [skip ci]"
             git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "No pipeline modifications detected."

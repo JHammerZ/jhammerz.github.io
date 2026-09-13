@@ -67,7 +67,7 @@ jobs:
           git config --global user.email "feeds@jhammerz.github.io"
           git add scripts/feed_generator.py public/feeds/ .hfid/indexing/
           if ! git diff --staged --quiet; then
-            git commit -m "chore: sync dynamic distribution syndication feeds [skip ci]"
+            git commit -m "[skip ci] chore: sync dynamic distribution syndication feeds [skip ci]"
             git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "Syndication feed configurations match active baseline parameters."

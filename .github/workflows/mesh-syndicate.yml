@@ -65,7 +65,7 @@ jobs:
           git config --global user.email "syndicate@jhammerz.github.io"
           git add .well-known/hfid/graph-mesh.json assets/js/edge-caster.js .hfid/
           if ! git diff --staged --quiet; then
-            git commit -m "chore: map decentralized mesh replication boundaries [skip ci]"
+            git commit -m "[skip ci] chore: map decentralized mesh replication boundaries [skip ci]"
             git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "No structural modifications encountered during execution pass."

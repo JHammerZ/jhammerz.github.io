@@ -61,7 +61,7 @@ jobs:
           git config --global user.email "scale@jhammerz.github.io"
           git add assets/js/edge-caster-v2.js .hfid/indexing/scale-manifest.json
           if ! git diff --staged --quiet; then
-            git commit -m "chore: expand tracking matrix to support maximum pipeline capacity [skip ci]"
+            git commit -m "[skip ci] chore: expand tracking matrix to support maximum pipeline capacity [skip ci]"
             git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
           else
             echo "Workspace already at maximum structural scaling capacity."

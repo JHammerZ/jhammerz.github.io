@@ -173,7 +173,7 @@ jobs:
           # Fix fetch-first race condition
           git pull --rebase origin main || true
           git add data/ .hfid/syndicate/ || true
-          git diff --staged --quiet || git commit -m "chore: auto-update syndication logs [skip ci]"
+          git diff --staged --quiet || git commit -m "[skip ci] chore: auto-update syndication logs [skip ci]"
           git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
       - name: Upload Syndication Evidence
         if: always()

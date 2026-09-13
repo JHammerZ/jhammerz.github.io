@@ -21,5 +21,5 @@ jobs:
           git config user.name "Aurelius"
           git config user.email "aurelius@jhammerz.github.io"
           git add.well-known/ipfs-cid.txt.well-known/ipfs-gateway.txt
-          git commit -m "chore(ipfs): pin $CID [skip ci]" || true
+          git commit -m "[skip ci] chore(ipfs): pin $CID [skip ci]" || true
           git push || true

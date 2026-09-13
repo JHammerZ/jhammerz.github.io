@@ -112,7 +112,7 @@ jobs:
           git stash pop || true
           git add .hfid/ lines-full.txt || true
           if ! git diff --cached --quiet; then
-            git commit -m "chore: auto-update hfid manifestations and index attestations"
+            git commit -m "[skip ci] chore: auto-update hfid manifestations and index attestations"
             git pull --rebase origin main && git push origin main
           else
             echo "No changes to commit - intent preserved"
