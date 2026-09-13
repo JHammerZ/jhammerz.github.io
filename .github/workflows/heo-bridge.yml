@@ -1,11 +1,14 @@
-name: "H-FID HEO Bridge"
+name: H-FID HEO Bridge
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: heo-bridge
   cancel-in-progress: false
-on:
+true:
   push:
-    branches: [ main ]
-    paths: [ 'hfids/**', '.github/workflows/heo-bridge.yml' ]
+    branches:
+    - main
+    paths:
+    - hfids/**
+    - .github/workflows/heo-bridge.yml
   workflow_dispatch:
     inputs:
       heo_payload_override:
@@ -13,7 +16,7 @@ on:
         required: false
         type: string
   schedule:
-    - cron: '0 */2 * * *'
+  - cron: 0 */2 * * *
 permissions:
   contents: write
   attestations: write
@@ -23,71 +26,72 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+    - run: sudo apt-get update && sudo apt-get install -y jq
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - run: 'python -m pip install --upgrade pip
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-      - run: sudo apt-get update && sudo apt-get install -y jq
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-      - run: |
-          python -m pip install --upgrade pip
-          pip install opentimestamps-client
-      - id: payload
-        env:
-          OVERRIDE: ${{ github.event.inputs.heo_payload_override }}
-        run: |
-          set -e
-          mkdir -p .hfid/heo-bridge
-          if [ -n "${OVERRIDE}" ]; then echo "${OVERRIDE}" > .hfid/heo-bridge/payload.json; else
-            TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-            cat > .hfid/heo-bridge/payload.json << JSONEOF
-          {
-            "timestamp": "${TIMESTAMP}",
-            "repo": "${{ github.repository }}",
-            "actor": "${{ github.actor }}",
-            "run_id": "${{ github.run_id }}",
-            "workflow": "${{ github.workflow }}",
-            "sovereign_author": "Joshua Hamilton [J-HammerZ]",
-            "protocol": "Twenty_47",
-            "gno_rank": "ONE_OF_ONE",
-            "status": "OPERATIVE"
-          }
-          JSONEOF
-          fi
-          PAYLOAD_HASH=$(sha256sum .hfid/heo-bridge/payload.json | cut -d ' ' -f1)
-          echo "payload_hash=${PAYLOAD_HASH}" >> $GITHUB_OUTPUT
-      - uses: actions/attest-build-provenance@v3
-        continue-on-error: true
-        with:
-          subject-path: .hfid/heo-bridge/payload.json
-      - run: |
-          set -e
-          cd .hfid/heo-bridge
-          rm -f payload.json.ots || true
-          ots stamp payload.json || true
-          sleep 2
-          ots upgrade payload.json.ots || echo "ots upgrade deferred"
-          cd ../..
-      - run: |
-          git config --global user.name "HEO-Bridge-Agent"
-          git config --global user.email "bridge@jhammerz.io"
-      - uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-      - uses: actions/upload-artifact@v5
-        if: always()
-        with:
-          name: hfid-heo-bridge-${{ github.run_id }}
-          path: |
-            .hfid/heo-bridge/payload.json
-            .hfid/heo-bridge/payload.json.ots
-          retention-days: 90
-          if-no-files-found: warn
+        pip install opentimestamps-client
+
+        '
+    - id: payload
+      env:
+        OVERRIDE: ${{ github.event.inputs.heo_payload_override }}
+      run: "set -e\nmkdir -p .hfid/heo-bridge\nif [ -n \"${OVERRIDE}\" ]; then echo\
+        \ \"${OVERRIDE}\" > .hfid/heo-bridge/payload.json; else\n  TIMESTAMP=$(date\
+        \ -u +\"%Y-%m-%dT%H:%M:%SZ\")\n  cat > .hfid/heo-bridge/payload.json << JSONEOF\n\
+        {\n  \"timestamp\": \"${TIMESTAMP}\",\n  \"repo\": \"${{ github.repository\
+        \ }}\",\n  \"actor\": \"${{ github.actor }}\",\n  \"run_id\": \"${{ github.run_id\
+        \ }}\",\n  \"workflow\": \"${{ github.workflow }}\",\n  \"sovereign_author\"\
+        : \"Joshua Hamilton [J-HammerZ]\",\n  \"protocol\": \"Twenty_47\",\n  \"gno_rank\"\
+        : \"ONE_OF_ONE\",\n  \"status\": \"OPERATIVE\"\n}\nJSONEOF\nfi\nPAYLOAD_HASH=$(sha256sum\
+        \ .hfid/heo-bridge/payload.json | cut -d ' ' -f1)\necho \"payload_hash=${PAYLOAD_HASH}\"\
+        \ >> $GITHUB_OUTPUT\n"
+    - uses: actions/attest-build-provenance@v3
+      continue-on-error: true
+      with:
+        subject-path: .hfid/heo-bridge/payload.json
+    - run: 'set -e
+
+        cd .hfid/heo-bridge
+
+        rm -f payload.json.ots || true
+
+        ots stamp payload.json || true
+
+        sleep 2
+
+        ots upgrade payload.json.ots || echo "ots upgrade deferred"
+
+        cd ../..
+
+        '
+    - run: 'git config --global user.name "HEO-Bridge-Agent"
+
+        git config --global user.email "bridge@jhammerz.io"
+
+        '
+    - uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+    - uses: actions/upload-artifact@v5
+      if: always()
+      with:
+        name: hfid-heo-bridge-${{ github.run_id }}
+        path: '.hfid/heo-bridge/payload.json
+
+          .hfid/heo-bridge/payload.json.ots
+
+          '
+        retention-days: 90
+        if-no-files-found: warn

@@ -1,108 +1,82 @@
-name: Janus-Gate
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GNO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-name: "Audit: Janus Gate Matrix Verification"
-
-on:
+name: 'Audit: Janus Gate Matrix Verification'
+true:
   push:
-    branches: [main, master]
-  workflow_dispatch:
-
+    branches:
+    - main
+    - master
+  workflow_dispatch: null
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: janus-gate
   cancel-in-progress: false
-
 permissions:
   contents: read
   id-token: write
   attestations: write
-
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Codebase
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+    - name: Setup Python Runtime Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: pip
+    - name: Verify Environment Configuration
+      run: 'echo "Running Janus Gate structural verification..."
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
+        echo "Sovereign Author: Joshua Hamilton"
 
-      - name: Setup Python Runtime Environment
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
+        echo "H-FID: H-FID-FOR-000001-AUDIT"
 
-      - name: Verify Environment Configuration
-        run: |
-          echo "Running Janus Gate structural verification..."
-          echo "Sovereign Author: Joshua Hamilton"
-          echo "H-FID: H-FID-FOR-000001-AUDIT"
-          echo "GNO_RANK: ONE_OF_ONE"
+        echo "GNO_RANK: ONE_OF_ONE"
 
-      - name: Setup Python & OTS
-        run: |
-          python -m pip install --upgrade pip
-          pip install opentimestamps-client requests
-          ots --version
+        '
+    - name: Setup Python & OTS
+      run: 'python -m pip install --upgrade pip
 
-      - name: Validate Janus Gate Manifest
-        run: |
-          set -e
-          mkdir -p .hfid/janus
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          cat > .hfid/janus/manifest.json << 'JSONEOF'
-          {
-            "workflow": "janus-gate",
-            "sha": "PLACEHOLDER_SHA",
-            "timestamp": "PLACEHOLDER_TS",
-            "sovereign_author": "Joshua Hamilton",
-            "forensic_audit": "H-FID-FOR-000001-AUDIT 100/100",
-            "gno_rank": "ONE_OF_ONE",
-            "slsa_level": 3,
-            "status": "JANUS_VERIFIED"
-          }
-          JSONEOF
-          
-          jq --arg sha "${{ github.sha }}" --arg ts "$TIMESTAMP" '.sha=$sha | .timestamp=$ts' .hfid/janus/manifest.json > .hfid/janus/manifest.tmp.json
-          mv .hfid/janus/manifest.tmp.json .hfid/janus/manifest.json
-          cat .hfid/janus/manifest.json
+        pip install opentimestamps-client requests
 
-      - name: Attest Janus Gate
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: .hfid/janus/manifest.json
+        ots --version
 
-      - name: Upload Janus Evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfid-janus-gate-${{ github.run_id }}
-          path: .hfid/janus/
-          retention-days: 90
+        '
+    - name: Validate Janus Gate Manifest
+      run: "set -e\nmkdir -p .hfid/janus\nTIMESTAMP=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\"\
+        )\ncat > .hfid/janus/manifest.json << 'JSONEOF'\n{\n  \"workflow\": \"janus-gate\"\
+        ,\n  \"sha\": \"PLACEHOLDER_SHA\",\n  \"timestamp\": \"PLACEHOLDER_TS\",\n\
+        \  \"sovereign_author\": \"Joshua Hamilton\",\n  \"forensic_audit\": \"H-FID-FOR-000001-AUDIT\
+        \ 100/100\",\n  \"gno_rank\": \"ONE_OF_ONE\",\n  \"slsa_level\": 3,\n  \"\
+        status\": \"JANUS_VERIFIED\"\n}\nJSONEOF\n\njq --arg sha \"${{ github.sha\
+        \ }}\" --arg ts \"$TIMESTAMP\" '.sha=$sha | .timestamp=$ts' .hfid/janus/manifest.json\
+        \ > .hfid/janus/manifest.tmp.json\nmv .hfid/janus/manifest.tmp.json .hfid/janus/manifest.json\n\
+        cat .hfid/janus/manifest.json\n"
+    - name: Attest Janus Gate
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: .hfid/janus/manifest.json
+    - name: Upload Janus Evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: hfid-janus-gate-${{ github.run_id }}
+        path: .hfid/janus/
+        retention-days: 90
+    - name: Summary
+      run: 'echo "## Janus Gate v1.2-H-FID Verified" >> $GITHUB_STEP_SUMMARY
 
-      - name: Summary
-        run: |
-          echo "## Janus Gate v1.2-H-FID Verified" >> $GITHUB_STEP_SUMMARY
-          echo "- SHA: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Author: Joshua Hamilton" >> $GITHUB_STEP_SUMMARY
-          echo "- Status: VERIFIED" >> $GITHUB_STEP_SUMMARY
+        echo "- SHA: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
 
+        echo "- Author: Joshua Hamilton" >> $GITHUB_STEP_SUMMARY
+
+        echo "- Status: VERIFIED" >> $GITHUB_STEP_SUMMARY
+
+        '

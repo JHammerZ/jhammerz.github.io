@@ -1,14 +1,14 @@
-name: "SEO: Force Search Engine Indexation"
+name: 'SEO: Force Search Engine Indexation'
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: force_index
   cancel-in-progress: false
-on:
+true:
   schedule:
-    - cron: '0 0 * * *'
+  - cron: 0 0 * * *
   workflow_dispatch:
     inputs:
       target_url:
-        description: 'Specific URL to index'
+        description: Specific URL to index
         required: false
         type: string
 permissions:
@@ -17,55 +17,43 @@ jobs:
   force-index:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - name: Install deps
+      run: 'python -m pip install --upgrade pip
 
-      - name: Install deps
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install google-auth google-api-python-client requests jq
-      - name: Prep URLs
-        run: |
-          set -eu pipefail
-          mkdir -p .hfid/indexing
-          if [ -s sitemap.xml ]; then
-            grep -oP '(?<=<loc>).*?(?=</loc>)' sitemap.xml > .hfid/indexing/urls.txt || echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
-          else
-            echo "https://jhammerz.github.io" > .hfid/indexing/urls.txt
-          fi
-      - name: Index via Google
-        env:
-          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_API_KEY }}
-        run: |
-          set -eu pipefail
-          if [ -z "${GOOGLE_INDEXING_API_JSON}" ]; then echo "::error:: GOOGLE_API_KEY blank"; exit 1; fi
-          echo "${GOOGLE_INDEXING_API_JSON}" > the-google-creds.json
-          python << 'PY_EOF'
-          import json
-          from pathlib import Path
-          from google.oauth2 import service_account
-          from googleapiclient.discovery import build
-          with open('the-google-creds.json','r') as f:
-              creds_data=json.load(f)
-          credentials = service_account.Credentials.from_service_account_info(creds_data, scopes=["https://www.googleapis.com/auth/indexing"])
-          service = build('indexing','v3',credentials=credentials)
-          url_list=[line.strip() for line in open('.hfid/indexing/urls.txt') if line.strip()] if Path('.hfid/indexing/urls.txt').exists() else ["https://jhammerz.github.io"]
-          if not url_list: url_list=["https://jhammerz.github.io"]
-          for target_url in url_list:
-              body={"url": target_url, "type": "URL_UPDATED"}
-              try:
-                  res = service.urlNotifications().publish(body=body).execute()
-                  print(f"API Response: {res}")
-              except Exception as e:
-                  print(f"Notification error for {target_url}: {e}")
-          PY_EOF
-          rm -f the-google-creds.json
-      - name: Sync secondary pipelines
-        run: echo "Syncing indexation maps..."
+        pip install google-auth google-api-python-client requests jq
+
+        '
+    - name: Prep URLs
+      run: "set -eu pipefail\nmkdir -p .hfid/indexing\nif [ -s sitemap.xml ]; then\n\
+        \  grep -oP '(?<=<loc>).*?(?=</loc>)' sitemap.xml > .hfid/indexing/urls.txt\
+        \ || echo \"https://jhammerz.github.io\" > .hfid/indexing/urls.txt\nelse\n\
+        \  echo \"https://jhammerz.github.io\" > .hfid/indexing/urls.txt\nfi\n"
+    - name: Index via Google
+      env:
+        GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_API_KEY }}
+      run: "set -eu pipefail\nif [ -z \"${GOOGLE_INDEXING_API_JSON}\" ]; then echo\
+        \ \"::error:: GOOGLE_API_KEY blank\"; exit 1; fi\necho \"${GOOGLE_INDEXING_API_JSON}\"\
+        \ > the-google-creds.json\npython << 'PY_EOF'\nimport json\nfrom pathlib import\
+        \ Path\nfrom google.oauth2 import service_account\nfrom googleapiclient.discovery\
+        \ import build\nwith open('the-google-creds.json','r') as f:\n    creds_data=json.load(f)\n\
+        credentials = service_account.Credentials.from_service_account_info(creds_data,\
+        \ scopes=[\"https://www.googleapis.com/auth/indexing\"])\nservice = build('indexing','v3',credentials=credentials)\n\
+        url_list=[line.strip() for line in open('.hfid/indexing/urls.txt') if line.strip()]\
+        \ if Path('.hfid/indexing/urls.txt').exists() else [\"https://jhammerz.github.io\"\
+        ]\nif not url_list: url_list=[\"https://jhammerz.github.io\"]\nfor target_url\
+        \ in url_list:\n    body={\"url\": target_url, \"type\": \"URL_UPDATED\"}\n\
+        \    try:\n        res = service.urlNotifications().publish(body=body).execute()\n\
+        \        print(f\"API Response: {res}\")\n    except Exception as e:\n   \
+        \     print(f\"Notification error for {target_url}: {e}\")\nPY_EOF\nrm -f\
+        \ the-google-creds.json\n"
+    - name: Sync secondary pipelines
+      run: echo "Syncing indexation maps..."

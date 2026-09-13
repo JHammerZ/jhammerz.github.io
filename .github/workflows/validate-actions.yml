@@ -1,108 +1,72 @@
-name: Validate-Actions
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-
-name: "CI: H-FID Forensic Reset & Validation"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+name: 'CI: H-FID Forensic Reset & Validation'
+true:
   schedule:
-    - cron: '0 0 * * 0' # Weekly Sunday midnight UTC only
-  workflow_dispatch: # Manual only - too dangerous for daily
-
+  - cron: 0 0 * * 0
+  workflow_dispatch: null
+concurrency:
+  group: validate-actions
+  cancel-in-progress: false
 permissions:
-  contents: write # Required for forensic commits
-  id-token: write # For SLSA attestation
-  attestations: write # Sign the forensic reset
-
+  contents: write
+  id-token: write
+  attestations: write
 jobs:
   forensic_reset_2026:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: github.ref == 'refs/heads/main' # Safety: main branch only
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Free Disk Space
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /opt/hostedtoolcache/CodeQL
-          df -h
+    - name: Free Disk Space
+      run: 'sudo rm -rf /usr/share/dotnet
 
-      - name: Checkout Vault
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+        sudo rm -rf /usr/local/lib/android
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+        sudo rm -rf /opt/ghc
 
-      - name: Configure Git Identity
-        run: |
-          git config --local user.name 'github-actions[bot]'
-          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-          git config --local commit.gpgsign false
+        sudo rm -rf /opt/hostedtoolcache/CodeQL
 
-      - name: Verify Environment
-        run: |
-          if [ -f "scripts/edge_interceptor.js" ]; then
-            node scripts/edge_interceptor.js
-          else
-            echo "⚠️ SKIP: scripts/edge_interceptor.js not found"
-          fi
+        df -h
 
-      - name: Generate H-FID Forensic Attestation
-        run: |
-          set -e
-          mkdir -p .hfid/forensic
-          cat >.hfid/forensic/reset.json << EOF
-          {
-            "workflow": "validate-actions",
-            "operation": "forensic_reset",
-            "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
-            "trigger": "${{ github.event_name }}",
-            "actor": "${{ github.actor }}"
-          }
-          EOF
-          echo "Generated forensic attestation at.hfid/forensic/reset.json"
+        '
+    - name: Checkout Vault
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Configure Git Identity
+      run: 'git config --local user.name ''github-actions[bot]''
 
-      - name: Stage Changes
-        id: stage
-        run: |
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: auto-update [skip ci]"
+        git config --local user.email ''github-actions[bot]@users.noreply.github.com''
 
-      - name: Attest Forensic Reset
-        if: steps.stage.outputs.has_changes == 'true'
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: .hfid/forensic/reset.json
+        git config --local commit.gpgsign false
 
+        '
+    - name: Verify Environment
+      run: "if [ -f \"scripts/edge_interceptor.js\" ]; then\n  node scripts/edge_interceptor.js\n\
+        else\n  echo \"\u26A0\uFE0F SKIP: scripts/edge_interceptor.js not found\"\n\
+        fi\n"
+    - name: Generate H-FID Forensic Attestation
+      run: "set -e\nmkdir -p .hfid/forensic\ncat >.hfid/forensic/reset.json << EOF\n\
+        {\n  \"workflow\": \"validate-actions\",\n  \"operation\": \"forensic_reset\"\
+        ,\n  \"sha\": \"${{ github.sha }}\",\n  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"\
+        ,\n  \"hfid_version\": \"v1.2\",\n  \"sovereign_author\": \"Joshua Hamilton\"\
+        ,\n  \"forensic_audit\": \"H-FID-100-FORENSIC-AUDIT 100/100\",\n  \"trigger\"\
+        : \"${{ github.event_name }}\",\n  \"actor\": \"${{ github.actor }}\"\n}\n\
+        EOF\necho \"Generated forensic attestation at.hfid/forensic/reset.json\"\n"
+    - name: Stage Changes
+      id: stage
+      run: ''
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+    - name: Attest Forensic Reset
+      if: steps.stage.outputs.has_changes == 'true'
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/forensic/reset.json

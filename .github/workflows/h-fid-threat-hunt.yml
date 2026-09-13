@@ -11,3 +11,6 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
     - run: echo 'Restored h-fid-threat-hunt - REGEX matrix trap intact'
+concurrency:
+  group: h-fid-threat-hunt
+  cancel-in-progress: false

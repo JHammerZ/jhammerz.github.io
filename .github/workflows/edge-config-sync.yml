@@ -1,79 +1,63 @@
 name: KV Sync Cloudflare KV & Edge Config
 concurrency:
-  group: edge-sync-${{ github.ref }}
+  group: edge-config-sync
   cancel-in-progress: false
-
-on:
+true:
   repository_dispatch:
-    types: [edge-config-sync]
+    types:
+    - edge-config-sync
   workflow_dispatch:
     inputs:
       namespace:
-        description: 'KV Namespaces to Sync'
+        description: KV Namespaces to Sync
         required: true
         type: choice
         options:
-          - H-FID
-          - H_FID_WWW
-          - L_FID_PRO
-          - S_FID_DEV
-          - SEC_MAN_EDGE
+        - H-FID
+        - H_FID_WWW
+        - L_FID_PRO
+        - S_FID_DEV
+        - SEC_MAN_EDGE
         default: SEC_MAN_EDGE
-
 permissions:
   contents: read
-
 jobs:
   sync_edge_config:
     runs-on: ubuntu-latest
     if: ${{ github.actor != 'github-actions[bot]' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Install deps
+      run: npm install --legacy-peer-deps || npm install
+    - name: Validate Edge Config
+      run: "if [ ! -f edge-config.json ]; then\n  echo '{\"items\":[]}' > edge-config.json\n\
+        fi\njq -e '.items' edge-config.json > /dev/null || echo '{\"items\":[]}' >\
+        \ edge-config.json\necho \"Valid: $(cat edge-config.json)\"\n"
+    - name: Sync KV
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        NAMESPACE: ${{ inputs.namespace }}
+      run: "if [ -z \"$CLOUDFLARE_API_TOKEN\" ]; then\n  echo \"No CLOUDFLARE_API_TOKEN\
+        \ - fork/PR safe skip - OK\"\n  exit 0\nfi\nnpm install -g wrangler\nmkdir\
+        \ -p .hfid/edge\nif [ \"$(jq '.items | length' edge-config.json)\" = \"0\"\
+        \ ]; then\n  echo \"No items to sync - OK\"\n  exit 0\nfi\necho \"Would sync\
+        \ to $NAMESPACE - green\"\n"
+    - name: Attestation
+      run: 'mkdir -p .hfid/edge
 
-      - name: Install deps
+        sha256sum edge-config.json > .hfid/edge/sovereign-manifest.txt
 
+        cat .hfid/edge/sovereign-manifest.txt
 
-      - name: Install deps
-        run: npm install --legacy-peer-deps || npm install
-
-      - name: Validate Edge Config
-        run: |
-          if [ ! -f edge-config.json ]; then
-            echo '{"items":[]}' > edge-config.json
-          fi
-          jq -e '.items' edge-config.json > /dev/null || echo '{"items":[]}' > edge-config.json
-          echo "Valid: $(cat edge-config.json)"
-
-      - name: Sync KV
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          NAMESPACE: ${{ inputs.namespace }}
-        run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "No CLOUDFLARE_API_TOKEN - fork/PR safe skip - OK"
-            exit 0
-          fi
-          npm install -g wrangler
-          mkdir -p .hfid/edge
-          if [ "$(jq '.items | length' edge-config.json)" = "0" ]; then
-            echo "No items to sync - OK"
-            exit 0
-          fi
-          echo "Would sync to $NAMESPACE - green"
-
-      - name: Attestation
-        run: |
-          mkdir -p .hfid/edge
-          sha256sum edge-config.json > .hfid/edge/sovereign-manifest.txt
-          cat .hfid/edge/sovereign-manifest.txt
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: hfid-edge-attestation
-          path: .hfid/edge/
-          if-no-files-found: warn
+        '
+    - uses: actions/upload-artifact@v4
+      with:
+        name: hfid-edge-attestation
+        path: .hfid/edge/
+        if-no-files-found: warn

@@ -1,59 +1,36 @@
-name: Query-D1
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GNO_RANK: ONE_OF_ONE (Verified Authority)
-
-name: "Validation: Query Live D1 Cluster"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+name: 'Validation: Query Live D1 Cluster'
+true:
   push:
-    branches: [main, master]
-  workflow_dispatch:
-
+    branches:
+    - main
+    - master
+  workflow_dispatch: null
+concurrency:
+  group: query-d1
+  cancel-in-progress: false
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Codebase
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Verify Environment Configuration
+      run: 'echo "Running verification track for query-d1..."
 
-      - name: Install deps
+        echo "SHA: ${{ github.sha }}"
 
-      - name: Verify Environment Configuration
-        run: |
-          echo "Running verification track for query-d1..."
-          echo "SHA: ${{ github.sha }}"
-          ls -la
+        ls -la
 
-      - name: Check Package Files
-        run: |
-          if [ -f package.json ]; then
-            echo "package.json found"
-            cat package.json | head -20
-          else
-            echo "no package.json"
-          fi
-          if [ -f yarn.lock ]; then
-            echo "yarn.lock found - would run yarn install --immutable"
-          else
-            echo "no yarn.lock"
-          fi
-
-      - name: Query D1 Validation Complete
-        run: echo "Validation complete for ${{ github.ref }}"
-
+        '
+    - name: Check Package Files
+      run: "if [ -f package.json ]; then\n  echo \"package.json found\"\n  cat package.json\
+        \ | head -20\nelse\n  echo \"no package.json\"\nfi\nif [ -f yarn.lock ]; then\n\
+        \  echo \"yarn.lock found - would run yarn install --immutable\"\nelse\n \
+        \ echo \"no yarn.lock\"\nfi\n"
+    - name: Query D1 Validation Complete
+      run: echo "Validation complete for ${{ github.ref }}"

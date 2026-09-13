@@ -1,39 +1,42 @@
-name: "Perpetual Content Syndicator"
+name: Perpetual Content Syndicator
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: perpetual-syndicator
   cancel-in-progress: false
-on:
+true:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+  - cron: 0 */6 * * *
+  workflow_dispatch: null
 jobs:
   syndicate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - name: Install deps
+      run: pip install requests pyyaml opentimestamps-client
+    - name: Run syndicator
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: 'mkdir -p .hfid/syndicator
 
-      - name: Install deps
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-      - name: Install deps
-        run: pip install requests pyyaml opentimestamps-client
-      - name: Run syndicator
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          mkdir -p .hfid/syndicator
-          python _github/scripts/social_syndicator.py || echo "no script"
-          echo "{\"timestamp\":\"$(date -u +%FT%TZ)\",\"sha\":\"${{ github.sha }}\"}" > .hfid/syndicator/manifest.json
-      - name: Anchor
-        run: ots stamp .hfid/syndicator/manifest.json || true
-      - name: Upload
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: hfid-syndicator-${{ github.run_id }}
-          path: .hfid/syndicator/
+        python _github/scripts/social_syndicator.py || echo "no script"
+
+        echo "{\"timestamp\":\"$(date -u +%FT%TZ)\",\"sha\":\"${{ github.sha }}\"}"
+        > .hfid/syndicator/manifest.json
+
+        '
+    - name: Anchor
+      run: ots stamp .hfid/syndicator/manifest.json || true
+    - name: Upload
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-syndicator-${{ github.run_id }}
+        path: .hfid/syndicator/

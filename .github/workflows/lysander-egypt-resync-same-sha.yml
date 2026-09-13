@@ -11,3 +11,6 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
     - run: echo 'Restored lysander-egypt-resync-same-sha - REGEX matrix trap intact'
+concurrency:
+  group: lysander-egypt-resync-same-sha
+  cancel-in-progress: false

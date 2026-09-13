@@ -1,77 +1,51 @@
-name: Seo-Validator
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-
-name: "SEO and Link Validator"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
-  workflow_dispatch:
+name: SEO and Link Validator
+true:
+  workflow_dispatch: null
   schedule:
-    - cron: '0 0 * * *'
+  - cron: 0 0 * * *
   push:
-    branches: [main]
+    branches:
+    - main
     paths:
-      - '**.html'
-      - '**.md'
-      - 'sitemap.xml'
-      - 'robots.txt'
-
+    - '**.html'
+    - '**.md'
+    - sitemap.xml
+    - robots.txt
+concurrency:
+  group: seo-validator
+  cancel-in-progress: false
 jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Codebase
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Check for broken links
+      uses: lycheeverse/lychee-action@v1
+      with:
+        args: --verbose --no-progress --exclude-mail --accept 200,403,429 ./**/*.html
+          ./**/*.md
+        fail: false
+    - name: Validate HTML Structure
+      run: 'set -e
 
-      - name: Install deps
+        npm install -g html-validate || true
 
-      - name: Check for broken links
-        uses: lycheeverse/lychee-action@v1
-        with:
-          args: --verbose --no-progress --exclude-mail --accept 200,403,429 ./**/*.html ./**/*.md
-          fail: false
+        html-validate "**/*.html" || echo "HTML validation warnings found"
 
-      - name: Validate HTML Structure
-        run: |
-          set -e
-          npm install -g html-validate || true
-          html-validate "**/*.html" || echo "HTML validation warnings found"
-
-      - name: Check SEO basics
-        run: |
-          set -e
-          echo "Checking for title tags..."
-          grep -r "<title>" . --include="*.html" || echo "Warning: Missing title tags"
-          
-          echo "Checking for meta description..."
-          grep -r "name=\"description\"" . --include="*.html" || echo "Warning: Missing meta descriptions"
-          
-          echo "Checking for robots.txt..."
-          if [ -f robots.txt ]; then 
-            echo "robots.txt found"
-          else 
-            echo "Warning: No robots.txt"
-          fi
-          
-          echo "Checking for sitemap..."
-          if [ -f sitemap.xml ]; then 
-            echo "sitemap.xml found"
-          else 
-            echo "Warning: No sitemap.xml"
-          fi
-
+        '
+    - name: Check SEO basics
+      run: "set -e\necho \"Checking for title tags...\"\ngrep -r \"<title>\" . --include=\"\
+        *.html\" || echo \"Warning: Missing title tags\"\n\necho \"Checking for meta\
+        \ description...\"\ngrep -r \"name=\\\"description\\\"\" . --include=\"*.html\"\
+        \ || echo \"Warning: Missing meta descriptions\"\n\necho \"Checking for robots.txt...\"\
+        \nif [ -f robots.txt ]; then \n  echo \"robots.txt found\"\nelse \n  echo\
+        \ \"Warning: No robots.txt\"\nfi\n\necho \"Checking for sitemap...\"\nif [\
+        \ -f sitemap.xml ]; then \n  echo \"sitemap.xml found\"\nelse \n  echo \"\
+        Warning: No sitemap.xml\"\nfi\n"

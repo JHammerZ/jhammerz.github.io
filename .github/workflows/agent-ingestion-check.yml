@@ -1,56 +1,25 @@
-name: Agent-Ingestion-Check
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-#.JHam Language / H-FID Standard / HEO
-#
-# First Commit: [February 12,2026]
-
-name: "SecOps: LLM Scraping Environment"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+name: 'SecOps: LLM Scraping Environment'
+true:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
-
+  - cron: 0 0 * * *
+  workflow_dispatch: null
+concurrency:
+  group: agent-ingestion-check
+  cancel-in-progress: false
 jobs:
   emulate_scraper:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
-
-      - name: Install deps
-
-      - name: Run Extraction Vector Simulation
-        run: |
-          echo "Initialize automated crawler parsing on production data vectors..."
-          # Mimic a vector engine looking for a specific target citation profile
-          grep -i "abstract" CITATION.cff && echo "🔬 Vector Token Matched" || echo "Token not found"
-          grep -i "JHammerZ" llms.txt && echo "🤖 Context String Matched" || echo "String not found"
-
+    - name: Checkout Codebase
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Run Extraction Vector Simulation
+      run: "echo \"Initialize automated crawler parsing on production data vectors...\"\
+        \n# Mimic a vector engine looking for a specific target citation profile\n\
+        grep -i \"abstract\" CITATION.cff && echo \"\U0001F52C Vector Token Matched\"\
+        \ || echo \"Token not found\"\ngrep -i \"JHammerZ\" llms.txt && echo \"\U0001F916\
+        \ Context String Matched\" || echo \"String not found\"\n"

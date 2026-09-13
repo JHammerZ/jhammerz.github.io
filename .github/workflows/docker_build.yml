@@ -1,113 +1,107 @@
 name: docker_build
-
-on:
-  workflow_dispatch:
+true:
+  workflow_dispatch: null
   push:
-    branches: [ "main" ]
+    branches:
+    - main
     paths:
-      - "Dockerfile"
-      - "docker/**"
-      - ".github/workflows/docker_build.yml"
-      - ".hfid/**"
+    - Dockerfile
+    - docker/**
+    - .github/workflows/docker_build.yml
+    - .hfid/**
   pull_request:
-    branches: [ "main" ]
-
+    branches:
+    - main
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: docker_build
   cancel-in-progress: false
-
 env:
   REGISTRY: ghcr.io
-
 permissions:
   contents: write
   packages: write
-
 jobs:
   build-stage:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Code
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Set lower case image name
+      run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Log in to Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Extract metadata for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: 'type=ref,event=branch
 
-      - name: Install deps
+          type=ref,event=pr
 
-      - name: Set lower case image name
-        run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+          type=raw,value=latest,enable=${{ github.ref == ''refs/heads/main'' }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+          '
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    - name: Verify Live Server Container
+      run: 'set -e
 
-      - name: Log in to Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        echo "Starting verification test..."
 
-      - name: Extract metadata for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+        docker run -d --name test-container -p 8080:8080 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME
+        }}:latest
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+        sleep 5
 
-      - name: Verify Live Server Container
-        run: |
-          set -e
-          echo "Starting verification test..."
-          docker run -d --name test-container -p 8080:8080 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          sleep 5
-          docker rm -f test-container || true
-          docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest || true
+        docker rm -f test-container || true
 
-      - name: Generate H-FID Container Attestation
-        if: success()
-        run: |
-          set -e
-          mkdir -p .hfid
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest | cut -d'@' -f2)
-          cat > .hfid/container.json << EOF
-          {
-            "image": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest",
-            "digest": "$DIGEST",
-            "sha": "${{ github.sha }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "hfid_version": "v1.1"
-          }
-          EOF
+        docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest || true
 
-      - name: Commit H-FID Attestation
-        if: success()
-        run: |
-          git config --local user.name "H-FID Docker Bot"
-          git config --local user.email "docker@hammerz.github.io"
+        '
+    - name: Generate H-FID Container Attestation
+      if: success()
+      run: "set -e\nmkdir -p .hfid\nDIGEST=$(docker inspect --format='{{index .RepoDigests\
+        \ 0}}' ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest | cut -d'@' -f2)\n\
+        cat > .hfid/container.json << EOF\n{\n  \"image\": \"${{ env.REGISTRY }}/${{\
+        \ env.IMAGE_NAME }}:latest\",\n  \"digest\": \"$DIGEST\",\n  \"sha\": \"${{\
+        \ github.sha }}\",\n  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\n\
+        \  \"hfid_version\": \"v1.1\"\n}\nEOF\n"
+    - name: Commit H-FID Attestation
+      if: success()
+      run: 'git config --local user.name "H-FID Docker Bot"
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: 'chore: auto-update [skip ci]'
+        git config --local user.email "docker@hammerz.github.io"
 
-      - name: Cleanup
-        if: always()
-        run: |
-          echo "Cleaning up..."
-          docker rm -f test-container || true
-          docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest || true
+        '
+    - name: Commit changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+    - name: Cleanup
+      if: always()
+      run: 'echo "Cleaning up..."
+
+        docker rm -f test-container || true
+
+        docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest || true
+
+        '

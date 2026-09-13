@@ -1,63 +1,46 @@
-name: Indexation
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# GNO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
-# SLSA Level: 1
-
-name: "SEO: Indexation"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+name: 'SEO: Indexation'
+true:
   push:
-    branches: [ main ]
+    branches:
+    - main
     paths:
-      - 'docs/**'
-      - '*.md'
-      - '*.html'
-      - 'sitemap.xml'
-  workflow_dispatch:
+    - docs/**
+    - '*.md'
+    - '*.html'
+    - sitemap.xml
+  workflow_dispatch: null
   schedule:
-    - cron: '0 0 * * *'
-
+  - cron: 0 0 * * *
+concurrency:
+  group: indexation
+  cancel-in-progress: false
 permissions:
   contents: write
-
 jobs:
   index-on:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Generate Artifacts Ledger
+      run: 'set -e
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+        mkdir -p .hfid/indexing
 
-      - name: Generate Artifacts Ledger
-        run: |
-          set -e
-          mkdir -p .hfid/indexing
-          echo "{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .hfid/indexing/index.json
+        echo "{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .hfid/indexing/index.json
 
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: Indexation update [skip ci]"
-          commit_user_name: "JHammerZ-Sovereign-Engine"
-          commit_user_email: "engine@hammerz.github.io"
-          file_pattern: ".hfid/indexing/index.json"
-
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: Indexation update [skip ci]'
+        commit_user_name: JHammerZ-Sovereign-Engine
+        commit_user_email: engine@hammerz.github.io
+        file_pattern: .hfid/indexing/index.json

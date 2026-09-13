@@ -1,235 +1,175 @@
-name: Seo-Audit
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# SLSA Level: 3
-
-name: "SecOps: H-FID SEO Audit"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+name: 'SecOps: H-FID SEO Audit'
+true:
   workflow_dispatch:
     inputs:
       strict:
-        description: 'Fail on any violation'
+        description: Fail on any violation
         required: false
         default: true
         type: boolean
   push:
-    branches: [main]
+    branches:
+    - main
     paths:
-      - '**.html'
-      - 'sitemap.xml'
-      - 'robots.txt'
-      - 'llms.txt'
+    - '**.html'
+    - sitemap.xml
+    - robots.txt
+    - llms.txt
   schedule:
-    - cron: '0 0 * * 1'
-
+  - cron: 0 0 * * 1
+concurrency:
+  group: seo-audit
+  cancel-in-progress: false
 permissions:
   contents: read
   id-token: write
   attestations: write
   issues: write
   security-events: write
-
 jobs:
   audit:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v5
+    - name: Checkout Repository
+      uses: actions/checkout@v5
+    - name: Install deps
+    - name: Setup Node
+      uses: actions/setup-node@v5
+      with:
+        node-version: 20
+    - name: Install deps - fix node_modules removal
+      run: npm install --legacy-peer-deps
+    - name: Setup Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+        cache: pip
+    - name: Install Dependencies
+      run: 'npm install -g html-validate lighthouse || true
 
-      - name: Install deps
+        pip install opentimestamps-client || true
 
-      - name: Setup Node
-        uses: actions/setup-node@v5
-        with:
-          node-version: 20
-      - name: Install deps - fix node_modules removal
-        run: npm install --legacy-peer-deps
+        sudo apt-get update && sudo apt-get install -y jq libxml2-utils || true
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-          cache: 'pip'
+        '
+    - name: Generate Audit Manifest
+      id: manifest
+      env:
+        STRICT_INPUT: ${{ github.event.inputs.strict }}
+      run: "set -e\nmkdir -p .hfid/seo\nif [ \"${STRICT_INPUT}\" = \"false\" ]; then\n\
+        \  STRICT=\"false\"\nelse\n  STRICT=\"true\"\nfi\nTIMESTAMP=$(date -u +\"\
+        %Y-%m-%dT%H:%M:%SZ\")\necho \"{\\\"hfid_version\\\":\\\"v1.2\\\",\\\"sovereign_author\\\
+        \":\\\"Joshua Hamilton\\\",\\\"workflow\\\":\\\"seo-audit\\\",\\\"sha\\\"\
+        :\\\"${{ github.sha }}\\\",\\\"run_id\\\":\\\"${{ github.run_id }}\\\",\\\"\
+        strict_mode\\\":\\\"$STRICT\\\",\\\"timestamp\\\":\\\"$TIMESTAMP\\\",\\\"\
+        sla_level\\\": 3}\" > .hfid/seo/manifest.json\nHASH=$(sha256sum .hfid/seo/manifest.json\
+        \ | cut -d' ' -f1)\necho \"hash=$HASH\" >> $GITHUB_OUTPUT\necho \"strict=$STRICT\"\
+        \ >> $GITHUB_OUTPUT\ncat .hfid/seo/manifest.json\n"
+    - name: Attest SEO Audit
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/seo/manifest.json
+    - name: Check Broken Links - Lychee
+      id: lychee
+      uses: lycheeverse/lychee-action@v1.9.3
+      with:
+        args: --verbose --no-progress --exclude-mail --accept 200,429,403 --format
+          json --output .hfid/seo/lychee.json ./**/*.html ./**/*.md
+        fail: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Parse Lychee Results
+      id: links
+      run: "set -e\nVIOLATIONS=0\nmkdir -p .hfid/seo\nif [ -f .hfid/seo/lychee.json\
+        \ ]; then\n  BROKEN=$(jq '[.[] | select(.status | tostring | test(\"error\"\
+        ))] | length' .hfid/seo/lychee.json 2>/dev/null || echo 0)\n  if [ \"$BROKEN\"\
+        \ -gt 0 ]; then\n    echo \"BROKEN_LINKS: $BROKEN found\" | tee -a .hfid/seo/audit.log\n\
+        \    VIOLATIONS=$BROKEN\n  fi\nelse\n  echo \"WARNING: Lychee output missing\"\
+        \ | tee -a .hfid/seo/audit.log\n  VIOLATIONS=1\nfi\necho \"links_violations=$VIOLATIONS\"\
+        \ >> $GITHUB_OUTPUT\n"
+    - name: Validate HTML + H-FID SEO
+      id: html
+      run: "set -e\nVIOLATIONS=0\nmkdir -p .hfid/seo\nhtml-validate \"**/*.html\"\
+        \ --formatter json > .hfid/seo/html.json || true\n\n# Safely parse structural\
+        \ html error metrics if valid array context matches\nif [ -f .hfid/seo/html.json\
+        \ ] && jq empty .hfid/seo/html.json 2>/dev/null; then\n  ERRORS=$(jq '[.[].messages[]\
+        \ | select(.severity == 2)] | length' .hfid/seo/html.json 2>/dev/null || echo\
+        \ 0)\n  VIOLATIONS=$((VIOLATIONS + ERRORS))\nfi\n\nfind . -name \"*.html\"\
+        \ -type f ! -path \"./_site/*\" | head -n 20 | while read -r FILE; do\n  TITLE=$(grep\
+        \ -o \"<title>[^<]*</title>\" \"$FILE\" | head -n 1 || echo \"\")\n  if [\
+        \ -z \"$TITLE\" ]; then\n    echo \"SEO: Invalid title in $FILE\" | tee -a\
+        \ .hfid/seo/audit.log\n    VIOLATIONS=$((VIOLATIONS + 1))\n  fi\n  if ! grep\
+        \ -qi \"Joshua Hamilton\\|J-HammerZ\" \"$FILE\"; then\n    echo \"H-FID: Missing\
+        \ sovereign claim in $FILE\" | tee -a .hfid/seo/audit.log\n    VIOLATIONS=$((VIOLATIONS\
+        \ + 1))\n  fi\n  if ! grep -qi \"<link rel=\\\"canonical\\\"\" \"$FILE\";\
+        \ then\n    echo \"SEO: Missing canonical in $FILE\" | tee -a .hfid/seo/audit.log\n\
+        \    VIOLATIONS=$((VIOLATIONS + 1))\n  fi\ndone\necho \"html_violations=$VIOLATIONS\"\
+        \ >> $GITHUB_OUTPUT\n"
+    - name: Validate sitemap.xml + robots.txt
+      id: sitemap
+      run: "set -e\nVIOLATIONS=0\nmkdir -p .hfid/seo\nif [ -f sitemap.xml ]; then\n\
+        \  xmllint --noout sitemap.xml || { echo \"ERROR: sitemap.xml invalid XML\"\
+        \ | tee -a .hfid/seo/audit.log; VIOLATIONS=$((VIOLATIONS + 1)); }\nelse\n\
+        \  echo \"SITEMAP: No sitemap.xml found\" | tee -a .hfid/seo/audit.log\n \
+        \ VIOLATIONS=$((VIOLATIONS + 1))\nfi\nif [ -f robots.txt ]; then\n  grep -qi\
+        \ \"Sitemap:\" robots.txt || { echo \"SEO: No Sitemap in robots.txt\" | tee\
+        \ -a .hfid/seo/audit.log; VIOLATIONS=$((VIOLATIONS + 1)); }\nelse\n  echo\
+        \ \"SEO: robots.txt missing\" | tee -a .hfid/seo/audit.log\n  VIOLATIONS=$((VIOLATIONS\
+        \ + 1))\nfi\necho \"sitemap_violations=$VIOLATIONS\" >> $GITHUB_OUTPUT\n"
+    - name: Bitcoin Anchor SEO Audit
+      if: always()
+      run: "if command -v ots > /dev/null; then\n  [ -f .hfid/seo/manifest.json ]\
+        \ && ots stamp .hfid/seo/manifest.json 2>/dev/null || true\n  [ -f .hfid/seo/audit.log\
+        \ ] && ots stamp .hfid/seo/audit.log 2>/dev/null || true\nfi\necho \"SEO audit\
+        \ anchored\" | tee -a .hfid/seo/audit.log\n"
+    - name: Evaluate SEO Compliance
+      id: evaluate
+      env:
+        STRICT: ${{ steps.manifest.outputs.strict }}
+        LINKS_V: ${{ steps.links.outputs.links_violations }}
+        HTML_V: ${{ steps.html.outputs.html_violations }}
+        SITEMAP_V: ${{ steps.sitemap.outputs.sitemap_violations }}
+      run: "set -e\nTOTAL=$((LINKS_V + HTML_V + SITEMAP_V))\necho \"total_violations=$TOTAL\"\
+        \ >> $GITHUB_OUTPUT\necho \"Total violations: $TOTAL\" | tee -a .hfid/seo/audit.log\n\
+        if [ \"$TOTAL\" -gt 0 ] && [ \"$STRICT\" = \"true\" ]; then\n  echo \"FAILED:\
+        \ Total SEO violations in strict mode\" | tee -a .hfid/seo/audit.log\n  exit\
+        \ 1\nelif [ \"$TOTAL\" -gt 0 ]; then\n  echo \"WARNING: Total violations but\
+        \ strict=false\" | tee -a .hfid/seo/audit.log\nelse\n  echo \"PASSED: H-FID\
+        \ SEO Compliance 100/100\" | tee -a .hfid/seo/audit.log\nfi\n"
+    - name: Create SEO Issue
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: "const total = '${{ steps.evaluate.outputs.total_violations }}' ||\
+          \ '0';\ngithub.rest.issues.create({\n  owner: context.repo.owner,\n  repo:\
+          \ context.repo.repo,\n  title: `H-FID SEO Violation - ${new Date().toISOString()}`,\n\
+          \  body: `**Violations**: ${total}\\n\\n**Broken Links**: ${{ steps.links.outputs.links_violations\
+          \ }}\\n**HTML/SEO**: ${{ steps.html.outputs.html_violations }}\\n**Sitemap/Robots**:\
+          \ ${{ steps.sitemap.outputs.sitemap_violations }}\\n\\nRun: ${{ github.server_url\
+          \ }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\\n\\nFailed\
+          \ Checks:\\nSee run logs and artifacts for .hfid/seo/audit.log`,\n  labels:\
+          \ ['seo', 'h-fid-v1.2', 'urgent', 'secops']\n})\n"
+    - name: Upload Audit Evidence
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-seo-audit-${{ github.run_id }}
+        path: .hfid/seo/
+        retention-days: 30
+    - name: Summary
+      if: always()
+      run: 'set -e
 
-      - name: Install Dependencies
-        run: |
-          npm install -g html-validate lighthouse || true
-          pip install opentimestamps-client || true
-          sudo apt-get update && sudo apt-get install -y jq libxml2-utils || true
+        echo "## H-FID SEO Audit" >> $GITHUB_STEP_SUMMARY
 
-      - name: Generate Audit Manifest
-        id: manifest
-        env:
-          STRICT_INPUT: ${{ github.event.inputs.strict }}
-        run: |
-          set -e
-          mkdir -p .hfid/seo
-          if [ "${STRICT_INPUT}" = "false" ]; then
-            STRICT="false"
-          else
-            STRICT="true"
-          fi
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          echo "{\"hfid_version\":\"v1.2\",\"sovereign_author\":\"Joshua Hamilton\",\"workflow\":\"seo-audit\",\"sha\":\"${{ github.sha }}\",\"run_id\":\"${{ github.run_id }}\",\"strict_mode\":\"$STRICT\",\"timestamp\":\"$TIMESTAMP\",\"sla_level\": 3}" > .hfid/seo/manifest.json
-          HASH=$(sha256sum .hfid/seo/manifest.json | cut -d' ' -f1)
-          echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "strict=$STRICT" >> $GITHUB_OUTPUT
-          cat .hfid/seo/manifest.json
+        echo "- Broken Links: ${{ steps.links.outputs.links_violations }} violations"
+        >> $GITHUB_STEP_SUMMARY
 
-      - name: Attest SEO Audit
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: .hfid/seo/manifest.json
+        echo "- HTML/SEO: ${{ steps.html.outputs.html_violations }} violations" >>
+        $GITHUB_STEP_SUMMARY
 
-      - name: Check Broken Links - Lychee
-        id: lychee
-        uses: lycheeverse/lychee-action@v1.9.3
-        with:
-          args: --verbose --no-progress --exclude-mail --accept 200,429,403 --format json --output .hfid/seo/lychee.json ./**/*.html ./**/*.md
-          fail: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        echo "- Sitemap/Robots: ${{ steps.sitemap.outputs.sitemap_violations }} violations"
+        >> $GITHUB_STEP_SUMMARY
 
-      - name: Parse Lychee Results
-        id: links
-        run: |
-          set -e
-          VIOLATIONS=0
-          mkdir -p .hfid/seo
-          if [ -f .hfid/seo/lychee.json ]; then
-            BROKEN=$(jq '[.[] | select(.status | tostring | test("error"))] | length' .hfid/seo/lychee.json 2>/dev/null || echo 0)
-            if [ "$BROKEN" -gt 0 ]; then
-              echo "BROKEN_LINKS: $BROKEN found" | tee -a .hfid/seo/audit.log
-              VIOLATIONS=$BROKEN
-            fi
-          else
-            echo "WARNING: Lychee output missing" | tee -a .hfid/seo/audit.log
-            VIOLATIONS=1
-          fi
-          echo "links_violations=$VIOLATIONS" >> $GITHUB_OUTPUT
-
-      - name: Validate HTML + H-FID SEO
-        id: html
-        run: |
-          set -e
-          VIOLATIONS=0
-          mkdir -p .hfid/seo
-          html-validate "**/*.html" --formatter json > .hfid/seo/html.json || true
-          
-          # Safely parse structural html error metrics if valid array context matches
-          if [ -f .hfid/seo/html.json ] && jq empty .hfid/seo/html.json 2>/dev/null; then
-            ERRORS=$(jq '[.[].messages[] | select(.severity == 2)] | length' .hfid/seo/html.json 2>/dev/null || echo 0)
-            VIOLATIONS=$((VIOLATIONS + ERRORS))
-          fi
-          
-          find . -name "*.html" -type f ! -path "./_site/*" | head -n 20 | while read -r FILE; do
-            TITLE=$(grep -o "<title>[^<]*</title>" "$FILE" | head -n 1 || echo "")
-            if [ -z "$TITLE" ]; then
-              echo "SEO: Invalid title in $FILE" | tee -a .hfid/seo/audit.log
-              VIOLATIONS=$((VIOLATIONS + 1))
-            fi
-            if ! grep -qi "Joshua Hamilton\|J-HammerZ" "$FILE"; then
-              echo "H-FID: Missing sovereign claim in $FILE" | tee -a .hfid/seo/audit.log
-              VIOLATIONS=$((VIOLATIONS + 1))
-            fi
-            if ! grep -qi "<link rel=\"canonical\"" "$FILE"; then
-              echo "SEO: Missing canonical in $FILE" | tee -a .hfid/seo/audit.log
-              VIOLATIONS=$((VIOLATIONS + 1))
-            fi
-          done
-          echo "html_violations=$VIOLATIONS" >> $GITHUB_OUTPUT
-
-      - name: Validate sitemap.xml + robots.txt
-        id: sitemap
-        run: |
-          set -e
-          VIOLATIONS=0
-          mkdir -p .hfid/seo
-          if [ -f sitemap.xml ]; then
-            xmllint --noout sitemap.xml || { echo "ERROR: sitemap.xml invalid XML" | tee -a .hfid/seo/audit.log; VIOLATIONS=$((VIOLATIONS + 1)); }
-          else
-            echo "SITEMAP: No sitemap.xml found" | tee -a .hfid/seo/audit.log
-            VIOLATIONS=$((VIOLATIONS + 1))
-          fi
-          if [ -f robots.txt ]; then
-            grep -qi "Sitemap:" robots.txt || { echo "SEO: No Sitemap in robots.txt" | tee -a .hfid/seo/audit.log; VIOLATIONS=$((VIOLATIONS + 1)); }
-          else
-            echo "SEO: robots.txt missing" | tee -a .hfid/seo/audit.log
-            VIOLATIONS=$((VIOLATIONS + 1))
-          fi
-          echo "sitemap_violations=$VIOLATIONS" >> $GITHUB_OUTPUT
-
-      - name: Bitcoin Anchor SEO Audit
-        if: always()
-        run: |
-          if command -v ots > /dev/null; then
-            [ -f .hfid/seo/manifest.json ] && ots stamp .hfid/seo/manifest.json 2>/dev/null || true
-            [ -f .hfid/seo/audit.log ] && ots stamp .hfid/seo/audit.log 2>/dev/null || true
-          fi
-          echo "SEO audit anchored" | tee -a .hfid/seo/audit.log
-
-      - name: Evaluate SEO Compliance
-        id: evaluate
-        env:
-          STRICT: ${{ steps.manifest.outputs.strict }}
-          LINKS_V: ${{ steps.links.outputs.links_violations }}
-          HTML_V: ${{ steps.html.outputs.html_violations }}
-          SITEMAP_V: ${{ steps.sitemap.outputs.sitemap_violations }}
-        run: |
-          set -e
-          TOTAL=$((LINKS_V + HTML_V + SITEMAP_V))
-          echo "total_violations=$TOTAL" >> $GITHUB_OUTPUT
-          echo "Total violations: $TOTAL" | tee -a .hfid/seo/audit.log
-          if [ "$TOTAL" -gt 0 ] && [ "$STRICT" = "true" ]; then
-            echo "FAILED: Total SEO violations in strict mode" | tee -a .hfid/seo/audit.log
-            exit 1
-          elif [ "$TOTAL" -gt 0 ]; then
-            echo "WARNING: Total violations but strict=false" | tee -a .hfid/seo/audit.log
-          else
-            echo "PASSED: H-FID SEO Compliance 100/100" | tee -a .hfid/seo/audit.log
-          fi
-
-      - name: Create SEO Issue
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const total = '${{ steps.evaluate.outputs.total_violations }}' || '0';
-            github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `H-FID SEO Violation - ${new Date().toISOString()}`,
-              body: `**Violations**: ${total}\n\n**Broken Links**: ${{ steps.links.outputs.links_violations }}\n**HTML/SEO**: ${{ steps.html.outputs.html_violations }}\n**Sitemap/Robots**: ${{ steps.sitemap.outputs.sitemap_violations }}\n\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\nFailed Checks:\nSee run logs and artifacts for .hfid/seo/audit.log`,
-              labels: ['seo', 'h-fid-v1.2', 'urgent', 'secops']
-            })
-
-      - name: Upload Audit Evidence
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: hfid-seo-audit-${{ github.run_id }}
-          path: .hfid/seo/
-          retention-days: 30
-
-      - name: Summary
-        if: always()
-        run: |
-          set -e
-          echo "## H-FID SEO Audit" >> $GITHUB_STEP_SUMMARY
-          echo "- Broken Links: ${{ steps.links.outputs.links_violations }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- HTML/SEO: ${{ steps.html.outputs.html_violations }} violations" >> $GITHUB_STEP_SUMMARY
-          echo "- Sitemap/Robots: ${{ steps.sitemap.outputs.sitemap_violations }} violations" >> $GITHUB_STEP_SUMMARY
-
+        '

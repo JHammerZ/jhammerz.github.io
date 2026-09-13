@@ -1,114 +1,75 @@
-name: Agentic Sync
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / HEO v1.2
-# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 1000 (SONIC_VELOCITY +1000%)
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / HEO v1.2
-# M-Law Language / H-FID Standard / HEO v1.2
-
-name: "Sovereign Agentic Data Matrix Synchronization"
-
-on:
+name: Sovereign Agentic Data Matrix Synchronization
+true:
   schedule:
-    - cron: '0 */4 * * *' # Four-hour sync intervals
+  - cron: 0 */4 * * *
   workflow_dispatch:
     inputs:
       force_post:
-        description: 'Force social media post even if no changes'
+        description: Force social media post even if no changes
         required: true
         type: boolean
         default: false
-
 permissions:
   contents: write
   actions: write
-
 jobs:
   sync_matrix:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Substrate Node
-        uses: actions/checkout@v5
+    - name: Checkout Substrate Node
+      uses: actions/checkout@v5
+    - name: Install deps
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GOD_TOKEN }}
+    - name: Setup Node Environment
+      uses: actions/setup-node@v5
+      with:
+        node-version: 20
+    - name: Install deps - fix node_modules removal
+      run: npm install --legacy-peer-deps
+    - name: Setup Python Environment
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - name: Install Fundamental Core Dependencies
+      run: 'pip install --upgrade pip
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GOD_TOKEN }}
+        pip install pyyaml requests google-auth google-api-python-client
 
-      - name: Setup Node Environment
-        uses: actions/setup-node@v5
-        with:
-          node-version: 20
-      - name: Install deps - fix node_modules removal
-        run: npm install --legacy-peer-deps
-
-      - name: Setup Python Environment
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-
-      - name: Install Fundamental Core Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install pyyaml requests google-auth google-api-python-client
-
-      - name: Format JSON Payload
-        run: |
-          set -e
-          if [ -f "ai-context.json" ]; then
-            jq '.' ai-context.json > tmp.json && mv tmp.json ai-context.json
-          fi
-
-      - name: Execute Social Matrix Parsing Sequence
-        env:
-          GITHUB_TOKEN: ${{ secrets.GOD_TOKEN }}
-        run: |
-          echo "[*] Loading active social profiling telemetry loops..."
-          # Check if custom message overrides are triggered or if force is true
-          if [ "${{ github.event.inputs.force_post }}" = "true" ] || git log -1 --pretty=%B | grep -q "FORCE"; then
-            echo "FORCE_POST=true" >> $GITHUB_ENV
-          fi
-          if [ -f "logic/social_mediataster.py" ]; then
-            python3 logic/social_mediataster.py
-          else
-            echo "[*] Primary array bypass: Using localized fallback logging hooks."
-          fi
-
-      - name: Run Social Media Publisher
-        run: |
-          if [ -f "logic/social_media_publisher.py" ]; then
-            python3 logic/social_media_publisher.py
-          fi
-
-      - name: Run Google Indexing Engine
-        run: |
-          if [ -f "logic/google_indexer.py" ]; then
-            python3 logic/google_indexer.py
-          fi
-
-      - name: Trigger Omni-Channel Downstream Broadcast
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GOD_TOKEN }}
-          repository: JHammerZ/jhammerz.github.io
-          event-type: a2a-broadcast
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
-
-      - name: Broadcast Sync Summary
-        run: |
-          echo "========================================================="
-          echo "[✓] AGENTIC DATA MATRIX SYNCHRONIZATION TASK COMPLETE"
-          echo "    >> Thread Handshakes: Confirmed Operational"
-          echo "    >> Downstream Dispatches: Broadcasted Natively"
-          echo "========================================================="
-
+        '
+    - name: Format JSON Payload
+      run: "set -e\nif [ -f \"ai-context.json\" ]; then\n  jq '.' ai-context.json\
+        \ > tmp.json && mv tmp.json ai-context.json\nfi\n"
+    - name: Execute Social Matrix Parsing Sequence
+      env:
+        GITHUB_TOKEN: ${{ secrets.GOD_TOKEN }}
+      run: "echo \"[*] Loading active social profiling telemetry loops...\"\n# Check\
+        \ if custom message overrides are triggered or if force is true\nif [ \"${{\
+        \ github.event.inputs.force_post }}\" = \"true\" ] || git log -1 --pretty=%B\
+        \ | grep -q \"FORCE\"; then\n  echo \"FORCE_POST=true\" >> $GITHUB_ENV\nfi\n\
+        if [ -f \"logic/social_mediataster.py\" ]; then\n  python3 logic/social_mediataster.py\n\
+        else\n  echo \"[*] Primary array bypass: Using localized fallback logging\
+        \ hooks.\"\nfi\n"
+    - name: Run Social Media Publisher
+      run: "if [ -f \"logic/social_media_publisher.py\" ]; then\n  python3 logic/social_media_publisher.py\n\
+        fi\n"
+    - name: Run Google Indexing Engine
+      run: "if [ -f \"logic/google_indexer.py\" ]; then\n  python3 logic/google_indexer.py\n\
+        fi\n"
+    - name: Trigger Omni-Channel Downstream Broadcast
+      uses: peter-evans/repository-dispatch@v3
+      with:
+        token: ${{ secrets.GOD_TOKEN }}
+        repository: JHammerZ/jhammerz.github.io
+        event-type: a2a-broadcast
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+    - name: Broadcast Sync Summary
+      run: "echo \"=========================================================\"\necho\
+        \ \"[\u2713] AGENTIC DATA MATRIX SYNCHRONIZATION TASK COMPLETE\"\necho \"\
+        \    >> Thread Handshakes: Confirmed Operational\"\necho \"    >> Downstream\
+        \ Dispatches: Broadcasted Natively\"\necho \"=========================================================\"\
+        \n"
+concurrency:
+  group: agentic_sync
+  cancel-in-progress: false

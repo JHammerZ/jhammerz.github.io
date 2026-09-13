@@ -1,31 +1,45 @@
 name: Kardashian v4 - Autonomous Co-Architect
-on:
-  workflow_dispatch:
+true:
+  workflow_dispatch: null
   push:
-    paths: ['clips/**','index.html','404.html','.nojekyll','sessions/library/**']
+    paths:
+    - clips/**
+    - index.html
+    - 404.html
+    - .nojekyll
+    - sessions/library/**
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Build clips + static
+      run: 'mkdir -p dist/clips public/clips
 
-      - name: Install deps
-      - name: Build clips + static
-        run: |
-          mkdir -p dist/clips public/clips
-          cp clips/*.* dist/clips/ 2>/dev/null || true
-          cp clips/*.json public/clips/ 2>/dev/null || true
-          cp .nojekyll dist/ 2>/dev/null || true
-          cp .nojekyll public/ 2>/dev/null || true
-          cat dist/clips/manifest.json 2>/dev/null || echo "no manifest yet"
-          cat dist/cut-manifest.json 2>/dev/null || true
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          keep_files: true
+        cp clips/*.* dist/clips/ 2>/dev/null || true
+
+        cp clips/*.json public/clips/ 2>/dev/null || true
+
+        cp .nojekyll dist/ 2>/dev/null || true
+
+        cp .nojekyll public/ 2>/dev/null || true
+
+        cat dist/clips/manifest.json 2>/dev/null || echo "no manifest yet"
+
+        cat dist/cut-manifest.json 2>/dev/null || true
+
+        '
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+        keep_files: true
+concurrency:
+  group: kardashian-v4-autonomous
+  cancel-in-progress: false

@@ -11,3 +11,6 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
     - run: echo 'Restored Broadcast - REGEX matrix trap intact'
+concurrency:
+  group: Broadcast
+  cancel-in-progress: false

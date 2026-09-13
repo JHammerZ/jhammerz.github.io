@@ -1,90 +1,56 @@
-name: Bundle Context
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / BEC v1.2
-# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
-# Sovereign Author: Joshua Hamilton
-
 name: bundle_context
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+true:
   push:
-    branches: [ main ]
+    branches:
+    - main
     paths:
-      - 'docs/**'
-      - 'llms.txt'
-      - 'llms-full.txt'
-  workflow_dispatch:
-
+    - docs/**
+    - llms.txt
+    - llms-full.txt
+  workflow_dispatch: null
+concurrency:
+  group: bundle_context
+  cancel-in-progress: false
 permissions:
   contents: write
-
 jobs:
   bundle:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Repository
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    - name: Generate llms-full.txt
+      run: "echo \"Generating llms-full.txt bundle...\"\n# your existing logic here\n\
+        if [ -f llms.txt ]; then\n  cat llms.txt > llms-full.txt\n  echo \"\" >> llms-full.txt\n\
+        \  echo \"## Full Context Bundle\" >> llms-full.txt\n  echo \"Generated: $(date\
+        \ -u +%Y-%m-%dT%H:%M:%SZ)\" >> llms-full.txt\nelse\n  echo \"# J-HammerZ\"\
+        \ > llms-full.txt\nfi\n"
+    - name: Update sitemap (optional)
+      run: 'echo "Sitemap check..."
 
-      - name: Install deps
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+        # your existing logic here
 
-      - name: Generate llms-full.txt
-        run: |
-          echo "Generating llms-full.txt bundle..."
-          # your existing logic here
-          if [ -f llms.txt ]; then
-            cat llms.txt > llms-full.txt
-            echo "" >> llms-full.txt
-            echo "## Full Context Bundle" >> llms-full.txt
-            echo "Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> llms-full.txt
-          else
-            echo "# J-HammerZ" > llms-full.txt
-          fi
+        ls -la | head
 
-      - name: Update sitemap (optional)
-        run: |
-          echo "Sitemap check..."
-          # your existing logic here
-          ls -la | head
+        '
+    - name: Commit and Push
+      run: "git config --global user.name \"github-actions[bot]\"\ngit config --global\
+        \ user.email \"github-actions[bot]@users.noreply.github.com\"\ngit add llms-full.txt\
+        \ || true\nif git diff --staged --quiet; then\n  echo \"Zero document changes\
+        \ detected.\"\n  exit 0\nfi\n\nn=0\nuntil git push origin HEAD:main; do\n\
+        \  n=$((n+1))\n  if [ \"$n\" -ge 3 ]; then\n    echo \"Failed to push after\
+        \ 3 retries\"\n    exit 1\n  fi\n  echo \"Push failed, retry $n/3...\"\n \
+        \ sleep 2\n  git pull --rebase origin main || true\ndone\n"
+    - name: Summary
+      if: always()
+      run: 'echo "### Bundle Context Complete" >> $GITHUB_STEP_SUMMARY
 
-      - name: Commit and Push
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add llms-full.txt || true
-          if git diff --staged --quiet; then
-            echo "Zero document changes detected."
-            exit 0
-          fi
-
-          n=0
-          until git push origin HEAD:main; do
-            n=$((n+1))
-            if [ "$n" -ge 3 ]; then
-              echo "Failed to push after 3 retries"
-              exit 1
-            fi
-            echo "Push failed, retry $n/3..."
-            sleep 2
-            git pull --rebase origin main || true
-          done
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "### Bundle Context Complete" >> $GITHUB_STEP_SUMMARY
-
+        '

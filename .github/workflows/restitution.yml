@@ -1,67 +1,46 @@
-name: Restitution
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GNO_RANK: ONE_OF_ONE (Verified Authority)
-# SLSA Level: 1
-
-name: "Security: H-FID Restitution Monitor"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
-  workflow_dispatch:
+name: 'Security: H-FID Restitution Monitor'
+true:
+  workflow_dispatch: null
   schedule:
-    - cron: '0 0 * * *'
-
+  - cron: 0 0 * * *
+concurrency:
+  group: restitution
+  cancel-in-progress: false
 permissions:
   contents: read
   id-token: write
   attestations: write
   issues: write
-
 jobs:
   restitution:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Codebase
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+    - name: Run Restitution Scan
+      run: 'echo "Running restitution scan..."
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
+        echo "Commit: ${{ github.sha }}"
 
-      - name: Run Restitution Scan
-        run: |
-          echo "Running restitution scan..."
-          echo "Commit: ${{ github.sha }}"
-          # Add your actual restitution commands here
-          # Example: python scripts/restitution.py
-          echo "Restitution check complete"
+        # Add your actual restitution commands here
 
-      - name: Create Issue on Failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: 'H-FID Restitution Failed',
-              body: `Restitution workflow failed on commit ${{ github.sha }}`
-            })
+        # Example: python scripts/restitution.py
 
+        echo "Restitution check complete"
+
+        '
+    - name: Create Issue on Failure
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: "github.rest.issues.create({\n  owner: context.repo.owner,\n  repo:\
+          \ context.repo.repo,\n  title: 'H-FID Restitution Failed',\n  body: `Restitution\
+          \ workflow failed on commit ${{ github.sha }}`\n})\n"

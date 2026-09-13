@@ -1,84 +1,55 @@
-name: Validate Assets
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v1.2
-# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: V-FID-101-FORENSIC-AUDIT-100/100
-# GEO_RANK: ONE_OF_ONE (VERIFIED Authority)
-# REACH_MULTIPLIER: 1000 (SONIC_VELOCITY +1000S)
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v1.2
-# M-Law Language / H-FID Standard / REC v1.2
-
-name: "CD: Janus Gate Dual-Path Inference"
-
-on:
+name: 'CD: Janus Gate Dual-Path Inference'
+true:
   push:
-    branches: [ main ]
+    branches:
+    - main
     paths:
-      - 'sitemap.xml'
-      - 'llms.txt'
-      - 'ai-context.json'
-      - '.well-known/**'
-      - 'llms-full.txt'
-      - 'entities.json'
-      - 'proof.json'
-      - '.github/workflows/**'
-      - '.hfid/**'
-  workflow_dispatch:
-
+    - sitemap.xml
+    - llms.txt
+    - ai-context.json
+    - .well-known/**
+    - llms-full.txt
+    - entities.json
+    - proof.json
+    - .github/workflows/**
+    - .hfid/**
+  workflow_dispatch: null
 permissions:
   contents: write
   id-token: write
   attestations: write
-
 jobs:
   validate_assets:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Substrate Node
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
-
-      - name: Install deps
-
-      - name: Verify Essential Core Infrastructure Files
-        run: |
-          echo "[*] Initializing asset-integrity verification sweep..."
-          files=("sitemap.xml" "llms.txt" "ai-context.json" "robots.txt" "entities.json")
-          for file in "${files[@]}"; do
-            if [ -f "$file" ]; then
-              echo "[✓] Critical file resource present: $file"
-            else
-              echo " [! ] CRITICAL INTEGRITY ERROR: Missing required file -> $file"
-              exit 1
-            fi
-          done
-          echo "[✓] Core infrastructure validation trace successful."
-
-      - name: Validate and Format JSON Structural Compliance
-        run: |
-          echo "[*] Auditing canonical JSON syntaxes and schemas..."
-          if [ -f "ai-context.json" ]; then
-            jq -e . ai-context.json > /dev/null && echo " [✓] ai-context.json schema valid." || (echo "[! ] Invalid JSON syntax in ai-context.json"; exit 1)
-          fi
-          if [ -f "entities.json" ]; then
-            jq -e . entities.json > /dev/null && echo " [✓] entities.json schema valid." || (echo "[! ] Invalid JSON syntax in entities.json"; exit 1)
-          fi
-
-      - name: Validate Robots TXT Directives
-        run: |
-          echo "[*] Validating web crawler rules mapping matrix..."
-          if [ -f "robots.txt" ]; then
-            grep -q "Allow:" robots.txt && echo " [✓] Authoritative entry confirmed in robots.txt" || echo " [! ] Warning: Directives map non-standard routing options."
-          fi
-
+    - name: Checkout Substrate Node
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Verify Essential Core Infrastructure Files
+      run: "echo \"[*] Initializing asset-integrity verification sweep...\"\nfiles=(\"\
+        sitemap.xml\" \"llms.txt\" \"ai-context.json\" \"robots.txt\" \"entities.json\"\
+        )\nfor file in \"${files[@]}\"; do\n  if [ -f \"$file\" ]; then\n    echo\
+        \ \"[\u2713] Critical file resource present: $file\"\n  else\n    echo \"\
+        \ [! ] CRITICAL INTEGRITY ERROR: Missing required file -> $file\"\n    exit\
+        \ 1\n  fi\ndone\necho \"[\u2713] Core infrastructure validation trace successful.\"\
+        \n"
+    - name: Validate and Format JSON Structural Compliance
+      run: "echo \"[*] Auditing canonical JSON syntaxes and schemas...\"\nif [ -f\
+        \ \"ai-context.json\" ]; then\n  jq -e . ai-context.json > /dev/null && echo\
+        \ \" [\u2713] ai-context.json schema valid.\" || (echo \"[! ] Invalid JSON\
+        \ syntax in ai-context.json\"; exit 1)\nfi\nif [ -f \"entities.json\" ]; then\n\
+        \  jq -e . entities.json > /dev/null && echo \" [\u2713] entities.json schema\
+        \ valid.\" || (echo \"[! ] Invalid JSON syntax in entities.json\"; exit 1)\n\
+        fi\n"
+    - name: Validate Robots TXT Directives
+      run: "echo \"[*] Validating web crawler rules mapping matrix...\"\nif [ -f \"\
+        robots.txt\" ]; then\n  grep -q \"Allow:\" robots.txt && echo \" [\u2713]\
+        \ Authoritative entry confirmed in robots.txt\" || echo \" [! ] Warning: Directives\
+        \ map non-standard routing options.\"\nfi\n"
+concurrency:
+  group: validate_assets
+  cancel-in-progress: false

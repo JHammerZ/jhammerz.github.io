@@ -1,13 +1,14 @@
 name: forensic-snapshot
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: forensic-snapshot
   cancel-in-progress: false
-on:
-  workflow_dispatch:
+true:
+  workflow_dispatch: null
   schedule:
-    - cron: '0 2 * * *'
+  - cron: 0 2 * * *
   push:
-    branches: [main]
+    branches:
+    - main
 permissions:
   contents: write
   id-token: write
@@ -16,43 +17,63 @@ jobs:
   forensic-snapshot:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-python@v6
+    - name: Generate Forensic Ledger
+      id: ledger
+      run: 'set -e
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v6
-      - name: Generate Forensic Ledger
-        id: ledger
-        run: |
-          set -e
-          mkdir -p .hfid/ledger
-          TS=$(date -u +%Y%m%d-%H%M%S)
-          SHORT=$(echo "${{ github.sha }}" | cut -c1-10)
-          BASE="jhammerz-site-${TS}-${SHORT}"
-          TAR="${BASE}.tar"
-          CAR="${BASE}.car"
-          echo "Creating $TAR and $CAR"
-          tar --exclude='.git' --exclude='node_modules' --exclude='.hfid' -cf "$TAR" . 2>/dev/null || tar --exclude='.git' -cf "$TAR" .
-          cp "$TAR" "$CAR"
-          ls -lh "$TAR" "$CAR"
-          echo "{\"sha\":\"${{ github.sha }}\",\"file\":\"$CAR\"}" > .hfid/ledger/${BASE}.json
-          echo "car_file=$CAR" >> $GITHUB_OUTPUT
-          echo "tar_file=$TAR" >> $GITHUB_OUTPUT
-          echo "ledger_file=.hfid/ledger/${BASE}.json" >> $GITHUB_OUTPUT
-      - uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: |
-            ${{ steps.ledger.outputs.car_file }}
-            ${{ steps.ledger.outputs.tar_file }}
-      - uses: actions/upload-artifact@v5
-        with:
-          name: hfid-forensic-${{ github.sha }}
-          path: |
-            ${{ steps.ledger.outputs.car_file }}
-            ${{ steps.ledger.outputs.tar_file }}
-            .hfid/ledger/
+        mkdir -p .hfid/ledger
+
+        TS=$(date -u +%Y%m%d-%H%M%S)
+
+        SHORT=$(echo "${{ github.sha }}" | cut -c1-10)
+
+        BASE="jhammerz-site-${TS}-${SHORT}"
+
+        TAR="${BASE}.tar"
+
+        CAR="${BASE}.car"
+
+        echo "Creating $TAR and $CAR"
+
+        tar --exclude=''.git'' --exclude=''node_modules'' --exclude=''.hfid'' -cf
+        "$TAR" . 2>/dev/null || tar --exclude=''.git'' -cf "$TAR" .
+
+        cp "$TAR" "$CAR"
+
+        ls -lh "$TAR" "$CAR"
+
+        echo "{\"sha\":\"${{ github.sha }}\",\"file\":\"$CAR\"}" > .hfid/ledger/${BASE}.json
+
+        echo "car_file=$CAR" >> $GITHUB_OUTPUT
+
+        echo "tar_file=$TAR" >> $GITHUB_OUTPUT
+
+        echo "ledger_file=.hfid/ledger/${BASE}.json" >> $GITHUB_OUTPUT
+
+        '
+    - uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: '${{ steps.ledger.outputs.car_file }}
+
+          ${{ steps.ledger.outputs.tar_file }}
+
+          '
+    - uses: actions/upload-artifact@v5
+      with:
+        name: hfid-forensic-${{ github.sha }}
+        path: '${{ steps.ledger.outputs.car_file }}
+
+          ${{ steps.ledger.outputs.tar_file }}
+
+          .hfid/ledger/
+
+          '

@@ -11,3 +11,6 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
     - run: echo 'Restored hfid-health-monitor - REGEX matrix trap intact'
+concurrency:
+  group: hfid-health-monitor
+  cancel-in-progress: false

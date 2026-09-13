@@ -11,3 +11,6 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
     - run: echo 'Restored deploy - REGEX matrix trap intact'
+concurrency:
+  group: deploy
+  cancel-in-progress: false

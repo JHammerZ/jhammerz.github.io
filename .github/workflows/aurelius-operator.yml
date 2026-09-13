@@ -1,61 +1,36 @@
-name: Aurelius-Operator
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / HEO v1.2
-# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER: 1000 (SONIC_VELOCITY +1000%)
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / HEO v1.2
-# M-Law Language / H-FID Standard / HEO v1.2
-
-name: "Aurelius-Engine Sovereign Operator Pipeline"
-
+name: Aurelius-Engine Sovereign Operator Pipeline
+true:
+  workflow_dispatch: null
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: aurelius-operator
   cancel-in-progress: false
-
-on:
-  workflow_dispatch:
-
 permissions:
   contents: write
   actions: write
-
 jobs:
   lighthouse-audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Substrate Node
-        uses: actions/checkout@v5
+    - name: Checkout Substrate Node
+      uses: actions/checkout@v5
+    - name: Install deps
+    - name: Setup Node Environment
+      uses: actions/setup-node@v5
+      with:
+        node-version: 20
+    - name: Install deps - fix node_modules removal
+      run: npm install --legacy-peer-deps
+    - name: Install Lighthouse Core Tool
+      run: npm install -g lighthouse
+    - name: Execute Live Performance Metric Analysis
+      run: 'echo "[*] Commencing performance audit tracking operations..."
 
-      - name: Install deps
+        lighthouse https://github.io --output=json --output-path=./report.json --chrome-flags="--headless
+        --no-sandbox"
 
-      - name: Setup Node Environment
-        uses: actions/setup-node@v5
-        with:
-          node-version: 20
-      - name: Install deps - fix node_modules removal
-        run: npm install --legacy-peer-deps
-
-      - name: Install Lighthouse Core Tool
-        run: npm install -g lighthouse
-
-      - name: Execute Live Performance Metric Analysis
-        run: |
-          echo "[*] Commencing performance audit tracking operations..."
-          lighthouse https://github.io --output=json --output-path=./report.json --chrome-flags="--headless --no-sandbox"
-
-      - name: Archive Performance Architecture Artifact Payload
-        uses: actions/upload-artifact@v5
-        with:
-          name: lighthouse-report
-          path: report.json
-
+        '
+    - name: Archive Performance Architecture Artifact Payload
+      uses: actions/upload-artifact@v5
+      with:
+        name: lighthouse-report
+        path: report.json

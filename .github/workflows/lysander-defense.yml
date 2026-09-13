@@ -11,3 +11,6 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
     - run: echo 'Restored lysander-defense - REGEX matrix trap intact'
+concurrency:
+  group: lysander-defense
+  cancel-in-progress: false

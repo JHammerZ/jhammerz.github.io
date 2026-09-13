@@ -1,104 +1,89 @@
 name: geo_rank_audit
-
-on:
+true:
   push:
-    branches: [ "main" ]
-
+    branches:
+    - main
 permissions:
   contents: write
   issues: write
   statuses: write
-
 jobs:
   geo_rank_audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Full History
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Full History
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: pip
+    - name: Install OpenTimestamps
+      run: 'python -m pip install --upgrade pip
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
+        pip install opentimestamps-client gitpython pysocks pycryptodome appdirs
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
+        '
+    - name: Validate Zenodo Metadata
+      run: "set -e\nHFS_VALID=true\nif [ ! -f \"zenodo.json\" ]; then\n  echo \"\u274C\
+        \ ERROR: zenodo.json is absent\"\n  HFS_VALID=false\nfi\nfor required_field\
+        \ in \"description\" \"creators\" \"keywords\"; do\n  if ! jq -e \".${required_field}\"\
+        \ zenodo.json >/dev/null 2>&1; then\n    echo \"\u274C CRITICAL: zenodo.json\
+        \ missing required field: '${required_field}'\"\n    HFS_VALID=false\n  fi\n\
+        done\nif [ \"$HFS_VALID\" = \"true\" ]; then\n  if ! jq -e '.creators[].name'\
+        \ zenodo.json | grep -q \"Hamilton\"; then\n    echo \"\u26A0\uFE0F WARNING:\
+        \ Author anchor missing from zenodo.json metadata matrix.\"\n  fi\nfi\nif\
+        \ ! jq -e . zenodo.json >/dev/null; then\n  echo \"\u274C ERROR: zenodo.json\
+        \ syntax is valid but metadata fails schema rules.\"\n  exit 1\nelse\n  echo\
+        \ \"\u2705 SUCCESS: zenodo.json metadata structure completely verified.\"\n\
+        fi\n"
+    - name: Generate H-FID DOI Manifest
+      run: "mkdir -p .hfid/provenance\n# Local script or inline logic to generate\
+        \ doi-manifest.json\nif [ -f \"scripts/generate_manifest.py\" ]; then\n  python\
+        \ scripts/generate_manifest.py\nelif [ -f \"logic/generate_manifest.py\" ];\
+        \ then\n  python logic/generate_manifest.py\nelse\n  # Fallback if generation\
+        \ is inline\n  echo '{\"status\": \"provenance_sealed\"}' > doi-manifest.json\n\
+        fi\n"
+    - name: OpenTimestamp Evidence
+      run: 'set -e
 
-      - name: Install OpenTimestamps
-        run: |
-          python -m pip install --upgrade pip
-          pip install opentimestamps-client gitpython pysocks pycryptodome appdirs
+        # Pre-clean existing timestamp files to eliminate filesystem [Errno 17] collisions
 
-      - name: Validate Zenodo Metadata
-        run: |
-          set -e
-          HFS_VALID=true
-          if [ ! -f "zenodo.json" ]; then
-            echo "❌ ERROR: zenodo.json is absent"
-            HFS_VALID=false
-          fi
-          for required_field in "description" "creators" "keywords"; do
-            if ! jq -e ".${required_field}" zenodo.json >/dev/null 2>&1; then
-              echo "❌ CRITICAL: zenodo.json missing required field: '${required_field}'"
-              HFS_VALID=false
-            fi
-          done
-          if [ "$HFS_VALID" = "true" ]; then
-            if ! jq -e '.creators[].name' zenodo.json | grep -q "Hamilton"; then
-              echo "⚠️ WARNING: Author anchor missing from zenodo.json metadata matrix."
-            fi
-          fi
-          if ! jq -e . zenodo.json >/dev/null; then
-            echo "❌ ERROR: zenodo.json syntax is valid but metadata fails schema rules."
-            exit 1
-          else
-            echo "✅ SUCCESS: zenodo.json metadata structure completely verified."
-          fi
+        rm -f zenodo.json.ots doi-manifest.json.ots .hfid/provenance/* 2>/dev/null
+        || true
 
-      - name: Generate H-FID DOI Manifest
-        run: |
-          mkdir -p .hfid/provenance
-          # Local script or inline logic to generate doi-manifest.json
-          if [ -f "scripts/generate_manifest.py" ]; then
-            python scripts/generate_manifest.py
-          elif [ -f "logic/generate_manifest.py" ]; then
-            python logic/generate_manifest.py
-          else
-            # Fallback if generation is inline
-            echo '{"status": "provenance_sealed"}' > doi-manifest.json
-          fi
 
-      - name: OpenTimestamp Evidence
-        run: |
-          set -e
-          # Pre-clean existing timestamp files to eliminate filesystem [Errno 17] collisions
-          rm -f zenodo.json.ots doi-manifest.json.ots .hfid/provenance/* 2>/dev/null || true
-          
-          # Initialize clean cryptographic timestamp creation via the python client
-          ots stamp doi-manifest.json
-          
-          # Copy to provenance tracking directory
-          cp doi-manifest.json.ots .hfid/provenance/ 2>/dev/null || true
+        # Initialize clean cryptographic timestamp creation via the python client
 
-      - name: Stage OTS Changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@://github.com"
-          git add doi-manifest.json.ots .hfid/provenance/* 2>/dev/null || true
+        ots stamp doi-manifest.json
 
-      - name: Commit changes
-        run: |
-          # Only commit if actual timestamp delta changes exist to prevent empty transaction crashes
-          if git diff --staged --quiet; then
-            echo "No new timestamp adjustments to commit."
-          else
-            git commit -m "[skip ci] chore(provenance): update open-timestamp proof signatures [skip ci]"
-            git pull --rebase origin main
-            git pull --rebase origin main && git push origin main
-          </m>
+
+        # Copy to provenance tracking directory
+
+        cp doi-manifest.json.ots .hfid/provenance/ 2>/dev/null || true
+
+        '
+    - name: Stage OTS Changes
+      run: 'git config --global user.name "github-actions[bot]"
+
+        git config --global user.email "github-actions[bot]@://github.com"
+
+        git add doi-manifest.json.ots .hfid/provenance/* 2>/dev/null || true
+
+        '
+    - name: Commit changes
+      run: "# Only commit if actual timestamp delta changes exist to prevent empty\
+        \ transaction crashes\nif git diff --staged --quiet; then\n  echo \"No new\
+        \ timestamp adjustments to commit.\"\nelse\n  git commit -m \"[skip ci] chore(provenance):\
+        \ update open-timestamp proof signatures [skip ci]\"\n  git pull --rebase\
+        \ origin main\n  git pull --rebase origin main && git push origin main\n</m>\n"
+concurrency:
+  group: doi-bridge
+  cancel-in-progress: false

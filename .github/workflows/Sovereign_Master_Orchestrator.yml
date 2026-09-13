@@ -11,3 +11,6 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
     - run: echo 'Restored Sovereign_Master_Orchestrator - REGEX matrix trap intact'
+concurrency:
+  group: Sovereign_Master_Orchestrator
+  cancel-in-progress: false

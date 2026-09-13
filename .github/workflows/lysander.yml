@@ -1,18 +1,22 @@
 name: Lysander MAX
-on: [push, workflow_dispatch]
+true:
+- push
+- workflow_dispatch
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
-
-      - name: Install deps
-      - name: Run from Secrets
-        env:
-          GOD_TOKEN: ${{ secrets.GOD_TOKEN }}
-          LYSANDER_PAT: ${{ secrets.LYSANDER_PAT }}
-        run: python3 lysander_controller.py
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Run from Secrets
+      env:
+        GOD_TOKEN: ${{ secrets.GOD_TOKEN }}
+        LYSANDER_PAT: ${{ secrets.LYSANDER_PAT }}
+      run: python3 lysander_controller.py
+concurrency:
+  group: lysander
+  cancel-in-progress: false

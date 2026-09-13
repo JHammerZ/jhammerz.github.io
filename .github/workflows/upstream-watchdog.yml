@@ -1,51 +1,39 @@
-name: "Perpetual Upstream Mutation Watchdog"
-on:
+name: Perpetual Upstream Mutation Watchdog
+true:
   schedule:
-    - cron: '42 */3 * * *'
-  workflow_dispatch:
+  - cron: 42 */3 * * *
+  workflow_dispatch: null
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: upstream-watchdog
   cancel-in-progress: false
-
 jobs:
   upstream-scrader:
-    name: "Lysander Edge Upstream Mutation Watchdog"
+    name: Lysander Edge Upstream Mutation Watchdog
     runs-on: ubuntu-latest
     steps:
-      - name: 1. Checkout Source Matrix
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
-
-      - name: Install deps
-
-      - name: 2. Setup Runtime Layer
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-
-      - name: 3. Install Core Protocols
-        run: pip install --no-cache-dir requests
-
-      - name: 4. Execute Scraper & Check for Pipeline Variations
-        id: check_mutations
-        continue-on-error: true
-        run: |
-          if [ -f update-watcher.py ]; then
-            python update-watcher.py
-          else
-            echo "update-watcher.py not found - skipping"
-            exit 0
-          fi
-
-      - name: 5. Auto-Commit Modifications & Broadcast if Updates Exist
-        run: |
-          git config --global user.name "Lysander Autonomous Robot"
-          git config --global user.email "bot@hfid.standard"
-          if [ -f "upstream_watcher_state.json" ]; then
-            git add upstream_watcher_state.json
-          fi
-          # Only commit and push if a mutation actually altered the file status
-          git diff --quiet && git diff --staged --quiet || (git commit -m "[skip ci] chore: upstream release mapping mutation detected" && git pull --rebase origin main && git push origin main)
+    - name: 1. Checkout Source Matrix
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: 2. Setup Runtime Layer
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - name: 3. Install Core Protocols
+      run: pip install --no-cache-dir requests
+    - name: 4. Execute Scraper & Check for Pipeline Variations
+      id: check_mutations
+      continue-on-error: true
+      run: "if [ -f update-watcher.py ]; then\n  python update-watcher.py\nelse\n\
+        \  echo \"update-watcher.py not found - skipping\"\n  exit 0\nfi\n"
+    - name: 5. Auto-Commit Modifications & Broadcast if Updates Exist
+      run: "git config --global user.name \"Lysander Autonomous Robot\"\ngit config\
+        \ --global user.email \"bot@hfid.standard\"\nif [ -f \"upstream_watcher_state.json\"\
+        \ ]; then\n  git add upstream_watcher_state.json\nfi\n# Only commit and push\
+        \ if a mutation actually altered the file status\ngit diff --quiet && git\
+        \ diff --staged --quiet || (git commit -m \"[skip ci] chore: upstream release\
+        \ mapping mutation detected\" && git pull --rebase origin main && git push\
+        \ origin main)\n"

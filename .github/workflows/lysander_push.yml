@@ -1,74 +1,55 @@
-name: Lysander Push
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GNO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
-# SLSA Level: 1
-
-name: "Lysander 3.0 Autonomous Push"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
-  workflow_dispatch:
+name: Lysander 3.0 Autonomous Push
+true:
+  workflow_dispatch: null
   schedule:
-    - cron: '0 */6 * * *'
-
+  - cron: 0 */6 * * *
+concurrency:
+  group: lysander_push
+  cancel-in-progress: false
 permissions:
   contents: write
-
 jobs:
   autonomous-commit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Repository
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    - name: Lysander Sovereign Manifest Update
+      run: '# your existing lysander logic here
 
-      - name: Install deps
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+        echo "Lysander updating sovereign manifest..."
 
-      - name: Lysander Sovereign Manifest Update
-        run: |
-          # your existing lysander logic here
-          echo "Lysander updating sovereign manifest..."
-          mkdir -p .hfid/lysander
-          date > .hfid/lysander/timestamp
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          echo "{\"timestamp\":\"$TIMESTAMP\",\"sha\":\"${{ github.sha }}\",\"author\":\"Joshua Hamilton\"}" > .hfid/lysander/latest.json
+        mkdir -p .hfid/lysander
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "Lysander-3.0-Engine"
-          git config --global user.email "Lysander@jhammerz.github.io"
+        date > .hfid/lysander/timestamp
 
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-          commit_user_name: "Lysander-3.0-Engine"
-          commit_user_email: "Lysander@jhammerz.github.io"
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-      - name: Retry Push with Backoff
-        if: failure()
-        run: |
-          for i in 1 2 3; do
-            echo "Push failed, retry $i/3..."
-            sleep 3
-            git push && break || true
-          done
+        echo "{\"timestamp\":\"$TIMESTAMP\",\"sha\":\"${{ github.sha }}\",\"author\":\"Joshua
+        Hamilton\"}" > .hfid/lysander/latest.json
 
+        '
+    - name: Configure Git
+      run: 'git config --global user.name "Lysander-3.0-Engine"
+
+        git config --global user.email "Lysander@jhammerz.github.io"
+
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+        commit_user_name: Lysander-3.0-Engine
+        commit_user_email: Lysander@jhammerz.github.io
+    - name: Retry Push with Backoff
+      if: failure()
+      run: "for i in 1 2 3; do\n  echo \"Push failed, retry $i/3...\"\n  sleep 3\n\
+        \  git push && break || true\ndone\n"

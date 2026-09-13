@@ -1,34 +1,28 @@
-name: Omega-Broadcast
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# SLSA Level: 3
-name: "Broadcast: H-FID Omega"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-on:
+name: 'Broadcast: H-FID Omega'
+true:
   workflow_dispatch:
     inputs:
       target:
-        description: 'Broadcast target'
+        description: Broadcast target
         required: true
-        default: 'all'
+        default: all
         type: choice
-        options: [arweave, ipfs, github, all]
+        options:
+        - arweave
+        - ipfs
+        - github
+        - all
       force:
-        description: 'Force broadcast even if unchanged'
+        description: Force broadcast even if unchanged
         required: false
         default: false
         type: boolean
   push:
-    tags: ["v*"]
+    tags:
+    - v*
+concurrency:
+  group: omega-broadcast
+  cancel-in-progress: false
 permissions:
   contents: write
   id-token: write
@@ -38,95 +32,103 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v5
+    - uses: actions/checkout@v5
+    - name: Install deps
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+    - uses: actions/setup-node@v5
+      with:
+        node-version: 20
+    - name: Install deps - fix node_modules removal
+      run: npm install --legacy-peer-deps
+    - name: Install deps
+      run: 'npm install -g arweave arlocal kubo-rpc-client ipfs-http-client || true
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 20
-      - name: Install deps - fix node_modules removal
-        run: npm install --legacy-peer-deps
-      - name: Install deps
-        run: |
-          npm install -g arweave arlocal kubo-rpc-client ipfs-http-client || true
-          pip install opentimestamps-client || true
-          sudo apt-get update && sudo apt-get install -y jq || true
-      - id: manifest
-        env:
-          TARGET: ${{ github.event.inputs.target || 'all' }}
-          FORCE: ${{ github.event.inputs.force || 'false' }}
-        run: |
-          set -e
-          mkdir -p .hfid/omega
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          REPO_HASH=$(git rev-parse HEAD)
-          CONTENT_HASH=$(find . -type f -not -path "./.git/*" -not -path "./.hfid/*" -not -path "./node_modules/*" -exec sha256sum {} \; | sort | sha256sum | cut -d' ' -f1)
-          cat > .hfid/omega/manifest.json << EOF
-          {
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "omega-broadcast",
-            "timestamp": "$TIMESTAMP",
-            "repo": "${{ github.repository }}",
-            "release_tag": "${{ github.ref_name }}",
-            "repo_sha": "$REPO_HASH",
-            "content_hash": "$CONTENT_HASH",
-            "run_id": "${{ github.run_id }}",
-            "target": "$TARGET",
-            "force": "$FORCE",
-            "slsa_level": 3
-          }
-          EOF
-          echo "$REPO_HASH" > .hfid/omega/repo.sha
-          echo "$CONTENT_HASH" > .hfid/omega/content.sha
-          echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
-      - uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: .hfid/omega/manifest.json
-      - id: check
-        env:
-          FORCE: ${{ github.event.inputs.force || 'false' }}
-        run: |
-          LAST_HASH=$(cat data/last_omega_hash.txt 2>/dev/null || echo "none")
-          CURRENT_HASH="${{ steps.manifest.outputs.content_hash }}"
-          if [ "$FORCE" = "true" ] || [ "$CURRENT_HASH" != "$LAST_HASH" ]; then
-            echo "needed=true" >> $GITHUB_OUTPUT
-          else
-            echo "needed=false" >> $GITHUB_OUTPUT
-          fi
-      - if: ${{ steps.check.outputs.needed == 'true' }}
-        run: |
-          tar --exclude='.git' --exclude='.hfid' --exclude='node_modules' -cf .hfid/omega/repo-bundle.tar.gz .
-      - if: ${{ steps.check.outputs.needed == 'true' }}
-        run: |
-          ots stamp .hfid/omega/manifest.json .hfid/omega/repo-bundle.tar.gz || true
-      - if: ${{ steps.check.outputs.needed == 'true' }}
-        name: Commit Ledger Only - with rebase
-        run: |
-          set -e
-          git config --global user.name "Lysander-Omega"
-          git config --global user.email "omega@jhammerz.github.io"
-          mkdir -p data .hfid/omega/receipt
-          echo "${{ steps.manifest.outputs.content_hash }}" > data/last_omega_hash.txt
-          cat > .hfid/omega/receipt/broadcast.txt << EOF
-          H-FID Omega Broadcast Receipt
-          Target: ${{ github.event.inputs.target || 'all' }}
-          SHA256: ${{ steps.manifest.outputs.content_hash }}
-          Verified: ${{ github.ref_name }} / ${{ github.sha }}
-          Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          EOF
-          # Fix fetch-first race
-          git pull --rebase origin main || true
-          git add data/last_omega_hash.txt .hfid/omega/ || true
-          git diff --staged --quiet || git commit -m "[skip ci] chore: omega broadcast ${{ github.ref_name }} [skip ci]"
-          git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
-      - if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: hfid-omega-${{ github.run_id }}
-          path: .hfid/omega/
-          retention-days: 30
+        pip install opentimestamps-client || true
 
+        sudo apt-get update && sudo apt-get install -y jq || true
+
+        '
+    - id: manifest
+      env:
+        TARGET: ${{ github.event.inputs.target || 'all' }}
+        FORCE: ${{ github.event.inputs.force || 'false' }}
+      run: "set -e\nmkdir -p .hfid/omega\nTIMESTAMP=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\"\
+        )\nREPO_HASH=$(git rev-parse HEAD)\nCONTENT_HASH=$(find . -type f -not -path\
+        \ \"./.git/*\" -not -path \"./.hfid/*\" -not -path \"./node_modules/*\" -exec\
+        \ sha256sum {} \\; | sort | sha256sum | cut -d' ' -f1)\ncat > .hfid/omega/manifest.json\
+        \ << EOF\n{\n  \"hfid_version\": \"v1.2\",\n  \"sovereign_author\": \"Joshua\
+        \ Hamilton\",\n  \"workflow\": \"omega-broadcast\",\n  \"timestamp\": \"$TIMESTAMP\"\
+        ,\n  \"repo\": \"${{ github.repository }}\",\n  \"release_tag\": \"${{ github.ref_name\
+        \ }}\",\n  \"repo_sha\": \"$REPO_HASH\",\n  \"content_hash\": \"$CONTENT_HASH\"\
+        ,\n  \"run_id\": \"${{ github.run_id }}\",\n  \"target\": \"$TARGET\",\n \
+        \ \"force\": \"$FORCE\",\n  \"slsa_level\": 3\n}\nEOF\necho \"$REPO_HASH\"\
+        \ > .hfid/omega/repo.sha\necho \"$CONTENT_HASH\" > .hfid/omega/content.sha\n\
+        echo \"content_hash=$CONTENT_HASH\" >> $GITHUB_OUTPUT\n"
+    - uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/omega/manifest.json
+    - id: check
+      env:
+        FORCE: ${{ github.event.inputs.force || 'false' }}
+      run: "LAST_HASH=$(cat data/last_omega_hash.txt 2>/dev/null || echo \"none\"\
+        )\nCURRENT_HASH=\"${{ steps.manifest.outputs.content_hash }}\"\nif [ \"$FORCE\"\
+        \ = \"true\" ] || [ \"$CURRENT_HASH\" != \"$LAST_HASH\" ]; then\n  echo \"\
+        needed=true\" >> $GITHUB_OUTPUT\nelse\n  echo \"needed=false\" >> $GITHUB_OUTPUT\n\
+        fi\n"
+    - if: ${{ steps.check.outputs.needed == 'true' }}
+      run: 'tar --exclude=''.git'' --exclude=''.hfid'' --exclude=''node_modules''
+        -cf .hfid/omega/repo-bundle.tar.gz .
+
+        '
+    - if: ${{ steps.check.outputs.needed == 'true' }}
+      run: 'ots stamp .hfid/omega/manifest.json .hfid/omega/repo-bundle.tar.gz ||
+        true
+
+        '
+    - if: ${{ steps.check.outputs.needed == 'true' }}
+      name: Commit Ledger Only - with rebase
+      run: 'set -e
+
+        git config --global user.name "Lysander-Omega"
+
+        git config --global user.email "omega@jhammerz.github.io"
+
+        mkdir -p data .hfid/omega/receipt
+
+        echo "${{ steps.manifest.outputs.content_hash }}" > data/last_omega_hash.txt
+
+        cat > .hfid/omega/receipt/broadcast.txt << EOF
+
+        H-FID Omega Broadcast Receipt
+
+        Target: ${{ github.event.inputs.target || ''all'' }}
+
+        SHA256: ${{ steps.manifest.outputs.content_hash }}
+
+        Verified: ${{ github.ref_name }} / ${{ github.sha }}
+
+        Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+        EOF
+
+        # Fix fetch-first race
+
+        git pull --rebase origin main || true
+
+        git add data/last_omega_hash.txt .hfid/omega/ || true
+
+        git diff --staged --quiet || git commit -m "[skip ci] chore: omega broadcast
+        ${{ github.ref_name }} [skip ci]"
+
+        git pull --rebase origin main && git push origin main || (git pull --rebase
+        origin main && git pull --rebase origin main && git push origin main)
+
+        '
+    - if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-omega-${{ github.run_id }}
+        path: .hfid/omega/
+        retention-days: 30

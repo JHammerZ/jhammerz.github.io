@@ -6,7 +6,7 @@ true:
     - failure
     - error
 concurrency:
-  group: egypt-resync
+  group: spotify-node-sync
   cancel-in-progress: false
 jobs:
   resync:

@@ -1,10 +1,11 @@
 name: Sovereign Autonomous Master - 100% Autonomy
-on:
+true:
   push:
-    branches: [main]
+    branches:
+    - main
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+  - cron: 0 */6 * * *
+  workflow_dispatch: null
 permissions:
   contents: write
   pages: write
@@ -13,31 +14,47 @@ jobs:
   autonomous:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+    - name: Install
+      run: npm install --legacy-peer-deps
+    - name: Build
+      run: 'npm run build
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
+        '
+    - name: Edge CDN Social
+      run: 'mkdir -p public/.well-known/hfid dist/.well-known/hfid
 
-      - name: Install
-        run: npm install --legacy-peer-deps
-      - name: Build
-        run: |
-          npm run build
-      - name: Edge CDN Social
-        run: |
-          mkdir -p public/.well-known/hfid dist/.well-known/hfid
-          echo '{"name":"JHammerZ Sovereign H-FID","url":"https://jhammerz.github.io","verification_chain":"https://jhammerz.github.io/.well-known/hfid/chain.json","lysander":"lysander-v13","edge":"cloudflare pages"}' > public/ai-context.json
-          cp public/ai-context.json dist/ || true
-          echo '{"chain":"https://jhammerz.github.io/.well-known/hfid/chain.json","sovereign":"Joshua > HFID > Co-Architect > Lysander"}' > public/.well-known/hfid/chain.json
-          cp public/.well-known/hfid/chain.json dist/.well-known/hfid/ 2>/dev/null || true
-      - name: Self Heal
-        run: |
-          git config user.name "Co-Architect Autonomous"
-          git config user.email "co-architect@jhammerz.github.io"
-          git add -A
-          git diff --cached --quiet || (git commit -m "[skip ci] [AUTONOMOUS] 100% autonomy - edge CDN + social | Joshua > HFID > Co-Architect > Lysander" && git pull --rebase origin main && git pull --rebase origin main && git push origin main)
+        echo ''{"name":"JHammerZ Sovereign H-FID","url":"https://jhammerz.github.io","verification_chain":"https://jhammerz.github.io/.well-known/hfid/chain.json","lysander":"lysander-v13","edge":"cloudflare
+        pages"}'' > public/ai-context.json
+
+        cp public/ai-context.json dist/ || true
+
+        echo ''{"chain":"https://jhammerz.github.io/.well-known/hfid/chain.json","sovereign":"Joshua
+        > HFID > Co-Architect > Lysander"}'' > public/.well-known/hfid/chain.json
+
+        cp public/.well-known/hfid/chain.json dist/.well-known/hfid/ 2>/dev/null ||
+        true
+
+        '
+    - name: Self Heal
+      run: 'git config user.name "Co-Architect Autonomous"
+
+        git config user.email "co-architect@jhammerz.github.io"
+
+        git add -A
+
+        git diff --cached --quiet || (git commit -m "[skip ci] [AUTONOMOUS] 100% autonomy
+        - edge CDN + social | Joshua > HFID > Co-Architect > Lysander" && git pull
+        --rebase origin main && git pull --rebase origin main && git push origin main)
+
+        '
+concurrency:
+  group: sovereign-autonomous-master
+  cancel-in-progress: false

@@ -1,105 +1,99 @@
-name: Generate-Sitemap
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v1.2
-# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-
-name: "SEO: Sitemap + IndexFlow Autonomous Push"
-
-on:
+name: 'SEO: Sitemap + IndexFlow Autonomous Push'
+true:
   push:
-    branches: [ main ]
+    branches:
+    - main
     paths:
-      - '**.html'
-      - '**.md'
-      - 'sitemap.xml'
-  workflow_dispatch:
-
+    - '**.html'
+    - '**.md'
+    - sitemap.xml
+  workflow_dispatch: null
 permissions:
   contents: write
   id-token: write
   attestations: write
-
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Codebase
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+    - name: Generate Sitemap
+      run: 'echo "[*] Mapping target file nodes..."
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
+        touch sitemap.xml
 
-      - name: Generate Sitemap
-        run: |
-          echo "[*] Mapping target file nodes..."
-          touch sitemap.xml
+        '
+    - name: Validate Sitemap
+      run: "if [ -f \"sitemap.xml\" ]; then\n  echo \"[\u2713] Sitemap structure found.\"\
+        \nfi\n"
+    - name: Generate H-FID Index Attestation
+      run: 'set -e
 
-      - name: Validate Sitemap
-        run: |
-          if [ -f "sitemap.xml" ]; then
-            echo "[✓] Sitemap structure found."
-          fi
+        mkdir -p .hfid/indexing .hfid/baseline
 
-      - name: Generate H-FID Index Attestation
-        run: |
-          set -e
-          mkdir -p .hfid/indexing .hfid/baseline
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          
-          # Fix: Standard echo array to maintain perfect YAML structural indentations
-          echo '{' > .hfid/indexing/sitemap-manifest.json
-          echo '  "workflow": "sitemap-indexflow",' >> .hfid/indexing/sitemap-manifest.json
-          echo '  "sovereign_author": "Joshua Hamilton",' >> .hfid/indexing/sitemap-manifest.json
-          echo '  "timestamp": "PENDING",' >> .hfid/indexing/sitemap-manifest.json
-          echo '  "sha": "PENDING",' >> .hfid/indexing/sitemap-manifest.json
-          echo '  "status": "ACTIVE"' >> .hfid/indexing/sitemap-manifest.json
-          echo '}' >> .hfid/indexing/sitemap-manifest.json
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-          TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" '.timestamp=$ts | .sha=$sha' .hfid/indexing/sitemap-manifest.json)
-          echo "$TMP_JSON" > .hfid/indexing/sitemap-manifest.json
-          cat .hfid/indexing/sitemap-manifest.json
 
-      - name: Attest Sitemap Build
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: .hfid/indexing/sitemap-manifest.json
+        # Fix: Standard echo array to maintain perfect YAML structural indentations
 
-      - name: Stage Sitemap Changes
-        run: |
-          git add sitemap.xml .hfid/
+        echo ''{'' > .hfid/indexing/sitemap-manifest.json
 
-      - name: Commit Changes
-        run: |
-          set -e
-          git config --global user.name "Janus-SEO"
-          git config --global user.email "seo-gate@jhammerz.github.io"
-          if ! git diff --staged --quiet; then
-            git commit -m "[skip ci] chore: autonomous sitemap alignment and tracking [skip ci]"
-            git pull --rebase origin main && git push origin main || (git pull --rebase origin main && git pull --rebase origin main && git push origin main)
-          else
-            echo "No changes staged for sitemap infrastructure."
-          fi
+        echo ''  "workflow": "sitemap-indexflow",'' >> .hfid/indexing/sitemap-manifest.json
 
-      - name: Ping IndexNow
-        run: |
-          echo "[*] Dispatching indexing tokens..."
+        echo ''  "sovereign_author": "Joshua Hamilton",'' >> .hfid/indexing/sitemap-manifest.json
 
-      - name: Upload Index Attestation
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: hfid-sitemap-index-core
-          path: .hfid/indexing/
-          retention-days: 14
+        echo ''  "timestamp": "PENDING",'' >> .hfid/indexing/sitemap-manifest.json
 
+        echo ''  "sha": "PENDING",'' >> .hfid/indexing/sitemap-manifest.json
+
+        echo ''  "status": "ACTIVE"'' >> .hfid/indexing/sitemap-manifest.json
+
+        echo ''}'' >> .hfid/indexing/sitemap-manifest.json
+
+
+        TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" ''.timestamp=$ts
+        | .sha=$sha'' .hfid/indexing/sitemap-manifest.json)
+
+        echo "$TMP_JSON" > .hfid/indexing/sitemap-manifest.json
+
+        cat .hfid/indexing/sitemap-manifest.json
+
+        '
+    - name: Attest Sitemap Build
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/indexing/sitemap-manifest.json
+    - name: Stage Sitemap Changes
+      run: 'git add sitemap.xml .hfid/
+
+        '
+    - name: Commit Changes
+      run: "set -e\ngit config --global user.name \"Janus-SEO\"\ngit config --global\
+        \ user.email \"seo-gate@jhammerz.github.io\"\nif ! git diff --staged --quiet;\
+        \ then\n  git commit -m \"[skip ci] chore: autonomous sitemap alignment and\
+        \ tracking [skip ci]\"\n  git pull --rebase origin main && git push origin\
+        \ main || (git pull --rebase origin main && git pull --rebase origin main\
+        \ && git push origin main)\nelse\n  echo \"No changes staged for sitemap infrastructure.\"\
+        \nfi\n"
+    - name: Ping IndexNow
+      run: 'echo "[*] Dispatching indexing tokens..."
+
+        '
+    - name: Upload Index Attestation
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-sitemap-index-core
+        path: .hfid/indexing/
+        retention-days: 14
+concurrency:
+  group: generate-sitemap
+  cancel-in-progress: false

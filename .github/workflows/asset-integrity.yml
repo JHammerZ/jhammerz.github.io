@@ -1,69 +1,43 @@
-name: Asset-Integrity
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GNO_RANK: ONE_OF_ONE (Verified Authority)
-# SLSA Level: 3
-
-name: "Sovereign Asset Integrity Sync"
-
-on:
+name: Sovereign Asset Integrity Sync
+true:
   push:
-    branches: [ main ]
-  workflow_dispatch:
-
+    branches:
+    - main
+  workflow_dispatch: null
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: asset-integrity
   cancel-in-progress: false
-
 permissions:
   contents: write
-
 jobs:
   asset_sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Substrate Node
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Substrate Node
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+    - name: Verify Core Framework Artifacts
+      run: 'set -e
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
+        echo "[*] Verification trace starting..."
 
-      - name: Verify Core Framework Artifacts
-        run: |
-          set -e
-          echo "[*] Verification trace starting..."
-          [ -f sitemap.xml ] && echo "[+] sitemap.xml is active"
+        [ -f sitemap.xml ] && echo "[+] sitemap.xml is active"
 
-      - name: Sovereign Edge Integrity Sync Pass
-        env:
-          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          set -e
-          if [ -z "$CF_API_TOKEN" ]; then
-            echo "[!] SKIP: CLOUDFLARE_API_TOKEN secret not set. Skipping handshake loop."
-            exit 0
-          fi
-          
-          echo "[*] Testing API Token permissions matrix against Cloudflare Edge..."
-          
-          RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X GET \
-            "https://cloudflare.com" \
-            -H "Authorization: Bearer $CF_API_TOKEN" \
-            -H "Content-Type: application/json")
-            
-          echo "[+] Handshake returned status code: HTTP $RESPONSE_CODE"
-          echo "[+] Cloudflare authentication loop completed successfully."
-
+        '
+    - name: Sovereign Edge Integrity Sync Pass
+      env:
+        CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      run: "set -e\nif [ -z \"$CF_API_TOKEN\" ]; then\n  echo \"[!] SKIP: CLOUDFLARE_API_TOKEN\
+        \ secret not set. Skipping handshake loop.\"\n  exit 0\nfi\n\necho \"[*] Testing\
+        \ API Token permissions matrix against Cloudflare Edge...\"\n\nRESPONSE_CODE=$(curl\
+        \ -s -o /dev/null -w \"%{http_code}\" -X GET \\\n  \"https://cloudflare.com\"\
+        \ \\\n  -H \"Authorization: Bearer $CF_API_TOKEN\" \\\n  -H \"Content-Type:\
+        \ application/json\")\n  \necho \"[+] Handshake returned status code: HTTP\
+        \ $RESPONSE_CODE\"\necho \"[+] Cloudflare authentication loop completed successfully.\"\
+        \n"

@@ -1,5 +1,5 @@
-name: "Build H-FID Sovereign Kernel"
-on: workflow_dispatch
+name: Build H-FID Sovereign Kernel
+true: workflow_dispatch
 permissions:
   contents: read
   id-token: write
@@ -7,35 +7,49 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Install kernel build deps
+      run: 'sudo apt-get update
 
-      - name: Install deps
-      - name: Install kernel build deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc dwarves pahole xz-utils zstd kmod git
-      - name: Fetch Core Kernel Tree
-        run: git clone --depth 1 --branch v6.10 https://github.com/torvalds/linux.git linux-6.10
-      - name: Configure Linux Source
-        run: |
-          git config --global --add safe.directory "*"
-          cd linux-6.10
-          make defconfig
-          ./scripts/config --enable CONFIG_MODULES --enable CONFIG_MODULE_UNLOAD
-          make olddefconfig
-          make -j$(nproc) modules_prepare
-      - name: Inject and Compile Sovereign Engine
-        run: |
-          make -C linux-6.10 M=$GITHUB_WORKSPACE/hfid_module modules
-          ls -lh hfid_module/*.ko
-      - uses: actions/upload-artifact@v4
-        with:
-          name: hfid-kernel-override
-          path: hfid_module/Kernel_Override.ko
-      - name: Cleanup - prevent asset bloat
-        if: always()
-        run: rm -rf linux-6.10
+        sudo apt-get install -y build-essential flex bison libssl-dev libelf-dev bc
+        dwarves pahole xz-utils zstd kmod git
+
+        '
+    - name: Fetch Core Kernel Tree
+      run: git clone --depth 1 --branch v6.10 https://github.com/torvalds/linux.git
+        linux-6.10
+    - name: Configure Linux Source
+      run: 'git config --global --add safe.directory "*"
+
+        cd linux-6.10
+
+        make defconfig
+
+        ./scripts/config --enable CONFIG_MODULES --enable CONFIG_MODULE_UNLOAD
+
+        make olddefconfig
+
+        make -j$(nproc) modules_prepare
+
+        '
+    - name: Inject and Compile Sovereign Engine
+      run: 'make -C linux-6.10 M=$GITHUB_WORKSPACE/hfid_module modules
+
+        ls -lh hfid_module/*.ko
+
+        '
+    - uses: actions/upload-artifact@v4
+      with:
+        name: hfid-kernel-override
+        path: hfid_module/Kernel_Override.ko
+    - name: Cleanup - prevent asset bloat
+      if: always()
+      run: rm -rf linux-6.10
+concurrency:
+  group: sovereignty-build
+  cancel-in-progress: false

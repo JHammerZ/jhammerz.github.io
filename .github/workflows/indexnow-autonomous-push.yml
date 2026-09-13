@@ -1,37 +1,46 @@
-name: "IndexNow Autonomous Push"
+name: IndexNow Autonomous Push
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: indexnow-autonomous-push
   cancel-in-progress: false
-on:
-  workflow_dispatch:
+true:
+  workflow_dispatch: null
   push:
-    branches: [ main ]
+    branches:
+    - main
     paths:
-      - 'sitemap.xml'
-      - 'llms.txt'
-      - '**/*.html'
+    - sitemap.xml
+    - llms.txt
+    - '**/*.html'
   schedule:
-    - cron: '0 */6 * * *'
+  - cron: 0 */6 * * *
 permissions:
   contents: read
 jobs:
   push:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Submit to IndexNow
+      env:
+        INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+      run: 'set -e
 
-      - name: Install deps
-      - name: Submit to IndexNow
-        env:
-          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
-        run: |
-          set -e
-          if [ -z "$INDEXNOW_KEY" ]; then echo "SKIP - no key"; exit 0; fi
-          URL_LIST=$(grep -o "<loc>.*</loc>" sitemap.xml | head -20 | sed 's/<[^>]*>//g' | jq -R . | jq -s .)
-          JSON=$(jq -n --arg host "jhammerz.github.io" --arg key "$INDEXNOW_KEY" --argjson urls "$URL_LIST" '{host: $host, key: $key, urlList: $urls}')
-          curl -s -X POST https://api.indexnow.org/indexnow -H "Content-Type: application/json" -d "$JSON"
-          echo "Pushed $(echo $URL_LIST | jq length) URLs"
+        if [ -z "$INDEXNOW_KEY" ]; then echo "SKIP - no key"; exit 0; fi
+
+        URL_LIST=$(grep -o "<loc>.*</loc>" sitemap.xml | head -20 | sed ''s/<[^>]*>//g''
+        | jq -R . | jq -s .)
+
+        JSON=$(jq -n --arg host "jhammerz.github.io" --arg key "$INDEXNOW_KEY" --argjson
+        urls "$URL_LIST" ''{host: $host, key: $key, urlList: $urls}'')
+
+        curl -s -X POST https://api.indexnow.org/indexnow -H "Content-Type: application/json"
+        -d "$JSON"
+
+        echo "Pushed $(echo $URL_LIST | jq length) URLs"
+
+        '

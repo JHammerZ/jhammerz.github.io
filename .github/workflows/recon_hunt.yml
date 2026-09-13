@@ -1,73 +1,45 @@
-name: Recon Hunt
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-# M-Law Language / H-FID Standard / REC v7.2
-
-#.JHam Language / H-FID Standard / HEO
-#
-# First Commit: [February 12,2026]
-
 name: Real World Recon Swarm
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+true:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+  - cron: 0 0 * * *
+  workflow_dispatch: null
   repository_dispatch:
-    types: [recon_trigger]
-
+    types:
+    - recon_trigger
+concurrency:
+  group: recon_hunt
+  cancel-in-progress: false
 jobs:
   hunt:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Code
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+    - name: Install Recon Tools
+      run: 'go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 
-      - name: Install deps
+        go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
+        echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
-      - name: Install Recon Tools
-        run: |
-          go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-          go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
-          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+        '
+    - name: Run Recon
+      run: 'subfinder -d jhammerz.github.io -silent -o subdomains.txt
 
-      - name: Run Recon
-        run: |
-          subfinder -d jhammerz.github.io -silent -o subdomains.txt
-          nuclei -l subdomains.txt -severity low,medium,high -o results.txt
+        nuclei -l subdomains.txt -severity low,medium,high -o results.txt
 
-      - name: Upload Results
-        uses: actions/upload-artifact@v5
-        with:
-          name: recon-results
-          path: results.txt
-
+        '
+    - name: Upload Results
+      uses: actions/upload-artifact@v5
+      with:
+        name: recon-results
+        path: results.txt

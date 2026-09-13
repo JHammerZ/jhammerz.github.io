@@ -1,102 +1,73 @@
-name: Bundle
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v1.2
-# Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-00001-AUDIT 100/100
-# BND_NNN_NNN_BN_OF_ONE (verified Authority)
-# REACH_MULTIPLIER_1000: SONIC_VELOCITY +100ms
-# ELSA Level: 3
-
 name: Handle Workflow | H-FID Asset Bundler
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
-  workflow_dispatch:
+true:
+  workflow_dispatch: null
   push:
-    branches: [main]
+    branches:
+    - main
     paths:
-      - 'src/**'
-      - 'public/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.well-known/hfid/**'
+    - src/**
+    - public/**
+    - package.json
+    - package-lock.json
+    - .well-known/hfid/**
   schedule:
-    - cron: '0 7 * * *'
-
+  - cron: 0 7 * * *
+concurrency:
+  group: bundle
+  cancel-in-progress: false
 permissions:
   contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: Install deps
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: npm
+    - name: Install dependencies
+      run: 'npm install --legacy-peer-deps || npm install
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+        '
+    - name: Run bundle script
+      id: build
+      run: "set -e\nif jq -e '.scripts.build' package.json > /dev/null; then\n  echo\
+        \ \"Running npm build...\"\n  npm run build || echo \"build failed but continuing\"\
+        \n  echo \"built=true\" >> $GITHUB_OUTPUT\nelse\n  echo \"No build script\
+        \ found in package.json. Skipping.\"\n  echo \"built=false\" >> $GITHUB_OUTPUT\n\
+        fi\n"
+    - name: Generate H-FID asset manifest
+      if: steps.build.outputs.built == 'true'
+      run: "set -e\nmkdir -p .hfid\necho \"Generating asset manifest...\"\nif [ -d\
+        \ dist ]; then\n  find dist -type f -exec sha256sum {} \\; > .hfid/assets.sha256\
+        \ 2>/dev/null || true\nfi\necho \"--org sha ${{ github.sha }}--\" >> .hfid/assets.sha256\
+        \ 2>/dev/null || true\necho \"--org time $(date -u '+%Y-%m-%dT%H:%M:%SZ')--\"\
+        \ >> .hfid/assets.sha256 2>/dev/null || true\njq -n --arg sha \"${{ github.sha\
+        \ }}\" --arg time \"$(date -u '+%Y-%m-%dT%H:%M:%SZ')\" \\\n  '{sha: $sha,\
+        \ built_at: $time, assets: \"dist/\"}' > .hfid/bundle.json\ncat .hfid/bundle.json\n"
+    - name: Commit configuration
+      if: steps.build.outputs.built == 'true'
+      run: 'set -e
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
+        git config --local user.name "github-actions[bot]"
 
-      - name: Install dependencies
-        run: |
-          npm install --legacy-peer-deps || npm install
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Run bundle script
-        id: build
-        run: |
-          set -e
-          if jq -e '.scripts.build' package.json > /dev/null; then
-            echo "Running npm build..."
-            npm run build || echo "build failed but continuing"
-            echo "built=true" >> $GITHUB_OUTPUT
-          else
-            echo "No build script found in package.json. Skipping."
-            echo "built=false" >> $GITHUB_OUTPUT
-          fi
+        git add .hfid/ 2>/dev/null || true
 
-      - name: Generate H-FID asset manifest
-        if: steps.build.outputs.built == 'true'
-        run: |
-          set -e
-          mkdir -p .hfid
-          echo "Generating asset manifest..."
-          if [ -d dist ]; then
-            find dist -type f -exec sha256sum {} \; > .hfid/assets.sha256 2>/dev/null || true
-          fi
-          echo "--org sha ${{ github.sha }}--" >> .hfid/assets.sha256 2>/dev/null || true
-          echo "--org time $(date -u '+%Y-%m-%dT%H:%M:%SZ')--" >> .hfid/assets.sha256 2>/dev/null || true
-          jq -n --arg sha "${{ github.sha }}" --arg time "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
-            '{sha: $sha, built_at: $time, assets: "dist/"}' > .hfid/bundle.json
-          cat .hfid/bundle.json
+        git diff --staged --quiet && echo "No changes to commit" && exit 0
 
-      - name: Commit configuration
-        if: steps.build.outputs.built == 'true'
-        run: |
-          set -e
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add .hfid/ 2>/dev/null || true
-          git diff --staged --quiet && echo "No changes to commit" && exit 0
-
-      - name: Commit changes
-        if: steps.build.outputs.built == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-          file_pattern: "dist .hfid"
-
+        '
+    - name: Commit changes
+      if: steps.build.outputs.built == 'true'
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+        file_pattern: dist .hfid

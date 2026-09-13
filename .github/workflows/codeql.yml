@@ -1,73 +1,51 @@
-name: Codeql
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-# M-Law Language / H-FID Standard / REC v7.2
-
-name: "CodeQL Advanced"
-
-on:
+name: CodeQL Advanced
+true:
   push:
-    branches: [ main, master ]
+    branches:
+    - main
+    - master
   pull_request:
-    branches: [ main, master ]
+    branches:
+    - main
+    - master
   schedule:
-    - cron: '0 0 * * 0'
-  workflow_dispatch:
-
+  - cron: 0 0 * * 0
+  workflow_dispatch: null
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.run_id }}
+  group: codeql
   cancel-in-progress: false
-
 jobs:
   analyze:
-    name: "Analyze (${{ matrix.language }})"
+    name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
     timeout-minutes: 360
-    
     permissions:
       actions: read
       contents: read
       security-events: write
-
     strategy:
       fail-fast: false
       matrix:
         include:
-          - language: javascript-typescript
-            build-mode: none
-          - language: python
-            build-mode: none
-
+        - language: javascript-typescript
+          build-mode: none
+        - language: python
+          build-mode: none
     steps:
-      - name: Checkout Repository Codebase
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
-
-      - name: Install deps
-
-      - name: Initialize CodeQL Framework
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
-          queries: security-extended,security-and-quality
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:${{ matrix.language }}"
-
+    - name: Checkout Repository Codebase
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Initialize CodeQL Framework
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+        queries: security-extended,security-and-quality
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: /language:${{ matrix.language }}

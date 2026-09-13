@@ -1,48 +1,39 @@
 name: HFIDa Post Scanner
-
-on:
+true:
   push:
-    branches: [ main ]
+    branches:
+    - main
   pull_request:
-    branches: [ main ]
-
+    branches:
+    - main
 jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
-
-      - name: Install deps
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      
-      - name: Run HFIDa Scanner
-        run: |
-          python3 tools/hfida_scanner.py
-          echo "--- Quarantine check ---"
-          ls -lh _quarantine/ || echo "No quarantine folder"
-          QUAR_COUNT=$(ls _quarantine/*.json 2>/dev/null | wc -l)
-          echo "Quarantined files: $QUAR_COUNT"
-          if [ "$QUAR_COUNT" -gt 0 ]; then
-            echo "⚠️ $QUAR_COUNT posts flagged - review needed"
-            echo "Flagged posts:"
-            cat _quarantine/*.json | head -500
-            # Fail the build so risky posts don't deploy to Pages
-            exit 1
-          else
-            echo "✅ All posts clean - safe to publish"
-          fi
-
-      - name: Upload quarantine report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hfida-quarantine-report
-          path: _quarantine/
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Run HFIDa Scanner
+      run: "python3 tools/hfida_scanner.py\necho \"--- Quarantine check ---\"\nls\
+        \ -lh _quarantine/ || echo \"No quarantine folder\"\nQUAR_COUNT=$(ls _quarantine/*.json\
+        \ 2>/dev/null | wc -l)\necho \"Quarantined files: $QUAR_COUNT\"\nif [ \"$QUAR_COUNT\"\
+        \ -gt 0 ]; then\n  echo \"\u26A0\uFE0F $QUAR_COUNT posts flagged - review\
+        \ needed\"\n  echo \"Flagged posts:\"\n  cat _quarantine/*.json | head -500\n\
+        \  # Fail the build so risky posts don't deploy to Pages\n  exit 1\nelse\n\
+        \  echo \"\u2705 All posts clean - safe to publish\"\nfi\n"
+    - name: Upload quarantine report
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: hfida-quarantine-report
+        path: _quarantine/
+concurrency:
+  group: hfida
+  cancel-in-progress: false

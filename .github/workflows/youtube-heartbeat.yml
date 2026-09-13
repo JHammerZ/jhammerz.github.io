@@ -1,28 +1,25 @@
 name: Core Matrix Repository Heartbeat
-
-on:
+true:
   schedule:
-    - cron: '*/15 * * * *'
-  workflow_dispatch:
-
+  - cron: '*/15 * * * *'
+  workflow_dispatch: null
 concurrency:
-  group: matrix-distribution-lock-${{ github.ref }}
+  group: youtube-heartbeat
   cancel-in-progress: false
-
 jobs:
   heartbeat:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out master grid branch
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Check out master grid branch
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+    - name: Execute Heartbeat Sync Sequence
+      run: 'echo "$(date -u)" >> scripts/youtube_beat.txt
 
-      - name: Install deps
+        python scripts/matrix_gatekeeper.py
 
-      - name: Execute Heartbeat Sync Sequence
-        run: |
-          echo "$(date -u)" >> scripts/youtube_beat.txt
-          python scripts/matrix_gatekeeper.py
+        '

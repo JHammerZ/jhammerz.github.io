@@ -1,8 +1,8 @@
 name: Sovereign Matrix Autonomous - Phase 5 Broadcast
-on:
+true:
   schedule:
-    - cron: '0 * * * *'
-  workflow_dispatch:
+  - cron: 0 * * * *
+  workflow_dispatch: null
 permissions:
   contents: write
   id-token: write
@@ -14,45 +14,56 @@ jobs:
   run-matrix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Sovereign Mesh Phase 4+5
+      run: 'pip install opentimestamps-client -q || true
 
-      - name: Install deps
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Sovereign Mesh Phase 4+5
-        run: |
-          pip install opentimestamps-client -q || true
-          python3 scripts/scraping_defense.py || true
-          python3 scripts/traffic_visualizer.py || true
-          python3 scripts/identity_anchor.py || true
-          python3 scripts/waveform_poisoner.py || true
-          python3 scripts/log_rotator.py || true
-          python3 scripts/threat_notifier.py || true
-          python3 scripts/neural_cortex.py || true
-          python3 scripts/mesh_syndicate.py || true
-          python3 scripts/janus_mesh_broadcaster.py || true
-          python3 scripts/hfida_scanner.py || true
-          mkdir -p .well-known/hfid
-          date -u > .well-known/hfid/last_beat.txt
-          echo "BEAT $(date -u) :: PHASE5 $(cat .hfid/syndicator/manifest.json | head -c 60)" >> LIVING_MANIFEST.md
-          ots stamp .hfid/syndicator/manifest.json || true
-          ots stamp .well-known/hfid/broadcast_ledger.json || true
-      - name: Stealth Push Phase5 [skip cf]
-        run: |
-          git config user.name "JHammerZ-JanusBot"
-          git config user.email "janus@jhammerz.network"
-          git add -A
-          if ! git diff-index --quiet HEAD --; then
-            MSG=$(cat scripts/neural_commit_msg.txt 2>/dev/null || echo "sys: phase5 broadcast $(date -u)")
-            git commit -m "[skip ci] [skip cf] $MSG"
-            git pull --rebase --autostash origin main || true
-            git push origin main
-          fi
+        python3 scripts/scraping_defense.py || true
+
+        python3 scripts/traffic_visualizer.py || true
+
+        python3 scripts/identity_anchor.py || true
+
+        python3 scripts/waveform_poisoner.py || true
+
+        python3 scripts/log_rotator.py || true
+
+        python3 scripts/threat_notifier.py || true
+
+        python3 scripts/neural_cortex.py || true
+
+        python3 scripts/mesh_syndicate.py || true
+
+        python3 scripts/janus_mesh_broadcaster.py || true
+
+        python3 scripts/hfida_scanner.py || true
+
+        mkdir -p .well-known/hfid
+
+        date -u > .well-known/hfid/last_beat.txt
+
+        echo "BEAT $(date -u) :: PHASE5 $(cat .hfid/syndicator/manifest.json | head
+        -c 60)" >> LIVING_MANIFEST.md
+
+        ots stamp .hfid/syndicator/manifest.json || true
+
+        ots stamp .well-known/hfid/broadcast_ledger.json || true
+
+        '
+    - name: Stealth Push Phase5 [skip cf]
+      run: "git config user.name \"JHammerZ-JanusBot\"\ngit config user.email \"janus@jhammerz.network\"\
+        \ngit add -A\nif ! git diff-index --quiet HEAD --; then\n  MSG=$(cat scripts/neural_commit_msg.txt\
+        \ 2>/dev/null || echo \"sys: phase5 broadcast $(date -u)\")\n  git commit\
+        \ -m \"[skip ci] [skip cf] $MSG\"\n  git pull --rebase --autostash origin\
+        \ main || true\n  git push origin main\nfi\n"

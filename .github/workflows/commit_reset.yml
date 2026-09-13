@@ -1,112 +1,84 @@
-name: Commit Reset
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / BEC v1.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-name: "Sovereign Kernel Build & Baseline Synchronizer"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+name: Sovereign Kernel Build & Baseline Synchronizer
+true:
   schedule:
-    - cron: '0 0 * * *'
+  - cron: 0 0 * * *
   workflow_dispatch:
     inputs:
       kernel_version:
-        description: 'Kernel Version Target'
+        description: Kernel Version Target
         required: false
         default: '6.10'
       rebuild_module:
-        description: 'Force Full Kernel & Module Rebuild'
+        description: Force Full Kernel & Module Rebuild
         required: false
         type: boolean
         default: true
   push:
     paths:
-      - 'Kernel_Override.c'
-      - 'Makefile'
-
+    - Kernel_Override.c
+    - Makefile
+concurrency:
+  group: commit_reset
+  cancel-in-progress: false
 permissions:
   contents: write
   id-token: write
   attestations: write
   actions: write
-
 jobs:
   kernel-build:
-    name: "Build Sovereign Kernel Module & Sync"
+    name: Build Sovereign Kernel Module & Sync
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - name: Checkout Sovereign Repository
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout Sovereign Repository
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    - name: Install Kernel Toolchain
+      run: 'sudo apt-get update
 
-      - name: Install deps
-        with:
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+        sudo apt-get install -y build-essential libncurses-dev bison flex libssl-dev
+        libelf-dev bc liburcu-dev dwarves rsync cpio kmod jq
 
-      - name: Install Kernel Toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev bc liburcu-dev dwarves rsync cpio kmod jq
+        '
+    - name: Compile Standalone Kernel Override Module
+      run: "echo \"*** Building Kernel_Override.ko against Linux Kernel Headers ***\"\
+        \nif [ -f \"Makefile\" ] && [ -f \"kernel_override.c\" ]; then\n  make -C\
+        \ /lib/modules/$(uname -r)/build M=$(pwd) modules || true\n  ls -la *.ko ||\
+        \ true\nelse\n  echo \"Makefile or kernel_override.c not found - skipping\
+        \ build\"\n  mkdir -p .hfid/kernel\n  echo \"placeholder\" > kernel_override.ko\n\
+        fi\n"
+    - name: Generate Sovereign Attestation
+      id: attest_kernel
+      run: "mkdir -p .hfid/kernel\nTIMESTAMP=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")\n\
+        cat > .hfid/kernel/manifest.json << 'MANIFESTEOF'\n{\n  \"hfid_version\":\
+        \ \"v1.2\",\n  \"sovereign_author\": \"Joshua Hamilton\",\n  \"workflow\"\
+        : \"kernel_module\",\n  \"timestamp\": \"PLACEHOLDER\",\n  \"kernel_override\"\
+        : \"Kernel_Override.c\",\n  \"ring_privilege\": \"KERN_3\",\n  \"gen_rank\"\
+        : \"ONE_OF_ONE\"\n}\nMANIFESTEOF\nTMP=$(mktemp)\njq --arg ts \"$TIMESTAMP\"\
+        \ --arg sha \"${{ github.sha }}\" --arg run \"${{ github.run_id }}\" '.timestamp=$ts\
+        \ | .sha=$sha | .run_id=$run' .hfid/kernel/manifest.json > \"$TMP\" && mv\
+        \ \"$TMP\" .hfid/kernel/manifest.json\ncat .hfid/kernel/manifest.json\n"
+    - name: Attest Kernel Artifact Provenance
+      continue-on-error: true
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/kernel/manifest.json
+    - name: Upload Kernel Artifacts
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: sovereign-kernel-module-${{ github.run_id }}
+        path: 'kernel_override.ko
 
-      - name: Compile Standalone Kernel Override Module
-        run: |
-          echo "*** Building Kernel_Override.ko against Linux Kernel Headers ***"
-          if [ -f "Makefile" ] && [ -f "kernel_override.c" ]; then
-            make -C /lib/modules/$(uname -r)/build M=$(pwd) modules || true
-            ls -la *.ko || true
-          else
-            echo "Makefile or kernel_override.c not found - skipping build"
-            mkdir -p .hfid/kernel
-            echo "placeholder" > kernel_override.ko
-          fi
+          .hfid/kernel/manifest.json
 
-      - name: Generate Sovereign Attestation
-        id: attest_kernel
-        run: |
-          mkdir -p .hfid/kernel
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          cat > .hfid/kernel/manifest.json << 'MANIFESTEOF'
-          {
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "kernel_module",
-            "timestamp": "PLACEHOLDER",
-            "kernel_override": "Kernel_Override.c",
-            "ring_privilege": "KERN_3",
-            "gen_rank": "ONE_OF_ONE"
-          }
-          MANIFESTEOF
-          TMP=$(mktemp)
-          jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" --arg run "${{ github.run_id }}" '.timestamp=$ts | .sha=$sha | .run_id=$run' .hfid/kernel/manifest.json > "$TMP" && mv "$TMP" .hfid/kernel/manifest.json
-          cat .hfid/kernel/manifest.json
-
-      - name: Attest Kernel Artifact Provenance
-        continue-on-error: true
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: .hfid/kernel/manifest.json
-
-      - name: Upload Kernel Artifacts
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: sovereign-kernel-module-${{ github.run_id }}
-          path: |
-            kernel_override.ko
-            .hfid/kernel/manifest.json
-          retention-days: 90
-
+          '
+        retention-days: 90

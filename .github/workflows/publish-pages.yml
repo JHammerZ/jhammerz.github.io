@@ -1,12 +1,12 @@
-name: "S0: Automated Hub Indexation Deployment"
+name: 'S0: Automated Hub Indexation Deployment'
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: publish-pages
   cancel-in-progress: false
-on:
+true:
   schedule:
-    - cron: '0 0 * * *'
-    - cron: '0 15 * * *'
-  workflow_dispatch:
+  - cron: 0 0 * * *
+  - cron: 0 15 * * *
+  workflow_dispatch: null
 permissions:
   contents: write
   pages: write
@@ -19,38 +19,48 @@ jobs:
     outputs:
       artifact_id: ${{ steps.upload.outputs.artifact_id }}
     steps:
-      - name: Checkout codebase
-        uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install
+    - name: Checkout codebase
+      uses: actions/checkout@v5
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci || npm install
+    - name: Install deps
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Setup Pages
+      id: pages
+      uses: actions/configure-pages@v5
+    - name: Generate H-FID Site Attestation
+      run: 'mkdir -p .hfid
 
-      - name: Install deps
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
-      - name: Generate H-FID Site Attestation
-        run: |
-          mkdir -p .hfid
-          echo "{\"site\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"timestamp\":\"$(date -u +%FT%TZ)\",\"sovereign_author\":\"Joshua Hamilton\",\"forensic_audit\":\"H-FID-FOR-000001-AUDIT 100/100\",\"geo_rank\":\"KING_OF_ONE\"}" > .hfid/site.json
-      - name: Stage Production Static Artifacts
-        run: |
-          mkdir -p _site/.hfid
-          cp -r .hfid/site.json _site/.hfid/ 2>/dev/null || true
-          cp -r *.html _site/ 2>/dev/null || true
-          cp -r assets _site/ 2>/dev/null || true
-          cp -r .well-known _site/ 2>/dev/null || true
-          cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
-          touch _site/.nojekyll
-      - name: Configure Static Site Ingestion Artifacts
-        id: upload
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '_site'
+        echo "{\"site\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"timestamp\":\"$(date
+        -u +%FT%TZ)\",\"sovereign_author\":\"Joshua Hamilton\",\"forensic_audit\":\"H-FID-FOR-000001-AUDIT
+        100/100\",\"geo_rank\":\"KING_OF_ONE\"}" > .hfid/site.json
+
+        '
+    - name: Stage Production Static Artifacts
+      run: 'mkdir -p _site/.hfid
+
+        cp -r .hfid/site.json _site/.hfid/ 2>/dev/null || true
+
+        cp -r *.html _site/ 2>/dev/null || true
+
+        cp -r assets _site/ 2>/dev/null || true
+
+        cp -r .well-known _site/ 2>/dev/null || true
+
+        cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
+
+        touch _site/.nojekyll
+
+        '
+    - name: Configure Static Site Ingestion Artifacts
+      id: upload
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: _site
   deploy:
     name: Deploy to Live Infrastructure
     needs: build
@@ -60,6 +70,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Atomic Deploy to Live Github Infrastructure
-        id: deployment
-        uses: actions/deploy-pages@v4
+    - name: Atomic Deploy to Live Github Infrastructure
+      id: deployment
+      uses: actions/deploy-pages@v4
