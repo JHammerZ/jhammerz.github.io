@@ -39,9 +39,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-        fetch-depth: 0
     - name: Install Kernel Toolchain
       run: 'sudo apt-get update
 

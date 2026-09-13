@@ -29,8 +29,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Install OpenTimestamps
       run: pip install opentimestamps-client
     - name: Execute Lysander Protocol

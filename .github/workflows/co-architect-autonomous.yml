@@ -26,9 +26,6 @@ jobs:
       uses: actions/checkout@v4
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        token: ${{ secrets.LYSANDER_PAT }}
-        fetch-depth: 0
     - name: Setup Node - Preserve Lighthouse 100
       uses: actions/setup-node@v4
       with:

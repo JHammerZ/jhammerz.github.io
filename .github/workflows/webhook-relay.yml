@@ -25,8 +25,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Run Integrity Scan on Script Logic
       run: "set -e\npython3 -m py_compile scripts/webhook_relay.py\necho \"[\u2713\
         ] Python execution engine syntax verified.\"\n"

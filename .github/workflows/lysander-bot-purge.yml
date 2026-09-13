@@ -19,8 +19,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Run Lysander Bot Purge
       run: 'set -e
 

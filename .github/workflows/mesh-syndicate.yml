@@ -25,8 +25,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Verify Distribution Payload Integrity
       run: "set -e\necho \"[*] Auditing AAD assets prior to syndicate broadcast...\"\
         \njq -e . .well-known/hfid/graph-mesh.json > /dev/null\necho \"[\u2713] Semantic\

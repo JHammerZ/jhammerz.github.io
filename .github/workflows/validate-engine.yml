@@ -21,8 +21,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Verify Essential Core Infrastructure Files
       run: "set -e\necho \"[*] Initializing asset integrity verification sweep...\"\
         \nFILES=\"sitemap.xml robots.txt llms.txt llms-full.txt entities.json proof.html\"\

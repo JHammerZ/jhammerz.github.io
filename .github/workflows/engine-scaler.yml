@@ -23,8 +23,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Audit High-Velocity Component Code
       run: "set -e\necho \"[*] Auditing client-side tracking assets...\"\nif [ -f\
         \ \"assets/js/edge-caster-v2.js\" ]; then\n  echo \"[\u2713] edge-caster-v2.js\

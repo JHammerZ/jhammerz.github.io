@@ -20,9 +20,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        fetch-depth: 0
     - name: Setup Python and OTS Client
       run: 'pip install opentimestamps-client
 

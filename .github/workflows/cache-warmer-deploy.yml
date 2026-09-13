@@ -23,8 +23,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Audit Warm-Caster JavaScript Logic
       run: "set -e\nif [ -f \"assets/js/cache-warmer.js\" ]; then\n  echo \"[\u2713\
         ] cache-warmer.js structural source verified.\"\nfi\n"

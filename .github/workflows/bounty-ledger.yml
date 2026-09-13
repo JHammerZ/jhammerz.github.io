@@ -53,9 +53,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
-        token: ${{ secrets.GITHUB_TOKEN }}
     - name: Setup Python
       uses: actions/setup-python@v6
       with:

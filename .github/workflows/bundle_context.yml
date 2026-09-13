@@ -25,9 +25,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        fetch-depth: 0
     - name: Generate llms-full.txt
       run: "echo \"Generating llms-full.txt bundle...\"\n# your existing logic here\n\
         if [ -f llms.txt ]; then\n  cat llms.txt > llms-full.txt\n  echo \"\" >> llms-full.txt\n\

@@ -15,8 +15,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: H-FID Baseline Audit
       run: "echo \"PWD: $(pwd)\"\necho \"WORKFLOW COUNT: $(ls .github/workflows/*.yml\
         \ | wc -l)\"\n\necho \"---BAD PUSH/PATHS FILES---\"\nfor wf in .github/workflows/*.yml;\

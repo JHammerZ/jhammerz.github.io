@@ -37,8 +37,6 @@ jobs:
       uses: actions/checkout@v4
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Setup Node.js 24
       uses: actions/setup-node@v4
       with:

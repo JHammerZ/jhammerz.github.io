@@ -23,8 +23,6 @@ jobs:
     - run: npm ci || npm install
     - name: Install deps
       run: npm ci || npm install || echo 'no deps'
-      with:
-        fetch-depth: 0
     - name: Audit Crawler-Router JavaScript Syntax
       run: "set -e\nif [ -f \"assets/js/crawler-router.js\" ]; then\n  echo \"[\u2713\
         ] crawler-router.js script validation verified.\"\nfi\n"
