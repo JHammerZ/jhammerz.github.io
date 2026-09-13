@@ -20,7 +20,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - run: npm ci || npm install || npm install
+      - run: npm ci || npm install
+
+      - name: Install deps
     - name: Backoff and resync same SHA
       run: 'echo "Pages deployment failed, waiting 90s to avoid loop"
 

@@ -32,16 +32,16 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install || npm install
+
+      - name: Install deps
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-                - name: Install Node Deps
+          cache: npm
+
+      - name: Install Node Deps
         run: npm install --legacy-peer-deps || npm install
 
       - name: Setup Python for OTS
@@ -201,6 +201,8 @@ jobs:
     steps:
       - name: Checkout for evidence
         uses: actions/checkout@v4
+
+      - name: Install deps
 
       - uses: actions/upload-artifact@v4
         with:

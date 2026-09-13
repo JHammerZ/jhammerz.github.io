@@ -47,10 +47,8 @@ jobs:
     steps:
       - name: Checkout Sovereign Repository
         uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci || npm install || npm install
+
+      - name: Install deps
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
