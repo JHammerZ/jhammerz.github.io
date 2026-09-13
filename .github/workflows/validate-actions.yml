@@ -58,7 +58,7 @@ jobs:
         EOF\necho \"Generated forensic attestation at.hfid/forensic/reset.json\"\n"
     - name: Stage Changes
       id: stage
-      run: ''
+      run: echo 'fixed empty run'
     - name: Commit Changes
       uses: stefanzweifel/git-auto-commit-action@v6
       with:
