@@ -30,6 +30,12 @@ jobs:
     steps:
       - name: Checkout Substrate Node Core
         uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
         with:
           fetch-depth: 0
 

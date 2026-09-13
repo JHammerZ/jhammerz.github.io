@@ -11,6 +11,12 @@ jobs:
     steps:
       - name: Checkout with PAT
         uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
         with:
           token: ${{ secrets.LYSANDER_PAT }}
           fetch-depth: 0

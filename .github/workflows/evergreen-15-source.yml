@@ -11,6 +11,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
+      - uses: actions/setup-node@v4
+        with:
           node-version: '20'
       - run: |
           head -n 5 .hfid/indexing/urls.txt > /tmp/old.txt

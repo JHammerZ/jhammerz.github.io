@@ -61,6 +61,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
 
     - name: Download broadcast receipt
       uses: actions/download-artifact@65a5d6ad1e5b6f3d0e1e2e4e8d5d5d5d # v4.1.7

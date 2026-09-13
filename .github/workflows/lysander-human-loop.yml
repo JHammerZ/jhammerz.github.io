@@ -32,6 +32,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -199,6 +205,12 @@ jobs:
     steps:
       - name: Checkout for evidence
         uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
 
       - uses: actions/upload-artifact@v4
         with:

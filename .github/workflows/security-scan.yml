@@ -31,6 +31,12 @@ jobs:
     steps:
       - name: Checkout Substrate Codebase
         uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
 
       - name: Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@v0.35.0

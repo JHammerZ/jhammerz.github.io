@@ -40,6 +40,12 @@ jobs:
     steps:
       - name: 1. Checkout JHammerZ Master Source Tree
         uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
 
       - name: 2. Broadcast Static Assets to Low-Latency Corridors
         uses: cloudflare/wrangler-action@v3
