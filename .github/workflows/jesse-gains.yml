@@ -1,12 +1,7 @@
 name: Sovereign Broadcast
 on:
-  push:
-    branches:
-    - main
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   broadcast:
     runs-on: ubuntu-latest

@@ -1,35 +1,7 @@
 name: 'Broadcast: H-FID Syndication Ledger'
 on:
-  workflow_dispatch:
-    inputs:
-      target:
-        description: Syndication target
-        required: true
-        default: discord
-        type: choice
-        options:
-        - discord
-        - telegram
-        - github
-        - all
-      force:
-        description: Force broadcast even if unchanged
-        required: false
-        default: false
-        type: boolean
-  push:
-    branches:
-    - main
-    paths:
-    - public/**
-    - dist/**
-concurrency:
-  group: broadcast
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   syndicate:
     runs-on: ubuntu-latest

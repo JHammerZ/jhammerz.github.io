@@ -1,19 +1,7 @@
 name: GEO_RANK Visibility Audit - H-FID Standard
 on:
-  schedule:
-  - cron: 0 */6 * * *
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
-  issues: write
-concurrency:
-  group: geo_rank_audit
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   geo_rank_audit:
     runs-on: ubuntu-latest

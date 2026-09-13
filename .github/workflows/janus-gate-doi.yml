@@ -1,23 +1,7 @@
 name: 'Audit: DOI Sync | Janus Gate v1.2-H-FID'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - zenodo.json
-    - CITATION.cff
-    - .well-known/hfid/**
-    - hfids/**
-  schedule:
-  - cron: 0 0 * * *
-  workflow_dispatch: null
-concurrency:
-  group: janus-gate-doi
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   validate:
     runs-on: ubuntu-latest

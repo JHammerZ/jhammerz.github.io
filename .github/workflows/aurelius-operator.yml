@@ -1,12 +1,7 @@
 name: Aurelius-Engine Sovereign Operator Pipeline
 on:
-  workflow_dispatch: null
-concurrency:
-  group: aurelius-operator
-  cancel-in-progress: false
-permissions:
-  contents: write
-  actions: write
+ workflow_dispatch:
+
 jobs:
   lighthouse-audit:
     runs-on: ubuntu-latest

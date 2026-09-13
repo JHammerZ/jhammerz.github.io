@@ -1,21 +1,7 @@
 name: 'SEO: Indexation'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - docs/**
-    - '*.md'
-    - '*.html'
-    - sitemap.xml
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 0 * * *
-concurrency:
-  group: indexation
-  cancel-in-progress: false
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   index-on:
     runs-on: ubuntu-latest

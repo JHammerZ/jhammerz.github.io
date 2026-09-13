@@ -1,10 +1,7 @@
 name: Kardashian v3 - Auto Cutter From Existing Library
 on:
-  workflow_dispatch: null
-  push:
-    paths:
-    - clips/manifest.json
-    - sessions/library/**
+ workflow_dispatch:
+
 jobs:
   cut:
     runs-on: ubuntu-latest

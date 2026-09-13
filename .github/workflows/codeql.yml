@@ -1,19 +1,7 @@
 name: CodeQL Advanced
 on:
-  push:
-    branches:
-    - main
-    - master
-  pull_request:
-    branches:
-    - main
-    - master
-  schedule:
-  - cron: 0 0 * * 0
-  workflow_dispatch: null
-concurrency:
-  group: codeql
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})

@@ -1,15 +1,7 @@
 name: 'Scale: Global Traffic Blast Protocol'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - assets/js/edge-caster-v2.js
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   scale_distribution:
     name: pipeline-scale-blast

@@ -1,33 +1,7 @@
 name: Deploy - H-FID Lysander Engine
-concurrency:
-  group: lysander_deploy
-  cancel-in-progress: false
 on:
-  workflow_dispatch:
-    inputs:
-      sequence:
-        description: Which sequence to run
-        required: true
-        default: audit
-        type: choice
-        options:
-        - audit
-        - deploy
-        - full
-        - emergency
-      dry_run:
-        description: Dry run - no commits
-        required: false
-        default: true
-        type: boolean
-  push:
-    tags:
-    - v*
-    - api/v*/**
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   sovereign-sequence:
     runs-on: ubuntu-latest

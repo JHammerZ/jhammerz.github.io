@@ -1,23 +1,7 @@
 name: Site Sitemap / Indexation Autonomous Push
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - '**.html'
-    - '**.md'
-    - '**.xml'
-    - index.html
-    - robots.txt
-    - sitemap.xml
-    - .hfid/**
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 0 * * *
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest

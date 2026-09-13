@@ -1,26 +1,7 @@
 name: KV Sync Cloudflare KV & Edge Config
-concurrency:
-  group: edge-config-sync
-  cancel-in-progress: false
 on:
-  repository_dispatch:
-    types:
-    - edge-config-sync
-  workflow_dispatch:
-    inputs:
-      namespace:
-        description: KV Namespaces to Sync
-        required: true
-        type: choice
-        options:
-        - H-FID
-        - H_FID_WWW
-        - L_FID_PRO
-        - S_FID_DEV
-        - SEC_MAN_EDGE
-        default: SEC_MAN_EDGE
-permissions:
-  contents: read
+ workflow_dispatch:
+
 jobs:
   sync_edge_config:
     runs-on: ubuntu-latest

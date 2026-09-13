@@ -1,26 +1,7 @@
 name: 'CD: H-FID HEO Bridge'
 on:
-  workflow_dispatch:
-    inputs:
-      message:
-        description: Legacy broadcast message text payload
-        required: false
-        default: H-FID Matrix Broadcast System Initialization
-      force:
-        description: Force dispatch fallback pipeline orchestration
-        required: false
-        default: false
-        type: boolean
-  push:
-    tags:
-    - v*
-concurrency:
-  group: heo-broadcast
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   hfid_bridge:
     name: hfid-bridge

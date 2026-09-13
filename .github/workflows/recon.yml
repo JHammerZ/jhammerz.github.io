@@ -1,37 +1,7 @@
 name: 'Security: H-FID Recon'
 on:
-  workflow_dispatch:
-    inputs:
-      target:
-        description: Target domain - MUST be owned
-        required: true
-        default: jhammerz.github.io
-        type: string
-      severity:
-        description: Minimum severity to report
-        required: true
-        default: medium
-        type: choice
-        options:
-        - info
-        - low
-        - medium
-        - high
-        - critical
-      force:
-        description: Force scan even if unchanged
-        required: false
-        default: false
-        type: boolean
-  schedule:
-  - cron: 0 0 * * 1
-concurrency:
-  group: recon
-  cancel-in-progress: false
-permissions:
-  contents: read
-  id-token: write
-  security-events: write
+ workflow_dispatch:
+
 jobs:
   recon:
     runs-on: ubuntu-latest

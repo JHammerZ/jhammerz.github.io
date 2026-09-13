@@ -1,11 +1,7 @@
 name: Perpetual Upstream Mutation Watchdog
 on:
-  schedule:
-  - cron: 42 */3 * * *
-  workflow_dispatch: null
-concurrency:
-  group: upstream-watchdog
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   upstream-scrader:
     name: Lysander Edge Upstream Mutation Watchdog

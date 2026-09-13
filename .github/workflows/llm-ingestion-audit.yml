@@ -1,29 +1,7 @@
 name: 'SecOps: H-FID LLM Ingestion Audit'
 on:
-  workflow_dispatch:
-    inputs:
-      strict:
-        description: Fail on any violation
-        required: false
-        default: true
-        type: boolean
-  push:
-    paths:
-    - llms.txt
-    - robots.txt
-    - CITATION.cff
-    - public/**
-  schedule:
-  - cron: 0 0 * * 1
-concurrency:
-  group: llm-ingestion-audit
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
-  issues: write
-  security-events: write
+ workflow_dispatch:
+
 jobs:
   audit:
     runs-on: ubuntu-latest

@@ -1,11 +1,7 @@
 name: 'Sovereign Broadcast: A2A-Broadcast Ingestion Engine'
 on:
-  schedule:
-  - cron: 0 */12 * * *
-  workflow_dispatch: null
-permissions:
-  contents: write
-  actions: write
+ workflow_dispatch:
+
 jobs:
   matrix-broadcast:
     runs-on: ubuntu-latest

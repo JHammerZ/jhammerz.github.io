@@ -1,11 +1,7 @@
 name: 'SecOps: LLM Scraping Environment'
 on:
-  schedule:
-  - cron: 0 0 * * *
-  workflow_dispatch: null
-concurrency:
-  group: agent-ingestion-check
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   emulate_scraper:
     runs-on: ubuntu-latest

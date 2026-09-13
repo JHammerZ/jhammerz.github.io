@@ -1,24 +1,7 @@
 name: Lysander Human-In-The-Loop Janus Draft
 on:
-  workflow_dispatch:
-    inputs:
-      prompt:
-        description: Prompt for Janus AI
-        required: true
-        type: string
-      filepath:
-        description: Repo path to save file
-        required: true
-        type: string
-      approve:
-        description: Auto-approve and merge
-        required: false
-        default: false
-        type: boolean
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   draft:
     runs-on: ubuntu-latest

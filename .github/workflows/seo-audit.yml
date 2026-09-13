@@ -1,31 +1,7 @@
 name: 'SecOps: H-FID SEO Audit'
 on:
-  workflow_dispatch:
-    inputs:
-      strict:
-        description: Fail on any violation
-        required: false
-        default: true
-        type: boolean
-  push:
-    branches:
-    - main
-    paths:
-    - '**.html'
-    - sitemap.xml
-    - robots.txt
-    - llms.txt
-  schedule:
-  - cron: 0 0 * * 1
-concurrency:
-  group: seo-audit
-  cancel-in-progress: false
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
-  issues: write
-  security-events: write
+ workflow_dispatch:
+
 jobs:
   audit:
     runs-on: ubuntu-latest

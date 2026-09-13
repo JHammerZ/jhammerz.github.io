@@ -1,17 +1,7 @@
 name: 'Audit: Janus Gate Matrix Verification'
 on:
-  push:
-    branches:
-    - main
-    - master
-  workflow_dispatch: null
-concurrency:
-  group: janus-gate
-  cancel-in-progress: false
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest

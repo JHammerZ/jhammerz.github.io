@@ -1,20 +1,7 @@
 name: Verify OpenTimestamps - Sovereign Audit
 on:
-  schedule:
-  - cron: 0 0 * * *
-  workflow_dispatch:
-    inputs:
-      target_path:
-        description: Path to verify
-        required: false
-        default: .hfid
-        type: string
-concurrency:
-  group: verify
-  cancel-in-progress: false
-permissions:
-  contents: read
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   verify:
     runs-on: ubuntu-latest

@@ -1,15 +1,7 @@
 name: 'Optimization: Warm Edge Distribution Cache'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - assets/js/cache-warmer.js
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   cache_warm:
     name: warm-edge-casters

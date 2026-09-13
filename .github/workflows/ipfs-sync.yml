@@ -1,31 +1,7 @@
 name: 'Decentralized: H-FID IPFS Sync'
 on:
-  workflow_dispatch:
-    inputs:
-      pin_service:
-        description: Pinning service
-        required: true
-        default: web3storage
-        type: choice
-        options:
-        - web3storage
-        - pinata
-        - estuary
-        - none
-  push:
-    branches:
-    - main
-    paths:
-    - public/**
-    - dist/**
-    - '*.html'
-concurrency:
-  group: ipfs-sync
-  cancel-in-progress: false
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   sync:
     runs-on: ubuntu-latest

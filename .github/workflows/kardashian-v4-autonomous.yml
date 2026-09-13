@@ -1,13 +1,7 @@
 name: Kardashian v4 - Autonomous Co-Architect
 on:
-  workflow_dispatch: null
-  push:
-    paths:
-    - clips/**
-    - index.html
-    - 404.html
-    - .nojekyll
-    - sessions/library/**
+ workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest

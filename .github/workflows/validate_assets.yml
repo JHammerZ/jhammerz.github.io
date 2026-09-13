@@ -1,23 +1,7 @@
 name: 'CD: Janus Gate Dual-Path Inference'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - sitemap.xml
-    - llms.txt
-    - ai-context.json
-    - .well-known/**
-    - llms-full.txt
-    - entities.json
-    - proof.json
-    - .github/workflows/**
-    - .hfid/**
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   validate_assets:
     runs-on: ubuntu-latest

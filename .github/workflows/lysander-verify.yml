@@ -1,24 +1,7 @@
 name: 'Security: H-FID Lysander Bot Purge'
 on:
-  schedule:
-  - cron: 0 */4 * * *
-  workflow_dispatch:
-    inputs:
-      mode:
-        description: Purge mode
-        required: true
-        default: enforce
-        type: choice
-        options:
-        - audit
-        - enforce
-        - heartbeat
-concurrency:
-  group: lysander-verify
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   lysander:
     runs-on: ubuntu-latest

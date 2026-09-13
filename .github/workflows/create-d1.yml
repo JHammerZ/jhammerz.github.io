@@ -1,17 +1,7 @@
 name: 'Recovery: Provision Live D1 Database'
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-    paths:
-    - wrangler.toml
-    - wrangler.jsonc
-    - migrations/**
-    - .github/workflows/create-d1.yml
-concurrency:
-  group: create-d1
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   provision-d1:
     runs-on: ubuntu-latest

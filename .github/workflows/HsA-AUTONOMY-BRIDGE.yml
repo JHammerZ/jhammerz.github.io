@@ -1,28 +1,7 @@
 name: 'HSA: Sitemap + IndexNow Autonomous Push'
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-    paths:
-    - '**/*.md'
-    - '**/*.html'
-    - llms.txt
-    - llms-full.txt
-    - entities.json
-    - proof.html
-    - .github/workflows/**
-    - .hfid/**
-    - sitemap.xml
-  schedule:
-  - cron: 0 0 * * *
-concurrency:
-  group: HsA-AUTONOMY-BRIDGE
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest

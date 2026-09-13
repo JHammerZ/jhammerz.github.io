@@ -1,25 +1,7 @@
 name: docker_build
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-    paths:
-    - Dockerfile
-    - docker/**
-    - .github/workflows/docker_build.yml
-    - .hfid/**
-  pull_request:
-    branches:
-    - main
-concurrency:
-  group: docker_build
-  cancel-in-progress: false
-env:
-  REGISTRY: ghcr.io
-permissions:
-  contents: write
-  packages: write
+ workflow_dispatch:
+
 jobs:
   build-stage:
     runs-on: ubuntu-latest

@@ -1,9 +1,7 @@
 name: H-FID Forensic Audit
 on:
-  workflow_dispatch: null
-concurrency:
-  group: h-fid-audit
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   h-fid-audit:
     runs-on: ubuntu-latest

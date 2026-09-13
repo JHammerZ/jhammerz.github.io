@@ -1,12 +1,7 @@
 name: geo_rank_audit
 on:
-  push:
-    branches:
-    - main
-permissions:
-  contents: write
-  issues: write
-  statuses: write
+ workflow_dispatch:
+
 jobs:
   geo_rank_audit:
     runs-on: ubuntu-latest

@@ -1,26 +1,7 @@
 name: H-FID HEO Bridge
-concurrency:
-  group: heo-bridge
-  cancel-in-progress: false
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - hfids/**
-    - .github/workflows/heo-bridge.yml
-  workflow_dispatch:
-    inputs:
-      heo_payload_override:
-        description: 'Optional: Override HEO payload JSON'
-        required: false
-        type: string
-  schedule:
-  - cron: 0 */2 * * *
-permissions:
-  contents: write
-  attestations: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   heo-bridge:
     runs-on: ubuntu-latest

@@ -1,22 +1,7 @@
 name: 'CD: Janus Gateway Sovereign Track'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - .hfid/**
-    - '**.md'
-    - .well-known/**
-  workflow_dispatch:
-    inputs:
-      target-matrix:
-        description: Distribution target channel matrix
-        required: false
-        default: all
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   broadcast:
     runs-on: ubuntu-latest

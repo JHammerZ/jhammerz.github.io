@@ -1,17 +1,7 @@
 name: 'SEO: Sitemap + IndexFlow Autonomous Push'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - '**.html'
-    - '**.md'
-    - sitemap.xml
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest

@@ -1,20 +1,7 @@
 name: IndexNow Autonomous Push
-concurrency:
-  group: indexnow-autonomous-push
-  cancel-in-progress: false
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-    paths:
-    - sitemap.xml
-    - llms.txt
-    - '**/*.html'
-  schedule:
-  - cron: 0 */6 * * *
-permissions:
-  contents: read
+ workflow_dispatch:
+
 jobs:
   push:
     runs-on: ubuntu-latest

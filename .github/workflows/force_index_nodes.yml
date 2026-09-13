@@ -1,26 +1,7 @@
 name: FORCE_INDEX_NODES
 on:
-  schedule:
-  - cron: 0 0 * * *
-  - cron: 0 12 * * *
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-    paths:
-    - .well-known/**
-    - sitemap.xml
-    - robots.txt
-    - llms.txt
-    - ai-context.json
-    - .github/workflows/force_index_nodes.yml
-concurrency:
-  group: force_index_nodes
-  cancel-in-progress: false
-permissions:
-  contents: write
-  attestations: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   FORCE_INDEX_NODES:
     runs-on: ubuntu-latest

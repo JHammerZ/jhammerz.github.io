@@ -1,13 +1,7 @@
 name: Build and Test TMA Full Suite
 on:
-  push:
-    branches:
-    - main
-    - master
-  workflow_dispatch: null
-concurrency:
-  group: build-tma-full
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   execute-matrix:
     runs-on: ubuntu-latest

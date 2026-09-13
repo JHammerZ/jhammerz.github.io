@@ -1,37 +1,7 @@
 name: 'Admin: H-FID Lysander Quota Purge'
 on:
-  workflow_dispatch:
-    inputs:
-      purge_type:
-        description: What to purge
-        required: true
-        default: token_logs
-        type: choice
-        options:
-        - token_logs
-        - rotate_key
-        - full_reset
-      api_provider:
-        description: Which API quota
-        required: true
-        default: gemini
-        type: choice
-        options:
-        - gemini
-        - janus
-        - openai
-        - all
-      reason:
-        description: Reason for purge - logged to audit
-        required: true
-        type: string
-concurrency:
-  group: lysander_quota_purge
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   purge:
     runs-on: ubuntu-latest

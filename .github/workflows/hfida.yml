@@ -1,11 +1,7 @@
 name: HFIDa Post Scanner
 on:
-  push:
-    branches:
-    - main
-  pull_request:
-    branches:
-    - main
+ workflow_dispatch:
+
 jobs:
   scan:
     runs-on: ubuntu-latest

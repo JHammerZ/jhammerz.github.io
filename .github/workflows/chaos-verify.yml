@@ -1,15 +1,7 @@
 name: Chaos Verify | Self-Healing Stack
 on:
-  schedule:
-  - cron: 0 * * * *
-  workflow_dispatch: null
-concurrency:
-  group: chaos-verify
-  cancel-in-progress: false
-permissions:
-  contents: read
-  issues: write
-  actions: read
+ workflow_dispatch:
+
 jobs:
   chaos:
     runs-on: ubuntu-latest

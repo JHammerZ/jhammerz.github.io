@@ -1,21 +1,7 @@
 name: 'Security: H-FID Human Verification'
 on:
-  workflow_dispatch:
-    inputs:
-      verification_note:
-        description: Human verification context
-        required: true
-        type: string
-      oath:
-        description: I verify I am human and sovereign author
-        required: true
-        type: boolean
-concurrency:
-  group: h-fid-verify
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   verify-human:
     runs-on: ubuntu-latest

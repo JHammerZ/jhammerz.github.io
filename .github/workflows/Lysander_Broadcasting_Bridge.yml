@@ -1,17 +1,7 @@
 name: Lysander 3.0 Broadcasting Bridge
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - .github/workflows/Lysander_Broadcasting_Bridge.yml
-    - broadcast-to-edge.sh
-  workflow_dispatch: null
-permissions:
-  contents: write
-  actions: write
-  packages: write
-  deployments: write
+ workflow_dispatch:
+
 jobs:
   broadcast-and-trigger-fleet:
     runs-on: ubuntu-latest

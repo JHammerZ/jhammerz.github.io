@@ -1,20 +1,7 @@
 name: 'S0: Favicon Sovereign Sync'
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-    paths:
-    - assets/favicon.svg
-    - assets/logo.png
-    - .github/workflows/favicon_sync.yml
-concurrency:
-  group: favicon_sync
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   favicon_sync:
     runs-on: ubuntu-latest

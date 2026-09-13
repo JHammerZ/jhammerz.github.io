@@ -1,18 +1,7 @@
 name: 'Syndicate: Compile Dynamic Distribution Feeds'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - scripts/feed_generator.py
-    - entities.json
-  schedule:
-  - cron: 30 12 * * *
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   generate_feeds:
     name: execute-feed-compilation

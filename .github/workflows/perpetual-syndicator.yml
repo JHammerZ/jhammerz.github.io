@@ -1,11 +1,7 @@
 name: Perpetual Content Syndicator
-concurrency:
-  group: perpetual-syndicator
-  cancel-in-progress: false
 on:
-  schedule:
-  - cron: 0 */6 * * *
-  workflow_dispatch: null
+ workflow_dispatch:
+
 jobs:
   syndicate:
     runs-on: ubuntu-latest

@@ -1,17 +1,7 @@
 name: 'Analytics: Compile Mesh Net Traffic Summary'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - scripts/traffic_visualizer.py
-  schedule:
-  - cron: 0 12 * * *
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   visualize_analytics:
     name: execute-traffic-compilation

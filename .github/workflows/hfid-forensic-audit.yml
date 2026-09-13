@@ -1,15 +1,7 @@
 name: 'Audit: H-FID-100 Forensic Certification'
-concurrency:
-  group: hfid-forensic-audit
-  cancel-in-progress: false
 on:
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 3 * * 1
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   forensic-audit:
     runs-on: ubuntu-latest

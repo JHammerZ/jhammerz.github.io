@@ -1,33 +1,7 @@
 name: 'Legal: H-FID Claim Monitor'
 on:
-  schedule:
-  - cron: 15 2,14 * * *
-  workflow_dispatch:
-    inputs:
-      domain:
-        description: Specific domain to check for claim theft
-        required: false
-        type: string
-      action:
-        description: Action to take
-        required: true
-        default: scan
-        type: choice
-        options:
-        - scan
-        - dmca-draft
-        - verify
-  workflow_call:
-    inputs:
-      domain:
-        required: false
-        type: string
-concurrency:
-  group: hfid-claim-monitor
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   monitor:
     runs-on: ubuntu-latest

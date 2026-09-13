@@ -1,17 +1,7 @@
 name: 'Cloudflare: Sovereign Content Edge Mesh'
 on:
-  push:
-    branches:
-    - main
-    - master
-    paths:
-    - public/**
-    - dist/**
-    - .well-known/**
-  workflow_dispatch: null
-concurrency:
-  group: deploy-cloudflare
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   broadcast-cloudflare:
     name: Cloudflare Anycast CDN Routing Deployment

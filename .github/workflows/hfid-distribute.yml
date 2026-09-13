@@ -1,10 +1,7 @@
 name: '[DEPRECATED] -> hfid-lysander-distribution'
 on:
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   distribute:
     runs-on: ubuntu-latest

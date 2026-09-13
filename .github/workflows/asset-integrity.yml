@@ -1,14 +1,7 @@
 name: Sovereign Asset Integrity Sync
 on:
-  push:
-    branches:
-    - main
-  workflow_dispatch: null
-concurrency:
-  group: asset-integrity
-  cancel-in-progress: false
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   asset_sync:
     runs-on: ubuntu-latest

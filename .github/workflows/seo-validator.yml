@@ -1,19 +1,7 @@
 name: SEO and Link Validator
 on:
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 0 * * *
-  push:
-    branches:
-    - main
-    paths:
-    - '**.html'
-    - '**.md'
-    - sitemap.xml
-    - robots.txt
-concurrency:
-  group: seo-validator
-  cancel-in-progress: false
+ workflow_dispatch:
+
 jobs:
   validate:
     runs-on: ubuntu-latest

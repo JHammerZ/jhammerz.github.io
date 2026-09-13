@@ -1,29 +1,7 @@
 name: 'CI: Cloudflare Workers Deploy'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - wrangler.toml
-    - worker.js
-    - .github/workflows/ci.yml
-    - src/**
-  pull_request:
-    branches:
-    - main
-    paths:
-    - wrangler.toml
-    - worker.js
-    - src/**
-  workflow_dispatch: null
-concurrency:
-  group: ci
-  cancel-in-progress: false
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
-  pull-requests: write
+ workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

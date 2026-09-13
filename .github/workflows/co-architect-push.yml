@@ -1,9 +1,7 @@
 name: Co-Architect Push - Music + Index
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
+ workflow_dispatch:
+
 jobs:
   sovereign-push:
     runs-on: self-hosted

@@ -1,16 +1,7 @@
 name: Deploy Worker
-concurrency:
-  group: deploy-worker
-  cancel-in-progress: false
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-    paths:
-    - wrangler.toml
-    - worker.js
-    - src/**
+ workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

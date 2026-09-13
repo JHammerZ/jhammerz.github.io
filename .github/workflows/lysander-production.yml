@@ -1,25 +1,7 @@
 name: Sovereign Model Baseline
 on:
-  schedule:
-  - cron: 0 0 * * 0
-  push:
-    tags:
-    - v*
-  pull_request: null
-  workflow_dispatch:
-    inputs:
-      baseline_sha:
-        description: Override Baseline commit SHA
-        required: false
-        default: a13b9be
-        type: string
-concurrency:
-  group: lysander-production
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   stabilize-grid:
     runs-on: ubuntu-latest

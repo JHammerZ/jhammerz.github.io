@@ -1,18 +1,7 @@
 name: bundle_context
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - docs/**
-    - llms.txt
-    - llms-full.txt
-  workflow_dispatch: null
-concurrency:
-  group: bundle_context
-  cancel-in-progress: false
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   bundle:
     runs-on: ubuntu-latest

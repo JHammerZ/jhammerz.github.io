@@ -1,21 +1,7 @@
 name: H-FID - Compile Core Data Repository
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-  pull_request: null
-  workflow_call: null
-  schedule:
-  - cron: 0 */6 * * *
-concurrency:
-  group: build-and-sync
-  cancel-in-progress: false
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   build-and-sync:
     runs-on: ubuntu-latest

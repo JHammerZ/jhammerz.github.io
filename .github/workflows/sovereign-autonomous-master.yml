@@ -1,15 +1,7 @@
 name: Sovereign Autonomous Master - 100% Autonomy
 on:
-  push:
-    branches:
-    - main
-  schedule:
-  - cron: 0 */6 * * *
-  workflow_dispatch: null
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   autonomous:
     runs-on: ubuntu-latest

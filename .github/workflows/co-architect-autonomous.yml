@@ -1,23 +1,7 @@
 name: Co-Architect Autonomous Sovereign
 on:
-  workflow_dispatch:
-    inputs:
-      task:
-        description: 'Task: full|music|index|fix|audit'
-        required: false
-        default: full
-        type: choice
-        options:
-        - full
-        - music
-        - index
-        - fix
-        - audit
-  push:
-    branches:
-    - main
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   autonomous:
     runs-on: ubuntu-latest

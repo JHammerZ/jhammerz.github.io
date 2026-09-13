@@ -1,17 +1,7 @@
 name: 'Syndicate: Decentralized Mesh Replication'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - .well-known/hfid/**
-    - entities.json
-    - assets/js/edge-caster.js
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   mesh_broadcast:
     name: broadcast-substrate-nodes

@@ -1,14 +1,7 @@
 name: Sovereign Structural Validation Engine
 on:
-  push:
-    branches:
-    - main
-  workflow_dispatch: null
-concurrency:
-  group: validate-engine
-  cancel-in-progress: false
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   validate_assets:
     runs-on: ubuntu-latest

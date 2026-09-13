@@ -1,13 +1,7 @@
 name: Lysander 3.0 Autonomous Push
 on:
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 */6 * * *
-concurrency:
-  group: lysander_push
-  cancel-in-progress: false
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   autonomous-commit:
     runs-on: ubuntu-latest

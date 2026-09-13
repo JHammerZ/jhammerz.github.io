@@ -1,32 +1,7 @@
 name: 'Broadcast: H-FID Omega'
 on:
-  workflow_dispatch:
-    inputs:
-      target:
-        description: Broadcast target
-        required: true
-        default: all
-        type: choice
-        options:
-        - arweave
-        - ipfs
-        - github
-        - all
-      force:
-        description: Force broadcast even if unchanged
-        required: false
-        default: false
-        type: boolean
-  push:
-    tags:
-    - v*
-concurrency:
-  group: omega-broadcast
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   broadcast:
     runs-on: ubuntu-latest

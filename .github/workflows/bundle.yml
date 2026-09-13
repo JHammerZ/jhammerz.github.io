@@ -1,22 +1,7 @@
 name: Handle Workflow | H-FID Asset Bundler
 on:
-  workflow_dispatch: null
-  push:
-    branches:
-    - main
-    paths:
-    - src/**
-    - public/**
-    - package.json
-    - package-lock.json
-    - .well-known/hfid/**
-  schedule:
-  - cron: 0 7 * * *
-concurrency:
-  group: bundle
-  cancel-in-progress: false
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest

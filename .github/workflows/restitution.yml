@@ -1,16 +1,7 @@
 name: 'Security: H-FID Restitution Monitor'
 on:
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 0 * * *
-concurrency:
-  group: restitution
-  cancel-in-progress: false
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
-  issues: write
+ workflow_dispatch:
+
 jobs:
   restitution:
     runs-on: ubuntu-latest

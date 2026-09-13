@@ -1,6 +1,7 @@
 name: sovereign-agent - restored
 on:
-  workflow_dispatch: {}
+ workflow_dispatch:
+
 jobs:
   run:
     runs-on: ubuntu-latest

@@ -1,11 +1,7 @@
 name: Kardashian Distribution Engine v2 - Library Harvest
 on:
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 */6 * * *
-  push:
-    paths:
-    - sessions/library/**
+ workflow_dispatch:
+
 jobs:
   harvest:
     runs-on: ubuntu-latest

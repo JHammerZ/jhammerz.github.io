@@ -1,33 +1,7 @@
 name: 'Admin: H-FID Killswitch'
 on:
-  workflow_dispatch:
-    inputs:
-      target:
-        description: What to cancel
-        required: true
-        default: zombies
-        type: choice
-        options:
-        - all
-        - zombies
-        - queued
-        - in_progress
-        - workflow_name
-      workflow_name:
-        description: If target=workflow_name, specify name
-        required: false
-        type: string
-      reason:
-        description: Reason for termination - logged to audit
-        required: true
-        type: string
-concurrency:
-  group: kill_all
-  cancel-in-progress: false
-permissions:
-  actions: write
-  contents: read
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   killswitch:
     runs-on: ubuntu-latest

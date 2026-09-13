@@ -1,28 +1,7 @@
 name: 'SEO: Sitemap + IndexNow Autonomous Push'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - docs/**
-    - '*.html'
-    - llms.txt
-    - llms-full.txt
-    - entities.json
-    - proof.html
-    - .github/workflows/**
-    - .hfid/**
-    - sitemap.xml
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 0 * * *
-concurrency:
-  group: HxA-AUTONOMY-BRIDGE
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest

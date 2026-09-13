@@ -1,57 +1,7 @@
 name: 'SecOps: H-FID Threat Intel Logger'
 on:
-  workflow_dispatch:
-    inputs:
-      ioc_type:
-        description: IOC Type
-        required: true
-        type: choice
-        options:
-        - domain
-        - ipv4
-        - ipv6
-        - url
-        - sha256
-        - sha1
-        - md5
-        - email
-        - cve
-        default: domain
-      value:
-        description: Indicator value
-        required: true
-        type: string
-      actor:
-        description: Threat actor / group
-        required: false
-        type: string
-      ttp:
-        description: MITRE ATT&CK TTP ID
-        required: false
-        type: string
-      malware:
-        description: Malware family
-        required: false
-        type: string
-      confidence:
-        description: Confidence level
-        required: true
-        type: choice
-        options:
-        - low
-        - medium
-        - high
-        default: medium
-      notes:
-        description: Analyst notes
-        required: false
-        type: string
-concurrency:
-  group: threat-intel
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
+ workflow_dispatch:
+
 jobs:
   log-intel:
     runs-on: ubuntu-latest

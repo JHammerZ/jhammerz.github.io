@@ -1,18 +1,7 @@
 name: 'SEO: Force Search Engine Indexation'
-concurrency:
-  group: force_index
-  cancel-in-progress: false
 on:
-  schedule:
-  - cron: 0 0 * * *
-  workflow_dispatch:
-    inputs:
-      target_url:
-        description: Specific URL to index
-        required: false
-        type: string
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   force-index:
     runs-on: ubuntu-latest

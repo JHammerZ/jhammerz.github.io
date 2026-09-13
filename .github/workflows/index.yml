@@ -1,29 +1,7 @@
 name: 'SEO: H-FID IndexNow + Google Hardened'
 on:
-  workflow_dispatch:
-    inputs:
-      urls:
-        description: Specific URLs to index, comma-separated
-        required: false
-        type: string
-      force:
-        description: Force submit even if unchanged
-        required: false
-        default: false
-        type: boolean
-  push:
-    branches:
-    - main
-    paths:
-    - public/**
-    - sitemap.xml
-concurrency:
-  group: index
-  cancel-in-progress: false
-permissions:
-  contents: read
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   index:
     runs-on: ubuntu-latest

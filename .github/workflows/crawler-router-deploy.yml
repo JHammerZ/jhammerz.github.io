@@ -1,15 +1,7 @@
 name: 'Optimization: Deploy Web Crawler Response Filter'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - assets/js/crawler-router.js
-  workflow_dispatch: null
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   crawler_route:
     name: optimize-crawler-ingestion

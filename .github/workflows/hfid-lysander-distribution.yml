@@ -1,17 +1,7 @@
 name: 'CD: H-FID LYSANDER Distribution'
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - .well-known/hfid/chain.json
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 6 * * *
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   distribute:
     runs-on: ubuntu-latest

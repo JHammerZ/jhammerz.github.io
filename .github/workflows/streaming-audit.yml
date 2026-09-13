@@ -1,25 +1,7 @@
 name: 'SecOps: H-FID Streaming Audit'
 on:
-  schedule:
-  - cron: 0 5 * * *
-  workflow_dispatch:
-    inputs:
-      platform:
-        description: Platform to audit
-        required: true
-        type: choice
-        options:
-        - spotify
-        - apple_music
-        - youtube_music
-        default: spotify
-concurrency:
-  group: streaming-audit
-  cancel-in-progress: false
-permissions:
-  contents: write
-  id-token: write
-  attestations: write
+ workflow_dispatch:
+
 jobs:
   audit:
     runs-on: ubuntu-latest

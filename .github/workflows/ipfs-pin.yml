@@ -1,12 +1,7 @@
 name: sovereign-ipfs-pin
 on:
-  workflow_run:
-    workflows:
-    - Aurelius Heartbeat
-    - omnichannel-refresh
-    types:
-    - completed
-  workflow_dispatch: null
+ workflow_dispatch:
+
 jobs:
   pin:
     runs-on: ubuntu-latest

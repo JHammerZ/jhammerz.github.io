@@ -1,17 +1,7 @@
 name: Sovereign Agentic Data Matrix Synchronization
 on:
-  schedule:
-  - cron: 0 */4 * * *
-  workflow_dispatch:
-    inputs:
-      force_post:
-        description: Force social media post even if no changes
-        required: true
-        type: boolean
-        default: false
-permissions:
-  contents: write
-  actions: write
+ workflow_dispatch:
+
 jobs:
   sync_matrix:
     runs-on: ubuntu-latest

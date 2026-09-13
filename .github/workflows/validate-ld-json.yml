@@ -1,17 +1,7 @@
 name: 'ST-Generator: HFD-validate-LD-JSON Framework Validation'
-concurrency:
-  group: validate-ld-json
-  cancel-in-progress: false
 on:
-  workflow_dispatch: null
-  schedule:
-  - cron: 0 0 * * *
-  push:
-    paths:
-    - '**.html'
-    - '**.json'
-permissions:
-  contents: write
+ workflow_dispatch:
+
 jobs:
   validate_schema:
     name: Validate Structured Data Schema
