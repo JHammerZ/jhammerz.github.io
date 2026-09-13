@@ -1,3 +1,9 @@
+name: Deploy-Google
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Deploy to Google Cloud Run
@@ -54,3 +60,4 @@ jobs:
         if: always()
         run: |
           echo "### GCP Deploy Complete" >> $GITHUB_STEP_SUMMARY
+

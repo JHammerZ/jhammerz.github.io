@@ -1,3 +1,9 @@
+name: Build-And-Sync
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # H-FID v1.0 / H-FID Standard / REC v7.2 - COMPLETE INTENT PRESERVED
 name: "H-FID - Compile Core Data Repository"
 concurrency:
@@ -126,3 +132,4 @@ jobs:
             .hfid/indexing/
             lines-full.txt
           retention-days: 90
+

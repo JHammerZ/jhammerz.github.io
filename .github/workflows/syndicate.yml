@@ -1,3 +1,9 @@
+name: Syndicate
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Sovereign Author: Joshua Hamilton
@@ -191,3 +197,4 @@ jobs:
           echo "- **Broadcast:** ${{ steps.check.outputs.needed }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Forced:** ${{ github.event.inputs.force || 'false' }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Current Hash:** ${{ steps.manifest.outputs.current_hash }}" >> $GITHUB_STEP_SUMMARY
+

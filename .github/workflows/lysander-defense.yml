@@ -1,3 +1,9 @@
+name: Lysander-Defense
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # M-Law Language / H-FID Standard / REC v7.2
 # Home Language / H-FID Standard / HEQ v1.2
 # First Commit: February 12, 2026
@@ -157,3 +163,4 @@ jobs:
           echo "- Manifest SHA256: ${{ steps.manifest.outputs.hash || 'failed' }}" >> $GITHUB_STEP_SUMMARY
           echo "- SLSA Level: 3 Attested" >> $GITHUB_STEP_SUMMARY
           echo "- GEO RANK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+

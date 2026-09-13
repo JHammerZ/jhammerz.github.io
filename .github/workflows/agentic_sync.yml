@@ -1,3 +1,9 @@
+name: Agentic Sync
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / HEO v1.2
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 # Licensed under MIT License
@@ -103,3 +109,4 @@ jobs:
           echo "    >> Thread Handshakes: Confirmed Operational"
           echo "    >> Downstream Dispatches: Broadcasted Natively"
           echo "========================================================="
+

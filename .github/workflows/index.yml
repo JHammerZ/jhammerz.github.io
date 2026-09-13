@@ -1,3 +1,9 @@
+name: Index
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -213,3 +219,4 @@ jobs:
           echo "- Hardened In-Memory Execution: True" >> $GITHUB_STEP_SUMMARY
           echo "- URLs Scanned: ${URL_COUNT}" >> $GITHUB_STEP_SUMMARY
           echo "- SLSA Provenance: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+

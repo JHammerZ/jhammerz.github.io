@@ -1,3 +1,9 @@
+name: Sitemap
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # .github/workflows/sitemap.yml
 # For use with Autonomous Push / Autonoma web-dev loop, sitemap automation
 
@@ -165,3 +171,4 @@ jobs:
       - name: Post Checkout Codebase
         run: |
           echo "Post job cleanup..."
+

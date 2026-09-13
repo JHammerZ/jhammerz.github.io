@@ -1,3 +1,9 @@
+name: Asset-Integrity
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -54,3 +60,4 @@ jobs:
             
           echo "[+] Handshake returned status code: HTTP $RESPONSE_CODE"
           echo "[+] Cloudflare authentication loop completed successfully."
+

@@ -1,3 +1,9 @@
+name: Ci
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Sovereign Author: Joshua Hamilton
@@ -121,3 +127,4 @@ jobs:
           name: hfid-edge-attestation
           path: .hfid/edge/
           retention-days: 90
+

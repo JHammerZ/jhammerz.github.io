@@ -1,3 +1,9 @@
+name: Streaming-Audit
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
@@ -193,3 +199,4 @@ jobs:
           echo "- **Timestamp:** ${{ steps.fetch.outputs.timestamp }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Hash:** ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
           echo "- **GEO_BAND:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+

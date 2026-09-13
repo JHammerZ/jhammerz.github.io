@@ -1,3 +1,9 @@
+name: H-Fid-Threat-Hunt
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HRS v1.2 / H-FID Standard / SEC v1.2.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -140,3 +146,4 @@ jobs:
           echo "- Status: ${{ steps.hunt.outputs.status || 'CLEAN' }}" >> $GITHUB_STEP_SUMMARY
           echo "- SILA: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
           echo "- GEO_MARK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+

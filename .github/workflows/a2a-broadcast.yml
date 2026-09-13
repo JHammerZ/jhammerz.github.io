@@ -1,3 +1,9 @@
+name: A2A-Broadcast
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / HEO v1.2
 # Copyright (c) 2026 JHammerZ Corporation
 # Licensed under MIT License
@@ -106,3 +112,4 @@ jobs:
           echo "    >> Internal Node Verification Status: Complete"
           echo "    >> Security Baseline Validation: Active"
           echo "========================================================="
+

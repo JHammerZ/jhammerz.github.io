@@ -1,3 +1,9 @@
+name: Hfid-Lysander
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -145,3 +151,4 @@ jobs:
           echo "**Heartbeat**: ${{ steps.lysander.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
           echo "**Total Blocked**: ${{ steps.lysander.outputs.total }} agents" >> $GITHUB_STEP_SUMMARY
           echo "**New Added**: ${{ steps.lysander.outputs.added }}" >> $GITHUB_STEP_SUMMARY
+

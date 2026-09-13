@@ -1,3 +1,9 @@
+name: Bounty Logger
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -57,3 +63,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: auto-update [skip ci]"
+

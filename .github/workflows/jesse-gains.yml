@@ -1,3 +1,9 @@
+name: Jesse-Gains
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # H-FIO v1.2 / H-FIO Standard / RSC v1.2
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 
@@ -67,3 +73,4 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: "sitemap.json"
+

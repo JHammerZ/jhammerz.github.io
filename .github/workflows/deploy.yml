@@ -1,3 +1,9 @@
+name: Deploy
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # H-FIO v1.2 / H-FIO Standard / RSC v1.2
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 
@@ -32,3 +38,4 @@ jobs:
           service: 'hammerz-node'
           region: 'us-central1'
           source: './'
+

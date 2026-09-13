@@ -1,3 +1,9 @@
+name: Sovereign-Audit
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -28,3 +34,4 @@ jobs:
           if [ -f yarn.lock ]; then echo "yarn.lock found"; else echo "no yarn.lock"; fi
       - name: Sovereign Audit Complete
         run: echo "Audit complete for ${{ github.ref }}"
+

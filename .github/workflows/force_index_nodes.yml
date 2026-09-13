@@ -1,3 +1,9 @@
+name: Force Index Nodes
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -176,3 +182,4 @@ jobs:
           echo "- **Execution Time**: ${{ steps.manifest.outputs.timestamp }}" >> $GITHUB_STEP_SUMMARY
           echo "- **GNO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+

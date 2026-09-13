@@ -1,3 +1,9 @@
+name: Deploy-To-Google-Cloud-Run
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / HBS v1.2.1
 # Sovereign Author: Joshua Hamilton (J-HammerZ)
 # FIXED: secrets cannot be used in if: - guard inside run instead
@@ -36,3 +42,4 @@ jobs:
           # Uncomment when you add Cloud Run Admin to that SA:
           # gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
           # gcloud run deploy jhammers-node --source=. --region=us-central1
+

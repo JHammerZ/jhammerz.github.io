@@ -1,3 +1,9 @@
+name: Heo-Broadcast
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Sovereign Author: Joshua Hamilton
@@ -125,3 +131,4 @@ jobs:
           name: hfid-bridge-payloads-${{ github.sha }}
           path: .hfid/heo-bridge/
           retention-days: 14
+

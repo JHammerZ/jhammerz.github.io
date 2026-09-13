@@ -1,3 +1,9 @@
+name: Omega-Broadcast
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [JHammerZ]
 # Sovereign Author: Joshua Hamilton
@@ -121,3 +127,4 @@ jobs:
           name: hfid-omega-${{ github.run_id }}
           path: .hfid/omega/
           retention-days: 30
+

@@ -1,3 +1,9 @@
+name: Content-Archive
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Sovereign Author: Joshua Hamilton
@@ -213,3 +219,4 @@ jobs:
           commit_user_name: "Joshua Hamilton [J-HammerZ]"
           commit_user_email: "jhammerz@users.noreply.github.com"
           commit_author: "Joshua Hamilton [J-HammerZ] <jhammerz@users.noreply.github.com>"
+

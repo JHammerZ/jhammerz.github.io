@@ -1,3 +1,9 @@
+name: Validate-Actions
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -93,3 +99,4 @@ jobs:
         uses: actions/attest-build-provenance@v3
         with:
           subject-path: .hfid/forensic/reset.json
+

@@ -1,3 +1,9 @@
+name: Cd-Hfid-Broadcast
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # H-FIO v1.2 / H-FIO Standard / RSC v1.2
 # Copyright (c) 2026 Joshua Hamilton (JHammerZ)
 
@@ -61,3 +67,4 @@ jobs:
         with:
           commit_message: "chore: auto-update Janus ledger state [skip ci]"
           fail_on_no_changes: false
+

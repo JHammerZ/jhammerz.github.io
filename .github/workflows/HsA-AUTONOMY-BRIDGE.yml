@@ -1,3 +1,9 @@
+name: Hsa-Autonomy-Bridge
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -170,3 +176,4 @@ jobs:
           echo "SHA: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "IndexNow: ${{ steps.indexnow.outputs.indexnow_success }}" >> $GITHUB_STEP_SUMMARY
           echo "**SLSA Level 3 Attested**" >> $GITHUB_STEP_SUMMARY
+

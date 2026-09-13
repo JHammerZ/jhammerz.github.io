@@ -1,3 +1,9 @@
+name: Sovereign-Agent
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BNS v1.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
@@ -166,3 +172,4 @@ jobs:
           echo "- Task: ${{ steps.manifest.outputs.task }}" >> $GITHUB_STEP_SUMMARY
           echo "- GEO_RANK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
           echo "- Force: ${{ github.event.inputs.force || 'false' }}" >> $GITHUB_STEP_SUMMARY
+

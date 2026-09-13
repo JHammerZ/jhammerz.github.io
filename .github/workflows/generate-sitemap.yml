@@ -1,3 +1,9 @@
+name: Generate-Sitemap
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v1.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Licensed under MIT License
@@ -90,3 +96,4 @@ jobs:
           name: hfid-sitemap-index-core
           path: .hfid/indexing/
           retention-days: 14
+

@@ -1,3 +1,9 @@
+name: Health Check
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 
 # HBS v1.2 / H-FID Standard / REC v7.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
@@ -230,3 +236,4 @@ jobs:
         echo "**GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
         echo "**Protocol:** Twenty 47" >> $GITHUB_STEP_SUMMARY
         echo "**Bitcoin OTS:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+

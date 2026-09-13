@@ -1,3 +1,9 @@
+name: Engine-Scaler
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / REC v1.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 
@@ -66,3 +72,4 @@ jobs:
           else
             echo "Workspace already at maximum structural scaling capacity."
           fi
+

@@ -1,3 +1,9 @@
+name: Structural Alignment
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HDS v2.1 // H-STD Standard / REC v7.2
 # Sovereign Workflow Distance: ci-structural-alignment.yml
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
@@ -98,3 +104,4 @@ jobs:
           echo "- **Workflows Checked:** ${WORKFLOW_COUNT}" >> $GITHUB_STEP_SUMMARY
           echo "- **Persistent Claims Evaluated:** ${CLAIMS_COUNT}" >> $GITHUB_STEP_SUMMARY
           echo "- **Schema Strict Enforcement:** True" >> $GITHUB_STEP_SUMMARY
+

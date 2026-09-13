@@ -1,3 +1,9 @@
+name: Build-Llms-Full
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Sovereign Author: Joshua Hamilton
@@ -138,3 +144,4 @@ jobs:
             HASH=$(sha256sum .hfid/baseline/sovereign-manifest.json | awk '{print $1}')
             echo "* Timestamp Hash: ${HASH}" >> $GITHUB_STEP_SUMMARY
           fi
+

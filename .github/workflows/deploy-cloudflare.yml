@@ -1,3 +1,9 @@
+name: Deploy-Cloudflare
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # ======================================================================
 #       LYSANDER NETWORK MATRIX // CLOUDFLARE PAGES EDGE INGRESS
 #       DESIGN DEPTH: LEVEL 4 PRODUCTION // INFINITE MEDIA PIPES
@@ -47,3 +53,4 @@ jobs:
           echo "Edge deployment complete"
           echo "SHA: ${{ github.sha }}"
           echo "Project: jhammerz-media-hub"
+

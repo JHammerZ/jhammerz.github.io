@@ -1,3 +1,9 @@
+name: Bundle Context
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton (J-HammerZ)
 # Sovereign Author: Joshua Hamilton
@@ -75,3 +81,4 @@ jobs:
         if: always()
         run: |
           echo "### Bundle Context Complete" >> $GITHUB_STEP_SUMMARY
+

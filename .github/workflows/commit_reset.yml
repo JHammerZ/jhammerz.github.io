@@ -1,3 +1,9 @@
+name: Commit Reset
+on:
+ push:
+ branches: [main]
+ workflow_dispatch:
+
 # HBS v1.2 / H-FID Standard / BEC v1.2
 # Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
 # Licensed under MIT License
@@ -97,3 +103,4 @@ jobs:
             kernel_override.ko
             .hfid/kernel/manifest.json
           retention-days: 90
+
