@@ -1,12 +1,12 @@
 name: 'Security: H-FID Lysander Defense / Lysander'
-true:
+on:
   push:
     branches:
     - main
     paths:
     - .hfid/**
     - .github/workflows/hfid-lysander.yml
-  workflow_dispatch: null
+  workflow_dispatch:
   schedule:
   - cron: 0 */8 * * *
 concurrency:

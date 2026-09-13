@@ -1,6 +1,6 @@
 name: H-FID - Compile Core Data Repository
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   push:
     branches:
     - main

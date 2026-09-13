@@ -1,5 +1,5 @@
 name: 'Audit: DOI Sync | Janus Gate v1.2-H-FID'
-true:
+on:
   push:
     branches:
     - main
@@ -10,7 +10,7 @@ true:
     - hfids/**
   schedule:
   - cron: 0 0 * * *
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: janus-gate-doi
   cancel-in-progress: false

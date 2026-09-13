@@ -1,5 +1,5 @@
 name: CodeQL Advanced
-true:
+on:
   push:
     branches:
     - main
@@ -10,7 +10,7 @@ true:
     - master
   schedule:
   - cron: 0 0 * * 0
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: codeql
   cancel-in-progress: false

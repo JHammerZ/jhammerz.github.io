@@ -1,8 +1,8 @@
 name: 'CI: H-FID Forensic Reset & Validation'
-true:
+on:
   schedule:
   - cron: 0 0 * * 0
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: validate-actions
   cancel-in-progress: false

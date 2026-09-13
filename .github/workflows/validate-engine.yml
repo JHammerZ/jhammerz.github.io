@@ -1,9 +1,9 @@
 name: Sovereign Structural Validation Engine
-true:
+on:
   push:
     branches:
     - main
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: validate-engine
   cancel-in-progress: false

@@ -1,8 +1,8 @@
 name: Chaos Verify | Self-Healing Stack
-true:
+on:
   schedule:
   - cron: 0 * * * *
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: chaos-verify
   cancel-in-progress: false

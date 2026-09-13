@@ -1,5 +1,5 @@
 name: 'Security: H-FID Human Verification'
-true:
+on:
   workflow_dispatch:
     inputs:
       verification_note:

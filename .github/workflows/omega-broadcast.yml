@@ -1,5 +1,5 @@
 name: 'Broadcast: H-FID Omega'
-true:
+on:
   workflow_dispatch:
     inputs:
       target:

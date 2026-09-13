@@ -2,7 +2,7 @@ name: Deploy - H-FID Lysander Engine
 concurrency:
   group: lysander_deploy
   cancel-in-progress: false
-true:
+on:
   workflow_dispatch:
     inputs:
       sequence:

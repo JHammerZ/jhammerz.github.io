@@ -1,5 +1,5 @@
 name: 'Admin: H-FID Killswitch'
-true:
+on:
   workflow_dispatch:
     inputs:
       target:

@@ -1,5 +1,5 @@
 name: 'CD: Janus Gateway Sovereign Track'
-true:
+on:
   push:
     branches:
     - main

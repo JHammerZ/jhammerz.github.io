@@ -1,5 +1,5 @@
 name: sovereign-agent - restored
-true:
+on:
   workflow_dispatch: {}
 jobs:
   run:

@@ -1,5 +1,5 @@
 name: Lysander Human-In-The-Loop Janus Draft
-true:
+on:
   workflow_dispatch:
     inputs:
       prompt:

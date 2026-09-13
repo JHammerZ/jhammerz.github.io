@@ -2,8 +2,8 @@ name: Deploy Worker
 concurrency:
   group: deploy-worker
   cancel-in-progress: false
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   push:
     branches:
     - main

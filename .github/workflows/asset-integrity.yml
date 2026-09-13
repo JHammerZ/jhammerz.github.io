@@ -1,9 +1,9 @@
 name: Sovereign Asset Integrity Sync
-true:
+on:
   push:
     branches:
     - main
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: asset-integrity
   cancel-in-progress: false

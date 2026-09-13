@@ -1,5 +1,5 @@
 name: 'SEO: Sitemap + IndexFlow Autonomous Push'
-true:
+on:
   push:
     branches:
     - main
@@ -7,7 +7,7 @@ true:
     - '**.html'
     - '**.md'
     - sitemap.xml
-  workflow_dispatch: null
+  workflow_dispatch:
 permissions:
   contents: write
   id-token: write

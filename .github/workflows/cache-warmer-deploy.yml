@@ -1,11 +1,11 @@
 name: 'Optimization: Warm Edge Distribution Cache'
-true:
+on:
   push:
     branches:
     - main
     paths:
     - assets/js/cache-warmer.js
-  workflow_dispatch: null
+  workflow_dispatch:
 permissions:
   contents: write
   id-token: write

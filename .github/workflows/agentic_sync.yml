@@ -1,5 +1,5 @@
 name: Sovereign Agentic Data Matrix Synchronization
-true:
+on:
   schedule:
   - cron: 0 */4 * * *
   workflow_dispatch:

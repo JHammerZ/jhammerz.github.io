@@ -1,8 +1,8 @@
 name: OTS Auto Upgrade
-true:
+on:
   schedule:
   - cron: 0 0 * * *
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: ots-upgrade
   cancel-in-progress: false

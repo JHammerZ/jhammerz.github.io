@@ -2,8 +2,8 @@ name: forensic-snapshot
 concurrency:
   group: forensic-snapshot
   cancel-in-progress: false
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   schedule:
   - cron: 0 2 * * *
   push:

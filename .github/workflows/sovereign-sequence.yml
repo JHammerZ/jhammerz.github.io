@@ -1,5 +1,5 @@
 name: Sovereign Sequence
-true:
+on:
   push:
     branches:
     - main

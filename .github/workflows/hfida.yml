@@ -1,5 +1,5 @@
 name: HFIDa Post Scanner
-true:
+on:
   push:
     branches:
     - main

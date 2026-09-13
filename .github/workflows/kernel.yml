@@ -1,5 +1,5 @@
 name: 'CD: H-FID Sovereign Kernel'
-true:
+on:
   workflow_dispatch:
     inputs:
       target:

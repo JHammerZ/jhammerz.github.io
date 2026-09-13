@@ -1,5 +1,5 @@
 name: 'CI: Cloudflare Workers Deploy'
-true:
+on:
   push:
     branches:
     - main
@@ -15,7 +15,7 @@ true:
     - wrangler.toml
     - worker.js
     - src/**
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: ci
   cancel-in-progress: false

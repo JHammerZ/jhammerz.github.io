@@ -1,5 +1,5 @@
 name: sovereign - restored
-true:
+on:
   workflow_dispatch: {}
 jobs:
   run:

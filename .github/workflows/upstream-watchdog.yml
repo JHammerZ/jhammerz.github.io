@@ -1,8 +1,8 @@
 name: Perpetual Upstream Mutation Watchdog
-true:
+on:
   schedule:
   - cron: 42 */3 * * *
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: upstream-watchdog
   cancel-in-progress: false

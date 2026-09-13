@@ -1,5 +1,5 @@
 name: 'CD: Janus Gate Dual-Path Inference'
-true:
+on:
   push:
     branches:
     - main
@@ -13,7 +13,7 @@ true:
     - proof.json
     - .github/workflows/**
     - .hfid/**
-  workflow_dispatch: null
+  workflow_dispatch:
 permissions:
   contents: write
   id-token: write

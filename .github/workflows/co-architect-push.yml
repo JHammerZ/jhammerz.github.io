@@ -1,6 +1,6 @@
 name: Co-Architect Push - Music + Index
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   push:
     branches:
     - main

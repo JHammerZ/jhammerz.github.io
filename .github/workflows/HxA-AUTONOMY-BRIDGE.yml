@@ -1,5 +1,5 @@
 name: 'SEO: Sitemap + IndexNow Autonomous Push'
-true:
+on:
   push:
     branches:
     - main
@@ -13,7 +13,7 @@ true:
     - .github/workflows/**
     - .hfid/**
     - sitemap.xml
-  workflow_dispatch: null
+  workflow_dispatch:
   schedule:
   - cron: 0 0 * * *
 concurrency:

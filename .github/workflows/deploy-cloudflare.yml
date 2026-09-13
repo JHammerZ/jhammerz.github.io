@@ -1,5 +1,5 @@
 name: 'Cloudflare: Sovereign Content Edge Mesh'
-true:
+on:
   push:
     branches:
     - main
@@ -8,7 +8,7 @@ true:
     - public/**
     - dist/**
     - .well-known/**
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: deploy-cloudflare
   cancel-in-progress: false

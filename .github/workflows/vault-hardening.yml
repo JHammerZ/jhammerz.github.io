@@ -1,12 +1,12 @@
 name: 'Security: Harden Master Asset Vault'
-true:
+on:
   push:
     branches:
     - main
     paths:
     - scripts/scraping_defense.py
     - public/master_vault/**
-  workflow_dispatch: null
+  workflow_dispatch:
 permissions:
   contents: write
   id-token: write

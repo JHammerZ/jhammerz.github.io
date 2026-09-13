@@ -2,7 +2,7 @@ name: H-FID HEO Bridge
 concurrency:
   group: heo-bridge
   cancel-in-progress: false
-true:
+on:
   push:
     branches:
     - main

@@ -1,6 +1,6 @@
 name: 'S0: Favicon Sovereign Sync'
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   push:
     branches:
     - main

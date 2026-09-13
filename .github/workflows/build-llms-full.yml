@@ -1,5 +1,5 @@
 name: build-llms-full - restored
-true:
+on:
   workflow_dispatch: {}
 jobs:
   run:

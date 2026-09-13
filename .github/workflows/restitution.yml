@@ -1,6 +1,6 @@
 name: 'Security: H-FID Restitution Monitor'
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   schedule:
   - cron: 0 0 * * *
 concurrency:

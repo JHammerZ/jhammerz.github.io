@@ -1,6 +1,6 @@
 name: SEO and Link Validator
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   schedule:
   - cron: 0 0 * * *
   push:

@@ -1,5 +1,5 @@
 name: 'SecOps: H-FID Bounty Ledger'
-true:
+on:
   workflow_dispatch:
     inputs:
       target:

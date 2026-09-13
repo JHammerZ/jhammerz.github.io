@@ -1,5 +1,5 @@
 name: 'SecOps: H-FID Threat Intel Logger'
-true:
+on:
   workflow_dispatch:
     inputs:
       ioc_type:

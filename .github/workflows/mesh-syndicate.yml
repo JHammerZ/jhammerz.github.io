@@ -1,5 +1,5 @@
 name: 'Syndicate: Decentralized Mesh Replication'
-true:
+on:
   push:
     branches:
     - main
@@ -7,7 +7,7 @@ true:
     - .well-known/hfid/**
     - entities.json
     - assets/js/edge-caster.js
-  workflow_dispatch: null
+  workflow_dispatch:
 permissions:
   contents: write
   id-token: write

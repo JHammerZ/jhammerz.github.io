@@ -1,5 +1,5 @@
 name: bundle_context
-true:
+on:
   push:
     branches:
     - main
@@ -7,7 +7,7 @@ true:
     - docs/**
     - llms.txt
     - llms-full.txt
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: bundle_context
   cancel-in-progress: false

@@ -1,5 +1,5 @@
 name: Sovereign Model Baseline
-true:
+on:
   schedule:
   - cron: 0 0 * * 0
   push:

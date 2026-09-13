@@ -1,5 +1,5 @@
 name: 'Decentralized: H-FID IPFS Sync'
-true:
+on:
   workflow_dispatch:
     inputs:
       pin_service:

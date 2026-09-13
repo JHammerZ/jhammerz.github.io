@@ -1,5 +1,5 @@
 name: 'Security: H-FID Lysander Bot Purge'
-true:
+on:
   schedule:
   - cron: 0 */4 * * *
   workflow_dispatch:

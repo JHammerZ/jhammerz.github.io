@@ -1,5 +1,5 @@
 name: 'SecOps: H-FID SEO Audit'
-true:
+on:
   workflow_dispatch:
     inputs:
       strict:

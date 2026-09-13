@@ -1,8 +1,8 @@
 name: 'Sovereign Broadcast: A2A-Broadcast Ingestion Engine'
-true:
+on:
   schedule:
   - cron: 0 */12 * * *
-  workflow_dispatch: null
+  workflow_dispatch:
 permissions:
   contents: write
   actions: write

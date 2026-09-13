@@ -1,6 +1,6 @@
 name: Aurelius-Engine Sovereign Operator Pipeline
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
 concurrency:
   group: aurelius-operator
   cancel-in-progress: false

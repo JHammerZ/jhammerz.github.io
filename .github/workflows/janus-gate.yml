@@ -1,10 +1,10 @@
 name: 'Audit: Janus Gate Matrix Verification'
-true:
+on:
   push:
     branches:
     - main
     - master
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: janus-gate
   cancel-in-progress: false

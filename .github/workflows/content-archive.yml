@@ -1,5 +1,5 @@
 name: 'SecOps: H-FID Content Archive'
-true:
+on:
   schedule:
   - cron: 0 */8 * * *
   workflow_dispatch:

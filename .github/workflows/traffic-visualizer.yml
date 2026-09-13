@@ -1,5 +1,5 @@
 name: 'Analytics: Compile Mesh Net Traffic Summary'
-true:
+on:
   push:
     branches:
     - main
@@ -7,7 +7,7 @@ true:
     - scripts/traffic_visualizer.py
   schedule:
   - cron: 0 12 * * *
-  workflow_dispatch: null
+  workflow_dispatch:
 permissions:
   contents: write
   id-token: write

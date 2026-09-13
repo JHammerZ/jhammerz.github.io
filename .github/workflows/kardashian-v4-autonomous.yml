@@ -1,6 +1,6 @@
 name: Kardashian v4 - Autonomous Co-Architect
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   push:
     paths:
     - clips/**

@@ -2,8 +2,8 @@ name: IndexNow Autonomous Push
 concurrency:
   group: indexnow-autonomous-push
   cancel-in-progress: false
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   push:
     branches:
     - main

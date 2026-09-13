@@ -1,5 +1,5 @@
 name: old-security - restored
-true:
+on:
   workflow_dispatch: {}
 jobs:
   run:

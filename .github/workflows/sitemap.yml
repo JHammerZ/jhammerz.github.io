@@ -1,5 +1,5 @@
 name: Site Sitemap / Indexation Autonomous Push
-true:
+on:
   push:
     branches:
     - main
@@ -11,7 +11,7 @@ true:
     - robots.txt
     - sitemap.xml
     - .hfid/**
-  workflow_dispatch: null
+  workflow_dispatch:
   schedule:
   - cron: 0 0 * * *
 permissions:

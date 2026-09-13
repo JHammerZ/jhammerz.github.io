@@ -1,10 +1,10 @@
 name: Build and Test TMA Full Suite
-true:
+on:
   push:
     branches:
     - main
     - master
-  workflow_dispatch: null
+  workflow_dispatch:
 concurrency:
   group: build-tma-full
   cancel-in-progress: false

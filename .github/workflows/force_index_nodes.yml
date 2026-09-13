@@ -1,9 +1,9 @@
 name: FORCE_INDEX_NODES
-true:
+on:
   schedule:
   - cron: 0 0 * * *
   - cron: 0 12 * * *
-  workflow_dispatch: null
+  workflow_dispatch:
   push:
     branches:
     - main

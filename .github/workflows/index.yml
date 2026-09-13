@@ -1,5 +1,5 @@
 name: 'SEO: H-FID IndexNow + Google Hardened'
-true:
+on:
   workflow_dispatch:
     inputs:
       urls:

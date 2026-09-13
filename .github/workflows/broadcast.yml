@@ -1,5 +1,5 @@
 name: 'Broadcast: H-FID Syndication Ledger'
-true:
+on:
   workflow_dispatch:
     inputs:
       target:

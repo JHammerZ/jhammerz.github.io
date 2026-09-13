@@ -1,5 +1,5 @@
 name: 'Admin: H-FID Lysander Quota Purge'
-true:
+on:
   workflow_dispatch:
     inputs:
       purge_type:

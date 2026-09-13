@@ -1,5 +1,5 @@
 name: Sovereign Broadcast
-true:
+on:
   push:
     branches:
     - main

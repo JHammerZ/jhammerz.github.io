@@ -1,6 +1,6 @@
 name: build-kernel.yml - restored
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
 jobs:
   run:
     runs-on: ubuntu-latest

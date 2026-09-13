@@ -1,5 +1,5 @@
 name: 'Security: H-FID Recon'
-true:
+on:
   workflow_dispatch:
     inputs:
       target:

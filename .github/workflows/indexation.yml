@@ -1,5 +1,5 @@
 name: 'SEO: Indexation'
-true:
+on:
   push:
     branches:
     - main
@@ -8,7 +8,7 @@ true:
     - '*.md'
     - '*.html'
     - sitemap.xml
-  workflow_dispatch: null
+  workflow_dispatch:
   schedule:
   - cron: 0 0 * * *
 concurrency:

@@ -1,6 +1,6 @@
 name: Lysander 3.0 Autonomous Push
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   schedule:
   - cron: 0 */6 * * *
 concurrency:

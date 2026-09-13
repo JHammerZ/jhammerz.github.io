@@ -1,6 +1,6 @@
 name: 'Recovery: Provision Live D1 Database'
-true:
-  workflow_dispatch: null
+on:
+  workflow_dispatch:
   push:
     branches:
     - main

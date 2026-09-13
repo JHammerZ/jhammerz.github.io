@@ -1,5 +1,5 @@
 name: 'Syndicate: Autonomous Webhook Relay Relay'
-true:
+on:
   push:
     branches:
     - main
@@ -7,7 +7,7 @@ true:
     - entities.json
     - .well-known/hfid/**
     - scripts/webhook_relay.py
-  workflow_dispatch: null
+  workflow_dispatch:
 permissions:
   contents: write
   id-token: write
