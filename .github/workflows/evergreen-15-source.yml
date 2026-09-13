@@ -2,7 +2,7 @@ name: evergreen-15-source
 on:
   schedule:
   - cron: 0 */2 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
 jobs:
   distribute:
     runs-on: ubuntu-latest

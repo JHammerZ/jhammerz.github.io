@@ -1,6 +1,6 @@
 name: FID OTS Maintenance / maintenance-and-audit
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   schedule:
   - cron: 0 3 * * *
 concurrency:

@@ -1,6 +1,6 @@
 name: Kardashian v3 - Auto Cutter From Existing Library
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   push:
     paths:
     - clips/manifest.json

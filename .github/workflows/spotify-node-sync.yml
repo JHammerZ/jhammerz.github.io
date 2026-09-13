@@ -1,6 +1,6 @@
 name: lysander-egypt-resync-same-sha - spotify-node-sync.yml
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   deployment_status:
     states:
     - failure

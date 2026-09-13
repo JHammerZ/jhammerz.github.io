@@ -6,7 +6,7 @@ on:
   schedule:
   - cron: 0 0 * * *
   - cron: 0 15 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
 permissions:
   contents: write
   pages: write

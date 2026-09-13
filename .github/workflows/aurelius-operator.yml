@@ -1,6 +1,6 @@
 name: Aurelius-Engine Sovereign Operator Pipeline
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: aurelius-operator
   cancel-in-progress: false
@@ -20,7 +20,6 @@ jobs:
       with:
         node-version: 20
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps' - fix node_modules removal
       run: npm install --legacy-peer-deps
     - name: Install Lighthouse Core Tool
       run: npm install -g lighthouse

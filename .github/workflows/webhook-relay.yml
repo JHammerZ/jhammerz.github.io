@@ -7,7 +7,7 @@ on:
     - entities.json
     - .well-known/hfid/**
     - scripts/webhook_relay.py
-  workflow_dispatch:
+  workflow_dispatch: null
 permissions:
   contents: write
   id-token: write

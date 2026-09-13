@@ -7,7 +7,7 @@ on:
     - docs/**
     - llms.txt
     - llms-full.txt
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: bundle_context
   cancel-in-progress: false

@@ -3,7 +3,7 @@ on:
   schedule:
   - cron: 0 0 * * *
   - cron: 0 12 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
   push:
     branches:
     - main
@@ -35,7 +35,6 @@ jobs:
       with:
         node-version: 20
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps' - fix node_modules removal
       run: npm install --legacy-peer-deps
     - name: Setup Python Tools
       uses: actions/setup-python@v6

@@ -2,7 +2,7 @@ name: Sovereign Mirror
 on:
   schedule:
   - cron: 0 0 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: sovereign-mirror
   cancel-in-progress: false

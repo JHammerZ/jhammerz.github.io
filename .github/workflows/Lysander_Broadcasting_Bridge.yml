@@ -6,7 +6,7 @@ on:
     paths:
     - .github/workflows/Lysander_Broadcasting_Bridge.yml
     - broadcast-to-edge.sh
-  workflow_dispatch:
+  workflow_dispatch: null
 permissions:
   contents: write
   actions: write

@@ -1,6 +1,6 @@
 name: H-FID - Compile Core Data Repository
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   push:
     branches:
     - main
@@ -33,7 +33,6 @@ jobs:
         python-version: '3.11'
         cache: pip
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
       run: 'set -eu pipefail
 
         sudo apt-get update

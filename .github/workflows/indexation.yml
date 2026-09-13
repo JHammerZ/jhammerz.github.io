@@ -8,7 +8,7 @@ on:
     - '*.md'
     - '*.html'
     - sitemap.xml
-  workflow_dispatch:
+  workflow_dispatch: null
   schedule:
   - cron: 0 0 * * *
 concurrency:

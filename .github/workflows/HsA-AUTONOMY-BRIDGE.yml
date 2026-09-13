@@ -1,6 +1,6 @@
 name: 'HSA: Sitemap + IndexNow Autonomous Push'
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   push:
     branches:
     - main

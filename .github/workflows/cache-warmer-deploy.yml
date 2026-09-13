@@ -5,7 +5,7 @@ on:
     - main
     paths:
     - assets/js/cache-warmer.js
-  workflow_dispatch:
+  workflow_dispatch: null
 permissions:
   contents: write
   id-token: write

@@ -10,7 +10,7 @@ on:
     - hfids/**
   schedule:
   - cron: 0 0 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: janus-gate-doi
   cancel-in-progress: false

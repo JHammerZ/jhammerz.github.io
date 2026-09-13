@@ -6,7 +6,7 @@ on:
     - omnichannel-refresh
     types:
     - completed
-  workflow_dispatch:
+  workflow_dispatch: null
 jobs:
   pin:
     runs-on: ubuntu-latest

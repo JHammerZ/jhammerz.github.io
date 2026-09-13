@@ -1,6 +1,6 @@
 name: Handle Workflow | H-FID Asset Bundler
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   push:
     branches:
     - main

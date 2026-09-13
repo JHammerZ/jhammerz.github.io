@@ -2,7 +2,7 @@ name: GEO_RANK Visibility Audit - H-FID Standard
 on:
   schedule:
   - cron: 0 */6 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
   push:
     branches:
     - main

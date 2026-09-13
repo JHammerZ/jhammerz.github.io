@@ -4,7 +4,7 @@ on:
     branches:
     - main
     - master
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: sovereign-audit
   cancel-in-progress: false

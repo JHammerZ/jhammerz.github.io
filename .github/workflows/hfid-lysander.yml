@@ -6,7 +6,7 @@ on:
     paths:
     - .hfid/**
     - .github/workflows/hfid-lysander.yml
-  workflow_dispatch:
+  workflow_dispatch: null
   schedule:
   - cron: 0 */8 * * *
 concurrency:

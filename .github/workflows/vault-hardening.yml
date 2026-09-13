@@ -6,7 +6,7 @@ on:
     paths:
     - scripts/scraping_defense.py
     - public/master_vault/**
-  workflow_dispatch:
+  workflow_dispatch: null
 permissions:
   contents: write
   id-token: write

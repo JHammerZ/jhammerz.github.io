@@ -13,7 +13,7 @@ on:
     - proof.json
     - .github/workflows/**
     - .hfid/**
-  workflow_dispatch:
+  workflow_dispatch: null
 permissions:
   contents: write
   id-token: write

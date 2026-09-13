@@ -5,7 +5,7 @@ on:
     - main
     paths:
     - .well-known/hfid/chain.json
-  workflow_dispatch:
+  workflow_dispatch: null
   schedule:
   - cron: 0 6 * * *
 permissions:

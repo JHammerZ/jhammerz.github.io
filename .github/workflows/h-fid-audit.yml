@@ -1,6 +1,6 @@
 name: H-FID Forensic Audit
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: h-fid-audit
   cancel-in-progress: false

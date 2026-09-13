@@ -2,7 +2,7 @@ name: H-FID Verify | Lysander 3.1 Bot Purge
 on:
   schedule:
   - cron: 0 0 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: lysander-bot-purge
   cancel-in-progress: false

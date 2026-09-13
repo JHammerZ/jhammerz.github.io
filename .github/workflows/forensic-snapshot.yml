@@ -3,7 +3,7 @@ concurrency:
   group: forensic-snapshot
   cancel-in-progress: false
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   schedule:
   - cron: 0 2 * * *
   push:

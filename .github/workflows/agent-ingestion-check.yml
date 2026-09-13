@@ -2,7 +2,7 @@ name: 'SecOps: LLM Scraping Environment'
 on:
   schedule:
   - cron: 0 0 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: agent-ingestion-check
   cancel-in-progress: false

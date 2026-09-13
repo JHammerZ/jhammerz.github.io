@@ -1,5 +1,5 @@
 name: Build H-FID Sovereign Kernel
-true: workflow_dispatch
+on: workflow_dispatch
 permissions:
   contents: read
   id-token: write

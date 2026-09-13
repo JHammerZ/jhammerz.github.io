@@ -10,7 +10,7 @@ on:
     - master
   schedule:
   - cron: 0 0 * * 0
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: codeql
   cancel-in-progress: false

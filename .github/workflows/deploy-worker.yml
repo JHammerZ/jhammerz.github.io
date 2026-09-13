@@ -3,7 +3,7 @@ concurrency:
   group: deploy-worker
   cancel-in-progress: false
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   push:
     branches:
     - main

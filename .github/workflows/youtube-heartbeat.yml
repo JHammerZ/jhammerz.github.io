@@ -2,7 +2,7 @@ name: Core Matrix Repository Heartbeat
 on:
   schedule:
   - cron: '*/15 * * * *'
-  workflow_dispatch:
+  workflow_dispatch: null
 concurrency:
   group: youtube-heartbeat
   cancel-in-progress: false

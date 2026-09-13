@@ -2,7 +2,7 @@ name: auto-scoop-library
 on:
   schedule:
   - cron: 17 */6 * * *
-  workflow_dispatch:
+  workflow_dispatch: null
 jobs:
   scoop:
     runs-on: ubuntu-latest
