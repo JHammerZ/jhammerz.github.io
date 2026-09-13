@@ -3,6 +3,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -13,7 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Prepare artifact
+        run: |
+          mkdir -p _site_deploy
+          rsync -av --exclude='.git' --exclude='.github' --exclude='.hfid' --exclude='node_modules' --exclude='_site_deploy'./ _site_deploy/
+          touch _site_deploy/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site_deploy'
       - uses: actions/deploy-pages@v4

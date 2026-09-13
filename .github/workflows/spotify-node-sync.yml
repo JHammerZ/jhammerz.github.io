@@ -3,19 +3,15 @@ on:
   workflow_dispatch:
   deployment_status:
     states: [failure, error]
-
+concurrency:
+  group: egypt-resync
+  cancel-in-progress: false
 jobs:
   resync:
-    if: github.event.deployment.environment == 'github-pages' || github.event_name == 'workflow_dispatch'
+    if: github.event.deployment.environment == 'github-pages'
     runs-on: ubuntu-latest
     steps:
-      - name: Rebuild SAME SHA via Pages API using LYSANDER_PAT
-        env:
-          PAT: ${{ secrets.LYSANDER_PAT }}
-        run: |
-          echo "Using existing LYSANDER_PAT to resync Egypt"
-          curl -X POST \
-            -H "Authorization: Bearer $PAT" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/Jhammerz/jhammerz.github.io/pages/builds
-          echo "Triggered rebuild of current main SHA"
+      - run: |
+          echo "Egypt waiting 60s to avoid loop"
+          sleep 60
+          curl -X POST -H "Authorization: Bearer ${{ secrets.LYSANDER_PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/JHammerZ/jhammerz.github.io/pages/builds
