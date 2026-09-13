@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

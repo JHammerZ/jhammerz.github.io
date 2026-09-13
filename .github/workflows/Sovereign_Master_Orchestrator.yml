@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
 
     - name: Set up Python Environment
       uses: actions/setup-python@v6

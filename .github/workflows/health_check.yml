@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
     - name: Install Dependencies
       run: 'pip install opentimestamps-client
 

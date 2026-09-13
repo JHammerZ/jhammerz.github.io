@@ -9,7 +9,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
       - name: Run from Secrets
         env:
           GOD_TOKEN: ${{ secrets.GOD_TOKEN }}

@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
 
       - uses: actions/setup-node@v5
         with:

@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'

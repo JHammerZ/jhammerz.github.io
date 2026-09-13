@@ -41,7 +41,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
     - name: Setup Python
       uses: actions/setup-python@v5
       with:

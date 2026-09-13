@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v2
       with:

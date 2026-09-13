@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-      - run: npm ci
+      - run: npm ci || npm install
     - name: Authenticate to GCP + Deploy
       env:
         GCP_SA_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
