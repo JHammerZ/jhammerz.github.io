@@ -17,8 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-      - run: npm ci || npm install
+      - run: npm ci || npm install || npm install
 
       - name: 2. Setup Runtime Layer
         uses: actions/setup-python@v6

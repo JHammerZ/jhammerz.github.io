@@ -37,8 +37,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-      - run: npm ci || npm install
+      - run: npm ci || npm install || npm install
       - name: Install OTS
         run: pip install opentimestamps-client
       - name: Upgrade timestamps

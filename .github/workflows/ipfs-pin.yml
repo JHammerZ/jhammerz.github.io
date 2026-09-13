@@ -13,8 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-      - run: npm ci || npm install
+      - run: npm ci || npm install || npm install
       - name: Pin to IPFS via ipfs.io
         run: |
           CID=$(curl -s -F file=@index.html https://ipfs.io/api/v0/add?pin=true | jq -r.Hash)
