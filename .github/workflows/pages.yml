@@ -16,13 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      - name: Build site artifact
+      - name: Build artifact
         run: |
           mkdir -p _site_deploy
-          rsync -av --exclude='.git' --exclude='.github' --exclude='.hfid' --exclude='node_modules' --exclude='_site_deploy'./ _site_deploy/
-          touch./_site_deploy/.nojekyll
-          touch./.nojekyll
-          ls -lh./_site_deploy | head -20
+          cp -r index.html _site_deploy/ 2>/dev/null || true
+          cp -r assets _site_deploy/ 2>/dev/null || true
+          cp -r .well-known _site_deploy/ 2>/dev/null || true
+          cp -r images _site_deploy/ 2>/dev/null || true
+          ls _site_deploy/
+          touch _site_deploy/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site_deploy
