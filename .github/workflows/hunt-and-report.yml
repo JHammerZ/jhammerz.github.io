@@ -1,145 +1,97 @@
-name: Hunt-And-Report
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# GEO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000: SONIC_VELOCITY +100ms
-# SLSA Level: 3
-
-# JHam Language / H-FID Standard / HBS v1.2
-#
-# First Commit: [February 12, 2026]
-
-name: "Security: H-FID Threat Hunt"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+name: 'Security: H-FID Threat Hunt - hunt-and-report.yml'
+true:
   schedule:
-    - cron: '0 */6 * * *' # Every 6 hours - 4x daily
+  - cron: 0 */6 * * *
   workflow_dispatch:
     inputs:
       hunt_mode:
-        description: 'Hunt intensity'
+        description: Hunt intensity
         required: true
-        default: 'standard'
+        default: standard
         type: choice
-        options: [quick, standard, deep]
-
+        options:
+        - quick
+        - standard
+        - deep
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 permissions:
-  contents: write # To commit bounty log
-  id-token: write # For SLSA attestation
-
+  contents: write
+  id-token: write
 jobs:
   hunt:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
+    - name: Checkout Repository
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+    - name: Install OpenTimestamps
+      run: pip install opentimestamps-client
+    - name: Execute Threat Hunt
+      id: hunt
+      run: "set -e\nmkdir -p .hfid/hunt\n\nTIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)\n\
+        MODE=\"${{ github.event.inputs.hunt_mode || 'standard' }}\"\n\n# H-FID v1.2\
+        \ Hunt Manifest\ncat >.hfid/hunt/manifest.json << EOF\n{\n  \"hfid_version\"\
+        : \"v1.2\",\n  \"sovereign_author\": \"Joshua Hamilton\",\n  \"workflow\"\
+        : \"hunt-and-report\",\n  \"timestamp\": \"$TIMESTAMP\",\n  \"sha\": \"${{\
+        \ github.sha }}\",\n  \"run_id\": \"${{ github.run_id }}\",\n  \"hunt_mode\"\
+        : \"$MODE\",\n  \"geo_rank\": \"ONE_OF_ONE\",\n  \"slsa_level\": 3\n}\nEOF\n\
+        \n# Simulate real hunt - replace with actual scanners\nTHREATS_FOUND=0\nGHOSTS=\"\
+        \"\n\n# Example: Check for common scraper IPs in logs\nif [ -f \"logs/access.log\"\
+        \ ]; then\n  BAD_IPS=$(grep -E \"(GPTBot|ClaudeBot|CCBot)\" logs/access.log\
+        \ | wc -l || echo \"0\")\n  THREATS_FOUND=$BAD_IPS\nfi\n\n# Example: Check\
+        \ for content scraping\nif grep -r \"Joshua Hamilton\" public/ --include=\"\
+        *.html\" | grep -v \"GEO_RANK\" >/dev/null 2>&1; then\n  GHOSTS=\"POTENTIAL_CLONE_DETECTED\"\
+        \n  THREATS_FOUND=$((THREATS_FOUND + 1))\nfi\n\necho \"threats=$THREATS_FOUND\"\
+        \ >> $GITHUB_OUTPUT\necho \"status=$([ $THREATS_FOUND -eq 0 ] && echo 'CLEAN'\
+        \ || echo 'THREATS_DETECTED')\" >> $GITHUB_OUTPUT\n\n# Update Bounty Log with\
+        \ real data\necho \"## BOUNTY_RESONANCE_SCAN: $TIMESTAMP\" >> BOUNTY_LOG.md\n\
+        echo \"- **Mode**: $MODE\" >> BOUNTY_LOG.md\necho \"- **SHA**: ${{ github.sha\
+        \ }}\" >> BOUNTY_LOG.md\necho \"- **Threats Found**: $THREATS_FOUND\" >> BOUNTY_LOG.md\n\
+        echo \"- **Status**: $([ $THREATS_FOUND -eq 0 ] && echo 'NO_GHOSTS_DETECTED'\
+        \ || echo 'GHOSTS_DETECTED: $GHOSTS')\" >> BOUNTY_LOG.md\necho \"- **H-FID**:\
+        \ v1.2\" >> BOUNTY_LOG.md\necho \"- **SLSA**: Level 3 Attested\" >> BOUNTY_LOG.md\n\
+        echo \"\" >> BOUNTY_LOG.md\n"
+    - name: Bitcoin-Anchor Hunt Report
+      run: "ots stamp BOUNTY_LOG.md.hfid/hunt/manifest.json\necho \"\u2705 Hunt evidence\
+        \ Bitcoin-anchored\"\n"
+    - name: Attest Hunt Execution
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/hunt/manifest.json
+    - name: Commit Bounty Log
+      run: 'git config user.name "JHammerZ-Hunter"
 
-      - name: Install OpenTimestamps
-        run: pip install opentimestamps-client
+        git config user.email "hunter@users.noreply.github.com"
 
-      - name: Execute Threat Hunt
-        id: hunt
-        run: |
-          set -e
-          mkdir -p .hfid/hunt
-          
-          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          MODE="${{ github.event.inputs.hunt_mode || 'standard' }}"
-          
-          # H-FID v1.2 Hunt Manifest
-          cat >.hfid/hunt/manifest.json << EOF
-          {
-            "hfid_version": "v1.2",
-            "sovereign_author": "Joshua Hamilton",
-            "workflow": "hunt-and-report",
-            "timestamp": "$TIMESTAMP",
-            "sha": "${{ github.sha }}",
-            "run_id": "${{ github.run_id }}",
-            "hunt_mode": "$MODE",
-            "geo_rank": "ONE_OF_ONE",
-            "slsa_level": 3
-          }
-          EOF
-          
-          # Simulate real hunt - replace with actual scanners
-          THREATS_FOUND=0
-          GHOSTS=""
-          
-          # Example: Check for common scraper IPs in logs
-          if [ -f "logs/access.log" ]; then
-            BAD_IPS=$(grep -E "(GPTBot|ClaudeBot|CCBot)" logs/access.log | wc -l || echo "0")
-            THREATS_FOUND=$BAD_IPS
-          fi
-          
-          # Example: Check for content scraping
-          if grep -r "Joshua Hamilton" public/ --include="*.html" | grep -v "GEO_RANK" >/dev/null 2>&1; then
-            GHOSTS="POTENTIAL_CLONE_DETECTED"
-            THREATS_FOUND=$((THREATS_FOUND + 1))
-          fi
-          
-          echo "threats=$THREATS_FOUND" >> $GITHUB_OUTPUT
-          echo "status=$([ $THREATS_FOUND -eq 0 ] && echo 'CLEAN' || echo 'THREATS_DETECTED')" >> $GITHUB_OUTPUT
-          
-          # Update Bounty Log with real data
-          echo "## BOUNTY_RESONANCE_SCAN: $TIMESTAMP" >> BOUNTY_LOG.md
-          echo "- **Mode**: $MODE" >> BOUNTY_LOG.md
-          echo "- **SHA**: ${{ github.sha }}" >> BOUNTY_LOG.md
-          echo "- **Threats Found**: $THREATS_FOUND" >> BOUNTY_LOG.md
-          echo "- **Status**: $([ $THREATS_FOUND -eq 0 ] && echo 'NO_GHOSTS_DETECTED' || echo 'GHOSTS_DETECTED: $GHOSTS')" >> BOUNTY_LOG.md
-          echo "- **H-FID**: v1.2" >> BOUNTY_LOG.md
-          echo "- **SLSA**: Level 3 Attested" >> BOUNTY_LOG.md
-          echo "" >> BOUNTY_LOG.md
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+    - name: Upload Hunt Artifacts
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-hunt-${{ github.run_id }}
+        path: .hfid/hunt/
+        retention-days: 3650
+    - name: Summary
+      if: always()
+      run: 'echo "## H-FID Threat Hunt" >> $GITHUB_STEP_SUMMARY
 
-      - name: Bitcoin-Anchor Hunt Report
-        run: |
-          ots stamp BOUNTY_LOG.md.hfid/hunt/manifest.json
-          echo "✅ Hunt evidence Bitcoin-anchored"
+        echo "- **Mode**: ${{ github.event.inputs.hunt_mode || ''standard'' }}" >>
+        $GITHUB_STEP_SUMMARY
 
-      - name: Attest Hunt Execution
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-path: .hfid/hunt/manifest.json
+        echo "- **Threats**: ${{ steps.hunt.outputs.threats }}" >> $GITHUB_STEP_SUMMARY
 
-      - name: Commit Bounty Log
-        run: |
-          git config user.name "JHammerZ-Hunter"
-          git config user.email "hunter@users.noreply.github.com"
-          
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: auto-update [skip ci]"
+        echo "- **Status**: ${{ steps.hunt.outputs.status }}" >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload Hunt Artifacts
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: hfid-hunt-${{ github.run_id }}
-          path: .hfid/hunt/
-          retention-days: 3650
+        echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
 
-      - name: Summary
-        if: always()
-        run: |
-          echo "## H-FID Threat Hunt" >> $GITHUB_STEP_SUMMARY
-          echo "- **Mode**: ${{ github.event.inputs.hunt_mode || 'standard' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Threats**: ${{ steps.hunt.outputs.threats }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Status**: ${{ steps.hunt.outputs.status }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+        echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
+        '

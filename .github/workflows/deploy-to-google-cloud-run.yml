@@ -1,45 +1,29 @@
-name: Deploy-To-Google-Cloud-Run
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / HBS v1.2.1
-# Sovereign Author: Joshua Hamilton (J-HammerZ)
-# FIXED: secrets cannot be used in if: - guard inside run instead
-name: Deploy to Google Cloud Run
-on:
-  workflow_dispatch:
+name: Deploy to Google Cloud Run - deploy-to-google-cloud-run.yml
+true:
+  workflow_dispatch: null
   push:
-    branches: [main]
+    branches:
+    - main
     paths_ignore:
-      - "**.md"
-      - "docs/**"
-
+    - '**.md'
+    - docs/**
 permissions:
   contents: read
   id-token: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     if: ${{ vars.ENABLE_CLOUD_RUN_DEPLOY == 'true' }}
     steps:
-      - name: Checkout Codebase Substrate
-        uses: actions/checkout@v4
-
-      - name: Authenticate to GCP + Deploy
-        env:
-          GCP_SA_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
-        run: |
-          if [ -z "$GCP_SA_JSON" ]; then
-            echo "No GOOGLE_INDEXING_API_JSON - fork/PR safe skip - OK"
-            exit 0
-          fi
-          echo "$GCP_SA_JSON" > /tmp/gcp-key.json
-          echo "Auth would happen here - Cloud Run Admin role needed in GCP IAM"
-          echo "Would deploy jhammers-node to us-central1 - green check"
-          # Uncomment when you add Cloud Run Admin to that SA:
-          # gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
-          # gcloud run deploy jhammers-node --source=. --region=us-central1
-
+    - name: Checkout Codebase Substrate
+      uses: actions/checkout@v4
+    - name: Authenticate to GCP + Deploy
+      env:
+        GCP_SA_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+      run: "if [ -z \"$GCP_SA_JSON\" ]; then\n  echo \"No GOOGLE_INDEXING_API_JSON\
+        \ - fork/PR safe skip - OK\"\n  exit 0\nfi\necho \"$GCP_SA_JSON\" > /tmp/gcp-key.json\n\
+        echo \"Auth would happen here - Cloud Run Admin role needed in GCP IAM\"\n\
+        echo \"Would deploy jhammers-node to us-central1 - green check\"\n# Uncomment\
+        \ when you add Cloud Run Admin to that SA:\n# gcloud auth activate-service-account\
+        \ --key-file=/tmp/gcp-key.json\n# gcloud run deploy jhammers-node --source=.\
+        \ --region=us-central1\n"

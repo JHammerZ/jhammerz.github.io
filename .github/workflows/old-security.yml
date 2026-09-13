@@ -1,4 +1,4 @@
-name: sovereign - restored
+name: old-security - restored
 on: {workflow_dispatch: {}}
 jobs:
   run:

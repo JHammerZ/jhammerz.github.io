@@ -1,8 +1,10 @@
-name: lysander-egypt-resync-same-sha
-on:
+name: lysander-egypt-resync-same-sha - lysander-egypt-resync-same-sha.yml
+true:
   deployment_status:
-    states: [failure, error]
-  workflow_dispatch:
+    states:
+    - failure
+    - error
+  workflow_dispatch: null
 permissions:
   contents: write
 concurrency:
@@ -10,14 +12,21 @@ concurrency:
   cancel-in-progress: true
 jobs:
   resync:
-    if: contains(github.event.deployment_status.environment, 'github-pages') && (github.event.deployment_status.state == 'failure' || github.event.deployment_status.state == 'error')
+    if: contains(github.event.deployment_status.environment, 'github-pages') && (github.event.deployment_status.state
+      == 'failure' || github.event.deployment_status.state == 'error')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Backoff and resync same SHA
-        run: |
-          echo "Pages deployment failed, waiting 90s to avoid loop"
-          sleep 90
-          git pull --rebase origin main
-          git commit --allow-empty -m "chore: egypt resync after pages failure [skip ci][skip cf]" || true
-          git push || (git pull --rebase origin main && git push)
+    - uses: actions/checkout@v4
+    - name: Backoff and resync same SHA
+      run: 'echo "Pages deployment failed, waiting 90s to avoid loop"
+
+        sleep 90
+
+        git pull --rebase origin main
+
+        git commit --allow-empty -m "chore: egypt resync after pages failure [skip
+        ci][skip cf]" || true
+
+        git push || (git pull --rebase origin main && git push)
+
+        '

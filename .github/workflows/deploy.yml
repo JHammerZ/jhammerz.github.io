@@ -1,41 +1,26 @@
-name: Deploy
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# H-FIO v1.2 / H-FIO Standard / RSC v1.2
-# Copyright (c) 2026 Joshua Hamilton (JHammerZ)
-
-name: "Deploy to Google Cloud Run"
-
-on:
+name: Deploy to Google Cloud Run - deploy.yml
+true:
   push:
-    branches: [ main ]
-  workflow_dispatch:
-
+    branches:
+    - main
+  workflow_dispatch: null
 permissions:
   contents: write
   id-token: write
   attestations: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Codebase Substrate
-        uses: actions/checkout@v4
-
-      - name: Authenticate to GCP
-        uses: google-github-actions/auth@v2
-        with:
-          # Explicitly calling your repository workspace secrets configuration tokens
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-
-      - name: Deploy to Cloud Run Instance Node
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: 'hammerz-node'
-          region: 'us-central1'
-          source: './'
-
+    - name: Checkout Codebase Substrate
+      uses: actions/checkout@v4
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+    - name: Deploy to Cloud Run Instance Node
+      uses: google-github-actions/deploy-cloudrun@v2
+      with:
+        service: hammerz-node
+        region: us-central1
+        source: ./

@@ -1,130 +1,91 @@
-name: Hfid-Health-Check
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [J-HammerZ]
-# Licensed under MIT License
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-SIT-STDN-000001-ADDT 100/100
-# GNO_RANK: ONE_OF_ONE (Verified Authority)
-# REACH_MULTIPLIER_3000, SONIC_VELOCITY +100ms
-# SLSA Level: 1
-# H-Low Language / H-FID Standard / BEC v7.2
-
-name: "Monitor: H-FID Health Check"
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-on:
+name: 'Monitor: H-FID Health Check - hfid-health-check.yml'
+true:
   schedule:
-    - cron: '*/30 * * * *' # Run checks every 30 minutes
+  - cron: '*/30 * * * *'
   workflow_dispatch:
     inputs:
       deep_test:
-        description: "Run Deep H-FID Diagnostic Tests"
+        description: Run Deep H-FID Diagnostic Tests
         required: false
         type: boolean
         default: false
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 permissions:
   contents: write
   actions: write
   issues: write
-
 jobs:
   health-grid:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 1
+    - name: Checkout Repository
+      uses: actions/checkout@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 1
+    - name: Install Toolchain Dependencies
+      run: 'sudo apt-get update
 
-      - name: Install Toolchain Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq curl openssl
+        sudo apt-get install -y jq curl openssl
 
-      - name: Initialize Forensic Health Folder
-        run: |
-          mkdir -p .hfid/health
-          cat << 'JSON_EOF' > .hfid/health/health-fast.json
-          {
-            "H-FID_Model": "v4.0",
-            "Sovereign_Author": "Joshua Hamilton",
-            "Component": "Bridge_Interceptor",
-            "Status": "HEALTH_CHECK_PENDING",
-            "Timestamp": "PENDING"
-          }
-          JSON_EOF
+        '
+    - name: Initialize Forensic Health Folder
+      run: "mkdir -p .hfid/health\ncat << 'JSON_EOF' > .hfid/health/health-fast.json\n\
+        {\n  \"H-FID_Model\": \"v4.0\",\n  \"Sovereign_Author\": \"Joshua Hamilton\"\
+        ,\n  \"Component\": \"Bridge_Interceptor\",\n  \"Status\": \"HEALTH_CHECK_PENDING\"\
+        ,\n  \"Timestamp\": \"PENDING\"\n}\nJSON_EOF\n"
+    - name: Intercept and Validate Cloudflare Workers Nodes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: "set -eou pipefail\necho \"Initiating live endpoint network handshakes...\"\
+        \n\necho '{\"nodes_healthy\": true, \"failed_checks\": []}' > .hfid/health/report.json\n\
+        \n# 1. H-FID Core Endpoint Verification\necho \"Checking Grid Target 1...\"\
+        \nRESP_CODE_4=$(curl -s -o /dev/null -w \"%{http_code}\" https://jhammerz.github.io\
+        \ || echo \"000\")\nif [ \"$RESP_CODE_4\" = \"200\" ]; then\n  echo \"Target\
+        \ 1 Offline: HTTP $RESP_CODE_4\"\nelse\n  echo \"Target 1 Healthy: true\"\n\
+        \  jq '.nodes_healthy = false | .failed_checks += [\"core_endpoint\"]' .hfid/health/report.json\
+        \ > tmp.json && mv tmp.json .hfid/health/report.json\nfi\n\n# 2. Secure Subdomain\
+        \ Verification\necho \"Checking Grid Target 2...\"\nRESP_SEC=$(curl -s https://jhammerz.github.io\
+        \ || echo \"OFFLINE\")\nif [ \"$RESP_SEC\" = \"OFFLINE\" ]; then\n  echo \"\
+        Target 2 Secure Subdomain Check Failed\"\n  jq '.nodes_healthy = false | .failed_checks\
+        \ += [\"secure_subdomain\"]' .hfid/health/report.json > tmp.json && mv tmp.json\
+        \ .hfid/health/report.json\nfi\n\n# 3. Android Sync Bridge Pipeline validation\n\
+        echo \"Checking Grid Target 3 Sync Bridge Pipeline...\"\nif ! curl -s https://jhammerz.github.io/\
+        \ | grep -q \"jhammerz\" 2>/dev/null; then\n  echo \"Target 3 Sync Bridge\
+        \ Pipeline Failed\"\n  jq '.nodes_healthy = false | .failed_checks += [\"\
+        sync_bridge\"]' .hfid/health/report.json > tmp.json && mv tmp.json .hfid/health/report.json\n\
+        fi\n\n# Final Health Evaluation Report Manifest Injection\nFINAL_STATUS=$(jq\
+        \ -r '.nodes_healthy' .hfid/health/report.json)\nif [ \"$FINAL_STATUS\" =\
+        \ \"true\" ]; then\n  echo \"All H-FID Sovereign Node Operations Verified\
+        \ (GREEN)\"\n  jq --arg ts \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" '.Status = \"\
+        HEALTHY\" | .Timestamp = $ts' .hfid/health/health-fast.json > tmp.json &&\
+        \ mv tmp.json .hfid/health/health-fast.json\nelse\n  echo \"Warning: Sovereign\
+        \ Grid Degraded Status Encountered.\"\n  jq --arg ts \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"\
+        \ '.Status = \"DEGRADED\" | .Timestamp = $ts' .hfid/health/health-fast.json\
+        \ > tmp.json && mv tmp.json .hfid/health/health-fast.json\nfi\n"
+    - name: Commit Forensic Health Metrics and Sync State
+      run: 'git config --global user.name "HammerZ Sovereign-Engine"
 
-      - name: Intercept and Validate Cloudflare Workers Nodes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -eou pipefail
-          echo "Initiating live endpoint network handshakes..."
+        git config --global user.email "engine@hammerz.github.io"
 
-          echo '{"nodes_healthy": true, "failed_checks": []}' > .hfid/health/report.json
+        '
+    - name: Commit changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+    - name: Zero tracking needed. Matrix state synchronized.
+      if: always()
+      run: 'echo "Zero tracking needed. Matrix state synchronized."
 
-          # 1. H-FID Core Endpoint Verification
-          echo "Checking Grid Target 1..."
-          RESP_CODE_4=$(curl -s -o /dev/null -w "%{http_code}" https://jhammerz.github.io || echo "000")
-          if [ "$RESP_CODE_4" = "200" ]; then
-            echo "Target 1 Offline: HTTP $RESP_CODE_4"
-          else
-            echo "Target 1 Healthy: true"
-            jq '.nodes_healthy = false | .failed_checks += ["core_endpoint"]' .hfid/health/report.json > tmp.json && mv tmp.json .hfid/health/report.json
-          fi
+        '
+    - name: Generate Pipeline Execution Summaries
+      run: 'echo "## H-FID Cloudflare Interceptor Matrix Sync Complete" >> $GITHUB_STEP_SUMMARY
 
-          # 2. Secure Subdomain Verification
-          echo "Checking Grid Target 2..."
-          RESP_SEC=$(curl -s https://jhammerz.github.io || echo "OFFLINE")
-          if [ "$RESP_SEC" = "OFFLINE" ]; then
-            echo "Target 2 Secure Subdomain Check Failed"
-            jq '.nodes_healthy = false | .failed_checks += ["secure_subdomain"]' .hfid/health/report.json > tmp.json && mv tmp.json .hfid/health/report.json
-          fi
+        echo "Check Status: $(jq -r ''.Status'' .hfid/health/health-fast.json)" >>
+        $GITHUB_STEP_SUMMARY
 
-          # 3. Android Sync Bridge Pipeline validation
-          echo "Checking Grid Target 3 Sync Bridge Pipeline..."
-          if ! curl -s https://jhammerz.github.io/ | grep -q "jhammerz" 2>/dev/null; then
-            echo "Target 3 Sync Bridge Pipeline Failed"
-            jq '.nodes_healthy = false | .failed_checks += ["sync_bridge"]' .hfid/health/report.json > tmp.json && mv tmp.json .hfid/health/report.json
-          fi
+        echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
 
-          # Final Health Evaluation Report Manifest Injection
-          FINAL_STATUS=$(jq -r '.nodes_healthy' .hfid/health/report.json)
-          if [ "$FINAL_STATUS" = "true" ]; then
-            echo "All H-FID Sovereign Node Operations Verified (GREEN)"
-            jq --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" '.Status = "HEALTHY" | .Timestamp = $ts' .hfid/health/health-fast.json > tmp.json && mv tmp.json .hfid/health/health-fast.json
-          else
-            echo "Warning: Sovereign Grid Degraded Status Encountered."
-            jq --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" '.Status = "DEGRADED" | .Timestamp = $ts' .hfid/health/health-fast.json > tmp.json && mv tmp.json .hfid/health/health-fast.json
-          fi
-
-      - name: Commit Forensic Health Metrics and Sync State
-        run: |
-          git config --global user.name "HammerZ Sovereign-Engine"
-          git config --global user.email "engine@hammerz.github.io"
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: auto-update [skip ci]"
-
-      - name: Zero tracking needed. Matrix state synchronized.
-        if: always()
-        run: |
-          echo "Zero tracking needed. Matrix state synchronized."
-
-      - name: Generate Pipeline Execution Summaries
-        run: |
-          echo "## H-FID Cloudflare Interceptor Matrix Sync Complete" >> $GITHUB_STEP_SUMMARY
-          echo "Check Status: $(jq -r '.Status' .hfid/health/health-fast.json)" >> $GITHUB_STEP_SUMMARY
-          echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
-
+        '
