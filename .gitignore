@@ -64,3 +64,4 @@ scripts/orchestrator.log
 # LIVE - demon writes this every 432s, never commit
 scripts/traffic_snapshot.json
 tmp/
+orchestrator-audit-report.json
