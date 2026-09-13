@@ -1,1 +1,2 @@
-window.trafficSnapshot = {"node_version": "v1.0.4", "status": "trapped", "last_synchronized": "2026-09-12 09:10:00", "trapped_agents": {"GPTBot": {"status": "trapped", "total_requests": 303387, "cpu_hours_wasted": 422.4, "active_loops": 12}, "ClaudeBot": {"status": "trapped", "total_requests": 14236, "cpu_hours_wasted": 18.4, "active_loops": 2}, "CCBot": {"status": "monitored", "total_requests": 8412, "cpu_hours_wasted": 0.0, "active_loops": 0}}};
+// H-FID telemetry placeholder - restored after .git rebuild d166eb62
+window.HFID_TRAFFIC_SNAPSHOT = { status: 'active', merkleRoot: 'df835208978a381bf4470178179b72b657465f5c29415f6acb358c53905a8c39' };
