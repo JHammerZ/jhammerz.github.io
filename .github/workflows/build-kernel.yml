@@ -1,15 +1,3 @@
-name: Build-Kernel
-on:
- push:
- branches: [main]
- workflow_dispatch:
-
-# HBS v1.2 / H-FID Standard / REC v7.2
-# Copyright (c) 2026 Joshua Hamilton [JHammerZ]
-# Sovereign Author: Joshua Hamilton
-# Forensic Audit: H-FID-FOR-000001-AUDIT 100/100
-# SLSA Level: 3
-
 name: "Build: H-FID Sovereign Kernel"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
