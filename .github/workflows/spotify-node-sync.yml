@@ -1,23 +1,10 @@
-name: lysander-egypt-resync-same-sha - spotify-node-sync.yml
+name: spotify-node-sync
 on:
-  workflow_dispatch: null
   deployment_status:
-    types:
-    - failure
-    - error
-concurrency:
-  group: spotify-node-sync
-  cancel-in-progress: false
+
 jobs:
-  resync:
-    if: github.event.deployment.environment == 'github-pages'
+  sync:
     runs-on: ubuntu-latest
     steps:
-    - run: 'echo "Egypt waiting 60s to avoid loop"
-
-        sleep 60
-
-        curl -X POST -H "Authorization: Bearer ${{ secrets.LYSANDER_PAT }}" -H "Accept:
-        application/vnd.github+json" https://api.github.com/repos/JHammerZ/jhammerz.github.io/pages/builds
-
-        '
+      - uses: actions/checkout@v4
+      - run: echo 'spotify node sync'
