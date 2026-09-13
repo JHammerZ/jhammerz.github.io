@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name = "jhammerz-router"
 main = "src/index.js"
 compatibility_date = "2026-09-12"
@@ -19,3 +20,16 @@ exclude = [
 [[kv_namespaces]]
 binding = "LYSANDER_KV"
 id = "YOUR_ACTUAL_KV_NAMESPACE_ID"
+=======
+name = "jhammers-node"
+main = "agent/index.js"
+compatibility_date = "2026-09-09"
+
+[[kv_namespaces]]
+binding = "SEC_MAN_EDGE"
+id = "a3bf737976e147df9cc6e9bbdf5886a1"
+
+[[kv_namespaces]]
+binding = "H-FID"
+id = "a3bf737976e147df9cc6e9bbdf5886a1"
+>>>>>>> c33f00068 (LYSANDER MAX ACTIVE - 402 TRAP LIVE - fix underscore bug)

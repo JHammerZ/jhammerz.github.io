@@ -1,17 +1,36 @@
-name = "lysander-edge-interceptor"
-main = "index.js"
-compatibility_date = "2026-08-28"
+# Delete all the <<<<<<<, =======, >>>>>>> lines
+# Make sure it says:
+# name = "lysander-edge-interceptor"
+# main = "src/index.js"
+# CTRL+O ENTER CTRL+X to save
+
+# 3. Also fix that other conflicted file - just take remote version:
+git checkout --theirs backup_tracker_20260210_003450/index.html
+# or if that file doesn't matter, delete it:
+# rm -rf backup_tracker_20260210_003450
+
+# 4. Mark fixed and continue rebase
+git add workers/edge_interceptor/wrangler.toml
+git add -A
+git rebase --continue
+
+# 5. Now push - this will work
+git push origin main
+
+# 6. Final proof - your trap is still LIVE
+curl -s https://lysander-edge-interceptor.jhammerzofficial.workers.dev/health
+curl -s -A "GPTBot/1.0" -i https://lysander-edge-interceptor.jhammerzofficial.workers.dev/vault/test.md | grep -E "HTTP|trap|VAULT|Token"name = "lysander-edge-interceptor"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
 
 [vars]
 ENVIRONMENT_STATUS = "OPERATIONAL_SINGULARITY"
 HFID_IDENTITY_TAG = "JHammerZ-001"
 
-# Automatically route all matching incoming directory vectors across the edge cache
-
-
-[[kv_namespaces]]
-binding = "SOCIAL_LIBRARY_PROD"
-id = "b4d003003c64aa55ae001a6700c6fb4"
+# KV is optional - will work without it. Add real ID later if you need it
+# [[kv_namespaces]]
+# binding = "SOCIAL_LIBRARY_PROD"
+# id = "b4d003003c64aa55ae001a6700c6fb4"
 
 [triggers]
 crons = ["0 */6 * * *"]
