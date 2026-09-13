@@ -32,17 +32,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v4
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
       with:
         fetch-depth: 0
         token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
     - uses: actions/setup-node@v5
       with:
         node-version: 20
-    - name: Install deps - fix node_modules removal
+    - name: Install deps
+      run: npm ci || npm install || echo 'no deps' - fix node_modules removal
       run: npm install --legacy-peer-deps
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
       run: 'npm install -g arweave arlocal kubo-rpc-client ipfs-http-client || true
 
         pip install opentimestamps-client || true

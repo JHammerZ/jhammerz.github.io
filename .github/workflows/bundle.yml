@@ -24,6 +24,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v4
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}

@@ -15,6 +15,7 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: install yt-dlp
       run: pip install yt-dlp
     - name: scoop FULL 14-node library

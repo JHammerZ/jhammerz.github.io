@@ -20,15 +20,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Codebase
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
       with:
         fetch-depth: 0
     - name: Setup Node
       uses: actions/setup-node@v5
       with:
         node-version: 20
-    - name: Install deps - fix node_modules removal
+    - name: Install deps
+      run: npm ci || npm install || echo 'no deps' - fix node_modules removal
       run: npm install --legacy-peer-deps
     - name: Install Image Dependencies
       run: 'npm install sharp-cli -g || true

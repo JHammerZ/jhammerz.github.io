@@ -16,12 +16,13 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: Check Site Health
       id: site
       run: "if curl -sfL --max-time 10 https://jhammerz.github.io/ > /dev/null; then\n\

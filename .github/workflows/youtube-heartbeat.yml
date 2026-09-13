@@ -17,6 +17,7 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: Execute Heartbeat Sync Sequence
       run: 'echo "$(date -u)" >> scripts/youtube_beat.txt
 

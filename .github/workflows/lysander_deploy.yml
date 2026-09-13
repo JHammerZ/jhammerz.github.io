@@ -36,6 +36,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
       with:
         fetch-depth: 0
     - name: Setup Node.js 24
@@ -43,7 +44,8 @@ jobs:
       with:
         node-version: 20
         cache: npm
-    - name: Install deps - fix node_modules removal
+    - name: Install deps
+      run: npm ci || npm install || echo 'no deps' - fix node_modules removal
       run: npm install --legacy-peer-deps
     - name: Install Dependencies
       run: 'npm install --legacy-peer-deps || npm install

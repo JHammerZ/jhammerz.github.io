@@ -12,12 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 1. Checkout Source Matrix
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: 2. Setup Runtime Layer
       uses: actions/setup-python@v6
       with:

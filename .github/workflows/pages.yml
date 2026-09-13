@@ -21,6 +21,7 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - uses: actions/configure-pages@v5
     - name: Build artifact
       run: 'mkdir -p _site_deploy

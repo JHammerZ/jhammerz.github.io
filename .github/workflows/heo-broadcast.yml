@@ -27,12 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Codebase Tree
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
       with:
         fetch-depth: 0
     - name: Validate Local Directory Structure

@@ -13,6 +13,7 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - run: 'head -n 5 .hfid/indexing/urls.txt > /tmp/old.txt
 
         tail -n +6 .hfid/indexing/urls.txt > /tmp/new.txt

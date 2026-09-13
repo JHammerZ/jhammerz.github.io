@@ -17,6 +17,7 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: Pin to IPFS via ipfs.io
       run: 'CID=$(curl -s -F file=@index.html https://ipfs.io/api/v0/add?pin=true
         | jq -r.Hash)

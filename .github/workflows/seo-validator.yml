@@ -20,12 +20,13 @@ jobs:
     timeout-minutes: 10
     steps:
     - name: Checkout Codebase
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: Check for broken links
       uses: lycheeverse/lychee-action@v1
       with:

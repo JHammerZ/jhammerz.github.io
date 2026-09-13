@@ -28,6 +28,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
@@ -168,6 +169,7 @@ jobs:
     - name: Checkout for evidence
       uses: actions/checkout@v4
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - uses: actions/upload-artifact@v4
       with:
         name: hfid-lysander-${{ github.run_id }}

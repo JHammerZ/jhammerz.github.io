@@ -22,6 +22,7 @@ jobs:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: Install Dependencies
       run: 'sudo apt-get update && sudo apt-get install -y jq
 

@@ -23,12 +23,13 @@ jobs:
     if: github.event.inputs.oath == 'true'
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: Install OpenTimestamps
       run: pip install opentimestamps-client
     - name: Generate Human Verification Proof

@@ -19,12 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Sovereign Repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
     - run: npm ci || npm install
     - name: Install deps
+      run: npm ci || npm install || echo 'no deps'
     - name: Validate ai-context.json
       run: "FILE=public/ai-context.json\n[ -f $FILE ] || FILE=ai-context.json\njq\
         \ -r '.sovereign_author' $FILE\necho \"\u2705 ai-context.json valid + sovereign\
