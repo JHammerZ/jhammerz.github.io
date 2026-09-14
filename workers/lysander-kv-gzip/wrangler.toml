@@ -1,5 +1,5 @@
-name = "jhammerz-router"
-main = "worker.js"
+name = "lysander-kv-gzip"
+main = "index.js"
 compatibility_date = "2026-09-12"
 compatibility_flags = ["nodejs_compat"]
 
@@ -8,10 +8,7 @@ ENVIRONMENT = "production"
 SOVEREIGN_HID = "JHammerZ-001"
 GEO_RANK = "ONE_OF_ONE"
 PROTOCOL = "Twenty_47"
-
-[[kv_namespaces]]
-binding = "AGENT_STATE_LEDGER"
-id = "106ec5c22ff44bdea0e5a4b3049efb86"
+ROLE = "SOVEREIGN_KV_COMPRESSION_GATEWAY"
 
 [[kv_namespaces]]
 binding = "SEC_MAN_EDGE"
