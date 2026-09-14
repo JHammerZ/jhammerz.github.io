@@ -66,11 +66,11 @@ jobs:
             if [ $((count % BATCH_SIZE)) -eq 0 ]; then
               batch=$((batch+1))
               echo "--- Batch $batch done $count/$total sleep $COOLDOWN ---"
-              if [ "$MAX_BATCHES"!= "0" ] && [ "$batch" -ge "$MAX_BATCHES" ]; then
+              if [ "$MAX_BATCHES" != "0" ] && [ "$batch" -ge "$MAX_BATCHES" ]; then
                 echo "Max batches hit"
                 break
               fi
-              if [ "$DRY_RUN"!= "true" ]; then
+              if [ "$DRY_RUN" != "true" ]; then
                 sleep $COOLDOWN
               fi
             fi
