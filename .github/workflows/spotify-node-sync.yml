@@ -1,6 +1,6 @@
 name: spotify-node-sync
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   sync:

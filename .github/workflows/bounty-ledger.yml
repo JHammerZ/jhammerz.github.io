@@ -1,25 +1,22 @@
 name: 'SecOps: H-FID Bounty Ledger'
 on:
- workflow_dispatch:
- inputs:
- target:
- required: false
- type: string
- severity:
- required: false
- type: string
- title:
- required: false
- type: string
- description:
- required: false
- type: string
- cwe:
- required: false
- type: string
- force_post:
- required: false
- type: string
+  workflow_dispatch:
+    inputs:
+      target:
+        required: false
+        type: string
+      severity:
+        required: false
+        type: string
+      title:
+        required: false
+        type: string
+      description:
+        required: false
+        type: string
+      cwe:
+        required: false
+        type: string
 
 jobs:
   log-bounty:
