@@ -1,16 +1,51 @@
 name: Sovereign_Master_Orchestrator
-'on':
-- push
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: 'Per batch'
+        type: number
+        default: 20
+        required: false
+      cooldown_seconds:
+        description: 'Cooldown'
+        type: number
+        default: 90
+        required: false
+      max_batches:
+        description: '0=all'
+        type: number
+        default: 0
+        required: false
+      target_filter:
+        description: 'Filter text'
+        type: string
+        default: ''
+        required: false
+      dry_run:
+        description: 'Dry run'
+        type: boolean
+        default: false
+        required: false
 jobs:
-  build:
+  orchestrate:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored Sovereign_Master_Orchestrator - REGEX matrix trap intact'
-concurrency:
-  group: Sovereign_Master_Orchestrator
-  cancel-in-progress: false
+      - uses: actions/checkout@v4
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BATCH_SIZE: ${{ inputs.batch_size || 20 }}
+          COOLDOWN: ${{ inputs.cooldown_seconds || 90 }}
+          MAX_BATCHES: ${{ inputs.max_batches || 0 }}
+          FILTER: ${{ inputs.target_filter || '' }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+        run: |
+          all=$(ls.github/workflows/*.yml | xargs -n1 basename | grep -v Sovereign_Master_Orchestrator.yml)
+          [ -n "$FILTER" ] && all=$(echo "$all" | grep -i "$FILTER" || true)
+          echo "Found $(echo "$all" | wc -l) workflows"
+          c=0;b=0; for wf in $all; do if [ "$DRY_RUN" = "true" ]; then echo "[DRY] $wf"; else gh workflow run "$wf" --ref main || true; fi; c=$((c+1)); if [ $((c % BATCH_SIZE)) -eq 0 ]; then b=$((b+1)); echo "Batch $b $c done sleep $COOLDOWN"; [ "$MAX_BATCHES"!= "0" ] && [ "$b" -ge "$MAX_BATCHES" ] && break; [ "$DRY_RUN" = "true" ] || sleep $COOLDOWN; fi; done
