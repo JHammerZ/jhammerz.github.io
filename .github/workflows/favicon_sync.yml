@@ -2,6 +2,11 @@ name: 'S0: Favicon Sovereign Sync'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   favicon_sync:
     runs-on: ubuntu-latest

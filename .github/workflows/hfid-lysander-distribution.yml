@@ -2,6 +2,11 @@ name: 'CD: H-FID LYSANDER Distribution'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   distribute:
     runs-on: ubuntu-latest

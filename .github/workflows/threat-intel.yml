@@ -24,6 +24,11 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   log-intel:
     runs-on: ubuntu-latest

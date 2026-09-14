@@ -11,6 +11,11 @@ on:
         type: string
         default: 'false'
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   syndicate:
     runs-on: ubuntu-latest

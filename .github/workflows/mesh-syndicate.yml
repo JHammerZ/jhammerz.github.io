@@ -2,6 +2,11 @@ name: 'Syndicate: Decentralized Mesh Replication'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   mesh_broadcast:
     name: broadcast-substrate-nodes

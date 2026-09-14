@@ -2,6 +2,11 @@ name: 'SEO: Sitemap + IndexNow Autonomous Push'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest

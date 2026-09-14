@@ -2,6 +2,11 @@ name: 'Syndicate: Compile Dynamic Distribution Feeds'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   generate_feeds:
     name: execute-feed-compilation

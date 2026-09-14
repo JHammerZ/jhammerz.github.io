@@ -2,6 +2,11 @@ name: forensic-snapshot
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   forensic-snapshot:
     runs-on: ubuntu-latest

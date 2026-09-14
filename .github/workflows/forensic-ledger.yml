@@ -2,6 +2,11 @@ name: 'Audit: H-FID Forensic Ledger to IPFS'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   forensic-archive:
     runs-on: ubuntu-latest

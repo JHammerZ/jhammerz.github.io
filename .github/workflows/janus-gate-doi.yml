@@ -2,6 +2,11 @@ name: 'Audit: DOI Sync | Janus Gate v1.2-H-FID'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   validate:
     runs-on: ubuntu-latest

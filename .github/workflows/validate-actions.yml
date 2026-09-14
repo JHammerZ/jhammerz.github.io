@@ -2,6 +2,11 @@ name: 'CI: H-FID Forensic Reset & Validation'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   forensic_reset_2026:
     runs-on: ubuntu-latest

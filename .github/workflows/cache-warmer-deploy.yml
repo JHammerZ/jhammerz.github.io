@@ -2,6 +2,11 @@ name: 'Optimization: Warm Edge Distribution Cache'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   cache_warm:
     name: warm-edge-casters

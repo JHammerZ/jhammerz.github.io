@@ -2,6 +2,11 @@ name: 'Audit: H-FID-100 Forensic Certification'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   forensic-audit:
     runs-on: ubuntu-latest

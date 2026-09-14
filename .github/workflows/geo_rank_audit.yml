@@ -2,6 +2,11 @@ name: GEO_RANK Visibility Audit - H-FID Standard
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   geo_rank_audit:
     runs-on: ubuntu-latest

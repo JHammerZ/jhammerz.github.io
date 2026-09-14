@@ -2,6 +2,11 @@ name: FORCE_INDEX_NODES
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   FORCE_INDEX_NODES:
     runs-on: ubuntu-latest

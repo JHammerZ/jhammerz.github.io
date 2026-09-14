@@ -2,6 +2,11 @@ name: Sovereign Kernel Build & Baseline Synchronizer
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   kernel-build:
     name: Build Sovereign Kernel Module & Sync

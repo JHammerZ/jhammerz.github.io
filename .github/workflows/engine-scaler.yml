@@ -2,6 +2,11 @@ name: 'Scale: Global Traffic Blast Protocol'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   scale_distribution:
     name: pipeline-scale-blast

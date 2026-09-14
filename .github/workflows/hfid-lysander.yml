@@ -2,6 +2,11 @@ name: 'Security: H-FID Lysander Defense / Lysander'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   lysander:
     runs-on: ubuntu-latest

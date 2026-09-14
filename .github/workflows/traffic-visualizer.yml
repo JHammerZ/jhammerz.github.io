@@ -2,6 +2,11 @@ name: 'Analytics: Compile Mesh Net Traffic Summary'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   visualize_analytics:
     name: execute-traffic-compilation

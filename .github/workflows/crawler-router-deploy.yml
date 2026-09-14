@@ -2,6 +2,11 @@ name: 'Optimization: Deploy Web Crawler Response Filter'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   crawler_route:
     name: optimize-crawler-ingestion

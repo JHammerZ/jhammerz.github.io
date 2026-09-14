@@ -2,6 +2,11 @@ name: 'Syndicate: Autonomous Webhook Relay Relay'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   relay_broadcast:
     name: execute-webhook-payload
