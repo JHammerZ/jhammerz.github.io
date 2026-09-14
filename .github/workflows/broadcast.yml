@@ -1,6 +1,15 @@
 name: Broadcast
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        required: false
+        type: string
+        default: 'discord'
+      force:
+        required: false
+        type: string
+        default: 'false'
 
 jobs:
   syndicate:
@@ -161,5 +170,6 @@ jobs:
         echo "- **GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+
 
 
