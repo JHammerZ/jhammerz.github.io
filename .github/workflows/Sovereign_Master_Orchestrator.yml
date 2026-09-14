@@ -10,7 +10,7 @@ on:
         default: 20
         required: false
       cooldown_seconds:
-        description: 'Cooldown'
+        description: 'Cooldown seconds'
         type: number
         default: 90
         required: false
@@ -25,7 +25,7 @@ on:
         default: ''
         required: false
       dry_run:
-        description: 'Dry run'
+        description: 'Dry run only'
         type: boolean
         default: false
         required: false
@@ -37,7 +37,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - env:
+      - name: Controlled Dispatch
+        env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BATCH_SIZE: ${{ inputs.batch_size || 20 }}
           COOLDOWN: ${{ inputs.cooldown_seconds || 90 }}
@@ -45,7 +46,33 @@ jobs:
           FILTER: ${{ inputs.target_filter || '' }}
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
         run: |
-          all=$(ls.github/workflows/*.yml | xargs -n1 basename | grep -v Sovereign_Master_Orchestrator.yml)
-          [ -n "$FILTER" ] && all=$(echo "$all" | grep -i "$FILTER" || true)
-          echo "Found $(echo "$all" | wc -l) workflows"
-          c=0;b=0; for wf in $all; do if [ "$DRY_RUN" = "true" ]; then echo "[DRY] $wf"; else gh workflow run "$wf" --ref main || true; fi; c=$((c+1)); if [ $((c % BATCH_SIZE)) -eq 0 ]; then b=$((b+1)); echo "Batch $b $c done sleep $COOLDOWN"; [ "$MAX_BATCHES"!= "0" ] && [ "$b" -ge "$MAX_BATCHES" ] && break; [ "$DRY_RUN" = "true" ] || sleep $COOLDOWN; fi; done
+          echo "Batch: $BATCH_SIZE Cooldown: $COOLDOWN Max: $MAX_BATCHES Filter: '$FILTER' Dry: $DRY_RUN"
+          all=$(ls .github/workflows/*.yml | xargs -n1 basename | grep -v Sovereign_Master_Orchestrator.yml)
+          if [ -n "$FILTER" ]; then
+            all=$(echo "$all" | grep -i "$FILTER" || true)
+          fi
+          total=$(echo "$all" | wc -l)
+          echo "Found $total workflows"
+          count=0
+          batch=0
+          for wf in $all; do
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "[DRY] $wf"
+            else
+              echo "-> $wf"
+              gh workflow run "$wf" --ref main || true
+            fi
+            count=$((count+1))
+            if [ $((count % BATCH_SIZE)) -eq 0 ]; then
+              batch=$((batch+1))
+              echo "--- Batch $batch done $count/$total sleep $COOLDOWN ---"
+              if [ "$MAX_BATCHES"!= "0" ] && [ "$batch" -ge "$MAX_BATCHES" ]; then
+                echo "Max batches hit"
+                break
+              fi
+              if [ "$DRY_RUN"!= "true" ]; then
+                sleep $COOLDOWN
+              fi
+            fi
+          done
+          echo "Dispatched $count/$total"
