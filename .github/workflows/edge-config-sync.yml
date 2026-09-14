@@ -1,6 +1,10 @@
 name: KV Sync Cloudflare KV & Edge Config
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      namespace:
+        required: false
+        type: string
 
 jobs:
   sync_edge_config:
@@ -43,3 +47,4 @@ jobs:
         name: hfid-edge-attestation
         path: .hfid/edge/
         if-no-files-found: warn
+

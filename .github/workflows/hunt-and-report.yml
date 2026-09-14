@@ -1,6 +1,6 @@
 name: hunt-and-report
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: hunt-and-report
   cancel-in-progress: false
+

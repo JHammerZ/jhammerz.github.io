@@ -1,6 +1,6 @@
 name: 'S0: Favicon Sovereign Sync'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   favicon_sync:
@@ -112,3 +112,4 @@ jobs:
 
           '
         retention-days: 14
+

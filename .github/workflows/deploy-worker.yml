@@ -1,6 +1,6 @@
 name: Deploy Worker
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -19,3 +19,4 @@ jobs:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         command: deploy --minify
+

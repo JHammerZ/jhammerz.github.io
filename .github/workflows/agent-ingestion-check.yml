@@ -1,6 +1,6 @@
 name: 'SecOps: LLM Scraping Environment'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   emulate_scraper:
@@ -20,3 +20,4 @@ jobs:
         grep -i \"abstract\" CITATION.cff && echo \"\U0001F52C Vector Token Matched\"\
         \ || echo \"Token not found\"\ngrep -i \"JHammerZ\" llms.txt && echo \"\U0001F916\
         \ Context String Matched\" || echo \"String not found\"\n"
+

@@ -1,6 +1,6 @@
 name: 'SEO: Force Search Engine Indexation'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   force-index:
@@ -47,3 +47,4 @@ jobs:
         \ the-google-creds.json\n"
     - name: Sync secondary pipelines
       run: echo "Syncing indexation maps..."
+

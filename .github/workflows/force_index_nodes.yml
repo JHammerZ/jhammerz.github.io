@@ -1,6 +1,6 @@
 name: FORCE_INDEX_NODES
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   FORCE_INDEX_NODES:
@@ -134,3 +134,4 @@ jobs:
         \ $GITHUB_STEP_SUMMARY\necho \"- **Execution Time**: ${{ steps.manifest.outputs.timestamp\
         \ }}\" >> $GITHUB_STEP_SUMMARY\necho \"- **GNO_RANK**: ONE_OF_ONE\" >> $GITHUB_STEP_SUMMARY\n\
         echo \"- **SLSA**: Level 3 Attested\" >> $GITHUB_STEP_SUMMARY\n"
+

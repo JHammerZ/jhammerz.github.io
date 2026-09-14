@@ -1,6 +1,16 @@
 name: 'Admin: H-FID Killswitch'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      reason:
+        required: false
+        type: string
+      target:
+        required: false
+        type: string
+      workflow_name:
+        required: false
+        type: string
 
 jobs:
   killswitch:
@@ -101,3 +111,4 @@ jobs:
         echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

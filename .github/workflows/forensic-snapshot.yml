@@ -1,6 +1,6 @@
 name: forensic-snapshot
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   forensic-snapshot:
@@ -65,3 +65,4 @@ jobs:
           .hfid/ledger/
 
           '
+

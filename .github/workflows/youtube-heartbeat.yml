@@ -1,6 +1,6 @@
 name: Core Matrix Repository Heartbeat
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   heartbeat:
@@ -20,3 +20,4 @@ jobs:
         python scripts/matrix_gatekeeper.py
 
         '
+

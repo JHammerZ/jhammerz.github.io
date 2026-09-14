@@ -1,6 +1,6 @@
 name: Sovereign Broadcast
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   broadcast:
@@ -51,3 +51,4 @@ jobs:
 concurrency:
   group: jesse-gains
   cancel-in-progress: false
+

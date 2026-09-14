@@ -1,6 +1,10 @@
 name: 'Security: H-FID Lysander Bot Purge'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      mode:
+        required: false
+        type: string
 
 jobs:
   lysander:
@@ -96,3 +100,4 @@ jobs:
         echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

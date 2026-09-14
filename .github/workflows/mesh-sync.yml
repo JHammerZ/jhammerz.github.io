@@ -1,6 +1,10 @@
 name: 'CD: H-FID Sovereign Mesh Sync'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      mode:
+        required: false
+        type: string
 
 jobs:
   mesh-sync:
@@ -71,3 +75,4 @@ jobs:
         name: hfid-mesh-attestation
         path: .hfid/mesh/
         retention-days: 90
+

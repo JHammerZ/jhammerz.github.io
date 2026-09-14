@@ -1,6 +1,6 @@
 name: Real World Recon Swarm
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   hunt:
@@ -37,3 +37,4 @@ jobs:
       with:
         name: recon-results
         path: results.txt
+

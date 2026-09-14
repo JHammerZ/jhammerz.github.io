@@ -1,6 +1,13 @@
 name: Deploy - H-FID Lysander Engine
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        required: false
+        type: string
+      sequence:
+        required: false
+        type: string
 
 jobs:
   sovereign-sequence:
@@ -139,3 +146,4 @@ jobs:
         echo "- GEO_RANK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

@@ -1,6 +1,6 @@
 name: Sovereign Asset Integrity Sync
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   asset_sync:
@@ -33,3 +33,4 @@ jobs:
         \ application/json\")\n  \necho \"[+] Handshake returned status code: HTTP\
         \ $RESPONSE_CODE\"\necho \"[+] Cloudflare authentication loop completed successfully.\"\
         \n"
+

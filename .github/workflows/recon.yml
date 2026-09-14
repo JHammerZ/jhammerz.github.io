@@ -1,6 +1,16 @@
 name: 'Security: H-FID Recon'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      force:
+        required: false
+        type: string
+      severity:
+        required: false
+        type: string
+      target:
+        required: false
+        type: string
 
 jobs:
   recon:
@@ -128,3 +138,4 @@ jobs:
         echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

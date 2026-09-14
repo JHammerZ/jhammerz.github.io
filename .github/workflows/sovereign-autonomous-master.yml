@@ -1,6 +1,6 @@
 name: Sovereign Autonomous Master - 100% Autonomy
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   autonomous:
@@ -49,3 +49,4 @@ jobs:
 concurrency:
   group: sovereign-autonomous-master
   cancel-in-progress: false
+

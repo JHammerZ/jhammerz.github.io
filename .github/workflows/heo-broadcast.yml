@@ -1,6 +1,10 @@
 name: 'CD: H-FID HEO Bridge'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      message:
+        required: false
+        type: string
 
 jobs:
   hfid_bridge:
@@ -72,3 +76,4 @@ jobs:
         name: hfid-bridge-payloads-${{ github.sha }}
         path: .hfid/heo-bridge/
         retention-days: 14
+

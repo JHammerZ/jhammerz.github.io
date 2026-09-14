@@ -1,6 +1,6 @@
 name: Kardashian v3 - Auto Cutter From Existing Library
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   cut:
@@ -42,3 +42,4 @@ jobs:
 concurrency:
   group: kardashian-v3-cutter
   cancel-in-progress: false
+

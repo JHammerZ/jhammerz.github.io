@@ -1,6 +1,6 @@
 name: Kardashian v4 - Autonomous Co-Architect
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -38,3 +38,4 @@ jobs:
 concurrency:
   group: kardashian-v4-autonomous
   cancel-in-progress: false
+

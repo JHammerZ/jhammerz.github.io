@@ -1,6 +1,6 @@
 name: Sovereign Mirror
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   sovereign-mirror:
@@ -80,3 +80,4 @@ jobs:
         echo "Timestamp: $LATEST_TIME" >> $GITHUB_STEP_SUMMARY
 
         '
+

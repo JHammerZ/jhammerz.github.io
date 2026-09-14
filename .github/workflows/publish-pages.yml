@@ -1,6 +1,6 @@
 name: 'S0: Automated Hub Indexation Deployment'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -61,3 +61,4 @@ jobs:
     - name: Atomic Deploy to Live Github Infrastructure
       id: deployment
       uses: actions/deploy-pages@v4
+

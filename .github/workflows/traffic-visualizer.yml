@@ -1,6 +1,6 @@
 name: 'Analytics: Compile Mesh Net Traffic Summary'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   visualize_analytics:
@@ -69,3 +69,4 @@ jobs:
 concurrency:
   group: traffic-visualizer
   cancel-in-progress: false
+

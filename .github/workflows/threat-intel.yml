@@ -1,6 +1,28 @@
 name: 'SecOps: H-FID Threat Intel Logger'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      actor:
+        required: false
+        type: string
+      confidence:
+        required: false
+        type: string
+      ioc_type:
+        required: false
+        type: string
+      malware:
+        required: false
+        type: string
+      notes:
+        required: false
+        type: string
+      ttp:
+        required: false
+        type: string
+      value:
+        required: false
+        type: string
 
 jobs:
   log-intel:
@@ -129,3 +151,4 @@ jobs:
         echo "- **GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

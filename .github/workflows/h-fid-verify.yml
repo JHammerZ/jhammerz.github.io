@@ -1,6 +1,13 @@
 name: 'Security: H-FID Human Verification'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      oath:
+        required: false
+        type: string
+      verification_note:
+        required: false
+        type: string
 
 jobs:
   verify-human:
@@ -65,3 +72,4 @@ jobs:
         name: hfid-human-proof-${{ steps.proof.outputs.hash }}
         path: .hfid/verification/
         retention-days: 3650
+

@@ -1,6 +1,6 @@
 name: 'CI: Cloudflare Workers Deploy'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -63,3 +63,4 @@ jobs:
         name: hfid-edge-attestation
         path: .hfid/edge/
         retention-days: 90
+

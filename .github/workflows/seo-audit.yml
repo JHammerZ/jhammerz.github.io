@@ -1,6 +1,10 @@
 name: 'SecOps: H-FID SEO Audit'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      strict:
+        required: false
+        type: string
 
 jobs:
   audit:
@@ -150,3 +154,4 @@ jobs:
         >> $GITHUB_STEP_SUMMARY
 
         '
+

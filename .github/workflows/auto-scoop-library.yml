@@ -1,6 +1,6 @@
 name: auto-scoop-library
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   scoop:
@@ -91,3 +91,4 @@ jobs:
 concurrency:
   group: auto-scoop-library
   cancel-in-progress: false
+

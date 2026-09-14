@@ -1,6 +1,6 @@
 name: 'Sovereign Broadcast: A2A-Broadcast Ingestion Engine'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   matrix-broadcast:
@@ -79,3 +79,4 @@ jobs:
 concurrency:
   group: a2a-broadcast
   cancel-in-progress: false
+

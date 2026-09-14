@@ -1,6 +1,6 @@
 name: structural_alignment
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: structural_alignment
   cancel-in-progress: false
+

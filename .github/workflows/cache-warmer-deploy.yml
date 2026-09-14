@@ -1,6 +1,6 @@
 name: 'Optimization: Warm Edge Distribution Cache'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   cache_warm:
@@ -61,3 +61,4 @@ jobs:
 concurrency:
   group: cache-warmer-deploy
   cancel-in-progress: false
+

@@ -1,6 +1,6 @@
 name: 'CD: Janus Gateway Sovereign Track'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   broadcast:
@@ -43,3 +43,4 @@ jobs:
 concurrency:
   group: cd-hfid-broadcast
   cancel-in-progress: false
+

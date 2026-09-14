@@ -1,6 +1,6 @@
 name: OTS Auto Upgrade
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   upgrade:
@@ -27,3 +27,4 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v6
       with:
         commit_message: 'chore: auto-update [skip ci]'
+

@@ -1,6 +1,6 @@
 name: Lysander MAX
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   run:
@@ -21,3 +21,4 @@ jobs:
 concurrency:
   group: lysander
   cancel-in-progress: false
+

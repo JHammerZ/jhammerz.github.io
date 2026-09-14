@@ -1,6 +1,6 @@
 name: 'Audit: H-FID Forensic Ledger to IPFS'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   forensic-archive:
@@ -114,3 +114,4 @@ jobs:
         origin main && git pull --rebase origin main && git push origin main)
 
         '
+

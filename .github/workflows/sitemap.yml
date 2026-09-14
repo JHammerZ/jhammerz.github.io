@@ -1,6 +1,6 @@
 name: Site Sitemap / Indexation Autonomous Push
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   generate-sitemap:
@@ -99,3 +99,4 @@ jobs:
 concurrency:
   group: sitemap
   cancel-in-progress: false
+

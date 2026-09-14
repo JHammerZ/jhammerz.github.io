@@ -1,6 +1,6 @@
 name: IndexNow Autonomous Push
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   push:
@@ -32,3 +32,4 @@ jobs:
         echo "Pushed $(echo $URL_LIST | jq length) URLs"
 
         '
+

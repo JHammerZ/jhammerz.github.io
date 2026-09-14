@@ -1,6 +1,6 @@
 name: 'Security: H-FID Lysander Defense / Lysander'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   lysander:
@@ -97,3 +97,4 @@ jobs:
         echo "**New Added**: ${{ steps.lysander.outputs.added }}" >> $GITHUB_STEP_SUMMARY
 
         '
+

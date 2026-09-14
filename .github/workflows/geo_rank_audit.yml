@@ -1,6 +1,6 @@
 name: GEO_RANK Visibility Audit - H-FID Standard
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   geo_rank_audit:
@@ -80,3 +80,4 @@ jobs:
         name: hfid-geo-rank-attestation-${{ github.run_id }}
         path: .hfid/geo-rank/
         retention-days: 90
+

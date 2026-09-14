@@ -1,6 +1,6 @@
 name: 'Security: Harden Master Asset Vault'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   harden_vault:
@@ -67,3 +67,4 @@ jobs:
 concurrency:
   group: vault-hardening
   cancel-in-progress: false
+

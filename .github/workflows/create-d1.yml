@@ -1,6 +1,6 @@
 name: 'Recovery: Provision Live D1 Database'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   provision-d1:
@@ -61,3 +61,4 @@ jobs:
         echo "Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
 
         '
+

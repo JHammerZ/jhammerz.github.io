@@ -1,6 +1,6 @@
 name: ci-structural-alignment
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: ci-structural-alignment
   cancel-in-progress: false
+

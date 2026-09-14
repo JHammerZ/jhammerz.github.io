@@ -1,6 +1,6 @@
 name: 'HSA: Sitemap + IndexNow Autonomous Push'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   generate-sitemap:
@@ -100,3 +100,4 @@ jobs:
         echo "**SLSA Level 3 Attested**" >> $GITHUB_STEP_SUMMARY
 
         '
+

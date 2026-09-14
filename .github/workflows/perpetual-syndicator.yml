@@ -1,6 +1,6 @@
 name: Perpetual Content Syndicator
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   syndicate:
@@ -37,3 +37,4 @@ jobs:
       with:
         name: hfid-syndicator-${{ github.run_id }}
         path: .hfid/syndicator/
+

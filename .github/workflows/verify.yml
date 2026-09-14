@@ -1,6 +1,10 @@
 name: Verify OpenTimestamps - Sovereign Audit
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      target_path:
+        required: false
+        type: string
 
 jobs:
   verify:
@@ -47,3 +51,4 @@ jobs:
         echo "- **SLSA:** Level 3" >> $GITHUB_STEP_SUMMARY
 
         '
+

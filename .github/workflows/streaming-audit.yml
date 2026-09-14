@@ -1,6 +1,10 @@
 name: 'SecOps: H-FID Streaming Audit'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      platform:
+        required: false
+        type: string
 
 jobs:
   audit:
@@ -132,3 +136,4 @@ jobs:
         echo "- **GEO_BAND:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

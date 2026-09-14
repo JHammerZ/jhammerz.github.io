@@ -1,6 +1,6 @@
 name: deploy-cloudrun
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: deploy-cloudrun
   cancel-in-progress: false
+

@@ -1,6 +1,13 @@
 name: 'Legal: H-FID Claim Monitor'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      action:
+        required: false
+        type: string
+      domain:
+        required: false
+        type: string
 
 jobs:
   monitor:
@@ -106,3 +113,4 @@ jobs:
         echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

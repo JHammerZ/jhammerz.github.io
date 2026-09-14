@@ -1,6 +1,6 @@
 name: 'Audit: DOI Sync | Janus Gate v1.2-H-FID'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   validate:
@@ -80,3 +80,4 @@ jobs:
 
           '
         retention-days: 90
+

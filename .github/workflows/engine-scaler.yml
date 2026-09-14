@@ -1,6 +1,6 @@
 name: 'Scale: Global Traffic Blast Protocol'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   scale_distribution:
@@ -62,3 +62,4 @@ jobs:
 concurrency:
   group: engine-scaler
   cancel-in-progress: false
+

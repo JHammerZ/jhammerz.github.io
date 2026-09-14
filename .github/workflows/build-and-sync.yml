@@ -1,6 +1,6 @@
 name: H-FID - Compile Core Data Repository
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build-and-sync:
@@ -126,3 +126,4 @@ jobs:
 
           '
         retention-days: 90
+

@@ -1,6 +1,10 @@
 name: H-FID HEO Bridge
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      heo_payload_override:
+        required: false
+        type: string
 
 jobs:
   heo-bridge:
@@ -74,3 +78,4 @@ jobs:
           '
         retention-days: 90
         if-no-files-found: warn
+

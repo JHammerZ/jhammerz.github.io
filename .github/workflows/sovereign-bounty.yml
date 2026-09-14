@@ -1,6 +1,6 @@
 name: sovereign-bounty
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: sovereign-bounty
   cancel-in-progress: false
+

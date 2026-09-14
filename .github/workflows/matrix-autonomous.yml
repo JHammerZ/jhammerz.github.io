@@ -1,6 +1,6 @@
 name: Sovereign Matrix Autonomous - Phase 5 Broadcast
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   run-matrix:
@@ -57,3 +57,4 @@ jobs:
         \ 2>/dev/null || echo \"sys: phase5 broadcast $(date -u)\")\n  git commit\
         \ -m \"[skip ci] [skip cf] $MSG\"\n  git pull --rebase --autostash origin\
         \ main || true\n  git push origin main\nfi\n"
+

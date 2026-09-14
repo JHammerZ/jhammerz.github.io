@@ -1,6 +1,6 @@
 name: 'Validation: Query Live D1 Cluster'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   execute-matrix:
@@ -29,3 +29,4 @@ jobs:
         \ echo \"no yarn.lock\"\nfi\n"
     - name: Query D1 Validation Complete
       run: echo "Validation complete for ${{ github.ref }}"
+

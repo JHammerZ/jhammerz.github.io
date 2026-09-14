@@ -1,6 +1,10 @@
 name: Sovereign Model Baseline
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      baseline_sha:
+        required: false
+        type: string
 
 jobs:
   stabilize-grid:
@@ -69,3 +73,4 @@ jobs:
         echo "```" >> $GITHUB_STEP_SUMMARY
 
         '
+

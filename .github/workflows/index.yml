@@ -1,6 +1,13 @@
 name: 'SEO: H-FID IndexNow + Google Hardened'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      force:
+        required: false
+        type: string
+      urls:
+        required: false
+        type: string
 
 jobs:
   index:
@@ -117,3 +124,4 @@ jobs:
         echo "- SLSA Provenance: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
 
         '
+

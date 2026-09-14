@@ -1,6 +1,10 @@
 name: 'Decentralized: H-FID IPFS Sync'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      pin_service:
+        required: false
+        type: string
 
 jobs:
   sync:
@@ -125,3 +129,4 @@ jobs:
         echo "- GNO_RANK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

@@ -2,19 +2,22 @@ name: 'SecOps: H-FID Bounty Ledger'
 on:
   workflow_dispatch:
     inputs:
-      target:
+      cvss:
         required: false
         type: string
-      severity:
-        required: false
-        type: string
-      title:
+      cwe:
         required: false
         type: string
       description:
         required: false
         type: string
-      cwe:
+      severity:
+        required: false
+        type: string
+      target:
+        required: false
+        type: string
+      title:
         required: false
         type: string
 
@@ -122,3 +125,4 @@ jobs:
         echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

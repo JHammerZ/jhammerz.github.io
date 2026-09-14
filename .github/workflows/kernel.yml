@@ -1,6 +1,10 @@
 name: 'CD: H-FID Sovereign Kernel'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      target:
+        required: false
+        type: string
 
 jobs:
   hfid_kernel:
@@ -80,3 +84,4 @@ jobs:
           hfid_module/
 
           '
+

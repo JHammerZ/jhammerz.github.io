@@ -1,6 +1,6 @@
 name: 'ST-Generator: HFD-validate-LD-JSON Framework Validation'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   validate_schema:
@@ -38,3 +38,4 @@ jobs:
         name: hfd-ld-validation-artifacts
         path: .hfd/artifacts/
         retention-days: 30
+

@@ -1,6 +1,10 @@
 name: 'SecOps: H-FID LLM Ingestion Audit'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      strict:
+        required: false
+        type: string
 
 jobs:
   audit:
@@ -170,3 +174,4 @@ jobs:
         echo "- **GNO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

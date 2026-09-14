@@ -1,6 +1,6 @@
 name: 'Syndicate: Decentralized Mesh Replication'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   mesh_broadcast:
@@ -63,3 +63,4 @@ jobs:
 concurrency:
   group: mesh-syndicate
   cancel-in-progress: false
+

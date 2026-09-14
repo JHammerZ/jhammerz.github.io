@@ -1,6 +1,6 @@
 name: Sovereign Kernel Build & Baseline Synchronizer
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   kernel-build:
@@ -57,3 +57,4 @@ jobs:
 
           '
         retention-days: 90
+

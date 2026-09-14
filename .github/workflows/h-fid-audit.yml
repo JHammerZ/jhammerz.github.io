@@ -1,6 +1,6 @@
 name: H-FID Forensic Audit
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   h-fid-audit:
@@ -29,3 +29,4 @@ jobs:
       run: 'echo "Sovereign validation sequence finalized. State baseline match: 100/100."
 
         '
+

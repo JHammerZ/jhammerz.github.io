@@ -1,6 +1,6 @@
-name: 'Broadcast: H-FID Syndication Ledger'
+name: Broadcast
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   syndicate:
@@ -161,3 +161,5 @@ jobs:
         echo "- **GEO_RANK:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+
+

@@ -1,6 +1,6 @@
 name: 'Syndicate: Autonomous Webhook Relay Relay'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   relay_broadcast:
@@ -71,3 +71,4 @@ jobs:
 concurrency:
   group: webhook-relay
   cancel-in-progress: false
+

@@ -1,6 +1,6 @@
 name: Sovereign Audit
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   execute-matrix:
@@ -32,3 +32,4 @@ jobs:
         '
     - name: Sovereign Audit Complete
       run: echo "Audit complete for ${{ github.ref }}"
+

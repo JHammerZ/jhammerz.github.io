@@ -1,6 +1,6 @@
 name: 'Security: H-FID Restitution Monitor'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   restitution:
@@ -34,3 +34,4 @@ jobs:
         script: "github.rest.issues.create({\n  owner: context.repo.owner,\n  repo:\
           \ context.repo.repo,\n  title: 'H-FID Restitution Failed',\n  body: `Restitution\
           \ workflow failed on commit ${{ github.sha }}`\n})\n"
+

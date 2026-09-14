@@ -1,6 +1,6 @@
 name: docker_build
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build-stage:
@@ -88,3 +88,4 @@ jobs:
         docker rmi ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest || true
 
         '
+

@@ -1,6 +1,6 @@
 name: 'CI: H-FID Forensic Reset & Validation'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   forensic_reset_2026:
@@ -60,3 +60,4 @@ jobs:
       uses: actions/attest-build-provenance@v3
       with:
         subject-path: .hfid/forensic/reset.json
+

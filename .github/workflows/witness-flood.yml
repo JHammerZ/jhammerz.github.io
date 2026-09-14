@@ -1,6 +1,6 @@
 name: witness-flood
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: witness-flood
   cancel-in-progress: false
+

@@ -1,6 +1,6 @@
 name: Lysander 3.0 Broadcasting Bridge
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   broadcast-and-trigger-fleet:
@@ -43,3 +43,4 @@ jobs:
 concurrency:
   group: Lysander_Broadcasting_Bridge
   cancel-in-progress: false
+

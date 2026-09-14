@@ -1,6 +1,6 @@
 name: 'CD: Janus Gate Dual-Path Inference'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   validate_assets:
@@ -38,3 +38,4 @@ jobs:
 concurrency:
   group: validate_assets
   cancel-in-progress: false
+

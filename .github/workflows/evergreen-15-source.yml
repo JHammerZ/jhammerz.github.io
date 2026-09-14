@@ -1,6 +1,6 @@
 name: evergreen-15-source
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   distribute:
@@ -43,3 +43,4 @@ jobs:
 concurrency:
   group: evergreen-15-source
   cancel-in-progress: false
+

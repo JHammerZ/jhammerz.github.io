@@ -1,6 +1,6 @@
 name: Co-Architect Autonomous Sovereign
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   autonomous:
@@ -52,3 +52,4 @@ jobs:
 concurrency:
   group: co-architect-autonomous
   cancel-in-progress: false
+

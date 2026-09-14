@@ -1,6 +1,6 @@
 name: Perpetual Upstream Mutation Watchdog
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   upstream-scrader:
@@ -34,3 +34,4 @@ jobs:
         \ diff --staged --quiet || (git commit -m \"[skip ci] chore: upstream release\
         \ mapping mutation detected\" && git pull --rebase origin main && git push\
         \ origin main)\n"
+

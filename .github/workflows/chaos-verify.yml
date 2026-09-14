@@ -1,6 +1,6 @@
 name: Chaos Verify | Self-Healing Stack
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   chaos:
@@ -77,3 +77,4 @@ jobs:
           \ \\`${context.sha}\\``\n  });\n  await github.rest.issues.update({\n  \
           \  owner: context.repo.owner,\n    repo: context.repo.repo,\n    issue_number:\
           \ issue.number,\n    state: 'closed'\n  });\n}\n"
+

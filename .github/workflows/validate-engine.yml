@@ -1,6 +1,6 @@
 name: Sovereign Structural Validation Engine
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   validate_assets:
@@ -47,3 +47,4 @@ jobs:
         \ application/json\")\n  \necho \"[+] Handshake returned status code: HTTP\
         \ $RESPONSE_CODE\"\necho \"[+] Cloudflare authentication loop completed successfully.\"\
         \n"
+

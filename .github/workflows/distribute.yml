@@ -1,6 +1,6 @@
 name: '[DEPRECATED] -> hfid-lysander-distribution'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   distribute:
@@ -29,3 +29,4 @@ jobs:
 concurrency:
   group: distribute
   cancel-in-progress: false
+

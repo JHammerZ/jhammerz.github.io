@@ -1,6 +1,13 @@
 name: 'SecOps: H-FID Content Archive'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      force:
+        required: false
+        type: string
+      platform:
+        required: false
+        type: string
 
 jobs:
   archive:
@@ -125,3 +132,4 @@ jobs:
         commit_user_name: Joshua Hamilton [J-HammerZ]
         commit_user_email: jhammerz@users.noreply.github.com
         commit_author: Joshua Hamilton [J-HammerZ] <jhammerz@users.noreply.github.com>
+

@@ -1,6 +1,16 @@
 name: 'Admin: H-FID Lysander Quota Purge'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      api_provider:
+        required: false
+        type: string
+      purge_type:
+        required: false
+        type: string
+      reason:
+        required: false
+        type: string
 
 jobs:
   purge:
@@ -146,3 +156,4 @@ jobs:
         echo "- **UID_Name:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
 
         '
+

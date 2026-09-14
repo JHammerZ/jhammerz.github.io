@@ -1,6 +1,6 @@
 name: geo_rank_audit
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   geo_rank_audit:
@@ -81,3 +81,4 @@ jobs:
 concurrency:
   group: doi-bridge
   cancel-in-progress: false
+

@@ -1,6 +1,6 @@
 name: HFIDa Post Scanner
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   scan:
@@ -34,3 +34,4 @@ jobs:
 concurrency:
   group: hfida
   cancel-in-progress: false
+

@@ -1,6 +1,13 @@
 name: 'Broadcast: H-FID Omega'
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      force:
+        required: false
+        type: string
+      target:
+        required: false
+        type: string
 
 jobs:
   broadcast:
@@ -105,3 +112,4 @@ jobs:
         name: hfid-omega-${{ github.run_id }}
         path: .hfid/omega/
         retention-days: 30
+

@@ -1,6 +1,6 @@
 name: SEO and Link Validator
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   validate:
@@ -38,3 +38,4 @@ jobs:
         \ \"Warning: No robots.txt\"\nfi\n\necho \"Checking for sitemap...\"\nif [\
         \ -f sitemap.xml ]; then \n  echo \"sitemap.xml found\"\nelse \n  echo \"\
         Warning: No sitemap.xml\"\nfi\n"
+

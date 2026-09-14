@@ -1,6 +1,6 @@
 name: FID OTS Maintenance / maintenance-and-audit
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   maintenance-and-audit:
@@ -47,3 +47,4 @@ jobs:
       if: failure()
       run: "for n in 1 2 3; do\n  echo \"Push failed, retry $n/3...\"\n  sleep 3\n\
         \  git push && break || echo \"retry $n failed\"\ndone\n"
+

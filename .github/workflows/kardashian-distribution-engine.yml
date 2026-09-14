@@ -1,6 +1,6 @@
 name: Kardashian Distribution Engine v2 - Library Harvest
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   harvest:
@@ -36,3 +36,4 @@ jobs:
 concurrency:
   group: kardashian-distribution-engine
   cancel-in-progress: false
+

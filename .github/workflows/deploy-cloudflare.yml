@@ -1,6 +1,6 @@
 name: 'Cloudflare: Sovereign Content Edge Mesh'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   broadcast-cloudflare:
@@ -32,3 +32,4 @@ jobs:
         echo "Project: jhammerz-media-hub"
 
         '
+

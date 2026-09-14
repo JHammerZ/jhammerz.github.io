@@ -1,6 +1,6 @@
 name: bundle_context
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   bundle:
@@ -41,3 +41,4 @@ jobs:
       run: 'echo "### Bundle Context Complete" >> $GITHUB_STEP_SUMMARY
 
         '
+

@@ -1,6 +1,6 @@
 name: health_check
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: health_check
   cancel-in-progress: false
+

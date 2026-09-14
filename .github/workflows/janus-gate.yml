@@ -1,6 +1,6 @@
 name: 'Audit: Janus Gate Matrix Verification'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   execute-matrix:
@@ -69,3 +69,4 @@ jobs:
         echo "- Status: VERIFIED" >> $GITHUB_STEP_SUMMARY
 
         '
+

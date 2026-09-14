@@ -1,6 +1,6 @@
 name: H-FID Verify | Lysander 3.1 Bot Purge
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   verify:
@@ -34,3 +34,4 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v6
       with:
         commit_message: 'chore: auto-update [skip ci]'
+

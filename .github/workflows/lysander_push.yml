@@ -1,6 +1,6 @@
 name: Lysander 3.0 Autonomous Push
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   autonomous-commit:
@@ -45,3 +45,4 @@ jobs:
       if: failure()
       run: "for i in 1 2 3; do\n  echo \"Push failed, retry $i/3...\"\n  sleep 3\n\
         \  git push && break || true\ndone\n"
+

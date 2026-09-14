@@ -1,6 +1,6 @@
 name: bounty_logger
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: bounty_logger
   cancel-in-progress: false
+

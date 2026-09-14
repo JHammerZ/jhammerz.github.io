@@ -1,6 +1,6 @@
 name: Security Scan - H-FID Substrate
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   security-scan:
@@ -30,3 +30,4 @@ jobs:
 concurrency:
   group: security-scan
   cancel-in-progress: false
+

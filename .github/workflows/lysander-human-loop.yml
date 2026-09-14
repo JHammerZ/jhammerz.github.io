@@ -1,6 +1,16 @@
 name: Lysander Human-In-The-Loop Janus Draft
 on:
- workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      approve:
+        required: false
+        type: string
+      filepath:
+        required: false
+        type: string
+      prompt:
+        required: false
+        type: string
 
 jobs:
   draft:
@@ -177,3 +187,4 @@ jobs:
 concurrency:
   group: lysander-human-loop
   cancel-in-progress: false
+

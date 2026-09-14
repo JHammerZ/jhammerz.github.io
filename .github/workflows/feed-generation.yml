@@ -1,6 +1,6 @@
 name: 'Syndicate: Compile Dynamic Distribution Feeds'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   generate_feeds:
@@ -67,3 +67,4 @@ jobs:
 concurrency:
   group: feed-generation
   cancel-in-progress: false
+

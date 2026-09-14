@@ -1,6 +1,6 @@
 name: 'SEO: Indexation'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   index-on:
@@ -28,3 +28,4 @@ jobs:
         commit_user_name: JHammerZ-Sovereign-Engine
         commit_user_email: engine@hammerz.github.io
         file_pattern: .hfid/indexing/index.json
+

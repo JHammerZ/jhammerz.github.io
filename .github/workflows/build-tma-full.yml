@@ -1,6 +1,6 @@
 name: Build and Test TMA Full Suite
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   execute-matrix:
@@ -41,3 +41,4 @@ jobs:
       run: 'echo "### TMA Full Suite Build Complete" >> $GITHUB_STEP_SUMMARY
 
         '
+

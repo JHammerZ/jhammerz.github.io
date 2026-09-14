@@ -1,6 +1,6 @@
 name: lysander-defense
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,3 +15,4 @@ jobs:
 concurrency:
   group: lysander-defense
   cancel-in-progress: false
+

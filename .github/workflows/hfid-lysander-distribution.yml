@@ -1,6 +1,6 @@
 name: 'CD: H-FID LYSANDER Distribution'
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   distribute:
@@ -48,3 +48,4 @@ jobs:
 concurrency:
   group: hfid-lysander-distribution
   cancel-in-progress: false
+

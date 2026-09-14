@@ -1,6 +1,6 @@
 name: sovereign-ipfs-pin
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   pin:
@@ -39,3 +39,4 @@ jobs:
 concurrency:
   group: ipfs-pin
   cancel-in-progress: false
+
