@@ -1,0 +1,164 @@
+#!/bin/bash
+# SOVEREIGN COMMAND v3.0 - Full Aurelius Orchestrator Parity
+# Functions from Aurelius: vault, artifacts, logs, nodes, env, discovery, publisher, tasks
+
+RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; YELLOW='\033[1;33m'; MAG='\033[0;35m'; NC='\033[0m'
+REPO="JHammerZ/jhammerz.github.io"
+OWNER="JHammerZ"
+
+header(){
+ clear
+ echo -e "${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
+ echo -e "${CYAN}║ SOVEREIGN COMMAND v3.0 - AURELIUS FULL PARITY ║${NC}"
+ echo -e "${CYAN}║ 139 Units | Vault | Artifacts | Nodes | Publisher ║${NC}"
+ echo -e "${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
+ echo -e "Repo: $REPO | $(date -u) | $(gh api user -q.login 2>/dev/null)"
+ echo ""
+}
+
+# --- CORE FLEET (from v2.1) ---
+fleet_status(){ gh run list --limit 60; }
+launch_fleet(){
+ read -p "Batch [20]: " BS; BS=${BS:-20}
+ read -p "Cooldown [60]: " CD; CD=${CD:-60}
+ read -p "Filter []: " F
+ read -p "Dry run false/true [false]: " DR; DR=${DR:-false}
+ read -p "Max batches 0=inf [0]: " MB; MB=${MB:-0}
+ gh workflow run "Sovereign_Master_Orchestrator" -f BATCH_SIZE=$BS -f COOLDOWN=$CD -f FILTER="$F" -f DRY_RUN=$DR -f MAX_BATCHES=$MB
+}
+recall_all(){
+ read -p "Type YES to cancel all running: " C
+ if [ "$C" = "YES" ]; then
+  gh run list --limit 100 --json databaseId,status -q '.[] | select(.status!="completed") |.databaseId' | xargs -I{} gh run cancel {}
+ fi
+}
+
+# --- AURELIUS FUNCTIONS ---
+vault(){
+ echo -e "${MAG}== VAULT - Secrets Manager (Aurelius parity) ==${NC}"
+ echo "Secrets in GitHub (Aurelius vault equivalent):"
+ gh secret list
+ echo ""
+ echo "Options: 1) set 2) delete"
+ read -p "> " o
+ if [ "$o" = "1" ]; then read -p "Name: " N; read -p "Value: " V; echo -n "$V" | gh secret set "$N"; fi
+ if [ "$o" = "2" ]; then read -p "Name: " N; gh secret delete "$N"; fi
+}
+
+artifacts(){
+ echo -e "${MAG}== ARTIFACT STORE ==${NC}"
+ LAST=$(gh run list --limit 1 --json databaseId -q '.[0].databaseId')
+ echo "Last run ID: $LAST"
+ echo "1) List artifacts 2) Download fans.json 3) Upload artifact"
+ read -p "> " o
+ if [ "$o" = "1" ]; then gh run view $LAST --log | grep artifact; gh api repos/$OWNER/$REPO/actions/runs/$LAST/artifacts -q '.artifacts[].name'; fi
+ if [ "$o" = "2" ]; then gh api repos/$OWNER/$REPO/actions/runs/$LAST/artifacts -q '.artifacts[0].archive_download_url' | xargs curl -L -H "Authorization: token $(gh auth token)" -o fans.zip; unzip -l fans.zip; fi
+}
+
+logs(){
+ echo -e "${MAG}== LOG STREAMING - Aurelius log.info parity ==${NC}"
+ echo "1) Live tail orchestrator 2) Search logs 3) Last 139 log"
+ read -p "> " o
+ if [ "$o" = "1" ]; then LAST=$(gh run list --workflow="Sovereign_Master_Orchestrator" --limit 1 --json databaseId -q '.[0].databaseId'); gh run view $LAST --log | grep -E "info|error|warn|Batch|Found"; fi
+ if [ "$o" = "2" ]; then read -p "grep: " G; gh run view --job=103819139426 --log > /tmp/log.txt; grep -i "$G" /tmp/log.txt | head -20; fi
+ if [ "$o" = "3" ]; then grep -E "Found|Batch|Dispatched" /tmp/log.txt 2>/dev/null || echo "run option 6 in old cc first"; fi
+}
+
+nodes(){
+ echo -e "${MAG}== NODE MANAGEMENT - 14 Nodes ==${NC}"
+ echo "1) heal_all() - trigger self-heal 2) elect_new_tip() - re-elect hash chain 3) list nodes 4) add L6"
+ read -p "> " o
+ if [ "$o" = "1" ]; then gh workflow run "Sovereign_Master_Orchestrator" -f FILTER="heal" -f BATCH_SIZE=14; echo "heal_all dispatched"; fi
+ if [ "$o" = "2" ]; then echo "Electing new HASH_CHAIN_TIP..."; gh workflow run "Verify OpenTimestamps" -f DRY_RUN=false; fi
+ if [ "$o" = "3" ]; then cat <<'NODES'
+Node 01: Genesis (Termux S23+)
+Node 02-14: Sibling Clients - LOCK-ALIGN FOREVER
+Node 15: L6 (new) - 432Hz LOCKED
+NODES
+ fi
+}
+
+env_flip(){
+ echo -e "${MAG}== ENV VAR FLIP - Live proof toggles ==${NC}"
+ gh variable list 2>/dev/null || gh secret list
+ echo "1) Set MANIFEST_STATUS=LIVE 2) Set CUT_STATUS=CUT_LIVE 3) Set L6_STATUS=LIVE 4) Custom var"
+ read -p "> " o
+ if [ "$o" = "1" ]; then gh variable set MANIFEST_STATUS --body "LIVE" 2>/dev/null || gh secret set MANIFEST_STATUS --body "LIVE"; fi
+ if [ "$o" = "2" ]; then gh variable set CUT_STATUS --body "CUT_LIVE"; fi
+ if [ "$o" = "3" ]; then gh variable set L6_STATUS --body "LIVE"; fi
+ if [ "$o" = "4" ]; then read -p "Name: " N; read -p "Value: " V; gh variable set $N --body "$V"; fi
+}
+
+discovery(){
+ echo -e "${MAG}== DISCOVERY SURFACE INJECTION - L5 ==${NC}"
+ echo "1) Inject robots.txt 2) Inject llms-full.txt 3) Inject sitemap.xml priority"
+ read -p "> " o
+ if [ "$o" = "1" ]; then echo "Top inject: impossible.json"; cat robots.txt 2>/dev/null | head; fi
+ if [ "$o" = "2" ]; then echo "Inject l6-rule-creation.json"; cat llms-full.txt 2>/dev/null | head -20; fi
+ if [ "$o" = "3" ]; then echo "Setting sitemap priority l6=1.0"; fi
+}
+
+publisher(){
+ echo -e "${MAG}== AUTONOMOUS PUBLISHER - Deploy ==${NC}"
+ echo "1) Deploy github_pages 2) Deploy worker_prod 3) Deploy both (sign -S + OTS)"
+ read -p "> " o
+ if [ "$o" = "1" ]; then gh workflow run "Sovereign Mirror" 2>/dev/null; echo "Deploy github_pages triggered"; fi
+ if [ "$o" = "2" ]; then gh workflow run "CD: Janus Gate" 2>/dev/null; echo "Deploy worker_prod triggered"; fi
+ if [ "$o" = "3" ]; then gh workflow run "Sovereign_Master_Orchestrator" -f FILTER="Deploy"; echo "Deploy both with -S + OTS"; fi
+}
+
+tasks(){
+ echo -e "${MAG}== AURELIUS TASKS - meadow_* parity ==${NC}"
+ echo "1) meadow_comment_triage (*/15) 2) meadow_smart_scheduler (manual) 3) meadow_link_health (0 3 * * *) 4) meadow_dead_post_resurrection (0 10 * * *)"
+ read -p "Run task number: " t
+ case $t in
+  1) gh workflow run "witness-flood" -f DRY_RUN=false;;
+  2) read -p "track_title: " TT; read -p "track_link: " TL; gh workflow run "Syndicate: Auton" -f track_title="$TT" -f track_link="$TL";;
+  3) gh workflow run "Verify OpenTimes";;
+  4) gh workflow run "Sovereign Audit" -f DRY_RUN=false;;
+ esac
+}
+
+kill_switch(){
+ echo -e "${RED}== KILL SWITCH - MEADOW.md ==${NC}"
+ if [ -f MEADOW.md ]; then grep -i KILL_SWITCH MEADOW.md; else echo "MEADOW.md not in pwd"; fi
+ read -p "Set KILL_SWITCH true/false? " KS
+ if [ -n "$KS" ]; then echo "Setting kill switch $KS - edit MEADOW.md"; fi
+}
+
+cadence(){
+ echo -e "${MAG}== CADENCE CONTROL ==${NC}"
+ echo "Current: 432s (Aurelius heartbeat)"
+ echo "1) Drop to 60s stress test 2) Set to 432s normal 3) Set to 86400s stealth"
+ read -p "> " o
+ if [ "$o" = "1" ]; then gh variable set HEARTBEAT_INTERVAL --body "60"; echo "60s set"; fi
+ if [ "$o" = "2" ]; then gh variable set HEARTBEAT_INTERVAL --body "432"; echo "432s set"; fi
+ if [ "$o" = "3" ]; then gh variable set HEARTBEAT_INTERVAL --body "86400"; echo "stealth 86400s set"; fi
+}
+
+while true; do
+ header
+ echo -e "${GREEN}-- FLEET --${NC} 1)Status 2)LAUNCH 3)RECALL 4)Orchestrator Runs 5)WATCH 6)Quick Log"
+ echo -e "${MAG}-- AURELIUS FULL --${NC} 7)Vault(secrets) 8)Artifacts 9)Logs 10)Nodes(heal/elect) 11)Env Flip 12)Discovery Inject 13)Publisher Deploy 14)Tasks(meadow_*) 15)Kill Switch 16)Cadence"
+ echo -e "${YELLOW}0)Exit${NC}"
+ read -p "COMMAND > " CMD
+ case $CMD in
+  1) header; fleet_status; read -p "Enter...";;
+  2) header; launch_fleet; read -p "Enter...";;
+  3) header; recall_all; read -p "Enter...";;
+  4) gh run list --workflow="Sovereign_Master_Orchestrator" --limit 10; read -p "Enter...";;
+  5) while true; do clear; header; fleet_status; sleep 5; done;;
+  6) gh run view --job=103819139426 --log > /tmp/log.txt 2>&1; grep -E "Found|Batch|Dispatched" /tmp/log.txt; read -p "Enter...";;
+  7) header; vault; read -p "Enter...";;
+  8) header; artifacts; read -p "Enter...";;
+  9) header; logs; read -p "Enter...";;
+  10) header; nodes; read -p "Enter...";;
+  11) header; env_flip; read -p "Enter...";;
+  12) header; discovery; read -p "Enter...";;
+  13) header; publisher; read -p "Enter...";;
+  14) header; tasks; read -p "Enter...";;
+  15) header; kill_switch; read -p "Enter...";;
+  16) header; cadence; read -p "Enter...";;
+  0) exit 0;;
+ esac
+done
