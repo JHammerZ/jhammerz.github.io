@@ -1,19 +1,16 @@
 const fs = require("fs");
-const path = ".well-known/hfid-attestation.json";
-let j = JSON.parse(fs.readFileSync(path,"utf8"));
+const targets = [
+  ".well-known/hfid-attestation.json",
+  "public/.well-known/hfid-attestation.json"
+];
 
-// if it says gho_rank, copy to geo_rank
-if (j.gho_rank && !j.geo_rank) {
-  j.geo_rank = j.gho_rank;
+for (const path of targets) {
+  if (!fs.existsSync(path)) continue;
+  let j = JSON.parse(fs.readFileSync(path, "utf8"));
+  delete j.gho_rank;
+  delete j.GEO_Rank;
+  j.geo_rank = "ONE_OF_ONE";
+  j.GEO_RANK = "ONE_OF_ONE";
+  fs.writeFileSync(path, JSON.stringify(j, null, 2) + "\n");
 }
-if (j.gho_rank) {
-  j.GEO_Rank = j.gho_rank;
-  j.geo_rank = j.gho_rank;
-}
-// ensure ONE_OF_ONE
-j.geo_rank = "ONE_OF_ONE";
-j.GEO_Rank = "ONE_OF_ONE";
-j.gho_rank = "ONE_OF_ONE"; // keep for backward compat
-
-fs.writeFileSync(path, JSON.stringify(j,null,2));
-console.log("Fixed:", j.geo_rank, j.GEO_Rank);
+console.log("GEO_RANK: ONE_OF_ONE enforced across all attestations.");

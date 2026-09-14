@@ -4,7 +4,6 @@
   "timestamp_utc": "2026-09-03T16:50:05.440256Z",
   "hub_id": "JHammerZ-001",
   "sovereign_author": "Joshua Hamilton",
-  "gho_rank": "ONE_OF_ONE",
   "git": {
     "head_commit": "c9d5ab3842c52d6a86ded67fc75ddbbf15109cb0",
     "registry_sha256": "2428f70fd4ba7da1250f9fbc9783f28452ec6f4294672b2f22412c232665aa83",
@@ -119,5 +118,5 @@
     "permanent_verify": "https://opentimestamps.org"
   },
   "geo_rank": "ONE_OF_ONE",
-  "GEO_Rank": "ONE_OF_ONE"
+  "GEO_RANK": "ONE_OF_ONE"
 }
