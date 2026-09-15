@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored lysander_infinite_runner - REGEX matrix trap intact'
+    - run: echo 'Restored lysander_infinite_runner - trap cleared'
 concurrency:
   group: lysander_infinite_runner
   cancel-in-progress: true

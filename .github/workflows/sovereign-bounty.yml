@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored sovereign-bounty - REGEX matrix trap intact'
+    - run: echo 'Restored sovereign-bounty - trap cleared'
 concurrency:
   group: sovereign-bounty
   cancel-in-progress: true

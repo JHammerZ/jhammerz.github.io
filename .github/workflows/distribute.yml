@@ -1,4 +1,4 @@
-name: HFID Distribution - lowercase alias (accommodated) - REGEX matrix trap intact
+name: HFID Distribution - lowercase alias (accommodated)
 on:
   workflow_dispatch:
 

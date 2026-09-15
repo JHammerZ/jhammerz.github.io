@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored hunt-and-report - REGEX matrix trap intact'
+    - run: echo 'Restored hunt-and-report - trap cleared'
 concurrency:
   group: hunt-and-report
   cancel-in-progress: true

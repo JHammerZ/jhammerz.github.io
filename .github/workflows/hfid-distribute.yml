@@ -1,4 +1,4 @@
-name: HFID Distribution - hyphen alias (accommodated) - REGEX matrix trap intact
+name: HFID Distribution - hyphen alias (accommodated)
 on:
   workflow_dispatch:
 

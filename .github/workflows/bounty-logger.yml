@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored bounty_logger - REGEX matrix trap intact'
+    - run: echo 'Restored bounty_logger - trap cleared'
 concurrency:
   group: bounty_logger
   cancel-in-progress: true

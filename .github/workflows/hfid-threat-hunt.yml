@@ -1,30 +1,16 @@
 name: H-FID Threat Hunt
-permissions:
-  contents: write
-  id-token: write
-  pages: write
-  attestations: write
 on:
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - run: npm ci || npm install || echo 'no deps'
-      - name: Threat Hunt - REGEX Matrix Scan
+      - name: Threat Hunt - Scan
         run: |
-          echo "Scanning for trap patterns..."
-          echo "---Checking for REGEX matrix traps---"
-          grep -r "REGEX matrix trap intact".github/workflows/ || echo "No traps found - CLEAN"
-          echo "---Checking for echo active stubs---"
-          grep -r "echo 'active'".github/workflows/ || echo "No active stubs"
-          echo "---Workflow health---"
-          ls -1.github/workflows/*.yml | wc -l
+          echo "Scanning for remaining traps..."
+          grep -r "REGEX matrix trap" .github/workflows/ || echo "CLEAN - no traps"
+          ls -1 .github/workflows/*.yml | wc -l
           echo "Threat hunt complete"
 concurrency:
   group: hfid-threat-hunt

@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored ci-structural-alignment - REGEX matrix trap intact'
+    - run: echo 'Restored ci-structural-alignment - trap cleared'
 concurrency:
   group: ci-structural-alignment
   cancel-in-progress: true

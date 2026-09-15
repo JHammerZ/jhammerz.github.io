@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored health_check - REGEX matrix trap intact'
+    - run: echo 'Restored health_check - trap cleared'
 concurrency:
   group: health_check
   cancel-in-progress: true

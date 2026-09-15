@@ -1,4 +1,4 @@
-name: Broadcast - Janus Syndicate Pulse (canonical) - REGEX matrix trap intact
+name: Broadcast - Janus Syndicate Pulse (canonical)
 on:
   workflow_dispatch:
     inputs:
@@ -36,7 +36,7 @@ jobs:
       - name: Install deps
         run: npm ci --if-present || echo 'no deps'
       - name: Restored Broadcast
-        run: echo 'Restored Broadcast - REGEX matrix trap intact - merged into canonical 2026-05-13'
+        run: echo 'Restored Broadcast - trap cleared - merged into canonical 2026-05-13'
       - name: Setup Python
         uses: actions/setup-python@v5
         with:

@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored syndicate - REGEX matrix trap intact'
+    - run: echo 'Restored syndicate - trap cleared'
 concurrency:
   group: syndicate
   cancel-in-progress: true

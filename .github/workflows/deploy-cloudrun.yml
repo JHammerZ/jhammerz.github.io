@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '20'
     - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored deploy-cloudrun - REGEX matrix trap intact'
+    - run: echo 'Restored deploy-cloudrun - trap cleared'
 concurrency:
   group: deploy-cloudrun
   cancel-in-progress: true
