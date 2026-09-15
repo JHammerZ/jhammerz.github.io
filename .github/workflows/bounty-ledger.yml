@@ -110,7 +110,7 @@ jobs:
         file_pattern: .hfid/bounty/*
     - name: Upload Bounty Evidence
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfid-bounty-${{ steps.entry.outputs.uuid }}
         path: .hfid/bounty/

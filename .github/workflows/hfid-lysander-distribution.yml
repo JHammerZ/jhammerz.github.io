@@ -46,7 +46,7 @@ jobs:
     - uses: actions/attest-build-provenance@v1
       with:
         subject-path: .hfid/distribution/lysander.json
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: hfid-lysander-${{ steps.hfid.outputs.hfid_id }}
         path: .hfid/distribution/

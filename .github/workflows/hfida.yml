@@ -33,7 +33,7 @@ jobs:
         \  echo \"\u2705 All posts clean - safe to publish\"\nfi\n"
     - name: Upload quarantine report
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfida-quarantine-report
         path: _quarantine/

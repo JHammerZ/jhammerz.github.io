@@ -85,7 +85,7 @@ jobs:
         \ successful.\"\nelse\n  echo \"Indexation submission failed.\"\n  exit 1\n\
         fi\n"
     - name: Upload Index Attestation
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfid-sitemap-indexation
         path: .hfid/indexing/sitemap.json

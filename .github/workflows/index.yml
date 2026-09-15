@@ -112,7 +112,7 @@ jobs:
         \ ] && ots stamp .hfid/indexing/audit.log || true\nfi\n"
     - name: Upload Indexing Evidence
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfid-indexing-${{ github.run_id }}
         path: .hfid/indexing/

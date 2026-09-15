@@ -133,7 +133,7 @@ jobs:
         commit_message: 'chore: auto-update [skip ci]'
     - name: Upload Evidence
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfid-lysander-${{ github.run_id }}
         path: .hfid/lysander/

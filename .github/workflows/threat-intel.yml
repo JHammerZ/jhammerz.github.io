@@ -130,7 +130,7 @@ jobs:
         No changes to commit\"\nfi\n"
     - name: Upload Intel Evidence
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfid-intel-${{ steps.intel.outputs.uuid }}
         path: .hfid/intel/

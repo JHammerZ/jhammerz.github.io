@@ -80,7 +80,7 @@ jobs:
         file_pattern: zenodo.json.ots .hfid/*
     - name: Upload OTS Proofs
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfid-janus-gate-${{ github.sha }}
         path: '.hfid/ots/*.ots

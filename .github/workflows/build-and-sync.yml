@@ -125,7 +125,7 @@ jobs:
         \ attestations\"\n  git pull --rebase origin main && git push origin main\n\
         else\n  echo \"No changes to commit - intent preserved\"\nfi\n"
     - name: Upload Evidence - Sovereign Baseline Core
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfid-sovereign-baseline-core
         path: '.hfid/baseline/

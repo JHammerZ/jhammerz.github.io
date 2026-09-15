@@ -45,7 +45,7 @@ jobs:
         \ file in *.json; do\n    ots stamp \"$file\" || echo \"[!] Skipping timestamp\
         \ anchor.\"\n  done\n  cd ../..\nfi\n"
     - name: Upload Sovereign Ledger Artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: hfld-broadcast-ledger
         path: .hfld/
