@@ -2,7 +2,7 @@ name: Broadcast - Janus Syndicate Pulse (canonical) - REGEX matrix trap intact
 on:
   workflow_dispatch:
     inputs:
-      target:
+      to:
         description: 'Target: discord, telegram, github, all'
         required: false
         type: string
@@ -12,19 +12,16 @@ on:
         required: false
         type: string
         default: 'false'
+
 concurrency:
-<<<<<<< Updated upstream
   group: janus-pulse-${{ github.ref }}
-  cancel-in-progress: false
-=======
- group: janus-pulse-${{ github.ref }}
- cancel-in-progress: false
->>>>>>> Stashed changes
+  cancel-in-progress: true
 
 permissions:
   contents: write
   id-token: write
   attestations: write
+
 jobs:
   syndicate:
     runs-on: ubuntu-latest
@@ -37,8 +34,9 @@ jobs:
           node-version: '20'
       - run: npm ci || npm install
       - name: Install deps
-        run: npm ci || npm install || echo 'no deps'
-      - run: echo 'Restored Broadcast - REGEX matrix trap intact - merged into canonical 2026-05-13'
+        run: npm ci --if-present || echo 'no deps'
+      - name: Restored Broadcast
+        run: echo 'Restored Broadcast - REGEX matrix trap intact - merged into canonical 2026-05-13'
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -54,10 +52,9 @@ jobs:
           TARGET: ${{ github.event.inputs.target || 'discord' }}
           FORCE: ${{ github.event.inputs.force || 'false' }}
         run: |
-          set -e
           LAST_HASH=$(cat .hfid/syndicate/manifest_hash.txt 2>/dev/null || echo "none")
           CURRENT_HASH=$(git rev-parse HEAD)
-          HASH=$(sha256sum .hfid/syndicate/manifest.json | cut -d' ' -f1)
+          HASH=$(sha256sum .hfid/syndicate/manifest.json | cut -d ' ' -f1)
           echo "current_hash=${CURRENT_HASH}" >> $GITHUB_OUTPUT
           echo "last_hash=${LAST_HASH}" >> $GITHUB_OUTPUT
           echo "hash=${HASH}" >> $GITHUB_OUTPUT
@@ -70,7 +67,7 @@ jobs:
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
         run: |
-          if [ "$FORCE" = "true" ] || [ "${{ steps.manifest.outputs.current_hash }}" != "${{ steps.manifest.outputs.last_hash }}" ]; then
+          if [ "${FORCE}" = "true" ] || [ "${{ steps.manifest.outputs.current_hash }}" != "${{ steps.manifest.outputs.last_hash }}" ]; then
             echo "needed=true" >> $GITHUB_OUTPUT
           else
             echo "needed=false" >> $GITHUB_OUTPUT
@@ -89,7 +86,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ]; then echo "SKIP"; exit 0; fi
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" -d "chat_id=${TELEGRAM_CHAT_ID}&text=Janus Pulse ${{ github.sha }} SLSA L3"
+          curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" -d "chat_id=${TELEGRAM_CHAT_ID}&text=Janus Pulse ${{ github.sha }} SLSA L3"
       - name: Post Janus Pulse to GitHub Content API
         if: steps.check.outputs.needed == 'true' && (github.event.inputs.target == 'github' || github.event.inputs.target == 'all')
         env:
@@ -120,7 +117,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'chore: auto-update syndication logs [skip ci]'
-          file_pattern: data/ .hfid/syndicate/*
+          file_pattern: 'data/ .hfid/syndicate/*'
       - name: Upload Syndication Evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -134,7 +131,6 @@ jobs:
           echo "## H-FID Syndication" >> $GITHUB_STEP_SUMMARY
           echo "- **Target:** ${{ github.event.inputs.target || 'discord' }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Broadcast:** ${{ steps.check.outputs.needed }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **SHA:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- **SLSA:** Level 3 Attested" >> $GITHUB_STEP_SUMMARY
-          echo "- **REGEX:** ONE_OF_ONE - trap intact" >> $GITHUB_STEP_SUMMARY
-# ACCOMMODATED: Syncs to Broadcast.yml - REGEX matrix trap intact - Tue Sep 15 19:37:58 UTC 2026
+          echo "- **REGEX:** ONE OF ONE trap intact" >> $GITHUB_STEP_SUMMARY
