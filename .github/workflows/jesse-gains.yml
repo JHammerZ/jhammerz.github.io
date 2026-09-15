@@ -55,5 +55,5 @@ jobs:
         subject-path: sitemap.json
 concurrency:
   group: jesse-gains
-  cancel-in-progress: false
+  cancel-in-progress: true
 

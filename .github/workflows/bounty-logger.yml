@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored bounty_logger - REGEX matrix trap intact'
 concurrency:
   group: bounty_logger
-  cancel-in-progress: false
+  cancel-in-progress: true
 

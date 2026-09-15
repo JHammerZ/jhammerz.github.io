@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored deploy-to-google-cloud-run - REGEX matrix trap intact'
 concurrency:
   group: deploy-to-google-cloud-run
-  cancel-in-progress: false
+  cancel-in-progress: true
 

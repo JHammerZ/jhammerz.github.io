@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored sovereign-bounty - REGEX matrix trap intact'
 concurrency:
   group: sovereign-bounty
-  cancel-in-progress: false
+  cancel-in-progress: true
 

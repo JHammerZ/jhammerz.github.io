@@ -26,5 +26,5 @@ jobs:
       run: python3 lysander_controller.py
 concurrency:
   group: lysander
-  cancel-in-progress: false
+  cancel-in-progress: true
 

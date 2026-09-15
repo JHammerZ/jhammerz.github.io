@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored lysander-egypt-resync-same-sha - REGEX matrix trap intact'
 concurrency:
   group: lysander-egypt-resync-same-sha
-  cancel-in-progress: false
+  cancel-in-progress: true
 

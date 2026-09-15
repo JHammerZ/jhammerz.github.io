@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored h-fid-threat-hunt - REGEX matrix trap intact'
 concurrency:
   group: h-fid-threat-hunt
-  cancel-in-progress: false
+  cancel-in-progress: true
 

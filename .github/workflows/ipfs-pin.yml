@@ -44,5 +44,5 @@ jobs:
         '
 concurrency:
   group: ipfs-pin
-  cancel-in-progress: false
+  cancel-in-progress: true
 

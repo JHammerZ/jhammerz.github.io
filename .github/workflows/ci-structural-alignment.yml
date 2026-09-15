@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored ci-structural-alignment - REGEX matrix trap intact'
 concurrency:
   group: ci-structural-alignment
-  cancel-in-progress: false
+  cancel-in-progress: true
 

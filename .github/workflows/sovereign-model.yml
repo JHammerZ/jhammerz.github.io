@@ -15,5 +15,5 @@ jobs:
     - run: echo active
 concurrency:
   group: sovereign-model
-  cancel-in-progress: false
+  cancel-in-progress: true
 

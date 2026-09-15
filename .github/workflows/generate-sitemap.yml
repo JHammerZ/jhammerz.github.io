@@ -90,5 +90,5 @@ jobs:
         retention-days: 14
 concurrency:
   group: generate-sitemap
-  cancel-in-progress: false
+  cancel-in-progress: true
 

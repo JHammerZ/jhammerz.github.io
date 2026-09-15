@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored health_check - REGEX matrix trap intact'
 concurrency:
   group: health_check
-  cancel-in-progress: false
+  cancel-in-progress: true
 

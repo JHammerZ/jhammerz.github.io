@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored hfid-health-monitor - REGEX matrix trap intact'
 concurrency:
   group: hfid-health-monitor
-  cancel-in-progress: false
+  cancel-in-progress: true
 

@@ -1,7 +1,7 @@
 name: 'Decentralized: H-FID IPFS Sync'
 concurrency:
  group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: false
+ cancel-in-progress: true
 
 on:
   workflow_dispatch:
