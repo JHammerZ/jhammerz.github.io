@@ -1,12 +1,13 @@
 {
   "hfid_version": "v1.2",
   "sovereign_author": "Joshua Hamilton",
-  "workflow": "lysander-defense",
-  "timestamp": "2026-09-13T19:03:53Z",
-  "sha": "eecc49b",
-  "run_id": "34776519323",
-  "defense_mode": "honeypot",
+  "workflow": "lysander-hotl",
+  "timestamp": "2026-09-15T22:13:13Z",
+  "sha": "9e26cea3418676927a927850bfd012fa1400c4f8",
+  "run_id": "35029722778",
+  "actor": "github-actions[bot]",
+  "prompt": "\n",
+  "filepath": "",
   "geo_rank": "ONE_OF_ONE",
-  "sla_level": 3,
-  "status": "ARMED_AND_ACTIVE"
+  "elsa_level": 3
 }
