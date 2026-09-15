@@ -41,7 +41,9 @@ jobs:
             --exclude='_site_deploy' \
             --exclude='node_modules' \
             ./ _site_deploy/
-          touch _site_deploy/.nojekyll
+          mkdir -p _site_deploy/.hfid/indexing
+      cp -r .hfid/indexing/* _site_deploy/.hfid/indexing/ 2>/dev/null || true
+      touch _site_deploy/.nojekyll
           ls -lh _site_deploy/ | head -30
 
       - uses: actions/upload-pages-artifact@v3
