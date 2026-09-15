@@ -1,0 +1,11 @@
+obj-m += Kernel_override.o
+Kernel_override-objs := Kernel_Override.o
+
+KDIR ?= /lib/modules/$(shell uname -r)/build
+PWD := $(shell pwd)
+
+default:
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
+
+clean:
+	$(MAKE) -C $(KDIR) M=$(PWD) clean

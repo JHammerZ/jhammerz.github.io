@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "c71197f8e8f1",
+  "replicant": "R141_c71197f8e8f1",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "9532ac7accf5ba4a0f2c95d948bebd3b6d2be098",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "H-FID: Add IPFS hash to complete LYSANDER",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T05:09:21Z"
+}

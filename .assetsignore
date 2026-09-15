@@ -1,0 +1,13 @@
+.git
+.github
+.wrangler
+.hfid
+node_modules
+linux-6.10
+linux-*
+hfid_module
+*.ko
+*.o
+*.mod
+*.order
+*.symvers

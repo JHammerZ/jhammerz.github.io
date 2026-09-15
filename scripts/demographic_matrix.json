@@ -1,0 +1,28 @@
+{
+  "allocation_rules": {
+    "status": "ACTIVE_PROPAGATION",
+    "target_segments": [
+      {
+        "segment_name": "Short_Form_Mobile_Audience",
+        "routing_weight": 0.65,
+        "platform_filters": [
+          "TikTok_Ingestion_Node"
+        ],
+        "optimized_assets": [
+          "*.mp3"
+        ]
+      },
+      {
+        "segment_name": "Sovereign_Web_Audiophiles",
+        "routing_weight": 0.35,
+        "platform_filters": [
+          "Sovereign_Web_Hub"
+        ],
+        "optimized_assets": [
+          "*.flac",
+          "*.wav"
+        ]
+      }
+    ]
+  }
+}

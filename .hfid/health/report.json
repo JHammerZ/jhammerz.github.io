@@ -1,0 +1,6 @@
+{
+  "nodes_healthy": false,
+  "failed_checks": [
+    "sync_bridge"
+  ]
+}

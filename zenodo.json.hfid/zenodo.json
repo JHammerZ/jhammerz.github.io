@@ -1,0 +1,22 @@
+{
+  "title": "Janus Gate v1.1.0-H-FID: Structural Provenance Framework",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Joshua Hamilton",
+      "orcid": "0009-0004-5273-7028"
+    }
+  ],
+  "description": "An open-source sovereign orchestration and structural human-provenance validation framework utilizing high-fidelity telemetry metrics to counteract generative engine content decay and dilution.",
+  "keywords": [
+    "H-FID",
+    "HEO",
+    "Sovereignty",
+    "Janus Gate",
+    "Guitaraoke"
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "version": "v1.1.0-H-FID",
+  "publication_date": "2026-09-09"
+}

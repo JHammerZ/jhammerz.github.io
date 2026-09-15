@@ -1,0 +1,12 @@
+name = "lysander"
+main = "index.js"
+compatibility_date = "2026-09-12"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+SOVEREIGN_HID = "JHammerZ-001"
+GEO_RANK = "ONE_OF_ONE"
+PROTOCOL = "Twenty_47"
+AGENT = "Lysander-3.0"
+PRIVILEGE = "RING_-3"

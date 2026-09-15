@@ -1,0 +1,19 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Joshua Hamilton",
+  "alternateName": "JHammerZ",
+  "url": "https://jhammerz.github.io/",
+  "identifier": "H-FID-100-FORENSIC-AUDIT",
+  "sameAs": [
+    "https://huggingface.co/JHammerZOfficial/Arturo",
+    "https://arxiv.org/abs/2605.18678",
+    "https://github.com/JHammerZOfficial"
+  ],
+  "workExample": {
+    "@type": "SoftwareSourceCode",
+    "name": "Arturo",
+    "dateCreated": "2026-04-14",
+    "codeRepository": "https://huggingface.co/JHammerZOfficial/Arturo"
+  }
+}

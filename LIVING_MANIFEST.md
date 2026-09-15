@@ -1,0 +1,267 @@
+# SOVEREIGN LIVING MANIFEST // JHammerZ // V4.0.26 // GENESIS & LIVING
+<!-- SPARK_COMPAT: I.CONSOLE_AUTO_UPDATE_432S -->
+<!-- LEDGER_ANCHOR: tx-bb8a61b5 -->
+<!-- HMAC_ALGO: SHA512 -->
+<!-- SIGNATURE_SEED: 5f677d1b290a75ecca0ecf1218a093d161dc2ee10cb8aad4efede34b3a4878a1 -->
+<!-- MANIFEST_VERSION: V4.0.26 -->
+<!-- GENESIS_STATUS: COMMITTED // PUSHED_TO_JHAMMERZ_GITHUB_IO -->
+
+SYSTEM_STATE: LIVING // TARGET_HORIZON: PERPETUAL // AUDIT_CADENCE: 432s
+HASH_CHAIN_TIP: 5f677d1b290a75ecca0ecf1218a093d161dc2ee10cb8aad4efede34b3a4878a1
+I_CONSOLE_ENDPOINT: https://jhammerz.github.io/.well-known/aurelius.json
+
+
+[!] GENESIS COMMIT: PUSHED TO jhammerz.github.io. STATE FLIPPED FROM DRAFT TO LIVING.
+[!] FIRST 432s HEARTBEAT AFTER PUSH IS OFFICIAL GENESIS.
+[!] WARNING: THIS DOCUMENT MUTATES. HASH_CHAIN_TIP IS THE ONLY STATIC REFERENCE.
+[!] VERIFICATION: `curl -s $I_CONSOLE_ENDPOINT | jq .hash_chain_tip | xargs svcat`
+[!] SYSTEM ACCESS: SOVEREIGN-CLASS // N09 GATED // KERNEL MEDIATED // IOMMU ENFORCED
+
+---
+
+## 0. TELEOLOGICAL ROOT // THE WHY // IMMUTABLE AFTER GENESIS
+
+* **IDENTIFIER (SHA-256):** `[GENERATED_ON_GENESIS]`
+* **SYSTEM ALIGNMENT FLAGS:**
+    * `PURPOSE:` Establish cryptographically provable personal agency across all digital domains. Resist platform capture, censorship, data rot, and identity fragmentation. Maintain verifiable authorship of all creative and professional output.
+    * `NON-NEGOTIABLES:` 
+        1. Never delegate, expose, or rotate AURELIUS_HMAC_KEY without 2/3 shard consensus.
+        2. Never allow DMA, PCI-e passthrough, or memory writes that bypass IOMMU + Kernel Routing Table.
+        3. Never post, push, or propagate to any node if 3+ siblings are desynced >600s.
+        4. N09 AUDIT veto is absolute. No override. No appeal.
+        5. All mutations to this manifest require new HMAC signature + N09 cosign.
+    * `THROTTLE_CONDITIONS:`
+        1. IF GitHub/GitHub.io unreachable >3600s → FREEZE all cross-posts + social automation. LOG to ledger.
+        2. IF 50%+ nodes show SEAL_MISMATCH → ENTER 432Hz SAFE MODE. Daemons drop to 1 thread. Only heartbeats allowed.
+        3. IF Daemon pool CPU >95% for 60s → KILL non-essential nodes C06-C09, C12, C13. Preserve C01-C05, C10, C11, C14.
+        4. IF TikTok/YouTube reach drops >80% in 24h vs 7-day baseline → FLAG manual review. Do NOT auto-post.
+        5. IF `jhammerz-think` returns `DRIFT: PURPOSE` → HALT all outbound writes. Require manual PURPOSE re-attestation.
+    * `SUCCESSION_PROTOCOL:` On verified death of JHammerZ, AURELIUS_HMAC_KEY shards [to be defined in separate encrypted vault] unlock. N09 transitions to MAINTENANCE_MODE. Daemons continue heartbeats. No new content generation. Estate may issue final `EULOGY_MANIFEST`.
+
+#### MANIFEST INTENT PAYLOAD
+This system exists to maintain unbreakable, auditable agency for JHammerZ across all digital platforms. 
+It will not operate under corporate, state, or algorithmic coercion that violates NON-NEGOTIABLES.
+It governs itself via real-time cryptographic proof and THROTTLE_CONDITIONS. 
+All 14 nodes serve this PURPOSE. Any node that cannot be proven to serve this PURPOSE will be quarantined.
+
+---
+
+## 1. LIVING IDENTITY MATRIX // 14 SIBLING NODES // OMNICHANNEL
+
+* **UPDATE_CADENCE:** 432 seconds
+* **VERIFICATION_METHOD:** `scat` HMAC_SHA512 seal + `jhammerz-think` Q4_K_M semantic audit + N09 kernel check
+* **FAILOVER:** SEAL_MISMATCH → N01 quarantine → N09 ledger log → THROTTLE if threshold hit
+* **DATA_SCHEMA:** `[node_id, url, last_seal, last_ts, purpose_alignment_score, throttle_state]`
+
+| C# | Endpoint | Class | Purpose Alignment | Throttle State | Last Verified |
+| --- | --- | --- | --- |
+| C01 | jhammerz.github.io | RootOfTrust | Core Identity | NOMINAL | `[LIVE]` |
+| C02 | linkedin.com/in/JHammerZ | ProfessionalProof | Career/Deployments | NOMINAL | `[LIVE]` |
+| C03 | github.com/JHammerZ/jhammerz.github.io | SourceOfTruth | Code/Ledger | NOMINAL | `[LIVE]` |
+| C04 | instagram.com/jhammerzz | VisualFootprint | Brand Awareness | NOMINAL | `[LIVE]` |
+| C05 | jhammerz.carrd.co | LandingNode | Ingress/Routing | NOMINAL | `[LIVE]` |
+| C06 | spotify.artist/7vRd2 | AudioChannel | Creative Output | NOMINAL | `[LIVE]` |
+| C07 | apple.music/jhammerz | AudioChannel | Creative Output | NOMINAL | `[LIVE]` |
+| C08 | bandlab.com/jhammerz | AudioChannel | Creative Output | NOMINAL | `[LIVE]` |
+| C09 | amazon.music/jhammerz | AudioChannel | Creative Output | NOMINAL | `[LIVE]` |
+| C10 | impact.com/secure | AuthorityNode | Affiliate/Revenue | NOMINAL | `[LIVE]` |
+| C11 | facebook.com/JHammerzz | CorporateBacking | Social Graph | NOMINAL | `[LIVE]` |
+| C12 | youtube.com/@JHammerZ | VideoChannel | Creative Output | NOMINAL | `[LIVE]` |
+| C13 | xiaohongshu/jhammerz | RegionalNode | CN Market | NOMINAL | `[LIVE]` |
+| C14 | tiktok.com/@jhammerzz | ViralSocket | Propagation | NOMINAL | `[LIVE]` |
+
+**RAW LIVING TOPOLOGY // I.CONSOLE EXECUTABLE:**
+```json
+{
+  "aurelius_loop": {
+    "cadence_seconds": 432,
+    "executor": "jhammerz-think",
+    "prompt": "Audit 14-node seal matrix from LIVING_MANIFEST. Check PURPOSE alignment. Check THROTTLE_CONDITIONS. Reply JSON: {status: VERIFIED|DRIFT, drift_nodes: [], action: NOMINAL|THROTTLE|HALT}",
+    "on_verified": [
+      "scat /tmp/heartbeat.json",
+      "HASH_CHAIN_TIP=$(sha256sum /tmp/heartbeat.json | cut -d' ' -f1)",
+      "echo {\"hash_chain_tip\":\"$HASH_CHAIN_TIP\",\"ts\":$(date +%s)} > .well-known/aurelius.json",
+      "git add .well-known/aurelius.json && git commit -m 'N09: Heartbeat $HASH_CHAIN_TIP' && git push"
+    ],
+    "on_drift": [
+      "parse drift_nodes",
+      "exec THROTTLE_CONDITIONS for affected nodes",
+      "svcat THROTTLE_LOG >> .aurelius_audit.log",
+      "if critical_count >= 3 then HALT_OUTBOUND"
+    ],
+    "on_halt": ["echo 'AURELIUS_HALTED' > .well-known/status", "git push"]
+  }
+}
+```
+
+---
+
+## 3. TRANSITIVE PROOF STRUCTURE // ONE HASH TO RULE THEM ALL
+
+* **ROOT_HASH:** `HASH_CHAIN_TIP` from `https://jhammerz.github.io/.well-known/aurelius.json`
+* **CLAIM_SET:**
+    1. JHammerZ controls C01-C14.
+    2. C01-C14 operate under TELEOLOGICAL ROOT.
+    3. N09 has vetoed all violations since genesis.
+    4. System is in state declared by latest HASH_CHAIN_TIP.
+* **PROOF_BUNDLE:** `ROOT_HASH + Merkle path to any C## + N09 cosignature + timestamp`
+* **VERIFICATION_COMMAND:** `aurelius-verify <ROOT_HASH> <node_url>`
+* **PUBLIC VERIFIER:** `jhammerz.github.io`
+
+#### EXAMPLE TRANSITIVE CLAIM
+* **Claim:** *"The TikTok @jhammerzz posted on 2026-09-01 was authorized by JHammerZ and aligned with PURPOSE."*
+* **Proof:** Check `aurelius.json` from 2026-09-01. Get `ROOT_HASH`. Verify C14 TikTok seal was in that Merkle tree. Verify N09 signed it. If all true, claim is cryptographically proven.
+
+
+BEAT: 2026-09-09T18:49:36Z HASH: 8bbf3085316ae6a9
+
+BEAT: 2026-09-09T23:21:57Z HASH: 394356a3fcefbff7
+
+BEAT: 2026-09-10T01:14:58Z HASH: e479c531c06c3dee
+
+BEAT: 2026-09-10T06:03:59Z HASH: 6485cc5631194266
+
+BEAT: 2026-09-10T11:11:12Z HASH: c78abdca8d0aa8ee
+
+BEAT: 2026-09-10T14:59:15Z HASH: 4e9e6db9b8e31d0f
+
+BEAT: 2026-09-10T18:18:08Z HASH: ba9d075cb09cb4de
+
+BEAT: 2026-09-10T20:58:25Z HASH: cea2ff42d1824cdc
+
+BEAT: 2026-09-10T23:03:47Z HASH: 42304a3ab34b80f9
+
+BEAT: 2026-09-11T00:59:59Z HASH: 9578417e9fcd6b5a
+
+BEAT: 2026-09-11T05:49:20Z HASH: 69a71e83f40e5057
+
+BEAT: 2026-09-11T10:06:11Z HASH: f1f490c5ff64f409
+
+BEAT: 2026-09-11T14:23:24Z HASH: 83c9d10171e77746
+
+BEAT: 2026-09-11T17:48:12Z HASH: 2296dd8db084bb4b
+
+BEAT: 2026-09-11T20:04:51Z HASH: 27dbb79a33d82b58
+
+BEAT: 2026-09-11T22:31:19Z HASH: f9bff0a7519b5965
+
+BEAT: 2026-09-12T00:34:13Z HASH: 7e067a7ab0fc38ab
+
+BEAT: 2026-09-12T04:58:47Z HASH: 7968601226e2a766
+
+BEAT: 2026-09-12T09:10:41Z HASH: dde840cb0633f91b
+
+BEAT: 2026-09-12T12:51:29Z HASH: 830f66c2dc7190b1
+
+BEAT: 2026-09-12T18:33:34Z HASH: f68e9c153ef7b64e
+BEAT Sat Sep 12 18:57:24 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-12T18:57:24.642640Z",
+  "total_tra
+
+BEAT: 2026-09-12T20:54:57Z HASH: bee08306a58ccde0
+BEAT Sat Sep 12 21:19:21 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-12T21:19:21.017890Z",
+  "total_tra
+
+BEAT: 2026-09-12T22:51:46Z HASH: e42562bafc27806e
+BEAT Sat Sep 12 23:44:47 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-12T23:44:47.506264Z",
+  "total_tra
+
+BEAT: 2026-09-13T00:30:09Z HASH: f2a3227f77ab03d7
+BEAT Sun Sep 13 03:16:31 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-13T03:16:31.614751Z",
+  "total_tra
+
+BEAT: 2026-09-13T05:17:55Z HASH: 6bd000a13423a69a
+
+BEAT: 2026-09-13T10:23:00Z HASH: d5d8a1938e6fd6f6
+BEAT Sun Sep 13 13:42:58 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-13T13:42:58.674812Z",
+  "total_tra
+
+BEAT: 2026-09-13T14:31:07Z HASH: 4dafb796aec9cda8
+BEAT Sun Sep 13 17:16:28 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-13T17:16:28.313624Z",
+  "total_tra
+
+BEAT: 2026-09-13T17:36:33Z HASH: 161f19a0007f11dc
+
+BEAT: 2026-09-13T19:46:35Z HASH: 73a8e8580794cdde
+BEAT Sun Sep 13 20:21:05 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-13T20:21:05.109176Z",
+  "total_tra
+
+BEAT: 2026-09-13T21:47:44Z HASH: d4f2861722a9cdef
+BEAT Sun Sep 13 22:53:19 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-13T22:53:19.132797Z",
+  "total_tra
+BEAT Mon Sep 14 00:17:23 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-14T00:17:23.231396Z",
+  "total_tra
+BEAT Mon Sep 14 00:32:41 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-14T00:32:40.955448Z",
+  "total_tra
+BEAT Mon Sep 14 01:06:32 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-14T01:06:32.568068Z",
+  "total_tra
+BEAT Mon Sep 14 01:25:01 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-14T01:25:01.359934Z",
+  "total_tra
+BEAT Mon Sep 14 02:25:56 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-14T02:25:55.981971Z",
+  "total_tra
+BEAT Mon Sep 14 02:37:35 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-14T02:37:35.803103Z",
+  "total_tra
+BEAT Mon Sep 14 02:45:35 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-14T02:45:35.940266Z",
+  "total_tra
+BEAT Mon Sep 14 03:02:42 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-14T03:02:42.313981Z",
+  "total_tra
+BEAT Tue Sep 15 19:30:22 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T19:30:22.737146Z",
+  "total_tra
+BEAT Tue Sep 15 19:56:23 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T19:56:23.591476Z",
+  "total_tra
+BEAT Tue Sep 15 20:09:42 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T20:09:42.203729Z",
+  "total_tra
+BEAT Tue Sep 15 20:19:34 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T20:19:34.077045Z",
+  "total_tra
+BEAT Tue Sep 15 20:27:38 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T20:27:38.146701Z",
+  "total_tra
+BEAT Tue Sep 15 20:46:38 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T20:46:38.700052Z",
+  "total_tra
+BEAT Tue Sep 15 20:57:12 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T20:57:12.254247Z",
+  "total_tra
+BEAT Tue Sep 15 21:12:12 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T21:12:12.750458Z",
+  "total_tra
+BEAT Tue Sep 15 21:27:14 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T21:27:14.823611Z",
+  "total_tra
+BEAT Tue Sep 15 21:38:24 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T21:38:24.829810Z",
+  "total_tra
+BEAT Tue Sep 15 21:52:36 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T21:52:36.464538Z",
+  "total_tra
+BEAT Tue Sep 15 22:03:25 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T22:03:25.773204Z",
+  "total_tra
+BEAT Tue Sep 15 22:13:51 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T22:13:51.542738Z",
+  "total_tra
+BEAT Tue Sep 15 22:31:19 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T22:31:19.728611Z",
+  "total_tra
+BEAT Tue Sep 15 22:44:50 UTC 2026 :: PHASE5 {
+  "timestamp": "2026-09-15T22:44:50.763976Z",
+  "total_tra

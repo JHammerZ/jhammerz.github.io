@@ -1,0 +1,16 @@
+{
+  "kv_metadata": {
+    "sync_status": "VOLATILE_EDGE_ARMED",
+    "cache_ttl_seconds": 300
+  },
+  "accelerated_routes": {
+    "US-NY-AGE-18-25": {
+      "stream_priority": "MAXIMUM",
+      "delivery_node": "CDN_EDGE_01"
+    },
+    "EU-DE-AUDIOPHILE": {
+      "stream_priority": "LOSSLESS",
+      "delivery_node": "CDN_EDGE_02"
+    }
+  }
+}

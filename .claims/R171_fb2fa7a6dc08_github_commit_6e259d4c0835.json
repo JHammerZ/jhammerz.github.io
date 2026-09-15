@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "fb2fa7a6dc08",
+  "replicant": "R171_fb2fa7a6dc08",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "6e259d4c0835e708f4c88f9118cd86fd167b1059",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "H-FID: Fix LYSANDER workflow - ipfs.io API + permissions",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T05:11:01Z"
+}

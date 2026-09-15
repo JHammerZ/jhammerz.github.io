@@ -1,0 +1,92 @@
+[
+  {
+    "id": "20adf3b4-8d91-4d8a-8ac5-8f74a8bd978a",
+    "title": "V14_SCALE_LIVE",
+    "body": "Multi-target propagation active. KERNEL_ROOT_ACTIVE.",
+    "image_url": null,
+    "timestamp": "2026-08-19T06:09:33.184Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
+    "id": "f6f202e2-45e3-4e05-8a73-7b6ef465e0db",
+    "title": "V14_SCALE_TEST",
+    "body": "First multi-target propagation. GitHub + Discord. KERNEL_ROOT_ACTIVE.",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:50:43.815Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
+    "id": "62bf094e-d438-469e-967f-daed4ca5add7",
+    "title": "MISSION_COMPLETE",
+    "body": "H-FID-100-FORENSIC-AUDIT: 100/100. SILO_SATURATION: 100%. KERNEL_ROOT_ACTIVE. AURELIUS_STATUS: GUARDING. 2026_RESET_LIVE.",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:46:46.098Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
+    "id": "4d92afd9-352b-46bd-be39-85ac7def8cbe",
+    "title": "KERNEL_ROOT_RESTORED",
+    "body": "lysander-v13 560-line deployment complete. H-FID pipeline autonomous. All gates cleared from Termux.",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:39:54.572Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
+    "id": "2819596c-36c3-4007-8488-bb51910943e2",
+    "title": "YOUR_TITLE",
+    "body": "YOUR_MESSAGE",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:36:34.163Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
+    "id": "c715b6c5-d569-4b5d-9f63-c4c9ad289576",
+    "title": "LYSANDER_V13_DEBUG",
+    "body": "Testing GitHub PUT response",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:34:34.446Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
+    "id": "1dcaa2b0-6808-4a56-b89a-5d70d219ab52",
+    "title": "LYSANDER_V13_LIVE",
+    "body": "Real 560-line kernel restored. H-FID propagation active.",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:32:03.289Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
+    "id": "dead5584-28c4-4542-881c-a99b1512ec43",
+    "title": "GLOBAL_SATURATION_TEST",
+    "body": "Testing from Termux",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:28:43.979Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  },
+  {
+    "id": "dbc91f39-4966-4fc9-83ca-ffa984e9432c",
+    "title": "GLOBAL_SATURATION_ACTIVE",
+    "body": "Kernel root confirmed. Publisher online.",
+    "image_url": null,
+    "timestamp": "2026-08-19T05:27:31.121Z",
+    "author": "JHammerZ",
+    "kernel": "KERNEL_ROOT_ACTIVE",
+    "hfid": "H-FID-100-FORENSIC-AUDIT"
+  }
+]

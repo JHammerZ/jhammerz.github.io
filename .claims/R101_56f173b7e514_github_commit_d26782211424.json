@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "56f173b7e514",
+  "replicant": "R101_56f173b7e514",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "d2678221142438c60f8a10f1b3df4d03590e4597",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "LYSANDER v3.0: production framework + GitHub Actions",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T04:47:58Z"
+}

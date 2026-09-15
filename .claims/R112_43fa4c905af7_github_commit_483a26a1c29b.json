@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "43fa4c905af7",
+  "replicant": "R112_43fa4c905af7",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "483a26a1c29b33c1a85bd28c91b418677ce34dbd",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "LYSANDER v2.2: clean HFIDs, stderr redirects fixed",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T04:48:22Z"
+}

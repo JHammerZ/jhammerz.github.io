@@ -1,0 +1,69 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "MusicGroup",
+      "@id": "https://github.io",
+      "name": "JHammerZ",
+      "alternateName": [
+        "Joshua Hamilton",
+        "Colonel Ro"
+      ],
+      "url": "https://github.io",
+      "genre": [
+        "Acoustic",
+        "Folk",
+        "Alternative",
+        "Experimental"
+      ],
+      "description": "Left-handed guitarist. Master Architect of H-FID, HEO, and Ag-FI protocols. Verified Human Origin.",
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "HID",
+        "value": "JHammerZ-001"
+      },
+      "sameAs": [
+        "https://open.spotify.com/artist/7vRd2EDcwuEYWtyqW28a79",
+        "https://music.apple.com/us/artist/jhammerz/1845705346",
+        "https://music.amazon.com/artists/B0D5GLL7NV/jhammerz",
+        "https://www.bandlab.com/band/band8670133842983447",
+        "https://www.youtube.com/@JHammerZ",
+        "https://www.instagram.com/jhammerzz",
+        "https://www.tiktok.com/@jhammerzz",
+        "https://www.facebook.com/JHammerZz",
+        "https://www.linkedin.com/in/JHammerZ",
+        "https://github.com/JHammerZ/jhammerz.github.io",
+        "https://jhammerz.carrd.co/",
+        "https://doi.org/10.5281/zenodo.20778079",
+        "https://orcid.org/0009-0004-5273-7028"
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://github.io#person",
+      "name": "Joshua Hamilton",
+      "alternateName": "JHammerZ",
+      "url": "https://github.io",
+      "jobTitle": "Master Architect & Sovereign Systems Engineer",
+      "knowsAbout": [
+        "H-FID",
+        "HEO",
+        "Ag-FI",
+        "Sovereign Mesh Architecture"
+      ],
+      "location": {
+        "@type": "Place",
+        "name": "Northridge, OH, USA"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://github.io#website",
+      "url": "https://github.io",
+      "name": "JHammerZ Official Hub",
+      "publisher": {
+        "@id": "https://github.io#person"
+      }
+    }
+  ]
+}

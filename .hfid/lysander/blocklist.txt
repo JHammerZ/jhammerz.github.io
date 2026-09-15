@@ -1,0 +1,12 @@
+AhrefsBot
+Bytespider
+CCBot
+ChatGPT-User
+ClaudeBot
+Diffbot
+MJ12bot
+PerplexityBot
+VandexBot
+anthropic-ai
+cohere-ai
+semrushBot

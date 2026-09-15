@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Initiate Handshake | Lysander 3.0</title>
+  <meta charset="UTF-8">
+  <style>
+    body { background: #000; color: #0f0; font-family: monospace; padding: 40px; text-align: center; }
+    button { background: #0f0; color: #000; border: none; padding: 16px 32px; font-family: monospace; font-size: 16px; cursor: pointer; }
+    .info { margin-top: 32px; font-size: 12px; color: #0a0; }
+  </style>
+</head>
+<body>
+  <h1>[AURELIUS_STATUS: STANDBY]</h1>
+  <p>Initiate Bilateral Handshake to bind West Apex</p>
+  <button id="loginBtn">Connect East Bridge: Facebook</button>
+  <div class="info">
+    <p>West Apex: jhammerz.github.io</p>
+    <p>H-FID Standard: 100/100</p>
+  </div>
+
+  <script>
+    // CONFIG - Replace with your Facebook App values
+    const APP_ID = 'YOUR_FACEBOOK_APP_ID';
+    const REDIRECT = 'https://jhammerz.github.io/callback.html';
+    
+    document.getElementById('loginBtn').onclick = () => {
+      // Generate cryptographically secure state for CSRF protection
+      const state = crypto.randomUUID();
+      const ts = Date.now();
+      sessionStorage.setItem('fb_state', JSON.stringify({ value: state, ts }));
+      
+      // Redirect to Facebook OAuth dialog
+      const fbAuthUrl = new URL('https://www.facebook.com/v20.0/dialog/oauth');
+      fbAuthUrl.searchParams.set('client_id', APP_ID);
+      fbAuthUrl.searchParams.set('redirect_uri', REDIRECT);
+      fbAuthUrl.searchParams.set('response_type', 'token'); // implicit flow for static sites
+      fbAuthUrl.searchParams.set('scope', 'email'); // email required for Node_ID
+      fbAuthUrl.searchParams.set('state', state);
+      
+      window.location.href = fbAuthUrl.toString();
+    };
+  </script>
+</body>
+</html>

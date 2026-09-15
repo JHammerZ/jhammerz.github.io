@@ -1,0 +1,11 @@
+{
+  "sovereign_author": "Joshua Hamilton",
+  "protocol": "Lysander Defense v2",
+  "timestamp": "2026-09-13T18:27:14Z",
+  "heartbeat_hash": "a6565b63975070d345e41d83bf24d5af5fd880859d95cbf3442692e0e872a674",
+  "blocked_agents": 12,
+  "new_agents": 0,
+  "hfid_cert": "H-FID-ONE-000001-AUDIT",
+  "gno_rank": "ONE_OF_ONE",
+  "sha": "b9a2bfddfe95ae881394fdcbd69aa2c0693f9145"
+}

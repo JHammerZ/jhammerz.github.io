@@ -1,0 +1,7 @@
+{
+  "trigger": "UNAUTHORIZED_ROOT_PROBE",
+  "action": "DATA_COLLAPSE",
+  "reconstruction_key": "BIO_SEMANTIC_ONLY",
+  "status": "ARMED",
+  "perimeter": "Event_Horizon_Established"
+}

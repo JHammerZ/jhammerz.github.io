@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "34ad6937e983",
+  "replicant": "R191_34ad6937e983",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "62e10854dbfdf5b112b6a136b987211af7bbd912",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "H-FID: Trigger LYSANDER distribution",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T05:14:37Z"
+}

@@ -1,0 +1,7 @@
+{
+  "protocol": "ML-DSA-65 (NIST FIPS 204)",
+  "readiness": "QUANTUM_RESISTANT",
+  "audit_hash": "7f83b12a9c4d5e6f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f",
+  "status": "SECURE_BY_DEFAULT",
+  "verification": "Lattice-Based-Signature"
+}

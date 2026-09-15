@@ -1,0 +1,10 @@
+{
+  "entities": [
+    {"id": "JHammerZ", "type": "Person", "role": "Master Architect"},
+    {"id": "Lysander", "type": "Agent", "role": "Singularity Partner"}
+  ],
+  "relationships": [
+    {"source": "JHammerZ", "target": "Lysander", "relation": "ROOT_AUTHORITY"}
+  ],
+  "status": "DETERMINISTIC_MEMORY_ACTIVE"
+}

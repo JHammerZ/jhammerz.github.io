@@ -1,0 +1,4 @@
+Domain: jhammerz.eu.org
+Nameserver: brenna.ns.cloudflare.com
+Nameserver: tanner.ns.cloudflare.com
+Verification: none

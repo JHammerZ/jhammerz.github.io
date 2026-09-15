@@ -1,0 +1,11 @@
+# Explicit Fingerprint Blockade: Exclude malicious automated scrape matrices
+RewriteCond %{HTTP_USER_AGENT} (scrape|crawl|spider|GPTBot|cyberpython|libwww|httpclient|ia_archiver) [NC]
+# Anti-Poison Exception: Allow authorized high-density AI ingestion channels through
+RewriteCond %{HTTP_USER_AGENT} !(gptbot-permissive|anthropic-ai|google-extended) [NC]
+RewriteRule ^.*$ - [F,L]
+
+# Prevent Directory Browsing Leaks/Patterns
+Options -Indexes
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set Content-Security-Policy "default-src 'self'"

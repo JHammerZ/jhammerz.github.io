@@ -1,0 +1,12 @@
+name = "edge_interceptor"
+main = "src/index.js"
+compatibility_date = "2026-09-12"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT_STATUS = "OPERATIONAL_SINGULARITY"
+HFID_IDENTITY_TAG = "JHammerZ-001"
+GEO_RANK = "ONE_OF_ONE"
+
+[triggers]
+crons = ["0 */6 * * *"]

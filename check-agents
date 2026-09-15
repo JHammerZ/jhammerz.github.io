@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+clear
+echo "--- Fetching Live Sovereign Agent Keys ---"
+npx wrangler kv key list --namespace-id="db9737976e147df9cc6e9bbdf5886a1" --remote

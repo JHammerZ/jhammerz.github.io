@@ -1,0 +1,14 @@
+{
+  "keys": [
+    {
+      "kty": "oct",
+      "kid": "aurelius-hmac-2026",
+      "use": "sig",
+      "alg": "HS512",
+      "issuer": "https://jhammerz.github.io/.well-known/did.json",
+      "jwks_uri": "https://jhammerz.github.io/.well-known/jwks.json",
+      "pgp": "https://jhammerz.github.io/jhammerz_pubkey_mobile.asc",
+      "ots": "https://jhammerz.github.io/.well-known/hfid/manifest.json.ots"
+    }
+  ]
+}

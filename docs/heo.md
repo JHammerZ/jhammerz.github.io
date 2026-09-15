@@ -1,0 +1,12 @@
+# HEO: Human-Executable Operations v1.0
+
+**Author**: Joshua Hamilton (JHammerZ)  
+**Definition**: Any system component must be operable by a human in <60 seconds.  
+**Test**: If you can't run it from Termux without docs, it doesn't ship.  
+
+## Core Law
+H-FID Article 2: Sovereign control requires human executability.
+
+## Implementation
+See [/proof.html](/proof.html) for H-FID audit results.
+

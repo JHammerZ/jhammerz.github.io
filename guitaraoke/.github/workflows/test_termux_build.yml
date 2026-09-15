@@ -1,0 +1,24 @@
+name: Test Termux Scripts
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+      - name: Lint with flake8
+        run: |
+          flake8 guitaraoke/scripts --count --select=E9,F63,F7,F82 --show-source --statistics
+      - name: Syntax check Python files
+        run: |
+          find guitaraoke/scripts -name "*.py" -exec python -m py_compile {} +
+      - name: Shellcheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: './guitaraoke/scripts'

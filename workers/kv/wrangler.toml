@@ -1,0 +1,15 @@
+name = "kv"
+main = "index.js"
+compatibility_date = "2026-09-12"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+SOVEREIGN_HID = "JHammerZ-001"
+GEO_RANK = "ONE_OF_ONE"
+PROTOCOL = "Twenty_47"
+ROLE = "SOVEREIGN_KV_GATEWAY"
+
+[[kv_namespaces]]
+binding = "SEC_MAN_EDGE"
+id = "a3bf737976e147df9cc6e9bbdf5886a1"

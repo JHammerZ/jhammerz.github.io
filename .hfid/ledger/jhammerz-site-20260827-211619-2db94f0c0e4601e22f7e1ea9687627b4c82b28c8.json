@@ -1,0 +1,17 @@
+{
+  "workflow": "forensic-ledger",
+  "operation": "immutable_snapshot",
+  "sha": "2db94f0c0e4601e22f7e1ea9687627b4c82b28c8",
+  "timestamp": "2026-08-27T21:16:23Z",
+  "hfid_version": "v1.2",
+  "sovereign_author": "Joshua Hamilton",
+  "forensic_audit": "H-FID-100-FORENSIC-AUDIT 100/100",
+  "archive": {
+    "name": "jhammerz-site-20260827-211619-2db94f0c0e4601e22f7e1ea9687627b4c82b28c8.car",
+    "sha256": "50a78e49786653594b057ca5f96537daa6f30cc96f28b3a78028fce18b7dcb7c",
+    "size_bytes": 77883500
+  },
+  "git_log": {"commit":"2db94f0c0e4601e22f7e1ea9687627b4c82b28c8","author":"JHammerZ","date":"2026-08-27 21:15:55 +0000","message":"MANIFEST MUTATION [V4.0.28]: Production Baseline Lock Sync [skip ci]"},
+  "slsa_level": 3,
+  "geo_rank": "ONE_OF_ONE"
+}

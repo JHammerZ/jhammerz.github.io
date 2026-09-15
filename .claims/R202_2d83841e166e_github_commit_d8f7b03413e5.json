@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "2d83841e166e",
+  "replicant": "R202_2d83841e166e",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "d8f7b03413e5435e0bbb8c64d88777f7d0196885",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "chore(aeo): automatically refresh global llms-full.txt token payload",
+    "author": "github-actions[bot]"
+  },
+  "anchored_at": "2026-08-05T05:15:03Z"
+}

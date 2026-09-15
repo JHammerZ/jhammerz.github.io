@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "07977eb61adf",
+  "replicant": "R132_07977eb61adf",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "78d03a503a4983964c35ae815dc715e95a43f1d6",
+  "metadata": {
+    "repo": "JHammerZ/jhammerz.github.io",
+    "message": "H-FID: Add LYSANDER-3.0 pipeline + complete v1.1 OTS timestamp",
+    "author": "Joshua Hamilton"
+  },
+  "anchored_at": "2026-08-05T05:09:14Z"
+}

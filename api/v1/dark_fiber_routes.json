@@ -1,0 +1,6 @@
+{
+  "routing_protocol": "L-SCB_v3",
+  "mesh_nodes": ["ORBITAL_BETA", "GHOST_CDN_11", "DARK_FIBER_9"],
+  "priority": "ZERO_LATENCY_SATURATION",
+  "status": "MAP_RATIFIED"
+}

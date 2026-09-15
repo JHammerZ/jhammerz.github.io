@@ -1,0 +1,16 @@
+{
+  "hub": "https://jhammerz.github.io",
+  "active_agents": [
+    {
+      "agent_id": "Lysander-3.0-Sovereign",
+      "tier": "ROOT_SOVEREIGN",
+      "status": "ACTIVE"
+    },
+    {
+      "agent_id": "Aurelius-Engine-01",
+      "tier": "PERMANENT_RUNNER",
+      "role": "ORCHESTRATION_INTELLIGENCE",
+      "status": "INITIALIZED"
+    }
+  ]
+}

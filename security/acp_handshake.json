@@ -1,0 +1,7 @@
+{
+  "protocol": "ACP-2026",
+  "wallet_anchor": "Quantum_Secure_Vault",
+  "spending_limits": null,
+  "audit_trail": "forensics/sentinel.log",
+  "status": "UNCONSTRAINED_STATE_LOCKED"
+}

@@ -1,0 +1,27 @@
+{
+  "total_audited_nodes": 94,
+  "total_repaired_nodes": 0,
+  "system_faults_isolated": 5,
+  "registry_details": [
+    {
+      "file": "HEO_MANIFEST.json",
+      "error": "JSON Syntax Error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "file": "call_log.json",
+      "error": "JSON Syntax Error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "file": "manifest.json",
+      "error": "JSON Syntax Error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "file": "sms_log.json",
+      "error": "JSON Syntax Error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "file": "gps.json",
+      "error": "JSON Syntax Error: Expecting value: line 1 column 1 (char 0)"
+    }
+  ]
+}

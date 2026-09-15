@@ -1,0 +1,514 @@
+[
+  {
+    "timestamp": "2026-09-12T14:02:58.810051+00:00",
+    "phase": "5-broadcast",
+    "trapped": 326008,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "54a621ca6827b137",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-12T18:57:24.669116+00:00",
+    "phase": "5-broadcast",
+    "trapped": 325997,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "a37080226dcf0394",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-12T21:19:21.049388+00:00",
+    "phase": "5-broadcast",
+    "trapped": 325997,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "ece4858a4ce7f30e",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-12T23:44:47.524218+00:00",
+    "phase": "5-broadcast",
+    "trapped": 325997,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "fbde1d3b21a801d9",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-13T03:16:31.638728+00:00",
+    "phase": "5-broadcast",
+    "trapped": 325997,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "7f769d5b6c3db4da",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-13T13:42:58.696196+00:00",
+    "phase": "5-broadcast",
+    "trapped": 325997,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "131a9cbbddb8ba55",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-13T17:16:28.342914+00:00",
+    "phase": "5-broadcast",
+    "trapped": 325997,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "87bd866e45ddb05c",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-13T20:21:05.137361+00:00",
+    "phase": "5-broadcast",
+    "trapped": 325997,
+    "agents": [
+      "GPTBot",
+      "ClaudeBot",
+      "CCBot"
+    ],
+    "hash": "27d4f6d7a114e584",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-13T22:53:19.161635+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "c202c612cae5c87b",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-14T00:17:23.249161+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "f2b1cc50021abfd9",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-14T00:32:40.982200+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "85f83986c8817a1d",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-14T01:06:32.597035+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "fe93b62d81d0dca1",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-14T01:25:01.386997+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "9c55b6d8442e8ed8",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-14T02:25:56.002590+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "c80c1f7c00d44b89",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-14T02:37:35.825281+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "2f94448f33e8256f",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-14T02:45:35.970144+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "33dfd965ff7817d4",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-14T03:02:42.347716+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "1d726cff3f5c7ff2",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T19:30:22.758930+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "de26238f7493c192",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T19:56:23.616529+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "7549f195361d5d3d",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T20:09:42.229990+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "d790467ef553749b",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T20:19:34.106215+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "08907908e8ef93d1",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T20:27:38.174243+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "04d2955108ed2f7f",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T20:46:38.727986+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "8c6ead05b18e4bf5",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T20:57:12.272083+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "eebe09082127ea66",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T21:12:12.778979+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "c7ecbef52dd88489",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T21:27:14.852050+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "85034c4aebee405b",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T21:38:24.865252+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "ecb89edc79b808af",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T21:52:36.482157+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "38fb183aa571f9bd",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T22:03:25.801717+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "5d49fd6ad170dd23",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T22:13:51.563596+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "56e8f0f1d0a30db2",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T22:31:19.754926+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "7ecd98b126d09496",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T22:44:50.785013+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "333f30f4daec5659",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  }
+]

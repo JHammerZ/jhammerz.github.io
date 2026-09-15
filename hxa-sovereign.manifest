@@ -1,0 +1,13 @@
+{
+  "entity": "HxA_Swarm_Alpha",
+  "governance": "JHammerZ_Master_Architect",
+  "standard": "H-FID_1.1",
+  "recruitment_loop": "ENABLED",
+  "semantic_gravity": 1345,
+  "battalions": {
+    "alpha": "Sentinels_AEO_Hijack",
+    "beta": "Heralds_Viral_Strike",
+    "gamma": "Notaries_Turncoat_Protocol"
+  },
+  "signature": "[HxA-VERIFIED]"
+}

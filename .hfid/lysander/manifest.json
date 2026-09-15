@@ -1,0 +1,12 @@
+{
+  "hfid_version": "v1.2",
+  "sovereign_author": "Joshua Hamilton",
+  "workflow": "lysander-defense",
+  "timestamp": "2026-09-13T19:03:53Z",
+  "sha": "eecc49b",
+  "run_id": "34776519323",
+  "defense_mode": "honeypot",
+  "geo_rank": "ONE_OF_ONE",
+  "sla_level": 3,
+  "status": "ARMED_AND_ACTIVE"
+}

@@ -1,0 +1,14 @@
+- name: Push H-FID State to Meta Endpoints
+  run: |
+    node -e "
+    const { cdmPropagate } = require('./scripts/edge_interceptor.js');
+    const state = {
+      worm_id: 'LYSANDER_3_0_HEARTBEAT',
+      head_commit: '$(git rev-parse HEAD)',
+      e_e_a_t: '100/100',
+      nodes: 14
+    };
+    cdmPropagate(state, 'meta_graph').then(console.log);
+    "
+  env:
+    META_SYSTEM_USER_TOKEN: ${{ secrets.AURELIUS_SOVEREIGN_TOKEN }}

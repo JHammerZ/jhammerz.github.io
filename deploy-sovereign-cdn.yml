@@ -1,0 +1,52 @@
+# ==============================================================================
+#          LYSANDER NETWORK CORRIDOR // ADVANCED CDN DISTRIBUTION LOGIC
+#          DESIGN DEPTH: LEVEL 4 PRODUCTION // MASS HYPER-SCALE PIPES
+# ==============================================================================
+name: "Edge: High-Performance Global Asset Content Delivery Network"
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'public/**'
+      - 'assets/**'
+      - 'music/**'
+  workflow_dispatch:
+
+jobs:
+  optimize-and-broadcast:
+    name: Global High-Performance Content Routing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Commercial License Signature Gate
+        run: |
+          echo "=== LYSANDER LICENSE VERIFICATION SYSTEM ==="
+          if [ -z "${{ secrets.LYSANDER_LICENSE_KEY }}" ]; then
+            echo "CRITICAL ERROR: UNAUTHORIZED COMMERCIAL DEPLOYMENT DETECTED."
+            echo "This repository is locked under a proprietary Pay-For-Use EULA."
+            echo "Please purchase an active subscription key to re-enable execution tokens."
+            exit 1
+          fi
+          echo "✓ License key signature discovered. Authorizing operational execution matrix."
+
+      - name: 1. Checkout JHammerZ Master Source Tree
+        uses: actions/checkout@v4
+
+      - name: 2. Initialize Static Web Assets Performance Optimizer
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 3. Extract and Locked Assets Payload Build
+        run: |
+          if [ -f "package.json" ]; then
+            if [ -f "yarn.lock" ]; then yarn install --immutable; else npm install; fi
+            if grep -q '"build"' package.json; then yarn build || npm run build; fi
+          fi
+
+      - name: 4. Deploy Global Content To Low-Latency Enterprise Edge Corridors
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name="jhammerz-media-hub"

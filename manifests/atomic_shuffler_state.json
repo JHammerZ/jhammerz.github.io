@@ -1,0 +1,10 @@
+{
+  "concurrency_metrics": {
+    "throughput_status": "MAXIMUM_VELOCITY",
+    "io_lock_bypass": true
+  },
+  "atomic_queues": {
+    "thread_allocation": "ASYNCHRONOUS_MULTIPLEX",
+    "max_burst_ops_per_second": 10000
+  }
+}

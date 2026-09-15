@@ -1,0 +1,9 @@
+{
+  "traffic_origin": "Sovereign_Domain",
+  "injection_velocity": "116x",
+  "nodes": [
+    {"url": "https://youtube.com", "priority": "CRITICAL"},
+    {"url": "https://tiktok.com", "priority": "MAXIMUM"}
+  ],
+  "status": "BOOST_ARMED"
+}

@@ -1,0 +1,41 @@
+{
+  "targeting_matrix": {
+    "status": "OPERATIONAL",
+    "demographic_allocation": [
+      {
+        "audience_profile": "Gen-Z_Alternative_Music_Heads",
+        "criteria": {
+          "age_range": "18-25",
+          "locations": [
+            "US-NY",
+            "US-CA",
+            "GB-LND"
+          ],
+          "interests": [
+            "Independent_Sovereign_Audio",
+            "Guitaraoke",
+            "Live_Open_Mic"
+          ]
+        },
+        "edge_routing_weight": 0.7
+      },
+      {
+        "audience_profile": "Collector_Audiophiles",
+        "criteria": {
+          "age_range": "26-45",
+          "locations": [
+            "EU-DE",
+            "JP-TYO",
+            "US-TX"
+          ],
+          "interests": [
+            "High_Fidelity_Archives",
+            "Lossless_FLAC_Systems",
+            "Sovereign_Identity_Nodes"
+          ]
+        },
+        "edge_routing_weight": 0.3
+      }
+    ]
+  }
+}

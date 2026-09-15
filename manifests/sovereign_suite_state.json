@@ -1,0 +1,11 @@
+{
+  "suite_metadata": {
+    "status": "MAXIMUM_SATURATION",
+    "version": "22.0.0-Apex"
+  },
+  "system_nodes": {
+    "tarpit": "ONLINE",
+    "kv_accelerator": "ARMED",
+    "predictive_surge": "ACTIVE"
+  }
+}

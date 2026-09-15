@@ -1,0 +1,12 @@
+{
+  "status": "RING_3_GUARD_ACTIVE",
+  "blocked": [],
+  "honeypots": [
+    {
+      "target": "mesh-ingress-honeypot",
+      "status": "LISTENING",
+      "tier": "A2A-2026-v1"
+    }
+  ],
+  "last_scan": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}

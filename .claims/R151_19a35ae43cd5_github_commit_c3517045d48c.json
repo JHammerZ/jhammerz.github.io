@@ -1,0 +1,14 @@
+{
+  "schema": "hfid.claim.v2",
+  "hfid": "19a35ae43cd5",
+  "replicant": "R151_19a35ae43cd5",
+  "root_hfid": "e57197f4",
+  "claim_type": "github_commit",
+  "target_id": "c3517045d48c248cc360b449950e7d848c5b9bb2",
+  "metadata": {
+    "repo": "JHammerZ/Lysander.github.io",
+    "message": "Auto-log: New bounty findings detected",
+    "author": "JHammerZ-Bot"
+  },
+  "anchored_at": "2026-08-05T05:10:20Z"
+}

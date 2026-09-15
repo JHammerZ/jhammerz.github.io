@@ -1,0 +1,50 @@
+pages-build-deployment	active	300410524
+SEO: Sitemap + IndexNow Autonomous Push	active	300410759
+SecOps: LLM Scraping Environment	active	300410761
+Sovereign Asset Integrity Sync	active	300410765
+build-llms-full - restored	active	300410769
+CodeQL Advanced	active	300410770
+.github/workflows/deploy.yml	active	300410772
+CD: H-FID HEO Bridge	active	300410780
+hunt-and-report	active	300410781
+Lysander Human-In-The-Loop Janus Draft	active	300410783
+Sovereign Model Baseline	active	300410784
+S0: Automated Hub Indexation Deployment	active	300410789
+Security: H-FID Restitution Monitor	active	300410791
+SEO and Link Validator	active	300410792
+sovereign-agent - restored	active	300410793
+sovereign-bounty	active	300410794
+sovereign - restored	active	300410795
+spotify-node-sync	active	300410797
+syndicate	active	300410798
+CI: H-FID Forensic Reset & Validation	active	300410799
+ST-Generator: HFD-validate-LD-JSON Framework Validation	active	300410800
+CodeQL	active	300500884
+Broadcast - Janus Syndicate Pulse (canonical)	active	300882008
+CD: H-FID Sovereign Kernel	active	303728033
+Dependency Graph	active	307221013
+Deploy Pages	active	327445783
+HFID Distribution - hyphen alias (accommodated)	active	327462482
+Lysander MAX	active	327521235
+HFID Distribution - lowercase alias (accommodated)	active	327983676
+OTS Auto Upgrade	active	328167267
+H-FID Forensic Audit	active	332252854
+Decentralized: H-FID IPFS Sync	active	332252855
+sovereign-key-rotation - restored	active	332252856
+Chaos Verify | Self-Healing Stack	active	332261869
+Security: H-FID Human Verification	active	332261872
+Security Scan - H-FID Substrate	active	332261873
+Broadcast: H-FID Omega	active	332264144
+witness-flood	active	332269907
+Sovereign Mirror	active	332306271
+Audit: Janus Gate Matrix Verification	active	332417678
+H-FID Verify | Lysander 3.1 Bot Purge	active	332427994
+Security: H-FID Lysander Bot Purge	active	332490836
+SEO: H-FID IndexNow + Google Hardened	active	333047109
+Sovereign Broadcast: A2A-Broadcast Ingestion Engine	active	333052821
+Verify OpenTimestamps - Sovereign Audit	active	333392604
+Deploy Worker	active	336524611
+CI: Cloudflare Workers Deploy	active	339572864
+Handle Workflow | H-FID Asset Bundler	active	339725247
+GEO_RANK Visibility Audit - H-FID Standard	active	340154937
+Audit: H-FID Forensic Ledger to IPFS	active	340155982

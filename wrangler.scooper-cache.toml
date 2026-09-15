@@ -1,0 +1,3 @@
+name = "jhammerz-scooper-cache"
+main = "scooper-cache.js"
+compatibility_date = "2026-09-12"

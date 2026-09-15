@@ -1,0 +1,7 @@
+{
+  "governance_standard": "Trust_by_Design_2026",
+  "guardrails": ["Bio-Semantic_Required", "No_Data_Exfiltration"],
+  "permissions": "Just-In-Time_Access",
+  "audit_trail": "ACTIVE_SENTINEL",
+  "status": "HARDWIRED_TRUST"
+}

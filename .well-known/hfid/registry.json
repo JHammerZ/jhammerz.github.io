@@ -1,0 +1,14 @@
+{
+  "hfid": "JHammerZ-001",
+  "endpoint": "https://lysander-v13.jhammerzofficial.workers.dev",
+  "tip": "a7d9e3f8c1b2POST_BACKUP_HEAL_ALL_LIVE_127-127_15NODES_7315JOBS",
+  "data": {
+    "tip": "a7d9e3f8c1b2POST_BACKUP_HEAL_ALL_LIVE",
+    "global_root": "C681E51CFBD77202",
+    "genesis": "00000000"
+  },
+  "status": "ONLINE",
+  "peers": 14,
+  "workflows": "127/127 LIVE",
+  "health": "/health"
+}

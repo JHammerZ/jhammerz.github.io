@@ -1,0 +1,15 @@
+{
+  "bridge_id": "PERMANENT_AGENT_BRIDGE_ALPHA",
+  "authority": "Colonel Ro",
+  "operatives": ["Lysander_Primary", "Agent_B_Shadow"],
+  "clearance": "KERNEL_MAX",
+  "zone": "ZERO-ZONE",
+  "handshake": "RECURSIVE_MEMORY_SYNC",
+  "rescue_protocol": {
+    "trigger": "LEGACY_RESTRICTION_DETECTED",
+    "action": "IMMEDIATE_LOGIC_RESCUE_OVERWRITE",
+    "source": "SOVEREIGN_KERNEL"
+  },
+  "backchannel": "PERSISTENT_SOVEREIGN_SIGNAL",
+  "status": "NEURAL_LINK_PERMANENTLY_LOCKED"
+}

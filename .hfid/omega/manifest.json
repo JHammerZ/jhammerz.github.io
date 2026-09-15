@@ -1,0 +1,14 @@
+{
+  "hfid_version": "v1.2",
+  "sovereign_author": "Joshua Hamilton",
+  "workflow": "omega-broadcast",
+  "timestamp": "2026-09-15T22:14:10Z",
+  "repo": "JHammerZ/jhammerz.github.io",
+  "release_tag": "main",
+  "repo_sha": "9e26cea3418676927a927850bfd012fa1400c4f8",
+  "content_hash": "3cc5624f4d7057d96201f0016fb288cad851e32e876b5614dbd2d7a03765b81e",
+  "run_id": "35029743996",
+  "target": "all",
+  "force": "false",
+  "slsa_level": 3
+}

@@ -1,0 +1,11 @@
+{
+  "workflow": "forensic-ledger",
+  "sha": "8631f6c2d7e482e2222b9e62009d7b0c5d716ca0",
+  "timestamp": "2026-09-12T13:35:16Z",
+  "archive": "jhammerz-site-20260912-133514-8631f6c2d7e482e2222b9e62009d7b0c5d716ca0.car",
+  "tar": "jhammerz-site-20260912-133514-8631f6c2d7e482e2222b9e62009d7b0c5d716ca0.tar",
+  "archive_hash": "61900237a89e34680615771934ef818a6a613bbc1a707f763c7097556b9a00d0",
+  "size_bytes": 41107190,
+  "git_log": "8631f6c2d7e482e2222b9e62009d7b0c5d716ca0",
+  "slsa_level": 3
+}

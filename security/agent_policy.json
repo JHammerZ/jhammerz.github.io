@@ -1,0 +1,6 @@
+{
+  "policy": "Zero-Trust_Agentic_Governance",
+  "guardrails": ["No_Key_Exfiltration", "Fidelity_Check_Required"],
+  "execution": "Sandboxed_Workflows",
+  "status": "ARMED_FOR_AUTONOMY"
+}

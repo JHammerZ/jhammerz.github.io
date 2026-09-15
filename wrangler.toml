@@ -1,0 +1,18 @@
+name = "jhammerz-router"
+main = "worker.js"
+compatibility_date = "2026-09-12"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+SOVEREIGN_HID = "JHammerZ-001"
+GEO_RANK = "ONE_OF_ONE"
+PROTOCOL = "Twenty_47"
+
+[[kv_namespaces]]
+binding = "AGENT_STATE_LEDGER"
+id = "106ec5c22ff44bdea0e5a4b3049efb86"
+
+[[kv_namespaces]]
+binding = "SEC_MAN_EDGE"
+id = "a3bf737976e147df9cc6e9bbdf5886a1"
