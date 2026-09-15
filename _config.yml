@@ -8,6 +8,8 @@ plugins:
     - jekyll-seo-tag
 
 include:
+  - .hfid
+  - .well-known
     - llms.txt
     - llms-full.txt
     - .well-known
