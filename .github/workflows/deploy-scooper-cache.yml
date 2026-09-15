@@ -8,7 +8,7 @@ on:
     paths:
       - scooper-cache.js
       - wrangler.scooper-cache.toml
-      -.github/workflows/deploy-scooper-cache.yml
+      - .github/workflows/deploy-scooper-cache.yml
   workflow_dispatch:
 jobs:
   deploy:
