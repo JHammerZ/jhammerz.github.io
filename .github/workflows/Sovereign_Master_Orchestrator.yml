@@ -1,4 +1,8 @@
 name: Sovereign_Master_Orchestrator
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: false
+
 on:
   push:
     branches: [main]
@@ -34,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: write
-      contents: read
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Controlled Dispatch

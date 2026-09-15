@@ -1,4 +1,10 @@
 name: lysander-egypt-resync-same-sha
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 

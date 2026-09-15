@@ -1,4 +1,8 @@
 name: 'Cloudflare: Sovereign Content Edge Mesh'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: false
+
 on:
   workflow_dispatch:
 
@@ -7,7 +11,7 @@ jobs:
     name: Cloudflare Anycast CDN Routing Deployment
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       deployments: write
     steps:
     - name: 1. Checkout JHammerZ Master Source Tree

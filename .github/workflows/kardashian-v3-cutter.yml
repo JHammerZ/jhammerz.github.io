@@ -1,4 +1,10 @@
 name: Kardashian v3 - Auto Cutter From Existing Library
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 

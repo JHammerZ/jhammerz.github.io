@@ -1,4 +1,10 @@
 name: Sovereign Agentic Data Matrix Synchronization
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
     inputs:

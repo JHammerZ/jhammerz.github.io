@@ -1,4 +1,14 @@
 name: SEO and Link Validator
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: false
+
 on:
   workflow_dispatch:
 

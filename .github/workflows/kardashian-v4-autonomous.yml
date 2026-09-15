@@ -1,4 +1,10 @@
 name: Kardashian v4 - Autonomous Co-Architect
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 

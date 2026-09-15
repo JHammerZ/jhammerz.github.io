@@ -1,4 +1,10 @@
 name: deploy-to-google-cloud-run
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 

@@ -1,4 +1,8 @@
 name: CodeQL Advanced
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: false
+
 on:
   workflow_dispatch:
 
@@ -9,7 +13,7 @@ jobs:
     timeout-minutes: 360
     permissions:
       actions: read
-      contents: read
+      contents: write
       security-events: write
     strategy:
       fail-fast: false

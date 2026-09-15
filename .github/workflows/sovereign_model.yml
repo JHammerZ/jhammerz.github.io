@@ -1,4 +1,10 @@
 name: sovereign_model.yml - restored
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 

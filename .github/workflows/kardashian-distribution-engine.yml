@@ -1,4 +1,10 @@
 name: Kardashian Distribution Engine v2 - Library Harvest
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 

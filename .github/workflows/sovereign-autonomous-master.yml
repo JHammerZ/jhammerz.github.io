@@ -1,4 +1,10 @@
 name: Sovereign Autonomous Master - 100% Autonomy
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 

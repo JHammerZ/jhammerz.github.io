@@ -1,4 +1,14 @@
 name: Sovereign Matrix Autonomous - Phase 5 Broadcast
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: false
+
 on:
   workflow_dispatch:
 

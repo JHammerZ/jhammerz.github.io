@@ -1,4 +1,10 @@
 name: old-security - restored
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 

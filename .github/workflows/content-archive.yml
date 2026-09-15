@@ -1,4 +1,8 @@
 name: 'SecOps: H-FID Content Archive'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: false
+
 on:
   workflow_dispatch:
     inputs:
@@ -10,7 +14,7 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
   attestations: write
 

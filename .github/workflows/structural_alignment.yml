@@ -1,4 +1,10 @@
 name: structural_alignment
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
 on:
   workflow_dispatch:
 
