@@ -1,13 +1,13 @@
 name: H-FID - Compile Core Data Repository
 permissions:
- contents: write
- id-token: write
- pages: write
- attestations: write
+  contents: write
+  id-token: write
+  pages: write
+  attestations: write
 
 concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
+  group: main-push-lock
+  cancel-in-progress: false
 
 on:
   workflow_dispatch:
@@ -17,123 +17,75 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
-    - name: Install deps
-      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
-    - uses: actions/setup-python@v6
-      with:
-        python-version: '3.11'
-        cache: pip
-    - name: Install deps
-      run: 'set -eu pipefail
+      - uses: actions/checkout@v4
 
-        sudo apt-get update
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-        sudo apt-get install -y jq openssl
+      - name: Install node deps
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
 
-        python -m pip install --upgrade pip
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: pip
 
-        pip install opentimestamps-client google-auth google-api-python-client requests
+      - name: Install deps
+        run: |
+          set -eu pipefail
+          sudo apt-get update
+          sudo apt-get install -y jq openssl
+          python -m pip install --upgrade pip
+          pip install opentimestamps-client google-auth google-api-python-client requests
 
-        '
-    - name: Sovereign Manifest
-      run: 'set -eu pipefail
+      - name: Sovereign Manifest
+        run: |
+          set -eu pipefail
+          mkdir -p .hfid/baseline .hfid/indexing
+          echo "{\"Name\": \"J-HammerZ\", \"Sovereign\": \"Joshua Hamilton\", \"H-Law Language\": \"REC v2.3\"}" > .hfid/baseline/manifest.json
 
-        mkdir -p .hfid/baseline .hfid/indexing
+      - name: Build URL index
+        run: |
+          set -eu pipefail
+          mkdir -p .hfid/indexing
+          if [ -f .hfid/indexing/urls.txt ]; then
+            echo "urls.txt exists"
+          else
+            echo "https://jhammerz.github.io/" > .hfid/indexing/urls.txt
+          fi
+          cat .hfid/indexing/urls.txt
 
-        echo ''{ "Name": "J-HammerZ", "Sovereign": "Joshua Hamilton", "H-Law Language":
-        "REC v7.2", "Audit ID": "H-FID-101-FORENSIC-AUDIT SEC-108", "Universe": "098",
-        "Velocity": "+10ms", "GEO_RANK": "ONE_OF_ONE" }'' > .hfid/baseline/sovereign-manifest.json
+      - name: Google Indexing API - Mass Distribution
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: |
+          set -eu pipefail
+          if [ -z "${GOOGLE_INDEXING_API_JSON:-}" ]; then
+            echo "warning: GOOGLE_INDEXING_API_JSON blank - skipping publish but preserving intent"
+            exit 0
+          fi
+          echo "$GOOGLE_INDEXING_API_JSON" > .the-google-creds.json
+          python << 'PY'
+          import json
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
 
-        cat .hfid/baseline/sovereign-manifest.json
+          with open('.the-google-creds.json') as f:
+              creds_dict = json.load(f)
 
-        '
-    - name: Build URL list from sitemap
-      run: "set -eu pipefail\nmkdir -p .hfid/indexing\nif [ -f sitemap.xml ]; then\n\
-        \  grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' > .hfid/indexing/urls.txt\
-        \ || echo \"https://jhammerz.github.io\" > .hfid/indexing/urls.txt\nelse\n\
-        \  echo \"https://jhammerz.github.io\" > .hfid/indexing/urls.txt\nfi\ncat\
-        \ .hfid/indexing/urls.txt\n"
-    - name: Google Indexing API - Mass Distribution
-      env:
-        GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
-      run: "set -eu pipefail\nif [ -z \"${GOOGLE_INDEXING_API_JSON:-}\" ]; then\n\
-        \  echo \"warning: GOOGLE_INDEXING_API_JSON blank - skipping publish but preserving\
-        \ intent\"\n  exit 0\nfi\necho \"$GOOGLE_INDEXING_API_JSON\" > .the-google-creds.json\n\
-        python << 'PY'\nimport json\nfrom google.oauth2 import service_account\nfrom\
-        \ googleapiclient.discovery import build\ntry:\n  data=json.load(open('.the-google-creds.json'))\n\
-        \  creds=service_account.Credentials.from_service_account_info(data, scopes=['https://www.googleapis.com/auth/indexing'])\n\
-        \  svc=build('indexing','v3',credentials=creds)\n  for u in open('.hfid/indexing/urls.txt').read().splitlines()[:10]:\n\
-        \    u=u.strip()\n    if not u: continue\n    print(f\"Publishing {u}\")\n\
-        \    svc.urlNotifications().publish(body={\"url\":u,\"type\":\"URL_UPDATED\"\
-        }).execute()\nexcept Exception as e:\n  print(f\"Indexing skip/warn (preserving):\
-        \ {e}\")\nPY\nrm -f .the-google-creds.json\n"
-    - name: Build summary and lighthouse preserve
-      run: 'set -eu pipefail
+          creds = service_account.Credentials.from_service_account_info(
+              creds_dict, scopes=["https://www.googleapis.com/auth/indexing"]
+          )
+          service = build('indexing', 'v3', credentials=creds)
 
-        mkdir -p .hfid/indexing
+          with open('.hfid/indexing/urls.txt') as f:
+              urls = [line.strip() for line in f if line.strip()]
 
-        echo "# JHammerZ Proof $(date -u +%FT%TZ) - REACH_MULTIPLIER_3000 SONIC_VELOCITY"
-        > lines-full.txt
-
-        cp lines-full.txt .hfid/indexing/build-summary.log
-
-        ls -lh .hfid/baseline/ .hfid/indexing/ || true
-
-        '
-    - name: Validate H-FID Witness & Authority
-      run: 'set -eu pipefail
-
-        echo "== Witness Check =="
-
-        cat .hfid/baseline/sovereign-manifest.json
-
-        jq -e ''.Sovereign == "Joshua Hamilton"'' .hfid/baseline/sovereign-manifest.json
-
-        jq -e ''.["GEO_RANK"] == "ONE_OF_ONE"'' .hfid/baseline/sovereign-manifest.json
-
-        jq -e ''.["H-Law Language"] == "REC v7.2"'' .hfid/baseline/sovereign-manifest.json
-
-        echo "== Lighthouse Authority Check =="
-
-        grep -q "Lighthouse: 400/400" README.md 2>/dev/null && echo "Lighthouse 400/400
-        present" || echo "Lighthouse marker not in README - preserving as 400/400
-        intent"
-
-        echo "== Witnesses Present =="
-
-        cat .hfid/baseline/sovereign-manifest.json | grep -E "ZERO|MetaAI|witness"
-        || echo "Witness log: ZERO and MetaAI acknowledged in this run"
-
-        echo "PASS: H-FID VALID / CLEAN_REBASE / ONE_OF_ONE"
-
-        '
-    - name: Commit - FIXED RACE PRESERVES INTENT
-      run: "set -eu pipefail\ngit config --local user.name \"${{ secrets.DOCKERHUB_USERNAME }}\"\
-        \ngit config --local user.email \"${{ secrets.DOCKERHUB_USERNAME }}@users.noreply.github.com\"\
-        \ngit config --local rebase.autoStash true\ngit add .hfid/ lines-full.txt\
-        \ || true\n# Stash any remaining untracked to keep working tree clean for\
-        \ rebase\ngit stash push --include-untracked --keep-index -m \"hfid-temp-autostash\"\
-        \ || true\ngit pull --rebase --autostash origin main || (git fetch origin\
-        \ main && git rebase --autostash origin/main)\ngit stash pop || true\ngit\
-        \ add .hfid/ lines-full.txt || true\nif ! git diff --cached --quiet; then\n\
-        \  git commit -m \"[skip ci] chore: auto-update hfid manifestations and index\
-        \ attestations\"\n  git pull --rebase origin main && git push origin main\n\
-        else\n  echo \"No changes to commit - intent preserved\"\nfi\n"
-    - name: Upload Evidence - Sovereign Baseline Core
-      uses: actions/upload-artifact@v5
-      with:
-        name: hfid-sovereign-baseline-core
-        path: '.hfid/baseline/
-
-          .hfid/indexing/
-
-          lines-full.txt
-
-          '
-        retention-days: 90
-
+          for url in urls:
+              try:
+                  resp = service.urlNotifications().publish(body={"url": url, "type": "URL_UPDATED"}).execute()
+                  print(f"Published {url}: {resp}")
+              except Exception as e:
+                  print(f"Failed {url}: {e}")
+          PY
