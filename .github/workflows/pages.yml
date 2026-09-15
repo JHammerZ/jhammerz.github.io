@@ -26,9 +26,9 @@ jobs:
           mkdir -p _site_deploy/.hfid/indexing
           mkdir -p _site_deploy/assets/js
           rsync -av ./ _site_deploy/ --exclude='.git' --exclude='.github' --exclude='_site_deploy' --exclude='node_modules' --exclude='.hfid/*.log' --exclude='.hfid/tmp'
-          cp -rf.hfid/indexing/* _site_deploy/.hfid/indexing/ 2>/dev/null || true
-          cp -rf.hfid/* _site_deploy/.hfid/ 2>/dev/null || true
-          cp -rf assets _site_deploy/ 2>/dev/null || true
+          cp -rf .hfid/indexing/* _site_deploy/.hfid/indexing/ 2>/dev/null || true
+          cp -rf .hfid/* _site_deploy/.hfid/ 2>/dev/null || true
+          cp -rf assets _site_deploy/ _site_deploy/ 2>/dev/null || true
           touch _site_deploy/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
