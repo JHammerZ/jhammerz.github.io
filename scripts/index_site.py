@@ -18,7 +18,7 @@ def broadcast_to_google():
         target_url = "https://jhammerz.github.io"
         endpoint = "https://indexing.googleapis.com/v3/urlNotifications:publish"
         data = {"url": target_url, "type": "URL_UPDATED"}
-        print(f"INITIATING_RESONANCE: Broadcasting {target_url}...")
+        print(f"INITIATING_RESONANCE: broadcasting {target_url}...")
         response = session.post(endpoint, json=data)
         if response.status_code == 200:
             print("RESONANCE_FORCE_COMPLETE: 200 OK")

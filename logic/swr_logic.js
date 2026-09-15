@@ -43,7 +43,7 @@ async function runSovereignSequence() {
 
     const files = fs.readdirSync(QUEUE_DIR).filter(file => file.endsWith('.json'));
     if (files.length === 0) {
-        console.log("[⚡] Broadcast queue clear. System running at peak telemetry surveillance.");
+        console.log("[⚡] broadcast queue clear. System running at peak telemetry surveillance.");
         return;
     }
 
@@ -62,7 +62,7 @@ async function runSovereignSequence() {
             const rawData = fs.readFileSync(filePath, 'utf8');
             const data = JSON.parse(rawData);
 
-            const topic = data.topic || "Global Broadcast";
+            const topic = data.topic || "Global broadcast";
             const textContent = data.text || "";
             const category = (data.category || "tech").toLowerCase();
             const tags = CAPTION_MATRICES[category] || CAPTION_MATRICES.tech;
@@ -93,7 +93,7 @@ async function runSovereignSequence() {
 
             // Write pristine manifest file to repository root
             const manifestPath = path.join(ROOT_DIR, `BROADCAST-${broadcastId}.md`);
-            const manifestContent = `# Global Saturation Broadcast Manifest\n\n**ID:** ${broadcastId}\n**Category Array:** ${category.toUpperCase()}\n**Topic:** ${topic}\n\n### Script Frame\n\`\`\`[...]\n`;
+            const manifestContent = `# Global Saturation broadcast Manifest\n\n**ID:** ${broadcastId}\n**Category Array:** ${category.toUpperCase()}\n**Topic:** ${topic}\n\n### Script Frame\n\`\`\`[...]\n`;
             // Only perform repository writes in explicit production mode
             if (IS_PRODUCTION) {
                 fs.writeFileSync(manifestPath, manifestContent);

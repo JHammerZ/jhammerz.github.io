@@ -45,7 +45,7 @@ async def main():
     try:
         # Fallback string pattern matching to prevent structural crashes
         current_guid = extract_tag_value(html_content, "guid")
-        title = extract_tag_value(html_content, "title") or "New Local Broadcast Update"
+        title = extract_tag_value(html_content, "title") or "New Local broadcast Update"
         link = extract_tag_value(html_content, "link")
         desc = extract_tag_value(html_content, "description")
 

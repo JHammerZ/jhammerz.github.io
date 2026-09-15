@@ -4,7 +4,7 @@ import queue
 import threading
 import time
 
-class BroadcastSignalIsolator:
+class broadcastSignalIsolator:
     """
     Manages concurrent multi-platform broadcast telemetry for Lysander 3.0.
     Prevents live stream data surges from impacting core substrate stability.
@@ -14,7 +14,7 @@ class BroadcastSignalIsolator:
         self.active_monitoring = True
         self.worker_thread = threading.Thread(target=self._process_signal_stream, daemon=True)
         self.worker_thread.start()
-        print("[INIT] Broadcast Signal Isolator Engaged. Mode: ASYNCHRONOUS_MULTI_STREAM.")
+        print("[INIT] broadcast Signal Isolator Engaged. Mode: ASYNCHRONOUS_MULTI_STREAM.")
 
     def inject_broadcast_metric(self, platform, viewer_velocity):
         """
@@ -43,5 +43,5 @@ class BroadcastSignalIsolator:
                 continue
 
 if __name__ == "__main__":
-    isolator = BroadcastSignalIsolator()
+    isolator = broadcastSignalIsolator()
     isolator.inject_broadcast_metric("TikTok_Live", 200)

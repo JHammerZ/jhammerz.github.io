@@ -25,7 +25,7 @@ def audit_packet_transmission():
         TRAFFIC_LOG.parent.mkdir(parents=True, exist_ok=True)
         TRAFFIC_LOG.write_text(json.dumps(traffic_state), encoding='utf-8')
         
-        print(f"[+] Active Egress Volume Broadcasted: {traffic_state['total_egress_gb']} GB")
+        print(f"[+] Active Egress Volume broadcasted: {traffic_state['total_egress_gb']} GB")
         print(f"[+] Active Ingress Volume Intercepted: {traffic_state['total_ingress_gb']} GB")
         print(f"[+] Network Saturation Throughput Status: {traffic_state['edge_mesh_saturation_status']}")
         return True

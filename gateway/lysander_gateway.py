@@ -148,7 +148,7 @@ class LysanderGateway:
         try:
             async for msg in ws:
                 if msg.type == WSMsgType.TEXT:
-                    # Broadcast to all listeners on same pipe
+                    # broadcast to all listeners on same pipe
                     await self.broadcast(pipe, msg.data, exclude=None)
                 elif msg.type == WSMsgType.ERROR:
                     logger.error(f'WS connection closed with exception {ws.exception()}')

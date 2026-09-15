@@ -361,7 +361,7 @@ export default {
         activeEdgeNode: edgeDetails,
         protocolVerification: {
           aureliusManifest: "V4.0.26 Living Genesis",
-          sovereignCannon: "V4.2 Omnichannel Broadcast",
+          sovereignCannon: "V4.2 Omnichannel broadcast",
           hashChainTip: ORIGIN_CONFIG.protocolHash,
           zeroDecayIndex: "100.0%"
         },

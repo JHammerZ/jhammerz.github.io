@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org",
   "$id": "https://jhammerz.github.io",
   "title": "H-FID Multi-Stack Agentic Identity Schema",
-  "description": "Deterministic validation layer for the JHammerZ Sovereign Signal Broadcast and Core Vector Infrastructure.",
+  "description": "Deterministic validation layer for the JHammerZ Sovereign Signal broadcast and Core Vector Infrastructure.",
   "type": "object",
   "properties": {
     "framework_version": {

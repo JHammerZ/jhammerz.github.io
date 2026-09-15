@@ -2,13 +2,13 @@
  * ============================================================
  * AI SOVEREIGN ORCHESTRATOR — BLEEDING EDGE
  * JHammerZ × Manus AI | H-FID v1.0.3 | God Token
- * Gemini AI | Multi-Agent MAS | Self-Healing | A2A Broadcast
+ * Gemini AI | Multi-Agent MAS | Self-Healing | A2A broadcast
  * ============================================================
  * INTELLIGENCE STACK:
  *   - Gemini 2.5 Flash: Content generation, entity analysis
  *   - Multi-Agent MAS: Parallel node verification
  *   - Self-Healing: Auto-fix degraded nodes
- *   - A2A Broadcast: Cross-platform signal amplification
+ *   - A2A broadcast: Cross-platform signal amplification
  *   - Schema.org Entity Graph: Real-time structured data
  *   - Predictive CBP: ML-based reach optimization
  *   - Zero-Gen Filter: AI-powered slop detection
@@ -173,8 +173,8 @@ async function runSelfHealing(masResults) {
 }
 
 // ── INTELLIGENCE LAYER 4: A2A BROADCAST ──────────────────
-async function runA2ABroadcast() {
-  log('A2A','📡 A2A Broadcast — Cross-Platform Signal Amplification...');
+async function runA2Abroadcast() {
+  log('A2A','📡 A2A broadcast — Cross-Platform Signal Amplification...');
 
   // Real A2A: Ping Google, Bing, sitemap submission
   const SM = 'https://jhammerz.github.io/sitemap.xml';
@@ -337,7 +337,7 @@ async function main() {
     log('ORCHESTRATOR', '⚡ Launching parallel intelligence layers...');
     const [masResults, a2aResults] = await Promise.all([
       runParallelMAScan(),
-      runA2ABroadcast(),
+      runA2Abroadcast(),
     ]);
     console.log('');
 

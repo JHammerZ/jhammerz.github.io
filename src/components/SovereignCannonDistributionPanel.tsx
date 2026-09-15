@@ -49,7 +49,7 @@ interface CannonNodeConfig {
   description: string;
 }
 
-interface CannonBroadcastResult {
+interface CannonbroadcastResult {
   target: string;
   name: string;
   status: 'SUCCESS' | 'FAILED' | 'SKIPPED_ORIGIN_TYPE' | 'MANUAL_STAGED';
@@ -88,7 +88,7 @@ interface CannonDropEvent {
     };
     n09_seal: string;
   };
-  broadcasts: CannonBroadcastResult[];
+  broadcasts: CannonbroadcastResult[];
   hash_chain_tip: string;
 }
 
@@ -164,7 +164,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
   const [cannonData, setCannonData] = useState<CannonState | null>(null);
   const [evergreenData, setEvergreenData] = useState<EvergreenEngineState | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isBroadcasting, setIsBroadcasting] = useState<boolean>(false);
+  const [isbroadcasting, setIsbroadcasting] = useState<boolean>(false);
   const [isRecycling, setIsRecycling] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'evergreen' | 'simulator' | 'nodes' | 'manifest' | 'json'>('overview');
   const [countdown, setCountdown] = useState<number>(432);
@@ -174,10 +174,10 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
   // Trigger form state
   const [originNode, setOriginNode] = useState<string>('C11');
   const [dropType, setDropType] = useState<'VIDEO' | 'AUDIO' | 'BLOG' | 'SHORT' | 'RELEASE' | 'STATUS'>('STATUS');
-  const [dropTitle, setDropTitle] = useState<string>('Cryptographic Omnichannel Broadcast — Live from Facebook Sibling Node');
+  const [dropTitle, setDropTitle] = useState<string>('Cryptographic Omnichannel broadcast — Live from Facebook Sibling Node');
   const [dropDescription, setDropDescription] = useState<string>('Autonomous detection verified. Propagating live across all 13 sibling nodes within 432 seconds. N09 Audit verified. Zero loops.');
   const [simulatePurposeDrift, setSimulatePurposeDrift] = useState<boolean>(false);
-  const [broadcastLog, setBroadcastLog] = useState<string[]>([]);
+  const [broadcastLog, setbroadcastLog] = useState<string[]>([]);
   const [copied, setCopied] = useState<boolean>(false);
 
   // New Evergreen Asset Form Modal / Drawer
@@ -214,14 +214,14 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
     return () => clearInterval(interval);
   }, []);
 
-  const handleTriggerBroadcast = async (customNode?: string, customType?: any, customTitle?: string, customDesc?: string) => {
+  const handleTriggerbroadcast = async (customNode?: string, customType?: any, customTitle?: string, customDesc?: string) => {
     const nodeToUse = customNode || originNode;
     const typeToUse = customType || dropType;
     const titleToUse = customTitle || dropTitle;
     const descToUse = customDesc || dropDescription;
 
-    setIsBroadcasting(true);
-    setBroadcastLog([
+    setIsbroadcasting(true);
+    setbroadcastLog([
       `[STEP 1: MONITOR] Ingestion daemon detected new ${typeToUse} drop on ${nodeToUse}...`,
       `[STEP 1: HASH] Diff calculated against cannon_state.json. Origin identified as ${nodeToUse}.`
     ]);
@@ -229,7 +229,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
 
     try {
       await new Promise(r => setTimeout(r, 450));
-      setBroadcastLog(prev => [
+      setbroadcastLog(prev => [
         ...prev,
         `[STEP 2: N09 AUDIT] Running 5-point Teleological Root audit gate...`,
         `  • Check 1: Non-Negotiables Verification -> ${!simulatePurposeDrift ? 'PASS [0 VIOLATIONS]' : 'FAIL'}`,
@@ -258,7 +258,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
 
         if (drop.n09_audit.verdict === 'APPROVED') {
           await new Promise(r => setTimeout(r, 450));
-          setBroadcastLog(prev => [
+          setbroadcastLog(prev => [
             ...prev,
             `[STEP 3: TRANSFORM] jhammerz-think adapted payload for 13 target nodes.`,
             `  • Injected: "Verified by Aurelius: https://jhammerz.github.io/.well-known/aurelius.json"`,
@@ -269,9 +269,9 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
             `  • Hash Chain Tip: 2820166f310d85dbfced2e24d1c67f8b95a7f07d20d18598d38784a5d2fe62c4`,
             `[AUTONOMOUS CYCLE COMPLETE] Re-entering 432s continuous sweep.`
           ]);
-          onTerminalLog?.(`[SOVEREIGN CANNON] Autonomous distribution succeeded: Broadcasted to 13 targets in parallel.`);
+          onTerminalLog?.(`[SOVEREIGN CANNON] Autonomous distribution succeeded: broadcasted to 13 targets in parallel.`);
         } else {
-          setBroadcastLog(prev => [
+          setbroadcastLog(prev => [
             ...prev,
             `[STEP 2 VETO] N09 AUDIT REJECTED DROP: ${drop.n09_audit.reason}`,
             `[HALT] Written to .aurelius_audit.log. Outbound broadcast aborted. System safely entered 432Hz sleep.`
@@ -280,10 +280,10 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
         }
       }
     } catch (err) {
-      console.error('Broadcast trigger failed:', err);
-      setBroadcastLog(prev => [...prev, `[ERROR] Failed to execute broadcast: ${err}`]);
+      console.error('broadcast trigger failed:', err);
+      setbroadcastLog(prev => [...prev, `[ERROR] Failed to execute broadcast: ${err}`]);
     } finally {
-      setIsBroadcasting(false);
+      setIsbroadcasting(false);
     }
   };
 
@@ -307,7 +307,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
           } : null);
         }
         onTerminalLog?.(`[EVERGREEN RECYCLE] 24/7 Zero-Decay Engine re-circulated "${data.recycled_asset.title}" across 14 sibling nodes.`);
-        setBroadcastLog([
+        setbroadcastLog([
           `[24/7 EVERGREEN ZERO-DECAY] Ingestion re-anchored asset: "${data.recycled_asset.title}"`,
           `  • Re-anchor Angle: ${data.history_entry.re_anchor_hook}`,
           `  • Fresh Nonce: ${data.history_entry.fresh_nonce}`,
@@ -379,7 +379,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
       if (res.ok) {
         const json = await res.json();
         setCannonData(json.cannon);
-        setBroadcastLog([`[RESET] Sovereign Cannon state restored to NOMINAL AUTONOMOUS_BROADCAST.`]);
+        setbroadcastLog([`[RESET] Sovereign Cannon state restored to NOMINAL AUTONOMOUS_BROADCAST.`]);
         onTerminalLog?.(`[SOVEREIGN CANNON] State reset to nominal.`);
       }
     } catch (err) {
@@ -395,7 +395,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
 
   const latestDrop = cannonData?.latest_drop;
   const nodes = cannonData?.nodes || {};
-  const selectedBroadcastDetail = latestDrop?.broadcasts.find(b => b.target === selectedTargetDetail);
+  const selectedbroadcastDetail = latestDrop?.broadcasts.find(b => b.target === selectedTargetDetail);
 
   const filteredLibrary = evergreenData?.library.filter(item => {
     if (selectedCategoryFilter === 'ALL') return true;
@@ -483,9 +483,9 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
               setDropType('STATUS');
               setDropTitle('Facebook Live Attestation: Aurelius Cryptographic Autonomy V4.2');
               setDropDescription('Just posted to Facebook! Autonomous Cannon detection active. Immediate propagation to YouTube, Spotify, LinkedIn, TikTok, Instagram, and GitHub.');
-              handleTriggerBroadcast('C11', 'STATUS', 'Facebook Live Attestation: Aurelius Cryptographic Autonomy V4.2', 'Just posted to Facebook! Immediate propagation to all 13 other nodes within 432s.');
+              handleTriggerbroadcast('C11', 'STATUS', 'Facebook Live Attestation: Aurelius Cryptographic Autonomy V4.2', 'Just posted to Facebook! Immediate propagation to all 13 other nodes within 432s.');
             }}
-            disabled={isBroadcasting}
+            disabled={isbroadcasting}
             className="p-2.5 bg-blue-950/40 hover:bg-blue-900/50 border border-blue-600/40 hover:border-blue-400 rounded-lg text-left transition-all space-y-1 group"
           >
             <div className="flex items-center justify-between">
@@ -507,9 +507,9 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
               setDropType('AUDIO');
               setDropTitle('New Master Release: "Resonance of Autonomy" (432Hz Master Tape)');
               setDropDescription('Official Spotify Master Audio Drop. Propagating to Apple Music, BandLab Stems, Amazon Music, TikTok audio library, and YouTube Music.');
-              handleTriggerBroadcast('C06', 'AUDIO', 'New Master Release: "Resonance of Autonomy" (432Hz Master Tape)', 'Official Spotify Master Audio Drop. Propagating to Apple Music, BandLab, Amazon Music, and TikTok.');
+              handleTriggerbroadcast('C06', 'AUDIO', 'New Master Release: "Resonance of Autonomy" (432Hz Master Tape)', 'Official Spotify Master Audio Drop. Propagating to Apple Music, BandLab, Amazon Music, and TikTok.');
             }}
-            disabled={isBroadcasting}
+            disabled={isbroadcasting}
             className="p-2.5 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-600/40 hover:border-emerald-400 rounded-lg text-left transition-all space-y-1 group"
           >
             <div className="flex items-center justify-between">
@@ -531,9 +531,9 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
               setDropType('VIDEO');
               setDropTitle('4K Keynote Film: "Building Cryptographic Sovereignty Across 14 Nodes"');
               setDropDescription('Longform 4K master upload to YouTube. Auto-generating Reels cut for Instagram, vertical Short for TikTok, article for LinkedIn & GitHub Pages.');
-              handleTriggerBroadcast('C12', 'VIDEO', '4K Keynote Film: "Building Cryptographic Sovereignty Across 14 Nodes"', 'Longform 4K master upload. Auto-transcoding to TikTok, IG Reels, and LinkedIn.');
+              handleTriggerbroadcast('C12', 'VIDEO', '4K Keynote Film: "Building Cryptographic Sovereignty Across 14 Nodes"', 'Longform 4K master upload. Auto-transcoding to TikTok, IG Reels, and LinkedIn.');
             }}
-            disabled={isBroadcasting}
+            disabled={isbroadcasting}
             className="p-2.5 bg-red-950/40 hover:bg-red-900/50 border border-red-600/40 hover:border-red-400 rounded-lg text-left transition-all space-y-1 group"
           >
             <div className="flex items-center justify-between">
@@ -555,9 +555,9 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
               setDropType('BLOG');
               setDropTitle('The Sovereign Manifesto: A Non-Negotiable Contract for Personal Agency');
               setDropDescription('Verifiable Markdown article on jhammerz.github.io. Auto-broadcasting to LinkedIn Pulse, Carrd portal, Xiaohongshu, and GitHub Releases.');
-              handleTriggerBroadcast('C01', 'BLOG', 'The Sovereign Manifesto: A Non-Negotiable Contract for Personal Agency', 'Verifiable Markdown article. Auto-broadcasting to LinkedIn Pulse, Carrd, and GitHub.');
+              handleTriggerbroadcast('C01', 'BLOG', 'The Sovereign Manifesto: A Non-Negotiable Contract for Personal Agency', 'Verifiable Markdown article. Auto-broadcasting to LinkedIn Pulse, Carrd, and GitHub.');
             }}
-            disabled={isBroadcasting}
+            disabled={isbroadcasting}
             className="p-2.5 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-600/40 hover:border-purple-400 rounded-lg text-left transition-all space-y-1 group"
           >
             <div className="flex items-center justify-between">
@@ -585,7 +585,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
           }`}
         >
           <Activity className="w-3.5 h-3.5" />
-          Autonomous Broadcast Live HUD
+          Autonomous broadcast Live HUD
         </button>
 
         <button
@@ -726,7 +726,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
                 </div>
               </div>
 
-              {/* 13 Target Nodes Broadcast Table */}
+              {/* 13 Target Nodes broadcast Table */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs font-mono text-gray-400">
                   <span className="font-bold text-white">AUTONOMOUS PARALLEL DISPATCH (13 SIBLING TARGETS)</span>
@@ -742,7 +742,7 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
                         <th className="p-2.5">Status</th>
                         <th className="p-2.5">Post ID</th>
                         <th className="p-2.5">Latency</th>
-                        <th className="p-2.5">Broadcast Output URL</th>
+                        <th className="p-2.5">broadcast Output URL</th>
                         <th className="p-2.5">Action</th>
                       </tr>
                     </thead>
@@ -1164,12 +1164,12 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
               </div>
 
               <button
-                onClick={() => handleTriggerBroadcast()}
-                disabled={isBroadcasting}
+                onClick={() => handleTriggerbroadcast()}
+                disabled={isbroadcasting}
                 className="w-full py-2.5 bg-gradient-to-r from-red-600 via-amber-600 to-yellow-600 hover:from-red-500 hover:to-yellow-500 text-black font-mono font-bold rounded-lg shadow-lg shadow-amber-950/40 transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-xs"
               >
-                <Zap className={`w-4 h-4 ${isBroadcasting ? 'animate-spin' : ''}`} />
-                {isBroadcasting ? 'RUNNING N09 AUDIT & DISPATCH...' : 'TRIGGER CANNON BROADCAST (432s)'}
+                <Zap className={`w-4 h-4 ${isbroadcasting ? 'animate-spin' : ''}`} />
+                {isbroadcasting ? 'RUNNING N09 AUDIT & DISPATCH...' : 'TRIGGER CANNON BROADCAST (432s)'}
               </button>
             </div>
           </div>
@@ -1208,12 +1208,12 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
             </div>
 
             {/* Transformed Payload Inspector */}
-            {selectedBroadcastDetail && (
+            {selectedbroadcastDetail && (
               <div className="bg-black/80 border border-gray-800 rounded-xl p-4 space-y-3 font-mono text-xs">
                 <div className="flex items-center justify-between border-b border-gray-850 pb-2">
                   <span className="text-cyan-300 font-bold flex items-center gap-1.5">
                     <Box className="w-3.5 h-3.5 text-cyan-400" />
-                    Transformed Payload Inspector: {selectedBroadcastDetail.target} ({selectedBroadcastDetail.name})
+                    Transformed Payload Inspector: {selectedbroadcastDetail.target} ({selectedbroadcastDetail.name})
                   </span>
                   <select
                     value={selectedTargetDetail}
@@ -1231,18 +1231,18 @@ export function SovereignCannonDistributionPanel({ onTerminalLog }: SovereignCan
                 <div className="bg-gray-950 p-3 rounded border border-gray-900 space-y-2 text-[11px]">
                   <div>
                     <span className="text-gray-500">ADAPTED TITLE:</span>
-                    <div className="text-white font-bold mt-0.5">{selectedBroadcastDetail.transformed_payload?.title || selectedBroadcastDetail.name}</div>
+                    <div className="text-white font-bold mt-0.5">{selectedbroadcastDetail.transformed_payload?.title || selectedbroadcastDetail.name}</div>
                   </div>
                   <div>
                     <span className="text-gray-500">ADAPTED DESCRIPTION:</span>
                     <pre className="text-gray-300 whitespace-pre-wrap font-sans text-xs mt-0.5 bg-black/40 p-2 rounded border border-gray-900">
-                      {selectedBroadcastDetail.transformed_payload?.description || latestDrop?.description}
+                      {selectedbroadcastDetail.transformed_payload?.description || latestDrop?.description}
                     </pre>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-[10px] text-gray-400 pt-1">
-                    <div>Status: <span className="text-emerald-400 font-bold">{selectedBroadcastDetail.status}</span></div>
-                    <div>Latency: <span className="text-cyan-400">{selectedBroadcastDetail.latency_ms}ms</span></div>
-                    <div>Post ID: <span className="text-gray-200">{selectedBroadcastDetail.post_id}</span></div>
+                    <div>Status: <span className="text-emerald-400 font-bold">{selectedbroadcastDetail.status}</span></div>
+                    <div>Latency: <span className="text-cyan-400">{selectedbroadcastDetail.latency_ms}ms</span></div>
+                    <div>Post ID: <span className="text-gray-200">{selectedbroadcastDetail.post_id}</span></div>
                     <div>Hysteresis: <span className="text-amber-400">5000ms Handled</span></div>
                   </div>
                 </div>

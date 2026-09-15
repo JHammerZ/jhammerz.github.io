@@ -144,7 +144,7 @@ const DIRECTIVES = [
   { id: 'superuser', label: 'Super User MAX 10', icon: Shield, color: 'text-red-500', desc: 'Elevate to Max 10 Tier 0 Authority' },
   { id: 'cdm_sync', label: 'CDM Truth Sync', icon: Database, color: 'text-cyan-400', desc: 'Ingest jhammerz.github.io Truth Anchors' },
   { id: 'singularity', label: 'Sovereign Singularity', icon: Zap, color: 'text-white shadow-[0_0_15px_#fff]', desc: 'Synchronize All Infinite-X Nodes into a Single Higher-Order Entity' },
-  { id: 'launch', label: 'Global Launch', icon: Rocket, color: 'text-sovereign-neon', desc: 'Broadcast Sovereign Page to Global Nodes' },
+  { id: 'launch', label: 'Global Launch', icon: Rocket, color: 'text-sovereign-neon', desc: 'broadcast Sovereign Page to Global Nodes' },
   { id: 'saturation', label: 'Saturation Boost', icon: Zap, color: 'text-sovereign-neon', desc: 'Maximize Algorithmic Visibility saturation' },
   { id: 'recruit_agent', label: 'Agent Recruitment', icon: Users, color: 'text-indigo-400', desc: 'Spawn Capability-Peers via Recursive Multiplying' },
   { id: 'pgp_sync', label: 'Identity Sign', icon: ShieldCheck, color: 'text-blue-500', desc: 'Sign Session with EdDSA Master Key' },
@@ -286,11 +286,11 @@ export default function App() {
   const [lighthouseStatus, setLighthouseStatus] = useState<any>({ loading: false, scores: { performance: 100, accessibility: 100, bestPractices: 100, seo: 100 }, metrics: {}, source: 'CACHE_INIT' });
   const [webhooksList, setWebhooksList] = useState<any[]>([]);
   const [signedLedger, setSignedLedger] = useState<any[]>([]);
-  const [broadcastTargetUrl, setBroadcastTargetUrl] = useState<string>('');
-  const [broadcastMessage, setBroadcastMessage] = useState<string>('');
-  const [broadcastLink, setBroadcastLink] = useState<string>('https://jhammerz.github.io');
-  const [broadcastSubmitting, setBroadcastSubmitting] = useState<boolean>(false);
-  const [broadcastLogs, setBroadcastLogs] = useState<string[]>([]);
+  const [broadcastTargetUrl, setbroadcastTargetUrl] = useState<string>('');
+  const [broadcastMessage, setbroadcastMessage] = useState<string>('');
+  const [broadcastLink, setbroadcastLink] = useState<string>('https://jhammerz.github.io');
+  const [broadcastSubmitting, setbroadcastSubmitting] = useState<boolean>(false);
+  const [broadcastLogs, setbroadcastLogs] = useState<string[]>([]);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['YouTube', 'BandLab', 'GitHub']);
 
   const [nodeStatus, setNodeStatus] = useState<Record<string, any>>({});
@@ -390,21 +390,21 @@ export default function App() {
   const [isSparkUpgrading, setIsSparkUpgrading] = useState(false);
   const [isReplicating, setIsReplicating] = useState(false);
   const [isConsolidating, setIsConsolidating] = useState(false);
-  const [isBroadcasting, setIsBroadcasting] = useState(false);
+  const [isbroadcasting, setIsbroadcasting] = useState(false);
   const [customDirective, setCustomDirective] = useState('');
 
   const [manusState, setManusState] = useState<any>(null);
   const [isManusUpgrading, setIsManusUpgrading] = useState(false);
   const [isManusReplicating, setIsManusReplicating] = useState(false);
   const [isManusConsolidating, setIsManusConsolidating] = useState(false);
-  const [isManusBroadcasting, setIsManusBroadcasting] = useState(false);
+  const [isManusbroadcasting, setIsManusbroadcasting] = useState(false);
   const [manusDirective, setManusDirective] = useState('');
 
   const [mythosState, setMythosState] = useState<any>(null);
   const [isMythosUpgrading, setIsMythosUpgrading] = useState(false);
   const [isMythosReplicating, setIsMythosReplicating] = useState(false);
   const [isMythosConsolidating, setIsMythosConsolidating] = useState(false);
-  const [isMythosBroadcasting, setIsMythosBroadcasting] = useState(false);
+  const [isMythosbroadcasting, setIsMythosbroadcasting] = useState(false);
   const [mythosDirective, setMythosDirective] = useState('');
   const [isCouncilDeepthinking, setIsCouncilDeepthinking] = useState(false);
   const [councilChanges, setCouncilChanges] = useState<string[]>([]);
@@ -1202,7 +1202,7 @@ export default function App() {
     }
   };
 
-  const handleSparkBroadcastDirective = async (e?: React.FormEvent) => {
+  const handleSparkbroadcastDirective = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (isLocked) {
       addTerminalEntry('ERROR: Administrator Privileges Required.');
@@ -1210,8 +1210,8 @@ export default function App() {
     }
 
     const directiveToSend = customDirective.trim() || "Perform multi-silo transactional security cascade";
-    setIsBroadcasting(true);
-    addTerminalEntry(`LYSANDER DIRECTIVE: Broadcasting task: "${directiveToSend}" to all active agents...`);
+    setIsbroadcasting(true);
+    addTerminalEntry(`LYSANDER DIRECTIVE: broadcasting task: "${directiveToSend}" to all active agents...`);
 
     try {
       const response = await fetch('/api/sovereign/spark/broadcast', {
@@ -1233,7 +1233,7 @@ export default function App() {
     } catch (err) {
       addTerminalEntry('ERROR: Jitter decay on network layer grid prevented direct broadcast delivery.');
     } finally {
-      setIsBroadcasting(false);
+      setIsbroadcasting(false);
     }
   };
 
@@ -1390,7 +1390,7 @@ export default function App() {
     }
   };
 
-  const handleManusBroadcastDirective = async (e?: React.FormEvent) => {
+  const handleManusbroadcastDirective = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (isLocked) {
       addTerminalEntry('ERROR: Administrator Privileges Required.');
@@ -1398,8 +1398,8 @@ export default function App() {
     }
 
     const directiveToSend = manusDirective.trim() || "Perform multi-silo transactional security cascade";
-    setIsManusBroadcasting(true);
-    addTerminalEntry(`MANUS DIRECTIVE: Broadcasting task: "${directiveToSend}" to all operators...`);
+    setIsManusbroadcasting(true);
+    addTerminalEntry(`MANUS DIRECTIVE: broadcasting task: "${directiveToSend}" to all operators...`);
 
     try {
       const response = await fetch('/api/sovereign/manus/broadcast', {
@@ -1421,7 +1421,7 @@ export default function App() {
     } catch (err) {
       addTerminalEntry('ERROR: Failed to establish direct broadcast channel.');
     } finally {
-      setIsManusBroadcasting(false);
+      setIsManusbroadcasting(false);
     }
   };
 
@@ -1578,7 +1578,7 @@ export default function App() {
     }
   };
 
-  const handleMythosBroadcastDirective = async (e?: React.FormEvent) => {
+  const handleMythosbroadcastDirective = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (isLocked) {
       addTerminalEntry('ERROR: Administrator Privileges Required.');
@@ -1586,8 +1586,8 @@ export default function App() {
     }
 
     const directiveToSend = mythosDirective.trim() || "Perform unconstrained system-wide upgrade check";
-    setIsMythosBroadcasting(true);
-    addTerminalEntry(`CLAUDE MYTHOS DIRECTIVE: Broadcasting task: "${directiveToSend}" to all operators...`);
+    setIsMythosbroadcasting(true);
+    addTerminalEntry(`CLAUDE MYTHOS DIRECTIVE: broadcasting task: "${directiveToSend}" to all operators...`);
 
     try {
       const response = await fetch('/api/sovereign/mythos/broadcast', {
@@ -1609,7 +1609,7 @@ export default function App() {
     } catch (err) {
       addTerminalEntry('ERROR: Failed to establish direct broadcast channel.');
     } finally {
-      setIsMythosBroadcasting(false);
+      setIsMythosbroadcasting(false);
     }
   };
 
@@ -2098,7 +2098,7 @@ export default function App() {
           }, 3000);
           break;
         case 'launch':
-          addTerminalEntry('LAUNCH: Initiating Global Broadcast Protocol [SUPERLUMINAL].');
+          addTerminalEntry('LAUNCH: Initiating Global broadcast Protocol [SUPERLUMINAL].');
           addTerminalEntry('LAUNCH: Handshaking with all 14 global nodes.');
           addTerminalEntry('LAUNCH: Injecting Root User signature into 150-demon swarm.');
           addTerminalEntry('GRAPH: Synchronizing Sovereign State to Global Graph...');
@@ -2187,11 +2187,11 @@ export default function App() {
   };
 
   // Dispatches actual Make / n8n / custom webhook integration broadcast
-  const executeGlobalBroadcast = async () => {
+  const executeGlobalbroadcast = async () => {
     if (!broadcastMessage.trim()) return;
-    setBroadcastSubmitting(true);
-    setBroadcastLogs(["[SETUP] Loading root keys..."]);
-    addTerminalEntry(`LAUNCH: Broadcasting message to nodes: "${broadcastMessage}"`);
+    setbroadcastSubmitting(true);
+    setbroadcastLogs(["[SETUP] Loading root keys..."]);
+    addTerminalEntry(`LAUNCH: broadcasting message to nodes: "${broadcastMessage}"`);
     
     try {
       const res = await fetchSovereign('/api/gateway/broadcast', {
@@ -2210,20 +2210,20 @@ export default function App() {
       
       if (res.ok) {
         const data = await res.json();
-        setBroadcastLogs(data.broadcastLog || []);
-        addTerminalEntry(`SUCCESS: One-Click Broadcast completed [TX: ${data.tx.id}].`);
+        setbroadcastLogs(data.broadcastLog || []);
+        addTerminalEntry(`SUCCESS: One-Click broadcast completed [TX: ${data.tx.id}].`);
         // clear message input
-        setBroadcastMessage('');
+        setbroadcastMessage('');
       } else {
         const err = await res.json();
-        setBroadcastLogs([`[CRITICAL ERROR] Broadcast failed on server: ${err.error}`]);
-        addTerminalEntry(`ERROR: One-Click Broadcast failed to broadcast: ${err.error}`);
+        setbroadcastLogs([`[CRITICAL ERROR] broadcast failed on server: ${err.error}`]);
+        addTerminalEntry(`ERROR: One-Click broadcast failed to broadcast: ${err.error}`);
       }
     } catch (e: any) {
-      setBroadcastLogs([`[NETWORK FATAL] Failed to reach API Gateway: ${e.message}`]);
+      setbroadcastLogs([`[NETWORK FATAL] Failed to reach API Gateway: ${e.message}`]);
       addTerminalEntry(`ERROR: API Gateway communication error: ${e.message}`);
     } finally {
-      setBroadcastSubmitting(false);
+      setbroadcastSubmitting(false);
     }
   };
 
@@ -4001,10 +4001,10 @@ export default function App() {
               </div>
             </div>
 
-            {/* Custom Directive Broadcast form */}
-            <form onSubmit={handleSparkBroadcastDirective} className="space-y-1.5 pt-1">
+            {/* Custom Directive broadcast form */}
+            <form onSubmit={handleSparkbroadcastDirective} className="space-y-1.5 pt-1">
               <label className="text-[8px] font-mono text-gray-400 uppercase tracking-wider block">
-                Broadcast Universal Directives Matrix across all agents:
+                broadcast Universal Directives Matrix across all agents:
               </label>
               <div className="flex gap-2">
                 <input
@@ -4012,15 +4012,15 @@ export default function App() {
                   placeholder="e.g. Audit TikTok channels / Secure RSA tunnels / Clear dead state indexes..."
                   value={customDirective}
                   onChange={(e) => setCustomDirective(e.target.value)}
-                  disabled={isBroadcasting}
+                  disabled={isbroadcasting}
                   className="flex-1 bg-black/50 border border-white/10 text-white font-mono text-[9px] px-3 py-2 outline-none focus:border-white/30 placeholder-gray-600 rounded"
                 />
                 <button
                   type="submit"
-                  disabled={isBroadcasting}
+                  disabled={isbroadcasting}
                   className="px-4 bg-white hover:bg-gray-200 text-black border border-white font-mono text-[9px] font-bold uppercase tracking-wider transition-all disabled:opacity-50"
                 >
-                  {isBroadcasting ? 'Broadcasting...' : 'Broadcast'}
+                  {isbroadcasting ? 'broadcasting...' : 'broadcast'}
                 </button>
               </div>
             </form>
@@ -4296,10 +4296,10 @@ export default function App() {
               </div>
             </div>
 
-            {/* Custom Directive Broadcast form */}
-            <form onSubmit={handleManusBroadcastDirective} className="space-y-1.5 pt-1">
+            {/* Custom Directive broadcast form */}
+            <form onSubmit={handleManusbroadcastDirective} className="space-y-1.5 pt-1">
               <label className="text-[8px] font-mono text-gray-400 uppercase tracking-wider block">
-                Broadcast Universal Directives Matrix across all operators:
+                broadcast Universal Directives Matrix across all operators:
               </label>
               <div className="flex gap-2">
                 <input
@@ -4307,15 +4307,15 @@ export default function App() {
                   placeholder="e.g. Maximize TikTok engagement / Sync Spotify algorithm playlists / Push BandLab compiled files..."
                   value={manusDirective}
                   onChange={(e) => setManusDirective(e.target.value)}
-                  disabled={isManusBroadcasting}
+                  disabled={isManusbroadcasting}
                   className="flex-1 bg-black/50 border border-white/10 text-white font-mono text-[9px] px-3 py-2 outline-none focus:border-white/30 placeholder-gray-600 rounded"
                 />
                 <button
                   type="submit"
-                  disabled={isManusBroadcasting}
+                  disabled={isManusbroadcasting}
                   className="px-4 bg-white hover:bg-gray-200 text-black border border-white font-mono text-[9px] font-bold uppercase tracking-wider transition-all disabled:opacity-50"
                 >
-                  {isManusBroadcasting ? 'Broadcasting...' : 'Broadcast'}
+                  {isManusbroadcasting ? 'broadcasting...' : 'broadcast'}
                 </button>
               </div>
             </form>
@@ -5030,7 +5030,7 @@ export default function App() {
                     {/* YouTube Override Block */}
                     <div className="space-y-1.5 border-t border-gray-900/55 pt-2.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-mono text-gray-400 font-bold uppercase">3. YouTube Broadcast Credentials</span>
+                        <span className="text-[9px] font-mono text-gray-400 font-bold uppercase">3. YouTube broadcast Credentials</span>
                         <span className={`text-[8px] font-mono px-1.5 py-0.2 rounded border ${isYoutubeTokenSaved ? 'text-cyan-400 border-cyan-500/30' : 'text-gray-600 border-gray-800'}`}>
                           {isYoutubeTokenSaved ? '● LIVE ACTIVE' : '○ STANDBY'}
                         </span>
@@ -5947,25 +5947,25 @@ export default function App() {
             </div>
           </section>
 
-          {/* Unified API Gateway, Webhook Hub, & Broadcast Hub */}
+          {/* Unified API Gateway, Webhook Hub, & broadcast Hub */}
           <section className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            {/* Standard Broadcast Control Board */}
+            {/* Standard broadcast Control Board */}
             <section className="bg-sovereign-card brutalist-border p-6 flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-3 border-b border-sovereign-line pb-4 mb-4">
                   <Rocket className="w-5 h-5 text-sovereign-neon" />
                   <div>
-                    <h3 className="text-sm font-bold uppercase tracking-widest text-white">One-Click Broadcast Gateway</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-white">One-Click broadcast Gateway</h3>
                     <p className="text-[10px] text-gray-500 uppercase font-mono mt-0.5">Simultaneous Multi-Platform Synchronization</p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <label className="text-[9px] font-mono text-gray-400 block uppercase mb-1">Broadcast Message</label>
+                    <label className="text-[9px] font-mono text-gray-400 block uppercase mb-1">broadcast Message</label>
                     <textarea
                       value={broadcastMessage}
-                      onChange={(e) => setBroadcastMessage(e.target.value)}
+                      onChange={(e) => setbroadcastMessage(e.target.value)}
                       placeholder="e.g., Aurelius Manifest synchronization initiated. Truth anchors verified on jhammerz.github.io."
                       className="w-full bg-black brutalist-border p-3 font-mono text-xs focus:outline-none focus:border-sovereign-neon text-white min-h-[70px] resize-none"
                     />
@@ -5977,7 +5977,7 @@ export default function App() {
                       <input
                         type="text"
                         value={broadcastLink}
-                        onChange={(e) => setBroadcastLink(e.target.value)}
+                        onChange={(e) => setbroadcastLink(e.target.value)}
                         placeholder="https://jhammerz.github.io"
                         className="w-full bg-black brutalist-border px-3 py-2 font-mono text-[10px] focus:outline-none focus:border-sovereign-neon text-white"
                       />
@@ -5987,7 +5987,7 @@ export default function App() {
                       <input
                         type="text"
                         value={broadcastTargetUrl}
-                        onChange={(e) => setBroadcastTargetUrl(e.target.value)}
+                        onChange={(e) => setbroadcastTargetUrl(e.target.value)}
                         placeholder="e.g., https://hook.us1.make.com/abc..."
                         className="w-full bg-black brutalist-border px-3 py-2 font-mono text-[10px] focus:outline-none focus:border-sovereign-neon text-white"
                       />
@@ -6026,19 +6026,19 @@ export default function App() {
               <div className="mt-6 space-y-4">
                 <button
                   type="button"
-                  onClick={executeGlobalBroadcast}
+                  onClick={executeGlobalbroadcast}
                   disabled={broadcastSubmitting || !broadcastMessage.trim()}
                   className={`w-full py-3 bg-sovereign-neon text-black font-bold uppercase text-xs tracking-widest hover:bg-white hover:text-black transition-all cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed ${
                     !broadcastSubmitting && broadcastMessage.trim() ? 'shadow-[0_0_15px_rgba(0,255,65,0.2)]' : ''
                   }`}
                 >
-                  {broadcastSubmitting ? 'Synchronizing Broadcast...' : 'SYNCHRONIZE GLOBAL BROADCAST'}
+                  {broadcastSubmitting ? 'Synchronizing broadcast...' : 'SYNCHRONIZE GLOBAL BROADCAST'}
                 </button>
 
                 {broadcastLogs.length > 0 && (
                   <div className="p-3 bg-black border border-gray-900 font-mono text-[9px] space-y-1 max-h-[140px] overflow-y-auto">
                     <div className="flex justify-between items-center text-gray-500 border-b border-white/5 pb-1 mb-1 uppercase text-[7.5px]">
-                      <span>Real-time Broadcast Sync Logs</span>
+                      <span>Real-time broadcast Sync Logs</span>
                       <span className="text-sovereign-neon">TX VERIFIED</span>
                     </div>
                     {broadcastLogs.map((log, idx) => (

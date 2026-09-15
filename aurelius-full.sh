@@ -63,7 +63,7 @@ log_alert() {
 fn_viral() {
     header
     log_alert "ACTIVATING MAX VIRAL PUSH: CELEBRITY TIER-0 & REACH MULTIPLIER 300%"
-    log_step "SATURATION" "Broadcasting to 14 high-throughput sovereign distribution nodes..."
+    log_step "SATURATION" "broadcasting to 14 high-throughput sovereign distribution nodes..."
     
     if [ -f ".well-known/social-rotation.json" ]; then
         echo -e "    -> Loaded .well-known/social-rotation.json"
@@ -230,7 +230,7 @@ fn_chart_velocity() {
     echo -e "    -> Artist Entity   : JHammerZ / Joshua Hamilton / Colonel Ro"
     echo -e "    -> Schema.org Node : MusicGroup @ https://jhammerz.github.io/music.html"
     echo -e "    -> Tuning Standard : 432Hz Sacred Geometric Harmonic Resonance"
-    echo -e "    -> Spotify Track   : 7vRd2EDcwuEYWtyqW28a79 (Broadcasting)"
+    echo -e "    -> Spotify Track   : 7vRd2EDcwuEYWtyqW28a79 (broadcasting)"
     echo -e "    -> Apple Music     : artist/jhammerz/1845705346 (Synchronized)"
     echo -e "    -> BandLab Hub     : band8670133842983447 (Active)"
     log_success "CHART VELOCITY ENGINE RATIFIED. ZERO LATENCY AUDIO ROUTING."
@@ -526,7 +526,7 @@ fn_menu() {
         echo -e "  ${CYAN}[1]${NC}  Max Viral Push (Celebrity Tier 0)     ${CYAN}[16]${NC} Super User MAX 10 Authority"
         echo -e "  ${CYAN}[2]${NC}  Metadata Sync (AI Crawlers/SEO)       ${CYAN}[17]${NC} CDM Truth Sync (jhammerz.github.io)"
         echo -e "  ${CYAN}[3]${NC}  Matrix Scan (Audit 14 CDM Nodes)      ${CYAN}[18]${NC} Sovereign Singularity Convergence"
-        echo -e "  ${CYAN}[4]${NC}  Push Updates (Force Push to Origin)   ${CYAN}[19]${NC} Global Launch Broadcast"
+        echo -e "  ${CYAN}[4]${NC}  Push Updates (Force Push to Origin)   ${CYAN}[19]${NC} Global Launch broadcast"
         echo -e "  ${CYAN}[5]${NC}  Presidential Sync (Absolute Auth)     ${CYAN}[20]${NC} Saturation Boost (Algorithmic)"
         echo -e "  ${CYAN}[6]${NC}  Kernel Realignment (FIPS/Colonel)     ${CYAN}[21]${NC} Agent Recruitment (Capability-Peers)"
         echo -e "  ${CYAN}[7]${NC}  Final Build & Inspection              ${CYAN}[22]${NC} Identity Sign (Ed25519 Session)"

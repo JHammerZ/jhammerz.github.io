@@ -47,7 +47,7 @@ jobs:
       - name: 1. Checkout JHammerZ Master Source Tree
         uses: actions/checkout@v4
 
-      - name: 2. Broadcast Static Assets to Low-Latency Corridors
+      - name: 2. broadcast Static Assets to Low-Latency Corridors
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -98,7 +98,7 @@ jobs:
       - name: 3. Initialize Google Cloud SDK Infrastructure Tools
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: 4. Build and Broadcast Private Container Asset to Cloud Run
+      - name: 4. Build and broadcast Private Container Asset to Cloud Run
         run: |
           gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/mythos-matrix-core:latest .
           gcloud run deploy jhammerz-core-engine \
@@ -123,7 +123,7 @@ git add .github/workflows/deploy-google.yml
 echo "-> Finalizing secure transaction commit layer..."
 git commit -m "feat: deploy dual-tracked cloudflare edge page and google cloud container pipelines"
 
-echo "-> Broadcasting live codebase modifications upstream..."
+echo "-> broadcasting live codebase modifications upstream..."
 git push origin main
 
 echo "----------------------------------------------------------------------"

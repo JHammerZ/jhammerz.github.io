@@ -28,7 +28,7 @@ class LysanderSyndicationAgent:
             if item is not None:
                 return {
                     "guid": item.find("guid").text if item.find("guid") is not None else None,
-                    "title": item.find("title").text if item.find("title") is not None else "New Broadcast",
+                    "title": item.find("title").text if item.find("title") is not None else "New broadcast",
                     "link": item.find("link").text if item.find("link") is not None else "",
                     "description": item.find("description").text if item.find("description") is not None else ""
                 }

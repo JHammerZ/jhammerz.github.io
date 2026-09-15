@@ -13,7 +13,7 @@ def queue_planetary_content_packet():
         
     # Generate high-capacity transaction payload with optimization fields
     content_payload = {
-        "title": "Sovereign Planetary Broadcaster Block",
+        "title": "Sovereign Planetary broadcaster Block",
         "body": "Omni-channel distribution network broadcasting at hyper-velocity scale via Level 4 Edge Cache Isolates.",
         "media_url": "https://github.io",
         "timestamp_epoch": int(time.time()),

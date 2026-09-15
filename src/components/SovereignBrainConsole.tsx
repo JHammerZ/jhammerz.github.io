@@ -437,7 +437,7 @@ export function SovereignBrainConsole({
   };
 
   const handleSendUltrasonicSync = () => {
-    onTerminalLog("🔊 ACOUSTIC TELEMETRY: Broadcasting state updates over localized near-ultrasonic sound waves [19.2 kHz, silent to human ear].");
+    onTerminalLog("🔊 ACOUSTIC TELEMETRY: broadcasting state updates over localized near-ultrasonic sound waves [19.2 kHz, silent to human ear].");
     onTerminalLog("✓ TRANSCEIVER CONFIRMATION: Remote microphone receiver node captured audio pulses and decoded state delta successfully. 0.05% packet loss.");
   };
 
@@ -731,7 +731,7 @@ export function SovereignBrainConsole({
   const executeBulkLivePing = async () => {
     if (isPingingAll) return;
     setIsPingingAll(true);
-    onTerminalLog(`NETWORK: Broadcasting low-latency TCP diagnostic handshake to absolute ecosystem array.`);
+    onTerminalLog(`NETWORK: broadcasting low-latency TCP diagnostic handshake to absolute ecosystem array.`);
     
     // Ping all 14 node nodes in sequential or slight parallel staggered chunks
     for (let i = 0; i < nodesRouteMapping.length; i++) {

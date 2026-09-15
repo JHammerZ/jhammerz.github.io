@@ -310,7 +310,7 @@ export const AUTHORITATIVE_UNIVERSAL_ENDPOINTS: UniversalEndpointSpec[] = [
     name: "youtube.com/@JHammerZ",
     endpoint: "https://www.youtube.com/@JHammerZ",
     class: "VideoChannel",
-    purpose_alignment: "YouTube Long-form & Shorts Video Broadcast Engine",
+    purpose_alignment: "YouTube Long-form & Shorts Video broadcast Engine",
     purpose_alignment_score: 100,
     throttle_state: "NOMINAL",
     routing_type: "BIDIRECTIONAL_SPOKE",

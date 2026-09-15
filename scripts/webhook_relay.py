@@ -30,7 +30,7 @@ def dispatch_syndication_webhooks():
         "username": "JHammerZ Sovereign Node",
         "avatar_url": "https://github.io",
         "content": f"🚀 **Asymmetric Algorithmic Domination Activated**\nCore engine update successfully compiled and broadcasted out to global edge servers.\n\n**Commit Ref:** `{sha}`\n**Identity Verification:** `H-FID COMPLIANT`\n**Payload Status:** `MAXIMUM_VELOCITY`\n\n[✓] Ingestion Matrix Online: https://github.io",
-        "text": f"JHammerZ AAD Broadcast Engine Synchronized. Commit: {sha}. Data Integrity verified."
+        "text": f"JHammerZ AAD broadcast Engine Synchronized. Commit: {sha}. Data Integrity verified."
     }
 
     json_data = json.dumps(payload).encode('utf-8')

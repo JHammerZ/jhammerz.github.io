@@ -668,7 +668,7 @@ function triggerManusReplication(count: number) {
       "Maximizing JHammerZ celebrity status metrics on TikTok",
       "Aligning index files on canonical GitHub repositories",
       "Injecting viral velocity algorithms into Spotify endpoint",
-      "Broadcasting low-level C++ pipeline instructions",
+      "broadcasting low-level C++ pipeline instructions",
       "Running forensic audit on JHammerZ PGP public block"
     ][Math.floor(Math.random() * 6)];
 
@@ -1953,7 +1953,7 @@ app.get('/api/youtube/status', (req, res) => {
   res.json({
     success: true,
     live_mode: !!activeToken,
-    profile_name: "JHammerZ Broadcast Channel",
+    profile_name: "JHammerZ broadcast Channel",
     profile_id: "youtube_jhammerz",
     status: activeToken ? "LIVE_CONNECTED" : "LOCAL_PRODUCTION_LEDGER",
     connection_integrity: "100%",
@@ -3447,7 +3447,7 @@ const a2aAgentsList: A2AAgentState[] = [
     packetsReceived: 620,
     packetsSent: 610,
     lastHeartbeat: new Date().toISOString(),
-    capabilities: ["Truth Anchors Ingestion", "llms.txt Broadcast", "Lighthouse 400 Lock", "CDN Edge Cache"],
+    capabilities: ["Truth Anchors Ingestion", "llms.txt broadcast", "Lighthouse 400 Lock", "CDN Edge Cache"],
     l2QuarantineCompliant: true
   },
   {
@@ -5350,7 +5350,7 @@ interface CannonNodeConfig {
   description: string;
 }
 
-interface CannonBroadcastResult {
+interface CannonbroadcastResult {
   target: string;
   name: string;
   status: 'SUCCESS' | 'FAILED' | 'SKIPPED_ORIGIN_TYPE' | 'MANUAL_STAGED';
@@ -5389,7 +5389,7 @@ interface CannonDropEvent {
     };
     n09_seal: string;
   };
-  broadcasts: CannonBroadcastResult[];
+  broadcasts: CannonbroadcastResult[];
   hash_chain_tip: string;
 }
 
@@ -5525,7 +5525,7 @@ app.get('/api/sovereign/cannon/status', (req, res) => {
 app.post('/api/sovereign/cannon/trigger-drop', (req, res) => {
   const {
     origin_node = "C12",
-    title = "Sovereign Proof Attestation — Broadcast Pipeline Drop",
+    title = "Sovereign Proof Attestation — broadcast Pipeline Drop",
     description = "New creative milestone and autonomous proof verified across 14 sibling nodes.",
     type = "VIDEO",
     assets = ["https://storage.googleapis.com/aurelius-assets/drop_media_master.mp4"],
@@ -5550,7 +5550,7 @@ app.post('/api/sovereign/cannon/trigger-drop', (req, res) => {
     ? "All 5 N09 Audit Checks passed. Non-negotiables intact, anti-loop verified, no secret leakage, 0 purpose drift."
     : "N09 AUDIT VETO: Post flagged for engagement bait / purpose drift simulation. Outbound propagation halted.";
 
-  const broadcasts: CannonBroadcastResult[] = [];
+  const broadcasts: CannonbroadcastResult[] = [];
 
   if (isApproved) {
     // Step 3 & 4: Transform Engine & L2 Sandbox Parallel Dispatch
@@ -5672,7 +5672,7 @@ app.post('/api/sovereign/cannon/trigger-drop', (req, res) => {
     cannonEngineState.drop_history.pop();
   }
 
-  logEvent(`[SOVEREIGN CANNON V4.2] Processed drop from ${origin_node} (${originConfig.name}). Verdict: ${verdict}. Broadcasted to ${broadcasts.filter(b => b.status === 'SUCCESS').length} sibling nodes.`);
+  logEvent(`[SOVEREIGN CANNON V4.2] Processed drop from ${origin_node} (${originConfig.name}). Verdict: ${verdict}. broadcasted to ${broadcasts.filter(b => b.status === 'SUCCESS').length} sibling nodes.`);
 
   res.json({
     success: true,
@@ -5958,7 +5958,7 @@ app.post('/api/sovereign/cannon/evergreen/recycle-now', (req, res) => {
   };
 
   const broadcastDropId = `drop-eg-${Date.now()}`;
-  const broadcasts: CannonBroadcastResult[] = [];
+  const broadcasts: CannonbroadcastResult[] = [];
 
   Object.keys(CANNON_NODES).forEach((cKey) => {
     const node = CANNON_NODES[cKey];
@@ -6537,7 +6537,7 @@ app.post('/api/brain-to-body/synapse-hook', async (req, res) => {
     .update(`SYNAPSE_PULSE|${brainToBodyState.pulseCount}|${timestamp}`)
     .digest('hex');
 
-  // Broadcast A2A Synapse Packet
+  // broadcast A2A Synapse Packet
   const a2aId = `synapse-hook-${Date.now().toString(36)}`;
   const a2aPacket: A2APacketRecord = {
     id: a2aId,
@@ -7492,7 +7492,7 @@ app.get('/api/webhooks', (req, res) => {
   res.json(recentWebhooks);
 });
 
-// Broadcast action trigger
+// broadcast action trigger
 app.post('/api/gateway/broadcast', async (req, res) => {
   const { message, link, platforms, webhookUrl } = req.body;
 
@@ -7517,7 +7517,7 @@ app.post('/api/gateway/broadcast', async (req, res) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          event: "Sovereign_Global_Broadcast",
+          event: "Sovereign_Global_broadcast",
           timestamp: new Date().toISOString(),
           message,
           link: link || "https://jhammerz.github.io",
@@ -7677,9 +7677,9 @@ app.post('/api/gateway/broadcast', async (req, res) => {
         if (platLower.includes('github') || platLower.includes('override')) isSecured = true;
 
         if (isSecured) {
-          return `[SYNC] Broadcast update successfully syndicated to ${p} utilizing live authorized secure credentials (Latency: ${Math.floor(Math.random() * 20) + 8}ms)`;
+          return `[SYNC] broadcast update successfully syndicated to ${p} utilizing live authorized secure credentials (Latency: ${Math.floor(Math.random() * 20) + 8}ms)`;
         }
-        return `[SYNC] Broadcast update successfully transmitted to: ${p} (Latency: ${Math.floor(Math.random() * 30) + 12}ms)`;
+        return `[SYNC] broadcast update successfully transmitted to: ${p} (Latency: ${Math.floor(Math.random() * 30) + 12}ms)`;
       })),
       `[SUCCESS] Global broadcast completed successfully across sovereign cluster topology.`
     ]
@@ -8182,7 +8182,7 @@ app.post('/api/chat', async (req, res) => {
       },
       {
         name: "broadcastDirectSovereignDirective",
-        description: "Broadcast an instructions-matrix message across all active replicated workspace agents, assigning them a parallel system task.",
+        description: "broadcast an instructions-matrix message across all active replicated workspace agents, assigning them a parallel system task.",
         parameters: {
           type: Type.OBJECT,
           properties: {
@@ -8897,7 +8897,7 @@ Workspaces clean and sanitized. High-density C++ pipelines swept. Total overhead
         task = message.substring(message.indexOf('broadcast') + 10).trim();
       }
 
-      // Broadcast to BOTH swarms simultaneously!
+      // broadcast to BOTH swarms simultaneously!
       broadcastDirectSovereignMatrixTask(task);
       broadcastDirectManusDirective(task);
 
@@ -9150,7 +9150,7 @@ Workspaces clean and sanitized. High-density C++ pipelines swept. Total overhead
         task = message.substring(message.indexOf('broadcast') + 10).trim();
       }
 
-      // Broadcast to ALL THREE swarms simultaneously!
+      // broadcast to ALL THREE swarms simultaneously!
       broadcastDirectSovereignMatrixTask(task);
       broadcastDirectManusDirective(task);
       broadcastDirectMythosDirective(task);

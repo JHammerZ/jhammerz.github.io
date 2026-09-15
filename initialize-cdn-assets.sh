@@ -23,7 +23,7 @@ cat << 'INNER_EOF' > public/assets/cdn-routing-profile.json
   "regional_hubs_active": [
     "North America Ingress Matrix",
     "European Transit Corridor",
-    "Asia-Pacific Broadcast Clusters"
+    "Asia-Pacific broadcast Clusters"
   ]
 }
 INNER_EOF

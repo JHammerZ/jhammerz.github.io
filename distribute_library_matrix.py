@@ -74,7 +74,7 @@ def execute_global_distribution():
         "verified_catalog": STUDIO_RECORDS
     }
         
-    print("[*] Broadcasting payload data capsules to Edge Cluster routing paths...")
+    print("[*] broadcasting payload data capsules to Edge Cluster routing paths...")
     with concurrent.futures.ThreadPoolExecutor(max_workers=24) as executor:
         worker_futures = [executor.submit(dispatch_payload_to_worker, node, broadcast_payload) for node in WORKER_NODES]
         for future in concurrent.futures.as_completed(worker_futures):

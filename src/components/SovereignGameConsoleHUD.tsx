@@ -321,7 +321,7 @@ const NODE_OBJECTIVES: TacticalNodeObjective[] = [
     category: 'Viral Gateway',
     preloadedDirectives: [
       'Scrape Real-Time Engagement Statistics',
-      'Broadcast Sound Byte Engagement Sync',
+      'broadcast Sound Byte Engagement Sync',
       'Optimize Bio Redirection Headers',
       'Audit Short-Form Retention Markers'
     ]
@@ -350,13 +350,13 @@ const NODE_OBJECTIVES: TacticalNodeObjective[] = [
     name: 'youtube.com/@JHammerZ',
     endpoint: 'https://www.youtube.com/@JHammerZ',
     status: 'BROADCASTER_STREAMS_OK',
-    type: 'Main Video Broadcast Hub',
+    type: 'Main Video broadcast Hub',
     latencyIndex: 19,
     cryptKey: 'YT-MEDIA-ENCODER',
     influenceMetric: 'Multi-Format Channel',
     explanation: 'Primary high-density media streaming vault hosting deep discussions, sessions, and musical audio releases.',
     roleDescription: 'Distributes audio-visual evidence of sovereign development and triggers parallel search engine metadata optimization.',
-    category: 'Broadcast Hub',
+    category: 'broadcast Hub',
     preloadedDirectives: [
       'Index Deep Think Topic Metadata',
       'Verify Acoustic Frequency Spectrum',
@@ -618,7 +618,7 @@ export function SovereignWarRoomHUD({
     { id: 'a2a', label: 'A2A Bridge & GitHub Mesh', icon: Network, desc: 'Agent-to-Agent Micro-Consensus & jhammerz.github.io Network Substrate' },
     { id: 'audit', label: 'Resiliency & Audit Matrix', icon: ShieldCheck, desc: 'Cloudflare LRU Cache, Manus Vault Tarball & GitHub Pages SEO Engine' },
     { id: 'manifest', label: 'Living Manifest V4.0.26', icon: FileText, desc: '14 Sibling Nodes, 432s Auto-Loop, Teleological Root & Non-Negotiables' },
-    { id: 'cannon', label: 'Sovereign Cannon V4.2', icon: Zap, desc: 'Autonomous Broadcast Engine, 14 Nodes, N09 Veto, 5000ms Hysteresis' },
+    { id: 'cannon', label: 'Sovereign Cannon V4.2', icon: Zap, desc: 'Autonomous broadcast Engine, 14 Nodes, N09 Veto, 5000ms Hysteresis' },
     { id: 'synapse', label: 'Brain-to-Body Synapse', icon: GitBranch, desc: 'Military-Grade Neural Brain to 7 GitHub Repositories Synapse Matrix' },
     { id: 'worm', label: 'W.O.R.M. Immutable Vault', icon: Lock, desc: 'Write Once, Read Many Sovereign Cryptographic Persistence & Merkle Proofs' }
   ];

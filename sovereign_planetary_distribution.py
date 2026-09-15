@@ -45,7 +45,7 @@ def execute_planetary_grid_sweep():
         try:
             with open(batch, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            title = data.get("title", "Planetary Broadcast Frame")
+            title = data.get("title", "Planetary broadcast Frame")
             c_hash = hashlib.sha256(str(data).encode('utf-8')).hexdigest()
             
             for node_name in GLOBAL_EDGE_REGISTRY.keys():

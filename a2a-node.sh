@@ -84,7 +84,7 @@ discover_peers() {
 }
 
 broadcast() {
-    echo "Broadcasting to IndexNow..."
+    echo "broadcasting to IndexNow..."
     local key=$(cat .well-known/api/key.txt 2>/dev/null || echo "your-indexnow-key")
     curl -s -X POST "https://api.indexnow.org/indexnow" \
       -H "Content-Type: application/json" \

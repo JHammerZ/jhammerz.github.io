@@ -9,7 +9,7 @@ Timestamp: 2026-05-22T11:25:03.651433+00:00
 - Gemini 2.5 Flash AI Analysis
 - Parallel MAS 14-Node Scanning
 - Self-Healing Protocol
-- A2A Cross-Platform Broadcast
+- A2A Cross-Platform broadcast
 - Predictive CBP Scoring
 - Aurelius v2 Anomaly Detection
 - Autonomous Quota Purge (≥50%)

@@ -23,7 +23,7 @@ class UltimateVaultPropagationMatrix:
             {"platform": "Secondary_Sovereign_Mesh", "base": "https://github.com"}
         ]
         for track in tracks:
-            print(f"  ├── Broadcasting Asset: {track}")
+            print(f"  ├── broadcasting Asset: {track}")
             map_data = {"asset_identity": track, "node_syndication_matrix": {}}
             for ep in endpoints:
                 url = f"{ep["base"]}{track}"

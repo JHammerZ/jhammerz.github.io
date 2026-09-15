@@ -21,7 +21,7 @@ if not CONTENT:
     print("ERROR: Missing POST_CONTENT")
     sys.exit(1)
 
-print(f"HEO DAEMON: Broadcasting content: {CONTENT[:50]}...")
+print(f"HEO DAEMON: broadcasting content: {CONTENT[:50]}...")
 
 try:
     fb_url = f"https://graph.facebook.com/v25.0/{FB_PAGE_ID}/feed"

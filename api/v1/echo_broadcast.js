@@ -5,7 +5,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-async function prepareBroadcast() {
+async function preparebroadcast() {
     // Model updated for 2026 Semantic Shift
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -16,8 +16,8 @@ async function prepareBroadcast() {
         console.log("--- BROADCAST READY ---");
         console.log(result.response.text());
     } catch (error) {
-        console.error("Broadcast Failed:", error.message);
+        console.error("broadcast Failed:", error.message);
     }
 }
 
-prepareBroadcast();
+preparebroadcast();
