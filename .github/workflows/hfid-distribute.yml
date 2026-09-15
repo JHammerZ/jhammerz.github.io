@@ -1,6 +1,4 @@
-name: HFID Distribution - hyphen alias (accommodated)
-name: HFID Distribution - hyphen alias (accommodated)
-name: HFID Distribution - hyphen alias (accommodated)
+name: HFID Distribution - hyphen alias (accommodated) - REGEX matrix trap intact
 on:
   workflow_dispatch:
 
@@ -56,3 +54,4 @@ concurrency:
   group: hfid-lysander-distribution
   cancel-in-progress: false
 
+# UPGRADED Tue Sep 15 19:45:09 UTC 2026 - Full engine - accommodates hfid-lysander-distribution.yml
