@@ -4,11 +4,10 @@ permissions:
   id-token: write
   pages: write
 on:
+  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
-
-  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,5 +16,4 @@ jobs:
       - name: Threat Hunt
         run: |
           echo "Scanning..."
-          grep -r "REGEX".github/workflows/ | grep -v "trap cleared" | grep -v "grep -r" || echo "CLEAN - no traps"
-          ls -1.github/workflows/*.yml | wc -l
+          grep -r "REGEX" .github/workflows/ | grep -v "trap cleared" | grep -v "grep -r" || echo "CLEAN - no traps"
