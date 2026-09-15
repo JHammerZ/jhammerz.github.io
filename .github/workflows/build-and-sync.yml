@@ -113,8 +113,8 @@ jobs:
 
         '
     - name: Commit - FIXED RACE PRESERVES INTENT
-      run: "set -eu pipefail\ngit config --local user.name \"github-actions[bot]\"\
-        \ngit config --local user.email \"github-actions[bot]@users.noreply.github.com\"\
+      run: "set -eu pipefail\ngit config --local user.name \"${{ secrets.DOCKERHUB_USERNAME }}\"\
+        \ngit config --local user.email \"${{ secrets.DOCKERHUB_USERNAME }}@users.noreply.github.com\"\
         \ngit config --local rebase.autoStash true\ngit add .hfid/ lines-full.txt\
         \ || true\n# Stash any remaining untracked to keep working tree clean for\
         \ rebase\ngit stash push --include-untracked --keep-index -m \"hfid-temp-autostash\"\

@@ -39,8 +39,8 @@ jobs:
 
         '
     - name: Commit and Push
-      run: "git config --global user.name \"github-actions[bot]\"\ngit config --global\
-        \ user.email \"github-actions[bot]@users.noreply.github.com\"\ngit add llms-full.txt\
+      run: "git config --global user.name \"${{ secrets.DOCKERHUB_USERNAME }}\"\ngit config --global\
+        \ user.email \"${{ secrets.DOCKERHUB_USERNAME }}@users.noreply.github.com\"\ngit add llms-full.txt\
         \ || true\nif git diff --staged --quiet; then\n  echo \"Zero document changes\
         \ detected.\"\n  exit 0\nfi\n\nn=0\nuntil git push origin HEAD:main; do\n\
         \  n=$((n+1))\n  if [ \"$n\" -ge 3 ]; then\n    echo \"Failed to push after\

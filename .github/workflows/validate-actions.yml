@@ -38,9 +38,9 @@ jobs:
     - name: Install deps
       run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Configure Git Identity
-      run: 'git config --local user.name ''github-actions[bot]''
+      run: 'git config --local user.name ''${{ secrets.DOCKERHUB_USERNAME }}''
 
-        git config --local user.email ''github-actions[bot]@users.noreply.github.com''
+        git config --local user.email ''${{ secrets.DOCKERHUB_USERNAME }}@users.noreply.github.com''
 
         git config --local commit.gpgsign false
 

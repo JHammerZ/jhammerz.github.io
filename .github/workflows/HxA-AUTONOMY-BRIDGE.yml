@@ -70,8 +70,8 @@ jobs:
         subject-path: .hfid/indexing/sitemap.json
     - name: Stage Sitemap Changes
       id: stage
-      run: "git config --local user.name \"github-actions[bot]\"\ngit config --local\
-        \ user.email \"github-actions[bot]@://github.com\"\nif [ -f sitemap.xml ];\
+      run: "git config --local user.name \"${{ secrets.DOCKERHUB_USERNAME }}\"\ngit config --local\
+        \ user.email \"${{ secrets.DOCKERHUB_USERNAME }}@://github.com\"\nif [ -f sitemap.xml ];\
         \ then\n  git add sitemap.xml .hfid/indexing/sitemap.json\nfi\n"
     - name: Commit Changes
       uses: stefanzweifel/git-auto-commit-action@v5

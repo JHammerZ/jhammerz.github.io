@@ -67,9 +67,9 @@ jobs:
       with:
         subject-path: .hfid/mesh/manifest.json
     - name: Commit Mesh Updates
-      run: 'git config --local user.name "github-actions[bot]"
+      run: 'git config --local user.name "${{ secrets.DOCKERHUB_USERNAME }}"
 
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.email "${{ secrets.DOCKERHUB_USERNAME }}@users.noreply.github.com"
 
         '
     - name: Commit Changes

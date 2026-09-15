@@ -71,9 +71,9 @@ jobs:
 
         '
     - name: Stage OTS Changes
-      run: 'git config --global user.name "github-actions[bot]"
+      run: 'git config --global user.name "${{ secrets.DOCKERHUB_USERNAME }}"
 
-        git config --global user.email "github-actions[bot]@://github.com"
+        git config --global user.email "${{ secrets.DOCKERHUB_USERNAME }}@://github.com"
 
         git add doi-manifest.json.ots .hfid/provenance/* 2>/dev/null || true
 
@@ -83,7 +83,8 @@ jobs:
         \ transaction crashes\nif git diff --staged --quiet; then\n  echo \"No new\
         \ timestamp adjustments to commit.\"\nelse\n  git commit -m \"[skip ci] chore(provenance):\
         \ update open-timestamp proof signatures [skip ci]\"\n  git pull --rebase\
-        \ origin main\n  git pull --rebase origin main && git push origin main\n</m>\n"
+        \ origin main\n  git pull --rebase origin main || true
+            git push origin main || (git pull --rebase origin main && git push origin main)\n</m>\n"
 concurrency:
   group: doi-bridge
   cancel-in-progress: true
