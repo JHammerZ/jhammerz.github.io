@@ -12,6 +12,10 @@ on:
         required: false
         type: string
         default: 'false'
+concurrency:
+  group: janus-pulse-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
   id-token: write
