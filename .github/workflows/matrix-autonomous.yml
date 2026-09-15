@@ -54,7 +54,7 @@ jobs:
         date -u > .well-known/hfid/last_beat.txt
 
         echo "BEAT $(date -u) :: PHASE5 $(cat .hfid/syndicator/manifest.json | head
-        -c 60)" >> LIVING_MANIFEST.md
+        - c 60)" >> LIVING_MANIFEST.md
 
         ots stamp .hfid/syndicator/manifest.json || true
 

@@ -68,7 +68,7 @@ jobs:
         fi\n"
     - if: ${{ steps.check.outputs.needed == 'true' }}
       run: 'tar --exclude=''.git'' --exclude=''.hfid'' --exclude=''node_modules''
-        -cf .hfid/omega/repo-bundle.tar.gz .
+        - cf .hfid/omega/repo-bundle.tar.gz .
 
         '
     - if: ${{ steps.check.outputs.needed == 'true' }}

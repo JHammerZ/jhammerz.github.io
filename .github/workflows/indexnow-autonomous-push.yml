@@ -37,7 +37,7 @@ jobs:
         urls "$URL_LIST" ''{host: $host, key: $key, urlList: $urls}'')
 
         curl -s -X POST https://api.indexnow.org/indexnow -H "Content-Type: application/json"
-        -d "$JSON"
+        - d "$JSON"
 
         echo "Pushed $(echo $URL_LIST | jq length) URLs"
 

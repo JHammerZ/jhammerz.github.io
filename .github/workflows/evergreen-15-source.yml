@@ -26,7 +26,7 @@ jobs:
         cat /tmp/new.txt /tmp/old.txt > .hfid/indexing/urls.txt
 
         echo "{\"last_rotation\":\"$(date -u +%FT%TZ)\",\"sources\":15,\"total_urls\":$(wc
-        -l <.hfid/indexing/urls.txt),\"tip\":\"95d5ebb9 LIVE\",\"distribution\":\"indefinite
+        - l <.hfid/indexing/urls.txt),\"tip\":\"95d5ebb9 LIVE\",\"distribution\":\"indefinite
         FYP\"}" > .hfid/syndicate/manifest.json
 
         date +%s > .hfid/syndicate/remifest_hash.txt

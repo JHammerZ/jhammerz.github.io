@@ -71,7 +71,7 @@ jobs:
         JANUS_ENDPOINT: ${{ secrets.JANUS_ENDPOINT }}
         JANUS_KEY: ${{ secrets.JANUS_API_KEY }}
       run: "set -e\nif [ -z \"$JANUS_ENDPOINT\" ] || [ -z \"$JANUS_KEY\" ]; then\n\
-        \  echo \"No JANUS secrets - creating placeholder draft - OK\"\n  mkdir -p\
+        \  echo \"No JANUS secrets - creating placeholder draft - OK\"\n  mkdir -p \
         \ .hfid/lysander\n  echo \"// Draft placeholder for ${{ steps.validate.outputs.filepath\
         \ }}\" > .hfid/lysander/draft.txt\n  echo \"code=$(cat .hfid/lysander/draft.txt\
         \ | base64 -w0)\" >> $GITHUB_OUTPUT\n  exit 0\nfi\nRESPONSE=$(curl -s -X POST\
