@@ -1,5 +1,5 @@
 {
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@ardrive/turbo-sdk": "^1.42.0",
     "@irys/sdk": "^0.2.11",
