@@ -1,4 +1,8 @@
 name: deploy-scooper-cache
+permissions:
+ contents: write
+ pages: write
+ id-token: write
 on:
   push:
     paths:
@@ -9,7 +13,11 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-permissions:
+ contents: write
+ pages: write
+ id-token: write
+on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Deploy scooper-cache CDM

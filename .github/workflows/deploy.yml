@@ -1,9 +1,8 @@
 name: deploy
 permissions:
   contents: write
-  id-token: write
   pages: write
-  attestations: write
+  id-token: write
 on:
   workflow_dispatch:
   push:
@@ -17,12 +16,10 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci || npm install || echo 'no deps'
-      - name: Build
-        run: |
-          rm -rf _site_deploy
-          mkdir -p _site_deploy/.hfid/indexing
-          npm run build 2>/dev/null || echo "no build"
-          rsync -av./ _site_deploy/ --exclude '.git' --exclude '_site_deploy' --exclude 'node_modules' 2>/dev/null || true
+      - run: |
+          mkdir -p _site_deploy
+          cp -r. _site_deploy/ 2>/dev/null || true
+          echo "deploy fixed $(date)" > _site_deploy/fixed.txt
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
