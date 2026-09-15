@@ -4,9 +4,11 @@ compatibility_date = "2026-09-12"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-ENVIRONMENT = "production"
+ENVIRONMENT = "library"
 SOVEREIGN_HID = "JHammerZ-001"
-GEO_RANK = "ONE_OF_ONE"
-PROTOCOL = "Twenty_47"
 ROLE = "SOVEREIGN_NODE_GATEWAY"
 NODE_ID = "AX-01"
+
+[[kv_namespaces]]
+binding = "LIBRARY"
+id = "2947e494953448c3a70a94174a77a2d4"
