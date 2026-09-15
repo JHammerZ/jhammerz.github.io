@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 https://github.com/JHammerZ/jhammerz.github.io
 https://jhammerz.carrd.co
 https://jhammerz.github.io/
@@ -12,3 +13,20 @@ https://www.instagram.com/jhammerzz/
 https://www.linkedin.com/in/jhammerz
 https://www.tiktok.com/@jhammerzz
 https://www.youtube.com/@JhammerZ/videos
+=======
+https://github.io{URL_PATH}
+https://github.io{URL_PATH}
+https://github.io{URL_PATH}
+https://github.io{URL_PATH}
+https://github.io{URL_PATH}
+https://github.io{URL_PATH}
+https://github.io{URL_PATH}
+https://github.io{URL_PATH}
+https://github.io
+https://github.io{f}
+https://github.io{f}
+https://github.io{f}
+https://github.io{f}
+https://github.io{f}
+https://github.io{f}
+>>>>>>> Stashed changes
