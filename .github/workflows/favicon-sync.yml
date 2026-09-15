@@ -18,7 +18,7 @@ jobs:
     - name: Checkout Codebase
       uses: actions/checkout@v4
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Setup Node
       uses: actions/setup-node@v5
       with:
@@ -26,7 +26,7 @@ jobs:
     - name: Install deps
       run: npm install --legacy-peer-deps
     - name: Install Image Dependencies
-      run: 'npm install sharp-cli -g || true
+      run: 'npm install --legacy-peer-deps sharp-cli -g || true
 
         '
     - name: Fallback Resource Matrix Instantiation
@@ -77,7 +77,7 @@ jobs:
         \ pristineSvgText, 'utf8');\n      console.log('\u2705 Re-initialized corrupted\
         \ file target vector configurations on local disk tree.');\n    }\n  } catch\
         \ (err) {\n    console.error('\u274C Core compilation failure:', err.message);\n\
-        \    process.exit(1);\n  }\n}\nrun();\nEOF\n\nnpm install sharp\nnode compiler.js\n\
+        \    process.exit(1);\n  }\n}\nrun();\nEOF\n\nnpm install --legacy-peer-deps sharp\nnode compiler.js\n\
         \ncp public/favicon.png public/apple-touch-icon.png ./ || true\n\ncat > public/site.webmanifest\
         \ << 'EOF'\n{\n  \"name\": \"jhammerz.github.io\",\n  \"short_name\": \"jhammerz\"\
         ,\n  \"icons\": [\n    { \"src\": \"/android-chrome-192x192.png\", \"sizes\"\

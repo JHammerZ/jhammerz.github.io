@@ -19,14 +19,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - uses: actions/setup-node@v5
       with:
         node-version: 20
     - name: Install deps
       run: npm install --legacy-peer-deps
     - name: Install validator
-      run: npm install -g ajv-cli
+      run: npm install --legacy-peer-deps -g ajv-cli
     - name: Validate JSON-LD
       run: "mkdir -p .hfd/validation\necho \"Scanning HTML for JSON-LD blocks...\"\
         \nnode << 'NODE'\nconst fs = require('fs');\nconst glob = require('fs');\n\

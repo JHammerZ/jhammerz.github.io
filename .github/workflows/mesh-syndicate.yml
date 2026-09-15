@@ -17,9 +17,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npm ci || npm install
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Verify Distribution Payload Integrity
       run: "set -e\necho \"[*] Auditing AAD assets prior to syndicate broadcast...\"\
         \njq -e . .well-known/hfid/graph-mesh.json > /dev/null\necho \"[\u2713] Semantic\

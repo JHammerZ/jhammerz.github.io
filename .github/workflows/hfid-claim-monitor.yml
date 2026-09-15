@@ -28,9 +28,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npm ci || npm install
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Install Dependencies
       run: 'pip install opentimestamps-client requests beautifulsoup4 python-whois
 

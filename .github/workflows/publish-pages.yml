@@ -31,7 +31,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci || npm install --legacy-peer-deps || echo 'no deps'
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
 
       - name: Setup Pages
         id: pages

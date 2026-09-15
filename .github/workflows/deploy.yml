@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm ci || npm install || echo 'no deps'
+      - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
       - run: |
           mkdir -p _site_deploy
           cp -r . _site_deploy/ 2>/dev/null || true

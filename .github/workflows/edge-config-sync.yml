@@ -25,11 +25,11 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npm ci || npm install
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Install deps
-      run: npm install --legacy-peer-deps || npm install
+      run: npm install --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Validate Edge Config
       run: "if [ ! -f edge-config.json ]; then\n  echo '{\"items\":[]}' > edge-config.json\n\
         fi\njq -e '.items' edge-config.json > /dev/null || echo '{\"items\":[]}' >\
@@ -40,7 +40,7 @@ jobs:
         CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         NAMESPACE: ${{ inputs.namespace }}
       run: "if [ -z \"$CLOUDFLARE_API_TOKEN\" ]; then\n  echo \"No CLOUDFLARE_API_TOKEN\
-        \ - fork/PR safe skip - OK\"\n  exit 0\nfi\nnpm install -g wrangler\nmkdir\
+        \ - fork/PR safe skip - OK\"\n  exit 0\nfi\nnpm install --legacy-peer-deps -g wrangler\nmkdir\
         \ -p .hfid/edge\nif [ \"$(jq '.items | length' edge-config.json)\" = \"0\"\
         \ ]; then\n  echo \"No items to sync - OK\"\n  exit 0\nfi\necho \"Would sync\
         \ to $NAMESPACE - green\"\n"

@@ -19,7 +19,7 @@ jobs:
     - name: Checkout Substrate Node
       uses: actions/checkout@v4
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Setup Node Environment
       uses: actions/setup-node@v5
       with:
@@ -27,7 +27,7 @@ jobs:
     - name: Install deps
       run: npm install --legacy-peer-deps
     - name: Install Lighthouse Core Tool
-      run: npm install -g lighthouse
+      run: npm install --legacy-peer-deps -g lighthouse
     - name: Execute Live Performance Metric Analysis
       run: 'echo "[*] Commencing performance audit tracking operations..."
 

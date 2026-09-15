@@ -26,14 +26,14 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 20
         cache: npm
     - name: Install Node Deps
-      run: npm install --legacy-peer-deps || npm install
+      run: npm install --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Setup Python for OTS
       uses: actions/setup-python@v5
       with:
@@ -167,7 +167,7 @@ jobs:
     - name: Checkout for evidence
       uses: actions/checkout@v4
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - uses: actions/upload-artifact@v5
       with:
         name: hfid-lysander-${{ github.run_id }}

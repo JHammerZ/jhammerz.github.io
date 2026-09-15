@@ -22,9 +22,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npm ci || npm install
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Check for broken links
       uses: lycheeverse/lychee-action@v1
       with:
@@ -34,7 +34,7 @@ jobs:
     - name: Validate HTML Structure
       run: 'set -e
 
-        npm install -g html-validate || true
+        npm install --legacy-peer-deps -g html-validate || true
 
         html-validate "**/*.html" || echo "HTML validation warnings found"
 

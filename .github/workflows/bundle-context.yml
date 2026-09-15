@@ -21,9 +21,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npm ci || npm install
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Generate llms-full.txt
       run: "echo \"Generating llms-full.txt bundle...\"\n# your existing logic here\n\
         if [ -f llms.txt ]; then\n  cat llms.txt > llms-full.txt\n  echo \"\" >> llms-full.txt\n\

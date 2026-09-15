@@ -17,9 +17,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npm ci || npm install
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Run Integrity Scan on Code Logic
       run: "set -e\npython3 -m py_compile scripts/scraping_defense.py\necho \"[\u2713\
         ] Python security script validation check clean.\"\n"

@@ -25,9 +25,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npm ci || npm install
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Setup IPFS Kubo
       run: 'wget -q https://dist.ipfs.tech/kubo/v0.30.0/kubo_v0.30.0_linux-amd64.tar.gz
 
@@ -89,7 +89,7 @@ jobs:
       env:
         WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
       run: "set -e\nif [ -z \"$WEB3_STORAGE_TOKEN\" ]; then\n  echo \"SKIP: Web3.Storage\
-        \ token not set\"\n  exit 0\nfi\nnpm install -g @web3-storage/w3 || true\n\
+        \ token not set\"\n  exit 0\nfi\nnpm install --legacy-peer-deps -g @web3-storage/w3 || true\n\
         if command -v w3 > /dev/null; then\n  w3 put .hfid/ipfs/manifest.json .hfid/ipfs/CID.txt\
         \ --name \"H-FID-${{ github.sha }}\" --no-wrap || true\nelse\n  npx @web3-storage/w3\
         \ put .hfid/ipfs/manifest.json .hfid/ipfs/CID.txt --name \"H-FID-${{ github.sha\

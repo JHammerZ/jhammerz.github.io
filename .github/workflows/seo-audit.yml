@@ -23,7 +23,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: Setup Node
       uses: actions/setup-node@v5
       with:
@@ -36,7 +36,7 @@ jobs:
         python-version: '3.11'
         cache: pip
     - name: Install Dependencies
-      run: 'npm install -g html-validate lighthouse || true
+      run: 'npm install --legacy-peer-deps -g html-validate lighthouse || true
 
         pip install opentimestamps-client || true
 

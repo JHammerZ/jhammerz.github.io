@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install deps
-      run: npm ci || npm install || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - uses: actions/setup-node@v5
       with:
         node-version: 20
@@ -29,7 +29,7 @@ jobs:
         python-version: '3.11'
     - run: 'pip install opentimestamps-client || true
 
-        npm install -g ipfs-car || true
+        npm install --legacy-peer-deps -g ipfs-car || true
 
         '
     - id: archive
