@@ -4,19 +4,23 @@ permissions:
   pages: write
   id-token: write
 on:
-  workflow_dispatch:
   push:
-    branches: [main]
+    paths:
+      - scooper-cache.js
+      - wrangler.scooper-cache.toml
+      - .github/workflows/deploy-scooper-cache.yml
+  workflow_dispatch:
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Scooper Cache
-        run: |
-          echo "scooper cache build"
-          mkdir -p _site_deploy
-          ls -1.github/workflows | wc -l
+      - name: Deploy scooper-cache CDM
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --no-bundle -c wrangler.scooper-cache.toml
 concurrency:
-  group: deploy-scooper-cache
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
