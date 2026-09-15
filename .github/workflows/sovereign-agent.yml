@@ -1,13 +1,10 @@
-name: sovereign-agent - restored
-on:
-  workflow_dispatch:
-
+name: sovereign-agent
+on: { workflow_dispatch: {} }
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - run: echo active
-concurrency:
-  group: sovereign-agent
-  cancel-in-progress: false
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node social_media_publisher.js --dry-run || python3 matrix_orchestrator.py --agent

@@ -1,13 +1,13 @@
-name: build-kernel.yml - restored
-on:
-  workflow_dispatch:
-
+name: build-kernel
+on: { workflow_dispatch: {}, push: { paths: ["kernel/**", "hfid/**"] } }
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - run: echo active
-concurrency:
-  group: build-kernel
-  cancel-in-progress: false
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: actions/setup-python@v6
+      - run: npm ci || npm i
+      - run: python3 matrix_orchestrator.py --build-kernel || python3 holy_grail.py build
+      - run: npm run build || echo "no npm build"

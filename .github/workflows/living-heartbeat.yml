@@ -1,13 +1,13 @@
-name: living-heartbeat - restored
-on:
-  workflow_dispatch:
-
+name: living-heartbeat
+on: { workflow_dispatch: {}, schedule: [{cron: "*/15 * * * *"}] }
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - run: echo active
-concurrency:
-  group: living-heartbeat
-  cancel-in-progress: false
-
+      - uses: actions/checkout@v4
+      - run: |
+          curl -s https://jhammerz-router.jhammerzofficial.workers.dev/ingest -H "Content-Type: application/json" -d '{"type":"heartbeat","ts":'$(date +%s)'}' || echo "router ping failed"
+          npx wrangler@4.131.2 kv key put --namespace-id=5b5c3570537940dba02d3db2194711be "evergreen:heartbeat:$(date -u +%Y%m%d%H%M)" '{"alive":true}' --remote || true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

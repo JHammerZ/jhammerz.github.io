@@ -1,13 +1,17 @@
-name: hfid-sovereign.yml - restored
-on:
-  workflow_dispatch:
-
+name: hfid-sovereign
+on: { workflow_dispatch: {} }
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - run: echo active
-concurrency:
-  group: hfid-sovereign
-  cancel-in-progress: false
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+      - run: pip install -r requirements.txt 2>/dev/null || true
+      - name: Validate H-FID Witness & Authority
+        run: python3 holy_grail.py validate || python3 matrix_orchestrator.py --validate
+      - name: Commit Witness
+        run: |
+          git config user.name "H-FID Bot"
+          git config user.email "hfid@jhammerz.github.io"
+          git add . || true
+          git diff --cached --quiet || git commit -m "FIXED RACE PRESERVES INTENT - H-FID Witness $(date -u)" || true
