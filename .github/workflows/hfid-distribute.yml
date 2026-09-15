@@ -1,6 +1,6 @@
-# UPGRADED 2026-05-13: Full engine cloned from hfid-lysander-distribution.yml - accommodates case FS - REGEX trap intact
-# DEPRECATED alias pointer preserved: Canonical workflow is .github/workflows/hfid-lysander-distribution.yml
-name: 'CD: H-FID LYSANDER Distribution'
+name: HFID Distribution - hyphen alias (accommodated)
+name: HFID Distribution - hyphen alias (accommodated)
+name: HFID Distribution - hyphen alias (accommodated)
 on:
   workflow_dispatch:
 
