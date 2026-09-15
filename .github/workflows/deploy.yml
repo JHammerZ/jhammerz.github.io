@@ -1,24 +1,32 @@
 name: deploy
 permissions:
- contents: write
- id-token: write
- pages: write
- attestations: write
-
+  contents: write
+  id-token: write
+  pages: write
+  attestations: write
 on:
   workflow_dispatch:
-
+  push:
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    - run: npm ci || npm install || echo 'no deps'
-    - run: echo 'Restored deploy - REGEX matrix trap intact'
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci || npm install || echo 'no deps'
+      - name: Build
+        run: |
+          rm -rf _site_deploy
+          mkdir -p _site_deploy/.hfid/indexing
+          npm run build 2>/dev/null || echo "no build"
+          rsync -av./ _site_deploy/ --exclude '.git' --exclude '_site_deploy' --exclude 'node_modules' 2>/dev/null || true
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir:./_site_deploy
 concurrency:
   group: deploy
   cancel-in-progress: true
-
