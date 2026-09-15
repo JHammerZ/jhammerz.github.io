@@ -274,3 +274,12 @@ BEAT Tue Sep 15 23:16:07 UTC 2026 :: PHASE5 ==> standard input <==
   "demon_pid": 16782,
   "hybrid": "GHOST yield active"
 }
+BEAT Tue Sep 15 23:30:26 UTC 2026 :: PHASE5 ==> standard input <==
+{
+  "timestamp": "2026-09-15T23:30:26.553886Z",
+  "total_trapped": 0,
+  "agents": [],
+  "phase": "4-syndicate",
+  "demon_pid": 16782,
+  "hybrid": "GHOST yield active"
+}
