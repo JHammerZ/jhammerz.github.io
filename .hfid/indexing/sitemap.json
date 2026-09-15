@@ -1,12 +1,12 @@
 {
   "workflow": "sitemap-indexnow",
-  "sha": "b8bc92f38f936adb223349b1fb3da43067fb10b8",
-  "timestamp": "2026-09-13T22:26:37Z",
+  "sha": "aa813588d8c421cbedab6269f2c51a6394cd1180",
+  "timestamp": "2026-09-15T22:05:30Z",
   "hfid_version": "v2.2",
   "sovereign_author": "Joshua Hamilton",
   "sitemap": {
     "url_count": 15,
-    "sha256": "6c1ded863b735e37b7a3b98375ec0e933d27e41bdfbc55ddf115657a6206ff37"
+    "sha256": "bf245ee2d7e942f7920b2aa4fe47ced1f22c4b75c1c7e569f4a907f35d17cf2e"
   },
   "slsa_level": 3,
   "gno_rank": "ONE_OF_ONE"
