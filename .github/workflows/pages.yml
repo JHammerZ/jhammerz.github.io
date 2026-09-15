@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -32,19 +34,25 @@ jobs:
 
       - name: Build artifact
         run: |
-          mkdir -p _site_deploy
-      mkdir -p _site_deploy/.hfid/indexing
-          rsync -av \
+          rm -rf _site_deploy
+          mkdir -p _site_deploy/.hfid/indexing
+          mkdir -p _site_deploy/assets/js
+          rsync -av ./ _site_deploy/ \
             --exclude='.git' \
             --exclude='.github' \
-            --exclude='.hfid/*.log' \
             --exclude='_site_deploy' \
             --exclude='node_modules' \
-            ./ _site_deploy/
-          mkdir -p _site_deploy/.hfid/indexing
-      cp -r .hfid/indexing/* _site_deploy/.hfid/indexing/ 2>/dev/null || true
-      touch _site_deploy/.nojekyll
-          ls -lh _site_deploy/ | head -30
+            --exclude='.hfid/*.log' \
+            --exclude='.hfid/tmp' \
+            --exclude='*.log' \
+            --exclude='*.tmp'
+          cp -rf .hfid/indexing/* _site_deploy/.hfid/indexing/ 2>/dev/null || true
+          cp -rf .hfid/* _site_deploy/.hfid/ 2>/dev/null || true
+          cp -rf assets _site_deploy/ 2>/dev/null || true
+          touch _site_deploy/.nojekyll
+          echo "VERIFY:"
+          ls -lh _site_deploy/.hfid/indexing/traffic-summary.json
+          ls -lh _site_deploy/assets/js/mesh-loader.js
 
       - uses: actions/upload-pages-artifact@v3
         with:
