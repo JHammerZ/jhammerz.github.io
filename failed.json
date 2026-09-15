@@ -217,7 +217,7 @@
   {
     "conclusion": "failure",
     "databaseId": 33204024450,
-    "name": ".github/workflows/hxa-autonomy-bridge.yml"
+    "name": ".github/workflows/HxA-AUTONOMY-BRIDGE.yml"
   },
   {
     "conclusion": "failure",
@@ -442,7 +442,7 @@
   {
     "conclusion": "failure",
     "databaseId": 33203715941,
-    "name": ".github/workflows/hxa-autonomy-bridge.yml"
+    "name": ".github/workflows/HxA-AUTONOMY-BRIDGE.yml"
   },
   {
     "conclusion": "failure",

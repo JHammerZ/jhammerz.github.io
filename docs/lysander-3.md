@@ -14,7 +14,7 @@ termCode: JHammerZ-003
 **Human sets policy, automation executes content.** No human in the deployment loop. No manual merges for content governed by policy.
 
 ## Technical Method
-1. **Policy as Code**: `.gitignore`, `CODEOWNERS`, `hxa-autonomy-bridge.yml` define what automation can touch.
+1. **Policy as Code**: `.gitignore`, `CODEOWNERS`, `HxA-AUTONOMY-BRIDGE.yml` define what automation can touch.
 2. **Swarm Execution**: 40-bot network monitors policy changes, generates compliant content, commits to `content/*` branches, auto-merges to `main`.
 3. **Verification**: Every merge triggers sitemap rebuild + IndexNow ping + `proof.html` audit update.
 
