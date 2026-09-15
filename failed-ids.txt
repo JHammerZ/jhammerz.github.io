@@ -1,0 +1,200 @@
+35033840675 Handle Workflow | H-FID Asset Bundler
+35033839194 bundle_context
+35033831451 Broadcast - Janus Syndicate Pulse (canonical)
+35033828018 SecOps: H-FID Bounty Ledger
+35033813623 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35033811466 SEO: Sitemap + IndexNow Autonomous Push
+35033684536 Legal: H-FID Claim Monitor
+35033680019 H-FID HEO Bridge
+35033672725 GEO_RANK Visibility Audit - H-FID Standard
+35033667083 Audit: H-FID Forensic Ledger to IPFS
+35033659557 S0: Favicon Sovereign Sync
+35033657638 evergreen-15-source
+35033539283 geo_rank_audit
+35033537487 docker_build
+35033532784 Deploy Worker
+35033529309 deploy-scooper-cache
+35033524208 Cloudflare: Sovereign Content Edge Mesh
+35033519385 SecOps: H-FID Content Archive
+35033511269 CI: Cloudflare Workers Deploy
+35033390320 Handle Workflow | H-FID Asset Bundler
+35033388668 bundle_context
+35033382694 Broadcast - Janus Syndicate Pulse (canonical)
+35033379838 SecOps: H-FID Bounty Ledger
+35033370343 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35033369075 SEO: Sitemap + IndexNow Autonomous Push
+35033352274 CI: Cloudflare Workers Deploy
+35033229906 Handle Workflow | H-FID Asset Bundler
+35033214854 SecOps: H-FID Bounty Ledger
+35033212604 Hunt-and-Report
+35033202663 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35033201143 SEO: Sitemap + IndexNow Autonomous Push
+35033189654 evergreen-15-source
+35033179261 deploy-scooper-cache
+35033069082 geo_rank_audit
+35033067374 docker_build
+35033063174 Deploy Worker
+35033056097 Cloudflare: Sovereign Content Edge Mesh
+35033051179 SecOps: H-FID Content Archive
+35033041973 CI: Cloudflare Workers Deploy
+35032915687 Handle Workflow | H-FID Asset Bundler
+35032913693 bundle_context
+35032905586 Broadcast - Janus Syndicate Pulse (canonical)
+35032902186 SecOps: H-FID Bounty Ledger
+35032900193 Hunt-and-Report
+35032898457 auto-scoop-library
+35032889156 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35032887116 SEO: Sitemap + IndexNow Autonomous Push
+35032843430 deploy
+35032844132 deploy-scooper-cache
+35032817199 Legal: H-FID Claim Monitor
+35032814456 H-FID HEO Bridge
+35032809276 deploy-scooper-cache
+35032809652 GEO_RANK Visibility Audit - H-FID Standard
+35032805849 Audit: H-FID Forensic Ledger to IPFS
+35032803272 FORCE_INDEX_NODES
+35032800571 S0: Favicon Sovereign Sync
+35032799161 evergreen-15-source
+35032677270 geo_rank_audit
+35032675998 docker_build
+35032672915 Deploy Worker
+35032664731 Cloudflare: Sovereign Content Edge Mesh
+35032660053 SecOps: H-FID Content Archive
+35032651881 CI: Cloudflare Workers Deploy
+35032517279 Handle Workflow | H-FID Asset Bundler
+35032510435 Broadcast - Janus Syndicate Pulse (canonical)
+35032508227 SecOps: H-FID Bounty Ledger
+35032506963 Hunt-and-Report
+35032499267 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35032497893 SEO: Sitemap + IndexNow Autonomous Push
+35032458626 deploy
+35032379446 OTS Auto Upgrade
+35032376258 Broadcast: H-FID Omega
+35032371150 CD: H-FID Sovereign Mesh Sync
+35032366005 Security: H-FID Lysander Bot Purge
+35032364400 Admin: H-FID Lysander Quota Purge
+35032362758 Lysander 3.0 Autonomous Push
+35032361059 Sovereign Model Baseline
+35032357646 Lysander Human-In-The-Loop Janus Draft
+35032347613 SecOps: H-FID LLM Ingestion Audit
+35032227375 Admin: H-FID Killswitch
+35032225747 CD: H-FID Sovereign Kernel
+35032216367 Audit: DOI Sync | Janus Gate v1.2-H-FID
+35032213194 sovereign-ipfs-pin
+35032208454 SEO: H-FID IndexNow + Google Hardened
+35032201563 Security: H-FID Lysander Defense / Lysander
+35032071259 Legal: H-FID Claim Monitor
+35032069637 CD: H-FID HEO Bridge
+35032067824 H-FID HEO Bridge
+35032061255 GEO_RANK Visibility Audit - H-FID Standard
+35032059516 SEO: Sitemap + IndexFlow Autonomous Push
+35032052179 FORCE_INDEX_NODES
+35032050437 Syndicate: Compile Dynamic Distribution Feeds
+35032048790 S0: Favicon Sovereign Sync
+35032045120 Scale: Global Traffic Blast Protocol
+35031922488 geo_rank_audit
+35031920503 docker_build
+35031916444 Deploy Worker
+35031913095 deploy-scooper-cache
+35031908420 Cloudflare: Sovereign Content Edge Mesh
+35031905281 Optimization: Deploy Web Crawler Response Filter
+35031903390 SecOps: H-FID Content Archive
+35031894829 CI: Cloudflare Workers Deploy
+35031768918 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35031764965 CD: Janus Gateway Sovereign Track
+35031762851 SEO: Sitemap + IndexNow Autonomous Push
+35031763258 Optimization: Warm Edge Distribution Cache
+35031761542 Handle Workflow | H-FID Asset Bundler
+35031759833 bundle_context
+35031748480 SecOps: H-FID Bounty Ledger
+35031746757 Hunt-and-Report
+35031671255 deploy
+35031631601 Handle Workflow | H-FID Asset Bundler
+35031602931 SEO: Sitemap + IndexNow Autonomous Push
+35031520828 deploy
+35031466189 Handle Workflow | H-FID Asset Bundler
+35031453235 Hunt-and-Report
+35031443285 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35031441708 SEO: Sitemap + IndexNow Autonomous Push
+35031411386 Sovereign Mirror
+35031398146 Site Sitemap / Indexation Autonomous Push
+35031394980 SecOps: H-FID SEO Audit
+35031393452 Security Scan - H-FID Substrate
+35031389626 Security: H-FID Recon
+35031250610 OTS Auto Upgrade
+35031247299 Broadcast: H-FID Omega
+35031236711 Security: H-FID Lysander Bot Purge
+35031235113 Admin: H-FID Lysander Quota Purge
+35031233001 Lysander 3.0 Autonomous Push
+35031231447 Sovereign Model Baseline
+35031227648 Lysander Human-In-The-Loop Janus Draft
+35031218935 H-FID Verify | Lysander 3.1 Bot Purge
+35031217455 SecOps: H-FID LLM Ingestion Audit
+35031090268 Admin: H-FID Killswitch
+35031088195 CD: H-FID Sovereign Kernel
+35031076536 Audit: DOI Sync | Janus Gate v1.2-H-FID
+35031072874 sovereign-ipfs-pin
+35031067016 SEO: H-FID IndexNow + Google Hardened
+35031061356 Security: H-FID Lysander Defense / Lysander
+35030924277 Legal: H-FID Claim Monitor
+35030920493 H-FID HEO Bridge
+35030910656 GEO_RANK Visibility Audit - H-FID Standard
+35030904829 Audit: H-FID Forensic Ledger to IPFS
+35030901340 FORCE_INDEX_NODES
+35030897814 S0: Favicon Sovereign Sync
+35030896066 evergreen-15-source
+35030762494 geo_rank_audit
+35030760297 docker_build
+35030754527 Deploy Worker
+35030750815 deploy-scooper-cache
+35030744674 Cloudflare: Sovereign Content Edge Mesh
+35030739255 SecOps: H-FID Content Archive
+35030729552 CI: Cloudflare Workers Deploy
+35030595934 Optimization: Warm Edge Distribution Cache
+35030594098 Handle Workflow | H-FID Asset Bundler
+35030592183 bundle_context
+35030583961 Broadcast - Janus Syndicate Pulse (canonical)
+35030579338 SecOps: H-FID Bounty Ledger
+35030576802 Hunt-and-Report
+35030574854 auto-scoop-library
+35030564775 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35030562874 SEO: Sitemap + IndexNow Autonomous Push
+35030462460 Legal: H-FID Claim Monitor
+35030459208 H-FID HEO Bridge
+35030451871 GEO_RANK Visibility Audit - H-FID Standard
+35030446835 Audit: H-FID Forensic Ledger to IPFS
+35030443234 FORCE_INDEX_NODES
+35030439343 S0: Favicon Sovereign Sync
+35030437577 evergreen-15-source
+35030302754 geo_rank_audit
+35030301159 docker_build
+35030296493 Deploy Worker
+35030293232 deploy-scooper-cache
+35030287747 Cloudflare: Sovereign Content Edge Mesh
+35030282515 SecOps: H-FID Content Archive
+35030273416 CI: Cloudflare Workers Deploy
+35030135873 Handle Workflow | H-FID Asset Bundler
+35030134327 bundle_context
+35030127791 Broadcast - Janus Syndicate Pulse (canonical)
+35030124582 SecOps: H-FID Bounty Ledger
+35030122845 Hunt-and-Report
+35030112556 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35030110655 SEO: Sitemap + IndexNow Autonomous Push
+35030000497 Handle Workflow | H-FID Asset Bundler
+35029981639 auto-scoop-library
+35029972305 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35029863969 Handle Workflow | H-FID Asset Bundler
+35029847073 auto-scoop-library
+35029836738 Sovereign Broadcast: A2A-Broadcast Ingestion Engine
+35029834701 SEO: Sitemap + IndexNow Autonomous Push
+35029747682 OTS Auto Upgrade
+35029740407 Syndicate: Decentralized Mesh Replication
+35029738562 CD: H-FID Sovereign Mesh Sync
+35029732623 Security: H-FID Lysander Bot Purge
+35029730659 Admin: H-FID Lysander Quota Purge
+35029728555 Lysander 3.0 Autonomous Push
+35029726636 Sovereign Model Baseline
+35029722778 Lysander Human-In-The-Loop Janus Draft
+35029713801 H-FID Verify | Lysander 3.1 Bot Purge
+35029712320 SecOps: H-FID LLM Ingestion Audit
+35029580023 Admin: H-FID Killswitch
