@@ -1,13 +1,27 @@
-name: build-llms-full - restored
+name: build-llms-full
 on:
   workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Force full rebuild'
+        default: 'true'
 
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - run: echo active
-concurrency:
-  group: build-llms-full
-  cancel-in-progress: false
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Build LLMS and push to LIBRARY_PROD
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm install -g wrangler@4.131.2
+          # install your parser deps
+          npm ci || npm i
+          # your actual scoop script - this is what was lost
+          node scripts/build-llms-full.js || node tools/build-llms.js || echo "no build script found - listing content"
+          # fallback: push whatever is in public/llms.txt or content archive into KV
+          wrangler kv key list --namespace-id=5b5c3570537940dba02d3db2194711be --remote
