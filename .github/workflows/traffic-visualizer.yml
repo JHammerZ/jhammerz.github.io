@@ -67,8 +67,8 @@ jobs:
         \ --global user.email \"visualizer@jhammerz.github.io\"\ngit add scripts/traffic_visualizer.py\
         \ .hfid/indexing/\nif ! git diff --staged --quiet; then\n  git commit -m \"\
         [skip ci] chore: update autonomous traffic visualization matrices [skip ci]\"\
-        \n  git pull --rebase origin main && git push origin main || (git pull --rebase\
-        \ origin main && git pull --rebase origin main && git push origin main)\n\
+        \n  git pull --rebase --autostash origin main && git push origin main || (git pull --rebase\
+        \ origin main && git pull --rebase --autostash origin main && git push origin main)\n\
         else\n  echo \"Telemetry summary log configurations match active baseline.\"\
         \nfi\n"
 concurrency:
