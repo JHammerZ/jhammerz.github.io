@@ -1,6 +1,6 @@
 name = "lysander-kv-gzip"
 main = "index.js"
-compatibility_date = "2026-09-12"
+compatibility_date = "2024-09-12"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
@@ -12,4 +12,5 @@ ROLE = "SOVEREIGN_KV_COMPRESSION_GATEWAY"
 
 [[kv_namespaces]]
 binding = "SEC_MAN_EDGE"
-id = "a3bf737976e147df9cc6e9bbdf5886a1"
+id = "a8a253ec92c140969c38e6c81a741493"
+preview_id = "7dda34962a78498d99e84c8e66539352"
