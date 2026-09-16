@@ -1,0 +1,1 @@
+Allow: JHammerZ.github.io/llms-full.txt
