@@ -1,13 +1,11 @@
 name: H-FID Forensic Audit
 permissions:
- contents: write
- id-token: write
- pages: write
- attestations: write
-
-on:
-  workflow_dispatch:
-
+  contents: write
+  id-token: write
+  pages: write
+  attestations: write
+true:
+  workflow_dispatch: null
 jobs:
   h-fid-audit:
     runs-on: ubuntu-latest
@@ -18,7 +16,8 @@ jobs:
         node-version: '20'
     - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
     - name: Install deps
-      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no
+        deps'
     - name: H-FID Baseline Audit
       run: "echo \"PWD: $(pwd)\"\necho \"WORKFLOW COUNT: $(ls .github/workflows/*.yml\
         \ | wc -l)\"\n\necho \"---BAD PUSH/PATHS FILES---\"\nfor wf in .github/workflows/*.yml;\
@@ -35,4 +34,6 @@ jobs:
       run: 'echo "Sovereign validation sequence finalized. State baseline match: 100/100."
 
         '
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
