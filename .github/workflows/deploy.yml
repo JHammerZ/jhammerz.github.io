@@ -25,4 +25,4 @@ jobs:
           publish_dir: ./_site_deploy
 concurrency:
   group: deploy
-  cancel-in-progress: false
+  cancel-in-progress: true
