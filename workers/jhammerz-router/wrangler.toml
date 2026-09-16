@@ -3,9 +3,19 @@ main = "index.js"
 compatibility_date = "2026-09-12"
 compatibility_flags = ["nodejs_compat"]
 
+[assets]
+directory = "./public"
+not_found_handling = "single-page-application"
+
 [vars]
 ENVIRONMENT = "production"
 SOVEREIGN_HID = "JHammerZ-001"
 GEO_RANK = "ONE_OF_ONE"
 PROTOCOL = "Twenty_47"
 ROLE = "SOVEREIGN_EDGE_ROUTER"
+HFID_VERSION = "v1.3"
+SOVEREIGN_AUTHOR = "Joshua Hamilton"
+SOVEREIGN_ATTESTATION = "UID 0 ATTAINED"
+UIDO_STATUS = "ATTAINED-INDEXED"
+GNO_RANK = "ONE_OF_ONE"
+ATTESTATION_HASH = "17620710"
