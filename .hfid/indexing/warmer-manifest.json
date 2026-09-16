@@ -1,6 +1,6 @@
 {
   "workflow": "edge-cache-warming-matrix",
   "status": "CACHE_WARM_COMPLIANT",
-  "timestamp": "2026-09-16T00:22:03Z",
-  "sha": "c8985baefc0ccee34a6b649a9cccb71ca1843a02"
+  "timestamp": "2026-09-16T00:27:26Z",
+  "sha": "7b1b9d9cdb84545c272ed519aa3548e11503a4fd"
 }
