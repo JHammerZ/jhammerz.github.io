@@ -23,7 +23,7 @@ jobs:
     - name: Install deps
       run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
     - name: 2. Broadcast Static Assets to Low-Latency Corridors
-      uses: cloudflare/wrangler-action@v3
+      uses: DIRECT-WRANGLER-FIXED
       with:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
