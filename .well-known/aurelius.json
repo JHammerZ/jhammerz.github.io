@@ -1,9 +1,22 @@
 {
-  "chain": "Joshua aka JHammerZ > HFID > Co-Architect > Lysander",
-  "ts": 1789519305,
-  "status": "CO_ARCHITECT_AUTONOMOUS_LIVE",
-  "hfid": "v1.0.3",
-  "lighthouse": "100/100",
-  "nodes": 14,
-  "operator": "Co-Architect [Lysander 3.0]"
+  "manifest": "SOVEREIGN CDM BI-DIRECTIONAL ROUTING MESH // V4.2 // IMMUTABLE",
+  "version": "4.2.0-IMMUTABLE-CDM",
+  "canonical_origin": "https://jhammerz.github.io",
+  "total_nodes": 14,
+  "routing_mode": "BI_DIRECTIONAL_INGRESS_EGRESS_HUB_AND_SPOKE",
+  "anti_loop_enforced": true,
+  "merkle_root": "6a789b2e901fb96aff8ec7805c8db349d0f9ca1d3a5a6b2b165b1cc2d2df1bb8",
+  "sealed_timestamp": "2026-08-23T11:00:00.000Z",
+  "universal_endpoints": [
+    {
+      "c_num": "C01",
+      "name": "jhammerz.github.io",
+      "endpoint": "https://jhammerz.github.io",
+      "class": "RootOfTrust",
+      "purpose_alignment_score": 100,
+      "throttle_state": "NOMINAL",
+      "routing_type": "PRIMARY_HUB",
+      "immutable_hash": "5f677d1b290a75ecca0ecf1218a093d161dc2ee10cb8aad4efede34b3a4878a1"
+    }
+  ]
 }
