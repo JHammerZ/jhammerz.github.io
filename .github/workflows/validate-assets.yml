@@ -43,5 +43,5 @@ jobs:
         \ map non-standard routing options.\"\nfi\n"
 concurrency:
   group: validate_assets
-  cancel-in-progress: true
+  cancel-in-progress: false
 

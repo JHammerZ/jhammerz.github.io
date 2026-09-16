@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored ci-structural-alignment - trap cleared'
 concurrency:
   group: ci-structural-alignment
-  cancel-in-progress: true
+  cancel-in-progress: false
 

@@ -15,5 +15,5 @@ jobs:
     - run: echo active
 concurrency:
   group: sovereign-agent
-  cancel-in-progress: true
+  cancel-in-progress: false
 

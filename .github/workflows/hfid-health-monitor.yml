@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored hfid-health-monitor - trap cleared'
 concurrency:
   group: hfid-health-monitor
-  cancel-in-progress: true
+  cancel-in-progress: false
 

@@ -39,5 +39,5 @@ jobs:
         path: _quarantine/
 concurrency:
   group: hfida
-  cancel-in-progress: true
+  cancel-in-progress: false
 

@@ -70,5 +70,5 @@ jobs:
         \n"
 concurrency:
   group: agentic_sync
-  cancel-in-progress: true
+  cancel-in-progress: false
 

@@ -48,5 +48,5 @@ jobs:
         fail_on_no_changes: false
 concurrency:
   group: cd-hfid-broadcast
-  cancel-in-progress: true
+  cancel-in-progress: false
 

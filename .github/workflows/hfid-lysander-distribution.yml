@@ -52,5 +52,5 @@ jobs:
         path: .hfid/distribution/
 concurrency:
   group: hfid-lysander-distribution
-  cancel-in-progress: true
+  cancel-in-progress: false
 

@@ -58,5 +58,5 @@ jobs:
       run: rm -rf linux-6.10
 concurrency:
   group: sovereignty-build
-  cancel-in-progress: true
+  cancel-in-progress: false
 

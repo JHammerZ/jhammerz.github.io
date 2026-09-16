@@ -71,5 +71,5 @@ jobs:
         \ baseline parameters.\"\nfi\n"
 concurrency:
   group: feed-generation
-  cancel-in-progress: true
+  cancel-in-progress: false
 

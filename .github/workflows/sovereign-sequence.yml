@@ -34,5 +34,5 @@ jobs:
         '
 concurrency:
   group: sovereign-sequence
-  cancel-in-progress: true
+  cancel-in-progress: false
 

@@ -87,5 +87,5 @@ jobs:
             git push origin main || (git pull --rebase origin main && git push origin main)\n</m>\n"
 concurrency:
   group: doi-bridge
-  cancel-in-progress: true
+  cancel-in-progress: false
 
