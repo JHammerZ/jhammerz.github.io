@@ -1,26 +1,28 @@
 name: deploy-scooper-cache
 permissions:
-  contents: write
-  pages: write
+  contents: read
   id-token: write
 on:
   push:
     paths:
-      - scooper-cache.js
-      - wrangler.scooper-cache.toml
-      - .github/workflows/deploy-scooper-cache.yml
+      - "scooper-cache.js"
+      - "wrangler/scooper-cache.toml"
+      - ".github/workflows/deploy-scooper-cache.yml"
   workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy scooper-cache CDM
+
+      - name: Deploy scooper-cache CDN
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --no-bundle -c wrangler.scooper-cache.toml
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+          command: deploy -c wrangler/scooper-cache.toml
+          wranglerVersion: "3"
