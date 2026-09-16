@@ -1,10 +1,4 @@
-User-agent: GPTBot
-Allow: /ARG/caught/
-User-agent: ClaudeBot
-Allow: /ARG/caught/
-User-agent: CCBot
-Allow: /ARG/caught/
-User-agent: Bytespider
-Allow: /ARG/caught/
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://jhammerz.github.io/sitemap.xml
