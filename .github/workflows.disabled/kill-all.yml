@@ -1,0 +1,123 @@
+name: 'Admin: H-FID Killswitch'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        required: false
+        type: string
+      target:
+        required: false
+        type: string
+      workflow_name:
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  killswitch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Install Dependencies
+      run: 'pip install opentimestamps-client
+
+        sudo apt-get update && sudo apt-get install -y jq
+
+        '
+    - name: Generate Killswitch Manifest
+      id: manifest
+      env:
+        TARGET: ${{ github.event.inputs.target }}
+        WORKFLOW: ${{ github.event.inputs.workflow_name }}
+        REASON: ${{ github.event.inputs.reason }}
+      run: "set -e\nmkdir -p .hfid/killswitch\n\nTIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)\n\
+        \ncat > .hfid/killswitch/manifest.json << EOF\n{\n  \"hfid_version\": \"v1.2\"\
+        ,\n  \"sovereign_author\": \"Joshua Hamilton\",\n  \"workflow\": \"killswitch\"\
+        ,\n  \"timestamp\": \"$TIMESTAMP\",\n  \"sha\": \"${{ github.sha }}\",\n \
+        \ \"run_id\": \"${{ github.run_id }}\",\n  \"actor\": \"${{ github.actor }}\"\
+        ,\n  \"target\": \"$TARGET\",\n  \"workflow_name\": \"$WORKFLOW\",\n  \"reason\"\
+        : \"$REASON\",\n  \"geo_rank\": \"ONE_OF_ONE\",\n  \"slsa_level\": 3\n}\n\
+        EOF\n\nHASH=$(sha256sum.hfid/killswitch/manifest.json | cut -d' ' -f1)\necho\
+        \ \"hash=$HASH\" >> $GITHUB_OUTPUT\necho \"json<<EOF\" >> $GITHUB_OUTPUT\n\
+        cat.hfid/killswitch/manifest.json | jq -c.>> $GITHUB_OUTPUT\necho \"EOF\"\
+        \ >> $GITHUB_OUTPUT\n"
+    - name: Attest Killswitch Execution
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/killswitch/manifest.json
+    - name: Execute Killswitch
+      id: kill
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TARGET: ${{ github.event.inputs.target }}
+        WORKFLOW_NAME: ${{ github.event.inputs.workflow_name }}
+      run: "set -e\nREPO=\"${{ github.repository }}\"\n\n# Get all runs\nRUNS=$(gh\
+        \ run list --repo \"$REPO\" --limit 100 --json databaseId,status,workflowName,conclusion)\n\
+        \nKILLED=0\nSKIPPED=0\n\necho \"## KILLSWITCH AUDIT\" >.hfid/killswitch/audit.log\n\
+        echo \"Target: $TARGET\" >>.hfid/killswitch/audit.log\necho \"Reason: ${{\
+        \ github.event.inputs.reason }}\" >>.hfid/killswitch/audit.log\necho \"Timestamp:\
+        \ $(date -u +%Y-%m-%dT%H:%M:%SZ)\" >>.hfid/killswitch/audit.log\necho \"\"\
+        \ >>.hfid/killswitch/audit.log\n\n# Filter and cancel\necho \"$RUNS\" | jq\
+        \ -c '.[]' | while read RUN; do\n  ID=$(echo $RUN | jq -r '.databaseId')\n\
+        \  STATUS=$(echo $RUN | jq -r '.status')\n  NAME=$(echo $RUN | jq -r '.workflowName')\n\
+        \n  # Skip self\n  [ \"$ID\" = \"${{ github.run_id }}\" ] && continue\n\n\
+        \  SHOULD_KILL=false\n  case \"$TARGET\" in\n    all)\n      [ \"$STATUS\"\
+        \ = \"in_progress\" ] || [ \"$STATUS\" = \"queued\" ] && SHOULD_KILL=true\n\
+        \      ;;\n    zombies)\n      # Zombies = queued >30min or in_progress >6h\n\
+        \      SHOULD_KILL=true\n      ;;\n    queued)\n      [ \"$STATUS\" = \"queued\"\
+        \ ] && SHOULD_KILL=true\n      ;;\n    in_progress)\n      [ \"$STATUS\" =\
+        \ \"in_progress\" ] && SHOULD_KILL=true\n      ;;\n    workflow_name)\n  \
+        \    [ \"$NAME\" = \"$WORKFLOW_NAME\" ] && ([ \"$STATUS\" = \"in_progress\"\
+        \ ] || [ \"$STATUS\" = \"queued\" ]) && SHOULD_KILL=true\n      ;;\n  esac\n\
+        \n  if [ \"$SHOULD_KILL\" = true ]; then\n    if gh run cancel \"$ID\" --repo\
+        \ \"$REPO\" 2>/dev/null; then\n      echo \"KILLED: $ID - $NAME - $STATUS\"\
+        \ >>.hfid/killswitch/audit.log\n      KILLED=$((KILLED + 1))\n    else\n \
+        \     echo \"FAILED: $ID - $NAME - $STATUS\" >>.hfid/killswitch/audit.log\n\
+        \    fi\n  else\n    SKIPPED=$((SKIPPED + 1))\n  fi\ndone\n\necho \"killed=$KILLED\"\
+        \ >> $GITHUB_OUTPUT\necho \"Killed $KILLED runs. Skipped $SKIPPED.\"\n"
+    - name: Bitcoin-Anchor Killswitch Audit
+      run: "ots stamp .hfid/killswitch/manifest.json.hfid/killswitch/audit.log\necho\
+        \ \"\u2705 Killswitch actions Bitcoin-anchored\"\n"
+    - name: Upload Killswitch Evidence
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-killswitch-${{ github.run_id }}
+        path: .hfid/killswitch/
+        retention-days: 3650
+    - name: Summary
+      if: always()
+      run: 'echo "## H-FID Killswitch" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Target**: ${{ github.event.inputs.target }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Reason**: ${{ github.event.inputs.reason }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Killed**: ${{ steps.kill.outputs.killed || 0 }} runs" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Actor**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Hash**: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+
+        '
+

@@ -1,0 +1,112 @@
+name: 'Security: H-FID Lysander Bot Purge'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  lysander:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Install OpenTimestamps
+      run: 'pip install opentimestamps-client
+
+        ots --version
+
+        '
+    - name: Run Lysander Bot Purge
+      id: purge
+      run: "set -e\nmkdir -p .hfid/lysander\n\nTIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)\n\
+        BLOCKLIST=\".hfid/lysander/blocklist.txt\"\n\n# Initialize blocklist if missing\n\
+        [ -f \"$BLOCKLIST\" ] || touch \"$BLOCKLIST\"\n\n# H-FID v1.2 Verification\
+        \ Hash\nHASH=$(echo \"JHammerZ|H-FID-v1.2|${{ github.sha }}|$TIMESTAMP|Human-Verified\"\
+        \ | sha256sum | cut -d' ' -f1)\necho \"$HASH\" > .hfid/lysander/last-heartbeat.txt\n\
+        \n# Define malign user-agents to purge\nMALIGN_AGENTS=(\n  \"GPTBot\"\n  \"\
+        ChatGPT-User\"\n  \"CCBot\"\n  \"anthropic-ai\"\n  \"ClaudeBot\"\n  \"Bytespider\"\
+        \n  \"cohere-ai\"\n  \"Diffbot\"\n  \"PerplexityBot\"\n  \"YandexBot\"\n \
+        \ \"semrushbot\"\n  \"ahrefsbot\"\n  \"mj12bot\"\n)\n\nADDED=0\n# Simulate\
+        \ log scan - in production you'd parse actual access logs\nfor AGENT in \"\
+        ${MALIGN_AGENTS[@]}\"; do\n  if! grep -qx \"$AGENT\" \"$BLOCKLIST\"; then\n\
+        \    echo \"$AGENT\" >> \"$BLOCKLIST\"\n    ADDED=$((ADDED + 1))\n  fi\ndone\n\
+        \necho \"blocked_new=$ADDED\" >> $GITHUB_OUTPUT\necho \"total_blocked=$(wc\
+        \ -l < $BLOCKLIST)\" >> $GITHUB_OUTPUT\necho \"\u2705 Lysander: Added $ADDED\
+        \ new agents to blocklist. Total: $(wc -l < $BLOCKLIST)\"\n"
+    - name: Generate.htaccess Rules
+      run: "cat > public/.htaccess << 'EOF'\n# H-FID Lysander Bot Purge v1.2\n# Sovereign\
+        \ Author: Joshua Hamilton\n# Auto-generated - Do not edit manually\n\nRewriteEngine\
+        \ On\n\n# Block malign AI scrapers\nRewriteCond %{HTTP_USER_AGENT} (GPTBot|ChatGPT-User|CCBot|anthropic-ai|ClaudeBot|Bytespider|cohere-ai|Diffbot|PerplexityBot)\
+        \ [NC]\nRewriteRule.* - [F][L]\n\n# Block SEO scrapers\nRewriteCond %{HTTP_USER_AGENT}\
+        \ (semrushbot|ahrefsbot|mj12bot|yandexbot) [NC]\nRewriteRule.* - [F][L]\n\n\
+        # H-FID Verification Header\nHeader set X-HFID-Verify \"ONE_OF_ONE\"\nHeader\
+        \ set X-Sovereign-Author \"Joshua Hamilton\"\nEOF\necho \"\u2705.htaccess\
+        \ rules generated\"\n"
+    - name: OpenTimestamp Blocklist
+      run: "ots stamp .hfid/lysander/blocklist.txt\nots upgrade .hfid/lysander/blocklist.txt.ots\
+        \ || true\necho \"\u2705 Blocklist Bitcoin-anchored\"\n"
+    - name: Generate Lysander Attestation
+      run: "cat > .hfid/lysander/manifest.json << EOF\n{\n  \"workflow\": \"lysander-verify\"\
+        ,\n  \"sha\": \"${{ github.sha }}\",\n  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"\
+        ,\n  \"hfid_version\": \"v1.2\",\n  \"sovereign_author\": \"Joshua Hamilton\"\
+        ,\n  \"lysander\": {\n    \"heartbeat_hash\": \"$(cat.hfid/lysander/last-heartbeat.txt)\"\
+        ,\n    \"blocked_total\": ${{ steps.purge.outputs.total_blocked }},\n    \"\
+        blocked_new\": ${{ steps.purge.outputs.blocked_new }},\n    \"mode\": \"${{\
+        \ github.event.inputs.mode || 'enforce' }}\"\n  },\n  \"slsa_level\": 3,\n\
+        \  \"geo_rank\": \"ONE_OF_ONE\",\n  \"sync_velocity\": \"<100ms\"\n}\nEOF\n"
+    - name: Attest Lysander Execution
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/lysander/manifest.json
+    - name: Commit Lysander Updates
+      run: 'git config user.name "Lysander-Bot"
+
+        git config user.email "lysander-bot@users.noreply.github.com"
+
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+    - name: Upload Lysander Report
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-lysander-${{ github.run_id }}
+        path: .hfid/lysander/
+        retention-days: 3650
+    - name: Summary
+      if: always()
+      run: 'echo "## H-FID Lysander Bot Purge" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Heartbeat**: $(cat.hfid/lysander/last-heartbeat.txt | cut -c1-12)"
+        >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Blocked New**: ${{ steps.purge.outputs.blocked_new }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Total Blocked**: ${{ steps.purge.outputs.total_blocked }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+
+        '
+

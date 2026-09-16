@@ -1,0 +1,53 @@
+name: generate-sitemap
+permissions:
+  contents: write
+
+concurrency:
+  group: main-push-lock
+  cancel-in-progress: false
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'astro.config.*'
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate sitemap
+        run: |
+          set -eu pipefail
+          mkdir -p public
+          if [ -f public/sitemap.xml ]; then
+            echo "sitemap exists, regenerating"
+          fi
+          echo "Generating sitemap..."
+          # your astro build or custom script here
+          npm run build || echo "build step skipped"
+
+      - name: Commit sitemap
+        run: |
+          set -eu pipefail
+          if [ -n "$(git status --porcelain public/sitemap.xml .hfid/indexing/urls.txt 2>/dev/null)" ]; then
+            git config user.name "JHammerZ Bot"
+            git config user.email "bot@jhammerz.github.io"
+            git add public/sitemap.xml .hfid/indexing/urls.txt || true
+            git commit -m "[skip ci] chore: autonomous sitemap alignment and tracking [skip ci]"
+            git pull --rebase origin main
+            git push origin main
+          else
+            echo "No changes staged for sitemap infrastructure."
+          fi

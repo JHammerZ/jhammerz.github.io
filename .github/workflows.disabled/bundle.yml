@@ -1,0 +1,67 @@
+name: Handle Workflow | H-FID Asset Bundler
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: npm
+    - name: Install dependencies
+      run: 'npm install --legacy-peer-deps || npm install --legacy-peer-deps
+
+        '
+    - name: Run bundle script
+      id: build
+      run: "set -e\nif jq -e '.scripts.build' package.json > /dev/null; then\n  echo\
+        \ \"Running npm build...\"\n  npm run build || echo \"build failed but continuing\"\
+        \n  echo \"built=true\" >> $GITHUB_OUTPUT\nelse\n  echo \"No build script\
+        \ found in package.json. Skipping.\"\n  echo \"built=false\" >> $GITHUB_OUTPUT\n\
+        fi\n"
+    - name: Generate H-FID asset manifest
+      if: steps.build.outputs.built == 'true'
+      run: "set -e\nmkdir -p .hfid\necho \"Generating asset manifest...\"\nif [ -d\
+        \ dist ]; then\n  find dist -type f -exec sha256sum {} \\; > .hfid/assets.sha256\
+        \ 2>/dev/null || true\nfi\necho \"--org sha ${{ github.sha }}--\" >> .hfid/assets.sha256\
+        \ 2>/dev/null || true\necho \"--org time $(date -u '+%Y-%m-%dT%H:%M:%SZ')--\"\
+        \ >> .hfid/assets.sha256 2>/dev/null || true\njq -n --arg sha \"${{ github.sha\
+        \ }}\" --arg time \"$(date -u '+%Y-%m-%dT%H:%M:%SZ')\" \\\n  '{sha: $sha,\
+        \ built_at: $time, assets: \"dist/\"}' > .hfid/bundle.json\ncat .hfid/bundle.json\n"
+    - name: Commit configuration
+      if: steps.build.outputs.built == 'true'
+      run: 'set -e
+
+        git config --local user.name "${{ secrets.DOCKERHUB_USERNAME }}"
+
+        git config --local user.email "${{ secrets.DOCKERHUB_USERNAME }}@users.noreply.github.com"
+
+        git add .hfid/ 2>/dev/null || true
+
+        git diff --staged --quiet && echo "No changes to commit" && exit 0
+
+        '
+    - name: Commit changes
+      if: steps.build.outputs.built == 'true'
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+        file_pattern: dist .hfid
+

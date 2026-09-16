@@ -1,0 +1,141 @@
+name: 'Decentralized: H-FID IPFS Sync'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      pin_service:
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Setup IPFS Kubo
+      run: 'wget -q https://dist.ipfs.tech/kubo/v0.30.0/kubo_v0.30.0_linux-amd64.tar.gz
+
+        tar -xzf kubo_v0.30.0_linux-amd64.tar.gz
+
+        cd kubo
+
+        sudo bash install.sh
+
+        ipfs init --profile=server
+
+        ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin ''["*"]''
+
+        ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods ''["PUT",
+        "POST", "GET"]''
+
+        nohup ipfs daemon --enable-pubsub-experiment >/dev/null 2>&1 &
+
+        sleep 5
+
+        ipfs id
+
+        '
+    - name: Install Dependencies
+      run: 'python -m pip install --upgrade pip
+
+        pip install opentimestamps-client
+
+        '
+    - name: Generate IPFS Manifest
+      id: manifest
+      env:
+        PIN_SVC: ${{ github.event.inputs.pin_service || 'web3storage' }}
+      run: "set -e\nmkdir -p .hfid/ipfs\n\nTIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)\n\
+        \ncat > .hfid/ipfs/manifest.json << EOF\n{\n  \"hfid_version\": \"v1.3\",\n\
+        \  \"sovereign_author\": \"Joshua Hamilton\",\n  \"workflow\": \"ipfs-sync\"\
+        ,\n  \"timestamp\": \"$TIMESTAMP\",\n  \"sha\": \"${{ github.sha }}\",\n \
+        \ \"run_id\": \"${{ github.run_id }}\",\n  \"pin_service\": \"$PIN_SVC\",\n\
+        \  \"repo\": \"jhammerz.github.io\",\n  \"slsa_level\": 3\n}\nEOF\n\nHASH=$(sha256sum\
+        \ .hfid/ipfs/manifest.json | cut -d ' ' -f1)\necho \"hash=${HASH}\" >> $GITHUB_OUTPUT\n\
+        cat .hfid/ipfs/manifest.json\n"
+    - name: Attest IPFS Sync Execution
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/ipfs/manifest.json
+    - name: Add to IPFS
+      id: ipfs
+      run: "set -e\necho \"node_modules\" > ipfs-exclude.txt\necho \".git\" >> ipfs-exclude.txt\n\
+        echo \".github\" >> ipfs-exclude.txt\necho \".hfid\" >> ipfs-exclude.txt\n\
+        \n# Safe directory check fallback path assignment loop\nif [ -d \"public\"\
+        \ ]; then\n  RAW_CID=$(ipfs add -r --exclude-file=ipfs-exclude.txt public/\
+        \ | tail -n 1 | awk '{print $2}')\nelse\n  RAW_CID=$(ipfs add -r -q . | tail\
+        \ -n 1)\nfi\n\nmkdir -p .hfid/ipfs\necho \"$RAW_CID\" > .hfid/ipfs/CID.txt\n\
+        \n# Match case lower-case to satisfy downstream assignments cleanly\necho\
+        \ \"cid=${RAW_CID}\" >> $GITHUB_OUTPUT\necho \"IPFS CID: ${RAW_CID}\"\n"
+    - name: Pin to Web3.Storage
+      if: github.event.inputs.pin_service == 'web3storage' || github.event.inputs.pin_service
+        == ''
+      env:
+        WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
+      run: "set -e\nif [ -z \"$WEB3_STORAGE_TOKEN\" ]; then\n  echo \"SKIP: Web3.Storage\
+        \ token not set\"\n  exit 0\nfi\nnpm install --legacy-peer-deps -g @web3-storage/w3 || true\n\
+        if command -v w3 > /dev/null; then\n  w3 put .hfid/ipfs/manifest.json .hfid/ipfs/CID.txt\
+        \ --name \"H-FID-${{ github.sha }}\" --no-wrap || true\nelse\n  npx @web3-storage/w3\
+        \ put .hfid/ipfs/manifest.json .hfid/ipfs/CID.txt --name \"H-FID-${{ github.sha\
+        \ }}\" --no-wrap || true\nfi\necho \"Pinned to Web3.Storage: ${{ steps.ipfs.outputs.cid\
+        \ }}\"\n"
+    - name: Pin to Pinata
+      if: github.event.inputs.pin_service == 'pinata'
+      env:
+        PINATA_JWT: ${{ secrets.PINATA_JWT }}
+        CID: ${{ steps.ipfs.outputs.cid }}
+      run: "if [ -z \"$PINATA_JWT\" ]; then\n  echo \"SKIP: Pinata JWT not set\"\n\
+        \  exit 0\nfi\ncurl -X POST \"https://api.pinata.cloud/pinning/pinByHash\"\
+        \ \\\n  -H \"Authorization: Bearer $PINATA_JWT\" \\\n  -H \"Content-Type:\
+        \ application/json\" \\\n  -d \"{\\\"hashToPin\\\": \\\"$CID\\\", \\\"pinataMetadata\\\
+        \": {\\\"name\\\": \\\"H-FID-${{ github.sha }}\\\"}}\"\necho \"Pinned to Pinata:\
+        \ $CID\"\n"
+    - name: Bitcoin-Anchor IPFS CID
+      run: "if command -v ots > /dev/null; then\n  [ -f .hfid/ipfs/manifest.json ]\
+        \ && ots stamp .hfid/ipfs/manifest.json || true\n  [ -f .hfid/ipfs/CID.txt\
+        \ ] && ots stamp .hfid/ipfs/CID.txt || true\n  echo \"IPFS CID Bitcoin-anchored\"\
+        \nfi\n"
+    - name: Upload IPFS Evidence
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-ipfs-manifest
+        path: .hfid/ipfs/
+        retention-days: 30
+    - name: Summary
+      if: always()
+      run: 'set -e
+
+        echo "## H-FID IPFS Sync" >> $GITHUB_STEP_SUMMARY
+
+        echo "- CID: ${{ steps.ipfs.outputs.cid }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- Hash: ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- Pin Service: ${{ github.event.inputs.pin_service || ''web3storage''
+        }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- Gateway: https://ipfs.io/ipfs/${{ steps.ipfs.outputs.cid }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- SLSA: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+
+        echo "- GNO_RANK: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+
+        '
+

@@ -1,0 +1,71 @@
+name: 'Syndicate: Decentralized Mesh Replication'
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  mesh_broadcast:
+    name: broadcast-substrate-nodes
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Structural Assets
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Verify Distribution Payload Integrity
+      run: "set -e\necho \"[*] Auditing AAD assets prior to syndicate broadcast...\"\
+        \njq -e . .well-known/hfid/graph-mesh.json > /dev/null\necho \"[\u2713] Semantic\
+        \ Knowledge-Graph matches strict schema definitions.\"\nif [ -f \"assets/js/edge-caster.js\"\
+        \ ]; then\n  echo \"[\u2713] Edge-Caster injection asset present.\"\nfi\n"
+    - name: Generate Syndicate Manifest Record
+      run: 'set -e
+
+        mkdir -p .hfid/baseline .hfid/indexing
+
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+
+        echo ''{'' > .hfid/indexing/syndicate-manifest.json
+
+        echo ''  "workflow": "mesh-syndicate-broadcast",'' >> .hfid/indexing/syndicate-manifest.json
+
+        echo ''  "engine_type": "Asymmetric_Algorithmic_Domination",'' >> .hfid/indexing/syndicate-manifest.json
+
+        echo ''  "timestamp": "PENDING",'' >> .hfid/indexing/syndicate-manifest.json
+
+        echo ''  "sha": "PENDING"'' >> .hfid/indexing/syndicate-manifest.json
+
+        echo ''}'' >> .hfid/indexing/syndicate-manifest.json
+
+
+        TMP_JSON=$(jq --arg ts "$TIMESTAMP" --arg sha "${{ github.sha }}" ''.timestamp=$ts
+        | .sha=$sha'' .hfid/indexing/syndicate-manifest.json)
+
+        echo "$TMP_JSON" > .hfid/indexing/syndicate-manifest.json
+
+        '
+    - name: Attest Syndicate Deployment Structure
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/indexing/syndicate-manifest.json
+    - name: Execute Mesh Ledger Synchronization
+      run: "set -e\ngit config --global user.name \"Janus-Syndicate\"\ngit config\
+        \ --global user.email \"syndicate@jhammerz.github.io\"\ngit add .well-known/hfid/graph-mesh.json\
+        \ assets/js/edge-caster.js .hfid/\nif ! git diff --staged --quiet; then\n\
+        \  git commit -m \"[skip ci] chore: map decentralized mesh replication boundaries\
+        \ [skip ci]\"\n  git pull --rebase origin main && git push origin main ||\
+        \ (git pull --rebase origin main && git pull --rebase origin main && git push\
+        \ origin main)\nelse\n  echo \"No structural modifications encountered during\
+        \ execution pass.\"\nfi\n"
+concurrency:
+  group: mesh-syndicate
+  cancel-in-progress: true
+

@@ -1,0 +1,72 @@
+name: 'S0: Automated Hub Indexation Deployment'
+
+concurrency:
+  group: "publish-pages"
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    name: Build & Sovereign Index
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact_id }}
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Generate H-FID Site Attestation
+        run: |
+          mkdir -p .hfid
+          echo "{\"site\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"timestamp\":\"$(date -u +%FT%TZ)\",\"sovereign_author\":\"Joshua Hamilton\",\"forensic_audit\":\"H-FID-FOR-000001-AUDIT 100/100\",\"geo_rank\":\"ONE_OF_ONE\"}" > .hfid/site.json
+
+      - name: Stage Production Static Artifacts
+        run: |
+          mkdir -p _site/.hfid
+          cp -r .hfid/site.json _site/.hfid/ 2>/dev/null || true
+          cp -r *.html _site/ 2>/dev/null || true
+          cp -r assets _site/ 2>/dev/null || true
+          cp -r .well-known _site/ 2>/dev/null || true
+          cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
+          touch _site/.nojekyll
+
+      - name: Configure Static Site Ingestion Artifacts
+        id: upload
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to Live Infrastructure
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Atomic Deploy to Live Github Infrastructure
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,56 @@
+name: 'CD: H-FID LYSANDER Distribution'
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Install Dependencies
+      run: 'sudo apt-get update && sudo apt-get install -y jq
+
+        echo "Deps OK - w3cli removed, it 404s"
+
+        '
+    - name: Extract H-FID Data
+      id: hfid
+      run: "set -e\nFILE=\".well-known/hfid/chain.json\"\necho \"File exists?\"\n\
+        ls -l $FILE\nTYPE=$(jq -r 'type' $FILE)\necho \"chain.json type = $TYPE\"\n\
+        if [ \"$TYPE\" = \"array\" ]; then\n  LEN=$(jq 'length' $FILE)\n  ID=$(jq\
+        \ -r '..hash // \"GENESIS\"' $FILE | cut -c1-12)\nelse\n  LEN=$(jq '.chain\
+        \ // .blocks // [.] | length' $FILE)\n  ID=$(jq -r '.hash // .hfid_id // .chain[0].hash\
+        \ // \"GENESIS\"' $FILE | cut -c1-12)\nfi\necho \"hfid_id=$ID\" >> $GITHUB_OUTPUT\n\
+        echo \"chain_length=$LEN\" >> $GITHUB_OUTPUT\necho \"OK: H-FID=$ID Blocks=$LEN\"\
+        \n"
+    - name: Generate Distribution Attestation
+      run: 'mkdir -p .hfid/distribution
+
+        echo "{\"sha\":\"${{ github.sha }}\",\"hfid\":\"${{ steps.hfid.outputs.hfid_id
+        }}\"}" > .hfid/distribution/lysander.json
+
+        cat .hfid/distribution/lysander.json
+
+        '
+    - uses: actions/attest-build-provenance@v1
+      with:
+        subject-path: .hfid/distribution/lysander.json
+    - uses: actions/upload-artifact@v5
+      with:
+        name: hfid-lysander-${{ steps.hfid.outputs.hfid_id }}
+        path: .hfid/distribution/
+concurrency:
+  group: hfid-lysander-distribution
+  cancel-in-progress: true
+

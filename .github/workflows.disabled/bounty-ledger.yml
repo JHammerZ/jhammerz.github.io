@@ -1,0 +1,137 @@
+name: 'SecOps: H-FID Bounty Ledger'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      cvss:
+        required: false
+        type: string
+      cwe:
+        required: false
+        type: string
+      description:
+        required: false
+        type: string
+      severity:
+        required: false
+        type: string
+      target:
+        required: false
+        type: string
+      title:
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  log-bounty:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Setup Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - name: Install Dependencies
+      run: 'pip install opentimestamps-client
+
+        sudo apt-get update && sudo apt-get install -y jq uuid-runtime
+
+        '
+    - name: Generate Bounty Entry
+      id: entry
+      env:
+        TARGET: ${{ github.event.inputs.target }}
+        SEVERITY: ${{ github.event.inputs.severity }}
+        TITLE: ${{ github.event.inputs.title }}
+        DESCRIPTION: ${{ github.event.inputs.description }}
+        CWE: ${{ github.event.inputs.cwe }}
+        CVSS: ${{ github.event.inputs.cvss }}
+      run: "set -e\nmkdir -p .hfid/bounty\n\nTIMESTAMP=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\"\
+        )\nUUID=$(uuidgen)\nFILENAME=\"${TIMESTAMP}_${UUID}.json\"\necho \"filename=${FILENAME}\"\
+        \ >> $GITHUB_OUTPUT\necho \"uuid=${UUID}\" >> $GITHUB_OUTPUT\n\n# Validate\
+        \ inputs\nif [ -z \"$TARGET\" ] || [ -z \"$TITLE\" ] || [ -z \"$DESCRIPTION\"\
+        \ ]; then\n  echo \"ERROR: target, title, and description required\" >> .hfid/bounty/audit.log\n\
+        \  exit 1\nfi\n\n# Validate CVSS range\nif ! awk \"BEGIN {exit !($CVSS >=\
+        \ 0 && $CVSS <= 10)}\"; then\n  echo \"ERROR: CVSS must be 0.0-10.0\" >> .hfid/bounty/audit.log\n\
+        \  exit 1\nfi\n\ncat > .hfid/bounty/${FILENAME} << EOF\n{\n  \"hfid_version\"\
+        : \"v1.2\",\n  \"sovereign_author\": \"Joshua Hamilton\",\n  \"workflow\"\
+        : \"bounty-ledger\",\n  \"id\": \"$UUID\",\n  \"timestamp\": \"$TIMESTAMP\"\
+        ,\n  \"sha\": \"${{ github.sha }}\",\n  \"run_id\": \"${{ github.run_id }}\"\
+        ,\n  \"target\": \"$TARGET\",\n  \"severity\": \"$SEVERITY\",\n  \"title\"\
+        : \"$TITLE\",\n  \"description\": \"$DESCRIPTION\",\n  \"cwe\": \"$CWE\",\n\
+        \  \"cvss\": $CVSS,\n  \"geo_rank\": \"ONE_OF_ONE\",\n  \"slsa_level\": 3\n\
+        }\nEOF\n\nHASH=$(sha256sum .hfid/bounty/${FILENAME} | cut -d ' ' -f1)\necho\
+        \ \"hash=${HASH}\" >> $GITHUB_OUTPUT\necho \"filename=${FILENAME}\" >> $GITHUB_OUTPUT\n\
+        echo \"uuid=${UUID}\" >> $GITHUB_OUTPUT\n\n# Human readable log\ncat >> .hfid/bounty/ledger.md\
+        \ << EOF\n---\n## H-FID BOUNTY: $TITLE\n**ID**: $UUID\n**Timestamp**: $TIMESTAMP\n\
+        **Target**: $TARGET\n**Severity**: $SEVERITY\n**CVSS**: $CVSS\n**CWE**: $CWE\n\
+        **SHA**: ${{ github.sha }}\n**SLSA**: Level 3\n\n**Description**:\n$DESCRIPTION\n\
+        \n**Hash**: $HASH\n**GEO_RANK**: ONE_OF_ONE\n---\nEOF\n"
+    - name: Attest Bounty Entry
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/bounty/${{ steps.entry.outputs.filename }}
+    - name: Bitcoin-Anchor Bounty Finding
+      run: 'ots stamp .hfid/bounty/${{ steps.entry.outputs.filename }} .hfid/bounty/ledger.md
+
+        echo "Bounty ${{ steps.entry.outputs.uuid }} Bitcoin-anchored" >> .hfid/bounty/audit.log
+
+        '
+    - name: Commit Sovereign Bounty Entry
+      run: 'set -e
+
+        # FIND: Commit as sovereign author, not bot
+
+        git config --local user.email "jhammerz@users.noreply.github.com"
+
+        git config --local user.name "Joshua Hamilton [J-HammerZ]"
+
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+        file_pattern: .hfid/bounty/*
+    - name: Upload Bounty Evidence
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-bounty-${{ steps.entry.outputs.uuid }}
+        path: .hfid/bounty/
+        retention-days: 3000
+    - name: Summary
+      if: always()
+      run: 'echo "## H-FID Bounty Ledger" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **ID**: ${{ steps.entry.outputs.uuid }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Target**: ${{ github.event.inputs.target }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Severity**: ${{ github.event.inputs.severity }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **CVSS**: ${{ github.event.inputs.cvss }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **CWE**: ${{ github.event.inputs.cwe }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **SLSA**: Level 3 Attested" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **GEO_RANK**: ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+
+        '
+

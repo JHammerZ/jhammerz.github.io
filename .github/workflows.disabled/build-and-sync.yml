@@ -1,0 +1,91 @@
+name: H-FID - Compile Core Data Repository
+permissions:
+  contents: write
+  id-token: write
+  pages: write
+  attestations: write
+
+concurrency:
+  group: main-push-lock
+  cancel-in-progress: false
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install node deps
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install deps
+        run: |
+          set -eu pipefail
+          sudo apt-get update
+          sudo apt-get install -y jq openssl
+          python -m pip install --upgrade pip
+          pip install opentimestamps-client google-auth google-api-python-client requests
+
+      - name: Sovereign Manifest
+        run: |
+          set -eu pipefail
+          mkdir -p .hfid/baseline .hfid/indexing
+          echo "{\"Name\": \"J-HammerZ\", \"Sovereign\": \"Joshua Hamilton\", \"H-Law Language\": \"REC v2.3\"}" > .hfid/baseline/manifest.json
+
+      - name: Build URL index
+        run: |
+          set -eu pipefail
+          mkdir -p .hfid/indexing
+          if [ -f .hfid/indexing/urls.txt ]; then
+            echo "urls.txt exists"
+          else
+            echo "https://jhammerz.github.io/" > .hfid/indexing/urls.txt
+          fi
+          cat .hfid/indexing/urls.txt
+
+      - name: Google Indexing API - Mass Distribution
+        env:
+          GOOGLE_INDEXING_API_JSON: ${{ secrets.GOOGLE_INDEXING_API_JSON }}
+        run: |
+          set -eu pipefail
+          if [ -z "${GOOGLE_INDEXING_API_JSON:-}" ]; then
+            echo "warning: GOOGLE_INDEXING_API_JSON blank - skipping publish but preserving intent"
+            exit 0
+          fi
+          echo "$GOOGLE_INDEXING_API_JSON" > .the-google-creds.json
+          python << 'PY'
+          import json
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+
+          with open('.the-google-creds.json') as f:
+              creds_dict = json.load(f)
+
+          creds = service_account.Credentials.from_service_account_info(
+              creds_dict, scopes=["https://www.googleapis.com/auth/indexing"]
+          )
+          service = build('indexing', 'v3', credentials=creds)
+
+          with open('.hfid/indexing/urls.txt') as f:
+              urls = [line.strip() for line in f if line.strip()]
+
+          for url in urls:
+              try:
+                  resp = service.urlNotifications().publish(body={"url": url, "type": "URL_UPDATED"}).execute()
+                  print(f"Published {url}: {resp}")
+              except Exception as e:
+                  print(f"Failed {url}: {e}")
+          PY

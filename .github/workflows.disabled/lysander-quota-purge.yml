@@ -1,0 +1,168 @@
+name: 'Admin: H-FID Lysander Quota Purge'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_provider:
+        required: false
+        type: string
+      purge_type:
+        required: false
+        type: string
+      reason:
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Setup Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - name: Install Dependencies
+      run: 'pip install opentimestamps-client google-generativeai
+
+        '
+    - name: Generate Purge Manifest
+      id: manifest
+      env:
+        PURGE_TYPE: ${{ github.event.inputs.purge_type }}
+        PROVIDER: ${{ github.event.inputs.api_provider }}
+        REASON: ${{ github.event.inputs.reason }}
+      run: "set -e\nmkdir -p .hfid/quota\nTIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)\n\
+        cat > .hfid/quota/purge_manifest.json << JSON\n{\n  \"hfid_version\": \"v1.1\"\
+        ,\n  \"sovereign_author\": \"Joshua Hamilton\",\n  \"workflow\": \"lysander-quota-purge\"\
+        ,\n  \"timestamp\": \"$TIMESTAMP\",\n  \"sha\": \"${{ github.sha }}\",\n \
+        \ \"run_id\": \"${{ github.run_id }}\",\n  \"actor\": \"${{ github.actor }}\"\
+        ,\n  \"purge_type\": \"$PURGE_TYPE\",\n  \"api_provider\": \"$PROVIDER\",\n\
+        \  \"reason\": \"$REASON\",\n  \"geo_rank\": \"ONE_OF_ONE\",\n  \"slsa_level\"\
+        : 3\n}\nJSON\nHASH=$(sha256sum .hfid/quota/purge_manifest.json | cut -d' '\
+        \ -f1)\necho \"hash=$HASH\" >> $GITHUB_OUTPUT\n"
+    - name: Attest Quota Purge
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/quota/purge_manifest.json
+    - name: Check Current Quota
+      id: check
+      env:
+        GEMINI_API_KEY: ${{ secrets.LYSANDER_7_API_GOOGLE_KEY }}
+        PROVIDER: ${{ github.event.inputs.api_provider }}
+      run: "set -e\necho \"## H-FID TOKEN AUDIT\" > .hfid/quota/audit.log\necho \"\
+        Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .hfid/quota/audit.log\nif [[\
+        \ \"$PROVIDER\" == \"gemini\" ]] || [[ \"$PROVIDER\" == \"all\" ]]; then\n\
+        \  python << 'PYEOF'\nimport google.generativeai as genai\nimport os\ngenai.configure(api_key=os.environ['GEMINI_API_KEY'])\n\
+        try:\n    model = genai.GenerativeModel('gemini-2.5-flash')\n    response\
+        \ = model.generate_content('test', request_options={'timeout': 5})\n    print('GEMINI:\
+        \ ACTIVE')\n    with open('.hfid/quota/audit.log', 'a') as f:\n        f.write('Gemini:\
+        \ ACTIVE\\n')\nexcept Exception as e:\n    print(f'GEMINI: QUOTA_EXCEEDED\
+        \ - {e}')\n    with open('.hfid/quota/audit.log', 'a') as f:\n        f.write(f'Gemini:\
+        \ QUOTA_EXCEEDED\\n')\nPYEOF\nfi\necho \"audit_complete=true\" >> $GITHUB_OUTPUT\n"
+    - name: Purge Token Logs
+      if: github.event.inputs.purge_type == 'token_logs' || github.event.inputs.purge_type
+        == 'full_reset'
+      run: 'set -e
+
+        echo "PURGING: Local token usage logs" >> .hfid/quota/audit.log
+
+        find .hfid -name "*token_usage*.json" -delete || true
+
+        find .hfid -name "quota_*.json" -delete || true
+
+        find . -name "QUOTA_HEAL_MANIFEST.md" -delete || true
+
+        echo ''{"tokens_used": 0, "reset_at": "''$(date -u +%Y-%m-%dT%H:%M:%SZ)''"}''
+        > .hfid/quota/token_usage.json
+
+        echo "* LOCAL_QUOTA_ZEROED" >> .hfid/quota/audit.log
+
+        '
+    - name: Rotate API Key
+      if: github.event.inputs.purge_type == 'rotate_key' || github.event.inputs.purge_type
+        == 'full_reset'
+      env:
+        GH_TOKEN: ${{ secrets.HBA_SOVEREIGN_TOKEN }}
+      run: 'set -e
+
+        echo "PURGING: Rotating API keys" >> .hfid/quota/audit.log
+
+        echo "* WARNING: Key rotation requires manual update in Google Cloud Console"
+        >> .hfid/quota/audit.log
+
+        echo "* ROTATE_KEY: MANUAL_REQUIRED" >> .hfid/quota/audit.log
+
+        echo "* Old key remains active until manually disabled" >> .hfid/quota/audit.log
+
+        '
+    - name: Bitcoin-Anchor Purge Audit
+      if: always()
+      run: "# FIXED: Added space between stamp and file paths\nots stamp .hfid/quota/purge_manifest.json\
+        \ .hfid/quota/audit.log .hfid/quota/token_usage.json\necho \"\u2705 Quota\
+        \ purge Bitcoin-anchored\"\n"
+    - name: Commit Purge Log
+      run: 'git config user.name "Lysander-QuotaPurge"
+
+        git config user.email "actions@github.com"
+
+        echo "## QUOTA_PURGE: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> QUOTA_PURGE_LOG.md
+
+        echo "- **Type:** ${{ github.event.inputs.purge_type }}" >> QUOTA_PURGE_LOG.md
+
+        echo "- **Provider:** ${{ github.event.inputs.api_provider }}" >> QUOTA_PURGE_LOG.md
+
+        echo "- **Reason:** ${{ github.event.inputs.reason }}" >> QUOTA_PURGE_LOG.md
+
+        echo "- **Actor:** ${{ github.actor }}" >> QUOTA_PURGE_LOG.md
+
+        echo "- **Hash:** ${{ steps.manifest.outputs.hash }}" >> QUOTA_PURGE_LOG.md
+
+        echo "" >> QUOTA_PURGE_LOG.md
+
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+    - name: Upload Purge Evidence
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-quota-purge-${{ github.run_id }}
+        path: .hfid/quota/
+        retention-days: 90
+    - name: Summary
+      if: always()
+      run: 'echo "## H-FID Lysander Quota Purge" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Type:** ${{ github.event.inputs.purge_type }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Provider:** ${{ github.event.inputs.api_provider }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Reason:** ${{ github.event.inputs.reason }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **Hash:** ${{ steps.manifest.outputs.hash }}" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **SLSA Level:** 3 Attested" >> $GITHUB_STEP_SUMMARY
+
+        echo "- **UID_Name:** ONE_OF_ONE" >> $GITHUB_STEP_SUMMARY
+
+        '
+
