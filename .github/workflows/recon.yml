@@ -118,7 +118,7 @@ jobs:
         echo \"\u2705 Recon results Bitcoin-anchored\" >>.hfid/recon/audit.log\n"
     - name: Upload SARIF to GitHub Security
       if: steps.nuclei.outputs.findings> 0
-      uses: github/codeql-action/upload-sarif@1a5d6a9c1b2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: .hfid/recon/results.sarif
         category: nuclei-hfid
