@@ -15,10 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy scooper-cache CDN
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: "3.78.12"
-          command: deploy --config wrangler/scooper-cache.toml
+      - name: Deploy directly
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm i -g wrangler@3.78.12
+          wrangler --version
+          wrangler deploy --config wrangler/scooper-cache.toml
