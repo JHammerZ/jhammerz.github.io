@@ -1,7 +1,4 @@
 name: deploy-scooper-cache
-permissions:
-  contents: read
-  id-token: write
 on:
   push:
     paths:
@@ -13,9 +10,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -24,5 +20,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy -c wrangler/scooper-cache.toml
-          wranglerVersion: "3"
+          wranglerVersion: "3.78.12"
+          command: deploy --config wrangler/scooper-cache.toml
