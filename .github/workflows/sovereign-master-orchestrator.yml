@@ -5,6 +5,10 @@ concurrency:
 
 on:
   push:
+ paths:
+ - '.github/workflows/sovereign-master-orchestrator.yml'
+ - 'src/**'
+ - 'workers/**'
     branches: [main]
   workflow_dispatch:
     inputs:
