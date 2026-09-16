@@ -4,7 +4,7 @@ permissions:
   id-token: write
   pages: write
   attestations: write
-true:
+on:
   workflow_dispatch: null
 jobs:
   h-fid-audit:
