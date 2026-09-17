@@ -5,14 +5,9 @@
   "version": "4.2.0-IMMUTABLE-CDM-SOVEREIGN-GODMODE",
   "merkle_root": "6a789b2e901fb96aff8ec7805c8db349d0f9ca1d3a5a6b2b165b1cc2d2df1bb8",
   "ledger_tx": "tx-f77bc477",
-  "sovereign_cluster_manifest": "COMPILE_SEQUENCE_092.4_SECURE",
   "status": "APPROVED - 100% SECURE & FULLY COMPLIANT",
   "total_nodes": 14,
   "recirculation": "14_CHANNEL_MESH",
   "god_mode": "100% - BOTH ENGINES PRESERVED - NOTHING LOST",
-  "gate_id": "JANUS-GATE-PRIME",
-  "heo_bridge_status": "SYNCHRONIZED",
-  "migration_state": "MIGRATED_SOVEREIGN_EDGE",
-  "routing_mode": "BI_DIRECTIONAL_INGRESS_EGRESS_HUB_AND_SPOKE",
-  "anti_loop_enforced": true
+  "gate_id": "JANUS-GATE-PRIME"
 }
