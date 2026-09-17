@@ -22,5 +22,7 @@
   "bridge_handshake": {
     "heo_bridge_status": "SYNCHRONIZED",
     "migration_state": "MIGRATED_SOVEREIGN_EDGE"
-  }
+  },
+  "ledger_tx": "tx-f77bc477",
+  "sovereign_cluster_manifest": "COMPILE_SEQUENCE_092.4_SECURE"
 }

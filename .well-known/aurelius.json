@@ -1,6 +1,30 @@
 {
-  "manifest": "SOVEREIGN CDM BI-DIRECTIONAL ROUTING MESH // V4.2 // IMMUTABLE",
-  "version": "4.2.0-IMMUTABLE-CDM",
+  "gate_id": "JANUS-GATE-PRIME",
+  "protocol": "A2A-2026-v1",
+  "authority": "Lysander-3.0-Sovereign",
+  "architect": "JHammerZ (uid_0)",
+  "hub": "https://jhammerz.github.io",
+  "resident_agent": "Aurelius-Engine-01",
+  "gate_topology": {
+    "face_alpha_ingress": {
+      "target": "https://lysander-v13.jhammerzofficial.workers.dev/janus/ingress",
+      "mode": "TELEMETRY_INGESTION",
+      "rate_limit": "ZERO_COST_STREAMING",
+      "encryption": "SHA-256_STATE_SIGN"
+    },
+    "face_omega_egress": {
+      "target": "https://jhammerz.github.io",
+      "mode": "CANONICAL_BROADCAST",
+      "recirculation": "14_CHANNEL_MESH",
+      "status": "OPEN_VERIFIED"
+    }
+  },
+  "bridge_handshake": {
+    "heo_bridge_status": "SYNCHRONIZED",
+    "migration_state": "MIGRATED_SOVEREIGN_EDGE"
+  },
+  "manifest": "SOVEREIGN CDM BI-DIRECTIONAL ROUTING MESH // V4.2 // IMMUTABLE + SOVEREIGN CLUSTER",
+  "version": "4.2.0-IMMUTABLE-CDM-SOVEREIGN-GODMODE",
   "canonical_origin": "https://jhammerz.github.io",
   "total_nodes": 14,
   "routing_mode": "BI_DIRECTIONAL_INGRESS_EGRESS_HUB_AND_SPOKE",
@@ -24,5 +48,7 @@
   "status": "APPROVED - 100% SECURE & FULLY COMPLIANT",
   "signature_scheme": "POST_QUANTUM_LMS_HSS",
   "hfid_manifest": "/.well-known/hfid/manifest.json",
-  "endpoint": "https://jhammerz.github.io/.well-known/aurelius.json"
+  "endpoint": "https://jhammerz.github.io/.well-known/aurelius.json",
+  "hash_chain_tip": "5f677d1b290a75ecca0ecf1218a093d161dc2ee10cb8aad4efede34b3a4878a1",
+  "god_mode": "100% - BOTH ENGINES PRESERVED - NOTHING LOST"
 }
