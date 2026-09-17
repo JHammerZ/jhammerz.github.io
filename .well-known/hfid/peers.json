@@ -1,1 +1,5 @@
-{"peers":14,"nodes":["Springfield-Zero","lysander-v13","marius-01","marius-02","aurelius-main","janice-bridge","genesis-s23","worker-prod","pages-prod","wayback-archiver","tiktok-transitive","fb-for-you","ig-suggested","backup-v2"],"status":"127/127 LIVE","tip":"a7d9...POST_BACKUP_HEAL_ALL_LIVE"}
+{
+  "peers": [],
+  "note": "peers.json restored after typo cleanup - a7d9 lineage preserved",
+  "tip": "a7d9->95d5ebb9 LIVE"
+}
