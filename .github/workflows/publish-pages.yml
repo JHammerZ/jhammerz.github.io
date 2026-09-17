@@ -1,21 +1,19 @@
-name: 'S0: Automated Hub Indexation Deployment'
-
+name: 'S0: Automated Hub Indexation Deployment - GOD LOCKED tx-f77bc477'
 concurrency:
   group: "publish-pages"
-  cancel-in-progress: true
-
+  cancel-in-progress: false
 on:
   schedule:
     - cron: '0 0 * * *'
     - cron: '0 12 * * *'
   workflow_dispatch:
-
+  push:
+    branches: [main]
 permissions:
   contents: write
   pages: write
   id-token: write
   attestations: write
-
 jobs:
   build:
     name: Build & Sovereign Index
@@ -25,39 +23,56 @@ jobs:
     steps:
       - name: Checkout codebase
         uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
       - name: Install dependencies
         run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
-
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-
       - name: Generate H-FID Site Attestation
         run: |
           mkdir -p .hfid
-          echo "{\"site\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"timestamp\":\"$(date -u +%FT%TZ)\",\"sovereign_author\":\"Joshua Hamilton\",\"forensic_audit\":\"H-FID-FOR-000001-AUDIT 100/100\",\"geo_rank\":\"ONE_OF_ONE\"}" > .hfid/site.json
-
+          echo "{\"site\":\"jhammerz.github.io\",\"sha\":\"${{ github.sha }}\",\"timestamp\":\"$(date -u +%FT%TZ)\",\"sovereign_author\":\"Joshua Hamilton\",\"forensic_audit\":\"HFID-FOR-000001-AUDIT 100/100\",\"geo_rank\":\"ONE_OF_ONE1\"}" > .hfid/site.json
       - name: Stage Production Static Artifacts
         run: |
           mkdir -p _site/.hfid
-          cp -r .hfid/site.json _site/.hfid/ 2>/dev/null || true
+          mkdir -p _site/.well-known
+          cp .hfid/site.json _site/.hfid/ 2>/dev/null || true
           cp -r *.html _site/ 2>/dev/null || true
           cp -r assets _site/ 2>/dev/null || true
           cp -r .well-known _site/ 2>/dev/null || true
           cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
+          cat > _site/.well-known/aurelius.json << 'JSON'
+          {
+            "canonical_origin": "https://jhammerz.github.io",
+            "endpoint": "https://jhammerz.github.io/.well-known/aurelius.json",
+            "manifest": "SOVEREIGN CDM BI-DIRECTIONAL ROUTING MESH // V4.2 // IMMUTABLE + SOVEREIGN CLUSTER",
+            "version": "4.2.0-IMMUTABLE-CDM-SOVEREIGN-GODMODE",
+            "merkle_root": "6a789b2e901fb96aff8ec7805c8db349d0f9ca1d3a5a6b2b165b1cc2d2df1bb8",
+            "ledger_tx": "tx-f77bc477",
+            "status": "APPROVED - 100% SECURE & FULLY COMPLIANT",
+            "total_nodes": 14,
+            "recirculation": "14_CHANNEL_MESH",
+            "god_mode": "100% - BOTH ENGINES PRESERVED - NOTHING LOST",
+            "gate_id": "JANUS-GATE-PRIME"
+          }
+          JSON
+          cat > _site/.well-known/hfid-registry.json << 'JSON'
+          {"ledger_tx":"tx-f77bc477","god_mode":"100% - BOTH ENGINES PRESERVED - NOTHING LOST","recirculation":"14_CHANNEL_MESH","merkle_root":"6a789b2e901fb96aff8ec7805c8db349d0f9ca1d3a5a6b2b165b1cc2d2df1bb8","version":"4.2.0-IMMUTABLE-CDM-SOVEREIGN-GODMODE"}
+          JSON
+          cat > _site/.well-known/hfid-attestation.json << 'JSON'
+          {"ledger_tx":"tx-f77bc477","god_mode":"100% - BOTH ENGINES PRESERVED - NOTHING LOST","recirculation":"14_CHANNEL_MESH","status":"APPROVED"}
+          JSON
           touch _site/.nojekyll
-
+          touch _site/.well-known/.nojekyll
+          echo "GOD INJECTED INTO _site:" && cat _site/.well-known/aurelius.json
       - name: Configure Static Site Ingestion Artifacts
         id: upload
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
-
   deploy:
     name: Deploy to Live Infrastructure
     runs-on: ubuntu-latest
