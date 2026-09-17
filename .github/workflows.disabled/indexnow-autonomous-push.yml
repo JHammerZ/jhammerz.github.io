@@ -1,0 +1,45 @@
+name: IndexNow Autonomous Push
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Submit to IndexNow
+      env:
+        INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+      run: 'set -e
+
+        if [ -z "$INDEXNOW_KEY" ]; then echo "SKIP - no key"; exit 0; fi
+
+        URL_LIST=$(grep -o "<loc>.*</loc>" sitemap.xml | head -20 | sed ''s/<[^>]*>//g''
+        | jq -R . | jq -s .)
+
+        JSON=$(jq -n --arg host "jhammerz.github.io" --arg key "$INDEXNOW_KEY" --argjson
+        urls "$URL_LIST" ''{host: $host, key: $key, urlList: $urls}'')
+
+        curl -s -X POST https://api.indexnow.org/indexnow -H "Content-Type: application/json"
+        - d "$JSON"
+
+        echo "Pushed $(echo $URL_LIST | jq length) URLs"
+
+        '
+

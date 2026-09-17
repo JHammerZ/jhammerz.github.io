@@ -54,5 +54,5 @@ jobs:
         '
 concurrency:
   group: sovereign-autonomous-master
-  cancel-in-progress: true
+  cancel-in-progress: false
 

@@ -1,0 +1,86 @@
+name: Sovereign Model Baseline
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      baseline_sha:
+        required: false
+        type: string
+
+jobs:
+  stabilize-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      baseline_sha: ${{ steps.baseline.outputs.sha }}
+      grid_status: ${{ steps.verify.outputs.status }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - run: pip install opentimestamps-client
+    - run: mkdir -p .hfid/baseline .hfid/indexing
+    - id: baseline
+      env:
+        BASELINE_SHA: ${{ github.event.inputs.baseline_sha || 'a13b9be' }}
+      run: "set -e\necho \"Initiating Restoration to Commit ${{ env.BASELINE_SHA }}\
+        \ Baseline...\"\ngit fetch origin \"${{ env.BASELINE_SHA }}\" --depth=1 ||\
+        \ true\necho \"sha=${{ env.BASELINE_SHA }}\" >> $GITHUB_OUTPUT\ncat > .hfid/baseline/sovereign-manifest.json\
+        \ << INNER_EOF\n{\n  \"baseline_sha\": \"${{ env.BASELINE_SHA }}\",\n  \"\
+        timestamp\": \"$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")\",\n  \"current_sha\": \"\
+        $(git rev-parse HEAD)\",\n  \"repository\": \"${{ github.repository }}\",\n\
+        \  \"run_id\": \"${{ github.run_id }}\",\n  \"gno_rank\": \"ONE_OF_ONE\",\n\
+        \  \"slsa_level\": 3\n}\nINNER_EOF\n"
+    - run: "set -e\nif [ -f .hfid/baseline/sovereign-manifest.json ]; then\n  echo\
+        \ \"Verifying local hash indexes against genesis targets...\"\n  sha256sum\
+        \ .hfid/baseline/sovereign-manifest.json\n  rm -f .hfid/baseline/sovereign-manifest.json.ots\n\
+        \  ots stamp .hfid/baseline/sovereign-manifest.json\nfi\n"
+    - id: verify
+      run: "set -e\necho \"Checking C01 secure ingress endpoint availability...\"\n\
+        if ! curl -sI --fail \"https://jhammerz.github.io\" > /dev/null; then\n  echo\
+        \ \"status=DEGRADED\" >> $GITHUB_OUTPUT\nelse\n  echo \"status=VERIFIED\"\
+        \ >> $GITHUB_OUTPUT\nfi\n"
+    - uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'MANIFEST MUTATION [V4.0.28]: Production Baseline Lock Sync
+          [skip ci]'
+        commit_user_name: JHammerZ-Sovereign-Engine
+        commit_user_email: engine@jhammerz.github.io
+        push_options: --force-with-lease
+        skip_dirty_check: false
+        skip_fetch: false
+    - if: always()
+      run: 'echo "## Sovereign Model Baseline Summary" >> $GITHUB_STEP_SUMMARY
+
+        echo "** Manifest Reference Code: ** V4.0.28" >> $GITHUB_STEP_SUMMARY
+
+        echo "** System Baseline State: ** LIVING / LOCK_ESTABLISHED" >> $GITHUB_STEP_SUMMARY
+
+        echo "** Author Entity Signature: ** Joshua Hamilton" >> $GITHUB_STEP_SUMMARY
+
+        echo "---" >> $GITHUB_STEP_SUMMARY
+
+        echo "```json" >> $GITHUB_STEP_SUMMARY
+
+        cat .hfid/baseline/sovereign-manifest.json >> $GITHUB_STEP_SUMMARY
+
+        echo "```" >> $GITHUB_STEP_SUMMARY
+
+        '
+

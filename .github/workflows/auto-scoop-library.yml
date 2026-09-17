@@ -1,39 +1,54 @@
 name: auto-scoop-library
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"
 
 jobs:
   scoop:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: auto-scoop-library
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: FULL 14-node library
         run: |
+          set -e
           mkdir -p .hfid/indexing
-          > .hfid/indexing/urls.txt
-          # --- CORE VIRAL ---
+          : > .hfid/indexing/urls.txt
+
+          # --- CORE / VIDEO ---
           echo "https://www.tiktok.com/@jhammerzz" >> .hfid/indexing/urls.txt
-          echo "https://www.youtube.com/@JhammerZ/videos" >> .hfid/indexing/urls.txt
+          echo "https://www.youtube.com/@jhammerz/videos" >> .hfid/indexing/urls.txt
+
           # --- AUDIO NODES ---
-          echo "https://open.spotify.com/artist/7vRd2eDCwvuEYWtyqW28a79" >> .hfid/indexing/urls.txt
-          echo "https://music.apple.com/us/artist/jhammerz/1845798346" >> .hfid/indexing/urls.txt
-          echo "https://music.amazon.com/artists/B0SGL7W/jhammerz" >> .hfid/indexing/urls.txt
+          echo "https://open.spotify.com/artist/7rM24DoCexEfYgLwN2B70" >> .hfid/indexing/urls.txt
+          echo "https://music.apple.com/artist/jhammerz/1815793478" >> .hfid/indexing/urls.txt
+          echo "https://music.amazon.com/artists/B0SSL7V/jhammerz" >> .hfid/indexing/urls.txt
           echo "https://www.bandlab.com/jhammerz" >> .hfid/indexing/urls.txt
+
           # --- SOCIAL GRAPH ---
-          echo "https://www.facebook.com/profile.php?id=61574652435664" >> .hfid/indexing/urls.txt
-          echo "https://www.instagram.com/jhammerzz/" >> .hfid/indexing/urls.txt
+          echo "https://www.facebook.com/profile.php?id=6157465345664" >> .hfid/indexing/urls.txt
+          echo "https://www.instagram.com/jhammerzz" >> .hfid/indexing/urls.txt
           echo "https://www.linkedin.com/in/jhammerz" >> .hfid/indexing/urls.txt
+
           # --- ROOTS ---
           echo "https://jhammerz.github.io/" >> .hfid/indexing/urls.txt
           echo "https://jhammerz.github.io/music.html" >> .hfid/indexing/urls.txt
           echo "https://jhammerz.github.io/graph.html" >> .hfid/indexing/urls.txt
           echo "https://github.com/JHammerZ/jhammerz.github.io" >> .hfid/indexing/urls.txt
-          echo "https://jhammerz.carrd.co" >> .hfid/indexing/urls.txt
-          # dedupe
+          echo "https://github.com/JHammerZ/carrd.co" >> .hfid/indexing/urls.txt
+
+          # --- dedupe + validate ---
           sort -u .hfid/indexing/urls.txt | grep -E "^https://" > /tmp/urls && mv /tmp/urls .hfid/indexing/urls.txt
-          echo "TOTAL: $(wc -l < .hfid/indexing/urls.txt) URLs"
+          echo "TOTAL $(wc -l < .hfid/indexing/urls.txt) URLs"
           cat .hfid/indexing/urls.txt
 
       - name: commit if changed
@@ -41,8 +56,8 @@ jobs:
           git config user.name "janus-bot"
           git config user.email "janus@jhammerz.github.io"
           git add .hfid/indexing/urls.txt
-          git diff --staged --quiet || git commit -m "[skip ci] auto-scoop: FULL 14-node refresh $(date -u +%FT%TZ) - $(wc -l < .hfid/indexing/urls.txt) URLs"
-          git push
-concurrency:
-  group: auto-scoop-library
-  cancel-in-progress: true
+          git diff --staged --quiet && echo "no changes" && exit 0
+          git commit -m "[skip ci] auto-scoop: FULL 14-node refresh $(date -u +%FT%TZ) - $(wc -l < .hfid/indexing/urls.txt) URLs"
+          # FIX for #90: rebase before push
+          git pull --rebase origin main
+          git push origin main

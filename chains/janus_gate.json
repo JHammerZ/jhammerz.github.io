@@ -5,7 +5,12 @@
   "face_alpha_ingress": {
     "target": "https://lysander.v13.jhammerzofficial.workers.dev/janus/ingress",
     "mode": "TELEMETRY_INGESTION",
+<<<<<<< HEAD
     "rate_limit": "ZERO_COST_STREAMING"
+=======
+    "rate_limit": "ZERO_COST_STREAMING",
+    "encryption": "SHA-256_STATE_SIGN"
+>>>>>>> 6b0b47f80889a72c8cac15c081fc86bd643b0629
   },
   "face_omega_egress": {
     "target": "https://jhammerz.github.io",

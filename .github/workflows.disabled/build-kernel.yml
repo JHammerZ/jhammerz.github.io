@@ -1,0 +1,19 @@
+name: build-kernel.yml - restored
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo active
+concurrency:
+  group: build-kernel
+  cancel-in-progress: true
+

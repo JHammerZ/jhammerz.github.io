@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored deploy-to-google-cloud-run - trap cleared'
 concurrency:
   group: deploy-to-google-cloud-run
-  cancel-in-progress: true
+  cancel-in-progress: false
 

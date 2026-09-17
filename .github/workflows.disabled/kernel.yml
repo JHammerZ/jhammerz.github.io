@@ -1,0 +1,96 @@
+name: 'CD: H-FID Sovereign Kernel'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  hfid_kernel:
+    name: hfid-bridge
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Install Toolchain Dependencies
+      run: 'set -e
+
+        sudo apt-get update
+
+        sudo apt-get install -y bc bison flex libelf-dev libssl-dev jq build-essential
+        gcc-12
+
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
+
+        '
+    - name: Setup Nix Cache
+      uses: cachix/install-nix-action@v30
+      with:
+        nix_path: nixpkgs-channel:nixos-unstable
+    - name: Fetch Target Kernel Tree
+      run: "set -e\necho \"Fetching specific target kernel release tree directly...\"\
+        \nif [ ! -d \"linux-5.10\" ]; then\n  git clone --depth 1 --branch v5.10 https://github.com/torvalds/linux.git\
+        \ linux-5.10\nfi\n"
+    - name: Configure Sovereign Platform
+      run: "set -e\nif [ -d \"linux-5.10\" ]; then\n  cd linux-5.10\n  make defconfig\n\
+        \  make modules_prepare\nelse\n  echo \"Core linux-5.10 source tree missing\"\
+        \n  exit 1\nfi\n"
+    - name: Generate Kernel Manifest
+      id: manifest_gen
+      run: "set -e\nmkdir -p .hfid/kernel hfid_module\nprintf 'obj-m += kernel_Override.o\\\
+        n' > hfid_module/Makefile\ncat > .hfid/kernel/manifest.json <<'MANIFEST_EOF'\n\
+        {\n  \"workflow\": \"kernel-build\",\n  \"sovereign_author\": \"Joshua Hamilton\"\
+        ,\n  \"timestamp\": \"PLACEHOLDER_TS\",\n  \"sha\": \"PLACEHOLDER_SHA\",\n\
+        \  \"target\": \"PLACEHOLDER_TGT\",\n  \"slsa_level\": 3,\n  \"geo_rank\"\
+        : \"ONE_OF_ONE\"\n}\nTIMESTAMP=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")\nTMP_JSON=$(jq\
+        \ --arg ts \"$TIMESTAMP\" --arg sha \"${{ github.sha }}\" --arg tgt \"${{\
+        \ github.event.inputs.target || 'kernel' }}\" '.timestamp=$ts | .sha=$sha\
+        \ | .target=$tgt' .hfid/kernel/manifest.json)\necho \"$TMP_JSON\" > .hfid/kernel/manifest.json\n\
+        cat .hfid/kernel/manifest.json\n"
+    - name: Compile Sovereign Kernel Module
+      run: "set -e\necho \"Initiating native module construction sequence...\"\nmake\
+        \ KBUILD_MODPOST_WARN=1 -C linux-5.10 M=$GITHUB_WORKSPACE/hfid_module modules\n\
+        if [ -f \"$GITHUB_WORKSPACE/hfid_module/kernel_Override.ko\" ]; then\n  echo\
+        \ \"Module compiled successfully.\"\n  sha256sum \"$GITHUB_WORKSPACE/hfid_module/kernel_Override.ko\"\
+        \ > \"$GITHUB_WORKSPACE/hfid_module/kernel_Override.ko.sha256\"\nelse\n  echo\
+        \ \"Core kernel driver artifact creation failed.\"\n  exit 1\nfi\n"
+    - name: Attest Kernel Code
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/kernel/manifest.json
+    - name: Execute State Synchronization
+      run: "set -e\ngit config --global user.name \"Lysander-Kernel\"\ngit config\
+        \ --global user.email \"kernel@hammerz.github.io\"\ngit pull --rebase origin\
+        \ main || true\ngit add .hfid/kernel/ hfid_module/\nif ! git diff --staged\
+        \ --quiet; then\n  git commit -m \"[skip ci] chore: update sovereign kernel\
+        \ build state [skip ci]\"\n  git pull --rebase origin main && git push origin\
+        \ main || (git pull --rebase origin main && git pull --rebase origin main\
+        \ && git push origin main)\nelse\n  echo \"No pipeline modifications detected.\"\
+        \nfi\n"
+    - name: Upload Kernel Artifacts
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-kernel-core
+        path: '.hfid/kernel/
+
+          hfid_module/
+
+          '
+

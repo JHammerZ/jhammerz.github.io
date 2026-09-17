@@ -1,0 +1,84 @@
+name: 'Security: H-FID Human Verification'
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      oath:
+        required: false
+        type: string
+      verification_note:
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  verify-human:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event.inputs.oath == 'true'
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Install OpenTimestamps
+      run: pip install opentimestamps-client
+    - name: Generate Human Verification Proof
+      id: proof
+      run: "set -e\nmkdir -p .hfid/verification\n\nTIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)\n\
+        ACTOR=\"${{ github.actor }}\"\nRUN_ID=\"${{ github.run_id }}\"\nSHA=\"${{\
+        \ github.sha }}\"\nNOTE=\"${{ github.event.inputs.verification_note }}\"\n\
+        \n# H-FID v1.2 Human Proof - includes who, when, what, why\ncat > .hfid/verification/human-proof.json\
+        \ << EOF\n{\n  \"hfid_version\": \"v1.2\",\n  \"sovereign_author\": \"Joshua\
+        \ Hamilton\",\n  \"verification_type\": \"Human-Initiated\",\n  \"timestamp\"\
+        : \"$TIMESTAMP\",\n  \"actor\": \"$ACTOR\",\n  \"run_id\": \"$RUN_ID\",\n\
+        \  \"sha\": \"$SHA\",\n  \"note\": \"$NOTE\",\n  \"oath\": \"I verify I am\
+        \ human and sovereign author\",\n  \"geo_rank\": \"ONE_OF_ONE\",\n  \"slsa_level\"\
+        : 3\n}\nEOF\n\n# SHA256 of the proof for chain linking\nHASH=$(sha256sum.hfid/verification/human-proof.json\
+        \ | cut -d' ' -f1)\necho \"hash=$HASH\" >> $GITHUB_OUTPUT\necho \"\u2705 Human\
+        \ verification proof generated: $HASH\"\n"
+    - name: OpenTimestamp Human Proof
+      run: "ots stamp .hfid/verification/human-proof.json\necho \"\u2705 Bitcoin-anchored\
+        \ human verification initiated\"\n"
+    - name: Update H-FID Chain with Human Proof
+      run: "set -e\nCHAIN=\".well-known/hfid/chain.json\"\n[ -f \"$CHAIN\" ] || echo\
+        \ \"[]\" > \"$CHAIN\"\n\njq --arg hash \"${{ steps.proof.outputs.hash }}\"\
+        \ \\\n   --arg ts \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" \\\n   --arg actor \"\
+        ${{ github.actor }}\" \\\n   --arg note \"${{ github.event.inputs.verification_note\
+        \ }}\" \\\n   '. += [{\"type\": \"Human-Verified\", \"hash\": $hash, \"timestamp\"\
+        : $ts, \"actor\": $actor, \"note\": $note, \"slsa_level\": 3}]' \\\n  \"$CHAIN\"\
+        \ > tmp.json && mv tmp.json \"$CHAIN\"\n\necho \"\u2705 H-FID chain updated\
+        \ with human verification block\"\n"
+    - name: Attest Human Verification
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: .hfid/verification/human-proof.json
+    - name: Commit Human Verification
+      run: 'git config user.name "Joshua Hamilton"
+
+        git config user.email "jhammerz@users.noreply.github.com"
+
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+    - name: Upload Verification Artifact
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-human-proof-${{ steps.proof.outputs.hash }}
+        path: .hfid/verification/
+        retention-days: 3650
+

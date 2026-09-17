@@ -1,0 +1,3 @@
+name = "scooper-cache"
+main = "../scooper-cache.js"
+compatibility_date = "2024-01-01"

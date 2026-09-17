@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored witness-flood - trap cleared'
 concurrency:
   group: witness-flood
-  cancel-in-progress: true
+  cancel-in-progress: false
 

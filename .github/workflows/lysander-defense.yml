@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored lysander-defense - trap cleared'
 concurrency:
   group: lysander-defense
-  cancel-in-progress: true
+  cancel-in-progress: false
 

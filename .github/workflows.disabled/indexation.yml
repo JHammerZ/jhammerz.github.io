@@ -1,0 +1,41 @@
+name: 'SEO: Indexation'
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+
+jobs:
+  index-on:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Generate Artifacts Ledger
+      run: 'set -e
+
+        mkdir -p .hfid/indexing
+
+        echo "{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .hfid/indexing/index.json
+
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: Indexation update [skip ci]'
+        commit_user_name: JHammerZ-Sovereign-Engine
+        commit_user_email: engine@hammerz.github.io
+        file_pattern: .hfid/indexing/index.json
+

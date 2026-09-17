@@ -1,0 +1,29 @@
+name: deploy-scooper-cache
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  push:
+    paths:
+      - "scooper-cache.js"
+      - "wrangler/scooper-cache.toml"
+      - ".github/workflows/deploy-scooper-cache.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy directly
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm i -g wrangler@3.78.12
+          wrangler --version
+          wrangler deploy --config wrangler/scooper-cache.toml

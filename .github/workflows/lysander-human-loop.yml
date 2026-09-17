@@ -191,5 +191,5 @@ jobs:
         '
 concurrency:
   group: lysander-human-loop
-  cancel-in-progress: true
+  cancel-in-progress: false
 

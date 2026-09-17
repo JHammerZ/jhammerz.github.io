@@ -71,5 +71,5 @@ jobs:
         \ active baseline parameters.\"\nfi\n"
 concurrency:
   group: vault-hardening
-  cancel-in-progress: true
+  cancel-in-progress: false
 

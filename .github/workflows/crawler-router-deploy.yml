@@ -65,5 +65,5 @@ jobs:
         \ fully calibrated.\"\nfi\n"
 concurrency:
   group: crawler-router-deploy
-  cancel-in-progress: true
+  cancel-in-progress: false
 

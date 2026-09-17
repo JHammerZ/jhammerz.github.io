@@ -41,5 +41,5 @@ jobs:
         keep_files: true
 concurrency:
   group: kardashian-distribution-engine
-  cancel-in-progress: true
+  cancel-in-progress: false
 

@@ -510,5 +510,110 @@
       "janus-gate"
     ],
     "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T23:16:07.765860+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "4d504cb9d8d1ee4a",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T23:30:26.575576+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "1a0a092390e8a9fc",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T23:41:17.774801+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "7a931fe422debfb2",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-15T23:58:51.066963+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "c468d587adb04e26",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-16T00:09:24.007399+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "c0b1d4f267f970c1",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-16T00:19:38.634409+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "922be5ff7accae0f",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
+  },
+  {
+    "timestamp": "2026-09-16T00:47:39.034719+00:00",
+    "phase": "5-broadcast",
+    "trapped": 0,
+    "agents": [],
+    "hash": "3c130ac12f91149a",
+    "gno_rank": "ONE_OF_ONE",
+    "sovereign": "Joshua Hamilton [J-HammerZ]",
+    "mesh_nodes": [
+      "hfid/indexing",
+      "ipfs",
+      "janus-gate"
+    ],
+    "status": "BROADCAST_READY"
   }
 ]

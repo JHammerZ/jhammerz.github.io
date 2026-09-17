@@ -1,6 +1,9 @@
 name: Deploy Pages
 on:
   push:
+    paths:
+      - '.github/workflows/pages.yml'
+      - 'src/**'
     branches: [main]
   workflow_dispatch:
 permissions:
@@ -9,7 +12,7 @@ permissions:
   id-token: write
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,16 +22,15 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || true
-      - uses: actions/configure-pages@v5
       - name: Build artifact
         run: |
           rm -rf _site_deploy
           mkdir -p _site_deploy/.hfid/indexing
           mkdir -p _site_deploy/assets/js
-          rsync -av ./ _site_deploy/ --exclude='.git' --exclude='.github' --exclude='_site_deploy' --exclude='node_modules' --exclude='.hfid/*.log' --exclude='.hfid/tmp'
-          cp -r f .hfid/indexing/* _site_deploy/.hfid/indexing/ 2>/dev/null || true
-          cp -r f .hfid/* _site_deploy/.hfid/ 2>/dev/null || true
-          cp -r f assets _site_deploy/ 2>/dev/null || true
+          rsync -av ./ _site_deploy/ --exclude='.git' --exclude='.github' --exclude='_site_deploy' --exclude='node_modules' --exclude='workers' --exclude='.hfid/*.log' --exclude='.hfid/tmp'
+          cp -r .hfid/indexing/* _site_deploy/.hfid/indexing/ 2>/dev/null || true
+          cp -r .hfid/2/* 2>/dev/null || true
+          cp -r assets _site_deploy/ 2>/dev/null || true
           touch _site_deploy/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

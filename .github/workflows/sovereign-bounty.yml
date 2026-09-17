@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored sovereign-bounty - trap cleared'
 concurrency:
   group: sovereign-bounty
-  cancel-in-progress: true
+  cancel-in-progress: false
 

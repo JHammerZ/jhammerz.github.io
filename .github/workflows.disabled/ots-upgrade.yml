@@ -1,0 +1,40 @@
+name: OTS Auto Upgrade
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - name: Install OTS
+      run: pip install opentimestamps-client
+    - name: Upgrade timestamps
+      run: 'find . -name "*.ots" -exec ots upgrade {} \;
+
+        git config user.name "L5 Bot"
+
+        git config user.email "bot@jhammerz.github.io"
+
+        '
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v6
+      with:
+        commit_message: 'chore: auto-update [skip ci]'
+

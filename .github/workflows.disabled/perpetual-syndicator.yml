@@ -1,0 +1,50 @@
+name: Perpetual Content Syndicator
+permissions:
+ contents: write
+ id-token: write
+ pages: write
+ attestations: write
+
+concurrency:
+ group: ${{ github.workflow }}-${{ github.ref }}
+ cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+
+jobs:
+  syndicate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    - name: Install deps
+      run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps || echo 'no deps'
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+    - name: Install deps
+      run: pip install requests pyyaml opentimestamps-client
+    - name: Run syndicator
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: 'mkdir -p .hfid/syndicator
+
+        python _github/scripts/social_syndicator.py || echo "no script"
+
+        echo "{\"timestamp\":\"$(date -u +%FT%TZ)\",\"sha\":\"${{ github.sha }}\"}"
+        > .hfid/syndicator/manifest.json
+
+        '
+    - name: Anchor
+      run: ots stamp .hfid/syndicator/manifest.json || true
+    - name: Upload
+      if: always()
+      uses: actions/upload-artifact@v5
+      with:
+        name: hfid-syndicator-${{ github.run_id }}
+        path: .hfid/syndicator/
+

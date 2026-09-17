@@ -7884,7 +7884,7 @@ async function executeGeminiChat(options: {
     };
   }
 
-  const modelsToTry = ["gemini-3.7-flash", "gemini-3.1-flash-lite"];
+  const modelsToTry = ["gemini-2.5-flash", "gemini-3.1-flash-lite"];
   let lastError: any = null;
 
   for (const modelName of modelsToTry) {
@@ -8798,10 +8798,8 @@ app.post('/api/chat', async (req, res) => {
       userMessage: promptMessage,
       history: history || [],
       tools: [
-        { googleSearch: {} },
         { functionDeclarations: toolDeclarations }
       ],
-      toolConfig: { includeServerSideToolInvocations: true },
       core: 'AURELIUS',
       onToolCalls
     });

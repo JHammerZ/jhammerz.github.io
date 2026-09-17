@@ -1,7 +1,7 @@
 name: GEO_RANK Visibility Audit - H-FID Standard
 concurrency:
  group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: true
+ cancel-in-progress: false
 
 on:
   workflow_dispatch:
