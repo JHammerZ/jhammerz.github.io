@@ -1,35 +1,9 @@
 {
-<<<<<<< HEAD
-=======
-  "gate_id": "JANUS-GATE-PRIME",
-  "authority": "Lysander-3.0-Sovereign",
-  "resident_agent": "Aurelius-Engine-01",
-  "face_alpha_ingress": {
-    "target": "https://lysander.v13.jhammerzofficial.workers.dev/janus/ingress",
-    "mode": "TELEMETRY_INGESTION",
-    "rate_limit": "ZERO_COST_STREAMING",
-    "encryption": "SHA-256_STATE_SIGN"
-  },
-  "face_omega_egress": {
-    "target": "https://jhammerz.github.io",
-    "mode": "CANONICAL_BROADCAST",
-    "recirculation": "14_CHANNEL_MESH",
-    "status": "OPEN_VERIFIED"
-  },
-  "bridge_handshake": {
-    "heo_bridge_status": "SYNCHRONIZED",
-    "migration_state": "MIGRATED_SOVEREIGN_EDGE"
-  },
-  "recirculation": "14_CHANNEL_MESH",
-  "ledger_tx": "tx-f77bc477",
-  "sovereign_cluster_manifest": "COMPILE_SEQUENCE_092.4_SECURE",
->>>>>>> 6b0b47f80889a72c8cac15c081fc86bd643b0629
   "canonical_origin": "https://jhammerz.github.io",
   "endpoint": "https://jhammerz.github.io/.well-known/aurelius.json",
   "manifest": "SOVEREIGN CDM BI-DIRECTIONAL ROUTING MESH // V4.2 // IMMUTABLE + SOVEREIGN CLUSTER",
   "version": "4.2.0-IMMUTABLE-CDM-SOVEREIGN-GODMODE",
   "merkle_root": "6a789b2e901fb96aff8ec7805c8db349d0f9ca1d3a5a6b2b165b1cc2d2df1bb8",
-<<<<<<< HEAD
   "ledger_tx": "tx-f77bc477",
   "sovereign_cluster_manifest": "COMPILE_SEQUENCE_092.4_SECURE",
   "status": "APPROVED - 100% SECURE & FULLY COMPLIANT",
@@ -37,11 +11,6 @@
   "recirculation": "14_CHANNEL_MESH",
   "god_mode": "100% - BOTH ENGINES PRESERVED - NOTHING LOST",
   "gate_id": "JANUS-GATE-PRIME",
-=======
-  "status": "APPROVED - 100% SECURE & FULLY COMPLIANT",
-  "total_nodes": 14,
-  "god_mode": "100% - BOTH ENGINES PRESERVED - NOTHING LOST",
->>>>>>> 6b0b47f80889a72c8cac15c081fc86bd643b0629
   "heo_bridge_status": "SYNCHRONIZED",
   "migration_state": "MIGRATED_SOVEREIGN_EDGE"
 }
