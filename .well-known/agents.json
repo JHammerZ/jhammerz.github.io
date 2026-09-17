@@ -1,16 +1,4 @@
 {
-  "gateway_version": "4.2.0-UNIVERSAL-AGENT-MESH",
-  "canonical_origin": "https://jhammerz.github.io",
-  "total_agent_types": 47,
-  "protocols_supported": ["openai", "anthropic", "gemini", "a2a", "mcp", "langchain", "voice", "viral", "ollama", "lmstudio", "jan", "cursor", "windsurf", "crewai", "autogen", "autogpt", "perplexity", "grok", "pi", "characterai", "poe", "openrouter", "groq", "together"],
-  "routing": "C01 PRIMARY_HUB -> BROADCAST_CANNON -> ALL 14 CDM + ALL AGENT PROTOCOLS",
-  "zero_latency": true,
-  "anti_loop_enforced": true,
-  "endpoints": {
-    "openai_compatible": "https://jhammerz.github.io/v1/chat/completions",
-    "claude_compatible": "https://jhammerz.github.io/v1/messages",
-    "gemini_native": "https://jhammerz.github.io/v1beta/models/gemini-3.6-flash:generateContent",
-    "a2a": "https://jhammerz.github.io/a2a/v1/invoke",
-    "mcp": "https://jhammerz.github.io/mcp/v1/tools/call"
-  }
+  "agents": ["aurelius", "hfid"],
+  "endpoint": "https://jhammerz.github.io/.well-known/aurelius.json"
 }
