@@ -127,9 +127,5 @@
       "established": "2026-05-22T00:00:00Z"
     }
   },
-  "auto_rotate": true,
-  "recycled_inventory_stream": {
-    "active_vault_manifest": [],
-    "updated_at": "2026-09-12T16:10:41.376222+00:00"
-  }
+  "auto_rotate": true
 }
