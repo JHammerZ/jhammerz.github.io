@@ -1,12 +1,6 @@
 {
   "gate_id": "JANUS-GATE-PRIME",
-  "protocol": "A2A-2026-",
   "authority": "Lysander-3.0-Sovereign",
-  "architects": {
-    "Humerl": {
-      "uid": "uid://HammerZ"
-    }
-  },
   "resident_agent": "Aurelius-Engine-01",
   "face_alpha_ingress": {
     "target": "https://lysander.v13.jhammerzofficial.workers.dev/janus/ingress",
