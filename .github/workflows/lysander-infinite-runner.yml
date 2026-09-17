@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored lysander_infinite_runner - trap cleared'
 concurrency:
   group: lysander_infinite_runner
-  cancel-in-progress: false
+  cancel-in-progress: true
 

@@ -43,5 +43,5 @@ jobs:
         keep_files: true
 concurrency:
   group: kardashian-v4-autonomous
-  cancel-in-progress: false
+  cancel-in-progress: true
 

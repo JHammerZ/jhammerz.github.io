@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored hunt-and-report - trap cleared'
 concurrency:
   group: hunt-and-report
-  cancel-in-progress: false
+  cancel-in-progress: true
 

@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored health_check - trap cleared'
 concurrency:
   group: health_check
-  cancel-in-progress: false
+  cancel-in-progress: true
 

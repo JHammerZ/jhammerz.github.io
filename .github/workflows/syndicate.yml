@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored syndicate - trap cleared'
 concurrency:
   group: syndicate
-  cancel-in-progress: false
+  cancel-in-progress: true
 

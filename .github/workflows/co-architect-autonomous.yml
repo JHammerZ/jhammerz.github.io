@@ -57,5 +57,5 @@ jobs:
         '
 concurrency:
   group: co-architect-autonomous
-  cancel-in-progress: false
+  cancel-in-progress: true
 

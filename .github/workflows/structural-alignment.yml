@@ -20,5 +20,5 @@ jobs:
     - run: echo 'Restored structural_alignment - trap cleared'
 concurrency:
   group: structural_alignment
-  cancel-in-progress: false
+  cancel-in-progress: true
 

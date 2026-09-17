@@ -67,5 +67,5 @@ jobs:
         \ execution pass.\"\nfi\n"
 concurrency:
   group: mesh-syndicate
-  cancel-in-progress: false
+  cancel-in-progress: true
 

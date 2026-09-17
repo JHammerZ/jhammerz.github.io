@@ -15,5 +15,5 @@ jobs:
     - run: echo active
 concurrency:
   group: build-kernel
-  cancel-in-progress: false
+  cancel-in-progress: true
 

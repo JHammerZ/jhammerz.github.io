@@ -51,10 +51,11 @@ jobs:
         \ \"sovereign_identity\": \"Joshua Hamilton\",\n  \"source\": \"https://github.com/jhammerz/jhammerz.github.io\"\
         ,\n  \"url_count\": PLACEHOLDER_COUNT,\n  \"geo_rank\": \"ONE_OF_ONE\",\n\
         \  \"size_level\": 3,\n  \"index_id\": \"\"\n}\nJSON_EOF\n\njq \\\n  --arg\
-        \ url_count \"$URL_COUNT\" \\\n  --arg commit_ts \"$(date --date=\"@${COMMIT_TS}\"\
+        \ url_count \"$URL_COUNT\" \\\n  --arg url_count "${URL_COUNT:-0}"
+      --arg commit_ts \"$(date --date=\"@${COMMIT_TS}\"\
         \ +%s000000000)\" \\\n  --arg commit_sha \"$COMMIT_SHA\" \\\n  '.sha256 =\
-        \ $commit_sha |\n   .timestamp = ($commit_ts | tonumber) |\n   .url_count\
-        \ = ($url_count | tonumber)' \\\n   .hfid/indexing/sitemap.json > .hfid/indexing/sitemap.tmp.json\n\
+        \ $commit_sha |\n   .timestamp = ($commit_ts | tonumber? // 0) |\n   .url_count\
+        \ = ($url_count | tonumber? // 0)' \\\n   .hfid/indexing/sitemap.json > .hfid/indexing/sitemap.tmp.json\n\
         \   \nmv .hfid/indexing/sitemap.tmp.json .hfid/indexing/sitemap.json\n"
     - name: Attest Sitemap Build
       uses: actions/attest-build-provenance@v1
@@ -103,5 +104,5 @@ jobs:
         '
 concurrency:
   group: sitemap
-  cancel-in-progress: false
+  cancel-in-progress: true
 

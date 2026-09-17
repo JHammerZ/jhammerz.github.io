@@ -75,5 +75,5 @@ jobs:
         \ synchronized.\"\nfi\n"
 concurrency:
   group: webhook-relay
-  cancel-in-progress: false
+  cancel-in-progress: true
 

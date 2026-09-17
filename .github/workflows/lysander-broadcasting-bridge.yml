@@ -48,5 +48,5 @@ jobs:
         \ - H-FID armed but idle - ONE_OF_ONE\"\nfi\n"
 concurrency:
   group: Lysander_Broadcasting_Bridge
-  cancel-in-progress: false
+  cancel-in-progress: true
 

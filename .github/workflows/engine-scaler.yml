@@ -66,5 +66,5 @@ jobs:
         \ structural scaling capacity.\"\nfi\n"
 concurrency:
   group: engine-scaler
-  cancel-in-progress: false
+  cancel-in-progress: true
 

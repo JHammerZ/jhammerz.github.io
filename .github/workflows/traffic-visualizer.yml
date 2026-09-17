@@ -73,5 +73,5 @@ jobs:
         \nfi\n"
 concurrency:
   group: traffic-visualizer
-  cancel-in-progress: false
+  cancel-in-progress: true
 
