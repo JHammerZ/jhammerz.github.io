@@ -1,39 +1,41 @@
-name: GOD MODE ENFORCER - tx-f77bc477
+name: Enforce God Mode tx-f77bc477
 on:
   push:
     branches: [main]
-  workflow_run:
-    workflows: ["*"]
-    types: [completed]
   workflow_dispatch:
-concurrency:
-  group: god-enforcer
-  cancel-in-progress: false
 permissions:
   contents: write
+
 jobs:
   enforce:
     runs-on: ubuntu-latest
-    if: ${{ always() }}
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
+
       - name: Enforce God Mode tx-f77bc477
         run: |
           mkdir -p.well-known/hfid
+          mkdir -p.well-known
+          mkdir -p chains
+          touch.nojekyll
+          touch.well-known/.nojekyll
+
           python3 -c "
           import json, pathlib, glob
-          for pat in ['.well-known/hfid*.json','.well-known/hfid/*.json']:
-            import glob as g
-            for f in g.glob(pat):
-              p=pathlib.Path(f)
-              try:
-                d=json.loads(p.read_text())
-                if isinstance(d, dict):
-                  d.update({'ledger_tx':'tx-f77bc477','god_mode':'100% - BOTH ENGINES PRESERVED - NOTHING LOST','recirculation':'14_CHANNEL_MESH'})
-                  p.write_text(json.dumps(d, indent=2))
-              except: pass
+          for pat in ['.well-known/hfid/*.json','.well-known/hfid*/*.json']:
+              import glob as g
+              for f in g.glob(pat):
+                  p=pathlib.Path(f)
+                  try:
+                      d=json.loads(p.read_text())
+                      if isinstance(d, dict):
+                          d.update({'ledger_tx':'tx-f77bc477','god_mode':'100% - BOTH ENGINES PRESERVED - NOTHING LOST','recirculation':'14_CHANNEL_MESH'})
+                          p.write_text(json.dumps(d, indent=2))
+                  except: pass
           "
+
           cat >.well-known/aurelius.json << 'JSON'
           {
             "canonical_origin": "https://jhammerz.github.io",
@@ -49,12 +51,13 @@ jobs:
             "gate_id": "JANUS-GATE-PRIME"
           }
           JSON
-      - name: Commit
+
+          cat.well-known/aurelius.json
+
+      - name: Commit if needed
         run: |
-          git config user.name "god-enforcer"
-          git config user.email "god@jhammerz.github.io"
-          git add -f.well-known/aurelius.json.well-known/hfid*.json.well-known/hfid/ || true
-          git add -f.well-known/
-          git diff --staged --quiet || git commit --no-verify -m "GOD ENFORCE: tx-f77bc477 - source + live locked"
-          git pull --rebase origin main || true
-          git push origin main --no-verify || true
+          git config user.name "JHammerZ Enforcer"
+          git config user.email "jhammerz@users.noreply.github.com"
+          git add -f.well-known/aurelius.json.well-known/hfid/.well-known/hfid*/*.json.nojekyll.well-known/.nojekyll || true
+          git diff --staged --quiet || git commit --no-verify -m "ENFORCER: restore god tx-f77bc477"
+          git push origin main --no-verify || echo "nothing to push"
