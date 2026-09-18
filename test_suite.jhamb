@@ -1,0 +1,1 @@
+{"compiler_version":"1.0.0-Beta","metadata":{"node_allocation_target":2},"symbol_table":[{"node_id":0,"vector":[100.25,200.5,0.0]},{"node_id":1,"vector":[105.0,198.75,0.0]}],"instructions":["EXECUTE_DELAUNAY_TESS_PASS","COMPILE_POLYGON_INDEX_MATRIX"]}
