@@ -112,7 +112,7 @@ class JHamLanguageCompiler:
                     compiled_bytecode["instructions"].append({"op": parts[0], "param": None, "val": float(parts[1])})
                 continue
 
-            if line in ["EXECUTE_DELAUNAY_TESS_PASS", "COMPILE_POLYGON_INDEX_MATRIX", "MINKOWSKI_METRIC_FLUX_COMPACT", "NON_EUCLIDEAN_METRIC_FOLD_PASS", "HYPERPLANE_PROJECT_PASS"]:
+            if line in ["EXECUTE_DELAUNAY_TESS_PASS", "COMPILE_POLYGON_INDEX_MATRIX", "MINKOWSKI_METRIC_FLUX_COMPACT", "NON_EUCLIDEAN_METRIC_FOLD_PASS", "HYPERPLANE_PROJECT_PASS", "STOCHASTIC_GRID_INVERSION"]:
                 compiled_bytecode["instructions"].append({"op": line, "param": None, "val": None})
                 continue
 
