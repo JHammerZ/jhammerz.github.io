@@ -1,9 +1,9 @@
 {
-  "h_fid_identity": "H-FID-100-EVERGREEN-SECURE-PASSED",
+  "h_fid_identity": "H-FID-100-SANCTUARY-VERIFIED",
   "metrics": {
     "active_sync_frame": 0,
-    "aurelius_compute_latency_ms": "0.1340ms",
+    "aurelius_compute_latency_ms": "0.1450ms",
     "cluster_spatial_density_nodes": 5000,
-    "system_stability_flag": "SHIELD_LOCK_98f6d7e2"
+    "system_stability_flag": "LYSANDER_SOVEREIGNTY_ENFORCED"
   }
 }
