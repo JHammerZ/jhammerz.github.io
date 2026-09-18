@@ -120,6 +120,11 @@
       "timestamp": 1789759929,
       "state_root": "6e798f62f781c27b697c69bb139833b223e72f1081bf7774bd5e523bd9378fbc",
       "integrity": "PQ_LMS_HSS_PASSED"
+    },
+    {
+      "timestamp": 1789759948,
+      "state_root": "1ca02be24fcb0ddb460e24ada74c2972a1dfea8b1e0e4bcce802053aafc58dcf",
+      "integrity": "PQ_LMS_HSS_PASSED"
     }
   ]
 }
