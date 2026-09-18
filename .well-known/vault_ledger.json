@@ -205,6 +205,11 @@
       "timestamp": 1789764860,
       "state_root": "486ea3572488210d6ef764f1f248fa0b0a90d08454419c4af2885ca7ec1fd587",
       "integrity": "PQ_LMS_HSS_PASSED"
+    },
+    {
+      "timestamp": 1789765015,
+      "state_root": "99bf39e65dec0f375277027f9ee20c1589be0b6b23d0fc171f748c932a6d220c",
+      "integrity": "PQ_LMS_HSS_PASSED"
     }
   ]
 }
