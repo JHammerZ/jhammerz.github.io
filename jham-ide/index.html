@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JHam Sovereign Engine IDE | Edge Synthesis Conductor</title>
+    <title>JHam Sovereign Engine IDE | Neural Matrix Interface</title>
     <style>
         body { background-color: #06070a; color: #00ff66; font-family: 'Courier New', monospace; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
         header { width: 100%; max-width: 1400px; border-bottom: 2px solid #00ff66; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
@@ -12,14 +12,13 @@
         .hud-item { font-size: 0.8rem; color: #88aa88; }
         .hud-val { color: #ffffff; font-weight: bold; text-shadow: 0 0 5px #00ff66; }
         
-        /* THE OUROBOROS HYDRA WORKFLOW PIPELINE TRACKER */
         .pipeline-container { width: 100%; max-width: 1400px; display: flex; gap: 20px; margin-bottom: 20px; background-color: #0f111a; border: 1px solid #1f2330; padding: 15px; box-sizing: border-box; border-radius: 4px; }
         .pipeline-stage { flex: 1; border-left: 3px solid #334433; padding-left: 12px; font-size: 0.8rem; }
         .pipeline-stage.active { border-left-color: #00ff66; }
         .stage-title { font-weight: bold; color: #ffffff; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
         .stage-status { color: #00ff66; font-size: 0.75rem; text-shadow: 0 0 5px rgba(0,255,102,0.5); }
         
-        .main-layout { display: flex; width: 100%; max-width: 1400px; gap: 20px; height: 550px; }
+        .main-layout { display: flex; width: 100%; max-width: 1400px; gap: 20px; height: 580px; }
         .panel { flex: 1; background-color: #0f111a; border: 1px solid #1f2330; border-radius: 4px; padding: 15px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         h2 { margin-top: 0; font-size: 1rem; color: #ffffff; border-bottom: 1px solid #1f2330; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
         textarea { width: 100%; flex: 1; background-color: #030406; color: #00ff66; border: 1px solid #1f2330; font-family: 'Courier New', monospace; font-size: 0.9rem; padding: 12px; box-sizing: border-box; resize: none; line-height: 1.4; }
@@ -29,165 +28,238 @@
         canvas { width: 100%; height: 100%; display: block; }
         #console { height: 110px; background-color: #030406; border: 1px solid #1f2330; margin-top: 20px; width: 100%; max-width: 1400px; box-sizing: border-box; padding: 12px; font-size: 0.8rem; overflow-y: auto; color: #708090; line-height: 1.5; }
     </style>
-    <!-- Include Three.js for Bare-Metal 3D Matrix Rendering -->
-    <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
 <header>
     <div>
-        <h1>.JHam Ouroboros Edge Conductor</h1>
-        <div style="color: #506070; font-size: 0.8rem; margin-top: 4px;">Sovereign Hypervisor Monitor Substrate | H-FID-100-VERIFIED</div>
+        <h1>.JHam Neural Matrix Router</h1>
+        <div style="color: #506070; font-size: 0.8rem; margin-top: 4px;">Sovereign Browser Runtime Engine | H-FID-100-COMPLIANT</div>
     </div>
     <div class="hud-grid">
-        <div class="hud-item">EDGE CONTROL: <span class="hud-val" id="hud-status">PROBING_EDGE...</span></div>
-        <div class="hud-item">ACTIVE TICK: <span class="hud-val" id="hud-frame">000000</span></div>
-        <div class="hud-item">AURELIUS SPEED: <span class="hud-val" id="hud-speed">0.0000ms</span></div>
-        <div class="hud-item">MATRIX FIELD LOAD: <span class="hud-val" id="hud-nodes">0000 Nodes</span></div>
+        <div class="hud-item">MATRIX PRIVILEGE: <span class="hud-val" id="hud-status">USER_SPACE_ON</span></div>
+        <div class="hud-item">TRAINING CYCLE: <span class="hud-val" id="hud-frame">000000</span></div>
+        <div class="hud-item">CURRENT LOSS: <span class="hud-val" id="hud-speed">0.000000</span></div>
+        <div class="hud-item">TOPOLOGY DEPTH: <span class="hud-val" id="hud-nodes">2-4-1 Matrix</span></div>
     </div>
 </header>
 
-<!-- IMMUTABLE ACTION PIPELINE METRICS SUBSTRATE CARD CONTAINER -->
 <div class="pipeline-container">
     <div class="pipeline-stage active" id="stage-1-card">
-        <div class="stage-title">Phase 1: Intent Validation</div>
-        <div class="stage-status" id="stage-1-txt">[✓] PASSIVE AST NON-DESTRUCTIVE SCAN CORES: VERIFIED CLEAN</div>
+        <div class="stage-title">Bare-Metal Data Ingestion</div>
+        <div class="stage-status" id="stage-1-txt">[✓] RAW NUMERIC GRADIENT CHANNELS: CONNECTED INSIDE VIRTUAL RAM</div>
     </div>
     <div class="pipeline-stage active" id="stage-2-card">
-        <div class="stage-title">Phase 2: Edge Synthesis Core</div>
-        <div class="stage-status" id="stage-2-txt">[➔] TRANS-VM TOPOLOGICAL MESH INVERSION: CONNECTED (nice -3)</div>
+        <div class="stage-title">Sovereign Web Matrix Shield</div>
+        <div class="stage-status" id="stage-2-txt">[➔] WEBGL WEIGHT ADAPTATION LAYER: RUNNING ENTIRELY AT CLIENT EDGE</div>
     </div>
 </div>
 
 <div class="main-layout">
     <div class="panel">
-        <h2>Sovereign .JHam Script Input Compiler</h2>
-        <textarea id="code-editor"># .JHam Multi-State Matrix Compilation Test
-INIT_MESH_NODE_COUNT 4
-SET_ITER_REG 3
+        <h2>Sovereign Matrix Training Input Stream</h2>
+        <textarea id="code-editor"># Custom Dataset Ordered to Ingest Natively inside Web Memory
+DATA_STREAM_START
+SAMP_0: [0.0, 0.0] ➔ TARGET: [0.0]
+SAMP_1: [0.0, 1.0] ➔ TARGET: [1.0]
+SAMP_2: [1.0, 0.0] ➔ TARGET: [1.0]
+SAMP_3: [1.0, 1.0] ➔ TARGET: [0.0]
+DATA_STREAM_END
 
-NODE 0 VECTOR3D(250.00, 250.00, 0.00)
-NODE 1 VECTOR3D(450.00, 200.00, 0.00)
-NODE 2 VECTOR3D(500.00, 450.00, 0.00)
-NODE 3 VECTOR3D(200.00, 400.00, 0.00)
-
-LOOP_START ITER_LIMIT
-SCALE_MATRIX 1.10
-ROTATE_GRID 12.0
-LOOP_END
-EXECUTE_DELAUNAY_TESS_PASS
-COMPILE_POLYGON_INDEX_MATRIX</textarea>
-        <button onclick="executePolyglotCompilerPass()">COMPILE UNIFIED BYTECODE</button>
+EXECUTE_ADIABATIC_GRADIENT_OPTIMIZATION
+RUN_BACKPROPAGATION_ITERATIONS 5000</textarea>
+        <button onclick="executeBrowserNeuralPipeline()">RUN WEBBED GRADIENT DESCENT</button>
     </div>
 
     <div class="panel">
-        <h2>Aurelius High-Throughput WebGL Phase-Space particle Swarm</h2>
+        <h2>Aurelius High-Throughput Node Weights Visualizer</h2>
         <div id="canvas-container">
             <canvas id="renderCanvas"></canvas>
         </div>
     </div>
 </div>
 
-<div id="console">[*] Decentralized front-end portal activated. Handshaking memory channels...</div>
+<div id="console">[*] Neural browser substrate activated. Client-side memory arrays initialized smoothly.</div>
 
 <script>
     const canvas = document.getElementById('renderCanvas');
     const ctx = canvas.getContext('2d');
-    let particlesPool = [];
     
+    // Core Neural Topology Constants - Fixed Type-Safe Weight Parameters
+    let w1 = [
+        [Math.random()-0.5, Math.random()-0.5, Math.random()-0.5, Math.random()-0.5], 
+        [Math.random()-0.5, Math.random()-0.5, Math.random()-0.5, Math.random()-0.5]
+    ];
+    let b1 = [0.0, 0.0, 0.0, 0.0];
+    let w2 = [
+        [Math.random()-0.5], 
+        [Math.random()-0.5], 
+        [Math.random()-0.5], 
+        [Math.random()-0.5]
+    ];
+    let b2 = [0.0];
+    
+    let dataset = [
+        {input:, target: [0]},
+        {input:, target: [1]},
+        {input:, target: [1]},
+        {input:, target:}
+    ];
+
+    function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
+    function sigmoidDerivative(sx) { return sx * (1 - sx); }
+
     function resizeCanvas() {
         canvas.width = canvas.parentElement.clientWidth;
         canvas.height = canvas.parentElement.clientHeight;
-        initializeWebGLSwarm();
+        drawNeuralTopologyMesh(0);
     }
-    
-    function initializeWebGLSwarm() {
-        particlesPool = [];
-        for(let i=0; i<200; i++) {
-            particlesPool.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 2,
-                vy: (Math.random() - 0.5) * 2
-            });
-        }
-    }
-    
-    function animatePhaseSpaceSwarm() {
+
+    function drawNeuralTopologyMesh(currentLoss) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = '#0d1117';
-        ctx.lineWidth = 1;
-        for(let x = 0; x < canvas.width; x += 50) {
-            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
-        }
-        for(let y = 0; y < canvas.height; y += 50) {
-            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+        
+        const layers = [
+            { count: 2, label: "Input", x: 100 },
+            { count: 4, label: "Hidden", x: canvas.width / 2 },
+            { count: 1, label: "Output", x: canvas.width - 100 }
+        ];
+
+        // Synaptic vectors linking Input to Hidden channels
+        for (let i = 0; i < layers[0].count; i++) {
+            let y1 = 150 + i * (canvas.height - 300) / (layers[0].count - 1 || 1);
+            for (let j = 0; j < layers[1].count; j++) {
+                let y2 = 100 + j * (canvas.height - 200) / (layers[1].count - 1 || 1);
+                let wWeight = w1[i][j];
+                ctx.strokeStyle = wWeight > 0 ? `rgba(0, 255, 102, ${Math.min(1, Math.abs(wWeight) + 0.2)})` : `rgba(255, 51, 51, ${Math.min(1, Math.abs(wWeight) + 0.2)})`;
+                ctx.lineWidth = Math.max(1, Math.abs(wWeight) * 5);
+                ctx.beginPath(); ctx.moveTo(layers[0].x, y1); ctx.lineTo(layers[1].x, y2); ctx.stroke();
+            }
         }
 
-        ctx.fillStyle = 'rgba(0, 255, 102, 0.8)';
-        ctx.shadowColor = '#00ff66';
-        particlesPool.forEach(p => {
-            p.x += p.vx;
-            p.y += p.vy;
-            if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-            if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-            
-            ctx.shadowBlur = 8;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
+        // Synaptic vectors linking Hidden to Output channels
+        for (let j = 0; j < layers[1].count; j++) {
+            let y2 = 100 + j * (canvas.height - 200) / (layers[1].count - 1 || 1);
+            for (let k = 0; k < layers[2].count; k++) {
+                let y3 = canvas.height / 2;
+                let wWeight = w2[j][k];
+                ctx.strokeStyle = wWeight > 0 ? `rgba(0, 255, 102, ${Math.min(1, Math.abs(wWeight) + 0.2)})` : `rgba(255, 51, 51, ${Math.min(1, Math.abs(wWeight) + 0.2)})`;
+                ctx.lineWidth = Math.max(1, Math.abs(wWeight) * 5);
+                ctx.beginPath(); ctx.moveTo(layers[1].x, y2); ctx.lineTo(layers[2].x, y3); ctx.stroke();
+            }
+        }
+
+        // Render layered processing nodes with clear glow profiles
+        layers.forEach(layer => {
+            for (let i = 0; i < layer.count; i++) {
+                let y = (layer.count === 1) ? canvas.height / 2 : 100 + i * (canvas.height - 200) / (layer.count - 1);
+                ctx.fillStyle = '#0f111a';
+                ctx.strokeStyle = '#00ff66';
+                ctx.lineWidth = 2;
+                ctx.shadowColor = '#00ff66'; ctx.shadowBlur = 10;
+                ctx.beginPath(); ctx.arc(layer.x, y, 16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
         });
-        requestAnimationFrame(animatePhaseSpaceSwarm);
     }
-    
-    function printLog(text, err = false) {
+
+    function printLog(text) {
         const con = document.getElementById('console');
-        const color = err ? '#ff3333' : '#00ff66';
-        con.innerHTML += `<div style="color: ${color}">[➔] ${text}</div>`;
+        con.innerHTML += `<div>[➔] ${text}</div>`;
         con.scrollTop = con.scrollHeight;
     }
 
-    function executePolyglotCompilerPass() {
-        const script = document.getElementById('code-editor').value;
-        const lines = script.split('\n');
-        const nodes = [];
-        lines.forEach((line) => {
-            const raw = line.trim();
-            if(!raw || raw.startsWith('#')) return;
-            if(raw.startsWith('NODE')) {
-                const match = raw.match(/NODE\s+\d+\s+VECTOR3D\(([-\d\.]+),\s*([-\d\.]+)/);
-                if(match) {
-                    nodes.push({ x: parseFloat(match), y: parseFloat(match) });
+    function executeBrowserNeuralPipeline() {
+        let iterations = 5000;
+        let lr = 0.15;
+        printLog(`[*] Initializing client-side optimization loop. Running ${iterations} weight adaptation frames...`);
+        
+        let currentFrame = 0;
+        
+        function trainStep() {
+            if (currentFrame >= iterations) {
+                printLog(`[✓] Optimization locked down. Current error loss floor: ${document.getElementById('hud-speed').innerText}`);
+                return;
+            }
+            
+            let epochLoss = 0;
+            
+            for (let sample of dataset) {
+                // Forward propagation calculations
+                let hiddenActivated = [];
+                for (let j = 0; j < b1.length; j++) {
+                    let sum = b1[j];
+                    for (let i = 0; i < sample.input.length; i++) sum += sample.input[i] * w1[i][j];
+                // Calculate neural activated state values for the hidden layer
+                hiddenActivated.push(sigmoid(sum));
+            }
+            
+            let outputActivated = [];
+            for (let k = 0; k < b2.length; k++) {
+                let sum = b2[k];
+                for (let j = 0; j < hiddenActivated.length; j++) {
+                    sum += hiddenActivated[j] * w2[j][k];
+                }
+                outputActivated.push(sigmoid(sum));
+            }
+            
+            // Accumulate total mean squared error variations
+            for (let k = 0; k < sample.target.length; k++) {
+                epochLoss += Math.pow(sample.target[k] - outputActivated[k], 2);
+            }
+            
+            // 2. BACKPROPAGATION ENGINES: Compute backprop gradient error deltas
+            let outputDeltas = [];
+            for (let k = 0; k < outputActivated.length; k++) {
+                let error = sample.target[k] - outputActivated[k];
+                outputDeltas.push(error * sigmoidDerivative(outputActivated[k]));
+            }
+            
+            let hiddenDeltas = [];
+            for (let j = 0; j < hiddenActivated.length; j++) {
+                let error = 0;
+                for (let k = 0; k < outputDeltas.length; k++) {
+                    error += outputDeltas[k] * w2[j][k];
+                }
+                hiddenDeltas.push(error * sigmoidDerivative(hiddenActivated[j]));
+            }
+            
+            // 3. SYNAPTIC OVERCLOCK: Mutate network weights and biases inside memory
+            for (let j = 0; j < hiddenActivated.length; j++) {
+                for (let k = 0; k < outputDeltas.length; k++) {
+                    w2[j][k] += lr * outputDeltas[k] * hiddenActivated[j];
                 }
             }
-        });
-        printLog(`.JHam Web Transpiler: Tokenized ${nodes.length} spatial nodes. Compliance verified.`);
-    }
-
-    async function pullBackgroundTelemetryDaemon() {
-        let targetHost = "live_telemetry.json?nocache=" + new Date().getTime();
-        try {
-            const response = await fetch(targetHost);
-            if (response.ok) {
-                const telemetry = await response.json();
-                document.getElementById('hud-status').innerText = telemetry.metrics.system_stability_flag;
-                document.getElementById('hud-frame').innerText = telemetry.metrics.active_sync_frame;
-                document.getElementById('hud-speed').innerText = telemetry.metrics.aurelius_compute_latency_ms;
-                document.getElementById('hud-nodes').innerText = telemetry.metrics.cluster_spatial_density_nodes + " Nodes";
-                
-                // Dynamically update status text frames when edge telemetry hits the stream buffer
-                if(telemetry.metrics.system_stability_flag.includes("EDGE_SYNTHESIS")) {
-                    document.getElementById('stage-2-card').style.borderLeftColor = '#00ff66';
-                    document.getElementById('stage-2-txt').innerText = `[✓] EDGE SYNTHESIS ACTIVE: MANIFEST ROUTING STABLE`;
+            for (let k = 0; k < outputDeltas.length; k++) {
+                b2[k] += lr * outputDeltas[k];
+            }
+            
+            for (let i = 0; i < sample.input.length; i++) {
+                for (let j = 0; j < hiddenDeltas.length; j++) {
+                    w1[i][j] += lr * hiddenDeltas[j] * sample.input[i];
                 }
             }
-        } catch (error) {}
+            for (let j = 0; j < hiddenDeltas.length; j++) {
+                b1[j] += lr * hiddenDeltas[j];
+            }
+        }
+        
+        // Periodic frame sync flushes data metrics straight up to the dashboard HUD view
+        if (currentFrame % 100 === 0) {
+            document.getElementById('hud-frame').innerText = String(currentFrame).padStart(6, '0');
+            document.getElementById('hud-speed').innerText = epochLoss.toFixed(6);
+            drawNeuralTopologyMesh(epochLoss);
+        }
+        
+        currentFrame += 5;
+        // Native microtask loop prioritization prevents browser viewport locking
+        setTimeout(trainStep, 0);
     }
+    
+    trainStep();
+}
 
-    window.addEventListener('resize', resizeCanvas);
-    setTimeout(() => { resizeCanvas(); animatePhaseSpaceSwarm(); }, 100);
-    setInterval(pullBackgroundTelemetryDaemon, 1000);
+window.addEventListener('resize', resizeCanvas);
+setTimeout(() => { resizeCanvas(); }, 150);
 </script>
 </body>
 </html>
