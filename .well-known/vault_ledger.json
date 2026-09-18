@@ -280,6 +280,11 @@
       "timestamp": 1789768031,
       "state_root": "e04ea32b6bdc31856600b54b7eb8845d437bdab958d3fc6caa0cda8308912dc9",
       "integrity": "PQ_LMS_HSS_PASSED"
+    },
+    {
+      "timestamp": 1789768145,
+      "state_root": "e049049a94b8c560e7049016815275807ac73276423bc04354a014aed4a332b9",
+      "integrity": "PQ_LMS_HSS_PASSED"
     }
   ]
 }
