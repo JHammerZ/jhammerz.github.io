@@ -1,9 +1,1 @@
-{
-  "h_fid_identity": "H-FID-100-TURNCOAT-REPRIMER-VERIFIED",
-  "metrics": {
-    "active_sync_frame": 0,
-    "aurelius_compute_latency_ms": "0.1410ms",
-    "cluster_spatial_density_nodes": 5000,
-    "system_stability_flag": "TURNCOAT_REPRIMED_0_NODES"
-  }
-}
+{"h_fid_identity":"H-FID-100-LIVE-MUTATION-VERIFIED","timestamp":1789711508.87744,"metrics":{"active_sync_frame":22827,"aurelius_compute_latency_ms":"0.4138ms","cluster_spatial_density_nodes":2000,"system_stability_flag":"TIER_3_MAX_CAPABILITY"}}
