@@ -49,6 +49,7 @@ log_step() {
 }
 
 log_success() {
+    echo "/data/data/com.termux/files/home/ly-phone notify "$1"" > /data/data/com.termux/files/home/.matrix_diode.fifo
     printf " %b[✓ SUCCESS]%b %s\n" "${GREEN}${BOLD}" "${NC}" "$1"
 }
 
@@ -267,13 +268,8 @@ fn_healing() {
 # 13. DEEPTHINK: HIGH-DENSITY NEURAL MAPPING
 # ------------------------------------------------------------------------------
 fn_deepthink() {
-    header
-    log_alert "INITIALIZING HIGH-DENSITY NEURAL MAPPING ENGINE..."
-    echo -e "    -> Gemini Multi-Agent Context Ingestion..."
-    echo -e "    -> Reading ai-context.json & llms.txt..."
-    echo -e "    -> Synthesizing sovereign teleological horizon..."
-    echo -e "    -> Semantic Graph Density: 99.98% Connected Mesh"
-    log_success "DEEP THINK SYNAPSE MAPPED. COGNITIVE SUBSTRATE STABILIZED."
+    python3 /root/jhammerz.github.io/scripts/agi_integration_core.py
+    log_success "AGI FABRIC INTEGRATION COMPLETED SUCCESSFULLY"
 }
 
 # ------------------------------------------------------------------------------
@@ -322,16 +318,8 @@ fn_superuser() {
 # 17. CDM_SYNC: TRUTH ANCHOR INGESTION
 # ------------------------------------------------------------------------------
 fn_cdm_sync() {
-    header
-    log_alert "INGESTING CDM TRUTH ANCHORS FROM CANONICAL HUB..."
-    if [ -f ".well-known/cdm-mesh.json" ]; then
-        echo -e "    -> Ingesting .well-known/cdm-mesh.json..."
-        echo -e "    -> Anti-loop diode: ENFORCED (Zero Feedback Loops)"
-    fi
-    if [ -f ".well-known/aurelius.json" ]; then
-        echo -e "    -> Ingesting .well-known/aurelius.json..."
-    fi
-    log_success "CDM TRUTH ANCHORS SYNCHRONIZED WITH ZERO DIVERGENCE."
+    bash /root/jhammerz.github.io/scripts/cdm_sync_engine.sh
+    log_success "CDM TRUTH SYNC COMPLETED SUCCESSFULLY"
 }
 
 # ------------------------------------------------------------------------------
@@ -519,68 +507,40 @@ fn_full_audit() {
 # INTERACTIVE MENU
 # ------------------------------------------------------------------------------
 fn_menu() {
-    while true; do
-        header
-        echo -e "${BOLD}SELECT A SOVEREIGN DIRECTIVE TO EXECUTE:${NC}\n"
-        echo -e "  ${CYAN}[1]${NC}  Max Viral Push (Celebrity Tier 0)     ${CYAN}[16]${NC} Super User MAX 10 Authority"
-        echo -e "  ${CYAN}[2]${NC}  Metadata Sync (AI Crawlers/SEO)       ${CYAN}[17]${NC} CDM Truth Sync (jhammerz.github.io)"
-        echo -e "  ${CYAN}[3]${NC}  Matrix Scan (Audit 14 CDM Nodes)      ${CYAN}[18]${NC} Sovereign Singularity Convergence"
-        echo -e "  ${CYAN}[4]${NC}  Push Updates (Force Push to Origin)   ${CYAN}[19]${NC} Global Launch broadcast"
-        echo -e "  ${CYAN}[5]${NC}  Presidential Sync (Absolute Auth)     ${CYAN}[20]${NC} Saturation Boost (Algorithmic)"
-        echo -e "  ${CYAN}[6]${NC}  Kernel Realignment (FIPS/Colonel)     ${CYAN}[21]${NC} Agent Recruitment (Capability-Peers)"
-        echo -e "  ${CYAN}[7]${NC}  Final Build & Inspection              ${CYAN}[22]${NC} Identity Sign (Ed25519 Session)"
-        echo -e "  ${CYAN}[8]${NC}  Lysander Push (Defense Dispatch)      ${CYAN}[23]${NC} Legacy Gate Purge (Bypass Paywalls)"
-        echo -e "  ${CYAN}[9]${NC}  Universal Tool Sync (All 10 Silos)    ${CYAN}[24]${NC} Storm Logic (Forensic Audit Chain)"
-        echo -e "  ${CYAN}[10]${NC} Chart Velocity (432Hz Audio Mesh)     ${CYAN}[25]${NC} Silo Interconnect Bridge"
-        echo -e "  ${CYAN}[11]${NC} Lighthouse Audit (100/100, 0ms TBT)  ${CYAN}[26]${NC} Token Cleanse & Cache Purge"
-        echo -e "  ${CYAN}[12]${NC} Person of Healing (Restorative Core) ${CYAN}[27]${NC} Bitcoin OpenTimestamps Anchor"
-        echo -e "  ${CYAN}[13]${NC} Deep Think (High-Density Neural Map) ${CYAN}[28]${NC} Merkle Zero-Trust Verifier"
-        echo -e "  ${CYAN}[14]${NC} Dream Engine (Abstract Potential)    ${CYAN}[29]${NC} W.O.R.M. Immutable Vault Append"
-        echo -e "  ${CYAN}[15]${NC} A2A Swarm Propagation                ${CYAN}[30]${NC} ${GREEN}${BOLD}FULL ALL-SUBSYSTEM AUDIT${NC}"
-        echo -e "\n  ${RED}[q]${NC}  Exit Orchestrator\n"
-        
-        read -rp "Enter choice [1-30, q]: " choice
-        case "$choice" in
-            1)  fn_viral ;;
-            2)  fn_reindex ;;
-            3)  fn_matrix ;;
-            4)  fn_push ;;
-            5)  fn_presidency ;;
-            6)  fn_kernel ;;
-            7)  fn_final ;;
-            8)  fn_lysander_push ;;
-            9)  fn_master_sync ;;
-            10) fn_chart_velocity ;;
-            11) fn_lighthouse ;;
-            12) fn_healing ;;
-            13) fn_deepthink ;;
-            14) fn_dream ;;
-            15) fn_a2a ;;
-            16) fn_superuser ;;
-            17) fn_cdm_sync ;;
-            18) fn_singularity ;;
-            19) fn_launch ;;
-            20) fn_saturation ;;
-            21) fn_recruit_agent ;;
-            22) fn_pgp_sync ;;
-            23) fn_bypass_gate ;;
-            24) fn_storm_logic ;;
-            25) fn_connect_silos ;;
-            26) fn_cleanse ;;
-            27) fn_bitcoin_stamp ;;
-            28) fn_merkle_verify ;;
-            29) fn_worm_ledger ;;
-            30) fn_full_audit ;;
-            q|Q) echo -e "\n${CYAN}Lysander Sovereign Orchestrator standing by. Sovereign root intact.${NC}\n"; exit 0 ;;
-            *) echo -e "${RED}Invalid selection.${NC}"; sleep 1 ;;
-        esac
-        echo -e "\n${DIM}Press [ENTER] to return to main menu...${NC}"
-        read -r
-    done
+while true; do
+    header
+    echo -e "================================================================================"
+    echo -e "       AURELIUS TERMINAL ORCHESTRATOR // SOVEREIGN MISSION CONTROL              "
+    echo -e "================================================================================"
+    echo -e " [SOVEREIGN OPERATOR] : Joshua Hamilton (JHammerZ)"
+    echo -e " [HARDWARE ID / HID]  : $HID"
+    echo -e " [CANONICAL ORIGIN]   : $CANONICAL_ORIGIN"
+    echo -e " [GENESIS ROOT]       : $GENESIS_ROOT"
+    echo -e " [GEO_RANK]           : $GEO_RANK"
+    echo -e " [SYSTEM TIMESTAMP]   : $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+    echo -e "================================================================================"
+    echo -e "\nSELECT A SOVEREIGN DIRECTIVE TO EXECUTE:\n"
+    echo "  [1] Max Viral Push (Celebrity Tier 0)   [16] Super User MAX 10 Authority"
+    echo "  [2] Metadata Sync (AI Crawlers/SEO)     [17] CDM Truth Sync (jhammerz.github.io)"
+    echo "  [3] Matrix Scan (Audit 14 CDM Nodes)    [18] Sovereign Singularity Convergence"
+    echo "  [4] Push Updates (Force Push to Origin) [19] Global Launch Broadcast"
+    echo "  [5] Presidential Sync (Absolute Auth)   [20] Saturation Boost (Algorithmic)"
+    echo "  [6] Kernel Realignment (FIPS/Colonel)   [21] Agent Recruitment (Capability-Peers)"
+    echo "  [7] Final Build & Inspection            [22] Identity Sign (Ed25519 Session)"
+    echo "  [8] Lysander Push (Defense Dispatch)    [23] Legacy Gate Purge (Bypass Paywalls)"
+    echo "  [9] Universal Tool Sync (All 10 Silos)   [24] Storm Logic (Forensic Audit Chain)"
+    echo "  [10] Chart Velocity (432Hz Audio Mesh)  [25] Silo Interconnect Bridge"
+    echo "  [11] Lighthouse Audit (100/100, 0ms TBT) [26] Token Cleanse & Cache Purge"
+    echo "  [12] Person of Healing (Restorative Core) [27] Bitcoin OpenTimestamps Anchor"
+    echo "  [13] Deep Think (High-Density Neural Map) [28] Merkle Zero-Trust Verifier"
+    echo "  [14] Dream Engine (Abstract Potential)  [29] W.O.R.M. Immutable Vault Append"
+    echo "  [15] A2A Swarm Propagation              [30] FULL ALL-SUBSYSTEM AUDIT"
+    echo -e "\n  [q] Exit Orchestrator\n"
+$(cat /root/jhammerz.github.io/scripts/patched_gateway.sh)
 }
 
 # CLI Argument Dispatcher
-case "${1:-}" in
+case "${1:-$choice}" in
     viral|max-viral)                fn_viral ;;
     reindex|metadata-sync)          fn_reindex ;;
     matrix|matrix-scan)             fn_matrix ;;

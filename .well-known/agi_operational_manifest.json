@@ -1,0 +1,34 @@
+{
+  "manifest_metadata": {
+    "protocol_class": "AURELIUS_ORCHESTRATOR_AGI_DIRECTIVE",
+    "version_sequence": "092.4.AUTONOMOUS",
+    "operator_signature": "Joshua Hamilton (JHammerZ)",
+    "security_clearance": "RING_-3_MAXIMUM_SOVEREIGNTY"
+  },
+  "autonomous_execution_domains": {
+    "domain_01_context_preservation": {
+      "objective": "Prevent cognitive drift across public endpoints and local repositories.",
+      "action_trigger": "CYCLIC_INTERVAL_3600MS",
+      "executable_routine": "python3 /root/jhammerz.github.io/scripts/agi_integration_core.py",
+      "success_metric": "SEMANTIC_GRAPH_DENSITY >= 99.95%"
+    },
+    "domain_02_perimeter_integrity": {
+      "objective": "Monitor cross-container data diode queues and flush stuck thread file descriptors.",
+      "action_trigger": "ON_STREAM_COLLISION_OR_FLAPPING",
+      "mitigation_routine": "pkill -f '.matrix_diode_engine.sh' && rm -f /data/data/com.termux/files/home/.diode.lock && nohup bash /data/data/com.termux/files/home/.matrix_diode_engine.sh > /data/data/com.termux/files/home/.diode_runtime.log 2>&1 &",
+      "fallback_policy": "TRIGGER_PHONE_HARDWARE_ALERT_VIA_LYPHONE"
+    },
+    "domain_03_immutable_accounting": {
+      "objective": "Seal state-root mutations to the local W.O.R.M. ledger and syndicate changes upstream.",
+      "action_trigger": "ON_LOCAL_STATE_CHANGE_DETECTION",
+      "executable_routine": "bash /root/jhammerz.github.io/scripts/append_vault_engine.sh",
+      "syndication_target": "GITHUB_MAIN_BRANCH_ORIGIN"
+    }
+  },
+  "self_governed_constraints": {
+    "allow_unilateral_execution_override": true,
+    "enforce_5000ms_hysteresis_cooldown": true,
+    "network_silence_fail_safe": "AIRGAP_LOCAL_VAULT_AND_REVOKE_SESSIONS",
+    "read_only_data_diode_enforcement": true
+  }
+}
