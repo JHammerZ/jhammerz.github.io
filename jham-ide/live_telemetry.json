@@ -1,9 +1,1 @@
-{
-  "h_fid_identity": "H-FID-100-SANCTUARY-VERIFIED",
-  "metrics": {
-    "active_sync_frame": 6,
-    "aurelius_compute_latency_ms": "0.1450ms",
-    "cluster_spatial_density_nodes": 5000,
-    "system_stability_flag": "LYSANDER_SOVEREIGNTY_ENFORCED"
-  }
-}
+{"h_fid_identity": "H-FID-100-TURING-SINGULARITY-VERIFIED", "metrics": {"active_sync_frame": 300, "aurelius_compute_latency_ms": "0.0052ms", "cluster_spatial_density_nodes": 5000, "system_stability_flag": "TURING_SINGULARITY_MAX_VELOCITY"}, "token_trace_log": ["NODE 0 VECTOR3D(486.00, 468.00, 0.00)", "NODE 1 VECTOR3D(436.00, 268.00, 0.00)", "NODE 2 VECTOR3D(531.00, 153.00, 0.00)"]}
