@@ -1,10 +1,10 @@
-# .JHam Cryptographic Lexicon - High-Axis Matrix Map
+# .JHam Cryptographic Lexicon - High-Axis Matrix Map v2
 import re
 import io
 
 class JHamCryptLexiconEngine:
     def __init__(self):
-        self.version = "1.1.0-SocialTimelineExt"
+        self.version = "1.2.0-SocialMatrixExt"
         
         # OBFUSCATED LEXICAL DICTIONARY: Maps standard primitives to abstract tensor fields
         self.god_lexicon = {
@@ -16,8 +16,8 @@ class JHamCryptLexiconEngine:
             "LOOP_END":             "∇_TEMPORAL_FLUX_CASCADE_END",
             "SCALE_MATRIX":         "Θ_THERMODYNAMIC_ADIABATIC_SCALE",
             "ROTATE_GRID":          "Λ_MINKOWSKI_HYPERSPACE_ROTATION",
-            "SOCIAL_FEED_INGEST":   "Ψ_SOCIAL_TIMELINE_MATRIX_ANCHOR",
-            "CROSS_POST_SYNC":      "Γ_TRANS_PLATFORM_PROPAGATION_METRIC"
+            "SOCIAL_FEED_INGEST":   "_Ξ_TIMELINE_MATRIX_ANCHOR_",
+            "CROSS_POST_SYNC":      "_Ξ_CROSS_POST_SYNC_"
         }
         self.inverse_lexicon = {v: k for k, v in self.god_lexicon.items()}
 
@@ -37,4 +37,4 @@ class JHamCryptLexiconEngine:
 
 if __name__ == "__main__":
     engine = JHamCryptLexiconEngine()
-    print("[✓] Lexicon extension initialized cleanly.")
+    print("[✓] Lexicon v2 extension initialized cleanly with Social Matrix tokens.")
