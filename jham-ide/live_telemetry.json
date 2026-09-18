@@ -1,7 +1,7 @@
 {
   "h_fid_identity": "H-FID-100-SANCTUARY-VERIFIED",
   "metrics": {
-    "active_sync_frame": 0,
+    "active_sync_frame": 3,
     "aurelius_compute_latency_ms": "0.1450ms",
     "cluster_spatial_density_nodes": 5000,
     "system_stability_flag": "LYSANDER_SOVEREIGNTY_ENFORCED"
