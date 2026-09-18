@@ -3,26 +3,17 @@ import socket
 import sys
 import threading
 import os
-import subprocess
 
 print("\033[1;36m[*] Activating Localized P2P Mesh Terminal Chat Server...\033[0m")
 
-# Automated Port Release: Find and kill any old instances holding port 9999 open
-try:
-    # Query system network sockets for processes binding port 9999 natively
-    pid_check = subprocess.check_output("fuser 9999/tcp 2>/dev/null", shell=True).decode().strip()
-    if pid_check:
-        print(f"  -> \033[1;33m[INTERFACE LOCK ACTIVE]\033[0m Releasing process {pid_check} holding socket tracks...")
-        os.system("fuser -k 9999/tcp >/dev/null 2>&1")
-except:
-    pass
-
+# Programmatically release the hardware port if an older background daemon instance is still open
+os.system("fuser -k 9999/tcp >/dev/null 2>&1")
 print("  -> Binding socket interfaces to Link-Local IPv6 scope...")
 
 try:
     server = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(('::', 9999))
+    server.bind((::, 9999))
     server.listen(5)
     print("  -> \033[1;32m[ONLINE]\033[0m Mesh Server actively listening on port \033[1;33m9999\033[0m completely offline.")
 except Exception as e:
