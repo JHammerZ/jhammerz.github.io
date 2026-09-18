@@ -7,7 +7,7 @@
 import os
 import sys
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 REPO_DIR = "/root/jhammerz.github.io"
 LEDGER_FILE = "/root/.aure_vault/immutable_ledger.json"
@@ -37,7 +37,7 @@ display_blocks = commits[-max_display:]
 
 for i, block in enumerate(display_blocks):
     epoch = block.get("timestamp", 0)
-    utc_str = datetime.utcfromtimestamp(epoch).strftime("%H:%M:%S") if epoch else "00:00:00"
+    utc_str = datetime.fromtimestamp(epoch, timezone.utc).strftime("%H:%M:%S") if epoch else "00:00:00"
     plot_weight = int((epoch % 10) + 5)
     graph_bar = "█" * plot_weight
     print(f"  [{utc_str} UTC] Block-{total_nodes - max_display + i + 1:03d} \033[1;32m{graph_bar:<15}\033[0m (\033[1;33mHash Verified\033[0m)")
@@ -46,14 +46,14 @@ print("\033[1;34m===============================================================
 
 md_lines = [
     "# AURELIUS HIGH-CAPACITY FORENSIC ANALYTICS DASHBOARD",
-    f"Last Synced: {datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')} UTC",
+    f"Last Synced: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} UTC",
     f"Total Immutable Ledger Chain Length: **{total_nodes} Blocks**",
     "\n### TRANSACTIONS VISUAL PARITY MATRIX",
     "```text"
 ]
 for i, block in enumerate(display_blocks):
     epoch = block.get("timestamp", 0)
-    utc_str = datetime.utcfromtimestamp(epoch).strftime("%H:%M:%S") if epoch else "00:00:00"
+    utc_str = datetime.fromtimestamp(epoch, timezone.utc).strftime("%H:%M:%S") if epoch else "00:00:00"
     plot_weight = int((epoch % 10) + 5)
     graph_bar = "█" * plot_weight
     md_lines.append(f"[{utc_str}] Blk-{total_nodes - max_display + i + 1:03d} {graph_bar:<15} [VERIFIED]")
