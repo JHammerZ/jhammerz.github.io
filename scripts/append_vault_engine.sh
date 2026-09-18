@@ -2,13 +2,16 @@
 REPO_DIR="/root/jhammerz.github.io"
 LEDGER_FILE="/root/.aure_vault/immutable_ledger.json"
 
-echo -e "\033[1;34m[*] Bundling local state hashes for GitHub Syndication...\033[0m"
+# Move vault copies to tracking folders
 mkdir -p "$REPO_DIR/.well-known"
 [[ -f "$LEDGER_FILE" ]] && cp -f "$LEDGER_FILE" "$REPO_DIR/.well-known/vault_ledger.json"
 
 cd "$REPO_DIR"
+# Force stage ALL local modifications (including llms.txt)
 git add .
-git commit -m "Aurelius Sovereign State Sync Commit [tx-$(date +%s)]" --quiet 2>/dev/null
 
-# Force-push upstream to blast past tracking conflicts natively
+# Force commit with an automated message parameter to bypass interactive text editors
+git commit -m "Aurelius System State Sync Commit Pass [tx-$(date +%s)]" --quiet 2>/dev/null
+
+# Push updates upstream cleanly
 git push origin main --force &>/dev/null
