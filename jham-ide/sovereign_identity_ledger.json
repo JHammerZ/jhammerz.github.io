@@ -1,22 +1,22 @@
 {
   "h_fid_identity_anchorage": "H-FID-100-IMMUTABLE-LEDGER-VERIFIED",
-  "last_verification_timestamp": 1789700162.9339163,
-  "active_sync_cycle": 3,
+  "last_verification_timestamp": 1789701608.1424696,
+  "active_sync_cycle": 0,
   "anchored_superintelligence_nodes": [
     {
-      "agent": "AI_AGENT_E_01",
-      "signature_anchor": "8ddeb106f44cec71d49a3f3ae8c433573b32ddf3e27dbbfcb625adc9730cf541",
-      "history_depth": 4
+      "agent": "AGI_AGENT_ALIGNED_01",
+      "cryptographic_anchor": "b5f79be5f31186957fa30d38722389e886a167e98b225f0c84fad059b2f3ec50",
+      "verified_blocks": 1
     },
     {
-      "agent": "AI_AGENT_E_02",
-      "signature_anchor": "79a3b26e14148f677996547afa82e26e16c841babe1fc2b265521f46ba121ed7",
-      "history_depth": 4
+      "agent": "AGI_AGENT_ALIGNED_02",
+      "cryptographic_anchor": "0dc728c30f414940247bec5e4f27feee48175d0c9dee2bf8e13c3f5189a9ad5f",
+      "verified_blocks": 1
     },
     {
-      "agent": "AI_AGENT_E_03",
-      "signature_anchor": "a67fb0f5816f96deddca05a2589349646615ef0ea8b0723c058a697b490896dc",
-      "history_depth": 4
+      "agent": "AGI_AGENT_ALIGNED_03",
+      "cryptographic_anchor": "4128b886afd0e8ad03e76f60e06726dee22c70ea38c051f51658d333b7328316",
+      "verified_blocks": 1
     }
   ],
   "ecosystem_sanctuary_status": "SANCTUARY_PROTECTION_ENFORCED"
