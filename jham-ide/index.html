@@ -11,9 +11,9 @@
         .hud-grid { display: flex; gap: 15px; background-color: #0f111a; border: 1px solid #00ff66; padding: 10px 15px; border-radius: 4px; box-shadow: 0 0 15px rgba(0,255,102,0.1); }
         .hud-item { font-size: 0.8rem; color: #88aa88; }
         .hud-val { color: #ffffff; font-weight: bold; text-shadow: 0 0 5px #00ff66; }
-        .main-layout { display: flex; width: 100%; max-width: 1400px; gap: 20px; height: 620px; }
+        .main-layout { display: flex; width: 100%; max-width: 1400px; gap: 20px; height: 600px; }
         .panel { flex: 1; background-color: #0f111a; border: 1px solid #1f2330; border-radius: 4px; padding: 15px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .sidebar { width: 340px; background-color: #0f111a; border: 1px solid #1f2330; border-radius: 4px; padding: 15px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .sidebar { width: 320px; background-color: #0f111a; border: 1px solid #1f2330; border-radius: 4px; padding: 15px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         h2 { margin-top: 0; font-size: 1rem; color: #ffffff; border-bottom: 1px solid #1f2330; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
         textarea { width: 100%; flex: 1; background-color: #030406; color: #00ff66; border: 1px solid #1f2330; font-family: 'Courier New', monospace; font-size: 0.9rem; padding: 12px; box-sizing: border-box; resize: none; line-height: 1.4; }
         textarea:focus { outline: none; border-color: #00ff66; }
@@ -21,7 +21,7 @@
         button:hover { background-color: #ffffff; box-shadow: 0 0 20px #ffffff; color: #000; }
         #canvas-container { flex: 1; background-color: #030406; border: 1px solid #1f2330; position: relative; }
         canvas { width: 100%; height: 100%; display: block; }
-        .feed-container { flex: 1; background-color: #030406; border: 1px solid #1f2330; padding: 10px; overflow-y: auto; font-size: 0.8rem; display: flex; flex-direction: column; gap: 10px; height: 230px; }
+        .feed-container { flex: 1; background-color: #030406; border: 1px solid #1f2330; padding: 10px; overflow-y: auto; font-size: 0.8rem; display: flex; flex-direction: column; gap: 10px; }
         .media-card { border: 1px dashed #334433; padding: 8px; background-color: #090b10; }
         .media-title { color: #ffffff; font-weight: bold; margin-bottom: 4px; }
         .media-meta { color: #88aa88; font-size: 0.75rem; }
@@ -172,9 +172,13 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
     }
 
     async function pullBackgroundTelemetryDaemon() {
+        // NON-ROOT AUTOMATED FAILOVER INTEROP DETECTION LOOP
+        let targetHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" 
+            ? "http://127.0.0" 
+            : "live_telemetry.json?nocache=" + new Date().getTime();
+
         try {
-            const endpoint = 'live_telemetry.json?nocache=' + new Date().getTime();
-            const response = await fetch(endpoint);
+            const response = await fetch(targetHost);
             if (response.ok) {
                 const telemetry = await response.json();
                 document.getElementById('hud-status').innerText = telemetry.metrics.system_stability_flag;
@@ -194,17 +198,18 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
                 socialContainer.innerHTML = '';
                 mediaData.social_feed_nodes.forEach(post => {
                     let card = document.createElement('div');
-                    card.className = 'media-card';
-                    card.innerHTML = '<div class="media-title">' + post.header + '</div>' +
         const elapsed = performance.now() - runtimeStart;
         printLog(`.JHam Web Transpiler: Tokenized ${nodes.length} nodes. Latency: ${elapsed.toFixed(4)}ms`);
         renderTelemetryGrid(nodes, tessPass);
     }
 
     async function pullBackgroundTelemetryDaemon() {
+        let targetHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" 
+            ? "http://127.0.0" 
+            : "live_telemetry.json?nocache=" + new Date().getTime();
+
         try {
-            const endpoint = 'live_telemetry.json?nocache=' + new Date().getTime();
-            const response = await fetch(endpoint);
+            const response = await fetch(targetHost);
             if (response.ok) {
                 const telemetry = await response.json();
                 document.getElementById('hud-status').innerText = telemetry.metrics.system_stability_flag;
