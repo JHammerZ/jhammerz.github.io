@@ -1,1 +1,1 @@
-{"h_fid_identity": "H-FID-100-HEO-OVERCLOCK-VERIFIED", "metrics": {"active_sync_frame": 100, "aurelius_compute_latency_ms": "0.1969ms", "cluster_spatial_density_nodes": 5000, "system_stability_flag": "H_FID_HEO_MAX_VELOCITY"}}
+{"h_fid_identity": "H-FID-100-VECTORIZED-SYNAPSE-VERIFIED", "metrics": {"active_sync_frame": 0, "aurelius_compute_latency_ms": "13.4151ms", "cluster_spatial_density_nodes": 5000, "system_stability_flag": "ACCEL_INDEX_9.97"}}
