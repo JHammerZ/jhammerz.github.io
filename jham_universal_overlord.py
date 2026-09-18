@@ -35,7 +35,8 @@ class JHamUniversalAGIOverlord:
             "02_PREDICTOR": "janus_quantum_predictor.py",
             "03_PROXY_GATE": "janus_proxy_gateway.py",
             "04_DASHBOARD": "jham_dashboard_daemon.py",
-            "05_TELEMETRY": "jham_web_telemetry.py"
+            "05_TELEMETRY": "jham_web_telemetry.py",
+            "06_GIT_AUTONOMY": "jham_git_autonomy.py"
         }
         self.active_processes = {}
         
