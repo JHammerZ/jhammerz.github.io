@@ -17,7 +17,8 @@ class JHamCryptLexiconEngine:
             "LOOP_START":           "∇_TEMPORAL_FLUX_CASCADE_START//[λ_i2]",
             "LOOP_END":             "∇_TEMPORAL_FLUX_CASCADE_END",
             "SCALE_MATRIX":         "Θ_THERMODYNAMIC_ADIABATIC_SCALE",
-            "ROTATE_GRID":          "Λ_MINKOWSKI_HYPERSPACE_ROTATION"
+            "ROTATE_GRID":          "Λ_MINKOWSKI_HYPERSPACE_ROTATION",
+            "CHRONO_ROLLBACK_F0": "Ω_CHRONO_LOOP_ROLLBACK_PASS_F0"
         }
         
         # Reverse mapping dictionary for fast internal RAM decoding loops
