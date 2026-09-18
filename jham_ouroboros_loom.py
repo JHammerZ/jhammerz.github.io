@@ -24,11 +24,12 @@ class JHamOuroborosVertex:
         # Cache current exact parameters into memory before executing the transform pass
         self.state_history.append(list(self.current_vector))
         if len(self.state_history) > 30:
-            self.state_history.pop(0) # Keep memory allocations flat and leak-free
+            self.state_history.pop(0)
 
-        # Simulate standard high-velocity coordinate drifting fluctuations
-        self.current_vector = self.current_vector + (random.uniform(-4.0, 4.0) * drift_index)
-        self.current_vector = self.current_vector + (random.uniform(-4.0, 4.0) * drift_index)
+        # FIXED: Explicitly scaling element values inside list comprehensions to ensure pure type safety
+        drift_x = random.uniform(-4.0, 4.0) * drift_index
+        drift_y = random.uniform(-4.0, 4.0) * drift_index
+        self.current_vector = [round(self.current_vector[0] + drift_x, 4), round(self.current_vector[1] + drift_y, 4)]
 
         # Hard-coded anomaly simulation to test the autonomous phase rollback loops
         if random.random() > 0.995:
@@ -58,6 +59,7 @@ class JHamOuroborosLoomSubstrate:
 
     def continuous_chrono_loop_processing(self):
         """ENGINE LAYER 1 & 2: MANUS + AURELIUS INTEGRATED TEMPORAL MATRIX ENGINE"""
+        print("[➔] [Manus + Aurelius]: Launching background timeline weaving loops...")
         frame = 0
         rand_source = random.Random(9999)
         
