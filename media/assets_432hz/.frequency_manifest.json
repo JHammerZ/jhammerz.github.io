@@ -1,0 +1,13 @@
+{
+  "epoch": 1789763384,
+  "dsp_mesh": "432hz_audio_scaled",
+  "nodes": [
+    {
+      "filename": "aurelius_protocol_base_resonance.wav",
+      "source_hz": 440,
+      "target_hz": 432,
+      "pitch_shift_cents": -31.7667,
+      "checksum_allocation": "0xc4ab5d8b"
+    }
+  ]
+}
