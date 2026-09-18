@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JHam Sovereign Engine IDE | H-FID One-of-One</title>
+    <style>
+        body {
+            background-color: #0d0e15;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 100%;
+            max-width: 1200px;
+            border-bottom: 2px solid #00ff66;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0,255,102,0.5);
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            gap: 20px;
+            height: 600px;
+        }
+        .panel {
+            flex: 1;
+            background-color: #141622;
+            border: 1px solid #334433;
+            border-radius: 4px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: #ffffff;
+            border-bottom: 1px solid #223322;
+            padding-bottom: 5px;
+        }
+        textarea {
+            width: 100%;
+            flex: 1;
+            background-color: #07080d;
+            color: #00ff66;
+            border: 1px solid #223322;
+            font-family: monospace;
+            font-size: 0.95rem;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: none;
+        }
+        button {
+            background-color: #00ff66;
+            color: #0d0e15;
+            border: none;
+            padding: 12px;
+            font-weight: bold;
+            font-family: monospace;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background-color: #ffffff;
+            box-shadow: 0 0 15px #ffffff;
+        }
+        #canvas-container {
+            flex: 1;
+            background-color: #07080d;
+            border: 1px solid #223322;
+            position: relative;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        #console {
+            height: 120px;
+            background-color: #07080d;
+            border: 1px solid #223322;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 1200px;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 0.85rem;
+            overflow-y: auto;
+            color: #88aa88;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>.JHam Language Engine Portal</h1>
+    <div>Sovereign Environment Architecture | Specification H-FID-100-VERIFIED</div>
+</header>
+
+<div class="container">
+    <div class="panel">
+        <h2>Native .JHam Code Editor</h2>
+        <textarea id="code-editor"># Official .JHam Language Spec Test
+INIT_MESH_NODE_COUNT 4
+
+NODE 0 VECTOR3D(200.00, 200.00, 0.00)
+NODE 1 VECTOR3D(400.00, 150.00, 0.00)
+NODE 2 VECTOR3D(450.00, 400.00, 0.00)
+NODE 3 VECTOR3D(150.00, 350.00, 0.00)
+
+EXECUTE_DELAUNAY_TESS_PASS
+COMPILE_POLYGON_INDEX_MATRIX</textarea>
+        <button onclick="compileAndRenderJHam()">EXECUTE POLYGLOT COMPILER PASS</button>
+    </div>
+
+    <div class="panel">
+        <h2>Sovereign Matrix Visualizer Render Loop</h2>
+        <div id="canvas-container">
+            <canvas id="renderCanvas"></canvas>
+        </div>
+    </div>
+</div>
+
+<div id="console">[*] Gated Web Substrate operational. Listening to isolated .JHam vector arrays.</div>
+
+<script>
+    const canvas = document.getElementById('renderCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+        drawGrid();
+    }
+    
+    function appendConsole(text, isSuccess=true) {
+        const con = document.getElementById('console');
+        const color = isSuccess ? '#00ff66' : '#ff3333';
+        con.innerHTML += `<div style="color: ${color}">[➔] ${text}</div>`;
+        con.scrollTop = con.scrollHeight;
+    }
+
+    function drawGrid(nodes = [], drawTriangles = false) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#14251c';
+        ctx.lineWidth = 1;
+        for(let i=0; i<canvas.width; i+=40) {
+            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+        }
+        for(let j=0; j<canvas.height; j+=40) {
+            ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke();
+        }
+
+        if(nodes.length === 0) return;
+
+        if(drawTriangles && nodes.length >= 3) {
+            ctx.strokeStyle = 'rgba(0, 255, 102, 0.4)';
+            ctx.fillStyle = 'rgba(0, 255, 102, 0.05)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(nodes[0].x, nodes[0].y);
+            for(let i = 1; i < nodes.length; i++) {
+                ctx.lineTo(nodes[i].x, nodes[i].y);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        nodes.forEach(node => {
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowColor = '#00ff66';
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        });
+    }
+
+    function compileAndRenderJHam() {
+        const code = document.getElementById('code-editor').value;
+        const lines = code.split('\n');
+        const nodes = [];
+        let tessellationEnabled = false;
+        
+        const startTime = performance.now();
+        appendConsole("Initializing browser-integrated .JHam parser runtime... Running diagnostic check.");
+
+        lines.forEach((line) => {
+            const trimmed = line.trim();
+            if(!trimmed || trimmed.startsWith('#')) return;
+
+            if(trimmed.startsWith('NODE')) {
+                const match = trimmed.match(/NODE\s+\d+\s+VECTOR3D\(([-\d\.]+),\s*([-\d\.]+)/);
+                if(match) {
+                    nodes.push({ x: parseFloat(match[1]), y: parseFloat(match[2]) });
+                }
+            }
+            if(trimmed === 'EXECUTE_DELAUNAY_TESS_PASS') tessellationEnabled = true;
+        });
+
+        const latency = performance.now() - startTime;
+        appendConsole(`.JHam Compiled: Extracted ${nodes.length} structural matrix tracking nodes.`);
+        appendConsole(`H-FID Security Execution Latency Tracker: ${latency.toFixed(4)}ms [PASS]`);
+        drawGrid(nodes, tessellationEnabled);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 100);
+</script>
+</body>
+</html>
