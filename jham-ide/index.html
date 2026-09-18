@@ -13,18 +13,12 @@
         .hud-val { color: #ffffff; font-weight: bold; text-shadow: 0 0 5px #00ff66; }
         .main-layout { display: flex; width: 100%; max-width: 1400px; gap: 20px; height: 600px; }
         .panel { flex: 1; background-color: #0f111a; border: 1px solid #1f2330; border-radius: 4px; padding: 15px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .sidebar { width: 320px; background-color: #0f111a; border: 1px solid #1f2330; border-radius: 4px; padding: 15px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         h2 { margin-top: 0; font-size: 1rem; color: #ffffff; border-bottom: 1px solid #1f2330; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
         textarea { width: 100%; flex: 1; background-color: #030406; color: #00ff66; border: 1px solid #1f2330; font-family: 'Courier New', monospace; font-size: 0.9rem; padding: 12px; box-sizing: border-box; resize: none; line-height: 1.4; }
-        textarea:focus { outline: none; border-color: #00ff66; }
         button { background-color: #00ff66; color: #06070a; border: none; padding: 14px; font-weight: bold; font-family: 'Courier New', monospace; cursor: pointer; margin-top: 12px; letter-spacing: 1px; transition: all 0.2s ease-in-out; }
         button:hover { background-color: #ffffff; box-shadow: 0 0 20px #ffffff; color: #000; }
         #canvas-container { flex: 1; background-color: #030406; border: 1px solid #1f2330; position: relative; }
         canvas { width: 100%; height: 100%; display: block; }
-        .feed-container { flex: 1; background-color: #030406; border: 1px solid #1f2330; padding: 10px; overflow-y: auto; font-size: 0.8rem; display: flex; flex-direction: column; gap: 10px; }
-        .media-card { border: 1px dashed #334433; padding: 8px; background-color: #090b10; }
-        .media-title { color: #ffffff; font-weight: bold; margin-bottom: 4px; }
-        .media-meta { color: #88aa88; font-size: 0.75rem; }
         #console { height: 110px; background-color: #030406; border: 1px solid #1f2330; margin-top: 20px; width: 100%; max-width: 1400px; box-sizing: border-box; padding: 12px; font-size: 0.8rem; overflow-y: auto; color: #708090; line-height: 1.5; }
     </style>
 </head>
@@ -68,21 +62,6 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
         <h2>Aurelius High-Throughput Matrix Render Loop</h2>
         <div id="canvas-container">
             <canvas id="renderCanvas"></canvas>
-        </div>
-    </div>
-
-    <div class="sidebar">
-        <div>
-            <h2>Sovereign Social Feed Nodes</h2>
-            <div class="feed-container" id="social-feed">
-                <div style="color:#506070;">Awaiting stream node packet updates...</div>
-            </div>
-        </div>
-        <div>
-            <h2>Decentralized Video Library</h2>
-            <div class="feed-container" id="video-feed">
-                <div style="color:#506070;">Awaiting stream segment buffers...</div>
-            </div>
         </div>
     </div>
 </div>
@@ -172,7 +151,6 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
     }
 
     async function pullBackgroundTelemetryDaemon() {
-        // NON-ROOT AUTOMATED FAILOVER INTEROP DETECTION LOOP
         let targetHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" 
             ? "http://127.0.0" 
             : "live_telemetry.json?nocache=" + new Date().getTime();
@@ -188,64 +166,6 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
                 document.getElementById('hud-status').style.color = '#00ff66';
             }
         } catch (error) {}
-
-        try {
-            const mediaEndpoint = 'media_manifest.json?nocache=' + new Date().getTime();
-            const mediaResponse = await fetch(mediaEndpoint);
-            if (mediaResponse.ok) {
-                const mediaData = await mediaResponse.json();
-                const socialContainer = document.getElementById('social-feed');
-                socialContainer.innerHTML = '';
-                mediaData.social_feed_nodes.forEach(post => {
-                    let card = document.createElement('div');
-        const elapsed = performance.now() - runtimeStart;
-        printLog(`.JHam Web Transpiler: Tokenized ${nodes.length} nodes. Latency: ${elapsed.toFixed(4)}ms`);
-        renderTelemetryGrid(nodes, tessPass);
-    }
-
-    async function pullBackgroundTelemetryDaemon() {
-        let targetHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" 
-            ? "http://127.0.0" 
-            : "live_telemetry.json?nocache=" + new Date().getTime();
-
-        try {
-            const response = await fetch(targetHost);
-            if (response.ok) {
-                const telemetry = await response.json();
-                document.getElementById('hud-status').innerText = telemetry.metrics.system_stability_flag;
-                document.getElementById('hud-frame').innerText = telemetry.metrics.active_sync_frame;
-                document.getElementById('hud-speed').innerText = telemetry.metrics.aurelius_compute_latency_ms;
-                document.getElementById('hud-nodes').innerText = telemetry.metrics.cluster_spatial_density_nodes + " Nodes";
-                document.getElementById('hud-status').style.color = '#00ff66';
-            }
-        } catch (error) {}
-
-        try {
-            const mediaEndpoint = 'media_manifest.json?nocache=' + new Date().getTime();
-            const mediaResponse = await fetch(mediaEndpoint);
-            if (mediaResponse.ok) {
-                const mediaData = await mediaResponse.json();
-                const socialContainer = document.getElementById('social-feed');
-                socialContainer.innerHTML = '';
-                mediaData.social_feed_nodes.forEach(post => {
-                    let card = document.createElement('div');
-                    card.className = 'media-card';
-                    card.innerHTML = '<div class="media-title">' + post.header + '</div>' +
-                                     '<div class="media-meta">Post ID: ' + post.post_id + '</div>';
-                    socialContainer.appendChild(card);
-                });
-
-                const videoContainer = document.getElementById('video-feed');
-                videoContainer.innerHTML = '';
-                mediaData.video_library_channels.forEach(video => {
-                    let card = document.createElement('div');
-                    card.className = 'media-card';
-                    card.innerHTML = '<div class="media-title">' + video.title + '</div>' +
-                                     '<div class="media-meta">ID: ' + video.asset_id + ' | Status: <span style="color:#00ff66">' + video.status + '</span></div>';
-                    videoContainer.appendChild(card);
-                });
-            }
-        } catch (mediaError) {}
     }
 
     window.addEventListener('resize', resizeCanvas);
