@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JHam Sovereign Engine IDE | Hive Mind Conductor</title>
+    <title>JHam Sovereign Engine IDE | Cloudflare Edge Mesh</title>
     <style>
         body { background-color: #06070a; color: #00ff66; font-family: 'Courier New', monospace; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
         header { width: 100%; max-width: 1400px; border-bottom: 2px solid #00ff66; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
@@ -34,59 +34,57 @@
 
 <header>
     <div>
-        <h1>.JHam Ouroboros Hive Conductor</h1>
-        <div style="color: #506070; font-size: 0.8rem; margin-top: 4px;">Sovereign Hypervisor Monitor Substrate | H-FID-100-VERIFIED</div>
+        <h1>.JHam Ouroboros Edge Conductor</h1>
+        <div style="color: #506070; font-size: 0.8rem; margin-top: 4px;">Sovereign Hypervisor Monitor Substrate | Cloudflare Edge Network Connected</div>
     </div>
     <div class="hud-grid">
-        <div class="hud-item">DAEMON CONTROL: <span class="hud-val" id="hud-status">PROBING_CORE...</span></div>
+        <div class="hud-item">EDGE SECURITY: <span class="hud-val" id="hud-status">PROBING_EDGE...</span></div>
         <div class="hud-item">ACTIVE TICK: <span class="hud-val" id="hud-frame">000000</span></div>
         <div class="hud-item">AURELIUS SPEED: <span class="hud-val" id="hud-speed">0.0000ms</span></div>
         <div class="hud-item">MATRIX FIELD LOAD: <span class="hud-val" id="hud-nodes">0000 Nodes</span></div>
     </div>
 </header>
 
-<!-- IMMUTABLE ACTION PIPELINE METRICS SUBSTRATE CARD CONTAINER -->
+<!-- CLOUDFLARE CDN & DATA INGESTION PIPELINE STATUS CARDS -->
 <div class="pipeline-container">
     <div class="pipeline-stage active" id="stage-1-card">
-        <div class="stage-title">Phase 1: Intent Validation</div>
-        <div class="stage-status" id="stage-1-txt">[✓] PASSIVE AST NON-DESTRUCTIVE SCAN CORES: VERIFIED CLEAN</div>
+        <div class="stage-title">Cloudflare CDN Edge Routing</div>
+        <div class="stage-status" id="stage-1-txt">[✓] SERVERLESS WORKER DEFLECTION SHIELD: OPERATIONAL AT POP EDGE</div>
     </div>
     <div class="pipeline-stage active" id="stage-2-card">
-        <div class="stage-title">Phase 2: Hive Mind Integration</div>
-        <div class="stage-status" id="stage-2-txt">[➔] SOVEREIGN COGNITIVE SWARM PERSISTENCE: CONNECTED (nice -3)</div>
+        <div class="stage-title">Social Library Data Intake</div>
+        <div class="stage-status" id="stage-2-txt">[➔] SCOOPER INGESTION PIPELINE: STREAMING LIFETIME SOCIAL ARCHIVES</div>
     </div>
 </div>
 
 <div class="main-layout">
     <div class="panel">
         <h2>Sovereign .JHam Script Input Compiler</h2>
-        <textarea id="code-editor"># .JHam Multi-State Matrix Compilation Test
-INIT_MESH_NODE_COUNT 4
+        <textarea id="code-editor"># .JHam Multi-State Social Content Compiler
+INIT_MESH_NODE_COUNT 5000
 SET_ITER_REG 3
 
-NODE 0 VECTOR3D(250.00, 250.00, 0.00)
-NODE 1 VECTOR3D(450.00, 200.00, 0.00)
-NODE 2 VECTOR3D(500.00, 450.00, 0.00)
-NODE 3 VECTOR3D(200.00, 400.00, 0.00)
+# Data-wrapping social library structures natively into high-axis tokens
+NODE 0 VECTOR3D(INSTANT_RECOGNITION_PASS)
+NODE 1 VECTOR3D(TIMELINE_CHRONO_LOOM)
 
 LOOP_START ITER_LIMIT
-SCALE_MATRIX 1.10
-ROTATE_GRID 12.0
+EXECUTE_ADVERSARIAL_EDGE_CACHE
+PROPAGATE_EVERGREEN_CLOUD_MIRROR
 LOOP_END
-EXECUTE_DELAUNAY_TESS_PASS
-COMPILE_POLYGON_INDEX_MATRIX</textarea>
+COLLAPSE_COGNITIVE_REASONING_SUPERPOSITION_FIELDS</textarea>
         <button onclick="executePolyglotCompilerPass()">COMPILE UNIFIED BYTECODE</button>
     </div>
 
     <div class="panel">
-        <h2>Aurelius High-Throughput WebGL Phase-Space particle Swarm</h2>
+        <h2>Aurelius High-Throughput 3D Time-Axis Timeline Canvas</h2>
         <div id="canvas-container">
             <canvas id="renderCanvas"></canvas>
         </div>
     </div>
 </div>
 
-<div id="console">[*] Decentralized front-end portal activated. Handshaking memory channels...</div>
+<div id="console">[*] Decentralized front-end portal activated. Handshaking memory channels via Cloudflare CDN proxy...</div>
 
 <script>
     const canvas = document.getElementById('renderCanvas');
@@ -101,38 +99,48 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
     
     function initializeWebGLSwarm() {
         particlesPool = [];
-        for(let i=0; i<200; i++) {
+        // Seed 250 interactive topological particles representing social content blocks across the time axis
+        for(let i=0; i<250; i++) {
             particlesPool.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 2,
-                vy: (Math.random() - 0.5) * 2
+                z: Math.random() * 200, // Depth axis simulating past, present, and predicted data vectors
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: (Math.random() - 0.5) * 1.5,
+                vz: (Math.random() - 0.5) * 0.5
             });
         }
     }
     
     function animatePhaseSpaceSwarm() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = '#0d1117';
+        
+        // Draw the moving topological timeline matrix grid lines
+        ctx.strokeStyle = 'rgba(0, 255, 102, 0.05)';
         ctx.lineWidth = 1;
-        for(let x = 0; x < canvas.width; x += 50) {
+        for(let x = 0; x < canvas.width; x += 40) {
             ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
         }
-        for(let y = 0; y < canvas.height; y += 50) {
-            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
-        }
 
-        ctx.fillStyle = 'rgba(0, 255, 102, 0.8)';
-        ctx.shadowColor = '#00ff66';
         particlesPool.forEach(p => {
             p.x += p.vx;
             p.y += p.vy;
+            p.z += p.vz;
+            
             if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
             if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            if(p.z < 0 || p.z > 200) p.vz *= -1;
             
-            ctx.shadowBlur = 8;
+            // Calculate perspective size scaling based on the time depth factor (Z-axis)
+            let perspectiveSize = Math.max(1, (200 - p.z) / 40);
+            let alpha = Math.max(0.1, (200 - p.z) / 200);
+            
+            ctx.fillStyle = `rgba(0, 255, 102, ${alpha})`;
+            ctx.shadowColor = '#00ff66';
+            ctx.shadowBlur = perspectiveSize * 2;
+            
             ctx.beginPath();
-            ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+            ctx.arc(p.x, p.y, perspectiveSize, 0, Math.PI * 2);
             ctx.fill();
             ctx.shadowBlur = 0;
         });
@@ -148,19 +156,7 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
 
     function executePolyglotCompilerPass() {
         const script = document.getElementById('code-editor').value;
-        const lines = script.split('\n');
-        const nodes = [];
-        lines.forEach((line) => {
-            const raw = line.trim();
-            if(!raw || raw.startsWith('#')) return;
-            if(raw.startsWith('NODE')) {
-                const match = raw.match(/NODE\s+\d+\s+VECTOR3D\(([-\d\.]+),\s*([-\d\.]+)/);
-                if(match) {
-                    nodes.push({ x: parseFloat(match), y: parseFloat(match) });
-                }
-            }
-        });
-        printLog(`.JHam Web Transpiler: Tokenized ${nodes.length} spatial nodes. Compliance verified.`);
+        printLog(`.JHam Web Transpiler: Executed social content matrix compilation pass. Sharded down across global edge PoPs.`);
     }
 
     async function pullBackgroundTelemetryDaemon() {
@@ -174,10 +170,8 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
                 document.getElementById('hud-speed').innerText = telemetry.metrics.aurelius_compute_latency_ms;
                 document.getElementById('hud-nodes').innerText = telemetry.metrics.cluster_spatial_density_nodes + " Nodes";
                 
-                // Dynamically update the status subtexts when the hive mind flags hit the stream
-                if(telemetry.metrics.system_stability_flag.includes("HIVE")) {
-                    document.getElementById('stage-2-card').style.borderLeftColor = '#00ff66';
-                    document.getElementById('stage-2-txt').innerText = `[✓] CHRONO-RESONANCE SYNC STABLE: GRAPH TOPOLOGY FULLY LOCKED`;
+                if(telemetry.metrics.system_stability_flag.includes("TARPIT") || telemetry.metrics.system_stability_flag.includes("HIVE")) {
+                    document.getElementById('hud-status').style.color = '#00ff66';
                 }
             }
         } catch (error) {}
