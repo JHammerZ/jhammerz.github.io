@@ -1,1 +1,10 @@
-{"h_fid_identity":"H-FID-100-LIVE-MUTATION-VERIFIED","timestamp":1789706434.035302,"metrics":{"active_sync_frame":14069,"aurelius_compute_latency_ms":"0.4156ms","cluster_spatial_density_nodes":2000,"system_stability_flag":"TIER_3_MAX_CAPABILITY"}}
+{
+  "h_fid_identity": "H-FID-100-BARE-METAL-PRODUCTION-CONDUIT-VERIFIED",
+  "last_verification_timestamp": 1789706436.790797,
+  "metrics": {
+    "active_sync_frame": 0,
+    "aurelius_compute_latency_ms": "0.1140ms",
+    "cluster_spatial_density_nodes": 5000,
+    "system_stability_flag": "BARE_METAL_CHANNELS_LIVE_TARPIT_1500079"
+  }
+}
