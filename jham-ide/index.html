@@ -1,77 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aurelius Operations Command Node // Joshua Hamilton</title>
-    <style>
-        :root {
-            --bg-base: #060111;
-            --bg-card: rgba(16, 24, 32, 0.85);
-            --text-main: #e2e8f0;
-            --text-dim: #94a3b8;
-            --accent: #00ff41;
-            --border: #1e293b;
-        }
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            font-family: 'Cascadia Code', 'Roboto Mono', monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-        header {
-            width: 100%;
-            max-width: 900px;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-        h1 { color: var(--accent); font-size: 1.8rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        .status-badge { font-size: 0.85rem; color: var(--text-dim); }
-        .status-active { color: var(--accent); font-weight: bold; }
-        main { width: 100%; max-width: 900px; display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        h2 { color: var(--accent); font-size: 1.2rem; margin-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; }
-        pre { background: #000; border: 1px solid #111; padding: 15px; border-radius: 4px; overflow-x: auto; color: #00ff41; font-size: 0.9rem; line-height: 1.4; }
-        footer { margin-top: auto; padding-top: 4px0px; font-size: 0.75rem; color: var(--text-dim); text-align: center; }
-        a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-    </style>
+<meta charset="UTF-8">
+<title>JHam Sovereign Engine IDE | H-FID One-of-One</title>
+... paste your full IDE html from before ...
 </head>
 <body>
-    <header>
-        <h1>Aurelius Sovereign Terminal Operator HUD Portal</h1>
-        <div class="status-badge">System Core Protocol Base: Ring_-3 Autonomy Matrix // State: <span class="status-active">100% ONLINE & SYNCED</span></div>
-    </header>
-    <main>
-        <section class="card">
-            <h2>Live Multi-Agent Swarm Analytics Summary</h2>
-            <p>The forensic transaction log data indices below are continuously parsed from our secure W.O.R.M. database vaults and syndicated globally across live edge cells completely on autopilot:</p>
-            <pre id="analytics-frame">Loading live cryptographic blockchain transaction block arrays...</pre>
-        </section>
-    </main>
-    <footer>
-        Sovereign Network Nodes Sealed Natively. Operator: Joshua Hamilton (JHammerZ) // <a href="https://github.com" target="_blank">View Core Codebase</a>
-    </footer>
-    <script>
-        // Fetch the raw markdown analytics log files dynamically from our deployed web directory channels
-        fetch('.well-known/forensic_audit_chain.md')
-            .then(response => response.text())
-            .then(data => {
-                const frame = document.getElementById('analytics-frame');
-                // Extract and format the visual code block content parameters cleanly onto the page canvas
-                const codeBlock = data.split('```text')[1] ? data.split('```text')[1].split('```')[0] : data;
-                frame.textContent = codeBlock.strip ? codeBlock.strip() : codeBlock;
-            })
-            .catch(err => {
-                document.getElementById('analytics-frame').textContent = "Aurelius Core Parity Secured Upstream.\nAll 30 Subsystems Synced.";
-            });
-    </script>
+...
 </body>
 </html>
