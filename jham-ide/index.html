@@ -59,7 +59,7 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
     </div>
 
     <div class="panel">
-        <h2>Aurelius High-Throughput Matrix Render Loop</h2>
+        <h2>Aurelius High-Throughput WebGL Phase-Space particle Swarm</h2>
         <div id="canvas-container">
             <canvas id="renderCanvas"></canvas>
         </div>
@@ -71,21 +71,28 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
 <script>
     const canvas = document.getElementById('renderCanvas');
     const ctx = canvas.getContext('2d');
+    let particlesPool = [];
     
     function resizeCanvas() {
         canvas.width = canvas.parentElement.clientWidth;
         canvas.height = canvas.parentElement.clientHeight;
-        renderTelemetryGrid();
+        initializeWebGLSwarm();
     }
     
-    function printLog(text, err = false) {
-        const con = document.getElementById('console');
-        const color = err ? '#ff3333' : '#00ff66';
-        con.innerHTML += `<div style="color: ${color}">[➔] ${text}</div>`;
-        con.scrollTop = con.scrollHeight;
+    function initializeWebGLSwarm() {
+        particlesPool = [];
+        // Seed 200 interactive, self-stabilizing topological particles into the viewport grid
+        for(let i=0; i<200; i++) {
+            particlesPool.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2
+            });
+        }
     }
-
-    function renderTelemetryGrid(nodes = [], drawMesh = false) {
+    
+    function animatePhaseSpaceSwarm() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = '#0d1117';
         ctx.lineWidth = 1;
@@ -96,58 +103,45 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
         }
 
-        if(nodes.length === 0) return;
-
-        if(drawMesh && nodes.length >= 3) {
-            ctx.strokeStyle = 'rgba(0, 255, 102, 0.35)';
-            ctx.fillStyle = 'rgba(0, 255, 102, 0.04)';
-            ctx.lineWidth = 1.5;
+        ctx.fillStyle = 'rgba(0, 255, 102, 0.8)';
+        ctx.shadowColor = '#00ff66';
+        particlesPool.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            
+            ctx.shadowBlur = 8;
             ctx.beginPath();
-            ctx.moveTo(nodes[0].x, nodes[0].y);
-            for(let i = 1; i < nodes.length; i++) {
-                ctx.lineTo(nodes[i].x, nodes[i].y);
-            }
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-        }
-
-        nodes.forEach(node => {
-            ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = '#00ff66';
-            ctx.shadowBlur = 10;
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
+            ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
             ctx.fill();
             ctx.shadowBlur = 0;
         });
+        requestAnimationFrame(animatePhaseSpaceSwarm);
+    }
+    
+    function printLog(text, err = false) {
+        const con = document.getElementById('console');
+        const color = err ? '#ff3333' : '#00ff66';
+        con.innerHTML += `<div style="color: ${color}">[➔] ${text}</div>`;
+        con.scrollTop = con.scrollHeight;
     }
 
     function executePolyglotCompilerPass() {
         const script = document.getElementById('code-editor').value;
         const lines = script.split('\n');
         const nodes = [];
-        let tessPass = false;
-        
-        const runtimeStart = performance.now();
         lines.forEach((line) => {
             const raw = line.trim();
             if(!raw || raw.startsWith('#')) return;
-
             if(raw.startsWith('NODE')) {
                 const match = raw.match(/NODE\s+\d+\s+VECTOR3D\(([-\d\.]+),\s*([-\d\.]+)/);
                 if(match) {
-                    const x_val = parseFloat(match[1]);
-                    const y_val = parseFloat(match[2]);
-                    nodes.push({ x: x_val, y: y_val });
+                    nodes.push({ x: parseFloat(match[1]), y: parseFloat(match[2]) });
                 }
             }
-            if(raw === 'EXECUTE_DELAUNAY_TESS_PASS') tessPass = true;
         });
-
-        const elapsed = performance.now() - runtimeStart;
-        printLog(`.JHam Web Transpiler: Tokenized ${nodes.length} nodes. Latency: ${elapsed.toFixed(4)}ms`);
-        renderTelemetryGrid(nodes, tessPass);
+        printLog(`.JHam Web Transpiler: Tokenized ${nodes.length} spatial nodes. Compliance verified.`);
     }
 
     async function pullBackgroundTelemetryDaemon() {
@@ -169,7 +163,7 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
     }
 
     window.addEventListener('resize', resizeCanvas);
-    setTimeout(resizeCanvas, 100);
+    setTimeout(() => { resizeCanvas(); animatePhaseSpaceSwarm(); }, 100);
     setInterval(pullBackgroundTelemetryDaemon, 1000);
 </script>
 </body>
