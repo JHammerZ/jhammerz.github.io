@@ -22,13 +22,26 @@
             padding-bottom: 10px;
             margin-bottom: 20px;
             text-shadow: 0 0 10px rgba(0,255,102,0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
         }
+        .header-title h1 { margin: 0; font-size: 2rem; }
+        .hud-panel {
+            background-color: #141622;
+            border: 1px solid #00ff66;
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,255,102,0.2);
+        }
+        .hud-val { color: #00ff66; font-weight: bold; }
         .container {
             display: flex;
             width: 100%;
             max-width: 1200px;
             gap: 20px;
-            height: 600px;
+            height: 550px;
         }
         .panel {
             flex: 1;
@@ -102,8 +115,16 @@
 <body>
 
 <header>
-    <h1>.JHam Language Engine Portal</h1>
-    <div>Sovereign Environment Architecture | Specification H-FID-100-VERIFIED</div>
+    <div class="header-title">
+        <h1>.JHam Language Engine Portal</h1>
+        <div style="color: #88aa88; font-size:0.9rem; margin-top:5px;">Sovereign Environment Architecture | Specification H-FID-100-VERIFIED</div>
+    </div>
+    <!-- Active Telemetry HUD Matrix HUD Display -->
+    <div class="hud-panel">
+        <div>CORE FEED STATUS: <span class="hud-val" id="hud-status">STANDALONE_READY</span></div>
+        <div>ACTIVE ENGINE FRAME: <span class="hud-val" id="hud-frame">0000</span></div>
+        <div>AURELIUS COMPUTE VELOCITY: <span class="hud-val" id="hud-speed">0.0000ms</span></div>
+    </div>
 </header>
 
 <div class="container">
@@ -130,7 +151,7 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
     </div>
 </div>
 
-<div id="console">[*] Gated Web Substrate operational. Listening to isolated .JHam vector arrays.</div>
+<div id="console">[*] Gated Web Substrate operational. System tracking pipelines online.</div>
 
 <script>
     const canvas = document.getElementById('renderCanvas');
@@ -194,8 +215,6 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
         let tessellationEnabled = false;
         
         const startTime = performance.now();
-        appendConsole("Initializing browser-integrated .JHam parser runtime... Running diagnostic check.");
-
         lines.forEach((line) => {
             const trimmed = line.trim();
             if(!trimmed || trimmed.startsWith('#')) return;
@@ -210,13 +229,30 @@ COMPILE_POLYGON_INDEX_MATRIX</textarea>
         });
 
         const latency = performance.now() - startTime;
-        appendConsole(`.JHam Compiled: Extracted ${nodes.length} structural matrix tracking nodes.`);
-        appendConsole(`H-FID Security Execution Latency Tracker: ${latency.toFixed(4)}ms [PASS]`);
+        appendConsole(`.JHam Local Compiler: Extracted ${nodes.length} spatial nodes. Latency: ${latency.toFixed(4)}ms [PASS]`);
         drawGrid(nodes, tessellationEnabled);
+    }
+
+    // INTERACTIVE DAEMON POLLING: Poll background daemon logs directly via local web structures
+    async function updateWebTelemetryHUD() {
+        try {
+            const response = await fetch('live_telemetry.json?t=' + new Date().getTime());
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('hud-status').innerText = data.metrics.system_stability_flag;
+                document.getElementById('hud-frame').innerText = data.metrics.active_sync_frame;
+                document.getElementById('hud-speed').innerText = data.metrics.aurelius_compute_latency_ms;
+                document.getElementById('hud-status').style.color = '#00ff66';
+            }
+        } catch (e) {
+            // Silently wait for target manifest updates to deploy
+        }
     }
 
     window.addEventListener('resize', resizeCanvas);
     setTimeout(resizeCanvas, 100);
+    // Continuously pull daemon streams every 1000ms
+    setInterval(updateWebTelemetryHUD, 1000);
 </script>
 </body>
 </html>
