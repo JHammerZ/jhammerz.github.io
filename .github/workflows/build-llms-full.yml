@@ -1,18 +1,14 @@
-name: Ouroboros - Sovereign Graph Sync [RESTORED]
+name: Ouroboros - Sovereign Graph Sync [RESTORED - SAFE]
 on:
   push:
     branches: [main]
     paths-ignore:
       - 'llms.txt'
-      - '.github/workflows/build-llms-full.yml'
   schedule:
     - cron: '0 */6 * * *'
   workflow_dispatch:
 permissions:
   contents: write
-  id-token: write
-  pages: write
-  attestations: write
 concurrency:
   group: build-llms-full
   cancel-in-progress: true
@@ -21,19 +17,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Ensure.nojekyll
+      - name: Ensure.nojekyll exists
         run: touch.nojekyll
-      - name: Guard llms.txt clean
+      - name: Verify llms.txt stays clean
         run: |
           head -5 llms.txt
           if grep -q "AURELIUS COGNITIVE HUB INDEX" llms.txt; then exit 1; fi
-      - name: Keep llms-full.txt anchor
-        run: ls -lh llms.txt llms-full.txt.nojekyll
+          echo "llms.txt clean - audit passes"
+      - name: Sync only llms-full.txt anchor
+        run: |
+          ls -lh llms.txt llms-full.txt.nojekyll
+          cat llms-full.txt
       - name: Commit safe files only
         run: |
           git config user.name "Ouroboros Bot"
           git config user.email "ouroboros@jhammerz.github.io"
-          git add -f.nojekyll llms-full.txt
+          git add -f.nojekyll
+          git add -f llms-full.txt
           git diff --staged --quiet || git commit -m "Ouroboros Metamorphic Shift Pass - Cloud-Native Architecture Synced [PASS]" && git push origin main
