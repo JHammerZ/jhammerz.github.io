@@ -1,14 +1,13 @@
 {
-  "name": "Aurelius Sovereign Orchestrator",
-  "version": "3.0",
-  "status": "SUPERLUMINAL LIVE | KERNEL_MAX",
-  "operator": "Joshua Hamilton (JhammerZ)",
-  "command_nodes": [
-    "https://jhammerz.github.io/ops/",
-    "https://jhammerz.github.io/ops.html",
-    "https://jhammerz.github.io/"
-  ],
-  "ide": "https://jhammerz.github.io/jham-ide/",
-  "did": "https://jhammerz.github.io/.well-known/did.json",
-  "manifest": "https://jhammerz.github.io/.well-known/hfid/manifest.json"
+  "canonical_origin": "https://jhammerz.github.io",
+  "endpoint": "https://jhammerz.github.io/.well-known/aurelius.json",
+  "manifest": "SOVEREIGN CDM BI-DIRECTIONAL ROUTING MESH // V4.2 // IMMUTABLE + SOVEREIGN CLUSTER",
+  "version": "4.2.0-IMMUTABLE-CDM-SOVEREIGN-GODMODE",
+  "merkle_root": "6a789b2e901fb96aff8ec7805c8db349d0f9ca1d3a5a6b2b165b1cc2d2df1bb8",
+  "ledger_tx": "tx-f77bc477",
+  "status": "APPROVED - 100% SECURE & FULLY COMPLIANT",
+  "total_nodes": 14,
+  "recirculation": "14_CHANNEL_MESH",
+  "god_mode": "100% - BOTH ENGINES PRESERVED - NOTHING LOST",
+  "gate_id": "JANUS-GATE-PRIME"
 }
