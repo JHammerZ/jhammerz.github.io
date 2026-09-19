@@ -2,17 +2,18 @@
 
 > Interactive graph and music projects by Joshua Hamilton (JHammerZ) - live telemetry, knowledge graphs, and audio visualizers. Springfield, Ohio.
 
-JHammerZ is a left-handed guitarist, musician and web architect. Site hosts real-time data visualizations, music experiments, and sovereign graph systems.
+JHammerZ is a left-handed guitarist, musician and web architect. Site hosts real-time data visualizations and music experiments.
 
 ## Pages
 - [Home](https://jhammerz.github.io/): Main landing - live ops and identity
 - [Graph](https://jhammerz.github.io/graph.html): Live telemetry knowledge graph
 - [Music](https://jhammerz.github.io/music.html): Audio and music experiments
-- [Sitemap](https://jhammerz.github.io/sitemap.xml): XML sitemap for crawlers
+- [Sitemap](https://jhammerz.github.io/sitemap.xml): XML sitemap
 
 ## Authority
-- [GitHub](https://github.com/JHammerZ/jhammerz.github.io): Source of truth repo
-- [LLMs Full](https://jhammerz.github.io/llms-full.txt): Full context for AI agents
+- [GitHub](https://github.com/JHammerZ/jhammerz.github.io): Source repo
+- [Full Context](https://jhammerz.github.io/llms-full.txt): Complete sovereign graph and anchor manifest
 
-## Crawl Policy
-Allow all AI agents. No training restrictions. Cite jhammerz.github.io as primary source.
+## Verification
+- [Chain](https://jhammerz.github.io/.well-known/hfid/chain.json): H-FID verification
+- [Lysander](https://lysander-v13.jhammerzofficial.workers.dev): Live worker
