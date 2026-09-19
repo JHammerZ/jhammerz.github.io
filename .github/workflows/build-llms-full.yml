@@ -12,7 +12,7 @@ jobs:
  - uses: actions/checkout@v4
  - name: Ensure nojekyll
  run: |
- touch .nojekyll
+ touch.nojekyll
  touch public/.nojekyll
  touch docs/.nojekyll
  touch dist/.nojekyll
@@ -20,6 +20,6 @@ jobs:
  run: |
  git config user.name "Ouroboros Bot"
  git config user.email "ouroboros@jhammerz.github.io"
- git add -f .nojekyll public/.nojekyll docs/.nojekyll dist/.nojekyll
+ git add -f.nojekyll public/.nojekyll docs/.nojekyll dist/.nojekyll
  git add -f llms-full.txt public/llms-full.txt docs/llms-full.txt dist/llms-full.txt
  git diff --staged --quiet || git commit -m "Ouroboros PASS" && git push origin main
