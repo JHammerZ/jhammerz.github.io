@@ -1,19 +1,13 @@
-name: build-llms-full - restored
-permissions:
- contents: write
- id-token: write
- pages: write
- attestations: write
-
+name: Build LLMs Full (Manual Only)
 on:
   workflow_dispatch:
 
 jobs:
-  run:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - run: echo active
-concurrency:
-  group: build-llms-full
-  cancel-in-progress: true
-
+      - uses: actions/checkout@v4
+      - name: No-op - preserve manual llms.txt
+        run: |
+          echo "Workflow disabled from auto-run to preserve clean llms.txt audit"
+          ls -lh llms.txt llms-full.txt
