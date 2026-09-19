@@ -11,7 +11,6 @@ include:
   - .hfid
   - .well-known
     - llms.txt
-    - llms-full.txt
     - .well-known
     - _headers
     - entities.json
