@@ -12,3 +12,7 @@ PROTOCOL = "Twenty_47"
 [[kv_namespaces]]
 binding = "AGENT_STATE_LEDGER"
 id = "106ec5c22ff44bdea0e5a4b3049efb86"
+
+[[kv_namespaces]]
+binding = "SEC_MAN_EDGE"
+id = "e6e08558443343678cf4612212600dfa"
