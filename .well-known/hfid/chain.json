@@ -1,1 +1,9 @@
-{"chain":"https://jhammerz.github.io/.well-known/hfid/chain.json","sovereign":"Joshua > HFID > Co-Architect > Lysander"}
+{
+  "hfid_version": "v1.3",
+  "sovereign_author": "Joshua Hamilton",
+  "verification_chain": "https://jhammerz.github.io/.well-known/hfid/chain.json",
+  "root_hash": "1a836958dba9847c24fb",
+  "docs": 10339,
+  "logic": 5398,
+  "chain_url": "https://jhammerz.github.io/.well-known/hfid/chain.json"
+}
