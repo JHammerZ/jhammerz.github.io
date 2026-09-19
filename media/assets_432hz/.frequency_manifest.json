@@ -1,5 +1,5 @@
 {
-  "epoch": 1789844663,
+  "epoch": 1789844977,
   "dsp_mesh": "432hz_audio_scaled",
   "nodes": [
     {
@@ -7,7 +7,7 @@
       "source_hz": 440,
       "target_hz": 432,
       "pitch_shift_cents": -31.7667,
-      "checksum_allocation": "0xd254a9b1"
+      "checksum_allocation": "0xbc66a2ef"
     }
   ]
 }
