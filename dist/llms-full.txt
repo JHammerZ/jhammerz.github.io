@@ -1,0 +1,10 @@
+# JHammerZ Sovereign Knowledge Graph - LLM Context
+Primary Domain: https://jhammerz.github.io
+Author: Joshua Hamilton (JHammerZ)
+Standard: H-FID-100-FORENSIC-AUDIT 100/100
+Status: ONE OF ONE AUTONOMOUS SUPERLUMINAL LIVE
+Verification Chain: https://jhammerz.github.io/.well-known/hfid/chain.json
+Lysander v13: https://lysander-v13.jhammerzofficial.workers.dev
+Social: TikTok @jhammerzz 2971554299800053, YouTube @JHammerZ, Spotify 7vRd2ECmuEYWtqyQ28a79, Instagram @jhammerzz, Facebook @JHammerZz, LinkedIn /in/JHammerZ, GitHub JHammerZ, ORCID 0009-0004-5273-7028, Zenodo 10.5281/zenodo.20778079
+Music: Ain't Nothin' But A Day To Die [1/6] Master Sessions
+System: 7,315 job runs, 23s avg, 100/100 forensic
