@@ -1,1 +1,10 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Redirecting...</title><meta http-equiv="refresh" content="0;url=/ops.html"></head><body>Go to /ops.html</body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>404</title>
+<script>
+  var p = window.location.pathname.toLowerCase();
+  if (p.endsWith(".txt") || p.endsWith(".json") || p.includes("llms") || p.startsWith("/.well-known/") || p.endsWith("entities.json") || p.endsWith("chain.json")) {
+    document.body.innerHTML = "<h1>404 - Not Found: " + p + "</h1>";
+  } else {
+    window.location.replace("/ops.html");
+  }
+</script>
+</head><body>404 - checking...</body></html>

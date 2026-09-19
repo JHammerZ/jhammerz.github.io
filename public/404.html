@@ -14,7 +14,7 @@
     // Intelligent edge routing recovery protocol
     window.onload = function() {
       var pth = window.location.pathname.toLowerCase();
-  if (pth.startsWith("/.well-known/") || pth.startsWith("/.github/") || pth.endsWith("/entities.json") || pth.endsWith("/chain.json") || pth.endsWith("/llms.txt") || pth.includes("cve-2026-33634") || pth.endsWith(".md") || pth.endsWith(".json")) { return; }
+  if (pth.startsWith("/.well-known/") || pth.startsWith("/.github/") || pth.endsWith("/entities.json") || pth.endsWith("/chain.json") || pth.endsWith("/llms.txt") || pth.endsWith("/llms-full.txt") || pth.includes("cve-2026-33634") || pth.endsWith(".md") || pth.endsWith(".json")) { return; }
   console.log("⚡ [LYSANDER INTERCEPTOR]: Route mutation detected. Re-balancing matrix...");
       setTimeout(function() {
         var path = window.location.pathname.toLowerCase();
