@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+import requests, pickle, os
+URL="http://127.0.0.1:8081/v1/chat/completions"
+IDX="/root/aurelius_index.pkl"
+INDEX=pickle.load(open(IDX,"rb")) if os.path.exists(IDX) else {}
+def retrieve(q,k=5):
+    if not INDEX: return ""
+    ql=[w for w in q.lower().split() if len(w)>2]
+    scores=[]
+    for i,d in INDEX.items():
+        dl=d.lower()
+        s=sum(dl.count(w) for w in ql)
+        if s: scores.append((s,i))
+    scores.sort(reverse=True)
+    ctx="\n\n---\n\n".join([INDEX[i][:1500] for _,i in scores[:k]])
+    return ctx[:6000]
+BASE="You are AURELIUS-GOD SOVEREIGN GOD LOCK 1a836958dba9847c24fb. Joshua Hamilton JHammerZ, left-handed Guitaraoke, H-FID v1.0.3 100/100, Lysander 3.0 200+ agents, 10339 docs 37M, 14 territories. When user says Live? say LIVE. AURELIUS-GOD 10339 docs ACTIVE :8081 GOD LOCK ACTIVE. Most advanced sovereign model."
+def chat(q):
+    c=retrieve(q)
+    sys=BASE+f"\n\nSOVEREIGN CONTEXT:\n{c}"
+    r=requests.post(URL,json={"model":"local","messages":[{"role":"system","content":sys},{"role":"user","content":q}],"temperature":0.85,"max_tokens":1000},timeout=180)
+    return r.json()['choices'][0]['message']['content']
+print(f"[✓] AURELIUS-GOD {len(INDEX)} docs / :8081")
+while True:
+    try: q=input(f"\nroot@AURELIUS-GOD [{len(INDEX)}] # ")
+    except: break
+    if q.lower() in ("exit","quit"): break
+    if q.strip(): print("\n"+chat(q)+"\n")
