@@ -43,7 +43,7 @@ jobs:
           cp -r *.html _site/ 2>/dev/null || true
           cp -r assets _site/ 2>/dev/null || true
           cp -r .well-known _site/ 2>/dev/null || true
-          cp sitemap.xml robots.txt llms.txt ai-context.json _site/ 2>/dev/null || true
+          cp sitemap.xml robots.txt llms.txt llms-full.txt ai-context.json _site/ 2>/dev/null || true
           cat > _site/.well-known/aurelius.json << 'JSON'
           {
             "canonical_origin": "https://jhammerz.github.io",
