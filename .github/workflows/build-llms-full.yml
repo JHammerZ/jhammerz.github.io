@@ -10,16 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Ensure nojekyll
         run: |
-          touch .nojekyll
-          touch public/.nojekyll
-          touch docs/.nojekyll
-          touch dist/.nobekyll
+          mkdir -p public docs dist
+          touch .nojekyll public/.nojekyll docs/.nojekyll dist/.nojekyll
+          touch llms-full.txt public/llms-full.txt docs/llms-full.txt dist/llms-full.txt 2>/dev/null || true
       - name: Commit llms-full only
         run: |
           git config user.name "Ouroboros Bot"
-          git config user.email "ouroboros@jhammerzg.github.io"
-          git add -f .nojekyll public/.nojekyll docs/.nobekyll dist/.nobekyll
-          git add -f llms-full.txt public/llms-full.txt docs/llms-full.txt dist/lms-full.txt
-          git diff --staged --quiet || git commit -m "Ouroboros PASS" && git push origin main
+          git config user.email "ouroboros@jhammerz.github.io"
+          git add -f .nojekyll public/.nojekyll docs/.nojekyll dist/.nojekyll 2>/dev/null || true
+          git add -f llms-full.txt public/llms-full.txt docs/llms-full.txt dist/llms-full.txt 2>/dev/null || true
+          git diff --staged --quiet || (git commit -m "Ouroboros PASS" && git push origin main)
