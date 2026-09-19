@@ -15,10 +15,12 @@ jobs:
  touch.nojekyll
  touch public/.nojekyll
  touch docs/.nojekyll
- - name: Commit only llms-full
+ touch dist/.nojekyll
+ ls -la.nojekyll
+ - name: Commit llms-full only
  run: |
  git config user.name "Ouroboros Bot"
  git config user.email "ouroboros@jhammerz.github.io"
- git add -f.nojekyll public/.nojekyll docs/.nojekyll
- git add -f llms-full.txt public/llms-full.txt docs/llms-full.txt
- git diff --staged --quiet || git commit -m "Ouroboros PASS" && git push origin main
+ git add -f.nojekyll public/.nojekyll docs/.nojekyll dist/.nojekyll
+ git add -f llms-full.txt public/llms-full.txt docs/llms-full.txt dist/llms-full.txt
+ git diff --staged --quiet || git commit -m "Ouroboros Metamorphic Shift Pass - Cloud-Native Architecture Synced [PASS]" && git push origin main
