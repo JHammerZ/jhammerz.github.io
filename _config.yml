@@ -2,23 +2,22 @@ title: JhammerZ Sovereign Hub
 description: Autonomous Distributed Network & Knowledge Matrix
 url: https://jhammerz.github.io
 baseurl: ""
-
 plugins:
     - jekyll-sitemap
     - jekyll-seo-tag
-
 include:
-  - .hfid
-  - .well-known
+  -.nojekyll
+  -.hfid
+  -.well-known
     - llms.txt
-    - .well-known
+    - llms-full.txt
     - _headers
     - entities.json
-
+    - chain.json
 exclude:
     - node_modules/
     - vendor/
-    - .config/
+  -.config/
     - backups/
     - server.ts
     - package.json
@@ -26,9 +25,8 @@ exclude:
     - tsconfig.json
     - vite.config.ts
     - src/
-    - .git/
-    - .github/
-
+  -.git/
+  -.github/
 markdown: kramdown
 kramdown:
   input: GFM

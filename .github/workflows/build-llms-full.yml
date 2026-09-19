@@ -1,34 +1,32 @@
-name: Ouroboros - Sovereign Graph Sync [RESTORED - SAFE]
+name: Ouroboros - Sovereign Graph Sync [SAFE]
 on:
- push:
- branches: [main]
- paths-ignore:
- - 'llms.txt'
- schedule:
- - cron: '0 */6 * * *'
- workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore: ['llms.txt']
+  schedule:
+        - cron: '0 */6 * * *'
+  workflow_dispatch:
 permissions:
- contents: write
-concurrency:
- group: build-llms-full
- cancel-in-progress: true
+  contents: write
 jobs:
- ouroboros:
- runs-on: ubuntu-latest
- steps:
- - uses: actions/checkout@v4
- - name: Ensure.nojekyll
- run: |
- touch.nojekyll
- ls -la.nojekyll
- - name: Verify llms.txt clean
- run: |
- head -5 llms.txt
- if grep -q "AURELIUS COGNITIVE HUB INDEX" llms.txt; then exit 1; fi
- - name: Commit llms-full.txt only
- run: |
- git config user.name "Ouroboros Bot"
- git config user.email "ouroboros@jhammerz.github.io"
- git add -f.nojekyll
- git add -f llms-full.txt
- git diff --staged --quiet || git commit -m "Ouroboros Metamorphic Shift Pass - Cloud-Native Architecture Synced [PASS]" && git push origin main
+  ouroboros:
+    runs-on: ubuntu-latest
+    steps:
+            - uses: actions/checkout@v4
+            - name: Ensure nojekyll
+        run: |
+          touch.nojekyll
+          touch public/.nojekyll
+          touch docs/.nojekyll
+          ls -la.nojekyll public/.nojekyll
+            - name: Verify llms.txt clean
+        run: |
+          head -5 llms.txt
+          if grep -q "AURELIUS COGNITIVE HUB INDEX" llms.txt; then exit 1; fi
+            - name: Commit llms-full.txt only
+        run: |
+          git config user.name "Ouroboros Bot"
+          git config user.email "ouroboros@jhammerz.github.io"
+          git add -f.nojekyll public/.nojekyll docs/.nojekyll
+          git add -f llms-full.txt public/llms-full.txt docs/llms-full.txt
+          git diff --staged --quiet || git commit -m "Ouroboros Metamorphic Shift Pass - Cloud-Native Architecture Synced [PASS]" && git push origin main
