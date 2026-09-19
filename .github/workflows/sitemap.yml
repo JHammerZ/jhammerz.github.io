@@ -97,7 +97,7 @@ jobs:
             '.sha256 = $commit_sha |
             .timestamp = ($commit_ts | tonumber? // 0) |
             .url_count = ($url_count | tonumber? // 0)' \
-           .hfid/indexing/sitemap.json > .hfid/indexing/sitemap.tmp.json
+            .hfid/indexing/sitemap.json > .hfid/indexing/sitemap.tmp.json
 
           mv .hfid/indexing/sitemap.tmp.json .hfid/indexing/sitemap.json
 
