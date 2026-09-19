@@ -13,11 +13,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Ensure nojekyll
+      - name: Ensure dirs and nojekyll files
         run: |
           mkdir -p public docs dist
           touch .nojekyll public/.nojekyll docs/.nojekyll dist/.nojekyll
           touch llms-full.txt public/llms-full.txt docs/llms-full.txt dist/llms-full.txt 2>/dev/null || true
+          ls -la public/.nojekyll docs/.nojekyll dist/.nojekyll
       - name: Commit llms-full only
         run: |
           git config user.name "Ouroboros Bot"
@@ -27,4 +28,6 @@ jobs:
           if ! git diff --staged --quiet; then
             git commit -m "Ouroboros PASS [skip ci]"
             git push origin main
+          else
+            echo "Nothing to commit"
           fi
