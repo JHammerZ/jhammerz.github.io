@@ -81,6 +81,9 @@ jobs:
         # --- THE OUROBOROS METAMORPHIC PROPAGATION KICK ---
         # Stages, commits, and pushes the updated data manifests to your repository branches.
         # This active branch write automatically triggers the next sequential cloud job pass.
-        git add .
+        git checkout stable-baseline -- wrangler.toml || true
+          echo 'PRESERVING DUAL-KV'
+          git add wrangler.toml jham-ide/live_telemetry.json || true
         git commit -m "Ouroboros Metamorphic Shift Pass - Cloud-Native Architecture Synced [PASS]" || echo "No fresh data deviations logged."
-        git push origin main || echo "Reference lock caught. Cloud core auto-rebaser engaged."
+        git pull --rebase origin main || true
+          git push origin main || echo "Reference lock caught. Cloud core auto-rebaser engaged."
