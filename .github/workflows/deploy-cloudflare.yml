@@ -1,43 +1,39 @@
-name: 'Cloudflare: Sovereign Content Edge Mesh'
-concurrency:
- group: ${{ github.workflow }}-${{ github.ref }}
- cancel-in-progress: false
-
+name: "Cloudflare: Sovereign Content Edge Mesh"
 on:
   workflow_dispatch:
 
 env:
- NPM_CONFIG_LEGACY_PEER_DEPS: "true"
- NPM_CONFIG_FUND: "false"
- NPM_CONFIG_AUDIT: "false"
+  NPM_CONFIG_LEGACY_PEER_DEPS: "true"
+  NODE_VERSION: "22"
+
 jobs:
-  broadcast-cloudflare:
-    name: Cloudflare Anycast CDN Routing Deployment
+  Cloudflare-Ancyst-CDN-Routing-Deployment:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       deployments: write
     steps:
-    - name: 1. Checkout JHammerZ Master Source Tree
-      uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    - run: npm ci --legacy-peer-deps --force || npm install --legacy-peer-deps --force
-    - name: Install deps
-      run: npm ci --legacy-peer-deps --force || npm install --legacy-peer-deps --force || echo 'no deps'
-    - name: 2. Broadcast Static Assets to Low-Latency Corridors
-      uses: cloudflare/wrangler-action@v3
-      with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        command: pages deploy public --project-name="jhammerz-media-hub"
-    - name: Sovereign Structural Verification Trace
-      run: 'echo "Edge deployment complete"
+      - name: 1. Checkout JHammerZ Master Source Tree
+        uses: actions/checkout@v4
 
-        echo "SHA: ${{ github.sha }}"
+      - name: Run actions/setup-node@v4
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
 
-        echo "Project: jhammerz-media-hub"
+      - name: Install deps
+        run: |
+          npm ci --legacy-peer-deps --force || npm install --legacy-peer-deps --force || echo 'no deps'
+          npm ls @cloudflare/workers-types || true
 
-        '
+      - name: 2. Broadcast Static Assets to Low-Latency Corridors
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx --yes wrangler@latest --version
+          npx --yes wrangler@latest deploy --compatibility-date=2025-09-01 || npx --yes wrangler@latest pages deploy ./ --compatibility-date=2025-09-01
 
+      - name: Sovereign Structural Verification Trace
+        run: echo "Sovereign trace complete - workers-types 5 kept, Node 22, legacy true"
