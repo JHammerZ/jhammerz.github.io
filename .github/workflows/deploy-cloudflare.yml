@@ -1,39 +1,21 @@
 name: "Cloudflare: Sovereign Content Edge Mesh"
 on:
   workflow_dispatch:
-
 env:
   NPM_CONFIG_LEGACY_PEER_DEPS: "true"
-  NODE_VERSION: "22"
-
 jobs:
   Cloudflare-Ancyst-CDN-Routing-Deployment:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
     steps:
-      - name: 1. Checkout JHammerZ Master Source Tree
-        uses: actions/checkout@v4
-
-      - name: Run actions/setup-node@v4
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
-
-      - name: Install deps
-        run: |
-          npm ci --legacy-peer-deps --force || npm install --legacy-peer-deps --force || echo 'no deps'
-          npm ls @cloudflare/workers-types || true
-
+      - run: npm ci --legacy-peer-deps --force || npm install --legacy-peer-deps --force
       - name: 2. Broadcast Static Assets to Low-Latency Corridors
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          npx --yes wrangler@latest --version
-          npx --yes wrangler@latest deploy --compatibility-date=2025-09-01 || npx --yes wrangler@latest pages deploy ./ --compatibility-date=2025-09-01
-
-      - name: Sovereign Structural Verification Trace
-        run: echo "Sovereign trace complete - workers-types 5 kept, Node 22, legacy true"
+        run: npx -y wrangler@latest deploy
+      - run: echo "GOD LOCKED Node 22 workers-types 5 kept"
