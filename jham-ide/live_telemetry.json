@@ -2,8 +2,8 @@
   "h_fid_identity": "H-FID-100-CLOUD-SINGULARITY-786BAA5B",
   "metrics": {
     "active_sync_frame": 119,
-    "aurelius_compute_latency_ms": "0.1125ms",
+    "aurelius_compute_latency_ms": "0.1318ms",
     "cluster_spatial_density_nodes": 5000,
-    "system_stability_flag": "TARPIT_HOLDING_1751374_BOTS"
+    "system_stability_flag": "TARPIT_HOLDING_1755038_BOTS"
   }
 }
