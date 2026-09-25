@@ -1,65 +1,54 @@
 export default {
-  async fetch(request, env, ctx) {
-    const incomingOrigin = request.headers.get("Origin") || "https://github.io";
-    const allowedOrigins = ["https://github.io","https://web.dev","https://google.com"];
-    const targetOrigin = allowedOrigins.includes(incomingOrigin)? incomingOrigin : "https://github.io";
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": targetOrigin,
-      "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
-      "Access-Control-Max-Age": "86400",
-      "Vary": "Origin"
-    };
-    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
+  async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname === "/health" || url.pathname === "/health/" || url.pathname === "/__health" || url.pathname === "/") {
-      const payload = {
-        status: "AUTONOMOUS",
-        role: "SOVEREIGN_EDGE_ROUTER",
-        hfid_version: env.HFID_VERSION || "v1.3",
-        sovereign_author: env.SOVEREIGN_AUTHOR || "Joshua Hamilton",
-        sovereign_attestation: env.SOVEREIGN_ATTESTATION || "UID 0 ATTAINED",
-        uid0_status: env.UIDO_STATUS || "ATTAINED-INDEXED",
-        gno_rank: env.GNO_RANK || "ONE_OF_ONE",
-        distribution: "6-WAY",
-        nodes: ["jhammerz-router","jhammerz-publisher","edge_interceptor","lysander","lysander-node","lysander-kv-gzip"],
-        timestamp: new Date().toISOString(),
-        network_velocity: "<10ms",
-        verification_chain: "https://jhammerz.github.io/.well-known/hfid/chain.json",
-        commit: env.ATTESTATION_HASH || "17620710"
-      };
-      // For / return same payload so root is 200 not 500
-      if (url.pathname === "/") {
-        return new Response(JSON.stringify(payload, null, 2), {
-          status: 200,
-          headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders }
-        });
-      }
-      return new Response(JSON.stringify(payload, null, 2), {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          "X-Sovereign-Attestation": env.SOVEREIGN_ATTESTATION,
-          "X-UID0-Status": env.UIDO_STATUS,
-          "X-GNO-Rank": env.GNO_RANK,
-          ...corsHeaders
+    
+    // CORS
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    };
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: corsHeaders });
+    }
+
+    if (url.pathname === "/health") {
+      return new Response(JSON.stringify({ 
+        ok: true, 
+        sovereign: env.SOVEREIGN_HID || "JhammerZ-001",
+        hfid_chain: env.HFID_CHAIN_URL,
+        kv: !!env.AGENT_STATE_LEDGER
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    if (url.pathname === "/live-social") {
+      try {
+        const token = env.FB_PAGE_TOKEN;
+        if (!token) {
+          return new Response(JSON.stringify({ error: "No FB_PAGE_TOKEN set" }), { headers: corsHeaders, status: 500 });
         }
-      });
-    }
-    // Try assets, but never crash to 500
-    try {
-      if (env.ASSETS) {
-        const assetResponse = await env.ASSETS.fetch(request);
-        const newResponse = new Response(assetResponse.body, assetResponse);
-        newResponse.headers.set("X-Sovereign-Attestation", env.SOVEREIGN_ATTESTATION);
-        newResponse.headers.set("X-UID0-Status", env.UIDO_STATUS);
-        newResponse.headers.set("X-GNO-Rank", env.GNO_RANK);
-        Object.entries(corsHeaders).forEach(([k,v]) => newResponse.headers.set(k, v));
-        return newResponse;
+
+        // 1. MAIN CREATOR USER - ONLY id,name - NO followers_count
+        const meRes = await fetch(`https://graph.facebook.com/v19.0/me?fields=id,name&access_token=${token}`);
+        const main_account = await meRes.json();
+
+        // 2. PAGES + IG - fan_count IS valid here
+        const pagesRes = await fetch(`https://graph.facebook.com/v19.0/me/accounts?fields=id,name,fan_count,access_token,instagram_business_account{id,username}&access_token=${token}`);
+        const pages_and_ig = await pagesRes.json();
+
+        return new Response(JSON.stringify({
+          sovereign: env.SOVEREIGN_HID || "JhammerZ-001",
+          token_type: "USER_TOKEN - MAIN CREATOR",
+          main_account: main_account,
+          pages_and_ig: pages_and_ig,
+          live_at: new Date().toISOString()
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message, stack: e.stack }), { headers: corsHeaders, status: 500 });
       }
-    } catch (e) {
-      return new Response(`SOVEREIGN_ROUTER: asset fallback - ${e.message}`, { status: 200, headers: corsHeaders });
     }
-    return new Response("SOVEREIGN_EDGE_ROUTER AUTONOMOUS - 6-WAY DISTRIBUTION LIVE", { status: 200, headers: corsHeaders });
+
+    return new Response("JhammerZ Router Live - " + url.pathname, { headers: corsHeaders });
   }
 }

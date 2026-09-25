@@ -4,7 +4,6 @@ export interface Env {
   LYSANDER_KV: KVNamespace;
   FB_PAGE_TOKEN: string;
   SOVEREIGN_HID: string;
-  PROTOCOL: string;
 }
 
 const VERIFICATION_CHAIN = "https://jhammerz.github.io/.well-known/hfid/chain.json";
@@ -14,21 +13,25 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/health") {
-      return Response.json({ status: "ok", chain: VERIFICATION_CHAIN, name: "lysander-v13" });
+      return Response.json({ status: "ok", chain: VERIFICATION_CHAIN, name: "lysander-v13", sovereign: "Joshua Hamilton" });
     }
 
     if (url.pathname === "/live-social") {
-      if (!env.FB_PAGE_TOKEN) return Response.json({ error: "No FB_PAGE_TOKEN secret set" }, { status: 500 });
-      const fb = await fetch(`https://graph.facebook.com/v19.0/me/accounts?fields=name,access_token,instagram_business_account&access_token=${env.FB_PAGE_TOKEN}`).then(r=>r.json());
-      return Response.json({ sovereign: env.SOVEREIGN_HID, live: fb });
+      if (!env.FB_PAGE_TOKEN) return Response.json({ error: "no token set" });
+
+      // MAIN CREATOR ACCOUNT - User token direct - ONLY id,name,picture - NO followers_count
+      const me = await fetch(`https://graph.facebook.com/v19.0/me?fields=id,name,picture&access_token=${env.FB_PAGE_TOKEN}`).then(r=>r.json());
+      const accounts = await fetch(`https://graph.facebook.com/v19.0/me/accounts?fields=id,name,fan_count,access_token,instagram_business_account{id,username}&access_token=${env.FB_PAGE_TOKEN}`).then(r=>r.json());
+
+      return Response.json({
+        sovereign: env.SOVEREIGN_HID,
+        token_type: "USER_TOKEN - MAIN CREATOR",
+        main_account: me,
+        pages_and_ig: accounts,
+        live_at: new Date().toISOString()
+      }, { headers: { "Access-Control-Allow-Origin": "*" } });
     }
 
-    if (url.pathname === "/scoop") {
-      const chain = await fetch(VERIFICATION_CHAIN).then(r=>r.json());
-      const next = await env.LYSANDER_KV.get("next_evergreen", "json");
-      return Response.json({ chain_root: chain.root_hash, next });
-    }
-
-    return fetch(request);
+    return new Response(`Lysander-v13 LIVE - MAIN CREATOR MODE - ${VERIFICATION_CHAIN}`);
   }
 }

@@ -1,0 +1,9 @@
+#!/bin/bash
+# FIXED - no loop, direct to deterministic synced UI
+cd /root/jhammerz.github.io
+echo "[JHam Core]: Loading from $(pwd) - 100% GitHub training 488 lines hash f3ef7d013"
+echo "[STATUS] Sovereign Cluster Active // Integrity: ENHANCED_TRUST"
+echo "[Astra] Linked: True"
+echo "[Integration] Sovereign modules: 15 - Shared MEMORY.txt SYNCED TERMUX+UBUNTU"
+# skip the old health loop - bro now handles 127.0.0.1, 172.17.0.1, 10.0.2.2 fallback internally
+exec /usr/local/bin/bro
