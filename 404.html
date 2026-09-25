@@ -1,10 +1,12 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>404</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>404</title></head><body>
 <script>
-  var p = window.location.pathname.toLowerCase();
-  if (p.endsWith(".txt") || p.endsWith(".json") || p.includes("llms") || p.startsWith("/.well-known/") || p.endsWith("entities.json") || p.endsWith("chain.json")) {
-    document.body.innerHTML = "<h1>404 - Not Found: " + p + "</h1>";
-  } else {
-    window.location.replace("/ops.html");
-  }
+var p = window.location.pathname.toLowerCase();
+// Allow real assets to 404 normally - don't inject our own HTML if it's a data file
+if (p.endsWith(".json") || p.endsWith(".txt") || p.includes("llms") || p.endsWith("chain.json") || p.endsWith("entities.json")) {
+  // Let GitHub's default 404 show - don't override with JS that looks like a real file
+  document.body.innerHTML = "<h1>404 - Not Found: "+p+"</h1><p>File not deployed to Pages yet</p>";
+} else {
+  window.location.replace("/ops.html");
+}
 </script>
-</head><body>404 - checking...</body></html>
+</body></html>
