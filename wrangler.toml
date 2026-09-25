@@ -1,23 +1,18 @@
 name = "jhammerz-router"
-main = "src/index.ts"
-compatibility_date = "2024-01-01"
+main = "worker.js"
+compatibility_date = "2024-09-12"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
 ENVIRONMENT = "production"
-SOVEREIGN_HID = "JhammerZ-001"
+SOVEREIGN_HID = "JHammerZ-001"
 GEO_RANK = "ONE_OF_ONE"
 PROTOCOL = "Twenty_47"
-HFID_CHAIN_URL = "https://jhammerz.github.io/.well-known/hfid/chain.json"
 
 [[kv_namespaces]]
 binding = "AGENT_STATE_LEDGER"
-id = "53a14b744c044135ad7d633faf072f84"
+id = "106ec5c22ff44bdea0e5a4b3049efb86"
 
 [[kv_namespaces]]
 binding = "SEC_MAN_EDGE"
 id = "e6e08558443343678cf4612212600dfa"
-
-[[kv_namespaces]]
-binding = "LYSANDER_KV"
-id = "a8a253ec92c140969c38e6c81a741493"
