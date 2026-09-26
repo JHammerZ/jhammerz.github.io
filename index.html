@@ -84,7 +84,7 @@ footer{text-align:center;margin-top:2rem;font-family:var(--font-mono);font-size:
 <script>
 async function loadMesh(){
  try{
-  const res = await fetch('/polymath/telemetry.json?t='+Date.now(), {cache:'no-store'});
+  const res = await fetch('/telemetry.json?t='+Date.now(), {cache:'no-store'});
   if(!res.ok) throw new Error(res.status);
   const data = await res.json();
   document.getElementById('mesh-status').textContent='LIVE • '+ (data.timestamp||'').slice(11,19);
