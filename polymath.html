@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Trusted Polymath in production.</title>
-<style>body{background:#0a0a0f;color:#e8e8ef;font-family:monospace;padding:40px;max-width:900px;margin:0 auto}h1{color:#8a2be2}a{color:#8a2be2}</style>
-</head><body>
-<h1>Trusted Polymath in production.</h1>
-<p>Joshua Hamilton - Principal Architect @ impact.com | HEO/HFID Founder | Left-Handed Guitaraoke | AURELIUS offline voice OS</p>
-<p>I. HEO/HFID - II. Guitaraoke 62 reels 4.4M - III. AURELIUS curl 127.0.0.1:8081/completion {"status":"ok"} - IV. AuDHD Archive</p>
-<p><a href="/">/ back to root</a> | <a href="/music">/music</a></p>
-</body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JHammerZ | Polymath Node - Knowledge Graph</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+body{background:#0a0a0f;color:#e2e8f0;font-family:monospace;margin:0;padding:24px}
+a{color:#00FF41}
+#tarpit-board{border:1px dashed #00FF41;background:rgba(0,20,5,0.95);padding:12px;margin:10px 0}
+</style>
+</head>
+<body>
+<a href="/">← Back to Sovereign Hub</a>
+<h1>► POLYMATH ORCHESTRATOR // KNOWLEDGE GRAPH [/polymath/]</h1>
+<div id="tarpit-board">
+<span style="color:#00FF41;font-weight:700;">LYSANDER TARPIT // LIVE</span> | 
+<span id="tarpit-score">Loading trap telemetry...</span>
+</div>
+<div id="heo-terminal">HammerZ-001 • Debian RING_3 | Type "help"</div>
+<input class="heo-input" id="heo-input" placeholder="_" autocomplete="off">
+<p>Polymath Node - Decentralized edge systems, H-FID verified, Sovereign Audio & Mech.</p>
+<p>Mesh: <span id="telemetry-status">checking...</span></p>
+<script>
+async function load(){
+ try{
+  const r=await fetch('/telemetry.json'); const d=await r.json();
+  document.getElementById('telemetry-status').innerText='ONLINE - '+ (d.total||0) +' trapped';
+  document.getElementById('tarpit-score').innerText='CPU Wasted: '+ (d.timeWastedSec||0) +'s | Bots: '+(d.GPTBot||0);
+ }catch(e){ document.getElementById('telemetry-status').innerText='offline - '+e; }
+}
+load();
+</script>
+</body>
+</html>
